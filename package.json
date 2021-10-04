@@ -1,0 +1,26 @@
+{
+    "name": "rustPlusPlus",
+    "version": "0.0.1",
+    "description": "A NodeJS Discord Bot that uses the rustplus.js library.",
+    "main": "index.js",
+    "scripts": {
+        "run": "node ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/alexemanuelol/rustPlusPlus.git"
+    },
+    "author": "Alexemanuelol",
+    "license": "SEE LICENSE IN LICENSE",
+    "bugs": {
+        "url": "https://github.com/alexemanuelol/rustPlusPlus/issues"
+    },
+    "homepage": "https://github.com/alexemanuelol/rustPlusPlus#readme",
+    "dependencies": {
+        "@liamcottle/rustplus.js": "^2.2.0",
+        "@discordjs/builders": "^0.6.0",
+        "@discordjs/rest": "^0.1.1-canary.0",
+        "discord.js": "^13.1.0",
+        "discord-api-types": "^0.23.1"
+    }
+}
