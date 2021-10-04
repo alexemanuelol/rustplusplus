@@ -1,5 +1,13 @@
 {
-    "clientId": "",
-    "guildId": "",
-    "token": ""
+    "discord": {
+        "clientId": "",
+        "guildId": "",
+        "token": ""
+    },
+    "rustplus": {
+        "steamId": "",
+        "serverIp": "",
+        "appPort": "",
+        "playerToken": ""
+    }
 }

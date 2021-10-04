@@ -1,10 +1,16 @@
 const fs = require('fs');
+const RustPlus = require('rustplus.js');
 const { Client, Collection, Intents } = require('discord.js');
-const { token } = require('./config.json');
+const Config = require('./config.json');
+
+/*
+ *  DISCORD
+ */
 
 /* Create a new client instance */
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
+/* Create a Collection for all the commands */
 client.commands = new Collection();
 
 /* Dynamically retrieve the command files */
@@ -15,10 +21,10 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
-/* Dynamically retrieve the event files */
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
+/* Dynamically retrieve the discord event files */
+const discordEventFiles = fs.readdirSync('./discordEvents').filter(file => file.endsWith('.js'));
+for (const file of discordEventFiles) {
+	const event = require(`./discordEvents/${file}`);
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
@@ -27,4 +33,25 @@ for (const file of eventFiles) {
 }
 
 /* Login to Discord with your client's token */
-client.login(token);
+client.login(Config.discord.token);
+
+
+/*
+ *  RUSTPLUS
+ */
+
+/* Create a new rustplus instance */
+const rustplus = new RustPlus(
+	Config.rustplus.serverIp,
+	Config.rustplus.appPort,
+	Config.rustplus.steamId,
+	Config.rustplus.playerToken);
+
+/* Dynamically retrieve the rustplus event files */
+const rustplusEventFiles = fs.readdirSync('./rustplusEvents').filter(file => file.endsWith('.js'));
+for (const file of rustplusEventFiles) {
+	const event = require(`./rustplusEvents/${file}`);
+	rustplus.on(event.name, (...args) => event.execute(...args));
+}
+
+rustplus.connect();
