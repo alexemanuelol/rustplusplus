@@ -1,6 +1,6 @@
 module.exports = {
     name: 'request',
-    async execute(request) {
-        console.log("Request Sent!");
+    async execute(discord, rustplus, request) {
+        console.log("REQUEST SENT:\n" + JSON.stringify(request));
     },
 };

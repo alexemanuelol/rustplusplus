@@ -1,6 +1,6 @@
 module.exports = {
     name: 'disconnected',
-    async execute() {
-        console.log('RustPlus Disconnected!');
+    async execute(discord, rustplus) {
+        console.log('RUSTPLUS DISCONNECTED');
     },
 };

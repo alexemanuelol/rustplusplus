@@ -8,7 +8,7 @@ module.exports = {
         .addStringOption(option =>
             option.setName('input')
                 .setDescription('The input to echo back')),
-    async execute(interaction) {
+    async execute(discord, rustplus, interaction) {
         if (interaction.options.getString('input') !== null)
             await interaction.reply(interaction.options.getString('input'));
         else

@@ -1,6 +1,7 @@
 module.exports = {
     name: 'error',
-    async execute(err) {
-        console.log(`Error: ${err}`);
+    async execute(discord, rustplus, err) {
+        console.log(`ERROR:\n${err}`);
+
     },
 };

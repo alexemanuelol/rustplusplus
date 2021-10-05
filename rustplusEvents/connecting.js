@@ -1,6 +1,6 @@
 module.exports = {
     name: 'connecting',
-    async execute() {
-        console.log('RustPlus Connecting...');
+    async execute(discord, rustplus) {
+        console.log('RUSTPLUS CONNECTING...');
     },
 };
