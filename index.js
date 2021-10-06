@@ -8,6 +8,7 @@ exports.debug = false;
 exports.mapWidth = null;
 exports.mapHeight = null;
 exports.mapOceanMargin = null;
+exports.mapMonuments = null;
 
 /*
  *  INITIALIZE DISCORD/RUSTPLUS

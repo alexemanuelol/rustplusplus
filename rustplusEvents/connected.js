@@ -11,6 +11,7 @@ module.exports = {
             Main.mapWidth = map.response.map.width;
             Main.mapHeight = map.response.map.height;
             Main.mapOceanMargin = map.response.map.oceanMargin;
+            Main.mapMonuments = map.response.map.monuments;
         });
 
         /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
