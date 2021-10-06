@@ -3,6 +3,12 @@ const RustPlus = require('rustplus.js');
 const Discord = require('discord.js');
 const Config = require('./config.json');
 
+exports.intervalId = 0;
+exports.debug = false;
+exports.mapWidth = null;
+exports.mapHeight = null;
+exports.mapOceanMargin = null;
+
 /*
  *  INITIALIZE DISCORD/RUSTPLUS
  */
