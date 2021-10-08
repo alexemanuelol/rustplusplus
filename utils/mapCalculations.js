@@ -1,5 +1,5 @@
 module.exports = {
-    getGridPosString: function (x, y, mapSize, gridDiameter = 146.25) {
+    getGridPos: function (x, y, mapSize, gridDiameter = 146.25) {
         let correctedMapSize = mapSize + (gridDiameter - (mapSize % gridDiameter));
 
         /* Outside the grid system */
@@ -45,6 +45,7 @@ module.exports = {
     },
 
     getDistance: function (x1, y1, x2, y2) {
+        /* Pythagoras is the man! */
         const a = x1 - x2;
         const b = y1 - y2;
         return Math.sqrt(a * a + b * b);
