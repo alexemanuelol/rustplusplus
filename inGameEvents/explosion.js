@@ -1,9 +1,12 @@
 const Main = require('./../index.js');
 const MapCalc = require('./../utils/mapCalculations.js');
 const RustPlusTypes = require('./../utils/rustplusTypes.js');
+const Timer = require('./../utils/timer.js');
 
 var currentExplosionsId = [];
+var bradleyRespawnTimer = null;
 const LAUNCH_SITE_RADIUS = 250;
+const BRADLEY_APC_RESPAWN_TIME_MS = 60 * 60 * 1000; /* Default 1 hour respawn time */
 
 module.exports = {
     checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
@@ -17,11 +20,14 @@ module.exports = {
                     if (module.exports.isExplosionBradley(marker.x, marker.y)) {
                         /* Bradley APC */
                         console.log('Bradley APC was destroyed at Launch Site.');
+                        bradleyRespawnTimer = new Timer.timer(module.exports.notifyBradleyRespawn,
+                            BRADLEY_APC_RESPAWN_TIME_MS);
                     }
                     else {
                         /* Patrol Helicopter */
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize)
-                        console.log('Patrol Helicopter was taken down at ' + gridLocation);
+                        let loc = (gridLocation === null) ? "somewhere outside the grid system" : "at " + gridLocation;
+                        console.log('Patrol Helicopter was taken down ' + loc + ".");
                     }
                 }
             }
@@ -54,6 +60,20 @@ module.exports = {
         }
 
         return (MapCalc.getDistance(x, y, launchCordX, launchCordY) <= LAUNCH_SITE_RADIUS)
+    },
+
+    getBradleyRespawnTimeLeft: function () {
+        if (bradleyRespawnTimer !== null) {
+            let time = bradleyRespawnTimer.getTimeLeft() / 1000;
+            return Timer.secondsToFullScale(time);
+        }
+        return null;
+    },
+
+    notifyBradleyRespawn: function () {
+        console.log("Bradley APC should respawn any second now");
+        bradleyRespawnTimer.stop();
+        bradleyRespawnTimer = null;
     },
 }
 
