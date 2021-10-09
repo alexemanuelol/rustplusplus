@@ -14,7 +14,7 @@ module.exports = {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Explosion) {
                 if (!currentExplosionsId.includes(marker.id)) {
-                    /* New Explosion detected! Save to array of explosions */
+                    /* New Explosion detected! Save to array of explosions id */
                     currentExplosionsId.push(marker.id);
 
                     if (module.exports.isExplosionBradley(marker.x, marker.y)) {
@@ -26,7 +26,7 @@ module.exports = {
                     else {
                         /* Patrol Helicopter */
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize)
-                        let loc = (gridLocation === null) ? "somewhere outside the grid system" : "at " + gridLocation;
+                        let loc = (gridLocation === null) ? 'somewhere outside the grid system' : 'at ' + gridLocation;
                         console.log('Patrol Helicopter was taken down ' + loc + ".");
                     }
                 }
@@ -50,6 +50,7 @@ module.exports = {
     },
 
     isExplosionBradley: function (x, y) {
+        /* Check where the explosion marker is located, if near Launch Site, it assumes bradley */
         let launchCordX = null;
         let launchCordY = null;
         for (let monument of Main.mapMonuments) {
@@ -63,6 +64,7 @@ module.exports = {
     },
 
     getBradleyRespawnTimeLeft: function () {
+        /* Returns the time left before the next bradley spawn, if no timer, null will be sent back */
         if (bradleyRespawnTimer !== null) {
             let time = bradleyRespawnTimer.getTimeLeft() / 1000;
             return Timer.secondsToFullScale(time);
@@ -71,7 +73,8 @@ module.exports = {
     },
 
     notifyBradleyRespawn: function () {
-        console.log("Bradley APC should respawn any second now");
+        /* Notifies when bradley should be respawning */
+        console.log('Bradley APC should respawn any second now');
         bradleyRespawnTimer.stop();
         bradleyRespawnTimer = null;
     },
