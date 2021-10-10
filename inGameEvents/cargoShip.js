@@ -24,6 +24,13 @@ module.exports = {
                         marker.y < -offset || marker.y > (mapSize + offset)) {
                         if (module.exports.isCargoShipEntering(marker.rotation, spawnDirNumber)) {
                             console.log('Cargo Ship enters the map from ' + spawnDir);
+
+                            if (cargoShipEgressTimer !== null) {
+                                cargoShipEgressTimer.stop();
+                                cargoShipEgressTimer = null;
+                            }
+
+                            /* Start a new timer for the Cargo Ship */
                             cargoShipEgressTimer = new Timer.timer(module.exports.notifyCargoShipEgress,
                                 CARGO_SHIP_EGRESS_TIME_MS);
                         }
@@ -41,14 +48,20 @@ module.exports = {
         /* Check to see if a Cargo Ship have disappeared from the map */
         let tempArray = [];
         for (let id of currentCargoShipsId) {
+            let active = false;
             for (let marker of mapMarkers.response.mapMarkers.markers) {
                 if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
                     if (marker.id === id) {
                         /* Cargo Ship is still visable on the map */
+                        active = true;
                         tempArray.push(id);
                         break;
                     }
                 }
+            }
+
+            if (active === false) {
+                console.log('Cargo Ship just left the map');
             }
         }
         currentCargoShipsId = tempArray.slice();
