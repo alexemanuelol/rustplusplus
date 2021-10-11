@@ -27,7 +27,7 @@ module.exports = {
                         /* Patrol Helicopter */
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize)
                         let loc = (gridLocation === null) ? 'somewhere outside the grid system' : 'at ' + gridLocation;
-                        console.log('Patrol Helicopter was taken down ' + loc + ".");
+                        console.log('Patrol Helicopter was taken down ' + loc + '.');
                     }
                 }
             }

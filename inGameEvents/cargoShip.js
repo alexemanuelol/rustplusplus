@@ -1,3 +1,4 @@
+const MapCalc = require('./../utils/mapCalculations.js');
 const RustPlusTypes = require('./../utils/rustplusTypes.js');
 const Timer = require('./../utils/timer.js');
 
@@ -15,26 +16,18 @@ module.exports = {
                     currentCargoShipsId.push(marker.id);
 
                     let mapSize = info.response.info.mapSize;
-                    let spawnDirNumber = module.exports.getCargoShipSpawnLocation(marker.x, marker.y, mapSize);
-                    let spawnDir = module.exports.locations[spawnDirNumber];
+                    let spawnLocation = module.exports.getCargoShipSpawnLocation(marker.x, marker.y, mapSize);
 
-                    let offset = (mapSize / 6) * 0.85
+                    let offset = 4 * MapCalc.gridDiameter;
 
                     /* If Cargo Ship is located outside the grid system + the offset */
                     if (marker.x < -offset || marker.x > (mapSize + offset) ||
                         marker.y < -offset || marker.y > (mapSize + offset)) {
-                        /* If the rotation of the Cargo Ship indicates that it is entering */
-                        if (module.exports.isCargoShipEntering(marker.rotation, spawnDirNumber)) {
-                            console.log('Cargo Ship enters the map from ' + spawnDir);
-                            module.exports.restartCargoShipEgressTimer();
-                        }
-                        /* If the rotation of the Cargo Ship indicates that it is on its way out */
-                        else {
-                            console.log('Cargo Ship is just about to leave the map at ' + spawnDir);
-                        }
+                        console.log('Cargo Ship enters the map from ' + spawnLocation);
+                        module.exports.restartCargoShipEgressTimer();
                     }
                     else {
-                        console.log('Cargo Ship located at ' + spawnDir);
+                        console.log('Cargo Ship located at ' + spawnLocation);
                     }
                 }
             }
@@ -95,9 +88,9 @@ module.exports = {
         }
         else {
             if (x < (offset * 3))
-                return 6;
+                return module.exports.locations[6];
             else
-                return 7;
+                return module.exports.locations[7];
         }
 
         /* Horizontally */
@@ -111,7 +104,7 @@ module.exports = {
             dir += 1;
         }
 
-        return dir;
+        return module.exports.locations[dir];
     },
 
     locations: {
@@ -123,37 +116,6 @@ module.exports = {
         5: 'North East',
         6: 'the West',
         7: 'the East'
-    },
-
-    rotationOfEnteringCargoShip: {
-        0: 315,
-        1: 0,
-        2: 45,
-        3: 225,
-        4: 180,
-        5: 135,
-        6: 270,
-        7: 90
-    },
-
-    isCargoShipEntering: function (rotation, enteringLocation) {
-        /* Decides if the Cargo Ship is entering the map or leaving the map by checking its current rotation */
-        let lower = module.exports.rotationOfEnteringCargoShip[enteringLocation] - 45;
-        if (lower < 0) {
-            lower += 360;
-        }
-
-        let upper = module.exports.rotationOfEnteringCargoShip[enteringLocation] + 45;
-        if (upper > 360) {
-            upper -= 360;
-        }
-
-        if (lower <= upper) {
-            return (rotation >= lower && rotation <= upper)
-        }
-        else {
-            return (rotation >= lower || rotation <= upper)
-        }
     },
 
     getCargoShipTimeLeftBeforeEgress: function () {
