@@ -1,23 +1,25 @@
 module.exports = {
-    getGridPos: function (x, y, mapSize, gridDiameter = 146.25) {
-        let correctedMapSize = mapSize + (gridDiameter - (mapSize % gridDiameter));
+    gridDiameter: 146.25,
+
+    getGridPos: function (x, y, mapSize) {
+        let correctedMapSize = mapSize + (module.exports.gridDiameter - (mapSize % module.exports.gridDiameter));
 
         /* Outside the grid system */
-        if (x < 0 || x > correctedMapSize || y < 0 || y > (mapSize - (mapSize % gridDiameter))) {
+        if (x < 0 || x > correctedMapSize || y < 0 || y > (mapSize - (mapSize % module.exports.gridDiameter))) {
             return null;
         }
 
-        const gridPosLetters = module.exports.getGridPosLettersX(x, mapSize, gridDiameter);
-        const gridPosNumber = module.exports.getGridPosNumberY(y, mapSize, gridDiameter);
+        const gridPosLetters = module.exports.getGridPosLettersX(x, mapSize);
+        const gridPosNumber = module.exports.getGridPosNumberY(y, mapSize);
 
         return gridPosLetters + gridPosNumber;
     },
 
-    getGridPosLettersX: function (x, mapSize, gridDiameter) {
-        let correctedMapSize = mapSize + (gridDiameter - (mapSize % gridDiameter));
+    getGridPosLettersX: function (x, mapSize) {
+        let correctedMapSize = mapSize + (module.exports.gridDiameter - (mapSize % module.exports.gridDiameter));
         let num = 1;
-        for (let startGrid = 0; startGrid < correctedMapSize; startGrid += gridDiameter) {
-            if (x >= startGrid && x <= (startGrid + gridDiameter)) {
+        for (let startGrid = 0; startGrid < correctedMapSize; startGrid += module.exports.gridDiameter) {
+            if (x >= startGrid && x <= (startGrid + module.exports.gridDiameter)) {
                 /* We're at the correct grid! */
                 return module.exports.toLetters(num);
             }
@@ -25,11 +27,11 @@ module.exports = {
         }
     },
 
-    getGridPosNumberY: function (y, mapSize, gridDiameter) {
+    getGridPosNumberY: function (y, mapSize) {
         let counter = 1;
-        let numberOfGrids = Math.floor(mapSize / gridDiameter);
-        for (let startGrid = 0; startGrid < mapSize; startGrid += gridDiameter) {
-            if (y >= startGrid && y <= (startGrid + gridDiameter)) {
+        let numberOfGrids = Math.floor(mapSize / module.exports.gridDiameter);
+        for (let startGrid = 0; startGrid < mapSize; startGrid += module.exports.gridDiameter) {
+            if (y >= startGrid && y <= (startGrid + module.exports.gridDiameter)) {
                 /* We're at the correct grid! */
                 return numberOfGrids - counter;
             }
