@@ -51,16 +51,12 @@ module.exports = {
 
     isExplosionBradley: function (x, y) {
         /* Check where the explosion marker is located, if near Launch Site, it assumes bradley */
-        let launchCordX = null;
-        let launchCordY = null;
         for (let monument of Main.mapMonuments) {
             if (monument.token === 'launchsite') {
-                launchCordX = monument.x;
-                launchCordY = monument.y;
+                return (MapCalc.getDistance(x, y, monument.x, monument.y) <= LAUNCH_SITE_RADIUS);
             }
         }
-
-        return (MapCalc.getDistance(x, y, launchCordX, launchCordY) <= LAUNCH_SITE_RADIUS)
+        return false;
     },
 
     getBradleyRespawnTimeLeft: function () {
