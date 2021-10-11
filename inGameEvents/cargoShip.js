@@ -20,20 +20,15 @@ module.exports = {
 
                     let offset = (mapSize / 6) * 0.85
 
+                    /* If Cargo Ship is located outside the grid system + the offset */
                     if (marker.x < -offset || marker.x > (mapSize + offset) ||
                         marker.y < -offset || marker.y > (mapSize + offset)) {
+                        /* If the rotation of the Cargo Ship indicates that it is entering */
                         if (module.exports.isCargoShipEntering(marker.rotation, spawnDirNumber)) {
                             console.log('Cargo Ship enters the map from ' + spawnDir);
-
-                            if (cargoShipEgressTimer !== null) {
-                                cargoShipEgressTimer.stop();
-                                cargoShipEgressTimer = null;
-                            }
-
-                            /* Start a new timer for the Cargo Ship */
-                            cargoShipEgressTimer = new Timer.timer(module.exports.notifyCargoShipEgress,
-                                CARGO_SHIP_EGRESS_TIME_MS);
+                            module.exports.restartCargoShipEgressTimer();
                         }
+                        /* If the rotation of the Cargo Ship indicates that it is on its way out */
                         else {
                             console.log('Cargo Ship is just about to leave the map at ' + spawnDir);
                         }
@@ -68,10 +63,21 @@ module.exports = {
 
         /* Clear timer if no active Cargo Ships */
         if (currentCargoShipsId.length === 0) {
-            if (cargoShipEgressTimer !== null) {
-                cargoShipEgressTimer.stop();
-                cargoShipEgressTimer = null;
-            }
+            module.exports.clearCargoShipEgressTimerVariable();
+        }
+    },
+
+    restartCargoShipEgressTimer: function () {
+        module.exports.clearCargoShipEgressTimerVariable();
+
+        /* Start a new timer for the Cargo Ship */
+        cargoShipEgressTimer = new Timer.timer(module.exports.notifyCargoShipEgress, CARGO_SHIP_EGRESS_TIME_MS);
+    },
+
+    clearCargoShipEgressTimerVariable: function () {
+        if (cargoShipEgressTimer !== null) {
+            cargoShipEgressTimer.stop();
+            cargoShipEgressTimer = null;
         }
     },
 
@@ -162,8 +168,7 @@ module.exports = {
     notifyCargoShipEgress: function () {
         /* Notifies when the Carho Ship should be in the egress stage */
         console.log('Cargo Ship should be in the egress stage.');
-        cargoShipEgressTimer.stop();
-        cargoShipEgressTimer = null;
+        module.exports.clearCargoShipEgressTimerVariable();
     },
 }
 
