@@ -1,17 +1,24 @@
 module.exports = {
     timer: function (callback, delay) {
-        var id, started, remaining = delay, running;
+        var id, started, remaining = delay, running = false;
 
         this.start = function () {
-            running = true;
             started = new Date();
-            id = setTimeout(callback, remaining);
+            if (remaining > 0) {
+                id = setTimeout(callback, remaining);
+                running = true;
+                return true;
+            }
+            else {
+                running = false;
+                return false;
+            }
         }
 
         this.stop = function () {
             running = false;
+            remaining = delay;
             clearTimeout(id);
-            remaining = 0;
         }
 
         this.pause = function () {
@@ -20,20 +27,39 @@ module.exports = {
             remaining -= new Date() - started;
         }
 
+        this.restart = function () {
+            this.stop();
+            remaining = delay;
+            this.start();
+        }
+
         this.getTimeLeft = function () {
-            if (running) {
+            if (this.getStateRunning()) {
                 this.pause();
                 this.start();
             }
 
-            return remaining;
+            if (remaining <= 0) {
+                return 0;
+            }
+            else {
+                return remaining;
+            }
+        }
+
+        this.isFinished = function () {
+            /* If exceeded initial delay value */
+            if ((new Date() - started) > delay) {
+                running = false;
+                return true;
+            }
+            return false;
         }
 
         this.getStateRunning = function () {
+            this.isFinished();
             return running;
         }
-
-        this.start();
     },
 
     secondsToFullScale: function (totalSeconds) {
