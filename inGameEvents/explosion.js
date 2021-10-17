@@ -3,10 +3,18 @@ const MapCalc = require('./../utils/mapCalculations.js');
 const RustPlusTypes = require('./../utils/rustplusTypes.js');
 const Timer = require('./../utils/timer.js');
 
-var currentExplosionsId = [];
-var bradleyRespawnTimer = null;
 const LAUNCH_SITE_RADIUS = 250;
 const BRADLEY_APC_RESPAWN_TIME_MS = 60 * 60 * 1000; /* Default 1 hour respawn time */
+
+var currentExplosionsId = [];
+var bradleyRespawnTimer = new Timer.timer(notifyBradleyRespawn, BRADLEY_APC_RESPAWN_TIME_MS);
+
+/* Bradley APC respawn notification function */
+function notifyBradleyRespawn() {
+    /* Notifies when bradley should be respawning */
+    console.log('Bradley APC should respawn any second now');
+    bradleyRespawnTimer.stop();
+}
 
 module.exports = {
     checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
@@ -20,8 +28,7 @@ module.exports = {
                     if (module.exports.isExplosionBradley(marker.x, marker.y)) {
                         /* Bradley APC */
                         console.log('Bradley APC was destroyed at Launch Site.');
-                        bradleyRespawnTimer = new Timer.timer(module.exports.notifyBradleyRespawn,
-                            BRADLEY_APC_RESPAWN_TIME_MS);
+                        bradleyRespawnTimer.restart();
                     }
                     else {
                         /* Patrol Helicopter */
@@ -33,7 +40,7 @@ module.exports = {
             }
         }
 
-        /* Check to see if an explosion marker have disappeared from the map */
+        /* Check to see if an Explosion marker have disappeared from the map */
         let tempArray = [];
         for (let id of currentExplosionsId) {
             for (let marker of mapMarkers.response.mapMarkers.markers) {
@@ -46,7 +53,7 @@ module.exports = {
                 }
             }
         }
-        currentExplosionsId = tempArray.slice();
+        currentExplosionsId = JSON.parse(JSON.stringify(tempArray));
     },
 
     isExplosionBradley: function (x, y) {
@@ -60,19 +67,11 @@ module.exports = {
     },
 
     getBradleyRespawnTimeLeft: function () {
-        /* Returns the time left before the next bradley spawn, if no timer, null will be sent back */
-        if (bradleyRespawnTimer !== null) {
-            let time = bradleyRespawnTimer.getTimeLeft() / 1000;
-            return Timer.secondsToFullScale(time);
+        /* Returns the time left before the next bradley spawn, if timer is not running, null will be sent back */
+        if (bradleyRespawnTimer.getStateRunning()) {
+            return Timer.secondsToFullScale(bradleyRespawnTimer.getTimeLeft() / 1000);
         }
         return null;
-    },
-
-    notifyBradleyRespawn: function () {
-        /* Notifies when bradley should be respawning */
-        console.log('Bradley APC should respawn any second now');
-        bradleyRespawnTimer.stop();
-        bradleyRespawnTimer = null;
     },
 }
 
