@@ -13,7 +13,6 @@ var bradleyRespawnTimer = new Timer.timer(notifyBradleyRespawn, BRADLEY_APC_RESP
 function notifyBradleyRespawn() {
     /* Notifies when bradley should be respawning */
     console.log('Bradley APC should respawn any second now');
-    bradleyRespawnTimer.stop();
 }
 
 module.exports = {

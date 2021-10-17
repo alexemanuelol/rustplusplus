@@ -11,7 +11,6 @@ var cargoShipEgressTimer = new Timer.timer(notifyCargoShipEgress, CARGO_SHIP_EGR
 function notifyCargoShipEgress() {
     /* Notifies when the Cargo Ship should be in the egress stage */
     console.log('Cargo Ship should be in the egress stage.');
-    cargoShipEgressTimer.stop();
 }
 
 module.exports = {
