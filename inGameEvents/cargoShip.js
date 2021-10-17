@@ -2,9 +2,17 @@ const MapCalc = require('./../utils/mapCalculations.js');
 const RustPlusTypes = require('./../utils/rustplusTypes.js');
 const Timer = require('./../utils/timer.js');
 
-var currentCargoShipsId = [];
-var cargoShipEgressTimer = null;
 const CARGO_SHIP_EGRESS_TIME_MS = 50 * 60 * 1000; /* Default 50 minutes before egress start */
+
+var currentCargoShipsId = [];
+var cargoShipEgressTimer = new Timer.timer(notifyCargoShipEgress, CARGO_SHIP_EGRESS_TIME_MS);
+
+/* Cargo Ship egress notification function */
+function notifyCargoShipEgress() {
+    /* Notifies when the Cargo Ship should be in the egress stage */
+    console.log('Cargo Ship should be in the egress stage.');
+    cargoShipEgressTimer.stop();
+}
 
 module.exports = {
     checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
@@ -18,13 +26,14 @@ module.exports = {
                     let mapSize = info.response.info.mapSize;
                     let spawnLocation = module.exports.getCargoShipSpawnLocation(marker.x, marker.y, mapSize);
 
+                    /* Offset that is used to determine if the Cargo Ship just spawned */
                     let offset = 4 * MapCalc.gridDiameter;
 
                     /* If Cargo Ship is located outside the grid system + the offset */
                     if (marker.x < -offset || marker.x > (mapSize + offset) ||
                         marker.y < -offset || marker.y > (mapSize + offset)) {
                         console.log('Cargo Ship enters the map from ' + spawnLocation);
-                        module.exports.restartCargoShipEgressTimer();
+                        cargoShipEgressTimer.restart();
                     }
                     else {
                         console.log('Cargo Ship located at ' + spawnLocation);
@@ -56,23 +65,10 @@ module.exports = {
 
         /* Clear timer if no active Cargo Ships */
         if (currentCargoShipsId.length === 0) {
-            module.exports.clearCargoShipEgressTimerVariable();
-        }
-    },
-
-    restartCargoShipEgressTimer: function () {
-        module.exports.clearCargoShipEgressTimerVariable();
-
-        /* Start a new timer for the Cargo Ship */
-        cargoShipEgressTimer = new Timer.timer(module.exports.notifyCargoShipEgress, CARGO_SHIP_EGRESS_TIME_MS);
-    },
-
-    clearCargoShipEgressTimerVariable: function () {
-        if (cargoShipEgressTimer !== null) {
             cargoShipEgressTimer.stop();
-            cargoShipEgressTimer = null;
         }
     },
+
 
     getCargoShipSpawnLocation: function (x, y, size) {
         /* Returns a number representing at what location Cargo Ship was located */
@@ -118,19 +114,13 @@ module.exports = {
         7: 'the East'
     },
 
-    getCargoShipTimeLeftBeforeEgress: function () {
-        /* Returns the time left before the Cargo Ship enters the egress stage, if no timer, null will be sent back */
-        if (cargoShipEgressTimer !== null) {
-            let time = cargoShipEgressTimer.getTimeLeft() / 1000;
-            return Timer.secondsToFullScale(time);
+    getCargoShipEgressTimeLeft: function () {
+        /* Returns the time left before the Cargo Ship enters the egress stage,
+        if timer is not running, null will be sent back */
+        if (cargoShipEgressTimer.getStateRunning()) {
+            return Timer.secondsToFullScale(cargoShipEgressTimer.getTimeLeft() / 1000);
         }
         return null;
-    },
-
-    notifyCargoShipEgress: function () {
-        /* Notifies when the Carho Ship should be in the egress stage */
-        console.log('Cargo Ship should be in the egress stage.');
-        module.exports.clearCargoShipEgressTimerVariable();
     },
 }
 
