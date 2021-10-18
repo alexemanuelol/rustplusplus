@@ -60,7 +60,7 @@ module.exports = {
                 console.log('Cargo Ship just left the map');
             }
         }
-        currentCargoShipsId = tempArray.slice();
+        currentCargoShipsId = JSON.parse(JSON.stringify(tempArray));
 
         /* Clear timer if no active Cargo Ships */
         if (currentCargoShipsId.length === 0) {
