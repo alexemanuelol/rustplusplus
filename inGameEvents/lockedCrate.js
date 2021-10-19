@@ -44,10 +44,24 @@ module.exports = {
                         continue;
                     }
                     else if (closestMonument.token === 'oil_rig_small') {
-                        console.log('Locked Crate just respawned on ' + MonNames.Monument['oil_rig_small']);
+                        /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
+                        replaced in currentLockedCratesId as well */
+                        if (!currentLockedCratesId.some(e => e.name === 'oil_rig_small')) {
+                            console.log('Locked Crate just respawned on ' + MonNames.Monument['oil_rig_small']);
+                        }
+                        else {
+                            currentLockedCratesId = currentLockedCratesId.filter(e => e.name !== 'oil_rig_small');
+                        }
                     }
                     else if (closestMonument.token === 'large_oil_rig') {
-                        console.log('Locked Crate just respawned on ' + MonNames.Monument['large_oil_rig']);
+                        /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
+                        replaced in currentLockedCratesId as well */
+                        if (!currentLockedCratesId.some(e => e.name === 'large_oil_rig')) {
+                            console.log('Locked Crate just respawned on ' + MonNames.Monument['large_oil_rig']);
+                        }
+                        else {
+                            currentLockedCratesId = currentLockedCratesId.filter(e => e.name !== 'large_oil_rig');
+                        }
                     }
                     else {
                         console.log('Locked Crate just got dropped by Chinook 47 at ' +
