@@ -26,6 +26,13 @@ function notifyLockedCrateLargeOpen() {
 module.exports = {
     checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if a Chinook 47 have been detected near any of the oil rigs */
+        module.exports.checkNewChinook47Detected(mapMarkers);
+
+        /* Check to see if a Chinook 47 have disappeared from the map */
+        module.exports.checkChinook47Left(mapMarkers);
+    },
+
+    checkNewChinook47Detected: function (mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Chinook47) {
                 if (!currentChinook47sId.includes(marker.id)) {
@@ -56,8 +63,9 @@ module.exports = {
                 }
             }
         }
+    },
 
-        /* Check to see if a Chinook 47 have disappeared from the map */
+    checkChinook47Left: function (mapMarkers) {
         let tempArray = [];
         for (let id of currentChinook47sId) {
             for (let marker of mapMarkers.response.mapMarkers.markers) {
@@ -71,7 +79,7 @@ module.exports = {
             }
         }
         currentChinook47sId = JSON.parse(JSON.stringify(tempArray));
-    },
+    }
 }
 
 // TODO: Add discord notifications for the events

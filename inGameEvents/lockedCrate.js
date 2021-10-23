@@ -31,6 +31,13 @@ function notifyLockedCrateWarningDespawn() {
 module.exports = {
     checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new Locked Crate is detected */
+        module.exports.checkNewLockedCrateDetected(mapMarkers);
+
+        /* Check to see if an Locked Crate marker have disappeared from the map */
+        module.exports.checkLockedCrateLeft(mapMarkers);
+    },
+
+    checkNewLockedCrateDetected: function (mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.LockedCrate) {
                 if (!currentLockedCratesId.some(e => e.id === marker.id)) {
@@ -79,8 +86,9 @@ module.exports = {
                 }
             }
         }
+    },
 
-        /* Check to see if an Locked Crate marker have disappeared from the map */
+    checkLockedCrateLeft: function (mapMarkers) {
         let tempArray = [];
         currentLockedCratesId.forEach((lockedCrate) => {
             let active = false;

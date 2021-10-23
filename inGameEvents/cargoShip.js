@@ -18,6 +18,18 @@ function notifyCargoShipEgress() {
 module.exports = {
     checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new Cargo Ship is detected */
+        module.exports.checkNewCargoShipDetected(mapMarkers, info);
+
+        /* Check to see if a Cargo Ship have disappeared from the map */
+        module.exports.checkCargoShipLeft(mapMarkers);
+
+        /* Clear timer if no active Cargo Ships */
+        if (currentCargoShipsId.length === 0) {
+            cargoShipEgressTimer.stop();
+        }
+    },
+
+    checkNewCargoShipDetected: function (mapMarkers, info) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
                 if (!currentCargoShipsId.includes(marker.id)) {
@@ -42,8 +54,9 @@ module.exports = {
                 }
             }
         }
+    },
 
-        /* Check to see if a Cargo Ship have disappeared from the map */
+    checkCargoShipLeft: function (mapMarkers) {
         let tempArray = [];
         for (let id of currentCargoShipsId) {
             let active = false;
@@ -63,13 +76,7 @@ module.exports = {
             }
         }
         currentCargoShipsId = JSON.parse(JSON.stringify(tempArray));
-
-        /* Clear timer if no active Cargo Ships */
-        if (currentCargoShipsId.length === 0) {
-            cargoShipEgressTimer.stop();
-        }
     },
-
 
     getCargoShipSpawnLocation: function (x, y, size) {
         /* Returns a number representing at what location Cargo Ship was located */
