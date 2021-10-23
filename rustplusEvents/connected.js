@@ -1,5 +1,5 @@
-const Main = require('./../index.js');
 const InGameEventHandler = require('./../inGameEvents/inGameEventHandler.js');
+const Main = require('./../index.js');
 
 module.exports = {
     name: 'connected',

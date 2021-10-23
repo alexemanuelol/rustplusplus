@@ -73,3 +73,5 @@ module.exports = {
         currentChinook47sId = JSON.parse(JSON.stringify(tempArray));
     },
 }
+
+// TODO: Add discord notifications for the events

@@ -75,10 +75,10 @@ module.exports = {
         let seconds = totalSeconds - days * day - hours * hour - minutes * minute;
 
         let time = '';
-        time += (days === 0) ? "" : days + 'd ';
-        time += (hours === 0 && totalSeconds < hour) ? "" : hours + 'h ';
-        time += (minutes === 0 && totalSeconds < minute) ? "" : minutes + 'm ';
-        time += seconds + 's';
+        time += (days === 0) ? "" : `${days}d `;
+        time += (hours === 0 && totalSeconds < hour) ? "" : `${hours}h `;
+        time += (minutes === 0 && totalSeconds < minute) ? "" : `${minutes}m `;
+        time += `${seconds}s`;
 
         return time;
     },

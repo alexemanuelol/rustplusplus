@@ -33,11 +33,11 @@ module.exports = {
                     /* If Cargo Ship is located outside the grid system + the offset */
                     if (marker.x < -offset || marker.x > (mapSize + offset) ||
                         marker.y < -offset || marker.y > (mapSize + offset)) {
-                        console.log('Cargo Ship enters the map from ' + spawnLocation);
+                        console.log(`Cargo Ship enters the map from ${spawnLocation}`);
                         cargoShipEgressTimer.restart();
                     }
                     else {
-                        console.log('Cargo Ship located at ' + spawnLocation);
+                        console.log(`Cargo Ship located at ${spawnLocation}`);
                     }
                 }
             }

@@ -23,8 +23,8 @@ var currentLockedCrateMonumentName = null;
 
 function notifyLockedCrateWarningDespawn() {
     /* Notifies when there is LOCKED_CRATE_DESPAWN_WARNING_TIME_MIN minutes before Locked Crate despawns */
-    console.log('Locked Crate at ' + currentLockedCrateMonumentName + ' despawns in ' +
-        LOCKED_CRATE_DESPAWN_WARNING_TIME_MIN + ' minutes');
+    console.log(`Locked Crate at ${currentLockedCrateMonumentName} despawns in ` +
+        `${LOCKED_CRATE_DESPAWN_WARNING_TIME_MIN} minutes`);
     lockedCrateDespawnWarningTimer.stop();
 }
 
@@ -51,7 +51,7 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!currentLockedCratesId.some(e => e.name === 'oil_rig_small')) {
-                            console.log('Locked Crate just respawned on ' + MonNames.Monument['oil_rig_small']);
+                            console.log(`Locked Crate just respawned on ${MonNames.Monument['oil_rig_small']}`);
                         }
                         else {
                             currentLockedCratesId = currentLockedCratesId.filter(e => e.name !== 'oil_rig_small');
@@ -61,7 +61,7 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!currentLockedCratesId.some(e => e.name === 'large_oil_rig')) {
-                            console.log('Locked Crate just respawned on ' + MonNames.Monument['large_oil_rig']);
+                            console.log(`Locked Crate just respawned on ${MonNames.Monument['large_oil_rig']}`);
                         }
                         else {
                             currentLockedCratesId = currentLockedCratesId.filter(e => e.name !== 'large_oil_rig');
@@ -69,7 +69,7 @@ module.exports = {
                     }
                     else {
                         console.log('Locked Crate just got dropped by Chinook 47 at ' +
-                            MonNames.Monument[closestMonument.token]);
+                            `${MonNames.Monument[closestMonument.token]}`);
 
                         lockedCrateDespawnTimer.restart();
                         lockedCrateDespawnWarningTimer.restart();
@@ -110,10 +110,10 @@ module.exports = {
                     let despawnOffset = 5 * 60 * 1000; /* 5 minutes offset value */
                     if (timeLeft > despawnOffset) {
                         /* The timer have reset, which might indicate that the Locked Crate despawned. */
-                        console.log('Locked Crate at ' + MonNames.Monument[lockedCrate.name] + " just got looted");
+                        console.log(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} just got looted`);
                     }
                     else {
-                        console.log('Locked Crate at ' + MonNames.Monument[lockedCrate.name] + " just despawned");
+                        console.log(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} just despawned`);
                     }
                     lockedCrateDespawnTimer.stop();
                     lockedCrateDespawnWarningTimer.stop();
