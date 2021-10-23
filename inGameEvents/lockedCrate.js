@@ -105,7 +105,7 @@ module.exports = {
 
             if (active === false) {
                 if (lockedCrate.name === 'cargo_ship') {
-                    console.log('Locked Crate on Cargo Ship just got looted');
+                    console.log('Locked Crate on Cargo Ship just got looted or despawned');
                 }
                 else if (lockedCrate.name === 'oil_rig_small') {
                     console.log('Locked Crate at Small Oil Rig just got looted');
