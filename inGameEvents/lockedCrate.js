@@ -175,7 +175,7 @@ module.exports = {
         return false;
     },
 
-    getTimerTimeLeft: function () {
+    getLockedCrateMonumentTimeLeft: function () {
         /* Returns the time left before the Locked Crate is despawned, if timer is not running,
         null will be sent back */
         if (lockedCrateDespawnTimer.getStateRunning()) {

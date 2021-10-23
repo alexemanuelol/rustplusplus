@@ -95,7 +95,23 @@ module.exports = {
             }
         }
         currentChinook47sId = JSON.parse(JSON.stringify(tempArray));
-    }
+    },
+
+    getSmallOilRigLockedCrateTimeLeft: function () {
+        /* Returns the time left before the next bradley spawn, if timer is not running, null will be sent back */
+        if (lockedCrateSmallOilRigTimer.getStateRunning()) {
+            return Timer.secondsToFullScale(lockedCrateSmallOilRigTimer.getTimeLeft() / 1000);
+        }
+        return null;
+    },
+
+    getLargeOilRigLockedCrateTimeLeft: function () {
+        /* Returns the time left before the next bradley spawn, if timer is not running, null will be sent back */
+        if (lockedCrateLargeOilRigTimer.getStateRunning()) {
+            return Timer.secondsToFullScale(lockedCrateLargeOilRigTimer.getTimeLeft() / 1000);
+        }
+        return null;
+    },
 }
 
 // TODO: Add discord notifications for the events
