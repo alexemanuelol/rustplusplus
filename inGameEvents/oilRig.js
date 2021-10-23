@@ -4,6 +4,8 @@ const RustPlusTypes = require('../utils/rustplusTypes.js');
 const Timer = require('../utils/timer.js');
 
 const OIL_RIG_CHINOOK_47_MAX_DISTANCE = 550;
+
+/* Locked crate is locked for 15 minutes */
 const OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MIN = 15;
 const OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS = OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MIN * 60 * 1000;
 

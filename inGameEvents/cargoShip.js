@@ -2,7 +2,9 @@ const MapCalc = require('./../utils/mapCalculations.js');
 const RustPlusTypes = require('./../utils/rustplusTypes.js');
 const Timer = require('./../utils/timer.js');
 
-const CARGO_SHIP_EGRESS_TIME_MS = 50 * 60 * 1000; /* Default 50 minutes before egress start */
+/* Default 50 minutes before egress start */
+const CARGO_SHIP_EGRESS_TIME_MIN = 50;
+const CARGO_SHIP_EGRESS_TIME_MS = CARGO_SHIP_EGRESS_TIME_MIN * 60 * 1000;
 
 var currentCargoShipsId = [];
 var cargoShipEgressTimer = new Timer.timer(notifyCargoShipEgress, CARGO_SHIP_EGRESS_TIME_MS);

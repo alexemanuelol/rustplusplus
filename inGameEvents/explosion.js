@@ -4,7 +4,10 @@ const RustPlusTypes = require('./../utils/rustplusTypes.js');
 const Timer = require('./../utils/timer.js');
 
 const LAUNCH_SITE_RADIUS = 250;
-const BRADLEY_APC_RESPAWN_TIME_MS = 60 * 60 * 1000; /* Default 1 hour respawn time */
+
+/* Default 1 hour respawn time */
+const BRADLEY_APC_RESPAWN_TIME_MIN = 60;
+const BRADLEY_APC_RESPAWN_TIME_MS = BRADLEY_APC_RESPAWN_TIME_MIN * 60 * 1000;
 
 var currentExplosionsId = [];
 var bradleyRespawnTimer = new Timer.timer(notifyBradleyRespawn, BRADLEY_APC_RESPAWN_TIME_MS);
