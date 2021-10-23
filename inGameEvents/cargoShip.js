@@ -37,7 +37,7 @@ module.exports = {
                     currentCargoShipsId.push(marker.id);
 
                     let mapSize = info.response.info.mapSize;
-                    let spawnLocation = module.exports.getCargoShipSpawnLocation(marker.x, marker.y, mapSize);
+                    let spawnLocation = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);
 
                     /* Offset that is used to determine if the Cargo Ship just spawned */
                     let offset = 4 * MapCalc.gridDiameter;
@@ -76,50 +76,6 @@ module.exports = {
             }
         }
         currentCargoShipsId = JSON.parse(JSON.stringify(tempArray));
-    },
-
-    getCargoShipSpawnLocation: function (x, y, size) {
-        /* Returns a number representing at what location Cargo Ship was located */
-        let offset = size / 6;
-        let dir;
-
-        /* Vertically */
-        if (y < offset) {
-            dir = 0;
-        }
-        else if (y > (offset * 5)) {
-            dir = 3;
-        }
-        else {
-            if (x < (offset * 3))
-                return module.exports.locations[6];
-            else
-                return module.exports.locations[7];
-        }
-
-        /* Horizontally */
-        if (x < offset) {
-            dir += 0;
-        }
-        else if (x > (offset * 5)) {
-            dir += 2;
-        }
-        else {
-            dir += 1;
-        }
-
-        return module.exports.locations[dir];
-    },
-
-    locations: {
-        0: 'South West',
-        1: 'the South',
-        2: 'South East',
-        3: 'North West',
-        4: 'the North',
-        5: 'North East',
-        6: 'the West',
-        7: 'the East'
     },
 
     getCargoShipEgressTimeLeft: function () {

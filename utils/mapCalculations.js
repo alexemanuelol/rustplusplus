@@ -52,4 +52,48 @@ module.exports = {
         const b = y1 - y2;
         return Math.sqrt(a * a + b * b);
     },
+
+    getCoordinatesOrientation: function (x, y, size) {
+        /* Returns the orientation position of the coordinate. */
+        let offset = size / 6;
+        let dir;
+
+        /* Vertically */
+        if (y < offset) {
+            dir = 0;
+        }
+        else if (y > (offset * 5)) {
+            dir = 3;
+        }
+        else {
+            if (x < (offset * 3))
+                return module.exports.locations[6];
+            else
+                return module.exports.locations[7];
+        }
+
+        /* Horizontally */
+        if (x < offset) {
+            dir += 0;
+        }
+        else if (x > (offset * 5)) {
+            dir += 2;
+        }
+        else {
+            dir += 1;
+        }
+
+        return module.exports.locations[dir];
+    },
+
+    locations: {
+        0: 'South West',
+        1: 'the South',
+        2: 'South East',
+        3: 'North West',
+        4: 'the North',
+        5: 'North East',
+        6: 'the West',
+        7: 'the East'
+    },
 }

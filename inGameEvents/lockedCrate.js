@@ -58,7 +58,7 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!currentLockedCratesId.some(e => e.name === 'oil_rig_small')) {
-                            console.log(`Locked Crate just respawned on ${MonNames.Monument['oil_rig_small']}`);
+                            console.log(`Locked Crate just respawned on Small ${MonNames.Monument['oil_rig_small']}`);
                         }
                         else {
                             currentLockedCratesId = currentLockedCratesId.filter(e => e.name !== 'oil_rig_small');
