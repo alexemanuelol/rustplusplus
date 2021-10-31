@@ -15,6 +15,10 @@ module.exports = (guildId) => {
     const rest = new REST({ version: '9' }).setToken(Config.discord.token);
 
     rest.put(Routes.applicationGuildCommands(Config.discord.clientId, guildId), { body: commands })
-        .then(() => console.log(`Successfully registered application commands for guild: ${guildId}.`))
-        .catch(console.error);
+        .then(() => {
+            console.log(`Successfully registered application commands for guild: ${guildId}.`)
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };

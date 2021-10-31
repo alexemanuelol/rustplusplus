@@ -1,6 +1,6 @@
 module.exports = {
     name: 'interactionCreate',
-    async execute(discord, rustplus, interaction) {
+    async execute(client, interaction) {
         if (!interaction.isCommand()) return;
 
         const command = interaction.client.commands.get(interaction.commandName);
@@ -9,7 +9,7 @@ module.exports = {
         if (!command) return;
 
         try {
-            await command.execute(discord, rustplus, interaction);
+            await command.execute(client, interaction);
         } catch (error) {
             console.error(error);
             await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
