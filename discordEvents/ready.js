@@ -3,5 +3,7 @@ module.exports = {
     once: true,
     execute(client) {
         console.log('LOGGED IN AS: ' + client.user.tag);
+
+        client.registerSlashCommands();
     },
 };
