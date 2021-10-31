@@ -21,13 +21,13 @@ function notifyBradleyRespawn() {
 module.exports = {
     checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new explosion is detected */
-        module.exports.checkNewExplosionDetected(mapMarkers);
+        module.exports.checkNewExplosionDetected(mapMarkers, info);
 
         /* Check to see if an Explosion marker have disappeared from the map */
         module.exports.checkExplosionLeft(mapMarkers);
     },
 
-    checkNewExplosionDetected: function (mapMarkers) {
+    checkNewExplosionDetected: function (mapMarkers, info) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Explosion) {
                 if (!currentExplosionsId.includes(marker.id)) {
