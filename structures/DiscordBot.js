@@ -2,7 +2,7 @@ const fs = require('fs');
 const { Collection, Client } = require('discord.js');
 const Config = require('../config.json');
 
-class RustPlusPlusBot extends Client {
+class DiscordBot extends Client {
     constructor(props) {
         super(props);
 
@@ -58,4 +58,4 @@ class RustPlusPlusBot extends Client {
     }
 }
 
-module.exports = RustPlusPlusBot;
+module.exports = DiscordBot;

@@ -2,7 +2,7 @@ const fs = require('fs');
 const RustPlus = require('rustplus.js');
 const Discord = require('discord.js');
 const Config = require('./config.json');
-const RustPlusPlusBot = require('./structures/RustPlusPlusBot');
+const DiscordBot = require('./structures/DiscordBot');
 
 exports.intervalId = 0;
 exports.debug = false;
@@ -15,7 +15,7 @@ exports.mapMonuments = null;
  *  INITIALIZE DISCORD/RUSTPLUS
  */
 
-const client = new RustPlusPlusBot({ intents: [Discord.Intents.FLAGS.GUILDS] });
+const client = new DiscordBot({ intents: [Discord.Intents.FLAGS.GUILDS] });
 
 client.build();
 

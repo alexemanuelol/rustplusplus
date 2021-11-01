@@ -1,5 +1,3 @@
-const Guilds = require('./guilds.js');
-
 const CATEGORY = 'rustPlusPlus';
 const EVENTS = 'events';
 const ALERTS = 'alerts';
