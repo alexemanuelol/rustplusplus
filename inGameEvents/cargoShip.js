@@ -1,6 +1,6 @@
-const MapCalc = require('./../util/mapCalculations.js');
-const RustPlusTypes = require('./../util/rustplusTypes.js');
-const Timer = require('./../util/timer.js');
+const MapCalc = require('../util/mapCalculations.js');
+const RustPlusTypes = require('../util/rustplusTypes.js');
+const Timer = require('../util/timer.js');
 
 /* Default 50 minutes before egress start */
 const CARGO_SHIP_EGRESS_TIME_MIN = 50;
