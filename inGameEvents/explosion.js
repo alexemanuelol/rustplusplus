@@ -1,7 +1,7 @@
 const Main = require('./../index.js');
-const MapCalc = require('./../utils/mapCalculations.js');
-const RustPlusTypes = require('./../utils/rustplusTypes.js');
-const Timer = require('./../utils/timer.js');
+const MapCalc = require('./../util/mapCalculations.js');
+const RustPlusTypes = require('./../util/rustplusTypes.js');
+const Timer = require('./../util/timer.js');
 
 const LAUNCH_SITE_RADIUS = 250;
 

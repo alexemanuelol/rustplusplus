@@ -1,6 +1,6 @@
-const Items = require('./../utils/items.js');
-const MapCalc = require('./../utils/mapCalculations.js');
-const RustPlusTypes = require('../utils/rustplusTypes.js');
+const Items = require('./../util/items.js');
+const MapCalc = require('./../util/mapCalculations.js');
+const RustPlusTypes = require('../util/rustplusTypes.js');
 
 var currentVendingMachines = [];
 var foundItems = [];

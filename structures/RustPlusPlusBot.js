@@ -44,7 +44,7 @@ class RustPlusPlusBot extends Client {
 
     registerSlashCommands() {
         this.guilds.cache.forEach((guild) => {
-            require('./../utils/RegisterSlashCommands')(guild.id);
+            require('../util/RegisterSlashCommands')(guild.id);
         });
     }
 }

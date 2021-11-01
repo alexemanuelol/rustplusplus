@@ -1,8 +1,8 @@
 const Main = require('./../index.js');
-const MapCalc = require('./../utils/mapCalculations.js');
-const MonNames = require('./../utils/monumentNames.js');
-const RustPlusTypes = require('../utils/rustplusTypes.js');
-const Timer = require('./../utils/timer.js');
+const MapCalc = require('./../util/mapCalculations.js');
+const MonNames = require('./../util/monumentNames.js');
+const RustPlusTypes = require('../util/rustplusTypes.js');
+const Timer = require('./../util/timer.js');
 
 const LOCKED_CRATE_MONUMENT_RADIUS = 150;
 const LOCKED_CRATE_CARGO_SHIP_RADIUS = 100;
