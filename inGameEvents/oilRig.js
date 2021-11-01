@@ -1,4 +1,3 @@
-const Main = require('./../index.js');
 const MapCalc = require('./../util/mapCalculations.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer.js');
@@ -26,20 +25,20 @@ function notifyLockedCrateLargeOpen() {
 module.exports = {
     checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if a Chinook 47 have been detected near any of the oil rigs */
-        module.exports.checkNewChinook47Detected(mapMarkers, info);
+        module.exports.checkNewChinook47Detected(rustplus, mapMarkers, info);
 
         /* Check to see if a Chinook 47 have disappeared from the map */
         module.exports.checkChinook47Left(mapMarkers);
     },
 
-    checkNewChinook47Detected: function (mapMarkers, info) {
+    checkNewChinook47Detected: function (rustplus, mapMarkers, info) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Chinook47) {
                 if (!currentChinook47sId.includes(marker.id)) {
                     currentChinook47sId.push(marker.id);
 
                     let smallX, smallY, largeX, largeY;
-                    for (let monument of Main.mapMonuments) {
+                    for (let monument of rustplus.mapMonuments) {
                         if (monument.token === 'oil_rig_small') {
                             smallX = monument.x; smallY = monument.y;
                         }

@@ -5,6 +5,13 @@ class RustPlus extends RP {
     constructor(serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
 
+        this.intervalId = 0;
+        this.debug = false;
+        this.mapWidth = null;
+        this.mapHeight = null;
+        this.mapOceanMargin = null;
+        this.mapMonuments = null;
+
         this.loadEvents();
     }
 

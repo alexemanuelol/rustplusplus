@@ -1,4 +1,3 @@
-const Main = require('./../index.js');
 const MapCalc = require('./../util/mapCalculations.js');
 const MonNames = require('./../util/monumentNames.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
@@ -31,17 +30,17 @@ function notifyLockedCrateWarningDespawn() {
 module.exports = {
     checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new Locked Crate is detected */
-        module.exports.checkNewLockedCrateDetected(mapMarkers);
+        module.exports.checkNewLockedCrateDetected(rustplus, mapMarkers);
 
         /* Check to see if an Locked Crate marker have disappeared from the map */
         module.exports.checkLockedCrateLeft(mapMarkers);
     },
 
-    checkNewLockedCrateDetected: function (mapMarkers) {
+    checkNewLockedCrateDetected: function (rustplus, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.LockedCrate) {
                 if (!currentLockedCratesId.some(e => e.id === marker.id)) {
-                    let closestMonument = module.exports.getClosestMonument(marker.x, marker.y);
+                    let closestMonument = module.exports.getClosestMonument(marker.x, marker.y, rustplus);
                     let distance = MapCalc.getDistance(marker.x, marker.y, closestMonument.x, closestMonument.y);
 
                     if (module.exports.isCrateOnCargoShip(marker.x, marker.y, mapMarkers)) {
@@ -150,10 +149,10 @@ module.exports = {
         'water_treatment_plant_display_name'
     ],
 
-    getClosestMonument: function (x, y) {
+    getClosestMonument: function (x, y, rustplus) {
         let minDistance = 1000000;
         let minDistanceMonument = null;
-        for (let monument of Main.mapMonuments) {
+        for (let monument of rustplus.mapMonuments) {
             let distance = MapCalc.getDistance(x, y, monument.x, monument.y);
             if (distance < minDistance && module.exports.validLockedCrateMonuments.includes(monument.token)) {
                 minDistance = distance;

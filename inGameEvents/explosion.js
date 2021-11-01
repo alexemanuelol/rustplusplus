@@ -1,4 +1,3 @@
-const Main = require('./../index.js');
 const MapCalc = require('./../util/mapCalculations.js');
 const RustPlusTypes = require('./../util/rustplusTypes.js');
 const Timer = require('./../util/timer.js');
@@ -21,20 +20,20 @@ function notifyBradleyRespawn() {
 module.exports = {
     checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new explosion is detected */
-        module.exports.checkNewExplosionDetected(mapMarkers, info);
+        module.exports.checkNewExplosionDetected(rustplus, mapMarkers, info);
 
         /* Check to see if an Explosion marker have disappeared from the map */
         module.exports.checkExplosionLeft(mapMarkers);
     },
 
-    checkNewExplosionDetected: function (mapMarkers, info) {
+    checkNewExplosionDetected: function (rustplus, mapMarkers, info) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Explosion) {
                 if (!currentExplosionsId.includes(marker.id)) {
                     /* New Explosion detected! Save to array of explosions id */
                     currentExplosionsId.push(marker.id);
 
-                    if (module.exports.isExplosionBradley(marker.x, marker.y)) {
+                    if (module.exports.isExplosionBradley(marker.x, marker.y, rustplus)) {
                         /* Bradley APC */
                         console.log('Bradley APC was destroyed at Launch Site.');
                         bradleyRespawnTimer.restart();
@@ -66,9 +65,9 @@ module.exports = {
         currentExplosionsId = JSON.parse(JSON.stringify(tempArray));
     },
 
-    isExplosionBradley: function (x, y) {
+    isExplosionBradley: function (x, y, rustplus) {
         /* Check where the explosion marker is located, if near Launch Site, it assumes bradley */
-        for (let monument of Main.mapMonuments) {
+        for (let monument of rustplus.mapMonuments) {
             if (monument.token === 'launchsite') {
                 return (MapCalc.getDistance(x, y, monument.x, monument.y) <= LAUNCH_SITE_RADIUS);
             }

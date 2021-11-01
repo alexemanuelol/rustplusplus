@@ -1,9 +1,7 @@
-const Main = require('./../index.js');
-
 module.exports = {
     name: 'request',
     async execute(rustplus, request) {
-        if (Main.debug)
+        if (rustplus.debug)
             console.log(`REQUEST SENT:\n${JSON.stringify(request)}`);
     },
 };
