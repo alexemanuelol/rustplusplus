@@ -5,5 +5,6 @@ module.exports = {
         console.log('LOGGED IN AS: ' + client.user.tag);
 
         client.registerSlashCommands();
+        client.setupGuildChannels();
     },
 };

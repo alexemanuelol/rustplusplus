@@ -1,0 +1,1 @@
+exports.guilds = new Object();

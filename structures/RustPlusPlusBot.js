@@ -47,6 +47,12 @@ class RustPlusPlusBot extends Client {
             require('../util/RegisterSlashCommands')(guild.id);
         });
     }
+
+    setupGuildChannels() {
+        this.guilds.cache.forEach((guild) => {
+            require('../util/SetupGuildChannels')(guild);
+        });
+    }
 }
 
 module.exports = RustPlusPlusBot;
