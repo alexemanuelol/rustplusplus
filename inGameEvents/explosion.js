@@ -19,7 +19,7 @@ function notifyBradleyRespawn() {
 }
 
 module.exports = {
-    checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new explosion is detected */
         module.exports.checkNewExplosionDetected(mapMarkers, info);
 

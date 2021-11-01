@@ -3,7 +3,7 @@ const Main = require('./../index.js');
 
 module.exports = {
     name: 'connected',
-    async execute(discord, rustplus) {
+    async execute(rustplus) {
         console.log('RUSTPLUS CONNECTED');
 
         /* Get map width/height and oceanMargin once when connected (to avoid calling getMap continuously) */
@@ -15,6 +15,6 @@ module.exports = {
         });
 
         /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
-        Main.intervalId = setInterval(InGameEventHandler.inGameEventHandler, 10000, discord, rustplus);
+        Main.intervalId = setInterval(InGameEventHandler.inGameEventHandler, 10000, rustplus);
     },
 };

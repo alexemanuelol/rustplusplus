@@ -24,7 +24,7 @@ function notifyLockedCrateLargeOpen() {
 }
 
 module.exports = {
-    checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if a Chinook 47 have been detected near any of the oil rigs */
         module.exports.checkNewChinook47Detected(mapMarkers, info);
 

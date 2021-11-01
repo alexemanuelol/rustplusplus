@@ -8,7 +8,7 @@ var foundItems = [];
 var itemsToLookForId = [];
 
 module.exports = {
-    checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
                 /* Check if new Vending Machine is detected */

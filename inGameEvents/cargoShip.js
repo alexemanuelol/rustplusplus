@@ -16,7 +16,7 @@ function notifyCargoShipEgress() {
 }
 
 module.exports = {
-    checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new Cargo Ship is detected */
         module.exports.checkNewCargoShipDetected(mapMarkers, info);
 

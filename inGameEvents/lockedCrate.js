@@ -29,7 +29,7 @@ function notifyLockedCrateWarningDespawn() {
 }
 
 module.exports = {
-    checkEvent: function (discord, rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
         /* Check if new Locked Crate is detected */
         module.exports.checkNewLockedCrateDetected(mapMarkers);
 
