@@ -9,6 +9,9 @@ class RustPlusPlusBot extends Client {
         /* Create a Collection for all the commands */
         this.commands = new Collection();
 
+        /* An object that contains all guild ids with channel ids */
+        this.guildsAndChannels = new Object();
+
         this.loadCommands();
         this.loadEvents();
     }
@@ -50,7 +53,7 @@ class RustPlusPlusBot extends Client {
 
     setupGuildChannels() {
         this.guilds.cache.forEach((guild) => {
-            require('../util/SetupGuildChannels')(guild);
+            require('../util/SetupGuildChannels')(this, guild);
         });
     }
 }
