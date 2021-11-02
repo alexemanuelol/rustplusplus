@@ -4,6 +4,7 @@ const Timer = require('../util/timer');
 const CargoShip = require('../inGameEvents/cargoShip.js');
 const Explosion = require('../inGameEvents/explosion.js');
 const LockedCrate = require('../inGameEvents/lockedCrate.js');
+const OilRig = require('../inGameEvents/oilRig.js');
 const Constants = require('../util/eventConstants.js');
 
 class RustPlus extends RP {
@@ -23,6 +24,7 @@ class RustPlus extends RP {
         this.currentExplosionsId = [];
         this.currentLockedCratesId = [];
         this.currentLockedCrateMonumentName = null;
+        this.currentChinook47sId = [];
 
         /* Event timers */
         this.cargoShipEgressTimer = new Timer.timer(
@@ -33,13 +35,19 @@ class RustPlus extends RP {
             Constants.BRADLEY_APC_RESPAWN_TIME_MS);
         this.lockedCrateDespawnTimer = new Timer.timer(
             () => { },
-            Constants.LOCKED_CRATE_DESPAWN_TIME_MS
-        );
+            Constants.LOCKED_CRATE_DESPAWN_TIME_MS);
         this.lockedCrateDespawnWarningTimer = new Timer.timer(
             LockedCrate.notifyLockedCrateWarningDespawn,
             Constants.LOCKED_CRATE_DESPAWN_TIME_MS - Constants.LOCKED_CRATE_DESPAWN_WARNING_TIME_MS,
-            this
-        );
+            this);
+        this.lockedCrateSmallOilRigTimer = new Timer.timer(
+            OilRig.notifyLockedCrateSmallOpen,
+            Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+            this);
+        this.lockedCrateLargeOilRigTimer = new Timer.timer(
+            OilRig.notifyLockedCrateLargeOpen,
+            Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+            this);
 
         /* Load rustplus events */
         this.loadEvents();

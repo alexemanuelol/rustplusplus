@@ -8,6 +8,9 @@ module.exports = {
     /* Default 120 minutes before locked crate at monument decay away */
     LOCKED_CRATE_DESPAWN_TIME_MS: 120 * 60 * 1000,
 
-    /* Warn 20 minutes before locked crate at monument despawn */
+    /* Default warn 20 minutes before locked crate at monument despawn */
     LOCKED_CRATE_DESPAWN_WARNING_TIME_MS: 20 * 60 * 1000,
+
+    /* Default Locked Crate is locked for 15 minutes */
+    OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS: 15 * 60 * 1000,
 }
