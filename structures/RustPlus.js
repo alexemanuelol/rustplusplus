@@ -25,6 +25,9 @@ class RustPlus extends RP {
         this.currentLockedCratesId = [];
         this.currentLockedCrateMonumentName = null;
         this.currentChinook47sId = [];
+        this.currentVendingMachines = [];
+        this.foundItems = [];
+        this.itemsToLookForId = [];
 
         /* Event timers */
         this.cargoShipEgressTimer = new Timer.timer(
@@ -72,6 +75,16 @@ class RustPlus extends RP {
             return Timer.secondsToFullScale(timer.getTimeLeft() / 1000);
         }
         return null;
+    }
+
+    addItemToLookFor(id) {
+        if (!this.itemsToLookForId.includes(id)) {
+            this.itemsToLookForId.push(id);
+        }
+    }
+
+    removeItemToLookFor(id) {
+        this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
     }
 }
 
