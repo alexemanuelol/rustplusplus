@@ -2,6 +2,7 @@ const fs = require('fs');
 const RP = require('rustplus.js');
 const Timer = require('../util/timer');
 const CargoShip = require('../inGameEvents/cargoShip.js');
+const Explosion = require('../inGameEvents/explosion.js');
 const Constants = require('../util/eventConstants.js');
 
 class RustPlus extends RP {
@@ -18,12 +19,16 @@ class RustPlus extends RP {
 
         /* Event Current Entities */
         this.currentCargoShipsId = [];
-        console.log("TIME: " + Constants.CARGO_SHIP_EGRESS_TIME_MS)
+        this.currentExplosionsId = [];
 
         /* Event timers */
         this.cargoShipEgressTimer = new Timer.timer(
             CargoShip.notifyCargoShipEgress,
             Constants.CARGO_SHIP_EGRESS_TIME_MS);
+        this.bradleyRespawnTimer = new Timer.timer(
+            Explosion.notifyBradleyRespawn,
+            Constants.BRADLEY_APC_RESPAWN_TIME_MS
+        );
 
         /* Load rustplus events */
         this.loadEvents();

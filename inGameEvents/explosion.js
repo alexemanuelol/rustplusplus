@@ -1,21 +1,7 @@
 const MapCalc = require('../util/mapCalculations.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
-const Timer = require('../util/timer.js');
 
 const LAUNCH_SITE_RADIUS = 250;
-
-/* Default 1 hour respawn time */
-const BRADLEY_APC_RESPAWN_TIME_MIN = 60;
-const BRADLEY_APC_RESPAWN_TIME_MS = BRADLEY_APC_RESPAWN_TIME_MIN * 60 * 1000;
-
-var currentExplosionsId = [];
-var bradleyRespawnTimer = new Timer.timer(notifyBradleyRespawn, BRADLEY_APC_RESPAWN_TIME_MS);
-
-/* Bradley APC respawn notification function */
-function notifyBradleyRespawn() {
-    /* Notifies when bradley should be respawning */
-    console.log('Bradley APC should respawn any second now');
-}
 
 module.exports = {
     checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
@@ -23,20 +9,20 @@ module.exports = {
         module.exports.checkNewExplosionDetected(rustplus, mapMarkers, info);
 
         /* Check to see if an Explosion marker have disappeared from the map */
-        module.exports.checkExplosionLeft(mapMarkers);
+        module.exports.checkExplosionLeft(rustplus, mapMarkers);
     },
 
     checkNewExplosionDetected: function (rustplus, mapMarkers, info) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Explosion) {
-                if (!currentExplosionsId.includes(marker.id)) {
+                if (!rustplus.currentExplosionsId.includes(marker.id)) {
                     /* New Explosion detected! Save to array of explosions id */
-                    currentExplosionsId.push(marker.id);
+                    rustplus.currentExplosionsId.push(marker.id);
 
                     if (module.exports.isExplosionBradley(marker.x, marker.y, rustplus)) {
                         /* Bradley APC */
                         console.log('Bradley APC was destroyed at Launch Site.');
-                        bradleyRespawnTimer.restart();
+                        rustplus.bradleyRespawnTimer.restart();
                     }
                     else {
                         /* Patrol Helicopter */
@@ -49,9 +35,9 @@ module.exports = {
         }
     },
 
-    checkExplosionLeft: function (mapMarkers) {
+    checkExplosionLeft: function (rustplus, mapMarkers) {
         let tempArray = [];
-        for (let id of currentExplosionsId) {
+        for (let id of rustplus.currentExplosionsId) {
             for (let marker of mapMarkers.response.mapMarkers.markers) {
                 if (marker.type === RustPlusTypes.MarkerType.Explosion) {
                     if (marker.id === id) {
@@ -62,7 +48,7 @@ module.exports = {
                 }
             }
         }
-        currentExplosionsId = JSON.parse(JSON.stringify(tempArray));
+        rustplus.currentExplosionsId = JSON.parse(JSON.stringify(tempArray));
     },
 
     isExplosionBradley: function (x, y, rustplus) {
@@ -75,12 +61,9 @@ module.exports = {
         return false;
     },
 
-    getBradleyRespawnTimeLeft: function () {
-        /* Returns the time left before the next bradley spawn, if timer is not running, null will be sent back */
-        if (bradleyRespawnTimer.getStateRunning()) {
-            return Timer.secondsToFullScale(bradleyRespawnTimer.getTimeLeft() / 1000);
-        }
-        return null;
+    notifyBradleyRespawn: function () {
+        /* Notifies when bradley should be respawning */
+        console.log('Bradley APC should respawn any second now');
     },
 }
 
