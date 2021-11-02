@@ -1,11 +1,11 @@
 module.exports = {
-    timer: function (callback, delay) {
+    timer: function (callback, delay, ...args) {
         var id, started, remaining = delay, running = false;
 
         this.start = function () {
             started = new Date();
             if (remaining > 0) {
-                id = setTimeout(callback, remaining);
+                id = setTimeout(callback, remaining, args);
                 running = true;
                 return true;
             }
