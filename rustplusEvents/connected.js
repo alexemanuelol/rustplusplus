@@ -38,7 +38,7 @@ module.exports = {
 
                 if (rustplus.interaction) {
                     rustplus.interaction.editReply({
-                        content: ':white_check_mark: Setup Successful!',
+                        content: ':white_check_mark: Setup Successful, Connected!',
                         ephemeral: true
                     });
                 }

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { Collection, Client } = require('discord.js');
 const Config = require('../config.json');
+const RustPlus = require('../structures/RustPlus');
 
 class DiscordBot extends Client {
     constructor(props) {
@@ -58,6 +59,25 @@ class DiscordBot extends Client {
         this.guilds.cache.forEach((guild) => {
             require('../util/SetupGuildChannels')(this, guild);
         });
+    }
+
+    createRustplusInstancesFromConfig() {
+        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../rustplusInstances.json`, 'utf8'));
+
+        for (let guildId in instances) {
+            let rustplus = new RustPlus(
+                instances[guildId].server_ip,
+                instances[guildId].app_port,
+                instances[guildId].steam_id,
+                instances[guildId].player_token
+            );
+
+            /* Add guild ID to the rustplus instance */
+            rustplus.guildId = guildId;
+
+            /* Connect */
+            rustplus.build();
+        }
     }
 }
 
