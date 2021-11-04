@@ -7,7 +7,7 @@ const LOCKED_CRATE_MONUMENT_RADIUS = 150;
 const LOCKED_CRATE_CARGO_SHIP_RADIUS = 100;
 
 module.exports = {
-    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Locked Crate is detected */
         module.exports.checkNewLockedCrateDetected(rustplus, mapMarkers);
 
@@ -87,9 +87,11 @@ module.exports = {
                 }
                 else if (lockedCrate.name === 'oil_rig_small') {
                     console.log('Locked Crate at Small Oil Rig just got looted');
+                    rustplus.lockedCrateSmallOilRigTimer.stop();
                 }
                 else if (lockedCrate.name === 'large_oil_rig') {
                     console.log('Locked Crate at Large Oil Rig just got looted');
+                    rustplus.lockedCrateLargeOilRigTimer.stop();
                 }
                 else {
                     let timeLeft = rustplus.lockedCrateDespawnTimer.getTimeLeft();

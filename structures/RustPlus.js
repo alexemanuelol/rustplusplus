@@ -1,5 +1,6 @@
 const fs = require('fs');
 const RP = require('rustplus.js');
+const Client = require('../index.js');
 const Timer = require('../util/timer');
 const CargoShip = require('../inGameEvents/cargoShip.js');
 const Explosion = require('../inGameEvents/explosion.js');
@@ -10,6 +11,14 @@ const Constants = require('../util/eventConstants.js');
 class RustPlus extends RP {
     constructor(serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
+
+        this.serverIp = serverIp;
+        this.appPort = appPort;
+        this.steamId = steamId;
+        this.playerToken = playerToken;
+
+        this.guildId = null;
+        this.interaction = null;
 
         /* Map meta */
         this.intervalId = 0;
@@ -61,7 +70,7 @@ class RustPlus extends RP {
         const eventFiles = fs.readdirSync(`${__dirname}/../rustplusEvents`).filter(file => file.endsWith('.js'));
         for (const file of eventFiles) {
             const event = require(`../rustplusEvents/${file}`);
-            this.on(event.name, (...args) => event.execute(this, ...args));
+            this.on(event.name, (...args) => event.execute(this, Client.client, ...args));
         }
     }
 

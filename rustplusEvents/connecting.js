@@ -1,6 +1,6 @@
 module.exports = {
     name: 'connecting',
-    async execute(rustplus) {
+    async execute(rustplus, client) {
         console.log('RUSTPLUS CONNECTING...');
     },
 };

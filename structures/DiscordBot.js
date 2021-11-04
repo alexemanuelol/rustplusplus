@@ -12,6 +12,9 @@ class DiscordBot extends Client {
         /* An object that contains all guild ids with channel ids */
         this.guildsAndChannels = new Object();
 
+        /* An object that contains all the rustplus instances */
+        this.rustplusInstances = new Object();
+
         this.loadCommands();
         this.loadEvents();
     }

@@ -1,6 +1,6 @@
 module.exports = {
     name: 'disconnected',
-    async execute(rustplus) {
+    async execute(rustplus, client) {
         console.log('RUSTPLUS DISCONNECTED');
 
         /* Clear the current interval of inGameEventHandler */

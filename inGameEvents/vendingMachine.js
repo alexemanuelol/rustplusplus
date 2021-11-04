@@ -3,7 +3,7 @@ const MapCalc = require('../util/mapCalculations.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
-    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
                 /* Check if new Vending Machine is detected */

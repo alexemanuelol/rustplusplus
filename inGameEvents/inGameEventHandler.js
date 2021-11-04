@@ -5,27 +5,27 @@ const OilRig = require('./oilRig.js');
 const VendingMachine = require('./vendingMachine.js');
 
 module.exports = {
-    inGameEventHandler: function (rustplus) {
+    inGameEventHandler: function (rustplus, client) {
         //console.log('Pull information: server info, map markers, team info and time.');
 
         rustplus.getInfo((info) => {
             rustplus.getMapMarkers((mapMarkers) => {
                 rustplus.getTeamInfo((teamInfo) => {
                     rustplus.getTime((time) => {
-                        module.exports.checkEvents(rustplus, info, mapMarkers, teamInfo, time);
+                        module.exports.checkEvents(rustplus, client, info, mapMarkers, teamInfo, time);
                     });
                 });
             });
         });
     },
 
-    checkEvents: function (rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvents: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         //console.log('Check in-game events.');
 
-        CargoShip.checkEvent(rustplus, info, mapMarkers, teamInfo, time);
-        Explosion.checkEvent(rustplus, info, mapMarkers, teamInfo, time);
-        LockedCrate.checkEvent(rustplus, info, mapMarkers, teamInfo, time);
-        OilRig.checkEvent(rustplus, info, mapMarkers, teamInfo, time);
-        VendingMachine.checkEvent(rustplus, info, mapMarkers, teamInfo, time);
+        CargoShip.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
+        Explosion.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
+        LockedCrate.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
+        OilRig.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
+        VendingMachine.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
     },
 };

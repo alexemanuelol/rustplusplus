@@ -2,7 +2,7 @@ const MapCalc = require('../util/mapCalculations.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
-    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Cargo Ship is detected */
         module.exports.checkNewCargoShipDetected(rustplus, mapMarkers, info);
 

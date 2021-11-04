@@ -4,7 +4,7 @@ const RustPlusTypes = require('../util/rustplusTypes.js');
 const LAUNCH_SITE_RADIUS = 250;
 
 module.exports = {
-    checkEvent: function (rustplus, info, mapMarkers, teamInfo, time) {
+    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new explosion is detected */
         module.exports.checkNewExplosionDetected(rustplus, mapMarkers, info);
 
