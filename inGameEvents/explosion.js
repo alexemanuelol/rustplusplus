@@ -21,14 +21,14 @@ module.exports = {
 
                     if (module.exports.isExplosionBradley(marker.x, marker.y, rustplus)) {
                         /* Bradley APC */
-                        console.log('Bradley APC was destroyed at Launch Site.');
+                        rustplus.log('Bradley APC was destroyed at Launch Site.');
                         rustplus.bradleyRespawnTimer.restart();
                     }
                     else {
                         /* Patrol Helicopter */
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize)
                         let loc = (gridLocation === null) ? 'somewhere outside the grid system' : `at ${gridLocation}`;
-                        console.log(`Patrol Helicopter was taken down ${loc}.`);
+                        rustplus.log(`Patrol Helicopter was taken down ${loc}.`);
                     }
                 }
             }
@@ -61,9 +61,10 @@ module.exports = {
         return false;
     },
 
-    notifyBradleyRespawn: function () {
+    notifyBradleyRespawn: function (rustplus) {
+        rustplus = rustplus[0];
         /* Notifies when bradley should be respawning */
-        console.log('Bradley APC should respawn any second now');
+        rustplus.log('Bradley APC should respawn any second now');
     },
 }
 

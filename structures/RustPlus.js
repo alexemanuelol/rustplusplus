@@ -7,17 +7,21 @@ const Explosion = require('../inGameEvents/explosion.js');
 const LockedCrate = require('../inGameEvents/lockedCrate.js');
 const OilRig = require('../inGameEvents/oilRig.js');
 const Constants = require('../util/eventConstants.js');
+const Logger = require('./Logger.js');
+const path = require('path');
 
 class RustPlus extends RP {
-    constructor(serverIp, appPort, steamId, playerToken) {
+    constructor(serverIp, appPort, steamId, playerToken, guildId) {
         super(serverIp, appPort, steamId, playerToken);
+
+        this.logger = new Logger(path.join(__dirname, '..', `Logs/${guildId}.log`), guildId);
 
         this.serverIp = serverIp;
         this.appPort = appPort;
         this.steamId = steamId;
         this.playerToken = playerToken;
 
-        this.guildId = null;
+        this.guildId = guildId;
         this.interaction = null;
 
         /* Map meta */
@@ -41,10 +45,12 @@ class RustPlus extends RP {
         /* Event timers */
         this.cargoShipEgressTimer = new Timer.timer(
             CargoShip.notifyCargoShipEgress,
-            Constants.CARGO_SHIP_EGRESS_TIME_MS);
+            Constants.CARGO_SHIP_EGRESS_TIME_MS,
+            this);
         this.bradleyRespawnTimer = new Timer.timer(
             Explosion.notifyBradleyRespawn,
-            Constants.BRADLEY_APC_RESPAWN_TIME_MS);
+            Constants.BRADLEY_APC_RESPAWN_TIME_MS,
+            this);
         this.lockedCrateDespawnTimer = new Timer.timer(
             () => { },
             Constants.LOCKED_CRATE_DESPAWN_TIME_MS);
@@ -63,6 +69,10 @@ class RustPlus extends RP {
 
         /* Load rustplus events */
         this.loadEvents();
+    }
+
+    log(text) {
+        this.logger.log(text);
     }
 
     loadEvents() {

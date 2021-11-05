@@ -34,6 +34,7 @@ module.exports = {
                 content: `:x: Invalid Server IP Address: ${server_ip}`,
                 ephemeral: true
             });
+            client.log(`Invalid Server IP Address: ${server_ip}`);
             return;
         }
         else if (!(app_port >= 1 && app_port <= 65535)) {
@@ -41,6 +42,7 @@ module.exports = {
                 content: `:x: Invalid Server App Port: ${app_port}`,
                 ephemeral: true
             });
+            client.log(`Invalid Server App Port: ${app_port}`);
             return;
         }
 
@@ -57,11 +59,9 @@ module.exports = {
             server_ip,
             app_port,
             steam_id,
-            player_token
+            player_token,
+            interaction.guildId
         );
-
-        /* Add guild ID to the rustplus instance */
-        rustplus.guildId = interaction.guildId;
 
         /* Store the interaction in the RustPlus instance temporarily */
         rustplus.interaction = interaction;

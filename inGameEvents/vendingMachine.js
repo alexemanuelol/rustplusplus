@@ -21,7 +21,7 @@ module.exports = {
 
             let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
 
-            console.log(`New Vending Machine located at ${gridLocation}`);
+            rustplus.log(`New Vending Machine located at ${gridLocation}`);
         }
     },
 
@@ -50,7 +50,7 @@ module.exports = {
 
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
 
-                        console.log(`${item} was found in a Vending Machine at ${gridLocation}`);
+                        rustplus.log(`${item} was found in a Vending Machine at ${gridLocation}`);
                     }
                 }
             }

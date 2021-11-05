@@ -4,15 +4,16 @@ const InGameEventHandler = require('../inGameEvents/inGameEventHandler.js');
 module.exports = {
     name: 'connected',
     async execute(rustplus, client) {
-        console.log('RUSTPLUS CONNECTED');
+        rustplus.log('RUSTPLUS CONNECTED');
 
         /* Get map width/height and oceanMargin once when connected (to avoid calling getMap continuously) */
         rustplus.getMap((map) => {
             if (map.response.error && rustplus.interaction !== null) {
                 rustplus.interaction.editReply({
-                    content: ':x: steamId or Player Token is invalid.',
+                    content: ':x: steamId or Player Token is invalid',
                     ephemeral: true
                 });
+                rustplus.log('steamId or Player Token is invalid');
                 rustplus.interaction = null;
                 rustplus.disconnect();
                 return;
@@ -41,6 +42,7 @@ module.exports = {
                         content: ':white_check_mark: Setup Successful, Connected!',
                         ephemeral: true
                     });
+                    rustplus.log('Setup Successful, Connected');
                 }
             }
             rustplus.mapWidth = map.response.map.width;

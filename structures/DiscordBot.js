@@ -2,10 +2,14 @@ const fs = require('fs');
 const { Collection, Client } = require('discord.js');
 const Config = require('../config.json');
 const RustPlus = require('../structures/RustPlus');
+const Logger = require('./Logger.js');
+const path = require('path');
 
 class DiscordBot extends Client {
     constructor(props) {
         super(props);
+
+        this.logger = new Logger(path.join(__dirname, '..', 'Logs/discordBot.log'));
 
         /* Create a Collection for all the commands */
         this.commands = new Collection();
@@ -18,6 +22,10 @@ class DiscordBot extends Client {
 
         this.loadCommands();
         this.loadEvents();
+    }
+
+    log(text) {
+        this.logger.log(text);
     }
 
     loadCommands() {
@@ -51,7 +59,7 @@ class DiscordBot extends Client {
 
     registerSlashCommands() {
         this.guilds.cache.forEach((guild) => {
-            require('../util/RegisterSlashCommands')(guild.id);
+            require('../util/RegisterSlashCommands')(this, guild.id);
         });
     }
 
@@ -69,11 +77,9 @@ class DiscordBot extends Client {
                 instances[guildId].server_ip,
                 instances[guildId].app_port,
                 instances[guildId].steam_id,
-                instances[guildId].player_token
+                instances[guildId].player_token,
+                guildId
             );
-
-            /* Add guild ID to the rustplus instance */
-            rustplus.guildId = guildId;
 
             /* Connect */
             rustplus.build();
