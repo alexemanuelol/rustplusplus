@@ -1,27 +1,36 @@
 const fs = require('fs');
 const RP = require('rustplus.js');
 const Client = require('../index.js');
+const { MessageEmbed } = require('discord.js');
 const Timer = require('../util/timer');
-const CargoShip = require('../inGameEvents/cargoShip.js');
-const Explosion = require('../inGameEvents/explosion.js');
-const LockedCrate = require('../inGameEvents/lockedCrate.js');
-const OilRig = require('../inGameEvents/oilRig.js');
 const Constants = require('../util/eventConstants.js');
 const Logger = require('./Logger.js');
 const path = require('path');
 
-class RustPlus extends RP {
-    constructor(serverIp, appPort, steamId, playerToken, guildId) {
-        super(serverIp, appPort, steamId, playerToken);
+const CargoShip = require('../inGameEvents/cargoShip.js');
+const Explosion = require('../inGameEvents/explosion.js');
+const LockedCrate = require('../inGameEvents/lockedCrate.js');
+const OilRig = require('../inGameEvents/oilRig.js');
 
-        this.logger = new Logger(path.join(__dirname, '..', `Logs/${guildId}.log`), guildId);
+class RustPlus extends RP {
+    constructor(serverIp, appPort, steamId, playerToken) {
+        super(serverIp, appPort, steamId, playerToken);
 
         this.serverIp = serverIp;
         this.appPort = appPort;
         this.steamId = steamId;
         this.playerToken = playerToken;
 
-        this.guildId = guildId;
+        this.logger = null;
+
+        this.guildId = null;
+        this.eventChannelId = null;
+        this.alertChannelId = null;
+        this.commandsChannelId = null;
+        this.switchesChannelId = null;
+
+        this.serverName = undefined;
+
         this.interaction = null;
 
         /* Map meta */
@@ -71,10 +80,6 @@ class RustPlus extends RP {
         this.loadEvents();
     }
 
-    log(text) {
-        this.logger.log(text);
-    }
-
     loadEvents() {
         /* Dynamically retrieve the rustplus event files */
         const eventFiles = fs.readdirSync(`${__dirname}/../rustplusEvents`).filter(file => file.endsWith('.js'));
@@ -85,7 +90,29 @@ class RustPlus extends RP {
     }
 
     build() {
+        /* Setup the logger */
+        this.logger = new Logger(path.join(__dirname, '..', `Logs/${this.guildId}.log`), this.guildId);
+
         this.connect();
+    }
+
+    log(text) {
+        this.logger.log(text);
+    }
+
+    sendEvent(text) {
+        let channel = Client.client.getChannel(this.guildId, this.eventChannelId);
+
+        if (channel) {
+            let embed = new MessageEmbed()
+                .setColor('#ce412b')
+                .setAuthor(text)
+                .setFooter(this.serverName)
+                .setTimestamp();
+
+            channel.send({ embeds: [embed] });
+            this.log(text);
+        }
     }
 
     getTimeLeftOfTimer(timer) {
@@ -105,6 +132,7 @@ class RustPlus extends RP {
     removeItemToLookFor(id) {
         this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
     }
+
 }
 
 module.exports = RustPlus;

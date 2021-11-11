@@ -1,4 +1,3 @@
-const fs = require('fs');
 const InGameEventHandler = require('../inGameEvents/inGameEventHandler.js');
 
 module.exports = {
@@ -8,31 +7,25 @@ module.exports = {
 
         /* Get map width/height and oceanMargin once when connected (to avoid calling getMap continuously) */
         rustplus.getMap((map) => {
-            if (map.response.error && rustplus.interaction !== null) {
-                rustplus.interaction.editReply({
-                    content: ':x: steamId or Player Token is invalid',
-                    ephemeral: true
-                });
-                rustplus.log('steamId or Player Token is invalid');
-                rustplus.interaction = null;
-                rustplus.disconnect();
-                return;
-            }
-            else {
-                /* SteamID and Player Token seem to be valid, add to instances json */
-                let instances = JSON.parse(fs.readFileSync(`${__dirname}/../rustplusInstances.json`, 'utf8'));
-
-                /* Delete previous instance if any */
-                delete instances[rustplus.guildId];
-
-                /* Add to object of instances */
-                instances[rustplus.guildId] = {
-                    server_ip: rustplus.serverIp,
-                    app_port: rustplus.appPort,
-                    steam_id: rustplus.steamId,
-                    player_token: rustplus.playerToken
+            rustplus.getInfo((info) => {
+                if (map.response.error && rustplus.interaction !== null) {
+                    rustplus.interaction.editReply({
+                        content: ':x: steamId or Player Token is invalid',
+                        ephemeral: true
+                    });
+                    rustplus.log('steamId or Player Token is invalid');
+                    rustplus.interaction = null;
+                    rustplus.disconnect();
+                    return;
                 }
-                fs.writeFileSync(`${__dirname}/../rustplusInstances.json`, JSON.stringify(instances, null, 2));
+
+                /* SteamID and Player Token seem to be valid, add to instances json */
+                require('../util/AddRustplusInstance')(
+                    rustplus.guildId,
+                    rustplus.serverIp,
+                    rustplus.appPort,
+                    rustplus.steamId,
+                    rustplus.playerToken);
 
                 /* Add rustplus instance to Object */
                 client.rustplusInstances[rustplus.guildId] = rustplus;
@@ -44,15 +37,17 @@ module.exports = {
                     });
                     rustplus.log('Setup Successful, Connected');
                 }
-            }
-            rustplus.mapWidth = map.response.map.width;
-            rustplus.mapHeight = map.response.map.height;
-            rustplus.mapOceanMargin = map.response.map.oceanMargin;
-            rustplus.mapMonuments = map.response.map.monuments;
 
-            /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
-            rustplus.intervalId = setInterval(InGameEventHandler.inGameEventHandler, 10000, rustplus, client);
+                rustplus.mapWidth = map.response.map.width;
+                rustplus.mapHeight = map.response.map.height;
+                rustplus.mapOceanMargin = map.response.map.oceanMargin;
+                rustplus.mapMonuments = map.response.map.monuments;
+
+                rustplus.serverName = info.response.info.name;
+
+                /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
+                rustplus.intervalId = setInterval(InGameEventHandler.inGameEventHandler, 10000, rustplus, client);
+            });
         });
-
     },
 };

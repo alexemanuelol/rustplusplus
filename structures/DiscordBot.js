@@ -11,36 +11,23 @@ class DiscordBot extends Client {
 
         this.logger = new Logger(path.join(__dirname, '..', 'Logs/discordBot.log'));
 
-        /* Create a Collection for all the commands */
         this.commands = new Collection();
-
-        /* An object that contains all guild ids with channel ids */
-        this.guildsAndChannels = new Object();
-
-        /* An object that contains all the rustplus instances */
+        this.guildsAndChannelsIds = new Object();
         this.rustplusInstances = new Object();
 
         this.loadCommands();
         this.loadEvents();
     }
 
-    log(text) {
-        this.logger.log(text);
-    }
-
     loadCommands() {
-        /* Dynamically retrieve the command files */
         const commandFiles = fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             const command = require(`../commands/${file}`);
-            /* Set a new item in the Collection with the key as the command name and
-               the value as the exported module */
             this.commands.set(command.data.name, command);
         }
     }
 
     loadEvents() {
-        /* Dynamically retrieve the discord event files */
         const discordEventFiles = fs.readdirSync(`${__dirname}/../discordEvents`).filter(file => file.endsWith('.js'));
         for (const file of discordEventFiles) {
             const event = require(`../discordEvents/${file}`);
@@ -53,13 +40,16 @@ class DiscordBot extends Client {
     }
 
     build() {
-        /* Login to Discord with token */
         this.login(Config.discord.token);
+    }
+
+    log(text) {
+        this.logger.log(text);
     }
 
     registerSlashCommands() {
         this.guilds.cache.forEach((guild) => {
-            require('../util/RegisterSlashCommands')(this, guild.id);
+            require('../util/RegisterSlashCommands')(this, guild);
         });
     }
 
@@ -69,20 +59,44 @@ class DiscordBot extends Client {
         });
     }
 
+    getChannel(guildId, channelId) {
+        let guild = this.guilds.cache.get(guildId);
+        if (guild) {
+            let channel = guild.channels.cache.get(channelId);
+            if (!channel) {
+                this.log(`No channel with ID: ${channelId}`);
+            }
+            return channel;
+        }
+        else {
+            this.log(`No guild with ID: ${guildId}`);
+        }
+        return guild;
+    }
+
+    createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken) {
+        let rustplus = new RustPlus(serverIp, appPort, steamId, playerToken);
+
+        rustplus.guildId = guildId;
+
+        rustplus.eventChannelId = this.guildsAndChannelsIds[guildId]['events'];
+        rustplus.alertChannelId = this.guildsAndChannelsIds[guildId]['alerts'];
+        rustplus.commandsChannelId = this.guildsAndChannelsIds[guildId]['commands'];
+        rustplus.switchesChannelId = this.guildsAndChannelsIds[guildId]['switches'];
+
+        rustplus.build();
+    }
+
     createRustplusInstancesFromConfig() {
         let instances = JSON.parse(fs.readFileSync(`${__dirname}/../rustplusInstances.json`, 'utf8'));
 
         for (let guildId in instances) {
-            let rustplus = new RustPlus(
+            this.createRustplusInstance(
+                guildId,
                 instances[guildId].server_ip,
                 instances[guildId].app_port,
                 instances[guildId].steam_id,
-                instances[guildId].player_token,
-                guildId
-            );
-
-            /* Connect */
-            rustplus.build();
+                instances[guildId].player_token);
         }
     }
 }

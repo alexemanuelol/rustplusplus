@@ -21,14 +21,14 @@ module.exports = {
 
                     if (module.exports.isExplosionBradley(marker.x, marker.y, rustplus)) {
                         /* Bradley APC */
-                        rustplus.log('Bradley APC was destroyed at Launch Site.');
+                        rustplus.sendEvent('Bradley APC was destroyed at Launch Site.');
                         rustplus.bradleyRespawnTimer.restart();
                     }
                     else {
                         /* Patrol Helicopter */
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize)
                         let loc = (gridLocation === null) ? 'somewhere outside the grid system' : `at ${gridLocation}`;
-                        rustplus.log(`Patrol Helicopter was taken down ${loc}.`);
+                        rustplus.sendEvent(`Patrol Helicopter was taken down ${loc}.`);
                     }
                 }
             }
@@ -62,10 +62,6 @@ module.exports = {
     },
 
     notifyBradleyRespawn: function (rustplus) {
-        rustplus = rustplus[0];
-        /* Notifies when bradley should be respawning */
-        rustplus.log('Bradley APC should respawn any second now');
+        rustplus[0].sendEvent('Bradley APC should respawn any second now');
     },
 }
-
-// TODO: Add discord notifications for the events
