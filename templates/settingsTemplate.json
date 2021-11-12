@@ -1,0 +1,19 @@
+{
+    "cargoShipDetected": true,
+    "cargoShipLeft": true,
+    "cargoShipEgress": true,
+    "bradleyApcDestroyed": true,
+    "bradleyApcShouldRespawn": true,
+    "patrolHelicopterDowned": true,
+    "lockedCrateSpawnCargoShip": true,
+    "lockedCrateRespawnOilRig": true,
+    "lockedCrateDroppedAtMonument": true,
+    "lockedCrateLeftCargoShip": true,
+    "lockedCrateLootedOilRig": true,
+    "lockedCrateMonumentLeft": true,
+    "lockedCrateMonumentDespawnWarning": true,
+    "lockedCrateOilRigUnlocked": true,
+    "heavyScientistCalled": true,
+    "chinook47Detected": true,
+    "vendingMachineDetected": true
+}

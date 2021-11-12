@@ -30,14 +30,16 @@ module.exports = {
 
                     if (MapCalc.getDistance(marker.x, marker.y, smallX, smallY) <=
                         OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
-                        /* Chinook 47 detected near Small Oil Rig */
-                        rustplus.sendEvent('Heavy Scientists got called to the Small Oil Rig');
+                        if (rustplus.settings.heavyScientistCalled) {
+                            rustplus.sendEvent('Heavy Scientists got called to the Small Oil Rig');
+                        }
                         rustplus.lockedCrateSmallOilRigTimer.restart();
                     }
                     else if (MapCalc.getDistance(marker.x, marker.y, largeX, largeY) <=
                         OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
-                        /* Chinook 47 detected near Large Oil Rig */
-                        rustplus.sendEvent('Heavy Scientists got called to the Large Oil Rig');
+                        if (rustplus.settings.heavyScientistCalled) {
+                            rustplus.sendEvent('Heavy Scientists got called to the Large Oil Rig');
+                        }
                         rustplus.lockedCrateLargeOilRigTimer.restart();
                     }
                     else {
@@ -50,11 +52,15 @@ module.exports = {
                         /* If coordinates of the marker is located outside the grid system + the offset */
                         if (marker.x < -offset || marker.x > (mapSize + offset) ||
                             marker.y < -offset || marker.y > (mapSize + offset)) {
-                            rustplus.sendEvent(`Chinook 47 enters the map from ${spawnLocation} ` +
-                                'to drop off Locked Crate');
+                            if (rustplus.settings.chinook47Detected) {
+                                rustplus.sendEvent(`Chinook 47 enters the map from ${spawnLocation} ` +
+                                    'to drop off Locked Crate');
+                            }
                         }
                         else {
-                            rustplus.sendEvent(`Chinook 47 located at ${spawnLocation}`);
+                            if (rustplus.settings.chinook47Detected) {
+                                rustplus.sendEvent(`Chinook 47 located at ${spawnLocation}`);
+                            }
                         }
                     }
                 }
@@ -79,12 +85,16 @@ module.exports = {
     },
 
     notifyLockedCrateSmallOpen: function (rustplus) {
-        rustplus[0].sendEvent('Locked Crate at Small Oil Rig has been unlocked');
+        if (rustplus[0].settings.lockedCrateOilRigUnlocked) {
+            rustplus[0].sendEvent('Locked Crate at Small Oil Rig has been unlocked');
+        }
         rustplus[0].lockedCrateSmallOilRigTimer.stop();
     },
 
     notifyLockedCrateLargeOpen: function (rustplus) {
-        rustplus[0].sendEvent('Locked Crate at Large Oil Rig has been unlocked');
+        if (rustplus[0].settings.lockedCrateOilRigUnlocked) {
+            rustplus[0].sendEvent('Locked Crate at Large Oil Rig has been unlocked');
+        }
         rustplus[0].lockedCrateLargeOilRigTimer.stop();
     },
 }

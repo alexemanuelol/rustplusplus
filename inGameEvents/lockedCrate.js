@@ -24,7 +24,7 @@ module.exports = {
 
                     if (module.exports.isCrateOnCargoShip(marker.x, marker.y, mapMarkers)) {
                         /* Locked Crate is located on Cargo Ship */
-                        if (!rustplus.firstPoll) {
+                        if (!rustplus.firstPoll && rustplus.settings.lockedCrateSpawnCargoShip) {
                             rustplus.sendEvent('Locked Crate just spawned on Cargo Ship');
                         }
                         rustplus.currentLockedCratesId.push({ id: marker.id, name: 'cargo_ship' });
@@ -38,7 +38,7 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'oil_rig_small')) {
-                            if (!rustplus.firstPoll) {
+                            if (!rustplus.firstPoll && rustplus.settings.lockedCrateRespawnOilRig) {
                                 rustplus.sendEvent('Locked Crate just respawned on Small' +
                                     `${MonNames.Monument['oil_rig_small']}`);
                             }
@@ -51,7 +51,7 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'large_oil_rig')) {
-                            if (!rustplus.firstPoll) {
+                            if (!rustplus.firstPoll && rustplus.settings.lockedCrateRespawnOilRig) {
                                 rustplus.sendEvent('Locked Crate just respawned on' +
                                     `${MonNames.Monument['large_oil_rig']}`);
                             }
@@ -61,7 +61,7 @@ module.exports = {
                         }
                     }
                     else {
-                        if (!rustplus.firstPoll) {
+                        if (!rustplus.firstPoll && rustplus.settings.lockedCrateDroppedAtMonument) {
                             rustplus.sendEvent('Locked Crate just got dropped by Chinook 47 at ' +
                                 `${MonNames.Monument[closestMonument.token]}`);
 
@@ -69,8 +69,10 @@ module.exports = {
                             rustplus.lockedCrateDespawnWarningTimer.restart();
                         }
                         else {
-                            rustplus.sendEvent('Locked Crate located at ' +
-                                `${MonNames.Monument[closestMonument.token]}`);
+                            if (rustplus.settings.lockedCrateDroppedAtMonument) {
+                                rustplus.sendEvent('Locked Crate located at ' +
+                                    `${MonNames.Monument[closestMonument.token]}`);
+                            }
                         }
                         rustplus.currentLockedCrateMonumentName = MonNames.Monument[closestMonument.token];
                     }
@@ -97,14 +99,20 @@ module.exports = {
 
             if (active === false) {
                 if (lockedCrate.name === 'cargo_ship') {
-                    rustplus.sendEvent('Locked Crate on Cargo Ship just got looted or despawned');
+                    if (rustplus.settings.lockedCrateLeftCargoShip) {
+                        rustplus.sendEvent('Locked Crate on Cargo Ship just got looted or despawned');
+                    }
                 }
                 else if (lockedCrate.name === 'oil_rig_small') {
-                    rustplus.sendEvent('Locked Crate at Small Oil Rig just got looted');
+                    if (rustplus.settings.lockedCrateLootedOilRig) {
+                        rustplus.sendEvent('Locked Crate at Small Oil Rig just got looted');
+                    }
                     rustplus.lockedCrateSmallOilRigTimer.stop();
                 }
                 else if (lockedCrate.name === 'large_oil_rig') {
-                    rustplus.sendEvent('Locked Crate at Large Oil Rig just got looted');
+                    if (rustplus.settings.lockedCrateLootedOilRig) {
+                        rustplus.sendEvent('Locked Crate at Large Oil Rig just got looted');
+                    }
                     rustplus.lockedCrateLargeOilRigTimer.stop();
                 }
                 else {
@@ -112,10 +120,15 @@ module.exports = {
                     let despawnOffset = 5 * 60 * 1000; /* 5 minutes offset value */
                     if (timeLeft > despawnOffset) {
                         /* The timer have reset, which might indicate that the Locked Crate despawned. */
-                        rustplus.sendEvent(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} just got looted`);
+                        if (rustplus.settings.lockedCrateMonumentLeft) {
+                            rustplus.sendEvent(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} ` +
+                                'just got looted');
+                        }
                     }
                     else {
-                        rustplus.sendEvent(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} just despawned`);
+                        if (rustplus.settings.lockedCrateMonumentLeft) {
+                            rustplus.sendEvent(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} just despawned`);
+                        }
                     }
                     rustplus.lockedCrateDespawnTimer.stop();
                     rustplus.lockedCrateDespawnWarningTimer.stop();
@@ -170,8 +183,10 @@ module.exports = {
     },
 
     notifyLockedCrateWarningDespawn: function (rustplus) {
-        rustplus[0].sendEvent(`Locked Crate at ${rustplus.currentLockedCrateMonumentName} despawns in ` +
-            `${Constants.LOCKED_CRATE_DESPAWN_WARNING_TIME_MS / (60 * 1000)} minutes`);
+        if (rustplus[0].settings.lockedCrateMonumentDespawnWarning) {
+            rustplus[0].sendEvent(`Locked Crate at ${rustplus.currentLockedCrateMonumentName} despawns in ` +
+                `${Constants.LOCKED_CRATE_DESPAWN_WARNING_TIME_MS / (60 * 1000)} minutes`);
+        }
         rustplus[0].lockedCrateDespawnWarningTimer.stop();
     },
 

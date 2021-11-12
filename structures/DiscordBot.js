@@ -88,7 +88,7 @@ class DiscordBot extends Client {
     }
 
     createRustplusInstancesFromConfig() {
-        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../rustplusInstances.json`, 'utf8'));
+        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/rustplusInstances.json`, 'utf8'));
 
         for (let guildId in instances) {
             this.createRustplusInstance(

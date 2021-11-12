@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 module.exports = (guildId, serverIp, appPort, steamId, playerToken) => {
-    let instances = JSON.parse(fs.readFileSync(`${__dirname}/../rustplusInstances.json`, 'utf8'));
+    let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/rustplusInstances.json`, 'utf8'));
 
     /* Delete previous instance if any */
     delete instances[guildId];
@@ -13,5 +13,5 @@ module.exports = (guildId, serverIp, appPort, steamId, playerToken) => {
         steam_id: steamId,
         player_token: playerToken
     }
-    fs.writeFileSync(`${__dirname}/../rustplusInstances.json`, JSON.stringify(instances, null, 2));
+    fs.writeFileSync(`${__dirname}/../instances/rustplusInstances.json`, JSON.stringify(instances, null, 2));
 };
