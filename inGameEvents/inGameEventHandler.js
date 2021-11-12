@@ -13,6 +13,7 @@ module.exports = {
                 rustplus.getTeamInfo((teamInfo) => {
                     rustplus.getTime((time) => {
                         module.exports.checkEvents(rustplus, client, info, mapMarkers, teamInfo, time);
+                        rustplus.firstPoll = false;
                     });
                 });
             });

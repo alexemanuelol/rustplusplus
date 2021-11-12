@@ -8,11 +8,6 @@ module.exports = {
 
         /* Check to see if a Cargo Ship have disappeared from the map */
         module.exports.checkCargoShipLeft(rustplus, mapMarkers);
-
-        /* Clear timer if no active Cargo Ships */
-        if (rustplus.currentCargoShipsId.length === 0) {
-            rustplus.cargoShipEgressTimer.stop();
-        }
     },
 
     checkNewCargoShipDetected: function (rustplus, mapMarkers, info) {
@@ -59,6 +54,7 @@ module.exports = {
 
             if (active === false) {
                 rustplus.sendEvent('Cargo Ship just left the map');
+                rustplus.cargoShipEgressTimer.stop();
             }
         }
         rustplus.currentCargoShipsId = JSON.parse(JSON.stringify(tempArray));

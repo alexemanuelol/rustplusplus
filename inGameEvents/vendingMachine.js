@@ -21,7 +21,9 @@ module.exports = {
 
             let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
 
-            rustplus.sendEvent(`New Vending Machine located at ${gridLocation}`);
+            if (!rustplus.firstPoll) {
+                rustplus.sendEvent(`New Vending Machine located at ${gridLocation}`);
+            }
         }
     },
 

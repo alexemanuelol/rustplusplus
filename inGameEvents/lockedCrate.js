@@ -24,7 +24,9 @@ module.exports = {
 
                     if (module.exports.isCrateOnCargoShip(marker.x, marker.y, mapMarkers)) {
                         /* Locked Crate is located on Cargo Ship */
-                        rustplus.sendEvent('Locked Crate just spawned on Cargo Ship');
+                        if (!rustplus.firstPoll) {
+                            rustplus.sendEvent('Locked Crate just spawned on Cargo Ship');
+                        }
                         rustplus.currentLockedCratesId.push({ id: marker.id, name: 'cargo_ship' });
                         continue;
                     }
@@ -36,8 +38,10 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'oil_rig_small')) {
-                            rustplus.sendEvent('Locked Crate just respawned on Small' +
-                                `${MonNames.Monument['oil_rig_small']}`);
+                            if (!rustplus.firstPoll) {
+                                rustplus.sendEvent('Locked Crate just respawned on Small' +
+                                    `${MonNames.Monument['oil_rig_small']}`);
+                            }
                         }
                         else {
                             rustplus.currentLockedCratesId = rustplus.currentLockedCratesId.filter(e => e.name !== 'oil_rig_small');
@@ -47,18 +51,27 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'large_oil_rig')) {
-                            rustplus.sendEvent(`Locked Crate just respawned on ${MonNames.Monument['large_oil_rig']}`);
+                            if (!rustplus.firstPoll) {
+                                rustplus.sendEvent('Locked Crate just respawned on' +
+                                    `${MonNames.Monument['large_oil_rig']}`);
+                            }
                         }
                         else {
                             rustplus.currentLockedCratesId = rustplus.currentLockedCratesId.filter(e => e.name !== 'large_oil_rig');
                         }
                     }
                     else {
-                        rustplus.sendEvent('Locked Crate just got dropped by Chinook 47 at ' +
-                            `${MonNames.Monument[closestMonument.token]}`);
+                        if (!rustplus.firstPoll) {
+                            rustplus.sendEvent('Locked Crate just got dropped by Chinook 47 at ' +
+                                `${MonNames.Monument[closestMonument.token]}`);
 
-                        rustplus.lockedCrateDespawnTimer.restart();
-                        rustplus.lockedCrateDespawnWarningTimer.restart();
+                            rustplus.lockedCrateDespawnTimer.restart();
+                            rustplus.lockedCrateDespawnWarningTimer.restart();
+                        }
+                        else {
+                            rustplus.sendEvent('Locked Crate located at ' +
+                                `${MonNames.Monument[closestMonument.token]}`);
+                        }
                         rustplus.currentLockedCrateMonumentName = MonNames.Monument[closestMonument.token];
                     }
                     rustplus.currentLockedCratesId.push({ id: marker.id, name: closestMonument.token });

@@ -33,6 +33,8 @@ class RustPlus extends RP {
 
         this.interaction = null;
 
+        this.firstPoll = true;
+
         /* Map meta */
         this.intervalId = 0;
         this.debug = false;
