@@ -12,82 +12,68 @@
 
 Version 2 of the previous RustPlus-Discord-Bot. A NodeJS Discord Bot that uses the rustplus.js library.
 
-## TODO features
-### Smart Switches
-- Add to device list (?)
-- Automatically add to device list, and add rename commando (?)
-- Should have auto-On timer
-- Display entityId
-- Indicate if switch is on/off
-- Add switch menu (?)
-- Add discord buttons to turn on/off
-- Add custom command for smart switches
-### Smart Alarms
-    - In-Game and Discord alerts
-
-### Storage Monitors
-- Show content inside via discord command
-- Time remaining before decay alert
-- Time threshhold before time is considered 'short'
-
-### Discord Text Channels to spam
-- Events
-- Alerts
-- Smart Switches
+## TODO
 
 ### Discord commands
-- Change server
+- [x] /setup command to setup a rustplus instance for the guild
+- [x] /help command to display a help message
+- [ ] /reset command to reset rustplus instance for the guild
+- [ ] /start command to start the configured rustplus instance
+- [ ] /stop command to stop the configured rustplus instance
+- [ ] /settings command to get a settings interface to change settings (?)
+- [ ] /resetchannels command to reset channels (Add missing channels etc...)
+- [ ] /setnotification command with all notifications as sub commands, boolean to set on or off
+- [ ] /switch command with subcommands: add, remove, removeall, on, off. Set auto-ON, custom name.
+- [ ] /prefix command to set the in-game command prefix
+
+
 ### In-Game commands
-- pop - population of the server currently, max number of players and size of queue.
-- time - The current time in game.
-- alarm - Set an alarm for X minutes.
-
-### Events
-- Chinook 47:
-    - The Chinook 47 dropped its crate at Airfield
-    - The Chinook 47 dropped its crate at Harbor
-    - The Chinook 47 dropped its crate at Junkyard
-    - The Chinook 47 dropped its crate at Military Tunnels
-    - The Chinook 47 dropped its crate at Power Plant
-    - The Chinook 47 dropped its crate at Sewer Branch
-    - The Chinook 47 dropped its crate at Satellite Dish
-    - The Chinook 47 dropped its crate at The Dome
-    - The Chinook 47 dropped its crate at Train Yard
-    - The Chinook 47 dropped its crate at Water Treatment Plant
-- Explosion:
-    - The Bradley APC got downed at Launchsite
-    - The Patrol Helicopter got downed in < MAP SQUARE NUMBER >
-    - The Bradley APC crates are now lootable
-    - The Patrol Helicopter crates are now lootable
-- Cargo Ship:
-    - The Cargo Ship enters the map from the North
-    - The Cargo Ship enters the map from North West
-    - The Cargo Ship enters the map from North East
-    - The Cargo Ship enters the map from the South
-    - The Cargo Ship enters the map from South West
-    - The Cargo Ship enters the map from South East
-    - The Cargo Ship enters the map from the West
-    - The Cargo Ship enters the map from the East
-    - The Cargo Ship just left the map
-    - The Cargo Ship's last locked crate got looted
-- Small Oil Rig:
-    - Heavy Scientists got called to the Small Oil Rig
-    - The Small Oil Rig locked crate has been unlocked
-    - The Small Oil Rig locked crate got looted
-    - The Small Oil Rig locked crate respawned
-- Large Oil Rig:
-    - Heavy scientists got called on the Large Oil Rig
-    - The Large Oil Rig locked crate has been unlocked
-    - The Large Oil Rig locked crate got looted
-    - The Large Oil Rig locked crate respawned
-- Vending Machine:
-    - New Shop added at < MAP SQUARE NUMBER >
-    - An Item you're looking for have been detected in shop at < MAP SQUARE NUMBER >
+- [ ] pop, to get the current population of the server, max players and size of queue.
+- [ ] time, to get the current time of the server.
+- [ ] wipe, to get the time since the wipe.
+- [ ] alarm, set a custom alarm
+- [ ] bradley, time before bradley should respawn
+- [ ] leader, give team leadership
 
 
+### Information Text Channel
+- [ ] Display things like Server name, ip and port, players, current time, time since wipe, etc...
 
 
+### Events Discord Text Channel
+- [x] Cargo Ship detected notification
+- [x] Cargo Ship left notification
+- [x] Cargo Ship entered egress stage notification
+- [x] Bradley APC got destroyed notification
+- [x] Bradley APC should respawn notification
+- [x] Patrol Helicopter got downed notification
+- [x] Locked Crate spawned on Cargo Ship notification
+- [x] Locked Crate respawned on Oil Rig notification
+- [x] Locked Crate got dropped at a monument notification
+- [x] Locked Crate got looted or despawned on Cargo Ship notification
+- [x] Locked Crate got looted at Oil Rig notification
+- [x] Locked Crate got looted or despawned on monument notification
+- [x] Locked Crate at monunment despawn warning notification
+- [x] Locked Crate at Oil Rig unlocked notification
+- [x] Heavy Scientists called at Oil Rig notification
+- [x] Chinook 47 detected notification
+- [x] New Vending Machine detected notification
 
 
-## Reference
-https://discordjs.guide/
+### Alerts Discord Text Channel
+- [ ] Smart Alarms
+- [ ] Tool Cupboard decay Alert
+- [ ] Vending Machine item detected
+
+
+### Switches Discord Text Channel
+- [ ] Interface of Smart Switches to turn then on or off
+- [ ] Clear all messages on restart
+
+
+### Storage Monitor Text Channel
+- [ ] Interface of Storage Monitors that display time left, content, etc...
+- [ ] Clear all messages on restart
+
+
+### General Discord Text Channel
