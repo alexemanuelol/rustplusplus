@@ -39,12 +39,13 @@ module.exports = {
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'oil_rig_small')) {
                             if (!rustplus.firstPoll && rustplus.settings.lockedCrateRespawnOilRig) {
-                                rustplus.sendEvent('Locked Crate just respawned on Small' +
+                                rustplus.sendEvent('Locked Crate just respawned on Small ' +
                                     `${MonNames.Monument['oil_rig_small']}`);
                             }
                         }
                         else {
                             rustplus.currentLockedCratesId = rustplus.currentLockedCratesId.filter(e => e.name !== 'oil_rig_small');
+                            rustplus.smallOilRigLeftChecker = false;
                         }
                     }
                     else if (closestMonument.token === 'large_oil_rig') {
@@ -52,12 +53,13 @@ module.exports = {
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'large_oil_rig')) {
                             if (!rustplus.firstPoll && rustplus.settings.lockedCrateRespawnOilRig) {
-                                rustplus.sendEvent('Locked Crate just respawned on' +
+                                rustplus.sendEvent('Locked Crate just respawned on ' +
                                     `${MonNames.Monument['large_oil_rig']}`);
                             }
                         }
                         else {
                             rustplus.currentLockedCratesId = rustplus.currentLockedCratesId.filter(e => e.name !== 'large_oil_rig');
+                            rustplus.largeOilRigLeftChecker = false;
                         }
                     }
                     else {
@@ -104,12 +106,26 @@ module.exports = {
                     }
                 }
                 else if (lockedCrate.name === 'oil_rig_small') {
+                    if (!rustplus.smallOilRigLeftChecker) {
+                        rustplus.smallOilRigLeftChecker = true;
+                        tempArray.push({ id: lockedCrate.id, name: lockedCrate.name });
+                        return;
+                    }
+                    rustplus.smallOilRigLeftChecker = false;
+
                     if (rustplus.settings.lockedCrateLootedOilRig) {
                         rustplus.sendEvent('Locked Crate at Small Oil Rig just got looted');
                     }
                     rustplus.lockedCrateSmallOilRigTimer.stop();
                 }
                 else if (lockedCrate.name === 'large_oil_rig') {
+                    if (!rustplus.largeOilRigLeftChecker) {
+                        rustplus.largeOilRigLeftChecker = true;
+                        tempArray.push({ id: lockedCrate.id, name: lockedCrate.name });
+                        return;
+                    }
+                    rustplus.largeOilRigLeftChecker = false;
+
                     if (rustplus.settings.lockedCrateLootedOilRig) {
                         rustplus.sendEvent('Locked Crate at Large Oil Rig just got looted');
                     }

@@ -26,6 +26,9 @@ class RustPlus extends RP {
         this.firstPoll = true;
         this.settings = null;
 
+        this.smallOilRigLeftChecker = false;
+        this.largeOilRigLeftChecker = false;
+
         this.guildId = null;
         this.eventChannelId = null;
         this.alertChannelId = null;

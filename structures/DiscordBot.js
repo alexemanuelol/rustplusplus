@@ -85,6 +85,8 @@ class DiscordBot extends Client {
         rustplus.switchesChannelId = this.guildsAndChannelsIds[guildId]['switches'];
 
         rustplus.build();
+
+        return rustplus;
     }
 
     createRustplusInstancesFromConfig() {

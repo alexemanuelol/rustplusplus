@@ -55,19 +55,16 @@ module.exports = {
         }
 
         /* Create the rustplus instance */
-        let rustplus = new RustPlus(
+        let rustplus = client.createRustplusInstance(
+            interaction.guildId,
             server_ip,
             app_port,
             steam_id,
-            player_token,
-            interaction.guildId
+            player_token
         );
 
         /* Store the interaction in the RustPlus instance temporarily */
         rustplus.interaction = interaction;
-
-        /* Connect */
-        rustplus.build();
     },
 };
 
