@@ -12,6 +12,47 @@
 
 Version 2 of the previous RustPlus-Discord-Bot. A NodeJS Discord Bot that uses the rustplus.js library.
 
+## Setup (Temporarily shitty guide, just because I kinda forgot that I had promised that I would do it today and the current time is 23:51 ;D)
+
+### Required Software
+- NodeJS (Since the bot is using discordjs v13, NodeJS version needs to be 16.6 or higher)
+    - https://nodejs.org/en/download/
+- Git
+    - https://git-scm.com/downloads
+
+### Setup of the bot
+Run the following commands to setup the environment:
+    $ git clone https://github.com/alexemanuelol/rustPlusPlus.git
+    $ cd rustPlusPlus
+    $ npm install
+
+Setup a discord bot:
+- Got to this website: https://discord.com/developers/docs/intro
+- Click on 'Application' in the top left corner
+- Click on 'New Application' in the top right corner
+- Give it a name and click 'Create'
+- You should now be able to see the 'Application Id' or 'Client Id', add that ID to the config.json file under the clientId property
+- Click on the 'Bot' tab on the website
+- Click on 'Add Bot'
+- Click 'Yes, Do it!'
+- Click on the 'Copy' button to copy the bot token, then paste it to the config.json file under the token property
+- Click on 'OAuth2' tab on the website
+- Scroll down to 'OAuth2 URL Generator
+- Check the following boxes: bot and applications.commands
+- Scroll down to Bot permissions and select the following: Administrator
+- Copy the URL (This is used to invite you discord bot to discord servers (guilds))
+
+To setup a rustplus instance in the discord server, you run the /setup commands with the arguments serverIp, appPort, steamId and playerToken. These can be gained by either running the following:
+    $ npx @liamcottle/rustplus.js fcm-register
+    $ npx @liamcottle/rustplus.js fcm-listen
+
+or if you've used my previous bot, you can run the script located in that repository:
+    $ cd RustPlus-Discord-Bot/tools/external
+    $ node copy_server_details_to_config.js
+
+Voila!
+
+
 ## TODO
 
 ### Discord commands
