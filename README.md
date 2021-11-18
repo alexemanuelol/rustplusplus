@@ -43,10 +43,12 @@ Setup a discord bot:
 - Copy the URL (This is used to invite you discord bot to discord servers (guilds))
 
 To setup a rustplus instance in the discord server, you run the /setup commands with the arguments serverIp, appPort, steamId and playerToken. These can be gained by either running the following:
+
     $ npx @liamcottle/rustplus.js fcm-register
     $ npx @liamcottle/rustplus.js fcm-listen
 
 or if you've used my previous bot, you can run the script located in that repository:
+
     $ cd RustPlus-Discord-Bot/tools/external
     $ node copy_server_details_to_config.js
 

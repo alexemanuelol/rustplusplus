@@ -1,4 +1,3 @@
-const RustPlus = require('../structures/RustPlus');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
@@ -50,7 +49,7 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         /* Disconnect previous instance is any */
-        if (client.rustplusInstances[interaction.guildId]) {
+        if (client.rustplusInstances.hasOwnProperty(interaction.guildId)) {
             client.rustplusInstances[interaction.guildId].disconnect();
         }
 

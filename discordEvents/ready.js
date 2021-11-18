@@ -6,6 +6,8 @@ module.exports = {
 
         client.log('LOGGED IN AS: ' + client.user.tag);
 
+        client.createInstancesFile();
+
         client.registerSlashCommands();
         client.setupGuildChannels();
         client.createRustplusInstancesFromConfig();

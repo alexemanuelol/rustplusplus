@@ -98,14 +98,7 @@ class RustPlus extends RP {
         this.logger = new Logger(path.join(__dirname, '..', `Logs/${this.guildId}.log`), this.guildId);
 
         /* Setup settings */
-        let instances = this.readSettingsFile();
-        if (instances.hasOwnProperty(this.guildId)) {
-            this.settings = instances[this.guildId];
-        }
-        else {
-            this.settings = this.getTemplateSettings();
-            this.writeSettings();
-        }
+        this.settings = Client.client.readSettingsFromFile(this.guildId);
 
         this.connect();
     }
@@ -146,25 +139,6 @@ class RustPlus extends RP {
     removeItemToLookFor(id) {
         this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
     }
-
-    writeSettings() {
-        if (this.settings !== null) {
-            let instances = this.readSettingsFile();
-
-            instances[this.guildId] = this.settings;
-
-            fs.writeFileSync(`${__dirname}/../instances/settingsInstances.json`, JSON.stringify(instances, null, 2));
-        }
-    }
-
-    readSettingsFile() {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../instances/settingsInstances.json`, 'utf8'));
-    }
-
-    getTemplateSettings() {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../templates/settingsTemplate.json`, 'utf8'));
-    }
-
 }
 
 module.exports = RustPlus;
