@@ -89,7 +89,7 @@ class DiscordBot extends Client {
 
         this.guilds.cache.forEach((guild) => {
             if (!instances.hasOwnProperty(guild.id)) {
-                instances[guild.id] = { settings: this.readTemplateSettings(), rustplus: null };
+                instances[guild.id] = { settings: this.readTemplateSettings(), rustplus: null, connect: true };
             }
         });
 
@@ -116,8 +116,11 @@ class DiscordBot extends Client {
         return JSON.parse(fs.readFileSync(`${__dirname}/../templates/settingsTemplate.json`, 'utf8'));
     }
 
-    createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken) {
+    createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken, connect) {
         let rustplus = new RustPlus(serverIp, appPort, steamId, playerToken);
+
+        /* Add rustplus instance to Object */
+        this.rustplusInstances[guildId] = rustplus;
 
         rustplus.guildId = guildId;
 
@@ -126,7 +129,7 @@ class DiscordBot extends Client {
         rustplus.commandsChannelId = this.guildsAndChannelsIds[guildId]['commands'];
         rustplus.switchesChannelId = this.guildsAndChannelsIds[guildId]['switches'];
 
-        rustplus.build();
+        rustplus.build(connect);
 
         return rustplus;
     }
@@ -141,7 +144,8 @@ class DiscordBot extends Client {
                     instances[instance].rustplus.server_ip,
                     instances[instance].rustplus.app_port,
                     instances[instance].rustplus.steam_id,
-                    instances[instance].rustplus.player_token);
+                    instances[instance].rustplus.player_token,
+                    instances[instance].connect);
             }
         }
     }

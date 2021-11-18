@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
@@ -21,6 +22,8 @@ module.exports = {
             .setDescription('The Player Token for the Rust Server')
             .setRequired(true)),
     async execute(client, interaction) {
+        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+
         /* Get the options from the command */
         let server_ip = interaction.options.getString('server_ip');
         let app_port = interaction.options.getString('app_port');
@@ -59,7 +62,8 @@ module.exports = {
             server_ip,
             app_port,
             steam_id,
-            player_token
+            player_token,
+            instances[interaction.guildId].connect
         );
 
         /* Store the interaction in the RustPlus instance temporarily */

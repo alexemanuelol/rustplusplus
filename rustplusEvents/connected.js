@@ -10,10 +10,10 @@ module.exports = {
             rustplus.getInfo((info) => {
                 if (map.response.error && rustplus.interaction !== null) {
                     rustplus.interaction.editReply({
-                        content: ':x: steamId or Player Token is invalid',
+                        content: ':x: steamId or Player Token is invalid, use the /setup command',
                         ephemeral: true
                     });
-                    rustplus.log('steamId or Player Token is invalid');
+                    rustplus.log('steamId or Player Token is invalid, use the /setup command');
                     rustplus.interaction = null;
                     rustplus.disconnect();
                     return;
@@ -27,15 +27,13 @@ module.exports = {
                     rustplus.steamId,
                     rustplus.playerToken);
 
-                /* Add rustplus instance to Object */
-                client.rustplusInstances[rustplus.guildId] = rustplus;
-
                 if (rustplus.interaction) {
                     rustplus.interaction.editReply({
-                        content: ':white_check_mark: Setup Successful, Connected!',
+                        content: ':white_check_mark: Successfully Connected!',
                         ephemeral: true
                     });
-                    rustplus.log('Setup Successful, Connected');
+                    rustplus.log('Successfully Connected!');
+                    rustplus.interaction = null;
                 }
 
                 rustplus.mapWidth = map.response.map.width;

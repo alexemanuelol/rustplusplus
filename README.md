@@ -61,8 +61,8 @@ Voila!
 - [x] /setup command to setup a rustplus instance for the guild
 - [x] /help command to display a help message
 - [ ] /reset command to reset rustplus instance for the guild
-- [ ] /start command to start the configured rustplus instance
-- [ ] /stop command to stop the configured rustplus instance
+- [x] /start command to start the configured rustplus instance
+- [x] /stop command to stop the configured rustplus instance
 - [ ] /settings command to get a settings interface to change settings (?)
 - [ ] /resetchannels command to reset channels (Add missing channels etc...)
 - [ ] /setnotification command with all notifications as sub commands, boolean to set on or off
