@@ -60,6 +60,18 @@ module.exports = {
     },
 
     commandWipe: function (rustplus) {
-        console.log('WIPE');
+        rustplus.getInfo((msg) => {
+            if (msg.response.hasOwnProperty('info')) {
+                const wipe = new Date(msg.response.info.wipeTime * 1000);
+                const now = new Date();
+
+                const sinceWipe = Timer.secondsToFullScale((now - wipe) / 1000);
+
+                let str = `${sinceWipe} since wipe.`;
+
+                rustplus.sendTeamMessage(str);
+                rustplus.log(str);
+            }
+        });
     },
 };
