@@ -56,7 +56,16 @@ module.exports = {
     },
 
     commandTime: function (rustplus) {
-        console.log('TIME');
+        rustplus.getTime((msg) => {
+            if (msg.response.hasOwnProperty('time')) {
+                const time = Timer.convertToHoursMinutes(msg.response.time.time);
+
+                let str = `Current in-game time: ${time}.`;
+
+                rustplus.sendTeamMessage(str);
+                rustplus.log(str);
+            }
+        });
     },
 
     commandWipe: function (rustplus) {
