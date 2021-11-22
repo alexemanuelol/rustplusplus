@@ -6,7 +6,6 @@ module.exports = {
         if (rustplus.debug)
             rustplus.log(`MESSAGE RECEIVED:\n${JSON.stringify(message)}`);
 
-
         if (message.hasOwnProperty('response')) {
 
         }
