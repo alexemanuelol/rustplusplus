@@ -7,10 +7,7 @@ module.exports = {
     inGameCommandHandler: function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
 
-        if (command.startsWith(`${prefix}alarm`)) {
-            module.exports.commandAlarm(rustplus, command);
-        }
-        else if (command === `${prefix}bradley`) {
+        if (command === `${prefix}bradley`) {
             module.exports.commandBradley(rustplus);
         }
         else if (command === `${prefix}cargo`) {
@@ -25,13 +22,12 @@ module.exports = {
         else if (command === `${prefix}time`) {
             module.exports.commandTime(rustplus);
         }
+        else if (command.startsWith(`${prefix}timer `)) {
+            module.exports.commandTimer(rustplus, command);
+        }
         else if (command === `${prefix}wipe`) {
             module.exports.commandWipe(rustplus);
         }
-    },
-
-    commandAlarm: function (rustplus, command) {
-        console.log('ALARM');
     },
 
     commandBradley: function (rustplus) {
@@ -140,6 +136,27 @@ module.exports = {
                 rustplus.log(str);
             }
         });
+    },
+
+    commandTimer: function (rustplus, command) {
+        let arguments = command.replace('!timer ', '');
+        let minutes = arguments.match(/^\d+/);
+        if (minutes === null) {
+            rustplus.sendTeamMessage('Invalid arguments, use syntax: !timer {minutes} {message}');
+            rustplus.log('Invalid arguments, use syntax: !timer {minutes} {message}');
+            return;
+        }
+
+        minutes = Number(minutes);
+        let message = arguments.slice((minutes.toString().length) + 1);
+
+        setTimeout(() => {
+            rustplus.sendTeamMessage(`Timer: ${message}`);
+            rustplus.log(`Timer: ${message}`);
+        }, minutes * 60 * 1000);
+
+        rustplus.sendTeamMessage(`Timer set for ${minutes} minutes.`);
+        rustplus.log(`Timer set for ${minutes} minutes.`);
     },
 
     commandWipe: function (rustplus) {
