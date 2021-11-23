@@ -1,25 +1,28 @@
 const Timer = require('../util/timer');
+const StringSimilarity = require('../util/stringSimilarity.js');
+
+const prefix = '!';
 
 module.exports = {
-    inGameCommandHandler: function (rustplus, client, command) {
-        const prefix = '!';
+    inGameCommandHandler: function (rustplus, client, message) {
+        let command = message.broadcast.teamMessage.message.message;
 
-        if (command.startsWith(prefix + 'alarm')) {
+        if (command.startsWith(`${prefix}alarm`)) {
             module.exports.commandAlarm(rustplus, command);
         }
-        else if (command === (prefix + 'bradley')) {
+        else if (command === `${prefix}bradley`) {
             module.exports.commandBradley(rustplus);
         }
-        else if (command.startsWith(prefix + 'leader')) {
-            module.exports.commandLeader(rustplus, command);
+        else if (command.startsWith(`${prefix}leader`)) {
+            module.exports.commandLeader(rustplus, message);
         }
-        else if (command === (prefix + 'pop')) {
+        else if (command === `${prefix}pop`) {
             module.exports.commandPop(rustplus);
         }
-        else if (command === (prefix + 'time')) {
+        else if (command === `${prefix}time`) {
             module.exports.commandTime(rustplus);
         }
-        else if (command === (prefix + 'wipe')) {
+        else if (command === `${prefix}wipe`) {
             module.exports.commandWipe(rustplus);
         }
     },
@@ -29,11 +32,64 @@ module.exports = {
     },
 
     commandBradley: function (rustplus) {
-        console.log('BRADLEY');
+        let time = rustplus.getTimeLeftOfTimer(rustplus.bradleyRespawnTimer);
+        let str;
+
+        if (time === null) {
+            str = 'No current data on Bradley APC.';
+        }
+        else {
+            str = `Approximately ${time} before Bradley APC respawns.`;
+        }
+
+        rustplus.sendTeamMessage(str);
+        rustplus.log(str);
     },
 
-    commandLeader: function (rustplus, command) {
-        console.log('LEADER');
+    commandLeader: function (rustplus, message) {
+        let command = message.broadcast.teamMessage.message.message;
+        let callerId = message.broadcast.teamMessage.message.steamId;
+        let callerName = message.broadcast.teamMessage.message.name;
+
+        rustplus.getTeamInfo((msg) => {
+            if (msg.response.hasOwnProperty('teamInfo')) {
+                if (command === `${prefix}leader`) {
+                    promoteToLeader(rustplus, callerId).then((result) => {
+                        rustplus.log(`Team Leadership was transfered to ${callerName}:${callerId}.`);
+                    }).catch((error) => {
+                        rustplus.log(JSON.stringify(error));
+                    });
+                }
+                else {
+                    let name = command.replace(`${prefix}leader `, '');
+
+                    /* Look if the value provided is a steamId */
+                    for (let member of msg.response.teamInfo.members) {
+                        if (name === member.steamId.toNumber()) {
+                            promoteToLeader(rustplus, caller).then((result) => {
+                                rustplus.log(`Team Leadership was transfered to ${member.name}:${name}.`);
+                            }).catch((error) => {
+                                rustplus.log(JSON.stringify(error));
+                            });
+                            return;
+                        }
+                    }
+
+                    /* Find the closest name */
+                    for (let member of msg.response.teamInfo.members) {
+                        if (StringSimilarity.similarity(name, member.name) >= 0.9) {
+                            promoteToLeader(rustplus, member.steamId.toNumber()).then((result) => {
+                                rustplus.log(`Team Leadership was transferred to ${name}:` +
+                                    `${member.steamId.toNumber()}.`);
+                            }).catch((error) => {
+                                rustplus.log(JSON.stringify(error));
+                            });
+                            return;
+                        }
+                    }
+                }
+            }
+        });
     },
 
     commandPop: function (rustplus) {
@@ -84,3 +140,11 @@ module.exports = {
         });
     },
 };
+
+function promoteToLeader(rustplus, steamId) {
+    return rustplus.sendRequestAsync({
+        promoteToLeader: {
+            steamId: steamId
+        },
+    }, 2000);
+}

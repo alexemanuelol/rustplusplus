@@ -15,7 +15,7 @@ module.exports = {
             }
             else if (message.broadcast.hasOwnProperty('teamMessage')) {
                 /* Let command handler handle the potential command */
-                CommandHandler.inGameCommandHandler(rustplus, client, message.broadcast.teamMessage.message.message);
+                CommandHandler.inGameCommandHandler(rustplus, client, message);
             }
             else if (message.broadcast.hasOwnProperty('entityChanged')) {
 
