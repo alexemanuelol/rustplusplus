@@ -13,6 +13,9 @@ module.exports = {
         else if (command === `${prefix}bradley`) {
             module.exports.commandBradley(rustplus);
         }
+        else if (command === `${prefix}cargo`) {
+            module.exports.commandCargo(rustplus);
+        }
         else if (command.startsWith(`${prefix}leader`)) {
             module.exports.commandLeader(rustplus, message);
         }
@@ -40,6 +43,21 @@ module.exports = {
         }
         else {
             str = `Approximately ${time} before Bradley APC respawns.`;
+        }
+
+        rustplus.sendTeamMessage(str);
+        rustplus.log(str);
+    },
+
+    commandCargo: function (rustplus) {
+        let time = rustplus.getTimeLeftOfTimer(rustplus.cargoShipEgressTimer);
+        let str;
+
+        if (time === null) {
+            str = 'No current data on Cargo Ship.';
+        }
+        else {
+            str = `Approximately ${time} before Cargo Ship enters egress stage.`;
         }
 
         rustplus.sendTeamMessage(str);

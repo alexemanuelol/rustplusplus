@@ -71,12 +71,13 @@ Voila!
 
 
 ### In-Game commands
-- [ ] pop, to get the current population of the server, max players and size of queue.
-- [ ] time, to get the current time of the server.
-- [ ] wipe, to get the time since the wipe.
 - [ ] alarm, set a custom alarm
-- [ ] bradley, time before bradley should respawn
-- [ ] leader, give team leadership
+- [x] bradley, time before bradley should respawn
+- [x] cargo, time before cargo enters egress stage
+- [x] leader, give team leadership
+- [x] pop, to get the current population of the server, max players and size of queue.
+- [x] time, to get the current time of the server.
+- [x] wipe, to get the time since the wipe.
 
 
 ### Information Text Channel
