@@ -73,7 +73,7 @@ module.exports = {
             if (msg.response.hasOwnProperty('teamInfo')) {
                 if (command === `${prefix}leader`) {
                     promoteToLeader(rustplus, callerId).then((result) => {
-                        rustplus.log(`Team Leadership was transfered to ${callerName}:${callerId}.`);
+                        rustplus.log(`Team Leadership was transferred to ${callerName}:${callerId}.`);
                     }).catch((error) => {
                         rustplus.log(JSON.stringify(error));
                     });
@@ -83,9 +83,9 @@ module.exports = {
 
                     /* Look if the value provided is a steamId */
                     for (let member of msg.response.teamInfo.members) {
-                        if (name === member.steamId.toNumber()) {
-                            promoteToLeader(rustplus, caller).then((result) => {
-                                rustplus.log(`Team Leadership was transfered to ${member.name}:${name}.`);
+                        if (name == member.steamId) {
+                            promoteToLeader(rustplus, member.steamId).then((result) => {
+                                rustplus.log(`Team Leadership was transferred to ${member.name}:${name}.`);
                             }).catch((error) => {
                                 rustplus.log(JSON.stringify(error));
                             });
@@ -96,9 +96,9 @@ module.exports = {
                     /* Find the closest name */
                     for (let member of msg.response.teamInfo.members) {
                         if (StringSimilarity.similarity(name, member.name) >= 0.9) {
-                            promoteToLeader(rustplus, member.steamId.toNumber()).then((result) => {
+                            promoteToLeader(rustplus, member.steamId).then((result) => {
                                 rustplus.log(`Team Leadership was transferred to ${name}:` +
-                                    `${member.steamId.toNumber()}.`);
+                                    `${member.steamId}.`);
                             }).catch((error) => {
                                 rustplus.log(JSON.stringify(error));
                             });
