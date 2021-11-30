@@ -24,6 +24,7 @@ class RustPlus extends RP {
         this.logger = null;
         this.serverName = undefined;
         this.firstPoll = true;
+        this.generalSettings = null;
         this.notificationSettings = null;
 
         this.smallOilRigLeftChecker = false;
@@ -98,6 +99,7 @@ class RustPlus extends RP {
         this.logger = new Logger(path.join(__dirname, '..', `Logs/${this.guildId}.log`), this.guildId);
 
         /* Setup settings */
+        this.generalSettings = Client.client.readInstancesFile()[this.guildId].generalSettings;
         this.notificationSettings = Client.client.readInstancesFile()[this.guildId].notificationSettings;
 
         if (connect) {

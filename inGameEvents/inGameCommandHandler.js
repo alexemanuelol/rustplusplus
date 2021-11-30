@@ -1,31 +1,29 @@
 const Timer = require('../util/timer');
 const StringSimilarity = require('../util/stringSimilarity.js');
 
-const prefix = '!';
-
 module.exports = {
     inGameCommandHandler: function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
 
-        if (command === `${prefix}bradley`) {
+        if (command === `${rustplus.prefix}bradley`) {
             module.exports.commandBradley(rustplus);
         }
-        else if (command === `${prefix}cargo`) {
+        else if (command === `${rustplus.prefix}cargo`) {
             module.exports.commandCargo(rustplus);
         }
-        else if (command.startsWith(`${prefix}leader`)) {
+        else if (command.startsWith(`${rustplus.prefix}leader`)) {
             module.exports.commandLeader(rustplus, message);
         }
-        else if (command === `${prefix}pop`) {
+        else if (command === `${rustplus.prefix}pop`) {
             module.exports.commandPop(rustplus);
         }
-        else if (command === `${prefix}time`) {
+        else if (command === `${rustplus.prefix}time`) {
             module.exports.commandTime(rustplus);
         }
-        else if (command.startsWith(`${prefix}timer `)) {
+        else if (command.startsWith(`${rustplus.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
         }
-        else if (command === `${prefix}wipe`) {
+        else if (command === `${rustplus.prefix}wipe`) {
             module.exports.commandWipe(rustplus);
         }
     },
@@ -67,7 +65,7 @@ module.exports = {
 
         rustplus.getTeamInfo((msg) => {
             if (msg.response.hasOwnProperty('teamInfo')) {
-                if (command === `${prefix}leader`) {
+                if (command === `${rustplus.prefix}leader`) {
                     promoteToLeader(rustplus, callerId).then((result) => {
                         rustplus.log(`Team Leadership was transferred to ${callerName}:${callerId}.`);
                     }).catch((error) => {
@@ -75,7 +73,7 @@ module.exports = {
                     });
                 }
                 else {
-                    let name = command.replace(`${prefix}leader `, '');
+                    let name = command.replace(`${rustplus.prefix}leader `, '');
 
                     /* Look if the value provided is a steamId */
                     for (let member of msg.response.teamInfo.members) {

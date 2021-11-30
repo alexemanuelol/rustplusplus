@@ -1,3 +1,4 @@
 {
-    "connect": true
+    "connect": true,
+    "prefix": "!"
 }
