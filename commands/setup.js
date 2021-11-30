@@ -22,7 +22,7 @@ module.exports = {
             .setDescription('The Player Token for the Rust Server')
             .setRequired(true)),
     async execute(client, interaction) {
-        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+        let instances = client.readInstancesFile();
 
         /* Get the options from the command */
         let server_ip = interaction.options.getString('server_ip');
@@ -63,7 +63,7 @@ module.exports = {
             app_port,
             steam_id,
             player_token,
-            instances[interaction.guildId].connect
+            instances[interaction.guildId].generalSettings.connect
         );
 
         /* Store the interaction in the RustPlus instance temporarily */

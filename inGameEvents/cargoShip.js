@@ -26,13 +26,13 @@ module.exports = {
                     /* If Cargo Ship is located outside the grid system + the offset */
                     if (marker.x < -offset || marker.x > (mapSize + offset) ||
                         marker.y < -offset || marker.y > (mapSize + offset)) {
-                        if (rustplus.settings.cargoShipDetected) {
+                        if (rustplus.notificationSettings.cargoShipDetected) {
                             rustplus.sendEvent(`Cargo Ship enters the map from ${spawnLocation}`);
                         }
                         rustplus.cargoShipEgressTimer.restart();
                     }
                     else {
-                        if (rustplus.settings.cargoShipDetected) {
+                        if (rustplus.notificationSettings.cargoShipDetected) {
                             rustplus.sendEvent(`Cargo Ship located at ${spawnLocation}`);
                         }
                     }
@@ -57,7 +57,7 @@ module.exports = {
             }
 
             if (active === false) {
-                if (rustplus.settings.cargoShipLeft) {
+                if (rustplus.notificationSettings.cargoShipLeft) {
                     rustplus.sendEvent('Cargo Ship just left the map');
                 }
                 rustplus.cargoShipEgressTimer.stop();

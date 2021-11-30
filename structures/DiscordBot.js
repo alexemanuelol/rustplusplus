@@ -74,6 +74,14 @@ class DiscordBot extends Client {
         return guild;
     }
 
+    readInstancesFile() {
+        return JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+    }
+
+    writeInstancesFile(instances) {
+        fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify(instances, null, 2));
+    }
+
     createInstancesFile() {
         /* If instances/ directory does not exist, create it */
         if (!fs.existsSync(`${__dirname}/../instances`)) {
@@ -85,35 +93,27 @@ class DiscordBot extends Client {
             fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify({}, null, 2));
         }
 
-        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+        let instances = this.readInstancesFile();
 
         this.guilds.cache.forEach((guild) => {
             if (!instances.hasOwnProperty(guild.id)) {
-                instances[guild.id] = { settings: this.readTemplateSettings(), rustplus: null, connect: true };
+                instances[guild.id] = {
+                    generalSettings: this.readGeneralSettingsTemplate(),
+                    notificationSettings: this.readNotificationSettingsTemplate(),
+                    rustplus: null
+                };
             }
         });
 
-        fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify(instances, null, 2));
+        this.writeInstancesFile(instances);
     }
 
-    readSettingsFromFile(guildId) {
-        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
-
-        return instances[guildId].settings;
+    readNotificationSettingsTemplate() {
+        return JSON.parse(fs.readFileSync(`${__dirname}/../templates/notificationSettingsTemplate.json`, 'utf8'));
     }
 
-    writeSettingsToFile(guildId, settings) {
-        if (settings !== null) {
-            let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
-
-            instances[guildId].settings = settings;
-
-            fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify(instances, null, 2));
-        }
-    }
-
-    readTemplateSettings() {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../templates/settingsTemplate.json`, 'utf8'));
+    readGeneralSettingsTemplate() {
+        return JSON.parse(fs.readFileSync(`${__dirname}/../templates/generalSettingsTemplate.json`, 'utf8'));
     }
 
     createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken, connect) {
@@ -135,7 +135,7 @@ class DiscordBot extends Client {
     }
 
     createRustplusInstancesFromConfig() {
-        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+        let instances = this.readInstancesFile();
 
         for (let instance in instances) {
             if (instances[instance].rustplus !== null) {
@@ -145,7 +145,7 @@ class DiscordBot extends Client {
                     instances[instance].rustplus.app_port,
                     instances[instance].rustplus.steam_id,
                     instances[instance].rustplus.player_token,
-                    instances[instance].connect);
+                    instances[instance].generalSettings.connect);
             }
         }
     }

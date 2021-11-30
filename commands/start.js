@@ -15,9 +15,9 @@ module.exports = {
 			return;
 		}
 
-		let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
-		instances[interaction.guildId].connect = true;
-		fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify(instances, null, 2));
+		let instances = client.readInstancesFile();
+		instances[interaction.guildId].generalSettings.connect = true;
+		client.writeInstancesFile(instances);
 
 		/* Reply with a temporary 'thinking ...' */
 		await interaction.deferReply({ ephemeral: true });

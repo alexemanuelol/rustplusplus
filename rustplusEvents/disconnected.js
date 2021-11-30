@@ -5,9 +5,9 @@ module.exports = {
     async execute(rustplus, client) {
         rustplus.log('RUSTPLUS DISCONNECTED');
 
-        let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+        let instances = client.readInstancesFile();
 
-        if (rustplus.interaction && !instances[rustplus.guildId].connect) {
+        if (rustplus.interaction && !instances[rustplus.guildId].generalSettings.connect) {
             rustplus.interaction.editReply({
                 content: ':white_check_mark: Successfully Disconnected!',
                 ephemeral: true

@@ -20,7 +20,7 @@ module.exports = {
                     rustplus.currentExplosionsId.push(marker.id);
 
                     if (module.exports.isExplosionBradley(marker.x, marker.y, rustplus)) {
-                        if (rustplus.settings.bradleyApcDestroyed) {
+                        if (rustplus.notificationSettings.bradleyApcDestroyed) {
                             rustplus.sendEvent('Bradley APC was destroyed at Launch Site.');
                         }
                         rustplus.bradleyRespawnTimer.restart();
@@ -29,7 +29,7 @@ module.exports = {
                         /* Patrol Helicopter */
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize)
                         let loc = (gridLocation === null) ? 'somewhere outside the grid system' : `at ${gridLocation}`;
-                        if (rustplus.settings.patrolHelicopterDowned) {
+                        if (rustplus.notificationSettings.patrolHelicopterDowned) {
                             rustplus.sendEvent(`Patrol Helicopter was taken down ${loc}.`);
                         }
                     }
