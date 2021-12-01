@@ -1,4 +1,3 @@
-const fs = require('fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = {
@@ -15,9 +14,9 @@ module.exports = {
 			return;
 		}
 
-		let instances = client.readInstancesFile();
-		instances[interaction.guildId].generalSettings.connect = true;
-		client.writeInstancesFile(instances);
+		let instance = client.readInstanceFile(interaction.guildId);
+		instance.generalSettings.connect = true;
+		client.writeInstanceFile(interaction.guildId, instance);
 
 		/* Reply with a temporary 'thinking ...' */
 		await interaction.deferReply({ ephemeral: true });

@@ -6,7 +6,7 @@ module.exports = {
 
         client.log('LOGGED IN AS: ' + client.user.tag);
 
-        client.createInstancesFile();
+        client.createInstanceFiles();
 
         client.registerSlashCommands();
         client.setupGuildChannels();

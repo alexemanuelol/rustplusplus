@@ -99,8 +99,9 @@ class RustPlus extends RP {
         this.logger = new Logger(path.join(__dirname, '..', `logs/${this.guildId}.log`), this.guildId);
 
         /* Setup settings */
-        this.generalSettings = Client.client.readInstancesFile()[this.guildId].generalSettings;
-        this.notificationSettings = Client.client.readInstancesFile()[this.guildId].notificationSettings;
+        let instance = Client.client.readInstanceFile(this.guildId);
+        this.generalSettings = instance.generalSettings;
+        this.notificationSettings = instance.notificationSettings;
 
         if (connect) {
             this.connect();

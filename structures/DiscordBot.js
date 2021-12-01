@@ -74,38 +74,29 @@ class DiscordBot extends Client {
         return guild;
     }
 
-    readInstancesFile() {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+    readInstanceFile(guildId) {
+        return JSON.parse(fs.readFileSync(`${__dirname}/../instances/${guildId}.json`, 'utf8'));
     }
 
-    writeInstancesFile(instances) {
-        fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify(instances, null, 2));
+    writeInstanceFile(guildId, instance) {
+        fs.writeFileSync(`${__dirname}/../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
     }
 
-    createInstancesFile() {
+    createInstanceFiles() {
         /* If instances/ directory does not exist, create it */
         if (!fs.existsSync(`${__dirname}/../instances`)) {
             fs.mkdirSync(`${__dirname}/../instances`);
         }
 
-        /* If instances.json does not exist, create it */
-        if (!fs.existsSync(`${__dirname}/../instances/instances.json`)) {
-            fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify({}, null, 2));
-        }
-
-        let instances = this.readInstancesFile();
-
         this.guilds.cache.forEach((guild) => {
-            if (!instances.hasOwnProperty(guild.id)) {
-                instances[guild.id] = {
+            if (!fs.existsSync(`${__dirname}/../instances/${guild.id}.json`)) {
+                fs.writeFileSync(`${__dirname}/../instances/${guild.id}.json`, JSON.stringify({
                     generalSettings: this.readGeneralSettingsTemplate(),
                     notificationSettings: this.readNotificationSettingsTemplate(),
                     rustplus: null
-                };
+                }, null, 2));
             }
         });
-
-        this.writeInstancesFile(instances);
     }
 
     readNotificationSettingsTemplate() {
@@ -135,19 +126,24 @@ class DiscordBot extends Client {
     }
 
     createRustplusInstancesFromConfig() {
-        let instances = this.readInstancesFile();
+        let files = fs.readdirSync(`${__dirname}/../instances`);
 
-        for (let instance in instances) {
-            if (instances[instance].rustplus !== null) {
-                this.createRustplusInstance(
-                    instance,
-                    instances[instance].rustplus.server_ip,
-                    instances[instance].rustplus.app_port,
-                    instances[instance].rustplus.steam_id,
-                    instances[instance].rustplus.player_token,
-                    instances[instance].generalSettings.connect);
+        files.forEach(file => {
+            if (file.endsWith('.json')) {
+                let guildId = file.replace('.json', '');
+                let instance = this.readInstanceFile(guildId);
+
+                if (instance.rustplus !== null) {
+                    this.createRustplusInstance(
+                        guildId,
+                        instance.rustplus.server_ip,
+                        instance.rustplus.app_port,
+                        instance.rustplus.steam_id,
+                        instance.rustplus.player_token,
+                        instance.generalSettings.connect);
+                }
             }
-        }
+        });
     }
 }
 

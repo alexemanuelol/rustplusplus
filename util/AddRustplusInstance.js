@@ -1,14 +1,14 @@
-const fs = require("fs");
+const Client = require('../index.js');
 
 module.exports = (guildId, serverIp, appPort, steamId, playerToken) => {
-    let instances = JSON.parse(fs.readFileSync(`${__dirname}/../instances/instances.json`, 'utf8'));
+    let instance = Client.client.readInstanceFile(guildId);
 
-    /* Add to object of instances */
-    instances[guildId].rustplus = {
+    instance.rustplus = {
         server_ip: serverIp,
         app_port: appPort,
         steam_id: steamId,
         player_token: playerToken
-    }
-    fs.writeFileSync(`${__dirname}/../instances/instances.json`, JSON.stringify(instances, null, 2));
+    };
+
+    Client.client.writeInstanceFile(guildId, instance);
 };
