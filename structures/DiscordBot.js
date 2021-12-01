@@ -9,7 +9,7 @@ class DiscordBot extends Client {
     constructor(props) {
         super(props);
 
-        this.logger = new Logger(path.join(__dirname, '..', 'Logs/discordBot.log'));
+        this.logger = new Logger(path.join(__dirname, '..', 'logs/discordBot.log'));
 
         this.commands = new Collection();
         this.guildsAndChannelsIds = new Object();
