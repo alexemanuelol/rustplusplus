@@ -67,7 +67,7 @@ module.exports = {
     },
 
     notifyCargoShipEgress: function (rustplus) {
-        if (rustplus[0].settings.cargoShipEgress) {
+        if (rustplus[0].notificationSettings.cargoShipEgress) {
             rustplus[0].sendEvent('Cargo Ship should be in the egress stage.');
         }
     },

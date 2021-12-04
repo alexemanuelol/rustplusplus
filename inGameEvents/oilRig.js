@@ -85,14 +85,14 @@ module.exports = {
     },
 
     notifyLockedCrateSmallOpen: function (rustplus) {
-        if (rustplus[0].settings.lockedCrateOilRigUnlocked) {
+        if (rustplus[0].notificationSettings.lockedCrateOilRigUnlocked) {
             rustplus[0].sendEvent('Locked Crate at Small Oil Rig has been unlocked');
         }
         rustplus[0].lockedCrateSmallOilRigTimer.stop();
     },
 
     notifyLockedCrateLargeOpen: function (rustplus) {
-        if (rustplus[0].settings.lockedCrateOilRigUnlocked) {
+        if (rustplus[0].notificationSettings.lockedCrateOilRigUnlocked) {
             rustplus[0].sendEvent('Locked Crate at Large Oil Rig has been unlocked');
         }
         rustplus[0].lockedCrateLargeOilRigTimer.stop();

@@ -199,7 +199,7 @@ module.exports = {
     },
 
     notifyLockedCrateWarningDespawn: function (rustplus) {
-        if (rustplus[0].settings.lockedCrateMonumentDespawnWarning) {
+        if (rustplus[0].notificationSettings.lockedCrateMonumentDespawnWarning) {
             rustplus[0].sendEvent(`Locked Crate at ${rustplus.currentLockedCrateMonumentName} despawns in ` +
                 `${Constants.LOCKED_CRATE_DESPAWN_WARNING_TIME_MS / (60 * 1000)} minutes`);
         }

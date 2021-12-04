@@ -65,7 +65,7 @@ module.exports = {
     },
 
     notifyBradleyRespawn: function (rustplus) {
-        if (rustplus[0].settings.bradleyApcShouldRespawn) {
+        if (rustplus[0].notificationSettings.bradleyApcShouldRespawn) {
             rustplus[0].sendEvent('Bradley APC should respawn any second now');
         }
     },
