@@ -24,8 +24,12 @@ module.exports = {
 
                     if (module.exports.isCrateOnCargoShip(marker.x, marker.y, mapMarkers)) {
                         /* Locked Crate is located on Cargo Ship */
-                        if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateSpawnCargoShip) {
-                            rustplus.sendEvent('Locked Crate just spawned on Cargo Ship');
+                        let str = 'Locked Crate just spawned on Cargo Ship';
+                        if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateSpawnCargoShip.discord) {
+                            rustplus.sendEvent(str);
+                        }
+                        if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateSpawnCargoShip.inGame) {
+                            rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.currentLockedCratesId.push({ id: marker.id, name: 'cargo_ship' });
                         continue;
@@ -38,9 +42,13 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'oil_rig_small')) {
-                            if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateRespawnOilRig) {
-                                rustplus.sendEvent('Locked Crate just respawned on Small ' +
-                                    `${MonNames.Monument['oil_rig_small']}`);
+                            let str = 'Locked Crate just respawned on Small ' +
+                                `${MonNames.Monument['oil_rig_small']}`;
+                            if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateRespawnOilRig.discord) {
+                                rustplus.sendEvent(str);
+                            }
+                            if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateRespawnOilRig.inGame) {
+                                rustplus.sendTeamMessage(`Event: ${str}`);
                             }
                         }
                         else {
@@ -52,9 +60,13 @@ module.exports = {
                         /* Locked Crate at small/large oil rig randomly respawns and get a new id, so it needs to be
                         replaced in currentLockedCratesId as well */
                         if (!rustplus.currentLockedCratesId.some(e => e.name === 'large_oil_rig')) {
-                            if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateRespawnOilRig) {
-                                rustplus.sendEvent('Locked Crate just respawned on ' +
-                                    `${MonNames.Monument['large_oil_rig']}`);
+                            let str = 'Locked Crate just respawned on ' +
+                                `${MonNames.Monument['large_oil_rig']}`;
+                            if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateRespawnOilRig.discord) {
+                                rustplus.sendEvent(str);
+                            }
+                            if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateRespawnOilRig.inGame) {
+                                rustplus.sendTeamMessage(`Event: ${str}`);
                             }
                         }
                         else {
@@ -63,17 +75,27 @@ module.exports = {
                         }
                     }
                     else {
-                        if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateDroppedAtMonument) {
-                            rustplus.sendEvent('Locked Crate just got dropped by Chinook 47 at ' +
-                                `${MonNames.Monument[closestMonument.token]}`);
+                        if (!rustplus.firstPoll) {
+                            let str = 'Locked Crate just got dropped by Chinook 47 at ' +
+                                `${MonNames.Monument[closestMonument.token]}`;
+                            if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.discord) {
+                                rustplus.sendEvent(str);
+                            }
+                            if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.inGame) {
+                                rustplus.sendTeamMessage(`Event: ${str}`);
+                            }
 
                             rustplus.lockedCrateDespawnTimer.restart();
                             rustplus.lockedCrateDespawnWarningTimer.restart();
                         }
                         else {
-                            if (rustplus.notificationSettings.lockedCrateDroppedAtMonument) {
-                                rustplus.sendEvent('Locked Crate located at ' +
-                                    `${MonNames.Monument[closestMonument.token]}`);
+                            let str = 'Locked Crate located at ' +
+                                `${MonNames.Monument[closestMonument.token]}`;
+                            if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.discord) {
+                                rustplus.sendEvent(str);
+                            }
+                            if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.inGame) {
+                                rustplus.sendTeamMessage(`Event: ${str}`);
                             }
                         }
                         rustplus.currentLockedCrateMonumentName = MonNames.Monument[closestMonument.token];
@@ -101,8 +123,12 @@ module.exports = {
 
             if (active === false) {
                 if (lockedCrate.name === 'cargo_ship') {
-                    if (rustplus.notificationSettings.lockedCrateLeftCargoShip) {
-                        rustplus.sendEvent('Locked Crate on Cargo Ship just got looted or despawned');
+                    let str = 'Locked Crate on Cargo Ship just got looted or despawned';
+                    if (rustplus.notificationSettings.lockedCrateLeftCargoShip.discord) {
+                        rustplus.sendEvent(str);
+                    }
+                    if (rustplus.notificationSettings.lockedCrateLeftCargoShip.inGame) {
+                        rustplus.sendTeamMessage(`Event: ${str}`);
                     }
                 }
                 else if (lockedCrate.name === 'oil_rig_small') {
@@ -113,8 +139,12 @@ module.exports = {
                     }
                     rustplus.smallOilRigLeftChecker = false;
 
-                    if (rustplus.notificationSettings.lockedCrateLootedOilRig) {
-                        rustplus.sendEvent('Locked Crate at Small Oil Rig just got looted');
+                    let str = 'Locked Crate at Small Oil Rig just got looted';
+                    if (rustplus.notificationSettings.lockedCrateLootedOilRig.discord) {
+                        rustplus.sendEvent(str);
+                    }
+                    if (rustplus.notificationSettings.lockedCrateLootedOilRig.inGame) {
+                        rustplus.sendTeamMessage(`Event: ${str}`);
                     }
                     rustplus.lockedCrateSmallOilRigTimer.stop();
                 }
@@ -126,8 +156,12 @@ module.exports = {
                     }
                     rustplus.largeOilRigLeftChecker = false;
 
-                    if (rustplus.notificationSettings.lockedCrateLootedOilRig) {
-                        rustplus.sendEvent('Locked Crate at Large Oil Rig just got looted');
+                    let str = 'Locked Crate at Large Oil Rig just got looted';
+                    if (rustplus.notificationSettings.lockedCrateLootedOilRig.discord) {
+                        rustplus.sendEvent(str);
+                    }
+                    if (rustplus.notificationSettings.lockedCrateLootedOilRig.inGame) {
+                        rustplus.sendTeamMessage(`Event: ${str}`);
                     }
                     rustplus.lockedCrateLargeOilRigTimer.stop();
                 }
@@ -136,14 +170,21 @@ module.exports = {
                     let despawnOffset = 5 * 60 * 1000; /* 5 minutes offset value */
                     if (timeLeft > despawnOffset) {
                         /* The timer have reset, which might indicate that the Locked Crate despawned. */
-                        if (rustplus.notificationSettings.lockedCrateMonumentLeft) {
-                            rustplus.sendEvent(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} ` +
-                                'just got looted');
+                        let str = `Locked Crate at ${MonNames.Monument[lockedCrate.name]} ` + 'just got looted';
+                        if (rustplus.notificationSettings.lockedCrateMonumentLeft.discord) {
+                            rustplus.sendEvent(str);
+                        }
+                        if (rustplus.notificationSettings.lockedCrateMonumentLeft.inGame) {
+                            rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                     }
                     else {
-                        if (rustplus.notificationSettings.lockedCrateMonumentLeft) {
-                            rustplus.sendEvent(`Locked Crate at ${MonNames.Monument[lockedCrate.name]} just despawned`);
+                        let str = `Locked Crate at ${MonNames.Monument[lockedCrate.name]} just despawned`;
+                        if (rustplus.notificationSettings.lockedCrateMonumentLeft.discord) {
+                            rustplus.sendEvent(str);
+                        }
+                        if (rustplus.notificationSettings.lockedCrateMonumentLeft.inGame) {
+                            rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                     }
                     rustplus.lockedCrateDespawnTimer.stop();
@@ -199,9 +240,13 @@ module.exports = {
     },
 
     notifyLockedCrateWarningDespawn: function (rustplus) {
-        if (rustplus[0].notificationSettings.lockedCrateMonumentDespawnWarning) {
-            rustplus[0].sendEvent(`Locked Crate at ${rustplus.currentLockedCrateMonumentName} despawns in ` +
-                `${Constants.LOCKED_CRATE_DESPAWN_WARNING_TIME_MS / (60 * 1000)} minutes`);
+        let str = `Locked Crate at ${rustplus.currentLockedCrateMonumentName} despawns in ` +
+            `${Constants.LOCKED_CRATE_DESPAWN_WARNING_TIME_MS / (60 * 1000)} minutes`;
+        if (rustplus[0].notificationSettings.lockedCrateMonumentDespawnWarning.discord) {
+            rustplus[0].sendEvent(str);
+        }
+        if (rustplus[0].notificationSettings.lockedCrateMonumentDespawnWarning.inGame) {
+            rustplus[0].sendTeamMessage(`Event: ${str}`);
         }
         rustplus[0].lockedCrateDespawnWarningTimer.stop();
     },

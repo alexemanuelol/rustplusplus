@@ -1,19 +1,70 @@
 {
-    "cargoShipDetected": true,
-    "cargoShipLeft": true,
-    "cargoShipEgress": true,
-    "bradleyApcDestroyed": true,
-    "bradleyApcShouldRespawn": true,
-    "patrolHelicopterDowned": true,
-    "lockedCrateSpawnCargoShip": true,
-    "lockedCrateRespawnOilRig": true,
-    "lockedCrateDroppedAtMonument": true,
-    "lockedCrateLeftCargoShip": true,
-    "lockedCrateLootedOilRig": true,
-    "lockedCrateMonumentLeft": true,
-    "lockedCrateMonumentDespawnWarning": true,
-    "lockedCrateOilRigUnlocked": true,
-    "heavyScientistCalled": true,
-    "chinook47Detected": true,
-    "vendingMachineDetected": true
+    "cargoShipDetected": {
+        "discord": true,
+        "inGame": true
+    },
+    "cargoShipLeft": {
+        "discord": true,
+        "inGame": true
+    },
+    "cargoShipEgress": {
+        "discord": true,
+        "inGame": true
+    },
+    "bradleyApcDestroyed": {
+        "discord": true,
+        "inGame": true
+    },
+    "bradleyApcShouldRespawn": {
+        "discord": true,
+        "inGame": true
+    },
+    "patrolHelicopterDowned": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateSpawnCargoShip": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateRespawnOilRig": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateDroppedAtMonument": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateLeftCargoShip": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateLootedOilRig": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateMonumentLeft": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateMonumentDespawnWarning": {
+        "discord": true,
+        "inGame": true
+    },
+    "lockedCrateOilRigUnlocked": {
+        "discord": true,
+        "inGame": true
+    },
+    "heavyScientistCalled": {
+        "discord": true,
+        "inGame": true
+    },
+    "chinook47Detected": {
+        "discord": true,
+        "inGame": true
+    },
+    "vendingMachineDetected": {
+        "discord": true,
+        "inGame": true
+    }
 }
