@@ -1,4 +1,4 @@
-const Client = require('../index.js');
+const Client = require('../../index.js');
 
 module.exports = (guildId, serverIp, appPort, steamId, playerToken) => {
     let instance = Client.client.readInstanceFile(guildId);

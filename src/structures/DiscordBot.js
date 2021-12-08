@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { Collection, Client } = require('discord.js');
-const Config = require('../config.json');
+const Config = require('../../config.json');
 const RustPlus = require('../structures/RustPlus');
 const Logger = require('./Logger.js');
 const path = require('path');

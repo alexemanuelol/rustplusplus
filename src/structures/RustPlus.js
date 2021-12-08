@@ -1,6 +1,6 @@
 const fs = require('fs');
 const RP = require('rustplus.js');
-const Client = require('../index.js');
+const Client = require('../../index.js');
 const { MessageEmbed } = require('discord.js');
 const Timer = require('../util/timer');
 const Constants = require('../util/eventConstants.js');
