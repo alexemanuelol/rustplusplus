@@ -2,23 +2,24 @@ module.exports = {
     gridDiameter: 146.25,
 
     getGridPos: function (x, y, mapSize) {
-        let correctedMapSize = mapSize + (module.exports.gridDiameter - (mapSize % module.exports.gridDiameter));
+        let remainder = mapSize % module.exports.gridDiameter;
+        let offset = module.exports.gridDiameter - remainder;
+        let correctedMapSize = (offset > (module.exports.gridDiameter / 2)) ? mapSize - remainder : mapSize + offset;
 
         /* Outside the grid system */
-        if (x < 0 || x > correctedMapSize || y < 0 || y > (mapSize - (mapSize % module.exports.gridDiameter))) {
+        if (x < 0 || x > correctedMapSize || y < 0 || y > correctedMapSize) {
             return null;
         }
 
-        const gridPosLetters = module.exports.getGridPosLettersX(x, mapSize);
-        const gridPosNumber = module.exports.getGridPosNumberY(y, mapSize);
+        const gridPosLetters = module.exports.getGridPosLettersX(x, correctedMapSize);
+        const gridPosNumber = module.exports.getGridPosNumberY(y, correctedMapSize);
 
         return gridPosLetters + gridPosNumber;
     },
 
     getGridPosLettersX: function (x, mapSize) {
-        let correctedMapSize = mapSize + (module.exports.gridDiameter - (mapSize % module.exports.gridDiameter));
         let num = 1;
-        for (let startGrid = 0; startGrid < correctedMapSize; startGrid += module.exports.gridDiameter) {
+        for (let startGrid = 0; startGrid < mapSize; startGrid += module.exports.gridDiameter) {
             if (x >= startGrid && x <= (startGrid + module.exports.gridDiameter)) {
                 /* We're at the correct grid! */
                 return module.exports.toLetters(num);
