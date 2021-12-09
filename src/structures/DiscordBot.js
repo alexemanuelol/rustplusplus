@@ -59,6 +59,12 @@ class DiscordBot extends Client {
         });
     }
 
+    setupSettingsMenus() {
+        this.guilds.cache.forEach((guild) => {
+            require('../util/SetupSettingsMenu')(this, guild);
+        })
+    }
+
     getChannel(guildId, channelId) {
         let guild = this.guilds.cache.get(guildId);
         if (guild) {

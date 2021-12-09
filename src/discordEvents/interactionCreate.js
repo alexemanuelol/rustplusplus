@@ -1,6 +1,11 @@
 module.exports = {
     name: 'interactionCreate',
     async execute(client, interaction) {
+        if (interaction.isButton()) {
+            require('../handlers/buttonHandler')(client, interaction);
+            return;
+        }
+
         if (!interaction.isCommand()) return;
 
         const command = interaction.client.commands.get(interaction.commandName);

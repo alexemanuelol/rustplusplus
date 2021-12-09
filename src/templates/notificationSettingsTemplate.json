@@ -1,69 +1,86 @@
 {
     "cargoShipDetected": {
+        "description": "When Cargo Ship is detected, send a notification.",
         "discord": true,
         "inGame": true
     },
     "cargoShipLeft": {
+        "description": "When Cargo Ship left the map, send a notification.",
         "discord": true,
         "inGame": true
     },
     "cargoShipEgress": {
+        "description": "When Cargo Ship enters egress stage, send a notification.",
         "discord": true,
         "inGame": true
     },
     "bradleyApcDestroyed": {
+        "description": "When Bradley APC gets destroyed, send a notification.",
         "discord": true,
         "inGame": true
     },
     "bradleyApcShouldRespawn": {
+        "description": "When Bradley APC should respawn, send a notification.",
         "discord": true,
         "inGame": true
     },
     "patrolHelicopterDowned": {
+        "description": "When Patrol Helicopter gets downed, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateSpawnCargoShip": {
+        "description": "When a Locked Crate spawns on Cargo Ship, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateRespawnOilRig": {
+        "description": "When a Locked Crate respawns at Oil Rig, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateDroppedAtMonument": {
+        "description": "When a Locked Crate gets dropped at a monument, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateLeftCargoShip": {
+        "description": "When a Locked Crate disappears from Cargo Ship, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateLootedOilRig": {
+        "description": "When a Locked Crate gets looted at Oil Rig, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateMonumentLeft": {
+        "description": "When a Locked Crate disappears from a monument, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateMonumentDespawnWarning": {
+        "description": "When a Locked Crate at a monument is about to despawn, send a notification.",
         "discord": true,
         "inGame": true
     },
     "lockedCrateOilRigUnlocked": {
+        "description": "When a Locked Crate at Oil Rig is unlocked, send a notification.",
         "discord": true,
         "inGame": true
     },
     "heavyScientistCalled": {
+        "description": "When Heavy Scientists are called to Oil Rig, send a notification.",
         "discord": true,
         "inGame": true
     },
     "chinook47Detected": {
+        "description": "When a Chinook 47 enters the map, send a notification.",
         "discord": true,
         "inGame": true
     },
     "vendingMachineDetected": {
+        "description": "When a new Vending Machine is detected, send a notification.",
         "discord": true,
         "inGame": true
     }

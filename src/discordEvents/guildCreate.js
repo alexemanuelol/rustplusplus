@@ -3,5 +3,6 @@ module.exports = {
     async execute(client, guild) {
         require('../util/RegisterSlashCommands')(client, guild);
         require('../util/SetupGuildChannels')(client, guild);
+        require('../util/SetupSettingsMenu')(client, guild);
     },
 }
