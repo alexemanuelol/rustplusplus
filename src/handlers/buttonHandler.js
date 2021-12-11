@@ -1,4 +1,4 @@
-const Buttons = require('../util/buttons.js');
+const Buttons = require('../discordTools/buttons.js');
 
 module.exports = (client, interaction) => {
     let guildId = interaction.guildId;

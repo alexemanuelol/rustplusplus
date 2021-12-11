@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const Buttons = require('../util/buttons.js');
+const Buttons = require('./buttons.js');
 
 module.exports = (client, guild) => {
     let channel = client.getChannel(guild.id, client.guildsAndChannelsIds[guild.id].settings);

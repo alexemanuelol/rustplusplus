@@ -49,19 +49,19 @@ class DiscordBot extends Client {
 
     registerSlashCommands() {
         this.guilds.cache.forEach((guild) => {
-            require('../util/RegisterSlashCommands')(this, guild);
+            require('../discordTools/RegisterSlashCommands')(this, guild);
         });
     }
 
     setupGuildChannels() {
         this.guilds.cache.forEach((guild) => {
-            require('../util/SetupGuildChannels')(this, guild);
+            require('../discordTools/SetupGuildChannels')(this, guild);
         });
     }
 
     setupSettingsMenus() {
         this.guilds.cache.forEach((guild) => {
-            require('../util/SetupSettingsMenu')(this, guild);
+            require('../discordTools/SetupSettingsMenu')(this, guild);
         })
     }
 
