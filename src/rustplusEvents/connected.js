@@ -1,4 +1,4 @@
-const InGameEventHandler = require('../inGameEvents/inGameEventHandler.js');
+const InGameEventHandler = require('../handlers/inGameEventHandler.js');
 
 module.exports = {
     name: 'connected',

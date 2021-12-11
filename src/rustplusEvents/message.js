@@ -1,4 +1,4 @@
-const CommandHandler = require('../inGameEvents/inGameCommandHandler.js');
+const CommandHandler = require('../handlers/inGameCommandHandler.js');
 
 module.exports = {
     name: 'message',

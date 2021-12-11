@@ -1,8 +1,8 @@
-const CargoShip = require('./cargoShip.js');
-const Explosion = require('./explosion.js');
-const LockedCrate = require('./lockedCrate.js');
-const OilRig = require('./oilRig.js');
-const VendingMachine = require('./vendingMachine.js');
+const CargoShip = require('../inGameEvents/cargoShip.js');
+const Explosion = require('../inGameEvents/explosion.js');
+const LockedCrate = require('../inGameEvents/lockedCrate.js');
+const OilRig = require('../inGameEvents/oilRig.js');
+const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
 module.exports = {
     inGameEventHandler: function (rustplus, client) {
