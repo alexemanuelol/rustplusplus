@@ -10,7 +10,7 @@ module.exports = {
 
         client.registerSlashCommands();
         client.setupGuildChannels();
-        client.setupSettingsMenus();
+        //client.setupSettingsMenus(); /* Only run on guildCreate? */
         client.createRustplusInstancesFromConfig();
     },
 };

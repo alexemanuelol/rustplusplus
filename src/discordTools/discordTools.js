@@ -8,7 +8,7 @@ module.exports = {
         if (guild) {
             let channel = guild.channels.cache.get(channelId);
 
-            if (channel.type === 'GUILD_TEXT') {
+            if (channel && channel.type === 'GUILD_TEXT') {
                 return channel;
             }
         }
