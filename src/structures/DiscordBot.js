@@ -65,21 +65,6 @@ class DiscordBot extends Client {
         })
     }
 
-    getChannel(guildId, channelId) {
-        let guild = this.guilds.cache.get(guildId);
-        if (guild) {
-            let channel = guild.channels.cache.get(channelId);
-            if (!channel) {
-                this.log(`No channel with ID: ${channelId}`);
-            }
-            return channel;
-        }
-        else {
-            this.log(`No guild with ID: ${guildId}`);
-        }
-        return guild;
-    }
-
     readInstanceFile(guildId) {
         return JSON.parse(fs.readFileSync(`${__dirname}/../instances/${guildId}.json`, 'utf8'));
     }

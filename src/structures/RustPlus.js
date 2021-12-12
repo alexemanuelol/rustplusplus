@@ -6,6 +6,7 @@ const Timer = require('../util/timer');
 const Constants = require('../util/eventConstants.js');
 const Logger = require('./Logger.js');
 const path = require('path');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 const CargoShip = require('../inGameEvents/cargoShip.js');
 const Explosion = require('../inGameEvents/explosion.js');
@@ -113,9 +114,9 @@ class RustPlus extends RP {
     }
 
     sendEvent(text) {
-        let channel = Client.client.getChannel(this.guildId, this.eventChannelId);
+        let channel = DiscordTools.getChannel(Client.client, this.guildId, this.eventChannelId);
 
-        if (channel) {
+        if (channel !== undefined) {
             let embed = new MessageEmbed()
                 .setColor('#ce412b')
                 .setAuthor(text)

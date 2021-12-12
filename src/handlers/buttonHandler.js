@@ -1,4 +1,4 @@
-const Buttons = require('../discordTools/buttons.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = (client, interaction) => {
     let guildId = interaction.guildId;
@@ -25,7 +25,7 @@ module.exports = (client, interaction) => {
         }
     }
 
-    let row = Buttons.getSettingsButtonsRow(
+    let row = DiscordTools.getNotificationButtonsRow(
         `${setting}Discord`,
         instance.notificationSettings[setting].discord,
         `${setting}InGame`,
