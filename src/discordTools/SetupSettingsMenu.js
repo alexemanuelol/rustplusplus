@@ -2,7 +2,7 @@ const { MessageEmbed } = require('discord.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = (client, guild) => {
-    let channel = DiscordTools.getChannel(client, guild.id, client.guildsAndChannelsIds[guild.id].settings);
+    let channel = DiscordTools.getChannel(guild.id, client.guildsAndChannelsIds[guild.id].settings);
     let instance = client.readInstanceFile(guild.id);
 
     if (channel === undefined) {
@@ -10,7 +10,7 @@ module.exports = (client, guild) => {
         return;
     }
 
-    DiscordTools.clearTextChannel(channel, 100);
+    DiscordTools.clearTextChannel(guild.id, client.guildsAndChannelsIds[guild.id].settings, 100);
 
 
     /* GENERAL SETTINGS */

@@ -114,7 +114,7 @@ class RustPlus extends RP {
     }
 
     sendEvent(text) {
-        let channel = DiscordTools.getChannel(Client.client, this.guildId, this.eventChannelId);
+        let channel = DiscordTools.getChannel(this.guildId, this.eventChannelId);
 
         if (channel !== undefined) {
             let embed = new MessageEmbed()

@@ -1,8 +1,9 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const Client = require('../../index.js');
 
 module.exports = {
-    getChannel: function (client, guildId, channelId) {
-        let guild = client.guilds.cache.get(guildId);
+    getChannel: function (guildId, channelId) {
+        let guild = Client.client.guilds.cache.get(guildId);
         if (guild) {
             let channel = guild.channels.cache.get(channelId);
             return channel;
@@ -10,7 +11,9 @@ module.exports = {
         return guild;
     },
 
-    clearTextChannel: function (channel, numberOfMessages) {
+    clearTextChannel: function (guildId, channelId, numberOfMessages) {
+        let channel = module.exports.getChannel(guildId, channelId);
+
         if (channel === undefined) {
             return;
         }
