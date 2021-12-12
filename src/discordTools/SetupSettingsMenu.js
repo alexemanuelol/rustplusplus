@@ -2,10 +2,10 @@ const { MessageEmbed } = require('discord.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = (client, guild) => {
-    let channel = DiscordTools.getChannel(guild.id, client.guildsAndChannelsIds[guild.id].settings);
+    let channel = DiscordTools.getTextChannelById(guild.id, client.guildsAndChannelsIds[guild.id].settings);
     let instance = client.readInstanceFile(guild.id);
 
-    if (channel === undefined) {
+    if (!channel) {
         client.log('Invalid guild or channel.');
         return;
     }
@@ -18,7 +18,8 @@ module.exports = (client, guild) => {
         embeds: [
             new MessageEmbed()
                 .setColor('#ce412b')
-                .setAuthor('GENERAL SETTINGS', 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png')
+                .setAuthor('GENERAL SETTINGS',
+                    'https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png')
         ],
     });
 
@@ -35,7 +36,8 @@ module.exports = (client, guild) => {
         embeds: [
             new MessageEmbed()
                 .setColor('#ce412b')
-                .setAuthor('NOTIFICATION SETTINGS', 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png')
+                .setAuthor('NOTIFICATION SETTINGS',
+                    'https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Settings_app_icon.png')
         ],
     });
 
@@ -55,7 +57,3 @@ module.exports = (client, guild) => {
     }
 
 };
-
-function clearChannel(channel, amount) {
-    channel.bulkDelete(amount, true);
-}
