@@ -74,19 +74,8 @@ class DiscordBot extends Client {
     }
 
     createInstanceFiles() {
-        /* If instances/ directory does not exist, create it */
-        if (!fs.existsSync(`${__dirname}/../instances`)) {
-            fs.mkdirSync(`${__dirname}/../instances`);
-        }
-
         this.guilds.cache.forEach((guild) => {
-            if (!fs.existsSync(`${__dirname}/../instances/${guild.id}.json`)) {
-                fs.writeFileSync(`${__dirname}/../instances/${guild.id}.json`, JSON.stringify({
-                    generalSettings: this.readGeneralSettingsTemplate(),
-                    notificationSettings: this.readNotificationSettingsTemplate(),
-                    rustplus: null
-                }, null, 2));
-            }
+            require('../util/CreateInstanceFile')(this, guild);
         });
     }
 
