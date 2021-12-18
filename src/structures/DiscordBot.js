@@ -53,6 +53,12 @@ class DiscordBot extends Client {
         });
     }
 
+    createInstanceFiles() {
+        this.guilds.cache.forEach((guild) => {
+            require('../util/CreateInstanceFile')(this, guild);
+        });
+    }
+
     setupGuildChannels() {
         this.guilds.cache.forEach((guild) => {
             require('../discordTools/SetupGuildChannels')(this, guild);
@@ -73,11 +79,6 @@ class DiscordBot extends Client {
         fs.writeFileSync(`${__dirname}/../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
     }
 
-    createInstanceFiles() {
-        this.guilds.cache.forEach((guild) => {
-            require('../util/CreateInstanceFile')(this, guild);
-        });
-    }
 
     readNotificationSettingsTemplate() {
         return JSON.parse(fs.readFileSync(`${__dirname}/../templates/notificationSettingsTemplate.json`, 'utf8'));
