@@ -63,7 +63,6 @@ Voila!
 - [ ] /reset command to reset rustplus instance for the guild
 - [x] /start command to start the configured rustplus instance
 - [x] /stop command to stop the configured rustplus instance
-- [ ] /settings command to get a settings interface to change settings (?)
 - [ ] /resetchannels command to reset channels (Add missing channels etc...)
 - [ ] /setnotification command with all notifications as sub commands, boolean to set on or off
 - [ ] /switch command with subcommands: add, remove, removeall, on, off. Set auto-ON, custom name.
@@ -78,6 +77,8 @@ Voila!
 - [x] time, to get the current time of the server.
 - [x] timer, set a custom timer
 - [x] wipe, to get the time since the wipe.
+- [ ] small, to get the time left before crate on small oilrig unlocks.
+- [ ] large, to get the time left before crate on large oilrig unlocks.
 
 
 ### Information Text Channel
@@ -102,6 +103,7 @@ Voila!
 - [x] Heavy Scientists called at Oil Rig notification
 - [x] Chinook 47 detected notification
 - [x] New Vending Machine detected notification
+- [ ] Patrol Helicopter enters the map
 
 
 ### Alerts Discord Text Channel
