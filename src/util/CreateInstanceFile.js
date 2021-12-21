@@ -10,7 +10,12 @@ module.exports = (client, guild) => {
         fs.writeFileSync(`${__dirname}/../instances/${guild.id}.json`, JSON.stringify({
             generalSettings: client.readGeneralSettingsTemplate(),
             notificationSettings: client.readNotificationSettingsTemplate(),
-            rustplus: null
+            rustplus: null,
+            channelId: {
+                category: null,
+                settings: null,
+                events: null
+            }
         }, null, 2));
     }
 };

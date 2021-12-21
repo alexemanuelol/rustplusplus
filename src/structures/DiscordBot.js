@@ -12,7 +12,6 @@ class DiscordBot extends Client {
         this.logger = new Logger(path.join(__dirname, '..', 'logs/discordBot.log'));
 
         this.commands = new Collection();
-        this.guildsAndChannelsIds = new Object();
         this.rustplusInstances = new Object();
 
         this.loadCommands();
@@ -79,7 +78,6 @@ class DiscordBot extends Client {
         fs.writeFileSync(`${__dirname}/../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
     }
 
-
     readNotificationSettingsTemplate() {
         return JSON.parse(fs.readFileSync(`${__dirname}/../templates/notificationSettingsTemplate.json`, 'utf8'));
     }
@@ -95,11 +93,6 @@ class DiscordBot extends Client {
         this.rustplusInstances[guildId] = rustplus;
 
         rustplus.guildId = guildId;
-
-        rustplus.eventChannelId = this.guildsAndChannelsIds[guildId]['events'];
-        rustplus.alertChannelId = this.guildsAndChannelsIds[guildId]['alerts'];
-        rustplus.commandsChannelId = this.guildsAndChannelsIds[guildId]['commands'];
-        rustplus.switchesChannelId = this.guildsAndChannelsIds[guildId]['switches'];
 
         rustplus.build(connect);
 

@@ -1,42 +1,56 @@
 const DiscordTools = require('../discordTools/discordTools.js');
 
-const CATEGORY = 'rustPlusPlus';
-const SETTINGS = 'settings';
-const EVENTS = 'events';
-
-const LIST_CHANNELS = [SETTINGS, EVENTS];
-
 module.exports = (client, guild) => {
-    let category = DiscordTools.getCategoryByName(guild.id, CATEGORY);
+    let instance = client.readInstanceFile(guild.id);
 
-    if (!client.guildsAndChannelsIds.hasOwnProperty(guild.id)) {
-        client.guildsAndChannelsIds[guild.id] = {};
+    let category = undefined;
+    if (instance.channelId.category !== null) {
+        category = DiscordTools.getCategoryById(guild.id, instance.channelId.category);
     }
+    if (category === undefined) {
+        DiscordTools.addCategory(guild.id, 'rustPlusPlus').then(cat => {
+            instance.channelId.category = cat.id;
+            client.writeInstanceFile(guild.id, instance);
 
-    /* Add Category/ Channels */
-    if (category) {
-        LIST_CHANNELS.forEach(value => {
-            let channel = DiscordTools.getTextChannelByName(guild.id, value);
-
-            if (!channel || channel.parentId !== category.id) {
-                DiscordTools.addTextChannel(guild.id, value).then(channel => {
-                    channel.setParent(category.id);
-                    client.guildsAndChannelsIds[guild.id][value] = channel.id;
-                });
-            }
-            else {
-                client.guildsAndChannelsIds[guild.id][value] = channel.id;
-            }
+            addMissingTextChannels(client, guild.id, cat);
         });
     }
     else {
-        DiscordTools.addCategory(guild.id, CATEGORY).then(cat => {
-            LIST_CHANNELS.forEach(value => {
-                DiscordTools.addTextChannel(guild.id, value).then(channel => {
-                    channel.setParent(cat.id);
-                    client.guildsAndChannelsIds[guild.id][value] = channel.id;
-                });
-            });
-        });
+        addMissingTextChannels(client, guild.id, category);
     }
 };
+
+
+function addMissingTextChannels(client, guildId, parent) {
+    let instance = client.readInstanceFile(guildId);
+
+    let settings = undefined;
+    if (instance.channelId.settings !== null) {
+        settings = DiscordTools.getTextChannelById(guildId, instance.channelId.settings);
+    }
+    if (settings === undefined) {
+        DiscordTools.addTextChannel(guildId, 'settings').then(channel => {
+            channel.setParent(parent.id);
+            instance.channelId.settings = channel.id;
+            client.writeInstanceFile(guildId, instance);
+        });
+    }
+    else {
+        settings.setParent(parent.id);
+    }
+
+    let events = undefined;
+    if (instance.channelId.events !== null) {
+        events = DiscordTools.getTextChannelById(guildId, instance.channelId.events);
+    }
+    if (events === undefined) {
+        DiscordTools.addTextChannel(guildId, 'events').then(channel => {
+            channel.setParent(parent.id);
+            instance.channelId.events = channel.id;
+            client.writeInstanceFile(guildId, instance);
+        });
+    }
+    else {
+        events.setParent(parent.id);
+    }
+}

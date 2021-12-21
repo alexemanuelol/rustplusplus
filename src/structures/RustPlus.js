@@ -32,11 +32,6 @@ class RustPlus extends RP {
         this.largeOilRigLeftChecker = false;
 
         this.guildId = null;
-        this.eventChannelId = null;
-        this.alertChannelId = null;
-        this.commandsChannelId = null;
-        this.switchesChannelId = null;
-
         this.interaction = null;
 
         /* Map meta */
@@ -114,7 +109,8 @@ class RustPlus extends RP {
     }
 
     sendEvent(text) {
-        let channel = DiscordTools.getTextChannelById(this.guildId, this.eventChannelId);
+        let instance = Client.client.readInstanceFile(this.guildId);
+        let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
 
         if (channel !== undefined) {
             let embed = new MessageEmbed()
