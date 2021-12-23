@@ -30,22 +30,9 @@ module.exports = {
         let player_token = interaction.options.getString('player_token');
 
         /* Validate server_ip and app_port */
-        if (!isValidIpAddress(server_ip)) {
-            await interaction.reply({
-                content: `:x: Invalid Server IP Address: ${server_ip}`,
-                ephemeral: true
-            });
-            client.log(`Invalid Server IP Address: ${server_ip}`);
+        if (!checkIpAddressValid(client, interaction, server_ip) ||
+            !checkPortValid(client, interaction, app_port))
             return;
-        }
-        else if (!(app_port >= 1 && app_port <= 65535)) {
-            await interaction.reply({
-                content: `:x: Invalid Server App Port: ${app_port}`,
-                ephemeral: true
-            });
-            client.log(`Invalid Server App Port: ${app_port}`);
-            return;
-        }
 
         /* Reply with a temporary 'thinking ...' */
         await interaction.deferReply({ ephemeral: true });
@@ -70,10 +57,27 @@ module.exports = {
     },
 };
 
-function isValidIpAddress(ip) {
+async function checkIpAddressValid(client, interaction, ip) {
     let regex = new RegExp('^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$');
-    if (regex.test(ip)) {
-        return true;
+    if (!regex.test(ip)) {
+        await interaction.reply({
+            content: `:x: Invalid Server IP Address: ${ip}`,
+            ephemeral: true
+        });
+        client.log(`Invalid Server IP Address: ${ip}`);
+        return false;
     }
-    return false;
+    return true;
+}
+
+async function checkPortValid(client, interaction, port) {
+    if (!(port >= 1 && port <= 65535)) {
+        await interaction.reply({
+            content: `:x: Invalid Server App Port: ${port}`,
+            ephemeral: true
+        });
+        client.log(`Invalid Server App Port: ${port}`);
+        return false;
+    }
+    return true;
 }
