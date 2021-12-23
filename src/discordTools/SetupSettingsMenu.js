@@ -34,11 +34,13 @@ module.exports = (client, guild) => {
         const embed = new MessageEmbed()
             .setColor('#861c0c')
             .setDescription(instance.notificationSettings[setting].description);
+
         let row = DiscordTools.getNotificationButtonsRow(
             `${setting}DiscordNotification`,
             discord,
             `${setting}InGameNotification`,
             inGame);
+
         channel.send({ embeds: [embed], components: [row] });
     }
 };

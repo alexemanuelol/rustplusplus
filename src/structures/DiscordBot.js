@@ -86,15 +86,13 @@ class DiscordBot extends Client {
         return JSON.parse(fs.readFileSync(`${__dirname}/../templates/generalSettingsTemplate.json`, 'utf8'));
     }
 
-    createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken, connect) {
-        let rustplus = new RustPlus(serverIp, appPort, steamId, playerToken);
+    createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken) {
+        let rustplus = new RustPlus(guildId, serverIp, appPort, steamId, playerToken);
 
         /* Add rustplus instance to Object */
         this.rustplusInstances[guildId] = rustplus;
 
-        rustplus.guildId = guildId;
-
-        rustplus.build(connect);
+        rustplus.build();
 
         return rustplus;
     }
@@ -113,8 +111,7 @@ class DiscordBot extends Client {
                         instance.rustplus.server_ip,
                         instance.rustplus.app_port,
                         instance.rustplus.steam_id,
-                        instance.rustplus.player_token,
-                        instance.generalSettings.connect);
+                        instance.rustplus.player_token);
                 }
             }
         });

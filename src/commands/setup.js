@@ -21,9 +21,6 @@ module.exports = {
             .setDescription('The Player Token for the Rust Server')
             .setRequired(true)),
     async execute(client, interaction) {
-        let instance = client.readInstanceFile(interaction.guildId);
-
-        /* Get the options from the command */
         let server_ip = interaction.options.getString('server_ip');
         let app_port = interaction.options.getString('app_port');
         let steam_id = interaction.options.getString('steam_id');
@@ -31,8 +28,7 @@ module.exports = {
 
         /* Validate server_ip and app_port */
         if (!checkIpAddressValid(client, interaction, server_ip) ||
-            !checkPortValid(client, interaction, app_port))
-            return;
+            !checkPortValid(client, interaction, app_port)) return;
 
         /* Reply with a temporary 'thinking ...' */
         await interaction.deferReply({ ephemeral: true });
@@ -48,8 +44,7 @@ module.exports = {
             server_ip,
             app_port,
             steam_id,
-            player_token,
-            instance.generalSettings.connect
+            player_token
         );
 
         /* Store the interaction in the RustPlus instance temporarily */

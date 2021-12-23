@@ -22,7 +22,6 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		client.rustplusInstances[interaction.guildId].interaction = interaction;
-
 		client.rustplusInstances[interaction.guildId].disconnect();
 	},
 };

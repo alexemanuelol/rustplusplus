@@ -14,8 +14,10 @@ const LockedCrate = require('../inGameEvents/lockedCrate.js');
 const OilRig = require('../inGameEvents/oilRig.js');
 
 class RustPlus extends RP {
-    constructor(serverIp, appPort, steamId, playerToken) {
+    constructor(guildId, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
+
+        this.guildId = guildId;
 
         this.serverIp = serverIp;
         this.appPort = appPort;
@@ -31,7 +33,6 @@ class RustPlus extends RP {
         this.smallOilRigLeftChecker = false;
         this.largeOilRigLeftChecker = false;
 
-        this.guildId = null;
         this.interaction = null;
 
         /* Map meta */
@@ -90,7 +91,7 @@ class RustPlus extends RP {
         }
     }
 
-    build(connect) {
+    build() {
         /* Setup the logger */
         this.logger = new Logger(path.join(__dirname, '..', `logs/${this.guildId}.log`), this.guildId);
 
@@ -99,7 +100,7 @@ class RustPlus extends RP {
         this.generalSettings = instance.generalSettings;
         this.notificationSettings = instance.notificationSettings;
 
-        if (connect) {
+        if (instance.generalSettings.connect) {
             this.connect();
         }
     }
