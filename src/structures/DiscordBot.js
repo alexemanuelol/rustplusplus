@@ -13,6 +13,7 @@ class DiscordBot extends Client {
 
         this.commands = new Collection();
         this.rustplusInstances = new Object();
+        this.currentFcmListeners = new Object();
 
         this.loadCommands();
         this.loadEvents();
@@ -61,6 +62,12 @@ class DiscordBot extends Client {
     setupGuildChannels() {
         this.guilds.cache.forEach((guild) => {
             require('../discordTools/SetupGuildChannels')(this, guild);
+        });
+    }
+
+    setupFcmListeners() {
+        this.guilds.cache.forEach((guild) => {
+            require('../util/FcmListener')(this, guild);
         });
     }
 

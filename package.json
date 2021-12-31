@@ -23,6 +23,8 @@
         "discord-api-types": "^0.23.1",
         "colors": "^1.4.0",
         "rustplus.js": "github:liamcottle/rustplus.js",
-        "winston": "^3.3.3"
+        "winston": "^3.3.3",
+        "push-receiver": "^2.1.1",
+        "lodash": "^4.0.0"
     }
 }

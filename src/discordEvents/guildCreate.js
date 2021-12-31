@@ -9,7 +9,6 @@ module.exports = {
         client.log(`Waiting 5 seconds to make sure all text channels are created in guild: ${guild.id}`);
 
         setTimeout(() => {
-            client.log(`Creating Settings Menus for guild: ${guild.id}`);
             require('../discordTools/SetupSettingsMenu')(client, guild);
         }, 5000);
     },

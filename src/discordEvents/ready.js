@@ -13,7 +13,7 @@ module.exports = {
         client.log('Waiting 5 seconds to make sure all text channels are created');
 
         setTimeout(() => {
-            client.log('Creating Settings Menus for the guilds');
+            client.setupFcmListeners();
             client.setupSettingsMenus(); /* Only run on guildCreate? */
             client.createRustplusInstancesFromConfig();
         }, 5000);

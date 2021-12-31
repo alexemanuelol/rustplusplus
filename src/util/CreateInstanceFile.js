@@ -15,7 +15,8 @@ module.exports = (client, guild) => {
                 category: null,
                 settings: null,
                 events: null
-            }
+            },
+            credentials: null
         }, null, 2));
     }
 };
