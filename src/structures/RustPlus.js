@@ -19,21 +19,13 @@ class RustPlus extends RP {
 
         this.guildId = guildId;
 
-        this.serverIp = serverIp;
-        this.appPort = appPort;
-        this.steamId = steamId;
-        this.playerToken = playerToken;
-
         this.logger = null;
-        this.serverName = undefined;
         this.firstPoll = true;
         this.generalSettings = null;
         this.notificationSettings = null;
 
         this.smallOilRigLeftChecker = false;
         this.largeOilRigLeftChecker = false;
-
-        this.interaction = null;
 
         /* Map meta */
         this.intervalId = 0;
@@ -100,9 +92,7 @@ class RustPlus extends RP {
         this.generalSettings = instance.generalSettings;
         this.notificationSettings = instance.notificationSettings;
 
-        if (instance.generalSettings.connect) {
-            this.connect();
-        }
+        this.connect();
     }
 
     log(text) {
@@ -117,7 +107,7 @@ class RustPlus extends RP {
             let embed = new MessageEmbed()
                 .setColor('#ce412b')
                 .setAuthor(text)
-                .setFooter(this.serverName)
+                .setFooter(instance.serverList[`${this.server}-${this.port}`].title)
                 .setTimestamp();
 
             channel.send({ embeds: [embed] });

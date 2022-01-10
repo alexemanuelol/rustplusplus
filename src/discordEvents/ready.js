@@ -14,6 +14,7 @@ module.exports = {
 
         setTimeout(() => {
             client.setupFcmListeners();
+            client.setupServerLists();
             client.setupSettingsMenus(); /* Only run on guildCreate? */
             client.createRustplusInstancesFromConfig();
         }, 5000);

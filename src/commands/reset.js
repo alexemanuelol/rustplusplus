@@ -3,15 +3,11 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('reset')
-		.setDescription('Reset discord channels or rustplus instance.')
+		.setDescription('Reset discord channels.')
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('discord')
-				.setDescription('Reset discord channels.'))
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('rustplus')
-				.setDescription('Reset rustplus instance.')),
+				.setDescription('Reset discord channels.')),
 	async execute(client, interaction) {
 		let instance = client.readInstanceFile(interaction.guildId);
 
@@ -30,19 +26,6 @@ module.exports = {
 
 				interaction.reply({
 					content: ':white_check_mark: Discord channels is reseting.',
-					ephemeral: true
-				});
-				break;
-
-			case 'rustplus':
-				if (client.rustplusInstances.hasOwnProperty(interaction.guildId)) {
-					client.rustplusInstances[interaction.guildId].disconnect();
-					delete client.rustplusInstances[interaction.guildId];
-				}
-				instance.rustplus = null;
-				client.writeInstanceFile(interaction.guildId, instance);
-				interaction.reply({
-					content: ':white_check_mark: Rustplus instance was successfully reset.',
 					ephemeral: true
 				});
 				break;

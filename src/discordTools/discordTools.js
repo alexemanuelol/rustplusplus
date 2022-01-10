@@ -85,15 +85,15 @@ module.exports = {
         }
     },
 
-    getNotificationButtonsRow: function (discordId, discordActive, inGameId, inGameActive) {
+    getNotificationButtonsRow: function (setting, discordActive, inGameActive) {
         return new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId(discordId)
+                    .setCustomId(`${setting}DiscordNotification`)
                     .setLabel('DISCORD')
                     .setStyle((discordActive) ? 'SUCCESS' : 'DANGER'),
                 new MessageButton()
-                    .setCustomId(inGameId)
+                    .setCustomId(`${setting}InGameNotification`)
                     .setLabel('IN-GAME')
                     .setStyle((inGameActive) ? 'SUCCESS' : 'DANGER'))
     },
@@ -122,5 +122,39 @@ module.exports = {
                         },
                     ])
             );
-    }
+    },
+
+    getServerButtonsRow: function (ipPort, state) {
+        let customId = null;
+        let label = null;
+        let style = null;
+
+        switch (state) {
+            case 0: /* CONNECT */
+                customId = `${ipPort}ServerConnect`;
+                label = 'CONNECT';
+                style = 'PRIMARY';
+                break;
+
+            case 1: /* DISCONNECT */
+                customId = `${ipPort}ServerDisconnect`;
+                label = 'DISCONNECT';
+                style = 'DANGER';
+                break;
+
+            default:
+                break;
+        }
+
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(customId)
+                    .setLabel(label)
+                    .setStyle(style),
+                new MessageButton()
+                    .setCustomId(`${ipPort}ServerDelete`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY'))
+    },
 }

@@ -14,6 +14,7 @@ class DiscordBot extends Client {
         this.commands = new Collection();
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
+        this.serverListMessages = new Object();
 
         this.loadCommands();
         this.loadEvents();
@@ -71,6 +72,12 @@ class DiscordBot extends Client {
         });
     }
 
+    setupServerLists() {
+        this.guilds.cache.forEach((guild) => {
+            require('../discordTools/SetupServerList')(this, guild);
+        });
+    }
+
     setupSettingsMenus() {
         this.guilds.cache.forEach((guild) => {
             require('../discordTools/SetupSettingsMenu')(this, guild);
@@ -112,13 +119,16 @@ class DiscordBot extends Client {
                 let guildId = file.replace('.json', '');
                 let instance = this.readInstanceFile(guildId);
 
-                if (instance.rustplus !== null) {
-                    this.createRustplusInstance(
-                        guildId,
-                        instance.rustplus.server_ip,
-                        instance.rustplus.app_port,
-                        instance.rustplus.steam_id,
-                        instance.rustplus.player_token);
+                for (const [key, value] of Object.entries(instance.serverList)) {
+                    if (value.active) {
+                        this.createRustplusInstance(
+                            guildId,
+                            value.serverIp,
+                            value.appPort,
+                            value.steamId,
+                            value.playerToken);
+                        break;
+                    }
                 }
             }
         });

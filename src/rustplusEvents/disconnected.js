@@ -3,16 +3,13 @@ module.exports = {
     async execute(rustplus, client) {
         rustplus.log('RUSTPLUS DISCONNECTED');
 
-        let instance = client.readInstanceFile(rustplus.guildId);
-
-        if (rustplus.interaction && !instance.generalSettings.connect) {
-            rustplus.interaction.editReply({
-                content: ':white_check_mark: Successfully Disconnected!',
-                ephemeral: true
-            });
-            rustplus.log('Successfully Disconnected!');
-            rustplus.interaction = null;
-        }
+        /* Stop all timers */
+        rustplus.cargoShipEgressTimer.stop();
+        rustplus.bradleyRespawnTimer.stop();
+        rustplus.lockedCrateDespawnTimer.stop();
+        rustplus.lockedCrateDespawnWarningTimer.stop();
+        rustplus.lockedCrateSmallOilRigTimer.stop();
+        rustplus.lockedCrateLargeOilRigTimer.stop();
 
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);

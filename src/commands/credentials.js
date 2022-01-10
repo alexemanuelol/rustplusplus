@@ -101,7 +101,6 @@ module.exports = {
                 client.writeInstanceFile(interaction.guildId, instance);
 
                 /* Start Fcm Listener */
-                console.log(interaction.guildId);
                 require('../util/FcmListener')(client, client.guilds.cache.get(interaction.guildId));
 
                 interaction.reply({

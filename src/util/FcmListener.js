@@ -1,5 +1,6 @@
-const fs = require('fs');
+const { MessageEmbed } = require('discord.js');
 const { listen } = require('push-receiver');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
@@ -7,7 +8,6 @@ module.exports = async (client, guild) => {
     if (instance.credentials === null) {
         return;
     }
-    console.log('HELLO');
 
     /* Destroy previous instance of fcm listener */
     if (client.currentFcmListeners[guild.id]) {
@@ -30,6 +30,40 @@ module.exports = async (client, guild) => {
                     switch (body.type) {
                         case 'server':
                             client.log(`${guild.id} pairing: server`);
+
+                            instance = client.readInstanceFile(guild.id);
+                            let customId = `${body.ip}-${body.port}`
+
+                            if (instance.serverList.hasOwnProperty(customId)) {
+                                break;
+                            }
+
+                            instance.serverList[customId] = {
+                                active: false,
+                                title: data.title,
+                                serverIp: body.ip,
+                                appPort: body.port,
+                                steamId: body.playerId,
+                                playerToken: body.playerToken
+                            }
+                            client.writeInstanceFile(guild.id, instance);
+
+                            let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.serverSelector);
+
+                            if (!channel) {
+                                client.log('Invalid guild or channel.');
+                                break;
+                            }
+
+                            let embed = new MessageEmbed()
+                                .setColor('#ce412b')
+                                .setAuthor(data.title)
+
+                            let row = DiscordTools.getServerButtonsRow(customId, 0);
+
+                            channel.send({ embeds: [embed], components: [row] }).then((msg) => {
+                                client.serverListMessages[guild.id][customId] = msg;
+                            });
                             break;
 
                         case 'entity':

@@ -24,6 +24,21 @@ module.exports = (client, guild) => {
 function addMissingTextChannels(client, guildId, parent) {
     let instance = client.readInstanceFile(guildId);
 
+    let serverSelector = undefined;
+    if (instance.channelId.serverSelector !== null) {
+        serverSelector = DiscordTools.getTextChannelById(guildId, instance.channelId.serverSelector);
+    }
+    if (serverSelector === undefined) {
+        DiscordTools.addTextChannel(guildId, 'server-selector').then(channel => {
+            channel.setParent(parent.id);
+            instance.channelId.serverSelector = channel.id;
+            client.writeInstanceFile(guildId, instance);
+        });
+    }
+    else {
+        serverSelector.setParent(parent.id);
+    }
+
     let settings = undefined;
     if (instance.channelId.settings !== null) {
         settings = DiscordTools.getTextChannelById(guildId, instance.channelId.settings);
