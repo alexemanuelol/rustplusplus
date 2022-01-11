@@ -3,6 +3,8 @@ module.exports = {
     async execute(rustplus, client) {
         rustplus.log('RUSTPLUS DISCONNECTED');
 
+        let instance = client.readInstanceFile(rustplus.guildId);
+
         /* Stop all timers */
         rustplus.cargoShipEgressTimer.stop();
         rustplus.bradleyRespawnTimer.stop();
@@ -13,5 +15,10 @@ module.exports = {
 
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);
+
+        if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
+            rustplus.disconnect();
+            rustplus.connect();
+        }
     },
 };
