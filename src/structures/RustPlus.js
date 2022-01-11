@@ -1,7 +1,7 @@
 const fs = require('fs');
 const RP = require('rustplus.js');
 const Client = require('../../index.js');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageAttachment } = require('discord.js');
 const Timer = require('../util/timer');
 const Constants = require('../util/eventConstants.js');
 const Logger = require('./Logger.js');
@@ -99,18 +99,20 @@ class RustPlus extends RP {
         this.logger.log(text);
     }
 
-    sendEvent(text) {
+    sendEvent(text, image) {
         let instance = Client.client.readInstanceFile(this.guildId);
         let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
 
         if (channel !== undefined) {
+            let file = new MessageAttachment(`src/images/${image}`);
             let embed = new MessageEmbed()
                 .setColor('#ce412b')
+                .setThumbnail(`attachment://${image}`)
                 .setAuthor(text)
                 .setFooter(instance.serverList[`${this.server}-${this.port}`].title)
                 .setTimestamp();
 
-            channel.send({ embeds: [embed] });
+            channel.send({ embeds: [embed], files: [file] });
             this.log(text);
         }
     }

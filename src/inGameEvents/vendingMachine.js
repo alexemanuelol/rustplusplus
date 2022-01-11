@@ -23,7 +23,7 @@ module.exports = {
 
             let str = `New Vending Machine located at ${gridLocation}`;
             if (!rustplus.firstPoll && rustplus.notificationSettings.vendingMachineDetected.discord) {
-                rustplus.sendEvent(str);
+                rustplus.sendEvent(str, 'vending_machine_logo.png');
             }
             if (!rustplus.firstPoll && rustplus.notificationSettings.vendingMachineDetected.inGame) {
                 rustplus.sendTeamMessage(`Event: ${str}`);
@@ -56,7 +56,7 @@ module.exports = {
 
                         let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
 
-                        rustplus.sendEvent(`${item} was found in a Vending Machine at ${gridLocation}`);
+                        rustplus.sendEvent(`${item} was found in a Vending Machine at ${gridLocation}`, 'vending_machine_logo.png');
                     }
                 }
             }

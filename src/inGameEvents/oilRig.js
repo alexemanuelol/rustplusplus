@@ -32,7 +32,7 @@ module.exports = {
                         OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                         let str = 'Heavy Scientists got called to the Small Oil Rig';
                         if (rustplus.notificationSettings.heavyScientistCalled.discord) {
-                            rustplus.sendEvent(str);
+                            rustplus.sendEvent(str, 'small_oil_rig_logo.png');
                         }
                         if (rustplus.notificationSettings.heavyScientistCalled.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -43,7 +43,7 @@ module.exports = {
                         OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                         let str = 'Heavy Scientists got called to the Large Oil Rig';
                         if (rustplus.notificationSettings.heavyScientistCalled.discord) {
-                            rustplus.sendEvent(str);
+                            rustplus.sendEvent(str, 'large_oil_rig_logo.png');
                         }
                         if (rustplus.notificationSettings.heavyScientistCalled.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -63,7 +63,7 @@ module.exports = {
                             let str = `Chinook 47 enters the map from ${spawnLocation} ` +
                                 'to drop off Locked Crate';
                             if (rustplus.notificationSettings.chinook47Detected.discord) {
-                                rustplus.sendEvent(str);
+                                rustplus.sendEvent(str, 'chinook_47_logo.png');
                             }
                             if (rustplus.notificationSettings.chinook47Detected.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
@@ -72,7 +72,7 @@ module.exports = {
                         else {
                             let str = `Chinook 47 located at ${spawnLocation}`;
                             if (rustplus.notificationSettings.chinook47Detected.discord) {
-                                rustplus.sendEvent(str);
+                                rustplus.sendEvent(str, 'chinook_47_logo.png');
                             }
                             if (rustplus.notificationSettings.chinook47Detected.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
@@ -103,7 +103,7 @@ module.exports = {
     notifyLockedCrateSmallOpen: function (rustplus) {
         let str = 'Locked Crate at Small Oil Rig has been unlocked';
         if (rustplus[0].notificationSettings.lockedCrateOilRigUnlocked.discord) {
-            rustplus[0].sendEvent(str);
+            rustplus[0].sendEvent(str, 'locked_crate_logo.png');
         }
         if (rustplus[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
             rustplus[0].sendTeamMessage(`Event: ${str}`);
@@ -114,7 +114,7 @@ module.exports = {
     notifyLockedCrateLargeOpen: function (rustplus) {
         let str = 'Locked Crate at Large Oil Rig has been unlocked';
         if (rustplus[0].notificationSettings.lockedCrateOilRigUnlocked.discord) {
-            rustplus[0].sendEvent(str);
+            rustplus[0].sendEvent(str, 'locked_crate_logo.png');
         }
         if (rustplus[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
             rustplus[0].sendTeamMessage(`Event: ${str}`);

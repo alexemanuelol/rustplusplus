@@ -22,7 +22,7 @@ module.exports = {
                     if (module.exports.isExplosionBradley(marker.x, marker.y, rustplus)) {
                         let str = 'Bradley APC was destroyed at Launch Site.';
                         if (rustplus.notificationSettings.bradleyApcDestroyed.discord) {
-                            rustplus.sendEvent(str);
+                            rustplus.sendEvent(str, 'bradley_apc_logo.png');
                         }
                         if (rustplus.notificationSettings.bradleyApcDestroyed.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -35,7 +35,7 @@ module.exports = {
                         let loc = (gridLocation === null) ? 'somewhere outside the grid system' : `at ${gridLocation}`;
                         let str = `Patrol Helicopter was taken down ${loc}.`;
                         if (rustplus.notificationSettings.patrolHelicopterDowned.discord) {
-                            rustplus.sendEvent(str);
+                            rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
                         }
                         if (rustplus.notificationSettings.patrolHelicopterDowned.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -75,7 +75,7 @@ module.exports = {
     notifyBradleyRespawn: function (rustplus) {
         let str = 'Bradley APC should respawn any second now';
         if (rustplus[0].notificationSettings.bradleyApcShouldRespawn.discord) {
-            rustplus[0].sendEvent(str);
+            rustplus[0].sendEvent(str, 'bradley_apc_logo.png');
         }
         if (rustplus[0].notificationSettings.bradleyApcShouldRespawn.inGame) {
             rustplus[0].sendTeamMessage(`Event: ${str}`);

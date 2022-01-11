@@ -28,7 +28,7 @@ module.exports = {
                         marker.y < -offset || marker.y > (mapSize + offset)) {
                         let str = `Cargo Ship enters the map from ${spawnLocation}`;
                         if (rustplus.notificationSettings.cargoShipDetected.discord) {
-                            rustplus.sendEvent(str);
+                            rustplus.sendEvent(str, 'cargoship_logo.png');
                         }
                         if (rustplus.notificationSettings.cargoShipDetected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -38,7 +38,7 @@ module.exports = {
                     else {
                         let str = `Cargo Ship located at ${spawnLocation}`;
                         if (rustplus.notificationSettings.cargoShipDetected.discord) {
-                            rustplus.sendEvent(str);
+                            rustplus.sendEvent(str, 'cargoship_logo.png');
                         }
                         if (rustplus.notificationSettings.cargoShipDetected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -67,7 +67,7 @@ module.exports = {
             if (active === false) {
                 let str = 'Cargo Ship just left the map';
                 if (rustplus.notificationSettings.cargoShipLeft.discord) {
-                    rustplus.sendEvent(str);
+                    rustplus.sendEvent(str, 'cargoship_logo.png');
                 }
                 if (rustplus.notificationSettings.cargoShipLeft.inGame) {
                     rustplus.sendTeamMessage(`Event: ${str}`);
@@ -81,7 +81,7 @@ module.exports = {
     notifyCargoShipEgress: function (rustplus) {
         let str = 'Cargo Ship should be in the egress stage.';
         if (rustplus[0].notificationSettings.cargoShipEgress.discord) {
-            rustplus[0].sendEvent(str);
+            rustplus[0].sendEvent(str, 'cargoship_logo.png');
         }
         if (rustplus[0].notificationSettings.cargoShipEgress.inGame) {
             rustplus[0].sendTeamMessage(`Event: ${str}`);
