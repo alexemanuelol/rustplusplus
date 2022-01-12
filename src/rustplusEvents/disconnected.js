@@ -17,6 +17,7 @@ module.exports = {
         clearInterval(rustplus.intervalId);
 
         if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
+            rustplus.log('RUSTPLUS RECONNECTING');
             rustplus.disconnect();
             rustplus.connect();
         }
