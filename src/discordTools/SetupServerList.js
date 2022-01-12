@@ -3,7 +3,7 @@ const DiscordTools = require('./discordTools.js');
 
 module.exports = (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
-    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.serverSelector);
+    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
 
     client.serverListMessages[guild.id] = {};
 
@@ -12,7 +12,7 @@ module.exports = (client, guild) => {
         return;
     }
 
-    DiscordTools.clearTextChannel(guild.id, instance.channelId.serverSelector, 100);
+    DiscordTools.clearTextChannel(guild.id, instance.channelId.servers, 100);
 
     for (const [key, value] of Object.entries(instance.serverList)) {
         let embed = new MessageEmbed()

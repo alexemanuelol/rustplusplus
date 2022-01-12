@@ -48,7 +48,7 @@ module.exports = async (client, guild) => {
                             }
                             client.writeInstanceFile(guild.id, instance);
 
-                            let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.serverSelector);
+                            let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
 
                             if (!channel) {
                                 client.log('Invalid guild or channel.');
