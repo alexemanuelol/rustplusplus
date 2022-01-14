@@ -16,10 +16,12 @@ module.exports = {
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);
 
-        if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
-            rustplus.log('RUSTPLUS RECONNECTING');
-            rustplus.disconnect();
-            rustplus.connect();
+        if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
+            if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
+                rustplus.log('RUSTPLUS RECONNECTING');
+                rustplus.disconnect();
+                rustplus.connect();
+            }
         }
     },
 };

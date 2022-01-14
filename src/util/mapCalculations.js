@@ -4,7 +4,7 @@ module.exports = {
     getGridPos: function (x, y, mapSize) {
         let remainder = mapSize % module.exports.gridDiameter;
         let offset = module.exports.gridDiameter - remainder;
-        let correctedMapSize = (offset > (module.exports.gridDiameter / 2)) ? mapSize - remainder : mapSize + offset;
+        let correctedMapSize = (remainder < 120) ? mapSize - remainder : mapSize + offset;
 
         /* Outside the grid system */
         if (x < 0 || x > correctedMapSize || y < 0 || y > correctedMapSize) {
