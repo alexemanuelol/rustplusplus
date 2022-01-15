@@ -116,6 +116,16 @@ class RustPlus extends RP {
             this.log(text);
         }
     }
+    
+    sendChatMessage(text) {
+        let instance = Client.client.readInstanceFile(this.guildId);
+        let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
+
+        if (channel !== undefined) {
+            channel.send(text);
+            this.log(text);
+        }
+    }
 
     getTimeLeftOfTimer(timer) {
         /* Returns the time left of a timer. If timer is not running, null will be returned. */

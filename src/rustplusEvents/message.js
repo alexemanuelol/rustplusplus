@@ -15,7 +15,14 @@ module.exports = {
             }
             else if (message.broadcast.hasOwnProperty('teamMessage')) {
                 /* Let command handler handle the potential command */
-                CommandHandler.inGameCommandHandler(rustplus, client, message);
+                const handled = CommandHandler.inGameCommandHandler(rustplus, client, message);
+
+                if (handled === false) {
+                    /* If the command was not handled, lets relay to chat */
+                    const { message, name } = message.broadcast.teamMessage.message;
+                    rustplus.sendChatMessage(`${name}: ${message}`);
+                }
+                
             }
             else if (message.broadcast.hasOwnProperty('entityChanged')) {
 
