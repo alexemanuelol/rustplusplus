@@ -3,15 +3,9 @@ const RP = require('rustplus.js');
 const Client = require('../../index.js');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const Timer = require('../util/timer');
-const Constants = require('../util/eventConstants.js');
 const Logger = require('./Logger.js');
 const path = require('path');
 const DiscordTools = require('../discordTools/discordTools.js');
-
-const CargoShip = require('../inGameEvents/cargoShip.js');
-const Explosion = require('../inGameEvents/explosion.js');
-const LockedCrate = require('../inGameEvents/lockedCrate.js');
-const OilRig = require('../inGameEvents/oilRig.js');
 
 class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
@@ -24,9 +18,6 @@ class RustPlus extends RP {
         this.generalSettings = null;
         this.notificationSettings = null;
 
-        this.smallOilRigLeftChecker = false;
-        this.largeOilRigLeftChecker = false;
-
         /* Map meta */
         this.intervalId = 0;
         this.debug = false;
@@ -35,40 +26,26 @@ class RustPlus extends RP {
         this.mapOceanMargin = null;
         this.mapMonuments = null;
 
-        /* Event Current Entities */
-        this.currentCargoShipsId = [];
-        this.currentExplosionsId = [];
-        this.currentLockedCratesId = [];
-        this.currentLockedCrateMonumentName = null;
-        this.currentChinook47sId = [];
-        this.currentVendingMachines = [];
+        /* Event active entities */
+        this.activeCargoShips = new Object();
+        this.activeChinook47s = new Object();
+        this.activeLockedCrates = new Object();
+        this.activePatrolHelicopters = new Object();
+        this.activeExplosions = new Object();
+        this.patrolHelicoptersLeft = [];
+        this.smallOilRigLeftEntities = [];
+        this.largeOilRigLeftEntities = [];
+        this.activeVendingMachines = [];
         this.foundItems = [];
         this.itemsToLookForId = [];
 
         /* Event timers */
-        this.cargoShipEgressTimer = new Timer.timer(
-            CargoShip.notifyCargoShipEgress,
-            Constants.CARGO_SHIP_EGRESS_TIME_MS,
-            this);
-        this.bradleyRespawnTimer = new Timer.timer(
-            Explosion.notifyBradleyRespawn,
-            Constants.BRADLEY_APC_RESPAWN_TIME_MS,
-            this);
-        this.lockedCrateDespawnTimer = new Timer.timer(
-            () => { },
-            Constants.LOCKED_CRATE_DESPAWN_TIME_MS);
-        this.lockedCrateDespawnWarningTimer = new Timer.timer(
-            LockedCrate.notifyLockedCrateWarningDespawn,
-            Constants.LOCKED_CRATE_DESPAWN_TIME_MS - Constants.LOCKED_CRATE_DESPAWN_WARNING_TIME_MS,
-            this);
-        this.lockedCrateSmallOilRigTimer = new Timer.timer(
-            OilRig.notifyLockedCrateSmallOpen,
-            Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
-            this);
-        this.lockedCrateLargeOilRigTimer = new Timer.timer(
-            OilRig.notifyLockedCrateLargeOpen,
-            Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
-            this);
+        this.cargoShipEgressTimers = new Object();
+        this.lockedCrateSmallOilRigTimers = new Object();
+        this.lockedCrateLargeOilRigTimers = new Object();
+        this.lockedCrateDespawnTimers = new Object();
+        this.lockedCrateDespawnWarningTimers = new Object();
+        this.bradleyRespawnTimers = new Object();
 
         /* Load rustplus events */
         this.loadEvents();

@@ -4,59 +4,63 @@ const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
     checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+        /* Check if new Vending Machine is detected */
+        module.exports.checkNewVendingMachineDetected(rustplus, info, mapMarkers);
+
+        /* Go through sellOrders to see if it includes items that we are looking for */
+        module.exports.checkItemsFromSellOrders(rustplus, info, mapMarkers);
+    },
+
+    checkNewVendingMachineDetected: function (rustplus, info, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
-                /* Check if new Vending Machine is detected */
-                module.exports.checkNewVendingMachineDetected(rustplus, marker, info);
+                if (!rustplus.activeVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
+                    rustplus.activeVendingMachines.push({ x: marker.x, y: marker.y });
 
-                /* Go through sellOrders to see if it includes items that we are looking for */
-                module.exports.checkItemsFromSellOrders(rustplus, marker, info);
+                    let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
+
+                    let str = `New Vending Machine located at ${gridLocation}`;
+                    if (!rustplus.firstPoll && rustplus.notificationSettings.vendingMachineDetected.discord) {
+                        rustplus.sendEvent(str, 'vending_machine_logo.png');
+                    }
+                    if (!rustplus.firstPoll && rustplus.notificationSettings.vendingMachineDetected.inGame) {
+                        rustplus.sendTeamMessage(`Event: ${str}`);
+                    }
+                }
             }
         }
     },
 
-    checkNewVendingMachineDetected: function (rustplus, marker, info) {
-        if (!rustplus.currentVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
-            rustplus.currentVendingMachines.push({ x: marker.x, y: marker.y });
+    checkItemsFromSellOrders: function (rustplus, info, mapMarkers) {
+        for (let marker of mapMarkers.response.mapMarkers.markers) {
+            if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
+                for (let order of marker.sellOrders) {
+                    /* if itemId or currencyId is in itemsToLookForId */
+                    if (rustplus.itemsToLookForId.includes(order.itemId) ||
+                        rustplus.itemsToLookForId.includes(order.currencyId)) {
+                        if (!module.exports.isAlreadyInFoundItems(rustplus, marker.x, marker.y, order)) {
+                            if (order.amountInStock >= 1) {
+                                /* Add to the array of found items */
+                                module.exports.addToFoundItems(rustplus, marker.x, marker.y, order);
 
-            let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
+                                let item = '';
+                                if (rustplus.itemsToLookForId.includes(order.itemId) &&
+                                    rustplus.itemsToLookForId.includes(order.currencyId)) {
+                                    item = Items.getName(order.itemId) + ' and ';
+                                    item += Items.getName(order.currencyId);
+                                }
+                                else if (rustplus.itemsToLookForId.includes(order.itemId)) {
+                                    item = Items.getName(order.itemId);
+                                }
+                                else if (rustplus.itemsToLookForId.includes(order.currencyId)) {
+                                    item = Items.getName(order.currencyId);
+                                }
 
-            let str = `New Vending Machine located at ${gridLocation}`;
-            if (!rustplus.firstPoll && rustplus.notificationSettings.vendingMachineDetected.discord) {
-                rustplus.sendEvent(str, 'vending_machine_logo.png');
-            }
-            if (!rustplus.firstPoll && rustplus.notificationSettings.vendingMachineDetected.inGame) {
-                rustplus.sendTeamMessage(`Event: ${str}`);
-            }
-        }
-    },
+                                let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
 
-    checkItemsFromSellOrders: function (rustplus, marker, info) {
-        for (let order of marker.sellOrders) {
-            /* if itemId or currencyId is in itemsToLookForId */
-            if (rustplus.itemsToLookForId.includes(order.itemId) ||
-                rustplus.itemsToLookForId.includes(order.currencyId)) {
-                if (!module.exports.isAlreadyInFoundItems(rustplus, marker.x, marker.y, order)) {
-                    if (order.amountInStock >= 1) {
-                        /* Add to the array of found items */
-                        module.exports.addToFoundItems(rustplus, marker.x, marker.y, order);
-
-                        let item = '';
-                        if (rustplus.itemsToLookForId.includes(order.itemId) &&
-                            rustplus.itemsToLookForId.includes(order.currencyId)) {
-                            item = Items.getName(order.itemId) + ' and ';
-                            item += Items.getName(order.currencyId);
+                                rustplus.sendEvent(`${item} was found in a Vending Machine at ${gridLocation}`, 'vending_machine_logo.png');
+                            }
                         }
-                        else if (rustplus.itemsToLookForId.includes(order.itemId)) {
-                            item = Items.getName(order.itemId);
-                        }
-                        else if (rustplus.itemsToLookForId.includes(order.currencyId)) {
-                            item = Items.getName(order.currencyId);
-                        }
-
-                        let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
-
-                        rustplus.sendEvent(`${item} was found in a Vending Machine at ${gridLocation}`, 'vending_machine_logo.png');
                     }
                 }
             }

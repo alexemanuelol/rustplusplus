@@ -14,6 +14,21 @@
         "discord": true,
         "inGame": true
     },
+    "patrolHelicopterDetected": {
+        "description": "When Patrol Helicopter is detected, send a notification.",
+        "discord": true,
+        "inGame": true
+    },
+    "patrolHelicopterLeft": {
+        "description": "When Patrol Helicopter left the map, send a notification.",
+        "discord": true,
+        "inGame": true
+    },
+    "patrolHelicopterDestroyed": {
+        "description": "When Patrol Helicopter gets destroyed, send a notification.",
+        "discord": true,
+        "inGame": true
+    },
     "bradleyApcDestroyed": {
         "description": "When Bradley APC gets destroyed, send a notification.",
         "discord": true,
@@ -21,11 +36,6 @@
     },
     "bradleyApcShouldRespawn": {
         "description": "When Bradley APC should respawn, send a notification.",
-        "discord": true,
-        "inGame": true
-    },
-    "patrolHelicopterDowned": {
-        "description": "When Patrol Helicopter gets downed, send a notification.",
         "discord": true,
         "inGame": true
     },

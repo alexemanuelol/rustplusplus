@@ -2,6 +2,7 @@ const CargoShip = require('../inGameEvents/cargoShip.js');
 const Explosion = require('../inGameEvents/explosion.js');
 const LockedCrate = require('../inGameEvents/lockedCrate.js');
 const OilRig = require('../inGameEvents/oilRig.js');
+const PatrolHelicopter = require('../inGameEvents/patrolHelicopter.js');
 const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
 module.exports = {
@@ -24,6 +25,7 @@ module.exports = {
         //console.log('Check in-game events.');
 
         CargoShip.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
+        PatrolHelicopter.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         Explosion.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         LockedCrate.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         OilRig.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);

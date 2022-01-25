@@ -6,12 +6,35 @@ module.exports = {
         let instance = client.readInstanceFile(rustplus.guildId);
 
         /* Stop all timers */
-        rustplus.cargoShipEgressTimer.stop();
-        rustplus.bradleyRespawnTimer.stop();
-        rustplus.lockedCrateDespawnTimer.stop();
-        rustplus.lockedCrateDespawnWarningTimer.stop();
-        rustplus.lockedCrateSmallOilRigTimer.stop();
-        rustplus.lockedCrateLargeOilRigTimer.stop();
+        for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
+            timer.stop();
+        }
+        rustplus.cargoShipEgressTimers = new Object();
+
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateSmallOilRigTimers)) {
+            timer.stop();
+        }
+        rustplus.lockedCrateSmallOilRigTimers = new Object();
+
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateLargeOilRigTimers)) {
+            timer.stop();
+        }
+        rustplus.lockedCrateLargeOilRigTimers = new Object();
+
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateDespawnTimers)) {
+            timer.stop();
+        }
+        rustplus.lockedCrateDespawnTimers = new Object();
+
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateDespawnWarningTimers)) {
+            timer.stop();
+        }
+        rustplus.lockedCrateDespawnWarningTimers = new Object();
+
+        for (const [id, timer] of Object.entries(rustplus.bradleyRespawnTimers)) {
+            timer.stop();
+        }
+        rustplus.bradleyRespawnTimers = new Object();
 
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);

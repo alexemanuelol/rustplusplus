@@ -54,6 +54,14 @@ module.exports = {
         return Math.sqrt(a * a + b * b);
     },
 
+    isOutsideGridSystem: function (x, y, mapSize, offset = 0) {
+        if (x < -offset || x > (mapSize + offset) ||
+            y < -offset || y > (mapSize + offset)) {
+            return true;
+        }
+        return false;
+    },
+
     getCoordinatesOrientation: function (x, y, size) {
         /* Returns the orientation position of the coordinate. */
         let offset = size / 6;

@@ -29,14 +29,26 @@ module.exports = {
     },
 
     commandBradley: function (rustplus) {
-        let time = rustplus.getTimeLeftOfTimer(rustplus.bradleyRespawnTimer);
-        let str;
+        let times = '';
+        for (const [id, timer] of Object.entries(rustplus.bradleyRespawnTimers)) {
+            let time = rustplus.getTimeLeftOfTimer(timer);
 
-        if (time === null) {
-            str = 'No current data on Bradley APC.';
+            if (time !== null) {
+                if (times === '') {
+                    times += time;
+                }
+                else {
+                    times += ` and ${time}`;
+                }
+            }
+        }
+
+        let str;
+        if (times === '') {
+            str = 'Bradley APC is probably roaming around in Launch Site.';
         }
         else {
-            str = `Approximately ${time} before Bradley APC respawns.`;
+            str = `Approximately ${times} before Bradley APC respawns.`;
         }
 
         rustplus.sendTeamMessage(str);
@@ -44,14 +56,26 @@ module.exports = {
     },
 
     commandCargo: function (rustplus) {
-        let time = rustplus.getTimeLeftOfTimer(rustplus.cargoShipEgressTimer);
-        let str;
+        let times = '';
+        for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
+            let time = rustplus.getTimeLeftOfTimer(timer);
 
-        if (time === null) {
-            str = 'No current data on Cargo Ship.';
+            if (time !== null) {
+                if (times === '') {
+                    times += time;
+                }
+                else {
+                    times += ` and ${time}`;
+                }
+            }
+        }
+
+        let str;
+        if (times === '') {
+            str = 'Cargo Ship is not currently active.';
         }
         else {
-            str = `Approximately ${time} before Cargo Ship enters egress stage.`;
+            str = `Approximately ${times} before Cargo Ship enters egress stage.`;
         }
 
         rustplus.sendTeamMessage(str);
