@@ -49,8 +49,8 @@ module.exports = {
                         rustplus.activeLockedCrates[marker.id].location = 'cargoShip';
                         rustplus.activeLockedCrates[marker.id].cargoShipId = cargoShipId;
 
-                        if (rustplus.activeCargoShips[id]) {
-                            rustplus.activeCargoShips[id].crates.push(marker.id);
+                        if (rustplus.activeCargoShips[cargoShipId]) {
+                            rustplus.activeCargoShips[cargoShipId].crates.push(marker.id);
                         }
                     }
                     else if (closestMonument.token === 'oil_rig_small' &&
