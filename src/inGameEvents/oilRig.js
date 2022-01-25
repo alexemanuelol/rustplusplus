@@ -54,6 +54,7 @@ module.exports = {
                             if (rustplus.notificationSettings.heavyScientistCalled.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
                             }
+                            rustplus.log(str);
 
                             let lockedCrateId = module.exports.getOilRigLockedCrateId(rig.x, rig.y, mapMarkers);
 
@@ -86,6 +87,7 @@ module.exports = {
                             if (rustplus.notificationSettings.heavyScientistCalled.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
                             }
+                            rustplus.log(str);
 
                             let lockedCrateId = module.exports.getOilRigLockedCrateId(rig.x, rig.y, mapMarkers);
 
@@ -117,6 +119,7 @@ module.exports = {
                         if (rustplus.notificationSettings.chinook47Detected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
                     else {
                         let str = `Chinook 47 located at ${pos}.`;
@@ -126,6 +129,7 @@ module.exports = {
                         if (rustplus.notificationSettings.chinook47Detected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
                 }
                 else {
@@ -178,6 +182,7 @@ module.exports = {
         if (args[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
+        args[0].log(str);
     },
 
     notifyLockedCrateLargeOpen: function (args) {
@@ -188,5 +193,6 @@ module.exports = {
         if (args[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
+        args[0].log(str);
     },
 }

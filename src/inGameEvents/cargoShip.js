@@ -41,6 +41,7 @@ module.exports = {
                         if (rustplus.notificationSettings.cargoShipDetected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
 
                         rustplus.cargoShipEgressTimers[marker.id] = new Timer.timer(
                             module.exports.notifyCargoShipEgress,
@@ -57,6 +58,7 @@ module.exports = {
                         if (rustplus.notificationSettings.cargoShipDetected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
                 }
                 else {
@@ -104,6 +106,7 @@ module.exports = {
                 if (rustplus.notificationSettings.cargoShipLeft.inGame) {
                     rustplus.sendTeamMessage(`Event: ${str}`);
                 }
+                rustplus.log(str);
 
                 if (rustplus.cargoShipEgressTimers[parseInt(id)]) {
                     rustplus.cargoShipEgressTimers[parseInt(id)].stop();
@@ -123,5 +126,6 @@ module.exports = {
         if (args[0].notificationSettings.cargoShipEgress.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
+        args[0].log(str);
     },
 }

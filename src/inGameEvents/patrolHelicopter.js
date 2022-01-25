@@ -41,6 +41,7 @@ module.exports = {
                         if (rustplus.notificationSettings.patrolHelicopterDetected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
                     else {
                         let str = `Patrol Helicopter located at ${pos}.`;
@@ -50,6 +51,7 @@ module.exports = {
                         if (rustplus.notificationSettings.patrolHelicopterDetected.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
                 }
                 else {
@@ -100,6 +102,7 @@ module.exports = {
                     if (rustplus.notificationSettings.patrolHelicopterLeft.inGame) {
                         rustplus.sendTeamMessage(`Event: ${str}`);
                     }
+                    rustplus.log(str);
                 }
                 else {
                     rustplus.patrolHelicoptersLeft.push({

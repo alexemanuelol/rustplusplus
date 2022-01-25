@@ -46,6 +46,7 @@ module.exports = {
                         if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateSpawnCargoShip.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
 
                         rustplus.activeLockedCrates[marker.id].type = 'cargoShip';
                         rustplus.activeLockedCrates[marker.id].cargoShipId = cargoShipId;
@@ -88,6 +89,7 @@ module.exports = {
                                 if (rustplus.notificationSettings.lockedCrateRespawnOilRig.inGame) {
                                     rustplus.sendTeamMessage(`Event: ${str}`);
                                 }
+                                rustplus.log(str);
                             }
                         }
 
@@ -127,6 +129,7 @@ module.exports = {
                                 if (rustplus.notificationSettings.lockedCrateRespawnOilRig.inGame) {
                                     rustplus.sendTeamMessage(`Event: ${str}`);
                                 }
+                                rustplus.log(str);
                             }
                         }
 
@@ -142,6 +145,7 @@ module.exports = {
                                 if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.inGame) {
                                     rustplus.sendTeamMessage(`Event: ${str}`);
                                 }
+                                rustplus.log(str);
                             }
                             else {
                                 let str = `Locked Crate located at ${pos}.`;
@@ -151,6 +155,7 @@ module.exports = {
                                 if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.inGame) {
                                     rustplus.sendTeamMessage(`Event: ${str}`);
                                 }
+                                rustplus.log(str);
                             }
 
                             rustplus.activeLockedCrates[marker.id].type = 'grid';
@@ -170,6 +175,7 @@ module.exports = {
                             if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
                             }
+                            rustplus.log(str);
 
                             rustplus.lockedCrateDespawnTimers[marker.id] = new Timer.timer(
                                 () => { },
@@ -192,6 +198,7 @@ module.exports = {
                             if (rustplus.notificationSettings.lockedCrateDroppedAtMonument.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
                             }
+                            rustplus.log(str);
                         }
 
                         rustplus.activeLockedCrates[marker.id].type = MonNames.Monument[closestMonument.token];
@@ -244,6 +251,7 @@ module.exports = {
                     if (rustplus.notificationSettings.lockedCrateLeftCargoShip.inGame) {
                         rustplus.sendTeamMessage(`Event: ${str}`);
                     }
+                    rustplus.log(str);
                 }
                 else if (content.type === 'grid') {
                     let str = `Locked Crate at ${content.location} just got looted or despawned.`;
@@ -253,6 +261,7 @@ module.exports = {
                     if (rustplus.notificationSettings.lockedCrateMonumentLeft.inGame) {
                         rustplus.sendTeamMessage(`Event: ${str}`);
                     }
+                    rustplus.log(str);
                 }
                 else if (content.type === 'invalid') {
                     /* Invalid Locked Crate, we don't care */
@@ -271,6 +280,7 @@ module.exports = {
                         if (rustplus.notificationSettings.lockedCrateLootedOilRig.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                         continue;
                     }
 
@@ -319,6 +329,7 @@ module.exports = {
                         if (rustplus.notificationSettings.lockedCrateLootedOilRig.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                         continue;
                     }
 
@@ -373,6 +384,7 @@ module.exports = {
                         if (rustplus.notificationSettings.lockedCrateMonumentLeft.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
                     else {
                         let str = `Locked Crate at ${content.location} just despawned.`;
@@ -382,6 +394,7 @@ module.exports = {
                         if (rustplus.notificationSettings.lockedCrateMonumentLeft.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
 
                     if (rustplus.lockedCrateDespawnTimers[parseInt(id)]) {
@@ -462,5 +475,6 @@ module.exports = {
         if (args[0].notificationSettings.lockedCrateMonumentDespawnWarning.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
+        args[0].log(str);
     },
 }

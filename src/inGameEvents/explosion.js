@@ -54,6 +54,7 @@ module.exports = {
                         if (rustplus.notificationSettings.patrolHelicopterDestroyed.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
                     }
                     else {
                         /* Bradley APC just got destroyed */
@@ -64,6 +65,7 @@ module.exports = {
                         if (rustplus.notificationSettings.bradleyApcDestroyed.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
+                        rustplus.log(str);
 
                         rustplus.bradleyRespawnTimers[marker.id] = new Timer.timer(
                             module.exports.notifyBradleyRespawn,
@@ -119,5 +121,6 @@ module.exports = {
         if (args[0].notificationSettings.bradleyApcShouldRespawn.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
+        args[0].log(str);
     },
 }
