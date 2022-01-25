@@ -14,12 +14,15 @@ module.exports = {
     checkNewVendingMachineDetected: function (rustplus, info, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
+                let mapSize = info.response.info.mapSize;
+                let outsidePos = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);
+                let gridPos = MapCalc.getGridPos(marker.x, marker.y, mapSize);
+                let pos = (gridPos === null) ? outsidePos : gridPos;
+
                 if (!rustplus.activeVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
                     rustplus.activeVendingMachines.push({ x: marker.x, y: marker.y });
 
-                    let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
-
-                    let str = `New Vending Machine located at ${gridLocation}.`;
+                    let str = `New Vending Machine located at ${pos}.`;
                     if (!rustplus.firstPoll && rustplus.notificationSettings.vendingMachineDetected.discord) {
                         rustplus.sendEvent(str, 'vending_machine_logo.png');
                     }
