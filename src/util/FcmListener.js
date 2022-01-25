@@ -57,7 +57,7 @@ module.exports = async (client, guild) => {
 
                             let embed = new MessageEmbed()
                                 .setColor('#ce412b')
-                                .setAuthor(data.title)
+                                .setTitle(data.title)
 
                             let row = DiscordTools.getServerButtonsRow(customId, 0);
 

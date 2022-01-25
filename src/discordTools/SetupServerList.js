@@ -17,7 +17,7 @@ module.exports = (client, guild) => {
     for (const [key, value] of Object.entries(instance.serverList)) {
         let embed = new MessageEmbed()
             .setColor('#ce412b')
-            .setAuthor(value.title)
+            .setTitle(value.title)
 
         let state = 0;
         if (value.active) {

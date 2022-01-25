@@ -85,7 +85,7 @@ class RustPlus extends RP {
             let embed = new MessageEmbed()
                 .setColor('#ce412b')
                 .setThumbnail(`attachment://${image}`)
-                .setAuthor(text)
+                .setTitle(text)
                 .setFooter(instance.serverList[`${this.server}-${this.port}`].title)
                 .setTimestamp();
 

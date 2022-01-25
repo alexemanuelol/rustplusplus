@@ -15,7 +15,7 @@ module.exports = (client, guild) => {
     DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
     /* GENERAL SETTINGS */
-    channel.send({ embeds: [new MessageEmbed().setColor('#ce412b').setAuthor('GENERAL SETTINGS', icon)] });
+    channel.send({ embeds: [new MessageEmbed().setColor('#ce412b').setTitle('GENERAL SETTINGS', icon)] });
 
     const embed = new MessageEmbed()
         .setColor('#861c0c')
@@ -25,7 +25,7 @@ module.exports = (client, guild) => {
     channel.send({ embeds: [embed], components: [row] });
 
     /* NOTIFICATION SETTINGS */
-    channel.send({ embeds: [new MessageEmbed().setColor('#ce412b').setAuthor('NOTIFICATION SETTINGS', icon)] });
+    channel.send({ embeds: [new MessageEmbed().setColor('#ce412b').setTitle('NOTIFICATION SETTINGS', icon)] });
 
     for (let setting in instance.notificationSettings) {
         let discord = instance.notificationSettings[setting].discord;
