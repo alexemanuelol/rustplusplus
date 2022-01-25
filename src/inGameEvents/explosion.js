@@ -112,7 +112,7 @@ module.exports = {
     },
 
     notifyBradleyRespawn: function (args) {
-        let str = 'Bradley APC should respawn any second now';
+        let str = 'Bradley APC should respawn any second now.';
         if (args[0].notificationSettings.bradleyApcShouldRespawn.discord) {
             args[0].sendEvent(str, 'bradley_apc_logo.png');
         }

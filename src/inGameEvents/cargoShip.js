@@ -34,7 +34,7 @@ module.exports = {
 
                     /* If Cargo Ship is located outside the grid system + the offset */
                     if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
-                        let str = `Cargo Ship enters the map from ${pos}`;
+                        let str = `Cargo Ship enters the map from ${pos}.`;
                         if (rustplus.notificationSettings.cargoShipDetected.discord) {
                             rustplus.sendEvent(str, 'cargoship_logo.png');
                         }
@@ -45,11 +45,12 @@ module.exports = {
                         rustplus.cargoShipEgressTimers[marker.id] = new Timer.timer(
                             module.exports.notifyCargoShipEgress,
                             Constants.CARGO_SHIP_EGRESS_TIME_MS,
-                            rustplus);
+                            rustplus,
+                            marker.id);
                         rustplus.cargoShipEgressTimers[marker.id].start();
                     }
                     else {
-                        let str = `Cargo Ship located at ${pos}`;
+                        let str = `Cargo Ship located at ${pos}.`;
                         if (rustplus.notificationSettings.cargoShipDetected.discord) {
                             rustplus.sendEvent(str, 'cargoship_logo.png');
                         }
@@ -96,7 +97,7 @@ module.exports = {
                     }
                 }
 
-                let str = 'Cargo Ship just left the map';
+                let str = `Cargo Ship just left the map at ${content.location}.`;
                 if (rustplus.notificationSettings.cargoShipLeft.discord) {
                     rustplus.sendEvent(str, 'cargoship_logo.png');
                 }
@@ -114,7 +115,8 @@ module.exports = {
     },
 
     notifyCargoShipEgress: function (args) {
-        let str = 'Cargo Ship should be in the egress stage.';
+        let pos = args[0].activeCargoShips[args[1]].location;
+        let str = `Cargo Ship should be in the egress stage at ${pos}.`;
         if (args[0].notificationSettings.cargoShipEgress.discord) {
             args[0].sendEvent(str, 'cargoship_logo.png');
         }

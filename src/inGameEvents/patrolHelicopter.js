@@ -34,7 +34,7 @@ module.exports = {
 
                     /* If Patrol Helicopter is located outside the grid system + the offset */
                     if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
-                        let str = `Patrol Helicopter enters the map from ${pos}`;
+                        let str = `Patrol Helicopter enters the map from ${pos}.`;
                         if (rustplus.notificationSettings.patrolHelicopterDetected.discord) {
                             rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
                         }
@@ -43,7 +43,7 @@ module.exports = {
                         }
                     }
                     else {
-                        let str = `Patrol Helicopter located at ${pos}`;
+                        let str = `Patrol Helicopter located at ${pos}.`;
                         if (rustplus.notificationSettings.patrolHelicopterDetected.discord) {
                             rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
                         }
@@ -93,7 +93,7 @@ module.exports = {
                     };
                 }
                 else if (content.fakeLeft && content.stage === 2) {
-                    let str = 'Patrol Helicopter just left the map';
+                    let str = `Patrol Helicopter just left the map at ${content.location}.`;
                     if (rustplus.notificationSettings.patrolHelicopterLeft.discord) {
                         rustplus.sendEvent(str, 'cargoship_logo.png');
                     }
