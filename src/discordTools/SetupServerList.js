@@ -16,15 +16,18 @@ module.exports = (client, guild) => {
 
     for (const [key, value] of Object.entries(instance.serverList)) {
         let embed = new MessageEmbed()
-            .setColor('#ce412b')
             .setTitle(value.title)
+            .setColor('#ce412b')
+            .setDescription(value.description)
+            .setThumbnail(value.img)
+            .addField('Connect', `connect ${value.serverIp}:${value.appPort}`);
 
         let state = 0;
         if (value.active) {
             state = 1;
         }
 
-        let row = DiscordTools.getServerButtonsRow(key, state);
+        let row = DiscordTools.getServerButtonsRow(key, state, value.url);
 
         channel.send({ embeds: [embed], components: [row] }).then((msg) => {
             client.serverListMessages[guild.id][key] = msg;

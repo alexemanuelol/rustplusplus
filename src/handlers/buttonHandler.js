@@ -40,13 +40,13 @@ module.exports = (client, interaction) => {
         for (const [key, value] of Object.entries(instance.serverList)) {
             if (value.active) {
                 instance.serverList[key].active = false;
-                let row = DiscordTools.getServerButtonsRow(key, 0);
+                let row = DiscordTools.getServerButtonsRow(key, 0, instance.serverList[key].url);
                 client.serverListMessages[guildId][key].edit({ components: [row] });
             }
         }
 
         instance.serverList[server].active = true;
-        let row = DiscordTools.getServerButtonsRow(server, 1);
+        let row = DiscordTools.getServerButtonsRow(server, 1, instance.serverList[server].url);
         interaction.update({ components: [row] });
 
         /* Disconnect previous instance is any */
@@ -67,7 +67,7 @@ module.exports = (client, interaction) => {
         let server = interaction.customId.replace('ServerDisconnect', '');
 
         instance.serverList[server].active = false;
-        let row = DiscordTools.getServerButtonsRow(server, 0);
+        let row = DiscordTools.getServerButtonsRow(server, 0, instance.serverList[server].url);
         interaction.update({ components: [row] });
 
         /* Disconnect previous instance if any */

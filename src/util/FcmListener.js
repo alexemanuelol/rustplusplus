@@ -32,38 +32,52 @@ module.exports = async (client, guild) => {
                             client.log(`${guild.id} pairing: server`);
 
                             instance = client.readInstanceFile(guild.id);
-                            let customId = `${body.ip}-${body.port}`
+                            let customId = `${body.ip}-${body.port}`;
 
-                            if (instance.serverList.hasOwnProperty(customId)) {
-                                break;
-                            }
-
+                            let exist = instance.serverList.hasOwnProperty(customId);
                             instance.serverList[customId] = {
-                                active: false,
+                                active: (exist) ? instance.serverList[customId].active : false,
                                 title: data.title,
                                 serverIp: body.ip,
                                 appPort: body.port,
                                 steamId: body.playerId,
-                                playerToken: body.playerToken
-                            }
+                                playerToken: body.playerToken,
+                                description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
+                                img: body.img,
+                                url: body.url
+                            };
                             client.writeInstanceFile(guild.id, instance);
 
-                            let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
-
-                            if (!channel) {
-                                client.log('Invalid guild or channel.');
-                                break;
-                            }
-
                             let embed = new MessageEmbed()
+                                .setTitle(instance.serverList[customId].title)
                                 .setColor('#ce412b')
-                                .setTitle(data.title)
+                                .setDescription(instance.serverList[customId].description)
+                                .setThumbnail(instance.serverList[customId].img)
+                                .addField('Connect', `connect ${body.ip}:${body.port}`);
 
-                            let row = DiscordTools.getServerButtonsRow(customId, 0);
+                            let row = DiscordTools.getServerButtonsRow(
+                                customId,
+                                (instance.serverList[customId].active) ? 1 : 0,
+                                body.url);
 
-                            channel.send({ embeds: [embed], components: [row] }).then((msg) => {
-                                client.serverListMessages[guild.id][customId] = msg;
-                            });
+                            if (exist) {
+                                client.serverListMessages[guild.id][customId].edit({
+                                    embeds: [embed],
+                                    components: [row]
+                                });
+                            }
+                            else {
+                                let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
+
+                                if (!channel) {
+                                    client.log('Invalid guild or channel.');
+                                    break;
+                                }
+
+                                channel.send({ embeds: [embed], components: [row] }).then((msg) => {
+                                    client.serverListMessages[guild.id][customId] = msg;
+                                });
+                            }
                             break;
 
                         case 'entity':

@@ -124,7 +124,7 @@ module.exports = {
             );
     },
 
-    getServerButtonsRow: function (ipPort, state) {
+    getServerButtonsRow: function (ipPort, state, url) {
         let customId = null;
         let label = null;
         let style = null;
@@ -152,6 +152,10 @@ module.exports = {
                     .setCustomId(customId)
                     .setLabel(label)
                     .setStyle(style),
+                new MessageButton()
+                    .setStyle('LINK')
+                    .setLabel('WEBSITE')
+                    .setURL(url),
                 new MessageButton()
                     .setCustomId(`${ipPort}ServerDelete`)
                     .setEmoji('🗑️')
