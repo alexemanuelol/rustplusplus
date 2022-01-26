@@ -177,7 +177,7 @@ module.exports = {
     notifyLockedCrateSmallOpen: function (args) {
         let str = `Locked Crate at Small Oil Rig at ${args[1]} has been unlocked.`;
         if (args[0].notificationSettings.lockedCrateOilRigUnlocked.discord) {
-            args[0].sendEvent(str, 'locked_crate_logo.png');
+            args[0].sendEvent(str, 'locked_crate_small_oil_rig_logo.png');
         }
         if (args[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
@@ -188,7 +188,7 @@ module.exports = {
     notifyLockedCrateLargeOpen: function (args) {
         let str = `Locked Crate at Large Oil Rig at ${args[1]} has been unlocked.`;
         if (args[0].notificationSettings.lockedCrateOilRigUnlocked.discord) {
-            args[0].sendEvent(str, 'locked_crate_logo.png');
+            args[0].sendEvent(str, 'locked_crate_large_oil_rig_logo.png');
         }
         if (args[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);

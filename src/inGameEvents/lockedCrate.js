@@ -41,7 +41,7 @@ module.exports = {
 
                         let str = `Locked Crate just spawned on Cargo Ship at ${pos}.`;
                         if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateSpawnCargoShip.discord) {
-                            rustplus.sendEvent(str, 'locked_crate_logo.png');
+                            rustplus.sendEvent(str, 'locked_crate_cargoship_logo.png');
                         }
                         if (!rustplus.firstPoll && rustplus.notificationSettings.lockedCrateSpawnCargoShip.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -84,7 +84,7 @@ module.exports = {
                                 let oilRig = MonNames.Monument['oil_rig_small'];
                                 let str = `Locked Crate just respawned on Small ${oilRig} at ${pos}.`;
                                 if (rustplus.notificationSettings.lockedCrateRespawnOilRig.discord) {
-                                    rustplus.sendEvent(str, 'locked_crate_logo.png');
+                                    rustplus.sendEvent(str, 'locked_crate_small_oil_rig_logo.png');
                                 }
                                 if (rustplus.notificationSettings.lockedCrateRespawnOilRig.inGame) {
                                     rustplus.sendTeamMessage(`Event: ${str}`);
@@ -124,7 +124,7 @@ module.exports = {
                                 let oilRig = MonNames.Monument['large_oil_rig'];
                                 let str = `Locked Crate just respawned on ${oilRig} at ${pos}.`;
                                 if (rustplus.notificationSettings.lockedCrateRespawnOilRig.discord) {
-                                    rustplus.sendEvent(str, 'locked_crate_logo.png');
+                                    rustplus.sendEvent(str, 'locked_crate_large_oil_rig_logo.png');
                                 }
                                 if (rustplus.notificationSettings.lockedCrateRespawnOilRig.inGame) {
                                     rustplus.sendTeamMessage(`Event: ${str}`);
@@ -246,7 +246,7 @@ module.exports = {
                 if (content.type === 'cargoShip') {
                     let str = `Locked Crate on Cargo Ship at ${content.location} just got looted.`;
                     if (rustplus.notificationSettings.lockedCrateLeftCargoShip.discord) {
-                        rustplus.sendEvent(str, 'locked_crate_logo.png');
+                        rustplus.sendEvent(str, 'locked_crate_cargoship_logo.png');
                     }
                     if (rustplus.notificationSettings.lockedCrateLeftCargoShip.inGame) {
                         rustplus.sendTeamMessage(`Event: ${str}`);
@@ -275,7 +275,7 @@ module.exports = {
                     if (content.fakeLeft === true) {
                         let str = `Locked Crate at Small Oil Rig at ${content.location} just got looted.`;
                         if (rustplus.notificationSettings.lockedCrateLootedOilRig.discord) {
-                            rustplus.sendEvent(str, 'locked_crate_logo.png');
+                            rustplus.sendEvent(str, 'locked_crate_small_oil_rig_logo.png');
                         }
                         if (rustplus.notificationSettings.lockedCrateLootedOilRig.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -324,7 +324,7 @@ module.exports = {
                     if (content.fakeLeft === true) {
                         let str = `Locked Crate at Large Oil Rig at ${content.location} just got looted.`;
                         if (rustplus.notificationSettings.lockedCrateLootedOilRig.discord) {
-                            rustplus.sendEvent(str, 'locked_crate_logo.png');
+                            rustplus.sendEvent(str, 'locked_crate_large_oil_rig_logo.png');
                         }
                         if (rustplus.notificationSettings.lockedCrateLootedOilRig.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);

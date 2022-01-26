@@ -97,7 +97,7 @@ module.exports = {
                 else if (content.fakeLeft && content.stage === 2) {
                     let str = `Patrol Helicopter just left the map at ${content.location}.`;
                     if (rustplus.notificationSettings.patrolHelicopterLeft.discord) {
-                        rustplus.sendEvent(str, 'cargoship_logo.png');
+                        rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
                     }
                     if (rustplus.notificationSettings.patrolHelicopterLeft.inGame) {
                         rustplus.sendTeamMessage(`Event: ${str}`);
