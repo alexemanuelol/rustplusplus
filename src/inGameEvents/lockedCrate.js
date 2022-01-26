@@ -377,7 +377,7 @@ module.exports = {
 
                     if (timeLeft > despawnOffset) {
                         /* The timer have reset, which might indicate that the Locked Crate despawned. */
-                        let str = `Locked Crate at ${content.location} just got looted.`;
+                        let str = `Locked Crate at ${content.type} just got looted.`;
                         if (rustplus.notificationSettings.lockedCrateMonumentLeft.discord) {
                             rustplus.sendEvent(str, 'locked_crate_logo.png');
                         }
@@ -387,7 +387,7 @@ module.exports = {
                         rustplus.log(str);
                     }
                     else {
-                        let str = `Locked Crate at ${content.location} just despawned.`;
+                        let str = `Locked Crate at ${content.type} just despawned.`;
                         if (rustplus.notificationSettings.lockedCrateMonumentLeft.discord) {
                             rustplus.sendEvent(str, 'locked_crate_logo.png');
                         }
