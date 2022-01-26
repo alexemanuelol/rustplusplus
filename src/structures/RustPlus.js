@@ -33,8 +33,8 @@ class RustPlus extends RP {
         this.activePatrolHelicopters = new Object();
         this.activeExplosions = new Object();
         this.patrolHelicoptersLeft = [];
-        this.smallOilRigLeftEntities = [];
-        this.largeOilRigLeftEntities = [];
+        this.smallOilRigLockedCratesLeft = [];
+        this.largeOilRigLockedCratesLeft = [];
         this.activeVendingMachines = [];
         this.foundItems = [];
         this.itemsToLookForId = [];

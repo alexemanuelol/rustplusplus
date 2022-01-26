@@ -57,11 +57,11 @@ module.exports = {
                     }
                     else if (closestMonument.token === 'oil_rig_small' &&
                         distance < LOCKED_CRATE_MONUMENT_RADIUS) {
-                        if (rustplus.smallOilRigLeftEntities.some(e =>
+                        if (rustplus.smallOilRigLockedCratesLeft.some(e =>
                             e.type === 'oil_rig_small' &&
                             MapCalc.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                             /* Refresh of Locked Crate at Small Oil Rig, Scenario 1 */
-                            for (let crate of rustplus.smallOilRigLeftEntities) {
+                            for (let crate of rustplus.smallOilRigLockedCratesLeft) {
                                 if (crate.type === 'oil_rig_small' &&
                                     MapCalc.getDistance(crate.x, crate.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
@@ -97,11 +97,11 @@ module.exports = {
                     }
                     else if (closestMonument.token === 'large_oil_rig' &&
                         distance < LOCKED_CRATE_MONUMENT_RADIUS) {
-                        if (rustplus.largeOilRigLeftEntities.some(e =>
+                        if (rustplus.largeOilRigLockedCratesLeft.some(e =>
                             e.type === 'large_oil_rig' &&
                             MapCalc.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                             /* Refresh of Locked Crate at Large Oil Rig, Scenario 1 */
-                            for (let crate of rustplus.largeOilRigLeftEntities) {
+                            for (let crate of rustplus.largeOilRigLockedCratesLeft) {
                                 if (crate.type === 'large_oil_rig' &&
                                     MapCalc.getDistance(crate.x, crate.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
@@ -214,8 +214,8 @@ module.exports = {
         }
 
         /* Reset Locked Crate Left Entities arrays */
-        rustplus.smallOilRigLeftEntities = [];
-        rustplus.largeOilRigLeftEntities = [];
+        rustplus.smallOilRigLockedCratesLeft = [];
+        rustplus.largeOilRigLockedCratesLeft = [];
     },
 
     checkLockedCrateLeft: function (rustplus, mapMarkers) {
@@ -297,7 +297,7 @@ module.exports = {
 
                     if (!refreshed) {
                         /* Scenario 1 */
-                        rustplus.smallOilRigLeftEntities.push({
+                        rustplus.smallOilRigLockedCratesLeft.push({
                             id: parseInt(id),
                             x: content.x,
                             y: content.y,
@@ -346,7 +346,7 @@ module.exports = {
 
                     if (!refreshed) {
                         /* Scenario 1 */
-                        rustplus.largeOilRigLeftEntities.push({
+                        rustplus.largeOilRigLockedCratesLeft.push({
                             id: parseInt(id),
                             x: content.x,
                             y: content.y,
