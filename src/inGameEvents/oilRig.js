@@ -112,7 +112,7 @@ module.exports = {
 
                     /* If coordinates of the marker is located outside the grid system + the offset */
                     if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
-                        let str = `Chinook 47 enters the map from ${pos} to dop off Locked Crate.`;
+                        let str = `Chinook 47 enters the map from ${pos} to drop off Locked Crate.`;
                         if (rustplus.notificationSettings.chinook47Detected.discord) {
                             rustplus.sendEvent(str, 'chinook_47_logo.png');
                         }
