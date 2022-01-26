@@ -19,8 +19,7 @@ module.exports = (client, guild) => {
             .setTitle(value.title)
             .setColor('#ce412b')
             .setDescription(value.description)
-            .setThumbnail(value.img)
-            .addField('Connect', `connect ${value.serverIp}:${value.appPort}`);
+            .setThumbnail(value.img);
 
         let state = 0;
         if (value.active) {

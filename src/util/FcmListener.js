@@ -52,8 +52,7 @@ module.exports = async (client, guild) => {
                                 .setTitle(instance.serverList[customId].title)
                                 .setColor('#ce412b')
                                 .setDescription(instance.serverList[customId].description)
-                                .setThumbnail(instance.serverList[customId].img)
-                                .addField('Connect', `connect ${body.ip}:${body.port}`);
+                                .setThumbnail(instance.serverList[customId].img);
 
                             let row = DiscordTools.getServerButtonsRow(
                                 customId,
