@@ -60,7 +60,8 @@ module.exports = {
                         rustplus.bradleyRespawnTimers[marker.id] = new Timer.timer(
                             module.exports.notifyBradleyRespawn,
                             Constants.BRADLEY_APC_RESPAWN_TIME_MS,
-                            rustplus);
+                            rustplus,
+                            marker.id);
                         rustplus.bradleyRespawnTimers[marker.id].start();
                     }
                 }
@@ -94,10 +95,7 @@ module.exports = {
             }
 
             if (active === false) {
-                if (rustplus.bradleyRespawnTimers[parseInt(id)]) {
-                    rustplus.bradleyRespawnTimers[parseInt(id)].stop();
-                    delete rustplus.bradleyRespawnTimers[parseInt(id)];
-                }
+                /* Do nothing */
             }
         }
         rustplus.activeExplosions = JSON.parse(JSON.stringify(newActiveExplosionsObject));
@@ -107,5 +105,10 @@ module.exports = {
         args[0].sendEvent(
             args[0].notificationSettings.bradleyApcShouldRespawn,
             'Bradley APC should respawn any second now.');
+
+        if (rustplus.bradleyRespawnTimers[parseInt(args[1])]) {
+            rustplus.bradleyRespawnTimers[parseInt(args[1])].stop();
+            delete rustplus.bradleyRespawnTimers[parseInt(args[1])];
+        }
     }
 }
