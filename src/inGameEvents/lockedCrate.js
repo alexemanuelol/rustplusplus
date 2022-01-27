@@ -61,6 +61,16 @@ module.exports = {
                             e.type === 'oil_rig_small' &&
                             MapCalc.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                             /* Refresh of Locked Crate at Small Oil Rig, Scenario 1 */
+                            let oilRig = MonNames.Monument['oil_rig_small'];
+                            let str = `Locked Crate just got refreshed on Small ${oilRig} at ${pos}.`;
+                            if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.discord) {
+                                rustplus.sendEvent(str, 'locked_crate_small_oil_rig_logo.png');
+                            }
+                            if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.inGame) {
+                                rustplus.sendTeamMessage(`Event: ${str}`);
+                            }
+                            rustplus.log(str);
+
                             for (let crate of rustplus.smallOilRigLockedCratesLeft) {
                                 if (crate.type === 'oil_rig_small' &&
                                     MapCalc.getDistance(crate.x, crate.y, marker.x, marker.y) <
@@ -76,6 +86,15 @@ module.exports = {
                                     MapCalc.getDistance(content.x, content.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                                     /* Refresh of Locked Crate at Small Oil Rig, Scenario 2 */
+                                    let oilRig = MonNames.Monument['oil_rig_small'];
+                                    let str = `Locked Crate just got refreshed on Small ${oilRig} at ${pos}.`;
+                                    if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.discord) {
+                                        rustplus.sendEvent(str, 'locked_crate_small_oil_rig_logo.png');
+                                    }
+                                    if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.inGame) {
+                                        rustplus.sendTeamMessage(`Event: ${str}`);
+                                    }
+                                    rustplus.log(str);
                                     refreshed = true;
                                 }
                             }
@@ -101,6 +120,16 @@ module.exports = {
                             e.type === 'large_oil_rig' &&
                             MapCalc.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                             /* Refresh of Locked Crate at Large Oil Rig, Scenario 1 */
+                            let oilRig = MonNames.Monument['large_oil_rig'];
+                            let str = `Locked Crate just got refreshed on ${oilRig} at ${pos}.`;
+                            if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.discord) {
+                                rustplus.sendEvent(str, 'locked_crate_large_oil_rig_logo.png');
+                            }
+                            if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.inGame) {
+                                rustplus.sendTeamMessage(`Event: ${str}`);
+                            }
+                            rustplus.log(str);
+
                             for (let crate of rustplus.largeOilRigLockedCratesLeft) {
                                 if (crate.type === 'large_oil_rig' &&
                                     MapCalc.getDistance(crate.x, crate.y, marker.x, marker.y) <
@@ -116,6 +145,15 @@ module.exports = {
                                     MapCalc.getDistance(content.x, content.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                                     /* Refresh of Locked Crate at Large Oil Rig, Scenario 2 */
+                                    let oilRig = MonNames.Monument['large_oil_rig'];
+                                    let str = `Locked Crate just got refreshed on ${oilRig} at ${pos}.`;
+                                    if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.discord) {
+                                        rustplus.sendEvent(str, 'locked_crate_large_oil_rig_logo.png');
+                                    }
+                                    if (rustplus.notificationSettings.lockedCrateOilRigRefreshed.inGame) {
+                                        rustplus.sendTeamMessage(`Event: ${str}`);
+                                    }
+                                    rustplus.log(str);
                                     refreshed = true;
                                 }
                             }

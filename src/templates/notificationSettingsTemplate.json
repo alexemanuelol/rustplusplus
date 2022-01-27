@@ -79,6 +79,11 @@
         "discord": true,
         "inGame": true
     },
+    "lockedCrateOilRigRefreshed": {
+        "description": "When a Locked Crate at Oil Rig gets refreshed, send a notification.",
+        "discord": true,
+        "inGame": true
+    },
     "heavyScientistCalled": {
         "description": "When Heavy Scientists are called to Oil Rig, send a notification.",
         "discord": true,
