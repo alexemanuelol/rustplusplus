@@ -89,7 +89,7 @@ module.exports = {
                         rustplus.notificationSettings.patrolHelicopterLeft,
                         `Patrol Helicopter just left the map at ${content.location}.`);
 
-                    this.timeSinceHeliWasOnMap = new Date();
+                    rustplus.timeSinceHeliWasOnMap = new Date();
                 }
                 else {
                     rustplus.patrolHelicoptersLeft.push({

@@ -51,8 +51,8 @@ module.exports = {
                             rustplus.notificationSettings.patrolHelicopterDestroyed,
                             `Patrol Helicopter was taken down ${pos}.`);
 
-                        this.timeSinceHeliWasDestroyed = new Date();
-                        this.timeSinceHeliWasOnMap = new Date();
+                        rustplus.timeSinceHeliWasDestroyed = new Date();
+                        rustplus.timeSinceHeliWasOnMap = new Date();
                     }
                     else {
                         /* Bradley APC just got destroyed */
@@ -60,14 +60,16 @@ module.exports = {
                             rustplus.notificationSettings.bradleyApcDestroyed,
                             'Bradley APC was destroyed at Launch Site.');
 
-                        rustplus.bradleyRespawnTimers[marker.id] = new Timer.timer(
-                            module.exports.notifyBradleyRespawn,
-                            Constants.BRADLEY_APC_RESPAWN_TIME_MS,
-                            rustplus,
-                            marker.id);
-                        rustplus.bradleyRespawnTimers[marker.id].start();
+                        if (!rustplus.firstPoll) {
+                            rustplus.bradleyRespawnTimers[marker.id] = new Timer.timer(
+                                module.exports.notifyBradleyRespawn,
+                                Constants.BRADLEY_APC_RESPAWN_TIME_MS,
+                                rustplus,
+                                marker.id);
+                            rustplus.bradleyRespawnTimers[marker.id].start();
+                        }
 
-                        this.timeSinceBradleyWasDestroyed = new Date();
+                        rustplus.timeSinceBradleyWasDestroyed = new Date();
                     }
                 }
                 else {
@@ -111,9 +113,9 @@ module.exports = {
             args[0].notificationSettings.bradleyApcShouldRespawn,
             'Bradley APC should respawn any second now.');
 
-        if (rustplus.bradleyRespawnTimers[parseInt(args[1])]) {
-            rustplus.bradleyRespawnTimers[parseInt(args[1])].stop();
-            delete rustplus.bradleyRespawnTimers[parseInt(args[1])];
+        if (args[0].bradleyRespawnTimers[parseInt(args[1])]) {
+            args[0].bradleyRespawnTimers[parseInt(args[1])].stop();
+            delete args[0].bradleyRespawnTimers[parseInt(args[1])];
         }
     }
 }

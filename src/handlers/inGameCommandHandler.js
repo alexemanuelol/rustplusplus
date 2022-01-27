@@ -29,30 +29,33 @@ module.exports = {
     },
 
     commandBradley: function (rustplus) {
-        let times = '';
+        let strings = [];
+
+        let timerCounter = 0;
         for (const [id, timer] of Object.entries(rustplus.bradleyRespawnTimers)) {
+            timerCounter += 1;
             let time = rustplus.getTimeLeftOfTimer(timer);
 
             if (time !== null) {
-                if (times === '') {
-                    times += time;
-                }
-                else {
-                    times += ` and ${time}`;
-                }
+                strings.push(`Approximately ${time} before Bradley APC respawns.`);
             }
         }
 
-        let str;
-        if (times === '') {
-            str = 'Bradley APC is probably roaming around in Launch Site.';
-        }
-        else {
-            str = `Approximately ${times} before Bradley APC respawns.`;
+        if (timerCounter === 0) {
+            if (rustplus.timeSinceBradleyWasDestroyed === null) {
+                strings.push('Bradley APC is probably roaming around in Launch Site.');
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceBradleyWasDestroyed) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSince} since Bradley APC last got destroyed.`)
+            }
         }
 
-        rustplus.sendTeamMessage(str);
-        rustplus.log(str);
+        for (let str of strings) {
+            rustplus.sendTeamMessage(str);
+            rustplus.log(str);
+        }
     },
 
     commandCargo: function (rustplus) {
