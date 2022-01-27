@@ -50,6 +50,9 @@ module.exports = {
                         rustplus.sendEvent(
                             rustplus.notificationSettings.patrolHelicopterDestroyed,
                             `Patrol Helicopter was taken down ${pos}.`);
+
+                        this.timeSinceHeliWasDestroyed = new Date();
+                        this.timeSinceHeliWasOnMap = new Date();
                     }
                     else {
                         /* Bradley APC just got destroyed */
@@ -63,6 +66,8 @@ module.exports = {
                             rustplus,
                             marker.id);
                         rustplus.bradleyRespawnTimers[marker.id].start();
+
+                        this.timeSinceBradleyWasDestroyed = new Date();
                     }
                 }
                 else {

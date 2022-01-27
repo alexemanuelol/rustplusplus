@@ -97,6 +97,8 @@ module.exports = {
                     rustplus.cargoShipEgressTimers[parseInt(id)].stop();
                     delete rustplus.cargoShipEgressTimers[parseInt(id)];
                 }
+
+                rustplus.timeSinceCargoWasOut = new Date();
             }
         }
         rustplus.activeCargoShips = JSON.parse(JSON.stringify(newActiveCargoShipObject));

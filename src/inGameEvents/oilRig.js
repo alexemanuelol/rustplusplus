@@ -63,6 +63,8 @@ module.exports = {
                                     oilRigLocation);
                                 rustplus.lockedCrateSmallOilRigTimers[lockedCrateId].start();
                             }
+
+                            this.timeSinceSmallOilRigWasTriggered = new Date();
                             break;
                         }
                     }
@@ -93,6 +95,8 @@ module.exports = {
                                     oilRigLocation);
                                 rustplus.lockedCrateLargeOilRigTimers[lockedCrateId].start();
                             }
+
+                            this.timeSinceLargeOilRigWasTriggered = new Date();
                             break;
                         }
                     }
