@@ -35,10 +35,11 @@ module.exports = {
                     /* If Cargo Ship is located outside the grid system + the offset */
                     if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
                         let str = `Cargo Ship enters the map from ${pos}.`;
-                        if (rustplus.notificationSettings.cargoShipDetected.discord) {
-                            rustplus.sendEvent(str, 'cargoship_logo.png');
+                        let setting = rustplus.notificationSettings.cargoShipDetected;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.cargoShipDetected.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
@@ -52,10 +53,11 @@ module.exports = {
                     }
                     else {
                         let str = `Cargo Ship located at ${pos}.`;
-                        if (rustplus.notificationSettings.cargoShipDetected.discord) {
-                            rustplus.sendEvent(str, 'cargoship_logo.png');
+                        let setting = rustplus.notificationSettings.cargoShipDetected;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.cargoShipDetected.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
@@ -100,10 +102,11 @@ module.exports = {
                 }
 
                 let str = `Cargo Ship just left the map at ${content.location}.`;
-                if (rustplus.notificationSettings.cargoShipLeft.discord) {
-                    rustplus.sendEvent(str, 'cargoship_logo.png');
+                let setting = rustplus.notificationSettings.cargoShipLeft;
+                if (setting.discord) {
+                    rustplus.sendEvent(str, setting.image);
                 }
-                if (rustplus.notificationSettings.cargoShipLeft.inGame) {
+                if (setting.inGame) {
                     rustplus.sendTeamMessage(`Event: ${str}`);
                 }
                 rustplus.log(str);
@@ -120,10 +123,11 @@ module.exports = {
     notifyCargoShipEgress: function (args) {
         let pos = args[0].activeCargoShips[args[1]].location;
         let str = `Cargo Ship should be in the egress stage at ${pos}.`;
-        if (args[0].notificationSettings.cargoShipEgress.discord) {
-            args[0].sendEvent(str, 'cargoship_logo.png');
+        let setting = args[0].notificationSettings.cargoShipEgress;
+        if (setting.discord) {
+            args[0].sendEvent(str, setting.image);
         }
-        if (args[0].notificationSettings.cargoShipEgress.inGame) {
+        if (setting.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
         args[0].log(str);

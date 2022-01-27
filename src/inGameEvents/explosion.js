@@ -48,10 +48,11 @@ module.exports = {
                     if (isExplosionMarkerHeli) {
                         /* Patrol Helicopter just got downed */
                         let str = `Patrol Helicopter was taken down ${pos}.`;
-                        if (rustplus.notificationSettings.patrolHelicopterDestroyed.discord) {
-                            rustplus.sendEvent(str, 'patrol_helicopter_downed_logo.png');
+                        let setting = rustplus.notificationSettings.patrolHelicopterDestroyed;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.patrolHelicopterDestroyed.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
@@ -59,10 +60,11 @@ module.exports = {
                     else {
                         /* Bradley APC just got destroyed */
                         let str = 'Bradley APC was destroyed at Launch Site.';
-                        if (rustplus.notificationSettings.bradleyApcDestroyed.discord) {
-                            rustplus.sendEvent(str, 'bradley_apc_destroyed_logo.png');
+                        let setting = rustplus.notificationSettings.bradleyApcDestroyed;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.bradleyApcDestroyed.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
@@ -115,10 +117,11 @@ module.exports = {
 
     notifyBradleyRespawn: function (args) {
         let str = 'Bradley APC should respawn any second now.';
-        if (args[0].notificationSettings.bradleyApcShouldRespawn.discord) {
-            args[0].sendEvent(str, 'bradley_apc_logo.png');
+        let setting = args[0].notificationSettings.bradleyApcShouldRespawn;
+        if (setting.discord) {
+            args[0].sendEvent(str, setting.image);
         }
-        if (args[0].notificationSettings.bradleyApcShouldRespawn.inGame) {
+        if (setting.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
         args[0].log(str);

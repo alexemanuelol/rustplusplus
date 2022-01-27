@@ -1,101 +1,121 @@
 {
     "cargoShipDetected": {
         "description": "When Cargo Ship is detected, send a notification.",
+        "image": "cargoship_logo.png",
         "discord": true,
         "inGame": true
     },
     "cargoShipLeft": {
         "description": "When Cargo Ship left the map, send a notification.",
+        "image": "cargoship_logo.png",
         "discord": true,
         "inGame": true
     },
     "cargoShipEgress": {
         "description": "When Cargo Ship enters egress stage, send a notification.",
+        "image": "cargoship_logo.png",
         "discord": true,
         "inGame": true
     },
     "patrolHelicopterDetected": {
         "description": "When Patrol Helicopter is detected, send a notification.",
+        "image": "patrol_helicopter_logo.png",
         "discord": true,
         "inGame": true
     },
     "patrolHelicopterLeft": {
         "description": "When Patrol Helicopter left the map, send a notification.",
+        "image": "patrol_helicopter_logo.png",
         "discord": true,
         "inGame": true
     },
     "patrolHelicopterDestroyed": {
         "description": "When Patrol Helicopter gets destroyed, send a notification.",
+        "image": "patrol_helicopter_downed_logo.png",
         "discord": true,
         "inGame": true
     },
     "bradleyApcDestroyed": {
         "description": "When Bradley APC gets destroyed, send a notification.",
+        "image": "bradley_apc_destroyed_logo.png",
         "discord": true,
         "inGame": true
     },
     "bradleyApcShouldRespawn": {
         "description": "When Bradley APC should respawn, send a notification.",
+        "image": "bradley_apc_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateSpawnCargoShip": {
         "description": "When a Locked Crate spawns on Cargo Ship, send a notification.",
+        "image": "locked_crate_cargoship_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateRespawnOilRig": {
         "description": "When a Locked Crate respawns at Oil Rig, send a notification.",
+        "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateDroppedAtMonument": {
         "description": "When a Locked Crate gets dropped at a monument, send a notification.",
+        "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateLeftCargoShip": {
         "description": "When a Locked Crate disappears from Cargo Ship, send a notification.",
+        "image": "locked_crate_cargoship_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateLootedOilRig": {
         "description": "When a Locked Crate gets looted at Oil Rig, send a notification.",
+        "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateMonumentLeft": {
         "description": "When a Locked Crate disappears from a monument, send a notification.",
+        "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateMonumentDespawnWarning": {
         "description": "When a Locked Crate at a monument is about to despawn, send a notification.",
+        "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateOilRigUnlocked": {
         "description": "When a Locked Crate at Oil Rig is unlocked, send a notification.",
+        "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": true
     },
     "lockedCrateOilRigRefreshed": {
         "description": "When a Locked Crate at Oil Rig gets refreshed, send a notification.",
+        "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": true
     },
     "heavyScientistCalled": {
         "description": "When Heavy Scientists are called to Oil Rig, send a notification.",
+        "image": "oil_rig_logo.png",
         "discord": true,
         "inGame": true
     },
     "chinook47Detected": {
         "description": "When a Chinook 47 enters the map, send a notification.",
+        "image": "chinook_47_logo.png",
         "discord": true,
         "inGame": true
     },
     "vendingMachineDetected": {
         "description": "When a new Vending Machine is detected, send a notification.",
+        "image": "vending_machine_logo.png",
         "discord": true,
         "inGame": true
     }

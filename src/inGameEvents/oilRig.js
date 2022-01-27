@@ -48,10 +48,11 @@ module.exports = {
                             let oilRigLocation = MapCalc.getCoordinatesOrientation(rig.x, rig.y, mapSize);
 
                             let str = `Heavy Scientists got called to the Small Oil Rig at ${oilRigLocation}.`;
-                            if (rustplus.notificationSettings.heavyScientistCalled.discord) {
+                            let setting = rustplus.notificationSettings.heavyScientistCalled;
+                            if (setting.discord) {
                                 rustplus.sendEvent(str, 'small_oil_rig_logo.png');
                             }
-                            if (rustplus.notificationSettings.heavyScientistCalled.inGame) {
+                            if (setting.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
                             }
                             rustplus.log(str);
@@ -81,10 +82,11 @@ module.exports = {
                             let oilRigLocation = MapCalc.getCoordinatesOrientation(rig.x, rig.y, mapSize);
 
                             let str = `Heavy Scientists got called to the Large Oil Rig at ${oilRigLocation}.`;
-                            if (rustplus.notificationSettings.heavyScientistCalled.discord) {
+                            let setting = rustplus.notificationSettings.heavyScientistCalled;
+                            if (setting.discord) {
                                 rustplus.sendEvent(str, 'large_oil_rig_logo.png');
                             }
-                            if (rustplus.notificationSettings.heavyScientistCalled.inGame) {
+                            if (setting.inGame) {
                                 rustplus.sendTeamMessage(`Event: ${str}`);
                             }
                             rustplus.log(str);
@@ -113,20 +115,22 @@ module.exports = {
                     /* If coordinates of the marker is located outside the grid system + the offset */
                     if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
                         let str = `Chinook 47 enters the map from ${pos} to drop off Locked Crate.`;
-                        if (rustplus.notificationSettings.chinook47Detected.discord) {
-                            rustplus.sendEvent(str, 'chinook_47_logo.png');
+                        let setting = rustplus.notificationSettings.chinook47Detected;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.chinook47Detected.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
                     }
                     else {
                         let str = `Chinook 47 located at ${pos}.`;
-                        if (rustplus.notificationSettings.chinook47Detected.discord) {
-                            rustplus.sendEvent(str, 'chinook_47_logo.png');
+                        let setting = rustplus.notificationSettings.chinook47Detected;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.chinook47Detected.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
@@ -176,10 +180,11 @@ module.exports = {
 
     notifyLockedCrateSmallOpen: function (args) {
         let str = `Locked Crate at Small Oil Rig at ${args[1]} has been unlocked.`;
-        if (args[0].notificationSettings.lockedCrateOilRigUnlocked.discord) {
+        let setting = args[0].notificationSettings.lockedCrateOilRigUnlocked;
+        if (setting.discord) {
             args[0].sendEvent(str, 'locked_crate_small_oil_rig_logo.png');
         }
-        if (args[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
+        if (setting.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
         args[0].log(str);
@@ -187,10 +192,11 @@ module.exports = {
 
     notifyLockedCrateLargeOpen: function (args) {
         let str = `Locked Crate at Large Oil Rig at ${args[1]} has been unlocked.`;
-        if (args[0].notificationSettings.lockedCrateOilRigUnlocked.discord) {
+        let setting = args[0].notificationSettings.lockedCrateOilRigUnlocked;
+        if (setting.discord) {
             args[0].sendEvent(str, 'locked_crate_large_oil_rig_logo.png');
         }
-        if (args[0].notificationSettings.lockedCrateOilRigUnlocked.inGame) {
+        if (setting.inGame) {
             args[0].sendTeamMessage(`Event: ${str}`);
         }
         args[0].log(str);

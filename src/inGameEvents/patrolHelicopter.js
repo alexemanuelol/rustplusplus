@@ -35,20 +35,22 @@ module.exports = {
                     /* If Patrol Helicopter is located outside the grid system + the offset */
                     if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
                         let str = `Patrol Helicopter enters the map from ${pos}.`;
-                        if (rustplus.notificationSettings.patrolHelicopterDetected.discord) {
-                            rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
+                        let setting = rustplus.notificationSettings.patrolHelicopterDetected;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.patrolHelicopterDetected.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
                     }
                     else {
                         let str = `Patrol Helicopter located at ${pos}.`;
-                        if (rustplus.notificationSettings.patrolHelicopterDetected.discord) {
-                            rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
+                        let setting = rustplus.notificationSettings.patrolHelicopterDetected;
+                        if (setting.discord) {
+                            rustplus.sendEvent(str, setting.image);
                         }
-                        if (rustplus.notificationSettings.patrolHelicopterDetected.inGame) {
+                        if (setting.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
                         }
                         rustplus.log(str);
@@ -96,10 +98,11 @@ module.exports = {
                 }
                 else if (content.fakeLeft && content.stage === 2) {
                     let str = `Patrol Helicopter just left the map at ${content.location}.`;
-                    if (rustplus.notificationSettings.patrolHelicopterLeft.discord) {
-                        rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
+                    let setting = rustplus.notificationSettings.patrolHelicopterLeft;
+                    if (setting.discord) {
+                        rustplus.sendEvent(str, setting.image);
                     }
-                    if (rustplus.notificationSettings.patrolHelicopterLeft.inGame) {
+                    if (setting.inGame) {
                         rustplus.sendTeamMessage(`Event: ${str}`);
                     }
                     rustplus.log(str);
