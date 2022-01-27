@@ -47,27 +47,15 @@ module.exports = {
 
                     if (isExplosionMarkerHeli) {
                         /* Patrol Helicopter just got downed */
-                        let str = `Patrol Helicopter was taken down ${pos}.`;
-                        let setting = rustplus.notificationSettings.patrolHelicopterDestroyed;
-                        if (setting.discord) {
-                            rustplus.sendEvent(str, setting.image);
-                        }
-                        if (setting.inGame) {
-                            rustplus.sendTeamMessage(`Event: ${str}`);
-                        }
-                        rustplus.log(str);
+                        rustplus.sendEvent(
+                            rustplus.notificationSettings.patrolHelicopterDestroyed,
+                            `Patrol Helicopter was taken down ${pos}.`);
                     }
                     else {
                         /* Bradley APC just got destroyed */
-                        let str = 'Bradley APC was destroyed at Launch Site.';
-                        let setting = rustplus.notificationSettings.bradleyApcDestroyed;
-                        if (setting.discord) {
-                            rustplus.sendEvent(str, setting.image);
-                        }
-                        if (setting.inGame) {
-                            rustplus.sendTeamMessage(`Event: ${str}`);
-                        }
-                        rustplus.log(str);
+                        rustplus.sendEvent(
+                            rustplus.notificationSettings.bradleyApcDestroyed,
+                            'Bradley APC was destroyed at Launch Site.');
 
                         rustplus.bradleyRespawnTimers[marker.id] = new Timer.timer(
                             module.exports.notifyBradleyRespawn,
@@ -116,14 +104,8 @@ module.exports = {
     },
 
     notifyBradleyRespawn: function (args) {
-        let str = 'Bradley APC should respawn any second now.';
-        let setting = args[0].notificationSettings.bradleyApcShouldRespawn;
-        if (setting.discord) {
-            args[0].sendEvent(str, setting.image);
-        }
-        if (setting.inGame) {
-            args[0].sendTeamMessage(`Event: ${str}`);
-        }
-        args[0].log(str);
-    },
+        args[0].sendEvent(
+            args[0].notificationSettings.bradleyApcShouldRespawn,
+            'Bradley APC should respawn any second now.');
+    }
 }

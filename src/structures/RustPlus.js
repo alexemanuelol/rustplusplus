@@ -76,7 +76,19 @@ class RustPlus extends RP {
         this.logger.log(text);
     }
 
-    sendEvent(text, image) {
+    sendEvent(setting, text, firstPoll = false, image = null) {
+        let img = (image !== null) ? image : setting.image;
+
+        if (!firstPoll && setting.discord) {
+            this.sendDiscordEvent(text, img)
+        }
+        if (!firstPoll && setting.inGame) {
+            this.sendTeamMessage(`Event: ${text}`);
+        }
+        this.log(text);
+    }
+
+    sendDiscordEvent(text, image) {
         let instance = Client.client.readInstanceFile(this.guildId);
         let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
 
