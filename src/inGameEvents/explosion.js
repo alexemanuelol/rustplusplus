@@ -49,7 +49,7 @@ module.exports = {
                         /* Patrol Helicopter just got downed */
                         let str = `Patrol Helicopter was taken down ${pos}.`;
                         if (rustplus.notificationSettings.patrolHelicopterDestroyed.discord) {
-                            rustplus.sendEvent(str, 'patrol_helicopter_logo.png');
+                            rustplus.sendEvent(str, 'patrol_helicopter_downed_logo.png');
                         }
                         if (rustplus.notificationSettings.patrolHelicopterDestroyed.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
@@ -60,7 +60,7 @@ module.exports = {
                         /* Bradley APC just got destroyed */
                         let str = 'Bradley APC was destroyed at Launch Site.';
                         if (rustplus.notificationSettings.bradleyApcDestroyed.discord) {
-                            rustplus.sendEvent(str, 'bradley_apc_logo.png');
+                            rustplus.sendEvent(str, 'bradley_apc_destroyed_logo.png');
                         }
                         if (rustplus.notificationSettings.bradleyApcDestroyed.inGame) {
                             rustplus.sendTeamMessage(`Event: ${str}`);
