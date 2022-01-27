@@ -36,6 +36,14 @@ module.exports = {
         }
         rustplus.bradleyRespawnTimers = new Object();
 
+        /* Reset dates */
+        rustplus.timeSinceCargoWasOut = null;
+        rustplus.timeSinceBradleyWasDestroyed = null;
+        rustplus.timeSinceHeliWasDestroyed = null;
+        rustplus.timeSinceHeliWasOnMap = null;
+        rustplus.timeSinceSmallOilRigWasTriggered = null;
+        rustplus.timeSinceLargeOilRigWasTriggered = null;
+
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);
 
