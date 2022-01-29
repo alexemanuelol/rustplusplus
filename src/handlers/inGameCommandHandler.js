@@ -43,7 +43,7 @@ module.exports = {
 
         if (timerCounter === 0) {
             if (rustplus.timeSinceBradleyWasDestroyed === null) {
-                strings.push('Bradley APC is probably roaming around in Launch Site.');
+                strings.push('Bradley APC is probably roaming around at Launch Site.');
             }
             else {
                 let secondsSince = (new Date() - rustplus.timeSinceBradleyWasDestroyed) / 1000;
@@ -59,30 +59,42 @@ module.exports = {
     },
 
     commandCargo: function (rustplus) {
-        let times = '';
+        let strings = [];
+        let unhandled = Object.keys(rustplus.activeCargoShips);
+        let numOfShips = unhandled.length;
+
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
+            unhandled = unhandled.filter(e => e != parseInt(id));
             let time = rustplus.getTimeLeftOfTimer(timer);
+            let pos = rustplus.activeCargoShips[parseInt(id)].location;
 
             if (time !== null) {
-                if (times === '') {
-                    times += time;
-                }
-                else {
-                    times += ` and ${time}`;
-                }
+                strings.push(`Approximately ${time} before Cargo Ship at ${pos} enters egress stage.`);
             }
         }
 
-        let str;
-        if (times === '') {
-            str = 'Cargo Ship is not currently active.';
-        }
-        else {
-            str = `Approximately ${times} before Cargo Ship enters egress stage.`;
+        if (unhandled !== []) {
+            for (let cargoShip of unhandled) {
+                let pos = rustplus.activeCargoShips[cargoShip].location;
+                strings.push(`Cargo Ship is located at ${pos}.`);
+            }
         }
 
-        rustplus.sendTeamMessage(str);
-        rustplus.log(str);
+        if (numOfShips === 0) {
+            if (rustplus.timeSinceCargoWasOut === null) {
+                strings.push('Cargo Ship is currently not on the map.');
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceCargoWasOut) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSince} since the last Cargo Ship left.`)
+            }
+        }
+
+        for (let str of strings) {
+            rustplus.sendTeamMessage(str);
+            rustplus.log(str);
+        }
     },
 
     commandLeader: function (rustplus, message) {
