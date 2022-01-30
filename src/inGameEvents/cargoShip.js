@@ -110,9 +110,9 @@ module.exports = {
             args[0].notificationSettings.cargoShipEgress,
             `Cargo Ship should be in the egress stage at ${pos}.`);
 
-        if (args[0].cargoShipEgressTimers[parseInt(id)]) {
-            args[0].cargoShipEgressTimers[parseInt(id)].stop();
-            delete args[0].cargoShipEgressTimers[parseInt(id)];
+        if (args[0].cargoShipEgressTimers[args[1]]) {
+            args[0].cargoShipEgressTimers[args[1]].stop();
+            delete args[0].cargoShipEgressTimers[args[1]];
         }
     }
 }
