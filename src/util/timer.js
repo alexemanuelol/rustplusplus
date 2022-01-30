@@ -94,8 +94,12 @@ module.exports = {
     },
 
     getSecondsFromStringTime: function (stringTime) {
-        let matches = stringTime.match(/\d+\w/g);
+        let matches = stringTime.match(/\d+[dhms]/g);
         let totalSeconds = 0;
+
+        if (matches === null) {
+            return null;
+        }
 
         for (let time of matches) {
             let value = parseInt(time.slice(0, -1));
