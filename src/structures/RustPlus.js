@@ -46,6 +46,7 @@ class RustPlus extends RP {
         this.lockedCrateDespawnTimers = new Object();
         this.lockedCrateDespawnWarningTimers = new Object();
         this.bradleyRespawnTimers = new Object();
+        this.timers = new Object();
 
         /* Event dates */
         this.timeSinceCargoWasOut = null;

@@ -176,24 +176,91 @@ module.exports = {
     },
 
     commandTimer: function (rustplus, command) {
-        let arguments = command.replace('!timer ', '');
-        let minutes = arguments.match(/^\d+/);
-        if (minutes === null) {
-            rustplus.sendTeamMessage('Invalid arguments, use syntax: !timer {minutes} {message}');
-            rustplus.log('Invalid arguments, use syntax: !timer {minutes} {message}');
+        if (!command.startsWith('!timer ')) {
             return;
         }
 
-        minutes = Number(minutes);
-        let message = arguments.slice((minutes.toString().length) + 1);
+        command = command.replace('!timer ', '');
+        let subcommand = command.replace(/ .*/, '');
+        command = command.slice(subcommand.length + 1);
 
-        setTimeout(() => {
-            rustplus.sendTeamMessage(`Timer: ${message}`);
-            rustplus.log(`Timer: ${message}`);
-        }, minutes * 60 * 1000);
+        if (subcommand !== 'remain' && command === '') {
+            return;
+        }
 
-        rustplus.sendTeamMessage(`Timer set for ${minutes} minutes.`);
-        rustplus.log(`Timer set for ${minutes} minutes.`);
+        let id;
+        switch (subcommand) {
+            case 'add':
+                let time = command.replace(/ .*/, '');
+                let timeSeconds = Timer.getSecondsFromStringTime(time);
+                if (timeSeconds === null) {
+                    return;
+                }
+
+                id = 0;
+                while (Object.keys(rustplus.timers).map(Number).includes(id)) {
+                    id += 1;
+                }
+
+                let message = command.slice(time.length + 1);
+                if (message === "") {
+                    return;
+                }
+
+                rustplus.timers[id] = {
+                    timer: new Timer.timer(
+                        () => {
+                            rustplus.sendTeamMessage(`Timer: ${message}`);
+                            rustplus.log(`Timer: ${message}`);
+                            delete rustplus.timers[id]
+                        },
+                        timeSeconds * 1000),
+                    message: message
+                };
+                rustplus.timers[id].timer.start();
+
+                rustplus.sendTeamMessage(`Timer set for ${time}.`);
+                rustplus.log(`Timer set for ${time}.`);
+                break;
+
+            case 'remove':
+                id = parseInt(command.replace(/ .*/, ''));
+                if (id === 'NaN') {
+                    return;
+                }
+
+                if (!Object.keys(rustplus.timers).map(Number).includes(id)) {
+                    return;
+                }
+
+                rustplus.timers[id].timer.stop();
+                delete rustplus.timers[id];
+
+                rustplus.sendTeamMessage(`Timer with ID: ${id} was removed.`);
+                rustplus.log(`Timer with ID: ${id} was removed.`);
+
+                break;
+
+            case 'remain':
+                if (Object.keys(rustplus.timers).length === 0) {
+                    rustplus.sendTeamMessage('No active timers.');
+                    rustplus.log('No active timers');
+                }
+                else {
+                    rustplus.sendTeamMessage('Active timers:');
+                    rustplus.log('Active timers:');
+                }
+                for (const [id, content] of Object.entries(rustplus.timers)) {
+                    let timeLeft = rustplus.getTimeLeftOfTimer(content.timer);
+                    let str = `- ID: ${parseInt(id)}, Time left: ${timeLeft}, Message: ${content.message}`;
+                    rustplus.sendTeamMessage(str);
+                    rustplus.log(str);
+                }
+                break;
+
+            default:
+                break;
+        }
     },
 
     commandWipe: function (rustplus) {

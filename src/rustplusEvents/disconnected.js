@@ -36,6 +36,11 @@ module.exports = {
         }
         rustplus.bradleyRespawnTimers = new Object();
 
+        for (const [id, timer] of Object.entries(rustplus.timers)) {
+            timer.stop();
+        }
+        rustplus.timers = new Object();
+
         /* Reset dates */
         rustplus.timeSinceCargoWasOut = null;
         rustplus.timeSinceBradleyWasDestroyed = null;

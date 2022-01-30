@@ -92,4 +92,35 @@ module.exports = {
 
         return `${hours}:${minutes}`;
     },
+
+    getSecondsFromStringTime: function (stringTime) {
+        let matches = stringTime.match(/\d+\w/g);
+        let totalSeconds = 0;
+
+        for (let time of matches) {
+            let value = parseInt(time.slice(0, -1));
+            switch (time[time.length - 1]) {
+                case 'd': /* Days */
+                    totalSeconds += value * 24 * 60 * 60;
+                    break;
+
+                case 'h': /* Hours */
+                    totalSeconds += value * 60 * 60;
+                    break;
+
+                case 'm': /* Minutes */
+                    totalSeconds += value * 60;
+                    break;
+
+                case 's': /* Seconds */
+                    totalSeconds += value;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        return totalSeconds;
+    },
 }
