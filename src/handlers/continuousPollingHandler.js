@@ -6,9 +6,8 @@ const PatrolHelicopter = require('../inGameEvents/patrolHelicopter.js');
 const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
 module.exports = {
-    inGameEventHandler: function (rustplus, client) {
-        //console.log('Pull information: server info, map markers, team info and time.');
-
+    continuousPollingHandler: function (rustplus, client) {
+        /* Continuous polling of server info, map markers, team info and time. */
         rustplus.getInfo((info) => {
             rustplus.getMapMarkers((mapMarkers) => {
                 rustplus.getTeamInfo((teamInfo) => {
@@ -22,8 +21,7 @@ module.exports = {
     },
 
     checkEvents: function (rustplus, client, info, mapMarkers, teamInfo, time) {
-        //console.log('Check in-game events.');
-
+        /* Check in-game events */
         CargoShip.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         PatrolHelicopter.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         Explosion.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);

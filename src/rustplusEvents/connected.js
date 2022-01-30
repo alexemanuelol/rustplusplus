@@ -1,4 +1,4 @@
-const InGameEventHandler = require('../handlers/inGameEventHandler.js');
+const PollingHandler = require('../handlers/continuousPollingHandler.js');
 
 module.exports = {
     name: 'connected',
@@ -20,7 +20,7 @@ module.exports = {
             rustplus.mapMonuments = map.response.map.monuments;
 
             /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
-            rustplus.intervalId = setInterval(InGameEventHandler.inGameEventHandler, 10000, rustplus, client);
+            rustplus.intervalId = setInterval(PollingHandler.continuousPollingHandler, 10000, rustplus, client);
         });
     },
 };
