@@ -165,9 +165,28 @@ module.exports = {
     commandTime: function (rustplus) {
         rustplus.getTime((msg) => {
             if (msg.response.hasOwnProperty('time')) {
+                const rawTime = parseFloat(msg.response.time.time.toFixed(2));
+                const sunrise = parseFloat(msg.response.time.sunrise.toFixed(2));
+                const sunset = parseFloat(msg.response.time.sunset.toFixed(2));
                 const time = Timer.convertToHoursMinutes(msg.response.time.time);
+                let str = `In-Game time: ${time}.`;
 
-                let str = `Current in-game time: ${time}.`;
+                if (rustplus.time24HoursPassed) {
+                    if (rawTime >= sunrise && rawTime < sunset) {
+                        /* It's Day */
+                        let closestTime = getValueOfClosestInObject(rawTime, rustplus.timeTillNight);
+                        let timeLeft = Timer.secondsToFullScale(closestTime);
+
+                        str += ` Approximately ${timeLeft} before nightfall.`;
+                    }
+                    else {
+                        /* It's Night */
+                        let closestTime = getValueOfClosestInObject(rawTime, rustplus.timeTillDay);
+                        let timeLeft = Timer.secondsToFullScale(closestTime);
+
+                        str += ` Approximately ${timeLeft} before daybreak.`;
+                    }
+                }
 
                 rustplus.sendTeamMessage(str);
                 rustplus.log(str);
@@ -286,4 +305,26 @@ function promoteToLeader(rustplus, steamId) {
             steamId: steamId
         },
     }, 2000);
+}
+
+function getValueOfClosestInObject(time, object) {
+    let distance = 24;
+    let closestTime = 0;
+
+    for (const [id, value] of Object.entries(object)) {
+        if (parseFloat(id) < time) {
+            if ((time - parseFloat(id)) < distance) {
+                distance = time - parseFloat(id);
+                closestTime = value;
+            }
+        }
+        else {
+            if ((parseFloat(id) - time) < distance) {
+                distance = parseFloat(id) - time;
+                closestTime = value;
+            }
+        }
+    }
+
+    return closestTime;
 }

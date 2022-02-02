@@ -56,6 +56,15 @@ class RustPlus extends RP {
         this.timeSinceSmallOilRigWasTriggered = null;
         this.timeSinceLargeOilRigWasTriggered = null;
 
+        /* Time variables */
+        this.time24HoursPassed = false;
+        this.passedFirstSunriseOrSunset = false;
+        this.startTime = null;
+        this.previousTime = null;
+        this.startTimeObject = new Object();
+        this.timeTillDay = new Object();
+        this.timeTillNight = new Object();
+
         /* Load rustplus events */
         this.loadEvents();
     }

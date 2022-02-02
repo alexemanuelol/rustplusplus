@@ -5,6 +5,8 @@ const OilRig = require('../inGameEvents/oilRig.js');
 const PatrolHelicopter = require('../inGameEvents/patrolHelicopter.js');
 const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
+const Time = require('../inGameEvents/time.js');
+
 module.exports = {
     continuousPollingHandler: function (rustplus, client) {
         /* Continuous polling of server info, map markers, team info and time. */
@@ -28,5 +30,9 @@ module.exports = {
         LockedCrate.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         OilRig.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         VendingMachine.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
+
+        if (!rustplus.time24HoursPassed) {
+            Time.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
+        }
     },
 };

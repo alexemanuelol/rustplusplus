@@ -5,6 +5,8 @@ module.exports = {
 
         let instance = client.readInstanceFile(rustplus.guildId);
 
+        rustplus.firstPoll = true;
+
         /* Stop all timers */
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
             timer.stop();
@@ -48,6 +50,15 @@ module.exports = {
         rustplus.timeSinceHeliWasOnMap = null;
         rustplus.timeSinceSmallOilRigWasTriggered = null;
         rustplus.timeSinceLargeOilRigWasTriggered = null;
+
+        /* Reset time variables */
+        rustplus.time24HoursPassed = false;
+        rustplus.passedFirstSunriseOrSunset = false;
+        rustplus.startTime = null;
+        rustplus.previousTime = null;
+        rustplus.startTimeObject = new Object();
+        rustplus.timeTillDay = new Object();
+        rustplus.timeTillNight = new Object();
 
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);
