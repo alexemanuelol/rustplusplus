@@ -57,11 +57,14 @@ module.exports = {
                 return;
             }
         }
+        let start = rustplus.startTime;
+        let prev = rustplus.previousTime;
+        let a = time > start && prev < start && time > prev;
+        let b = time < start && prev < start && time < prev;
+        let c = time > start && prev > start && time < prev;
 
         /* If 24 hours in-game time have passed */
-        if ((time > rustplus.startTime && rustplus.previousTime < rustplus.startTime) ||
-            (time > rustplus.startTime && rustplus.previousTime > time) ||
-            (time < rustplus.previousTime && rustplus.startTime > rustplus.previousTime)) {
+        if (a || b || c) {
             rustplus.time24HoursPassed = true;
 
             /* Merge startTimeObject with correct object */
