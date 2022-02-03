@@ -1,6 +1,10 @@
 const { MessageEmbed } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
+const ValidUrl = require('valid-url');
+
+const DEFAULT_URL = 'https://rust.facepunch.com/';
+const DEFAULT_IMG = 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg';
 
 module.exports = async (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
@@ -43,8 +47,8 @@ module.exports = async (client, guild) => {
                                 steamId: body.playerId,
                                 playerToken: body.playerToken,
                                 description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
-                                img: body.img,
-                                url: body.url
+                                img: ValidUrl.isUri(body.img) ? body.img : DEFAULT_IMG,
+                                url: ValidUrl.isUri(body.url) ? body.url : DEFAULT_URL
                             };
                             client.writeInstanceFile(guild.id, instance);
 
@@ -57,7 +61,7 @@ module.exports = async (client, guild) => {
                             let row = DiscordTools.getServerButtonsRow(
                                 customId,
                                 (instance.serverList[customId].active) ? 1 : 0,
-                                body.url);
+                                instance.serverList[customId].url);
 
                             if (exist) {
                                 client.serverListMessages[guild.id][customId].edit({
