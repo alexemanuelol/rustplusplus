@@ -12,9 +12,6 @@ module.exports = {
 
     checkNewPatrolHelicopterDetected: function (rustplus, mapMarkers, info) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
-            if (marker.type > 6 || marker.type < 1) {
-                console.log(`New Heli map marker type?: ${marker.type}`);
-            }
             if (marker.type === RustPlusTypes.MarkerType.PatrolHelicopter) {
                 let mapSize = info.response.info.mapSize;
                 let outsidePos = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);

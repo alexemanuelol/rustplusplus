@@ -7,7 +7,7 @@ module.exports = {
         CargoShip: 5,
         LockedCrate: 6,
         GenericRadius: 7,
-        PatrolHelicopter: 99
+        PatrolHelicopter: 8
     },
 
 }
