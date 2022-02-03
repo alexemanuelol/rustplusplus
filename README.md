@@ -57,6 +57,16 @@ Run the following commands to retrieve credential data (starting from repository
 
 This will open up an instance of **Google Chrome** where you need to login with your Steam Account to get access to Rust+ credentials. Once the login is successful, you will be given a **Discord Slash Command** string (/credential set) that you shall copy and then run in your Discord Server Text Channel. Which Text Channel you run the Slash Command is not important, as long as the bot has access to it.
 
+## How to update the repository (If it does not work, re-clone the repository)
+Most of the time it should be possible to run the simple command:
+
+    $ git stash && git pull --rebase && git stash pop
+
+If it complains about it not having any local changes to save, just run the following command:
+
+    $ git pull --rebase
+
+
 # TODO
 
 ## Discord commands
