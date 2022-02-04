@@ -1,4 +1,5 @@
 {
     "connect": true,
-    "prefix": "!"
+    "prefix": "!",
+    "botchatprefix": "on"
 }

@@ -33,6 +33,20 @@ async function setupGeneralSettings(instance, channel) {
             new MessageAttachment('src/images/settings_logo.png')
         ]
     })
+    await channel.send({
+        embeds: [
+            new MessageEmbed()
+                .setColor('#861c0c')
+                .setTitle('Should a prefix be added to all messages sent by the bot?')
+                .setThumbnail(`attachment://settings_logo.png`)
+        ],
+        components: [
+            DiscordTools.getBotChatPrefixSelectMenu(instance.generalSettings.botchatprefix)
+        ],
+        files: [
+            new MessageAttachment('src/images/settings_logo.png')
+        ]
+    })
 }
 
 async function setupNotificationSettings(instance, channel) {

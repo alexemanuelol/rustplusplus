@@ -10,7 +10,12 @@ const DiscordTools = require('../discordTools/discordTools.js');
 class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
+        this.oldsendTeamMessage = this.sendTeamMessage;
+        this.sendTeamMessage = function (message) {
+            let generalSettings = this.generalSettings || { botchatprefix: "On" };
 
+            this.oldsendTeamMessage(`${generalSettings.botchatprefix == "On" ? `rustPlusPlus | ` : ""} ${message}`);
+        }
         this.guildId = guildId;
 
         this.logger = null;
