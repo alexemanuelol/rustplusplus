@@ -16,7 +16,6 @@ module.exports = (client, interaction) => {
             let row = DiscordTools.getPrefixSelectMenu(interaction.values[0]);
             interaction.update({ components: [row] });
             break;
-
         default:
             break;
     }

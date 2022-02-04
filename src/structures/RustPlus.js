@@ -10,7 +10,10 @@ const DiscordTools = require('../discordTools/discordTools.js');
 class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
-
+        this.oldsendTeamMessage = this.sendTeamMessage;
+        this.sendTeamMessage = function (message) {
+            this.oldsendTeamMessage(`rustPlusPlus | ${message}`);
+        }
         this.guildId = guildId;
 
         this.logger = null;
@@ -57,7 +60,6 @@ class RustPlus extends RP {
         this.timeSinceLargeOilRigWasTriggered = null;
 
         /* Time variables */
-        this.time24HoursPassed = false;
         this.passedFirstSunriseOrSunset = false;
         this.startTime = null;
         this.previousTime = null;
@@ -116,7 +118,9 @@ class RustPlus extends RP {
                 .setColor('#ce412b')
                 .setThumbnail(`attachment://${image}`)
                 .setTitle(text)
-                .setFooter(instance.serverList[`${this.server}-${this.port}`].title)
+                .setFooter({
+                    text: instance.serverList[`${this.server}-${this.port}`].title
+                })
                 .setTimestamp();
 
             channel.send({ embeds: [embed], files: [file] });

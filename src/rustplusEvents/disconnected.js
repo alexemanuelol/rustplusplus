@@ -52,7 +52,6 @@ module.exports = {
         rustplus.timeSinceLargeOilRigWasTriggered = null;
 
         /* Reset time variables */
-        rustplus.time24HoursPassed = false;
         rustplus.passedFirstSunriseOrSunset = false;
         rustplus.startTime = null;
         rustplus.previousTime = null;

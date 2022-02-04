@@ -18,7 +18,7 @@ module.exports = {
             module.exports.commandPop(rustplus);
         }
         else if (command === `${rustplus.generalSettings.prefix}time`) {
-            module.exports.commandTime(rustplus);
+            module.exports.commandTime(rustplus, client);
         }
         else if (command.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
@@ -162,7 +162,7 @@ module.exports = {
         });
     },
 
-    commandTime: function (rustplus) {
+    commandTime: function (rustplus, client) {
         rustplus.getTime((msg) => {
             if (msg.response.hasOwnProperty('time')) {
                 const rawTime = parseFloat(msg.response.time.time.toFixed(2));
@@ -171,17 +171,21 @@ module.exports = {
                 const time = Timer.convertToHoursMinutes(msg.response.time.time);
                 let str = `In-Game time: ${time}.`;
 
-                if (rustplus.time24HoursPassed) {
+                let instance = client.readInstanceFile(rustplus.guildId);
+                let server = `${rustplus.server}-${rustplus.port}`;
+
+                if (instance.serverList[server].timeTillDay !== null &&
+                    instance.serverList[server].timeTillNight !== null) {
                     if (rawTime >= sunrise && rawTime < sunset) {
                         /* It's Day */
-                        let closestTime = getValueOfClosestInObject(rawTime, rustplus.timeTillNight);
+                        let closestTime = getValueOfClosestInObject(rawTime, instance.serverList[server].timeTillNight);
                         let timeLeft = Timer.secondsToFullScale(closestTime);
 
                         str += ` Approximately ${timeLeft} before nightfall.`;
                     }
                     else {
                         /* It's Night */
-                        let closestTime = getValueOfClosestInObject(rawTime, rustplus.timeTillDay);
+                        let closestTime = getValueOfClosestInObject(rawTime, instance.serverList[server].timeTillDay);
                         let timeLeft = Timer.secondsToFullScale(closestTime);
 
                         str += ` Approximately ${timeLeft} before daybreak.`;
