@@ -3,10 +3,10 @@ const _ = require('lodash');
 module.exports = {
     checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check current time and update time variables */
-        module.exports.updateTimeVariables(rustplus, time);
+        module.exports.updateTimeVariables(rustplus, client, time);
     },
 
-    updateTimeVariables: function (rustplus, time) {
+    updateTimeVariables: function (rustplus, client, time) {
         const sunrise = parseFloat(time.response.time.sunrise.toFixed(2));
         const sunset = parseFloat(time.response.time.sunset.toFixed(2));
         time = parseFloat(time.response.time.time.toFixed(2));
@@ -29,6 +29,7 @@ module.exports = {
         if (distance > 1) {
             /* Too big of a jump for a normal server, might have been a skip night server */
             rustplus.log(`Invalid time: distance: ${distance}, previous: ${rustplus.previousTime}, time: ${time}`);
+            rustplus.passedFirstSunriseOrSunset = false;
             rustplus.startTime = time;
             rustplus.previousTime = time;
             rustplus.startTimeObject = new Object();
@@ -57,6 +58,7 @@ module.exports = {
                 return;
             }
         }
+
         let start = rustplus.startTime;
         let prev = rustplus.previousTime;
         let a = time > start && prev < start && time > prev;
@@ -65,8 +67,6 @@ module.exports = {
 
         /* If 24 hours in-game time have passed */
         if (a || b || c) {
-            rustplus.time24HoursPassed = true;
-
             /* Merge startTimeObject with correct object */
             let highestValue = 0;
             for (let id of Object.keys(rustplus.startTimeObject)) {
@@ -89,6 +89,13 @@ module.exports = {
 
                 rustplus.timeTillDay = _.merge(rustplus.startTimeObject, rustplus.timeTillDay);
             }
+
+            let instance = client.readInstanceFile(rustplus.guildId);
+            let server = `${rustplus.server}-${rustplus.port}`;
+
+            instance.serverList[server].timeTillDay = rustplus.timeTillDay;
+            instance.serverList[server].timeTillNight = rustplus.timeTillNight;
+            client.writeInstanceFile(rustplus.guildId, instance);
 
             rustplus.log('24 Successful Hours in-game time have passed.');
             return;

@@ -31,7 +31,10 @@ module.exports = {
         OilRig.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         VendingMachine.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
 
-        if (!rustplus.time24HoursPassed) {
+        let instance = client.readInstanceFile(rustplus.guildId);
+        let server = `${rustplus.server}-${rustplus.port}`;
+
+        if (instance.serverList[server].timeTillDay === null && instance.serverList[server].timeTillNight == null) {
             Time.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         }
     },

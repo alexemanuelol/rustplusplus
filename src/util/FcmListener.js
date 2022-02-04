@@ -48,7 +48,9 @@ module.exports = async (client, guild) => {
                                 playerToken: body.playerToken,
                                 description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
                                 img: ValidUrl.isUri(body.img) ? body.img : DEFAULT_IMG,
-                                url: ValidUrl.isUri(body.url) ? body.url : DEFAULT_URL
+                                url: ValidUrl.isUri(body.url) ? body.url : DEFAULT_URL,
+                                timeTillDay: null,
+                                timeTillNight: null
                             };
                             client.writeInstanceFile(guild.id, instance);
 
