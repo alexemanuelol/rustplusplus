@@ -1,7 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
-const ValidUrl = require('valid-url');
 
 const DEFAULT_URL = 'https://rust.facepunch.com/';
 const DEFAULT_IMG = 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg';
@@ -47,8 +46,8 @@ module.exports = async (client, guild) => {
                                 steamId: body.playerId,
                                 playerToken: body.playerToken,
                                 description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
-                                img: ValidUrl.isUri(body.img) ? body.img : DEFAULT_IMG,
-                                url: ValidUrl.isUri(body.url) ? body.url : DEFAULT_URL,
+                                img: isValidUrl(body.img) ? body.img : DEFAULT_IMG,
+                                url: isValidUrl(body.url) ? body.url : DEFAULT_URL,
                                 timeTillDay: null,
                                 timeTillNight: null
                             };
@@ -153,3 +152,10 @@ module.exports = async (client, guild) => {
             }
         });
 };
+
+function isValidUrl(url) {
+    if (url.startsWith('https') || url.startsWith('http')) {
+        return true;
+    }
+    return false;
+}

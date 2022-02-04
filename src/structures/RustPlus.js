@@ -12,9 +12,7 @@ class RustPlus extends RP {
         super(serverIp, appPort, steamId, playerToken);
         this.oldsendTeamMessage = this.sendTeamMessage;
         this.sendTeamMessage = function (message) {
-            let generalSettings = this.generalSettings || { botchatprefix: "On" };
-
-            this.oldsendTeamMessage(`${generalSettings.botchatprefix == "On" ? `rustPlusPlus | ` : ""} ${message}`);
+            this.oldsendTeamMessage(`rustPlusPlus | ${message}`);
         }
         this.guildId = guildId;
 
@@ -120,7 +118,9 @@ class RustPlus extends RP {
                 .setColor('#ce412b')
                 .setThumbnail(`attachment://${image}`)
                 .setTitle(text)
-                .setFooter(instance.serverList[`${this.server}-${this.port}`].title)
+                .setFooter({
+                    text: instance.serverList[`${this.server}-${this.port}`].title
+                })
                 .setTimestamp();
 
             channel.send({ embeds: [embed], files: [file] });

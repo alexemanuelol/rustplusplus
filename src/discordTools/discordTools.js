@@ -124,28 +124,6 @@ module.exports = {
             );
     },
 
-    getBotChatPrefixSelectMenu: function (currentPrefix) {
-        return new MessageActionRow()
-            .addComponents(
-                new MessageSelectMenu()
-                    .setCustomId('botchatprefix')
-                    .setPlaceholder(`Current Status: ${currentPrefix}`)
-                    .addOptions([
-                        {
-                            label: 'On',
-                            description: 'Put a prefix infront of all bot sent team chat messages.',
-                            value: 'On',
-                        },
-                        {
-                            label: 'Off',
-                            description: 'Have no prefix infront of bot sent team chat messages.',
-                            value: 'Off',
-                        }
-                    ])
-            );
-    },
-
-
     getServerButtonsRow: function (ipPort, state, url) {
         let customId = null;
         let label = null;
