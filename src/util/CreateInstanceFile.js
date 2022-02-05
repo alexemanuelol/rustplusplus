@@ -8,6 +8,7 @@ module.exports = (client, guild) => {
 
     if (!fs.existsSync(`${__dirname}/../instances/${guild.id}.json`)) {
         fs.writeFileSync(`${__dirname}/../instances/${guild.id}.json`, JSON.stringify({
+            firstTime: true,
             generalSettings: client.readGeneralSettingsTemplate(),
             notificationSettings: client.readNotificationSettingsTemplate(),
             channelId: {

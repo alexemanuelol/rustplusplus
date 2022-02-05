@@ -10,10 +10,16 @@ module.exports = async (client, guild) => {
         return;
     }
 
-    DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
+    if (instance.firstTime) {
+        DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
-    await setupGeneralSettings(instance, channel);
-    await setupNotificationSettings(instance, channel);
+        await setupGeneralSettings(instance, channel);
+        await setupNotificationSettings(instance, channel);
+
+        instance.firstTime = false;
+        client.writeInstanceFile(guild.id, instance);
+    }
+
 };
 
 async function setupGeneralSettings(instance, channel) {
