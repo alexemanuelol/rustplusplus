@@ -2,11 +2,15 @@ const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.
 const Client = require('../../index.js');
 
 module.exports = {
+    getGuild: function (guildId) {
+        return Client.client.guilds.cache.get(guildId);
+    },
+
     getTextChannelById: function (guildId, channelId) {
-        let guild = Client.client.guilds.cache.get(guildId);
+        const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            let channel = guild.channels.cache.get(channelId);
+            const channel = guild.channels.cache.get(channelId);
 
             if (channel && channel.type === 'GUILD_TEXT') {
                 return channel;
@@ -16,10 +20,10 @@ module.exports = {
     },
 
     getTextChannelByName: function (guildId, name) {
-        let guild = Client.client.guilds.cache.get(guildId);
+        const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            let channel = guild.channels.cache.find(c => c.name === name);
+            const channel = guild.channels.cache.find(c => c.name === name);
 
             if (channel && channel.type === 'GUILD_TEXT') {
                 return channel;
@@ -29,7 +33,7 @@ module.exports = {
     },
 
     getCategoryById: function (guildId, categoryId) {
-        let guild = Client.client.guilds.cache.get(guildId);
+        let guild = module.exports.getGuild(guildId);
 
         if (guild) {
             let category = guild.channels.cache.get(categoryId);
@@ -42,10 +46,10 @@ module.exports = {
     },
 
     getCategoryByName: function (guildId, name) {
-        let guild = Client.client.guilds.cache.get(guildId);
+        const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            let category = guild.channels.cache.find(c => c.name === name);
+            const category = guild.channels.cache.find(c => c.name === name);
 
             if (category && category.type === 'GUILD_CATEGORY') {
                 return category;
@@ -55,7 +59,7 @@ module.exports = {
     },
 
     addCategory: function (guildId, name) {
-        let guild = Client.client.guilds.cache.get(guildId);
+        const guild = module.exports.getGuild(guildId);
 
         if (guild) {
             return guild.channels.create(name, { type: 'GUILD_CATEGORY' });
@@ -63,7 +67,7 @@ module.exports = {
     },
 
     addTextChannel: function (guildId, name) {
-        let guild = Client.client.guilds.cache.get(guildId);
+        const guild = module.exports.getGuild(guildId);
 
         if (guild) {
             return guild.channels.create(name, { type: 'GUILD_TEXT' });
@@ -71,7 +75,7 @@ module.exports = {
     },
 
     clearTextChannel: function (guildId, channelId, numberOfMessages) {
-        let channel = module.exports.getTextChannelById(guildId, channelId);
+        const channel = module.exports.getTextChannelById(guildId, channelId);
 
         if (channel) {
             for (let messagesLeft = numberOfMessages; messagesLeft > 0; messagesLeft -= 100) {

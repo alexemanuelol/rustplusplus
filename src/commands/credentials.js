@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const _ = require('lodash');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -101,7 +102,7 @@ module.exports = {
                 client.writeInstanceFile(interaction.guildId, instance);
 
                 /* Start Fcm Listener */
-                require('../util/FcmListener')(client, client.guilds.cache.get(interaction.guildId));
+                require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
 
                 interaction.reply({
                     content: 'Credentials were set successfully!',
