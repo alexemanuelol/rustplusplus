@@ -115,7 +115,9 @@ class RustPlus extends RP {
                 .setColor('#ce412b')
                 .setThumbnail(`attachment://${image}`)
                 .setTitle(text)
-                .setFooter(instance.serverList[`${this.server}-${this.port}`].title)
+                .setFooter({
+                    text: instance.serverList[`${this.server}-${this.port}`].title
+                })
                 .setTimestamp();
 
             channel.send({ embeds: [embed], files: [file] });

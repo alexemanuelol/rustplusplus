@@ -25,7 +25,6 @@
         "rustplus.js": "github:liamcottle/rustplus.js",
         "winston": "^3.3.3",
         "push-receiver": "^2.1.1",
-        "lodash": "^4.0.0",
-        "valid-url": "^1.0.9"
+        "lodash": "^4.0.0"
     }
 }
