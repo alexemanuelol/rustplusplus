@@ -13,6 +13,11 @@ class RustPlus extends RP {
 
         this.guildId = guildId;
 
+        this.oldsendTeamMessage = this.sendTeamMessage;
+        this.sendTeamMessage = function (message) {
+            this.oldsendTeamMessage(`rustPlusPlus | ${message}`);
+        }
+
         this.logger = null;
         this.firstPoll = true;
         this.generalSettings = null;
