@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageSelectMenu, Permissions } = require('discord.js');
 const Client = require('../../index.js');
 
 module.exports = {
@@ -62,7 +62,13 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            return guild.channels.create(name, { type: 'GUILD_CATEGORY' });
+            return guild.channels.create(name, {
+                type: 'GUILD_CATEGORY',
+                permissionOverwrites: [{
+                    id: guild.roles.everyone.id,
+                    deny: [Permissions.FLAGS.SEND_MESSAGES]
+                }]
+            });
         }
     },
 
@@ -70,7 +76,13 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            return guild.channels.create(name, { type: 'GUILD_TEXT' });
+            return guild.channels.create(name, {
+                type: 'GUILD_TEXT',
+                permissionOverwrites: [{
+                    id: guild.roles.everyone.id,
+                    deny: [Permissions.FLAGS.SEND_MESSAGES]
+                }],
+            });
         }
     },
 
