@@ -11,6 +11,9 @@ module.exports = {
         else if (command === `${rustplus.generalSettings.prefix}cargo`) {
             module.exports.commandCargo(rustplus);
         }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}heli`)) {
+            module.exports.commandHeli(rustplus);
+        }
         else if (command.startsWith(`${rustplus.generalSettings.prefix}leader`)) {
             module.exports.commandLeader(rustplus, message);
         }
@@ -48,7 +51,7 @@ module.exports = {
             else {
                 let secondsSince = (new Date() - rustplus.timeSinceBradleyWasDestroyed) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince);
-                strings.push(`It was ${timeSince} since Bradley APC last got destroyed.`)
+                strings.push(`It was ${timeSince} since Bradley APC got destroyed.`)
             }
         }
 
@@ -87,7 +90,43 @@ module.exports = {
             else {
                 let secondsSince = (new Date() - rustplus.timeSinceCargoWasOut) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince);
-                strings.push(`It was ${timeSince} since the last Cargo Ship left.`)
+                strings.push(`It was ${timeSince} since Cargo Ship left.`)
+            }
+        }
+
+        for (let str of strings) {
+            rustplus.sendTeamMessage(str);
+            rustplus.log('COMMAND', str);
+        }
+    },
+    commandHeli: function (rustplus) {
+        let strings = [];
+
+        let heliCounter = 0;
+        for (const [id, content] of Object.entries(rustplus.activePatrolHelicopters)) {
+            heliCounter += 1;
+            strings.push(`Patrol Helicopter is located at ${content.location}.`);
+        }
+
+        if (heliCounter === 0) {
+            if (rustplus.timeSinceHeliWasOnMap === null &&
+                rustplus.timeSinceHeliWasDestroyed === null) {
+                strings.push('No current data on Patrol Helicopter.');
+            }
+            else if (rustplus.timeSinceHeliWasOnMap !== null &&
+                rustplus.timeSinceHeliWasDestroyed === null) {
+                let secondsSince = (new Date() - rustplus.timeSinceHeliWasOnMap) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSince} since the last Patrol Helicopter was on the map.`);
+            }
+            else if (rustplus.timeSinceHeliWasOnMap !== null &&
+                rustplus.timeSinceHeliWasDestroyed !== null) {
+                let secondsSince = (new Date() - rustplus.timeSinceHeliWasOnMap) / 1000;
+                let timeSinceOut = Timer.secondsToFullScale(secondsSince);
+                secondsSince = (new Date() - rustplus.timeSinceHeliWasDestroyed) / 1000;
+                let timeSinceDestroyed = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSinceOut} since Patrol Helicopter was on the map and ` +
+                    `${timeSinceDestroyed} since it got downed.`);
             }
         }
 

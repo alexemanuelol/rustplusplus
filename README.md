@@ -71,15 +71,14 @@ If it complains about it not having any local changes to save, just run the foll
 
 ## Discord commands
 - [x] /help command to display a help message
-- [ ] /reset command to reset rustplus instance for the guild
-- [ ] /resetchannels command to reset channels (Add missing channels etc...)
-- [ ] /setnotification command with all notifications as sub commands, boolean to set on or off
+- [x] /reset command to reset rustplus instance for the guild
 - [ ] /switch command with subcommands: add, remove, removeall, on, off. Set auto-ON, custom name.
 
 
 ## In-Game commands
 - [x] bradley, time before bradley should respawn
 - [x] cargo, time before cargo enters egress stage
+- [x] heli, time since heli got downed and since last time it was on map.
 - [x] leader, give team leadership
 - [x] pop, to get the current population of the server, max players and size of queue.
 - [x] time, to get the current time of the server.
