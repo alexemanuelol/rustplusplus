@@ -11,14 +11,20 @@ module.exports = {
         else if (command === `${rustplus.generalSettings.prefix}cargo`) {
             module.exports.commandCargo(rustplus);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}heli`)) {
+        else if (command === `${rustplus.generalSettings.prefix}heli`) {
             module.exports.commandHeli(rustplus);
+        }
+        else if (command === `${rustplus.generalSettings.prefix}large`) {
+            module.exports.commandLarge(rustplus);
         }
         else if (command.startsWith(`${rustplus.generalSettings.prefix}leader`)) {
             module.exports.commandLeader(rustplus, message);
         }
         else if (command === `${rustplus.generalSettings.prefix}pop`) {
             module.exports.commandPop(rustplus);
+        }
+        else if (command === `${rustplus.generalSettings.prefix}small`) {
+            module.exports.commandSmall(rustplus);
         }
         else if (command === `${rustplus.generalSettings.prefix}time`) {
             module.exports.commandTime(rustplus, client);
@@ -99,6 +105,7 @@ module.exports = {
             rustplus.log('COMMAND', str);
         }
     },
+
     commandHeli: function (rustplus) {
         let strings = [];
 
@@ -127,6 +134,37 @@ module.exports = {
                 let timeSinceDestroyed = Timer.secondsToFullScale(secondsSince);
                 strings.push(`It was ${timeSinceOut} since Patrol Helicopter was on the map and ` +
                     `${timeSinceDestroyed} since it got downed.`);
+            }
+        }
+
+        for (let str of strings) {
+            rustplus.sendTeamMessage(str);
+            rustplus.log('COMMAND', str);
+        }
+    },
+
+    commandLarge: function (rustplus) {
+        let strings = [];
+
+        let timerCounter = 0;
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateLargeOilRigTimers)) {
+            timerCounter += 1;
+            let time = rustplus.getTimeLeftOfTimer(timer);
+            let pos = rustplus.activeLockedCrates[parseInt(id)].location;
+
+            if (time !== null) {
+                strings.push(`Approximately ${time} before Locked Crate unlocks at Large Oil Rig at ${pos}.`);
+            }
+        }
+
+        if (timerCounter === 0) {
+            if (rustplus.timeSinceLargeOilRigWasTriggered === null) {
+                strings.push('No current data on Large Oil Rig.');
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceLargeOilRigWasTriggered) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSince} since Large Oil Rig last got triggered.`);
             }
         }
 
@@ -199,6 +237,37 @@ module.exports = {
                 rustplus.log('COMMAND', str);
             }
         });
+    },
+
+    commandSmall: function (rustplus) {
+        let strings = [];
+
+        let timerCounter = 0;
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateSmallOilRigTimers)) {
+            timerCounter += 1;
+            let time = rustplus.getTimeLeftOfTimer(timer);
+            let pos = rustplus.activeLockedCrates[parseInt(id)].location;
+
+            if (time !== null) {
+                strings.push(`Approximately ${time} before Locked Crate unlocks at Small Oil Rig at ${pos}.`);
+            }
+        }
+
+        if (timerCounter === 0) {
+            if (rustplus.timeSinceSmallOilRigWasTriggered === null) {
+                strings.push('No current data on Small Oil Rig.');
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceSmallOilRigWasTriggered) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSince} since Small Oil Rig last got triggered.`);
+            }
+        }
+
+        for (let str of strings) {
+            rustplus.sendTeamMessage(str);
+            rustplus.log('COMMAND', str);
+        }
     },
 
     commandTime: function (rustplus, client) {

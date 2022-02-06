@@ -60,7 +60,8 @@ module.exports = {
                                     module.exports.notifyLockedCrateSmallOpen,
                                     Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
                                     rustplus,
-                                    oilRigLocation);
+                                    oilRigLocation,
+                                    lockedCrateId);
                                 rustplus.lockedCrateSmallOilRigTimers[lockedCrateId].start();
                             }
 
@@ -92,7 +93,8 @@ module.exports = {
                                     module.exports.notifyLockedCrateLargeOpen,
                                     Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
                                     rustplus,
-                                    oilRigLocation);
+                                    oilRigLocation,
+                                    lockedCrateId);
                                 rustplus.lockedCrateLargeOilRigTimers[lockedCrateId].start();
                             }
 
@@ -168,6 +170,10 @@ module.exports = {
             `Locked Crate at Small Oil Rig at ${args[1]} has been unlocked.`,
             args[0].firstPoll,
             'locked_crate_small_oil_rig_logo.png');
+
+        if (args[0].lockedCrateSmallOilRigTimers.hasOwnProperty(args[2])) {
+            delete args[0].lockedCrateSmallOilRigTimers[args[2]]
+        }
     },
 
     notifyLockedCrateLargeOpen: function (args) {
@@ -176,5 +182,9 @@ module.exports = {
             `Locked Crate at Large Oil Rig at ${args[1]} has been unlocked.`,
             args[0].firstPoll,
             'locked_crate_large_oil_rig_logo.png');
+
+        if (args[0].lockedCrateLargeOilRigTimers.hasOwnProperty(args[2])) {
+            delete args[0].lockedCrateLargeOilRigTimers[args[2]]
+        }
     },
 }

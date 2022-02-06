@@ -84,8 +84,8 @@ If it complains about it not having any local changes to save, just run the foll
 - [x] time, to get the current time of the server.
 - [x] timer, set a custom timer
 - [x] wipe, to get the time since the wipe.
-- [ ] small, to get the time left before crate on small oilrig unlocks.
-- [ ] large, to get the time left before crate on large oilrig unlocks.
+- [x] small, to get the time left before crate on small oilrig unlocks.
+- [x] large, to get the time left before crate on large oilrig unlocks.
 
 
 ## Information Text Channel
