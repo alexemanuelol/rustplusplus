@@ -146,6 +146,18 @@ module.exports = async (client, guild) => {
                     }
                     break;
 
+                case 'news':
+                    switch (body.type) {
+                        case 'news':
+                            client.log(`${guild.id} news: news`);
+                            break;
+
+                        default:
+                            client.log(`${guild.id} news: other\n${JSON.stringify(full)}`);
+                            break;
+                    }
+                    break;
+
                 default:
                     client.log(`${guild.id} other\n${JSON.stringify(full)}`);
                     break;
