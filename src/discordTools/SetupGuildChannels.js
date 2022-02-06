@@ -68,4 +68,22 @@ function addMissingTextChannels(client, guildId, parent) {
     else {
         events.setParent(parent.id);
     }
+
+    let teamchat = undefined;
+    if (instance.channelId.teamchat !== null) {
+        teamchat = DiscordTools.getTextChannelById(guildId, instance.channelId.teamchat);
+    }
+    if (teamchat === undefined) {
+        DiscordTools.addTextChannel(guildId, 'teamchat').then(channel => {
+            channel.setParent(parent.id);
+            instance.channelId.teamchat = channel.id;
+            channel.permissionOverwrites.edit(channel.guild.roles.everyone.id, {
+                SEND_MESSAGES: true
+            })
+            client.writeInstanceFile(guildId, instance);
+        });
+    }
+    else {
+        teamchat.setParent(parent.id);
+    }
 }
