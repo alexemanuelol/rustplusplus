@@ -32,7 +32,7 @@ module.exports = async (client, guild) => {
                 case 'pairing':
                     switch (body.type) {
                         case 'server':
-                            client.log(`${guild.id} pairing: server`);
+                            client.log('FCM', `${guild.id} pairing: server`);
 
                             instance = client.readInstanceFile(guild.id);
                             let customId = `${body.ip}-${body.port}`;
@@ -74,7 +74,7 @@ module.exports = async (client, guild) => {
                                 let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
 
                                 if (!channel) {
-                                    client.log('Invalid guild or channel.');
+                                    client.log('ERROR', 'Invalid guild or channel.', 'error');
                                     break;
                                 }
 
@@ -87,25 +87,25 @@ module.exports = async (client, guild) => {
                         case 'entity':
                             switch (body.entityName) {
                                 case 'Switch':
-                                    client.log(`${guild.id} pairing: entity: Switch`);
+                                    client.log('FCM', `${guild.id} pairing: entity: Switch`);
                                     break;
 
                                 case 'Smart Alarm':
-                                    client.log(`${guild.id} pairing: entity: Smart Alarm`);
+                                    client.log('FCM', `${guild.id} pairing: entity: Smart Alarm`);
                                     break;
 
                                 case 'Storage Monitor':
-                                    client.log(`${guild.id} pairing: entity: Storage Monitor`);
+                                    client.log('FCM', `${guild.id} pairing: entity: Storage Monitor`);
                                     break;
 
                                 default:
-                                    client.log(`${guild.id} pairing: entity: other\n${JSON.stringify(full)}`);
+                                    client.log('FCM', `${guild.id} pairing: entity: other\n${JSON.stringify(full)}`);
                                     break;
                             }
                             break;
 
                         default:
-                            client.log(`${guild.id} pairing: other\n${JSON.stringify(full)}`);
+                            client.log('FCM', `${guild.id} pairing: other\n${JSON.stringify(full)}`);
                             break;
                     }
                     break;
@@ -113,11 +113,11 @@ module.exports = async (client, guild) => {
                 case 'alarm':
                     switch (body.type) {
                         case 'alarm':
-                            client.log(`${guild.id} alarm: alarm`);
+                            client.log('FCM', `${guild.id} alarm: alarm`);
                             break;
 
                         default:
-                            client.log(`${guild.id} alarm: other\n${JSON.stringify(full)}`);
+                            client.log('FCM', `${guild.id} alarm: other\n${JSON.stringify(full)}`);
                             break;
                     }
                     break;
@@ -125,11 +125,11 @@ module.exports = async (client, guild) => {
                 case 'player':
                     switch (body.type) {
                         case 'death':
-                            client.log(`${guild.id} player: death`);
+                            client.log('FCM', `${guild.id} player: death`);
                             break;
 
                         default:
-                            client.log(`${guild.id} player: other\n${JSON.stringify(full)}`);
+                            client.log('FCM', `${guild.id} player: other\n${JSON.stringify(full)}`);
                             break;
                     }
                     break;
@@ -137,11 +137,11 @@ module.exports = async (client, guild) => {
                 case 'team':
                     switch (body.type) {
                         case 'login':
-                            client.log(`${guild.id} team: login`);
+                            client.log('FCM', `${guild.id} team: login`);
                             break;
 
                         default:
-                            client.log(`${guild.id} team: other\n${JSON.stringify(full)}`);
+                            client.log('FCM', `${guild.id} team: other\n${JSON.stringify(full)}`);
                             break;
                     }
                     break;
@@ -149,17 +149,17 @@ module.exports = async (client, guild) => {
                 case 'news':
                     switch (body.type) {
                         case 'news':
-                            client.log(`${guild.id} news: news`);
+                            client.log('FCM', `${guild.id} news: news`);
                             break;
 
                         default:
-                            client.log(`${guild.id} news: other\n${JSON.stringify(full)}`);
+                            client.log('FCM', `${guild.id} news: other\n${JSON.stringify(full)}`);
                             break;
                     }
                     break;
 
                 default:
-                    client.log(`${guild.id} other\n${JSON.stringify(full)}`);
+                    client.log('FCM', `${guild.id} other\n${JSON.stringify(full)}`);
                     break;
             }
         });

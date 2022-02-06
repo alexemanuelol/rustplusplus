@@ -6,7 +6,7 @@ module.exports = {
 
         /* TODO: Wait for all text channels to be created before continue */
         require('../discordTools/SetupGuildChannels')(client, guild);
-        client.log(`Waiting 5 seconds to make sure all text channels are created in guild: ${guild.id}`);
+        client.log('INFO', `Waiting 5 seconds to make sure all text channels are created in guild: ${guild.id}`);
 
         setTimeout(() => {
             require('../discordTools/SetupSettingsMenu')(client, guild);

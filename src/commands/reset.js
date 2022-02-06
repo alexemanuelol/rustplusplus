@@ -17,14 +17,14 @@ module.exports = {
 				const guild = DiscordTools.getGuild(interaction.guildId);
 				/* TODO: Wait for all text channels to be created before continue */
 				require('../discordTools/SetupGuildChannels')(client, guild);
-				client.log('Waiting 5 seconds to make sure all text channels are created in guild: ' +
+				client.log('INFO', 'Waiting 5 seconds to make sure all text channels are created in guild: ' +
 					interaction.guildId);
 
 				instance.firstTime = true;
 				client.writeInstanceFile(interaction.guildId, instance);
 
 				setTimeout(() => {
-					client.log(`Creating Settings Menus for guild: ${interaction.guildId}`);
+					client.log('INFO', `Creating Settings Menus for guild: ${interaction.guildId}`);
 					require('../discordTools/SetupSettingsMenu')(client, guild);
 				}, 5000);
 

@@ -9,7 +9,7 @@ class DiscordBot extends Client {
     constructor(props) {
         super(props);
 
-        this.logger = new Logger(path.join(__dirname, '..', 'logs/discordBot.log'));
+        this.logger = new Logger(path.join(__dirname, '..', 'logs/discordBot.log'), 'default');
 
         this.commands = new Collection();
         this.rustplusInstances = new Object();
@@ -44,8 +44,8 @@ class DiscordBot extends Client {
         this.login(Config.discord.token);
     }
 
-    log(text) {
-        this.logger.log(text);
+    log(title, text, level = 'info') {
+        this.logger.log(title, text, level);
     }
 
     registerSlashCommands() {

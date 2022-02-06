@@ -8,7 +8,7 @@ module.exports = (client, guild) => {
     client.serverListMessages[guild.id] = {};
 
     if (!channel) {
-        client.log('Invalid guild or channel.');
+        client.log('ERROR', 'Invalid guild or channel.', 'error');
         return;
     }
 

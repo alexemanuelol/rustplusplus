@@ -54,7 +54,7 @@ module.exports = {
 
         for (let str of strings) {
             rustplus.sendTeamMessage(str);
-            rustplus.log(str);
+            rustplus.log('COMMAND', str);
         }
     },
 
@@ -93,7 +93,7 @@ module.exports = {
 
         for (let str of strings) {
             rustplus.sendTeamMessage(str);
-            rustplus.log(str);
+            rustplus.log('COMMAND', str);
         }
     },
 
@@ -106,9 +106,9 @@ module.exports = {
             if (msg.response.hasOwnProperty('teamInfo')) {
                 if (command === `${rustplus.generalSettings.prefix}leader`) {
                     promoteToLeader(rustplus, callerId).then((result) => {
-                        rustplus.log(`Team Leadership was transferred to ${callerName}:${callerId}.`);
+                        rustplus.log('COMMAND', `Team Leadership was transferred to ${callerName}:${callerId}.`);
                     }).catch((error) => {
-                        rustplus.log(JSON.stringify(error));
+                        rustplus.log('ERROR', JSON.stringify(error), 'error');
                     });
                 }
                 else {
@@ -118,9 +118,9 @@ module.exports = {
                     for (let member of msg.response.teamInfo.members) {
                         if (name == member.steamId) {
                             promoteToLeader(rustplus, member.steamId).then((result) => {
-                                rustplus.log(`Team Leadership was transferred to ${member.name}:${name}.`);
+                                rustplus.log('COMMAND', `Team Leadership was transferred to ${member.name}:${name}.`);
                             }).catch((error) => {
-                                rustplus.log(JSON.stringify(error));
+                                rustplus.log('ERROR', JSON.stringify(error), 'error');
                             });
                             return;
                         }
@@ -130,10 +130,10 @@ module.exports = {
                     for (let member of msg.response.teamInfo.members) {
                         if (StringSimilarity.similarity(name, member.name) >= 0.9) {
                             promoteToLeader(rustplus, member.steamId).then((result) => {
-                                rustplus.log(`Team Leadership was transferred to ${name}:` +
+                                rustplus.log('COMMAND', `Team Leadership was transferred to ${name}:` +
                                     `${member.steamId}.`);
                             }).catch((error) => {
-                                rustplus.log(JSON.stringify(error));
+                                rustplus.log('ERROR', JSON.stringify(error), 'error');
                             });
                             return;
                         }
@@ -157,7 +157,7 @@ module.exports = {
                 }
 
                 rustplus.sendTeamMessage(str);
-                rustplus.log(str);
+                rustplus.log('COMMAND', str);
             }
         });
     },
@@ -193,7 +193,7 @@ module.exports = {
                 }
 
                 rustplus.sendTeamMessage(str);
-                rustplus.log(str);
+                rustplus.log('COMMAND', str);
             }
         });
     },
@@ -234,7 +234,7 @@ module.exports = {
                     timer: new Timer.timer(
                         () => {
                             rustplus.sendTeamMessage(`Timer: ${message}`);
-                            rustplus.log(`Timer: ${message}`);
+                            rustplus.log('TIMER', message);
                             delete rustplus.timers[id]
                         },
                         timeSeconds * 1000),
@@ -243,7 +243,7 @@ module.exports = {
                 rustplus.timers[id].timer.start();
 
                 rustplus.sendTeamMessage(`Timer set for ${time}.`);
-                rustplus.log(`Timer set for ${time}.`);
+                rustplus.log('COMMAND', `Timer set for ${time}.`);
                 break;
 
             case 'remove':
@@ -260,24 +260,24 @@ module.exports = {
                 delete rustplus.timers[id];
 
                 rustplus.sendTeamMessage(`Timer with ID: ${id} was removed.`);
-                rustplus.log(`Timer with ID: ${id} was removed.`);
+                rustplus.log('COMMAND', `Timer with ID: ${id} was removed.`);
 
                 break;
 
             case 'remain':
                 if (Object.keys(rustplus.timers).length === 0) {
                     rustplus.sendTeamMessage('No active timers.');
-                    rustplus.log('No active timers');
+                    rustplus.log('COMMAND', 'No active timers');
                 }
                 else {
                     rustplus.sendTeamMessage('Active timers:');
-                    rustplus.log('Active timers:');
+                    rustplus.log('COMMAND', 'Active timers:');
                 }
                 for (const [id, content] of Object.entries(rustplus.timers)) {
                     let timeLeft = rustplus.getTimeLeftOfTimer(content.timer);
                     let str = `- ID: ${parseInt(id)}, Time left: ${timeLeft}, Message: ${content.message}`;
                     rustplus.sendTeamMessage(str);
-                    rustplus.log(str);
+                    rustplus.log('COMMAND', str);
                 }
                 break;
 
@@ -297,7 +297,7 @@ module.exports = {
                 let str = `${sinceWipe} since wipe.`;
 
                 rustplus.sendTeamMessage(str);
-                rustplus.log(str);
+                rustplus.log('COMMAND', str);
             }
         });
     },

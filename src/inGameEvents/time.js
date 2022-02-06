@@ -28,7 +28,7 @@ module.exports = {
 
         if (distance > 1) {
             /* Too big of a jump for a normal server, might have been a skip night server */
-            rustplus.log(`Invalid time: distance: ${distance}, previous: ${rustplus.previousTime}, time: ${time}`);
+            rustplus.log('ERROR', `Invalid time: distance: ${distance}, previous: ${rustplus.previousTime}, time: ${time}`, 'error');
             rustplus.passedFirstSunriseOrSunset = false;
             rustplus.startTime = time;
             rustplus.previousTime = time;
@@ -97,7 +97,7 @@ module.exports = {
             instance.serverList[server].timeTillNight = rustplus.timeTillNight;
             client.writeInstanceFile(rustplus.guildId, instance);
 
-            rustplus.log('24 Successful Hours in-game time have passed.');
+            rustplus.log('TIME', '24 Successful Hours in-game time have passed.');
             return;
         }
 

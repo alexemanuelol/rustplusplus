@@ -92,7 +92,7 @@ module.exports = {
                             content: 'Credentials are already used for another guild server!',
                             ephemeral: true
                         });
-                        client.log('Credentials are already used for another guild server!');
+                        client.log('INFO', 'Credentials are already used for another guild server!');
                         return;
                     }
                 }
@@ -108,7 +108,7 @@ module.exports = {
                     content: 'Credentials were set successfully!',
                     ephemeral: true
                 });
-                client.log('Credentials were set successfully!');
+                client.log('INFO', 'Credentials were set successfully!');
                 break;
 
             case 'clear':
@@ -124,7 +124,7 @@ module.exports = {
                     content: 'Credentials were cleared successfully!',
                     ephemeral: true
                 });
-                client.log('Credentials were cleared successfully!');
+                client.log('INFO', 'Credentials were cleared successfully!');
                 break;
 
             default:

@@ -1,16 +1,27 @@
 const winston = require("winston");
 const colors = require("colors");
+const Client = require('../../index.js');
 
 class Logger {
-    constructor(logFilePath, guildId = '') {
+    constructor(logFilePath, type) {
         this.logger = winston.createLogger({
             transports: [new winston.transports.File({ filename: logFilePath })],
         });
 
+        this.type = type;
+        this.guildId = null;
+        this.rustplus = null;
+    }
+
+    setGuildId(guildId) {
         this.guildId = guildId;
     }
 
-    log(text) {
+    setRustplus(rustplus) {
+        this.rustplus = rustplus;
+    }
+
+    getTime() {
         let d = new Date();
 
         let year = d.getFullYear();
@@ -20,18 +31,47 @@ class Logger {
         let minutes = d.getMinutes() < 10 ? ('0' + d.getMinutes()) : d.getMinutes();
         let seconds = d.getSeconds() < 10 ? ('0' + d.getSeconds()) : d.getSeconds();
 
-        let time = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+        return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+    }
 
-        this.logger.log({
-            level: 'info',
-            message: `${time} ${this.guildId} | INFO: ${text}`,
-        });
+    log(title, text, level) {
+        let time = this.getTime();
 
-        console.log(
-            colors.green(`${time} `) +
-            colors.cyan(this.guildId) +
-            colors.yellow(` | INFO: ` + text)
-        );
+        switch (this.type) {
+            case 'default':
+                text = `${title}: ${text}`;
+                this.logger.log({
+                    level: level,
+                    message: `${time} | ${text}`
+                });
+
+                console.log(
+                    colors.green(`${time} `) +
+                    ((level === 'error') ? colors.red(text) : colors.yellow(text))
+                );
+                break;
+
+            case 'guild':
+                let instance = Client.client.readInstanceFile(this.guildId);
+                let serverName = instance.serverList[`${this.rustplus.server}-${this.rustplus.port}`].title;
+                text = `${title}: ${text}`;
+
+                this.logger.log({
+                    level: level,
+                    message: `${time} | ${this.guildId} | ${serverName} | ${text}`
+                });
+
+                console.log(
+                    colors.green(`${time} `) +
+                    colors.cyan(`${this.guildId} `) +
+                    colors.white(`${serverName} `) +
+                    ((level === 'error') ? colors.red(text) : colors.yellow(text))
+                );
+                break;
+
+            default:
+                break;
+        }
     }
 }
 

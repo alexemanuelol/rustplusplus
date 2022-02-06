@@ -1,7 +1,7 @@
 module.exports = {
     name: 'disconnected',
     async execute(rustplus, client) {
-        rustplus.log('RUSTPLUS DISCONNECTED');
+        rustplus.log('DISCONNECTED', 'RUSTPLUS DISCONNECTED');
 
         let instance = client.readInstanceFile(rustplus.guildId);
 
@@ -64,7 +64,7 @@ module.exports = {
 
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
             if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
-                rustplus.log('RUSTPLUS RECONNECTING');
+                rustplus.log('RECONNECTING', 'RUSTPLUS RECONNECTING');
                 rustplus.disconnect();
                 rustplus.connect();
             }

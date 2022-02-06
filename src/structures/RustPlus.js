@@ -84,7 +84,9 @@ class RustPlus extends RP {
 
     build() {
         /* Setup the logger */
-        this.logger = new Logger(path.join(__dirname, '..', `logs/${this.guildId}.log`), this.guildId);
+        this.logger = new Logger(path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
+        this.logger.setGuildId(this.guildId);
+        this.logger.setRustplus(this);
 
         /* Setup settings */
         let instance = Client.client.readInstanceFile(this.guildId);
@@ -94,8 +96,8 @@ class RustPlus extends RP {
         this.connect();
     }
 
-    log(text) {
-        this.logger.log(text);
+    log(title, text, level = 'info') {
+        this.logger.log(title, text, level);
     }
 
     sendEvent(setting, text, firstPoll = false, image = null) {
@@ -107,7 +109,7 @@ class RustPlus extends RP {
         if (!firstPoll && setting.inGame) {
             this.sendTeamMessage(`Event: ${text}`);
         }
-        this.log(text);
+        this.log('EVENT', text);
     }
 
     sendDiscordEvent(text, image) {

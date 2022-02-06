@@ -1,6 +1,6 @@
 module.exports = {
     name: 'connecting',
     async execute(rustplus, client) {
-        rustplus.log('RUSTPLUS CONNECTING...');
+        rustplus.log('CONNECTING', 'RUSTPLUS CONNECTING...');
     },
 };

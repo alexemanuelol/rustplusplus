@@ -6,6 +6,6 @@ module.exports = {
 		.setDescription('Display help message'),
 	async execute(client, interaction) {
 		await interaction.reply('HAH! No help for you! >:)');
-		client.log('HAH! No help for you! >:)');
+		client.log('INFO', 'HAH! No help for you! >:)');
 	},
 };
