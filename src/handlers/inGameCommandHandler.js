@@ -20,6 +20,12 @@ module.exports = {
         else if (command.startsWith(`${rustplus.generalSettings.prefix}leader`)) {
             module.exports.commandLeader(rustplus, message);
         }
+        else if (command === `${rustplus.generalSettings.prefix}offline`) {
+            module.exports.commandOffline(rustplus);
+        }
+        else if (command === `${rustplus.generalSettings.prefix}online`) {
+            module.exports.commandOnline(rustplus);
+        }
         else if (command === `${rustplus.generalSettings.prefix}pop`) {
             module.exports.commandPop(rustplus);
         }
@@ -216,6 +222,47 @@ module.exports = {
                         }
                     }
                 }
+            }
+        });
+    },
+
+    commandOffline: function (rustplus) {
+        rustplus.getTeamInfo((teamInfo) => {
+            if (teamInfo.response.hasOwnProperty('teamInfo')) {
+                let str = '';
+                for (let member of teamInfo.response.teamInfo.members) {
+                    if (member.isOnline === false) {
+                        str += `${member.name}, `;
+                    }
+                }
+
+                if (str === '') {
+                    str = 'No one is offline.';
+                }
+                else {
+                    str = str.slice(0, -2);
+                }
+
+                rustplus.sendTeamMessage(str);
+                rustplus.log('COMMAND', str);
+            }
+        });
+    },
+
+    commandOnline: function (rustplus) {
+        rustplus.getTeamInfo((teamInfo) => {
+            if (teamInfo.response.hasOwnProperty('teamInfo')) {
+                let str = '';
+                for (let member of teamInfo.response.teamInfo.members) {
+                    if (member.isOnline === true) {
+                        str += `${member.name}, `;
+                    }
+                }
+
+                str = str.slice(0, -2);
+
+                rustplus.sendTeamMessage(str);
+                rustplus.log('COMMAND', str);
             }
         });
     },
