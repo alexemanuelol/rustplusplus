@@ -1,5 +1,5 @@
 const Constants = require('../util/eventConstants.js');
-const MapCalc = require('../util/mapCalculations.js');
+const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer');
 
@@ -18,8 +18,8 @@ module.exports = {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Chinook47) {
                 let mapSize = info.response.info.mapSize;
-                let outsidePos = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);
-                let gridPos = MapCalc.getGridPos(marker.x, marker.y, mapSize);
+                let outsidePos = Map.getCoordinatesDirection(marker.x, marker.y, mapSize);
+                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
                 let pos = (gridPos === null) ? outsidePos : gridPos;
 
                 if (!(marker.id in rustplus.activeChinook47s)) {
@@ -42,10 +42,10 @@ module.exports = {
 
                     let found = false;
                     for (let rig of smallOil) {
-                        if (MapCalc.getDistance(marker.x, marker.y, rig.x, rig.y) <=
+                        if (Map.getDistance(marker.x, marker.y, rig.x, rig.y) <=
                             OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                             found = true;
-                            let oilRigLocation = MapCalc.getCoordinatesOrientation(rig.x, rig.y, mapSize);
+                            let oilRigLocation = Map.getCoordinatesDirection(rig.x, rig.y, mapSize);
 
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.heavyScientistCalled,
@@ -74,10 +74,10 @@ module.exports = {
                     }
 
                     for (let rig of largeOil) {
-                        if (MapCalc.getDistance(marker.x, marker.y, rig.x, rig.y) <=
+                        if (Map.getDistance(marker.x, marker.y, rig.x, rig.y) <=
                             OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                             found = true;
-                            let oilRigLocation = MapCalc.getCoordinatesOrientation(rig.x, rig.y, mapSize);
+                            let oilRigLocation = Map.getCoordinatesDirection(rig.x, rig.y, mapSize);
 
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.heavyScientistCalled,
@@ -106,10 +106,10 @@ module.exports = {
                     }
 
                     /* Offset that is used to determine if coordinates is outside grid system */
-                    let offset = 4 * MapCalc.gridDiameter;
+                    let offset = 4 * Map.gridDiameter;
 
                     /* If coordinates of the marker is located outside the grid system + the offset */
-                    if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
+                    if (Map.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
                         rustplus.sendEvent(
                             rustplus.notificationSettings.chinook47Detected,
                             `Chinook 47 enters the map from ${pos} to drop off Locked Crate.`);
@@ -133,7 +133,7 @@ module.exports = {
     getOilRigLockedCrateId: function (x, y, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.LockedCrate) {
-                if (MapCalc.getDistance(x, y, marker.x, marker.y) < 100) {
+                if (Map.getDistance(x, y, marker.x, marker.y) < 100) {
                     return marker.id;
                 }
             }

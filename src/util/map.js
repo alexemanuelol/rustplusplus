@@ -62,8 +62,8 @@ module.exports = {
         return false;
     },
 
-    getCoordinatesOrientation: function (x, y, size) {
-        /* Returns the orientation position of the coordinate. */
+    getCoordinatesDirection: function (x, y, size) {
+        /* Returns the direction of the coordinate. */
         let offset = size / 6;
         let dir;
 
@@ -76,9 +76,9 @@ module.exports = {
         }
         else {
             if (x < (offset * 3))
-                return module.exports.locations[6];
+                return module.exports.directions[6];
             else
-                return module.exports.locations[7];
+                return module.exports.directions[7];
         }
 
         /* Horizontally */
@@ -92,10 +92,10 @@ module.exports = {
             dir += 1;
         }
 
-        return module.exports.locations[dir];
+        return module.exports.directions[dir];
     },
 
-    locations: {
+    directions: {
         0: 'South West',
         1: 'the South',
         2: 'South East',

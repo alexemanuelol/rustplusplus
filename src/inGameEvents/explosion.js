@@ -1,5 +1,5 @@
 const Constants = require('../util/eventConstants.js');
-const MapCalc = require('../util/mapCalculations.js');
+const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer');
 
@@ -18,8 +18,8 @@ module.exports = {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Explosion) {
                 let mapSize = info.response.info.mapSize;
-                let outsidePos = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);
-                let gridPos = MapCalc.getGridPos(marker.x, marker.y, mapSize);
+                let outsidePos = Map.getCoordinatesDirection(marker.x, marker.y, mapSize);
+                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
                 let pos = (gridPos === null) ? outsidePos : gridPos;
 
                 if (!(marker.id in rustplus.activeExplosions)) {
@@ -33,7 +33,7 @@ module.exports = {
                     let isExplosionMarkerHeli = false;
                     if (rustplus.patrolHelicoptersLeft.length !== 0) {
                         for (let heli of rustplus.patrolHelicoptersLeft) {
-                            if (MapCalc.getDistance(marker.x, marker.y, heli.x, heli.y) <=
+                            if (Map.getDistance(marker.x, marker.y, heli.x, heli.y) <=
                                 PATROL_HELI_DOWNED_RADIUS) {
                                 isExplosionMarkerHeli = true;
                                 delete rustplus.activePatrolHelicopters[heli.id]

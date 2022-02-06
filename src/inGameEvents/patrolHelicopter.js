@@ -1,4 +1,4 @@
-const MapCalc = require('../util/mapCalculations.js');
+const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
@@ -14,8 +14,8 @@ module.exports = {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.PatrolHelicopter) {
                 let mapSize = info.response.info.mapSize;
-                let outsidePos = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);
-                let gridPos = MapCalc.getGridPos(marker.x, marker.y, mapSize);
+                let outsidePos = Map.getCoordinatesDirection(marker.x, marker.y, mapSize);
+                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
                 let pos = (gridPos === null) ? outsidePos : gridPos;
 
                 if (!(marker.id in rustplus.activePatrolHelicopters)) {
@@ -27,10 +27,10 @@ module.exports = {
                     };
 
                     /* Offset that is used to determine if the Patrol Helicopter just spawned */
-                    let offset = 4 * MapCalc.gridDiameter;
+                    let offset = 4 * Map.gridDiameter;
 
                     /* If Patrol Helicopter is located outside the grid system + the offset */
-                    if (MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
+                    if (Map.isOutsideGridSystem(marker.x, marker.y, mapSize, offset)) {
                         rustplus.sendEvent(
                             rustplus.notificationSettings.patrolHelicopterDetected,
                             `Patrol Helicopter enters the map from ${pos}.`);

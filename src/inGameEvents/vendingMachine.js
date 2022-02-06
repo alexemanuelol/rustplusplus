@@ -1,5 +1,5 @@
 const Items = require('../util/items.js');
-const MapCalc = require('../util/mapCalculations.js');
+const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
@@ -15,8 +15,8 @@ module.exports = {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
                 let mapSize = info.response.info.mapSize;
-                let outsidePos = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);
-                let gridPos = MapCalc.getGridPos(marker.x, marker.y, mapSize);
+                let outsidePos = Map.getCoordinatesDirection(marker.x, marker.y, mapSize);
+                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
                 let pos = (gridPos === null) ? outsidePos : gridPos;
 
                 if (!rustplus.activeVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
@@ -56,7 +56,7 @@ module.exports = {
                                     item = Items.getName(order.currencyId);
                                 }
 
-                                let gridLocation = MapCalc.getGridPos(marker.x, marker.y, info.response.info.mapSize);
+                                let gridLocation = Map.getGridPos(marker.x, marker.y, info.response.info.mapSize);
 
                                 rustplus.sendEvent(
                                     rustplus.notificationSettings.vendingMachineDetected,

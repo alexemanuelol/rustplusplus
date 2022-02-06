@@ -1,5 +1,5 @@
 const Constants = require('../util/eventConstants.js');
-const MapCalc = require('../util/mapCalculations.js');
+const Map = require('../util/map.js');
 const MonNames = require('../util/monumentNames.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer');
@@ -21,8 +21,8 @@ module.exports = {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.LockedCrate) {
                 let mapSize = info.response.info.mapSize;
-                let outsidePos = MapCalc.getCoordinatesOrientation(marker.x, marker.y, mapSize);
-                let gridPos = MapCalc.getGridPos(marker.x, marker.y, mapSize);
+                let outsidePos = Map.getCoordinatesDirection(marker.x, marker.y, mapSize);
+                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
                 let pos = (gridPos === null) ? outsidePos : gridPos;
 
                 if (!(marker.id in rustplus.activeLockedCrates)) {
@@ -34,7 +34,7 @@ module.exports = {
                     };
 
                     let closestMonument = module.exports.getClosestMonument(marker.x, marker.y, rustplus);
-                    let distance = MapCalc.getDistance(marker.x, marker.y, closestMonument.x, closestMonument.y);
+                    let distance = Map.getDistance(marker.x, marker.y, closestMonument.x, closestMonument.y);
 
                     if (module.exports.isCrateOnCargoShip(marker.x, marker.y, mapMarkers)) {
                         let cargoShipId = module.exports.getCargoShipId(marker.x, marker.y, mapMarkers);
@@ -55,7 +55,7 @@ module.exports = {
                         distance < LOCKED_CRATE_MONUMENT_RADIUS) {
                         if (rustplus.smallOilRigLockedCratesLeft.some(e =>
                             e.type === 'oil_rig_small' &&
-                            MapCalc.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
+                            Map.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                             /* Refresh of Locked Crate at Small Oil Rig, Scenario 1 */
                             let oilRig = MonNames.Monument['oil_rig_small'];
                             rustplus.sendEvent(
@@ -66,7 +66,7 @@ module.exports = {
 
                             for (let crate of rustplus.smallOilRigLockedCratesLeft) {
                                 if (crate.type === 'oil_rig_small' &&
-                                    MapCalc.getDistance(crate.x, crate.y, marker.x, marker.y) <
+                                    Map.getDistance(crate.x, crate.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                                     delete rustplus.activeLockedCrates[crate.id];
                                 }
@@ -76,7 +76,7 @@ module.exports = {
                             let refreshed = false;
                             for (const [id, content] of Object.entries(rustplus.activeLockedCrates)) {
                                 if (content.type === 'oil_rig_small' &&
-                                    MapCalc.getDistance(content.x, content.y, marker.x, marker.y) <
+                                    Map.getDistance(content.x, content.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                                     /* Refresh of Locked Crate at Small Oil Rig, Scenario 2 */
                                     let oilRig = MonNames.Monument['oil_rig_small'];
@@ -105,7 +105,7 @@ module.exports = {
                         distance < LOCKED_CRATE_MONUMENT_RADIUS) {
                         if (rustplus.largeOilRigLockedCratesLeft.some(e =>
                             e.type === 'large_oil_rig' &&
-                            MapCalc.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
+                            Map.getDistance(e.x, e.y, marker.x, marker.y) < LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                             /* Refresh of Locked Crate at Large Oil Rig, Scenario 1 */
                             let oilRig = MonNames.Monument['large_oil_rig'];
                             rustplus.sendEvent(
@@ -116,7 +116,7 @@ module.exports = {
 
                             for (let crate of rustplus.largeOilRigLockedCratesLeft) {
                                 if (crate.type === 'large_oil_rig' &&
-                                    MapCalc.getDistance(crate.x, crate.y, marker.x, marker.y) <
+                                    Map.getDistance(crate.x, crate.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                                     delete rustplus.activeLockedCrates[crate.id];
                                 }
@@ -126,7 +126,7 @@ module.exports = {
                             let refreshed = false;
                             for (const [id, content] of Object.entries(rustplus.activeLockedCrates)) {
                                 if (content.type === 'large_oil_rig' &&
-                                    MapCalc.getDistance(content.x, content.y, marker.x, marker.y) <
+                                    Map.getDistance(content.x, content.y, marker.x, marker.y) <
                                     LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                                     /* Refresh of Locked Crate at Large Oil Rig, Scenario 2 */
                                     let oilRig = MonNames.Monument['large_oil_rig'];
@@ -152,7 +152,7 @@ module.exports = {
                         rustplus.activeLockedCrates[marker.id].type = 'large_oil_rig';
                     }
                     else if (distance > LOCKED_CRATE_MONUMENT_RADIUS) {
-                        if (!MapCalc.isOutsideGridSystem(marker.x, marker.y, mapSize)) {
+                        if (!Map.isOutsideGridSystem(marker.x, marker.y, mapSize)) {
                             if (!rustplus.firstPoll) {
                                 rustplus.sendEvent(
                                     rustplus.notificationSettings.lockedCrateDroppedAtMonument,
@@ -269,7 +269,7 @@ module.exports = {
                     let refreshed = false;
                     for (const [idx, contentx] of Object.entries(rustplus.activeLockedCrates)) {
                         if (contentx.type === content.type &&
-                            MapCalc.getDistance(contentx.x, contentx.y, content.x, content.y) <
+                            Map.getDistance(contentx.x, contentx.y, content.x, content.y) <
                             LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS &&
                             idx !== id) {
                             /* Refresh of Locked Crate at Small Oil Rig, Scenario 2 */
@@ -315,7 +315,7 @@ module.exports = {
                     let refreshed = false;
                     for (const [idx, contentx] of Object.entries(rustplus.activeLockedCrates)) {
                         if (contentx.type === content.type &&
-                            MapCalc.getDistance(contentx.x, contentx.y, content.x, content.y) <
+                            Map.getDistance(contentx.x, contentx.y, content.x, content.y) <
                             LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS &&
                             idx !== id) {
                             /* Refresh of Locked Crate at Large Oil Rig, Scenario 2 */
@@ -402,7 +402,7 @@ module.exports = {
         let minDistance = 1000000;
         let closestMonument = null;
         for (let monument of rustplus.mapMonuments) {
-            let distance = MapCalc.getDistance(x, y, monument.x, monument.y);
+            let distance = Map.getDistance(x, y, monument.x, monument.y);
             if (distance < minDistance && module.exports.validLockedCrateMonuments.includes(monument.token)) {
                 minDistance = distance;
                 closestMonument = monument;
@@ -415,7 +415,7 @@ module.exports = {
     isCrateOnCargoShip: function (x, y, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
-                if (MapCalc.getDistance(x, y, marker.x, marker.y) <= LOCKED_CRATE_CARGO_SHIP_RADIUS) {
+                if (Map.getDistance(x, y, marker.x, marker.y) <= LOCKED_CRATE_CARGO_SHIP_RADIUS) {
                     return true;
                 }
             }
@@ -426,7 +426,7 @@ module.exports = {
     getCargoShipId: function (x, y, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
-                if (MapCalc.getDistance(x, y, marker.x, marker.y) <= LOCKED_CRATE_CARGO_SHIP_RADIUS) {
+                if (Map.getDistance(x, y, marker.x, marker.y) <= LOCKED_CRATE_CARGO_SHIP_RADIUS) {
                     return marker.id;
                 }
             }
