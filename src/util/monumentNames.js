@@ -1,6 +1,8 @@
 module.exports = {
     Monument: {
+        'AbandonedMilitaryBase': 'Abandoned Military Base',
         'airfield_display_name': 'Airfield',
+        'arctic_base_a': 'Arctic Research Base',
         'bandit_camp': 'Bandit Camp',
         'dome_monument_name': 'The Dome',
         'excavator': 'Giant Excavator Pit',

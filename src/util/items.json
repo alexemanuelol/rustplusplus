@@ -99,6 +99,11 @@
         "name": "High External Wooden Wall",
         "description": "A high wooden wall used to keep people off your property."
     },
+    "106959911": {
+        "shortname": "frankensteins.monster.01.legs",
+        "name": "Light Frankenstein Legs",
+        "description": "Slightly faster, slightly weaker.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
     "121049755": {
         "shortname": "sign.pictureframe.tall",
         "name": "Tall Picture Frame",
@@ -264,6 +269,11 @@
         "name": "Anchovy",
         "description": "A small bony fish commonly found in large schools."
     },
+    "343045591": {
+        "shortname": "aiming.module.mlrs",
+        "name": "MLRS Aiming Module",
+        "description": "An aiming system computer module for an MLRS vehicle."
+    },
     "349762871": {
         "shortname": "ammo.grenadelauncher.he",
         "name": "40mm HE Grenade",
@@ -338,6 +348,11 @@
         "shortname": "halloween.lootbag.large",
         "name": "Large Loot Bag",
         "description": "A massive haul. Contains the best halloween loot"
+    },
+    "491263800": {
+        "shortname": "hazmatsuit.nomadsuit",
+        "name": "Nomad Suit",
+        "description": "A nomad suit."
     },
     "492357192": {
         "shortname": "electric.random.switch",
@@ -514,10 +529,20 @@
         "name": "Wooden Cross",
         "description": "A wooden cross marking the remains of an unknown soul"
     },
+    "709206314": {
+        "shortname": "hat.tigermask",
+        "name": "Tiger Mask",
+        "description": "A special tiger mask to celebrate Chinese New Year"
+    },
     "722955039": {
         "shortname": "gun.water",
         "name": "Water Gun",
         "description": "A large water gun with pumpable pressure. Hold reload to pump!"
+    },
+    "755224797": {
+        "shortname": "bottle.vodka",
+        "name": "Vodka Bottle",
+        "description": "A bottle of Russian Vodka."
     },
     "756517185": {
         "shortname": "xmas.present.medium",
@@ -528,6 +553,11 @@
         "shortname": "electric.sirenlight",
         "name": "Siren Light",
         "description": "A spinning siren light"
+    },
+    "782422285": {
+        "shortname": "sofa.pattern",
+        "name": "Sofa - Pattern",
+        "description": "A comfortable old sofa with a floral pattern. A decorative item which provides comfort and seats two."
     },
     "785728077": {
         "shortname": "ammo.pistol",
@@ -599,6 +629,11 @@
         "name": "Red Berry Seed",
         "description": "These red berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
     },
+    "831955134": {
+        "shortname": "skylantern.skylantern.purple",
+        "name": "Sky Lantern - Purple",
+        "description": ""
+    },
     "832133926": {
         "shortname": "wood.armor.pants",
         "name": "Wood Armor Pants",
@@ -608,6 +643,11 @@
         "shortname": "box.wooden.large",
         "name": "Large Wood Box",
         "description": "Keep your things in this wooden storage box. Stores up to 30 items."
+    },
+    "835042040": {
+        "shortname": "frankensteins.monster.02.legs",
+        "name": "Medium Frankenstein Legs",
+        "description": "A balanced set of legs.\n\nCombined at a Frankenstein Table to create your very own monster."
     },
     "838831151": {
         "shortname": "clone.blue.berry",
@@ -632,12 +672,12 @@
     "854447607": {
         "shortname": "white.berry",
         "name": "White Berry",
-        "description": "A white berry."
+        "description": "A white berry. Can be eaten or used in mixing table recipes to create teas."
     },
     "858486327": {
         "shortname": "green.berry",
         "name": "Green Berry",
-        "description": "A green berry."
+        "description": "A green berry. Can be eaten or used in mixing table recipes to create teas."
     },
     "866332017": {
         "shortname": "sign.neon.xl",
@@ -819,6 +859,11 @@
         "name": "Chainsaw",
         "description": "A Chainsaw. Very effective at cutting trees in addition to soft fleshy objects. Requires Low Grade Fuel to run."
     },
+    "1107575710": {
+        "shortname": "hazmatsuit_scientist_arctic",
+        "name": "Arctic Scientist Suit",
+        "description": "A hazmat suit made from radiation resistant rubber."
+    },
     "1110385766": {
         "shortname": "metal.plate.torso",
         "name": "Metal Chest Plate",
@@ -827,7 +872,7 @@
     "1112162468": {
         "shortname": "blue.berry",
         "name": "Blue Berry",
-        "description": "A blue berry."
+        "description": "A blue berry. Can be eaten or used in mixing table recipes to create teas."
     },
     "1121925526": {
         "shortname": "candycane",
@@ -924,6 +969,11 @@
         "name": "SMG Body",
         "description": "The firing mechanism of a submachinegun. Used in construction of a weapon that can fire pistol ammo fully automatic."
     },
+    "1230691307": {
+        "shortname": "captainslog",
+        "name": "Captain's Log",
+        "description": "A deteriorating piece of paper with information relating to the last moments of this vessel."
+    },
     "1234878710": {
         "shortname": "telephone",
         "name": "Telephone",
@@ -969,10 +1019,15 @@
         "name": "Hazmat Suit",
         "description": "A hazmat suit made from radiation resistant rubber."
     },
+    "1268178466": {
+        "shortname": "industrial.wall.light.green",
+        "name": "Green Industrial Wall Light",
+        "description": "A small green light source."
+    },
     "1272194103": {
         "shortname": "red.berry",
         "name": "Red Berry",
-        "description": "A red berry."
+        "description": "A red berry. Can be eaten or used in mixing table recipes to create teas."
     },
     "1272430949": {
         "shortname": "piano",
@@ -993,6 +1048,11 @@
         "shortname": "sign.neon.125x125",
         "name": "Small Neon Sign",
         "description": "A small neon sign!"
+    },
+    "1312843609": {
+        "shortname": "skull",
+        "name": "Skull",
+        "description": "A spooky skull"
     },
     "1315082560": {
         "shortname": "hat.oxmask",
@@ -1094,6 +1154,11 @@
         "name": "Burnt Pork",
         "description": "This little piggy has been in the oven for too long."
     },
+    "1394042569": {
+        "shortname": "rhib",
+        "name": "RHIB",
+        "description": ""
+    },
     "1397052267": {
         "shortname": "supply.signal",
         "name": "Supply Signal",
@@ -1174,6 +1239,11 @@
         "name": "Paddle",
         "description": "A versatile melee weapon that can also be used to paddle a kayak."
     },
+    "1491753484": {
+        "shortname": "frankensteins.monster.02.torso",
+        "name": "Medium Frankenstein Torso",
+        "description": "A balanced torso.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
     "1512054436": {
         "shortname": "clone.potato",
         "name": "Potato Clone",
@@ -1201,8 +1271,13 @@
     },
     "1524187186": {
         "shortname": "workbench1",
-        "name": "Work Bench Level 1",
+        "name": "Workbench Level 1",
         "description": "This allows you to craft and unlock items requiring workbench level 1"
+    },
+    "1524980732": {
+        "shortname": "carvable.pumpkin",
+        "name": "Carvable Pumpkin",
+        "description": "A pumpkin that you can carve. \n\nRequires wood as a fuel source."
     },
     "1525520776": {
         "shortname": "building.planner",
@@ -1269,6 +1344,11 @@
         "name": "Handmade Fishing Rod",
         "description": "Use [attack2] to cast out the line and wait for a bite. Requires bait."
     },
+    "1575635062": {
+        "shortname": "frankensteintable",
+        "name": "Frankenstein Table",
+        "description": "Place a monsters head, torso and legs into the table to summon Frankensteins monster."
+    },
     "1581210395": {
         "shortname": "planter.large",
         "name": "Large Planter Box",
@@ -1298,6 +1378,16 @@
         "shortname": "shirt.tanktop",
         "name": "Tank Top",
         "description": "A tshirt without sleeves"
+    },
+    "1614528785": {
+        "shortname": "frankensteins.monster.03.torso",
+        "name": "Heavy Frankenstein Torso",
+        "description": "Slightly slower, slightly stronger.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
+    "1623701499": {
+        "shortname": "industrial.wall.light",
+        "name": "Industrial Wall Light",
+        "description": "A small light source."
     },
     "1629293099": {
         "shortname": "snowman",
@@ -1342,7 +1432,7 @@
     "1660145984": {
         "shortname": "yellow.berry",
         "name": "Yellow Berry",
-        "description": "A yellow berry."
+        "description": "A yellow berry. Can be eaten or used in mixing table recipes to create teas."
     },
     "1668129151": {
         "shortname": "fish.cooked",
@@ -1449,6 +1539,11 @@
         "name": "Silver Egg",
         "description": "A Silver Egg. Contains medium level loot, Collect 10 to upgrade to a gold Egg"
     },
+    "1768112091": {
+        "shortname": "snowmobiletomaha",
+        "name": "Tomaha Snowmobile",
+        "description": "An old snowmobile from around 1980."
+    },
     "1770475779": {
         "shortname": "worm",
         "name": "Worm",
@@ -1499,6 +1594,11 @@
         "name": "Bone Knife",
         "description": "Melee weapon crafted from bone fragments. Good for harvesting carcases."
     },
+    "1819863051": {
+        "shortname": "skylantern",
+        "name": "Sky Lantern",
+        "description": "A beautiful sky lantern. Can be launched in any direction. Has one inventory slot. Can be Ignited with a lit torch."
+    },
     "1827479659": {
         "shortname": "wolfmeat.burned",
         "name": "Burnt Wolf Meat",
@@ -1548,6 +1648,11 @@
         "shortname": "burlap.headwrap",
         "name": "Burlap Headwrap",
         "description": "A Headwrap made out of burlap."
+    },
+    "1878053256": {
+        "shortname": "rowboat",
+        "name": "Rowboat",
+        "description": ""
     },
     "1882709339": {
         "shortname": "metalblade",
@@ -1719,6 +1824,11 @@
         "name": "Inner Tube",
         "description": "An inflated tube for aquatic activities."
     },
+    "2054391128": {
+        "shortname": "factorydoor",
+        "name": "Factory Door",
+        "description": "Medium strength door, vulnerable to explosives. Contains a bulletproof viewing portal"
+    },
     "2063916636": {
         "shortname": "oretea.advanced",
         "name": "Advanced Ore Tea",
@@ -1799,6 +1909,11 @@
         "name": "High Velocity Rocket",
         "description": "Fast moving rocket ammunition. Short to medium range self-propelled, unguided rocket which deals large splash damage on impact but less damage than a normal rocket."
     },
+    "-1843426638": {
+        "shortname": "ammo.rocket.mlrs",
+        "name": "MLRS Rocket",
+        "description": "A rocket intended for use in an MLRS (Multiple Launch Rocket System)."
+    },
     "-384243979": {
         "shortname": "ammo.rocket.sam",
         "name": "SAM Ammo",
@@ -1868,6 +1983,11 @@
         "shortname": "attire.reindeer.headband",
         "name": "Reindeer Antlers",
         "description": "A festive reindeer antlers headband and nose."
+    },
+    "-842267147": {
+        "shortname": "attire.snowman.helmet",
+        "name": "Snowman Helmet",
+        "description": "A snowman helmet which provides ample protection."
     },
     "-2139580305": {
         "shortname": "autoturret",
@@ -2264,6 +2384,11 @@
         "name": "Orange Boomer",
         "description": "A very large mortar type firework with an orange starburst"
     },
+    "-379734527": {
+        "shortname": "firework.boomer.pattern",
+        "name": "Pattern Boomer",
+        "description": "A very large mortar type firework with an massive champagne colored explosion followed by smaller orange starbursts"
+    },
     "-1553999294": {
         "shortname": "firework.boomer.red",
         "name": "Red Boomer",
@@ -2344,6 +2469,11 @@
         "name": "Small Trout",
         "description": "A Small Trout. Good for a few meals."
     },
+    "-1707425764": {
+        "shortname": "fishing.tackle",
+        "name": "Fishing Tackle",
+        "description": "Fishing Tackle"
+    },
     "-1215753368": {
         "shortname": "flamethrower",
         "name": "Flame Thrower",
@@ -2368,6 +2498,31 @@
         "shortname": "fogmachine",
         "name": "Fogger-3000",
         "description": "A Fog machine which runs on low grade fuel. Can be set to fill an area with a dense fog or triggered by motion."
+    },
+    "-134959124": {
+        "shortname": "frankensteins.monster.01.head",
+        "name": "Light Frankenstein Head",
+        "description": "Slightly faster, slightly weaker.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
+    "-1624770297": {
+        "shortname": "frankensteins.monster.01.torso",
+        "name": "Light Frankenstein Torso",
+        "description": "Slightly faster, slightly weaker.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
+    "-1732475823": {
+        "shortname": "frankensteins.monster.02.head",
+        "name": "Medium Frankenstein Head",
+        "description": "A balanced head.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
+    "-297099594": {
+        "shortname": "frankensteins.monster.03.head",
+        "name": "Heavy Frankenstein Head",
+        "description": "Slightly slower, slightly stronger.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
+    "-2024549027": {
+        "shortname": "frankensteins.monster.03.legs",
+        "name": "Heavy Frankenstein Legs",
+        "description": "Slightly slower, slightly stronger.\n\nCombined at a Frankenstein Table to create your very own monster."
     },
     "-2107018088": {
         "shortname": "fun.bass",
@@ -2519,10 +2674,15 @@
         "name": "Hatchet",
         "description": "A Hatchet, useful for chopping trees and dismembering corpses."
     },
+    "-470439097": {
+        "shortname": "hazmatsuit.arcticsuit",
+        "name": "Arctic Suit",
+        "description": "An arctic variant of the hazmat suit which trades radiation for cold protection."
+    },
     "-560304835": {
         "shortname": "hazmatsuit.spacesuit",
         "name": "Space Suit",
-        "description": "A space suit built for harsh conditions."
+        "description": "A spacesuit built for harsh conditions."
     },
     "-253079493": {
         "shortname": "hazmatsuit_scientist",
@@ -2609,6 +2769,11 @@
         "name": "Salvaged Icepick",
         "description": "A high-yield resource gathering Icepick."
     },
+    "-1160621614": {
+        "shortname": "industrial.wall.light.red",
+        "name": "Red Industrial Wall Light",
+        "description": "A small red light source."
+    },
     "-697981032": {
         "shortname": "innertube",
         "name": "Inner Tube",
@@ -2684,6 +2849,11 @@
         "name": "Low Grade Fuel",
         "description": "Low Grade Fuel, used to power light sources."
     },
+    "-763071910": {
+        "shortname": "lumberjack hoodie",
+        "name": "Lumberjack Hoodie",
+        "description": "A Lumberjack Hoodie"
+    },
     "-1961560162": {
         "shortname": "lunar.firecrackers",
         "name": "Firecracker String",
@@ -2748,6 +2918,11 @@
         "shortname": "mining.pumpjack",
         "name": "Pump Jack",
         "description": "Extracts oil from the ground. Use a Survey Charge to determine the amount of oil available for extraction in any given area."
+    },
+    "-1449152644": {
+        "shortname": "mlrs",
+        "name": "MLRS",
+        "description": "M270 Multiple Launch Rocket System"
     },
     "-20045316": {
         "shortname": "mobilephone",
@@ -2883,6 +3058,11 @@
         "shortname": "rf_pager",
         "name": "RF Pager",
         "description": "An RF Pager. An audible tone will be produced when a signal is picked up on the listening frequency. Can be set to silent mode."
+    },
+    "-1335497659": {
+        "shortname": "rifle.ak.ice",
+        "name": "Assault Rifle - ICE",
+        "description": "Ice-covered high damage machine rifle."
     },
     "-778367295": {
         "shortname": "rifle.l96",
@@ -3134,6 +3314,21 @@
         "name": "Skull Spikes",
         "description": "A spike of several skulls. Very spooky."
     },
+    "-1770889433": {
+        "shortname": "skylantern.skylantern.green",
+        "name": "Sky Lantern - Green",
+        "description": ""
+    },
+    "-1824770114": {
+        "shortname": "skylantern.skylantern.orange",
+        "name": "Sky Lantern - Orange",
+        "description": ""
+    },
+    "-1433390281": {
+        "shortname": "skylantern.skylantern.red",
+        "name": "Sky Lantern - Red",
+        "description": ""
+    },
     "-333406828": {
         "shortname": "sled",
         "name": "Sled",
@@ -3179,6 +3374,11 @@
         "name": "Snowball",
         "description": "A snowball, throw it!"
     },
+    "-1364246987": {
+        "shortname": "snowmobile",
+        "name": "Snowmobile",
+        "description": "A custom snowmobile, made of various bits and pieces."
+    },
     "-555122905": {
         "shortname": "sofa",
         "name": "Sofa",
@@ -3219,6 +3419,11 @@
         "name": "Spinning wheel",
         "description": "An interactive spinning wheel."
     },
+    "-596876839": {
+        "shortname": "spraycan",
+        "name": "Spray Can",
+        "description": "Use the Spray Can to reskin your items. Press [attack2] while looking at an item to open the skin picker."
+    },
     "-369760990": {
         "shortname": "stash.small",
         "name": "Small Stash",
@@ -3239,14 +3444,9 @@
         "name": "Stones",
         "description": "Harvested from rocks using tools, basic building material."
     },
-    "-239306133": {
-        "shortname": "submarine.torpedo.rising",
-        "name": "Surface torpedo",
-        "description": "A torpedo for use in a submarine. Fires ahead while rising to the water's surface."
-    },
     "-1671551935": {
         "shortname": "submarine.torpedo.straight",
-        "name": "Direct Torpedo",
+        "name": "Torpedo",
         "description": "A torpedo for use in a submarine. Fires ahead in a straight line."
     },
     "-187031121": {
@@ -3353,6 +3553,11 @@
         "shortname": "vehicle.1mod.taxi",
         "name": "Taxi Vehicle Module",
         "description": "Single module seating for two passengers, with protection at the front."
+    },
+    "-1040518150": {
+        "shortname": "vehicle.2mod.camper",
+        "name": "Camper Vehicle Module",
+        "description": "Dual module camper that allows up to 4 players to respawn. Also includes a barbecue, a locker and a small box for item storage."
     },
     "-1693832478": {
         "shortname": "vehicle.2mod.flatbed",
@@ -3472,7 +3677,7 @@
     "-1284169891": {
         "shortname": "waterpump",
         "name": "Water Pump",
-        "description": "Can be placed in a water source to collect that water while powered. Can be connected to other Water entites."
+        "description": "Can be placed in a water source to collect that water while powered. Can be connected to other Water entities."
     },
     "-132516482": {
         "shortname": "weapon.mod.lasersight",
@@ -3536,18 +3741,23 @@
     },
     "-41896755": {
         "shortname": "workbench2",
-        "name": "Work Bench Level 2",
+        "name": "Workbench Level 2",
         "description": "This allows you to craft and unlock items requiring workbench level 2"
     },
     "-1607980696": {
         "shortname": "workbench3",
-        "name": "Work Bench Level 3",
+        "name": "Workbench Level 3",
         "description": "This allows you to craft and unlock items requiring workbench level 3"
     },
     "-810326667": {
         "shortname": "workcart",
         "name": "Work Cart",
         "description": "A service train designed to run on an underground rail system."
+    },
+    "-2027793839": {
+        "shortname": "xmas.advent",
+        "name": "Advent Calendar",
+        "description": "Receive a special gift each and every day!"
     },
     "-1667224349": {
         "shortname": "xmas.decoration.baubels",
@@ -3568,6 +3778,11 @@
         "shortname": "xmas.decoration.star",
         "name": "Star Tree Topper",
         "description": "A golden star to top off your Christmas Tree"
+    },
+    "-1230433643": {
+        "shortname": "xmas.double.door.garland",
+        "name": "Festive Double Doorway Garland",
+        "description": "A Festive decoration to spruce up your double doorway during the holidays!"
     },
     "-151387974": {
         "shortname": "xmas.lightstring.advanced",
