@@ -15,13 +15,15 @@ class RustPlus extends RP {
 
         this.guildId = guildId;
 
+        this.trademarkString = 'rustPlusPlus | ';
+
         this.oldsendTeamMessage = this.sendTeamMessage;
         this.sendTeamMessage = function (message) {
-            let messageMaxLength = MAX_LENGTH_TEAM_MESSAGE - 'rustPlusPlus | '.length;
+            let messageMaxLength = MAX_LENGTH_TEAM_MESSAGE - this.trademarkString.length;
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
 
             for (let msg of strings) {
-                this.oldsendTeamMessage(`rustPlusPlus | ${msg}`);
+                this.oldsendTeamMessage(`${this.trademarkString}${msg}`);
             }
         }
 
