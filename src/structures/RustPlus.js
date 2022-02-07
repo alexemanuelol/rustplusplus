@@ -7,6 +7,8 @@ const Logger = require('./Logger.js');
 const path = require('path');
 const DiscordTools = require('../discordTools/discordTools.js');
 
+const MAX_LENGTH_TEAM_MESSAGE = 128;
+
 class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
@@ -15,7 +17,12 @@ class RustPlus extends RP {
 
         this.oldsendTeamMessage = this.sendTeamMessage;
         this.sendTeamMessage = function (message) {
-            this.oldsendTeamMessage(`rustPlusPlus | ${message}`);
+            let messageMaxLength = MAX_LENGTH_TEAM_MESSAGE - 'rustPlusPlus | '.length;
+            let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
+
+            for (let msg of strings) {
+                this.oldsendTeamMessage(`rustPlusPlus | ${msg}`);
+            }
         }
 
         this.logger = null;
