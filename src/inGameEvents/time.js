@@ -46,7 +46,7 @@ module.exports = {
                 (time >= sunrise && time < sunset);
 
             for (let id of Object.keys(rustplus.startTimeObject)) {
-                rustplus.startTimeObject[id] += 10;
+                rustplus.startTimeObject[id] += (client.pollingIntervalMs / 1000);
             }
 
             if (a || b) {
@@ -105,7 +105,7 @@ module.exports = {
             /* It's Day */
             /* Increment all values in the object */
             for (let id of Object.keys(rustplus.timeTillNight)) {
-                rustplus.timeTillNight[id] += 10;
+                rustplus.timeTillNight[id] += (client.pollingIntervalMs / 1000);
             }
 
             rustplus.timeTillNight[time] = 0;
@@ -114,7 +114,7 @@ module.exports = {
             /* It's Night */
             /* Increment all values in the object */
             for (let id of Object.keys(rustplus.timeTillDay)) {
-                rustplus.timeTillDay[id] += 10;
+                rustplus.timeTillDay[id] += (client.pollingIntervalMs / 1000);
             }
 
             rustplus.timeTillDay[time] = 0;

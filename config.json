@@ -1,4 +1,7 @@
 {
+    "general": {
+        "pollingIntervalMs": 10000
+    },
     "discord": {
         "clientId": "",
         "token": ""

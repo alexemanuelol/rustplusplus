@@ -20,7 +20,10 @@ module.exports = {
             rustplus.mapMonuments = map.response.map.monuments;
 
             /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
-            rustplus.intervalId = setInterval(PollingHandler.continuousPollingHandler, 10000, rustplus, client);
+            rustplus.intervalId = setInterval(PollingHandler.continuousPollingHandler,
+                client.pollingIntervalMs,
+                rustplus,
+                client);
         });
     },
 };
