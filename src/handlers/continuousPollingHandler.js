@@ -6,6 +6,7 @@ const PatrolHelicopter = require('../inGameEvents/patrolHelicopter.js');
 const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
 const Time = require('../inGameEvents/time.js');
+const Information = require('../inGameEvents/information.js');
 
 module.exports = {
     continuousPollingHandler: function (rustplus, client) {
@@ -37,5 +38,7 @@ module.exports = {
         if (instance.serverList[server].timeTillDay === null && instance.serverList[server].timeTillNight == null) {
             Time.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         }
+
+        Information.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
     },
 };

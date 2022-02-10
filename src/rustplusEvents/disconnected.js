@@ -1,7 +1,12 @@
+const DiscordTools = require('../discordTools/discordTools.js');
+
 module.exports = {
     name: 'disconnected',
     async execute(rustplus, client) {
         rustplus.log('DISCONNECTED', 'RUSTPLUS DISCONNECTED');
+
+        /* Clear the current interval of inGameEventHandler */
+        clearInterval(rustplus.intervalId);
 
         let instance = client.readInstanceFile(rustplus.guildId);
 
@@ -59,8 +64,10 @@ module.exports = {
         rustplus.timeTillDay = new Object();
         rustplus.timeTillNight = new Object();
 
-        /* Clear the current interval of inGameEventHandler */
-        clearInterval(rustplus.intervalId);
+        rustplus.teamMembers = new Object();
+
+        delete client.informationMessages[rustplus.guildId];
+        DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.information, 100);
 
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
             if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {

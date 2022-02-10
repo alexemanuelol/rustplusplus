@@ -78,6 +78,8 @@ class RustPlus extends RP {
         this.timeTillDay = new Object();
         this.timeTillNight = new Object();
 
+        this.teamMembers = new Object();
+
         /* Load rustplus events */
         this.loadEvents();
     }

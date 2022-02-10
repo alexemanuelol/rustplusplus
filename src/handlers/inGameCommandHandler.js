@@ -326,23 +326,14 @@ module.exports = {
                 const time = Timer.convertToHoursMinutes(msg.response.time.time);
                 let str = `In-Game time: ${time}.`;
 
-                let instance = client.readInstanceFile(rustplus.guildId);
-                let server = `${rustplus.server}-${rustplus.port}`;
-
-                if (instance.serverList[server].timeTillDay !== null &&
-                    instance.serverList[server].timeTillNight !== null) {
+                let timeLeft = Timer.getTimeBeforeSunriseOrSunset(rustplus, client, msg);
+                if (timeLeft !== null) {
                     if (rawTime >= sunrise && rawTime < sunset) {
                         /* It's Day */
-                        let closestTime = getValueOfClosestInObject(rawTime, instance.serverList[server].timeTillNight);
-                        let timeLeft = Timer.secondsToFullScale(closestTime);
-
                         str += ` Approximately ${timeLeft} before nightfall.`;
                     }
                     else {
                         /* It's Night */
-                        let closestTime = getValueOfClosestInObject(rawTime, instance.serverList[server].timeTillDay);
-                        let timeLeft = Timer.secondsToFullScale(closestTime);
-
                         str += ` Approximately ${timeLeft} before daybreak.`;
                     }
                 }
@@ -464,26 +455,4 @@ function promoteToLeader(rustplus, steamId) {
             steamId: steamId
         },
     }, 2000);
-}
-
-function getValueOfClosestInObject(time, object) {
-    let distance = 24;
-    let closestTime = 0;
-
-    for (const [id, value] of Object.entries(object)) {
-        if (parseFloat(id) < time) {
-            if ((time - parseFloat(id)) < distance) {
-                distance = time - parseFloat(id);
-                closestTime = value;
-            }
-        }
-        else {
-            if ((parseFloat(id) - time) < distance) {
-                distance = parseFloat(id) - time;
-                closestTime = value;
-            }
-        }
-    }
-
-    return closestTime;
 }

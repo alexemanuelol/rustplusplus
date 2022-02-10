@@ -15,6 +15,7 @@ class DiscordBot extends Client {
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
         this.serverListMessages = new Object();
+        this.informationMessages = new Object();
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 

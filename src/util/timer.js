@@ -83,6 +83,13 @@ module.exports = {
         return time;
     },
 
+    secondsToMinutes: function (totalSeconds) {
+        totalSeconds = Math.floor(totalSeconds);
+        const minute = 60;
+
+        return `${Math.floor(totalSeconds / minute)}m`
+    },
+
     convertToHoursMinutes: function (value) {
         let hours = Math.floor(value);
         let minutes = Math.floor((value - hours) * 60);
@@ -126,5 +133,57 @@ module.exports = {
         }
 
         return totalSeconds;
+    },
+
+    getClosestTimeInObject: function (time, object) {
+        let distance = 24;
+        let closestTime = 0;
+
+        for (const [id, value] of Object.entries(object)) {
+            if (parseFloat(id) < time) {
+                if ((time - parseFloat(id)) < distance) {
+                    distance = time - parseFloat(id);
+                    closestTime = value;
+                }
+            }
+            else {
+                if ((parseFloat(id) - time) < distance) {
+                    distance = parseFloat(id) - time;
+                    closestTime = value;
+                }
+            }
+        }
+
+        return closestTime;
+    },
+
+    getTimeBeforeSunriseOrSunset: function (rustplus, client, time) {
+        const rawTime = parseFloat(time.response.time.time.toFixed(2));
+        const sunrise = parseFloat(time.response.time.sunrise.toFixed(2));
+        const sunset = parseFloat(time.response.time.sunset.toFixed(2));
+
+        let instance = client.readInstanceFile(rustplus.guildId);
+        let server = `${rustplus.server}-${rustplus.port}`;
+
+        let closestTime;
+        let timeLeft;
+        if (instance.serverList[server].timeTillDay !== null &&
+            instance.serverList[server].timeTillNight !== null) {
+            if (rawTime >= sunrise && rawTime < sunset) {
+                /* It's Day */
+                closestTime = module.exports.getClosestTimeInObject(rawTime, instance.serverList[server].timeTillNight);
+                timeLeft = module.exports.secondsToFullScale(closestTime);
+            }
+            else {
+                /* It's Night */
+                closestTime = module.exports.getClosestTimeInObject(rawTime, instance.serverList[server].timeTillDay);
+                timeLeft = module.exports.secondsToFullScale(closestTime);
+            }
+        }
+        else {
+            return null;
+        }
+
+        return timeLeft;
     },
 }

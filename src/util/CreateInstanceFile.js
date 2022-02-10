@@ -13,6 +13,7 @@ module.exports = (client, guild) => {
             notificationSettings: client.readNotificationSettingsTemplate(),
             channelId: {
                 category: null,
+                information: null,
                 servers: null,
                 settings: null,
                 events: null
