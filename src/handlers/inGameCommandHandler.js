@@ -41,6 +41,11 @@ module.exports = {
         else if (command === `${rustplus.generalSettings.prefix}wipe`) {
             module.exports.commandWipe(rustplus);
         }
+        else {
+            return false;
+        }
+
+        return true;
     },
 
     commandBradley: function (rustplus) {
