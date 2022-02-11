@@ -16,7 +16,8 @@ module.exports = (client, guild) => {
                 information: null,
                 servers: null,
                 settings: null,
-                events: null
+                events: null,
+                teamchat: null
             },
             serverList: {},
             credentials: null
