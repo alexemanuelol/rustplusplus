@@ -16,6 +16,7 @@ module.exports = {
             client.setupFcmListeners();
             client.setupServerLists();
             client.setupSettingsMenus(); /* Only run on guildCreate? */
+            client.setupInformationChannels();
             client.createRustplusInstancesFromConfig();
         }, 5000);
     },

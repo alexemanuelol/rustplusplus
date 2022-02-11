@@ -1,7 +1,10 @@
+const DiscordTools = require('../discordTools/discordTools.js');
+
 module.exports = {
     name: 'guildCreate',
     async execute(client, guild) {
         require('../util/CreateInstanceFile')(client, guild);
+        let instance = client.readInstanceFile(guild.id);
         require('../discordTools/RegisterSlashCommands')(client, guild);
 
         /* TODO: Wait for all text channels to be created before continue */
@@ -10,6 +13,8 @@ module.exports = {
 
         setTimeout(() => {
             require('../discordTools/SetupSettingsMenu')(client, guild);
+            DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
+            client.informationMessages[guild.id] = {};
         }, 5000);
     },
 }

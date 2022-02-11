@@ -299,7 +299,7 @@ module.exports = {
 }
 
 async function sendInformationEmbed(rustplus, client, instance, infoMessage, embed, file) {
-    if (!client.informationMessages[rustplus.guildId][infoMessage]) {
+    if (!client.informationMessages[rustplus.guildId].hasOwnProperty(infoMessage)) {
         let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
 
         if (!channel) {

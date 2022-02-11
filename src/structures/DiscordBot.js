@@ -4,6 +4,7 @@ const Config = require('../../config.json');
 const RustPlus = require('../structures/RustPlus');
 const Logger = require('./Logger.js');
 const path = require('path');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 class DiscordBot extends Client {
     constructor(props) {
@@ -84,7 +85,15 @@ class DiscordBot extends Client {
     setupSettingsMenus() {
         this.guilds.cache.forEach((guild) => {
             require('../discordTools/SetupSettingsMenu')(this, guild);
-        })
+        });
+    }
+
+    setupInformationChannels() {
+        this.guilds.cache.forEach((guild) => {
+            let instance = this.readInstanceFile(guild.id);
+            DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
+            this.informationMessages[guild.id] = {};
+        });
     }
 
     readInstanceFile(guildId) {
