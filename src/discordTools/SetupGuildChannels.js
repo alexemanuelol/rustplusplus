@@ -1,4 +1,5 @@
 const DiscordTools = require('../discordTools/discordTools.js');
+const { Permissions } = require('discord.js');
 
 module.exports = (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
@@ -92,9 +93,12 @@ function addMissingTextChannels(client, guildId, parent) {
         DiscordTools.addTextChannel(guildId, 'teamchat').then(channel => {
             channel.setParent(parent.id);
             instance.channelId.teamchat = channel.id;
-            channel.permissionOverwrites.edit(channel.guild.roles.everyone.id, {
-                SEND_MESSAGES: true
-            })
+            channel.permissionOverwrites.set([
+                {
+                    id: channel.guild.roles.everyone.id,
+                    allow: [Permissions.FLAGS.SEND_MESSAGES]
+                }
+            ]);
             client.writeInstanceFile(guildId, instance);
         });
     }
