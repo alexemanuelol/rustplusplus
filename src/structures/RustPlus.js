@@ -80,6 +80,8 @@ class RustPlus extends RP {
 
         this.teamMembers = new Object();
 
+        this.informationIntervalCounter = 0;
+
         /* Load rustplus events */
         this.loadEvents();
     }

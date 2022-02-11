@@ -22,6 +22,12 @@ const AFK_TIME_SECONDS = 5 * 60; /* 5 Minutes */
 
 module.exports = {
     checkEvent: async function (rustplus, client, info, mapMarkers, teamInfo, time) {
+        if (rustplus.informationIntervalCounter !== 0) {
+            rustplus.informationIntervalCounter -= 1;
+            return;
+        }
+        rustplus.informationIntervalCounter = 5;
+
         let instance = client.readInstanceFile(rustplus.guildId);
 
         /* Update Server Information embed */
