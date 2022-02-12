@@ -10,12 +10,7 @@ module.exports = function (rustplus, client, message) {
     if (channel !== undefined) {
         let embed = new MessageEmbed()
             .setColor(message.color)
-            .setTitle(message.name)
-            .setDescription(message.message)
-            .setFooter({
-                text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
-            })
-            .setTimestamp();
+            .setDescription(`**${message.name}**: ${message.message}`)
 
         channel.send({ embeds: [embed] });
     }
