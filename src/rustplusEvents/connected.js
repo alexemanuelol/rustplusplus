@@ -19,6 +19,8 @@ module.exports = {
             rustplus.mapOceanMargin = map.response.map.oceanMargin;
             rustplus.mapMonuments = map.response.map.monuments;
 
+            require('../discordTools/SetupSwitches')(client, rustplus);
+
             /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
             rustplus.intervalId = setInterval(PollingHandler.continuousPollingHandler,
                 client.pollingIntervalMs,

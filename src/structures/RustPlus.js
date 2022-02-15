@@ -82,6 +82,8 @@ class RustPlus extends RP {
 
         this.informationIntervalCounter = 0;
 
+        this.interactionSwitches = [];
+
         /* Load rustplus events */
         this.loadEvents();
     }

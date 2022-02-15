@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, Permissions } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageSelectMenu, Permissions, MessageEmbed } = require('discord.js');
 const Client = require('../../index.js');
 
 module.exports = {
@@ -176,5 +176,32 @@ module.exports = {
                     .setCustomId(`${ipPort}ServerDelete`)
                     .setEmoji('🗑️')
                     .setStyle('SECONDARY'))
+    },
+
+    getSwitchButtonsEmbed: function (id, name, command, server, active) {
+        return new MessageEmbed()
+            .setTitle(`${name}`)
+            .setColor('#ce412b')
+            .setDescription(`${id}`)
+            .setThumbnail(`attachment://${(active) ? 'on_logo.png' : 'off_logo.png'}`)
+            .addFields(
+                { name: 'Custom Command', value: `${command}`, inline: true }
+            )
+            .setFooter({ text: `${server}` })
+    },
+
+    getSwitchButtonsRow: function (id, active) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`${id}${(active) ? 'Off' : 'On'}SmartSwitch`)
+                    .setLabel((active) ? 'TURN OFF' : 'TURN ON')
+                    .setStyle((active) ? 'DANGER' : 'SUCCESS'),
+                new MessageButton()
+                    .setCustomId(`${id}SmartSwitchDelete`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY')
+            )
+
     },
 }

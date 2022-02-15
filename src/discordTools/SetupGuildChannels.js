@@ -105,4 +105,19 @@ function addMissingTextChannels(client, guildId, parent) {
     else {
         teamchat.setParent(parent.id);
     }
+
+    let switches = undefined;
+    if (instance.channelId.switches !== null) {
+        switches = DiscordTools.getTextChannelById(guildId, instance.channelId.switches);
+    }
+    if (switches === undefined) {
+        DiscordTools.addTextChannel(guildId, 'switches').then(channel => {
+            channel.setParent(parent.id);
+            instance.channelId.switches = channel.id;
+            client.writeInstanceFile(guildId, instance);
+        });
+    }
+    else {
+        switches.setParent(parent.id);
+    }
 }

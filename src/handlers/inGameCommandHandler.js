@@ -1,5 +1,7 @@
 const Timer = require('../util/timer');
 const StringSimilarity = require('../util/stringSimilarity.js');
+const { MessageAttachment } = require('discord.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
     inGameCommandHandler: function (rustplus, client, message) {
@@ -42,6 +44,42 @@ module.exports = {
             module.exports.commandWipe(rustplus);
         }
         else {
+            let instance = client.readInstanceFile(rustplus.guildId);
+
+            for (const [id, content] of Object.entries(instance.switches)) {
+                let active = !content.active;
+                if (command === `${rustplus.generalSettings.prefix}${content.command}`) {
+                    let file = new MessageAttachment(`src/images/${(active) ?
+                        'on_logo.png' : 'off_logo.png'}`);
+                    let embed = DiscordTools.getSwitchButtonsEmbed(
+                        id, content.name, `${rustplus.generalSettings.prefix}${content.command}`,
+                        content.server, active);
+
+                    let row = DiscordTools.getSwitchButtonsRow(id, active);
+
+                    rustplus.interactionSwitches[id] = active;
+
+                    if (active) {
+                        rustplus.turnSmartSwitchOn(id, (msg) => {
+                            client.switchesMessages[rustplus.guildId][id].edit({
+                                embeds: [embed], components: [row], files: [file]
+                            });
+                        });
+                    }
+                    else {
+                        rustplus.turnSmartSwitchOff(id, (msg) => {
+                            client.switchesMessages[rustplus.guildId][id].edit({
+                                embeds: [embed], components: [row], files: [file]
+                            });
+                        });
+                    }
+
+                    instance.switches[id].active = active;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    return true;
+                }
+            }
             return false;
         }
 

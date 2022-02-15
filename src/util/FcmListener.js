@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageAttachment } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
 
@@ -88,6 +88,45 @@ module.exports = async (client, guild) => {
                             switch (body.entityName) {
                                 case 'Switch':
                                     client.log('FCM', `${guild.id} pairing: entity: Switch`);
+
+                                    instance = client.readInstanceFile(guild.id);
+                                    let id = body.entityId;
+
+                                    if (instance.switches.hasOwnProperty(id)) return;
+
+                                    client.rustplusInstances[guild.id].getEntityInfo(id, (msg) => {
+                                        let active = msg.response.entityInfo.payload.value;
+                                        instance.switches[id] = {
+                                            active: active,
+                                            name: 'Smart Switch',
+                                            command: id,
+                                            server: body.name,
+                                            ipPort: `${body.ip}-${body.port}`
+                                        };
+                                        client.writeInstanceFile(guild.id, instance);
+
+                                        let prefix = client.rustplusInstances[guild.id].generalSettings.prefix;
+
+                                        let img = (active) ? 'on_logo.png' : 'off_logo.png';
+                                        let file = new MessageAttachment(`src/images/${img}`);
+                                        let embed = DiscordTools.getSwitchButtonsEmbed(
+                                            id, 'Smart Switch', `${prefix}${id}`, body.name, active);
+
+                                        let row = DiscordTools.getSwitchButtonsRow(
+                                            id, active);
+
+                                        let channel = DiscordTools.getTextChannelById(
+                                            guild.id, instance.channelId.switches);
+
+                                        if (!channel) {
+                                            client.log('ERROR', 'Invalid guild or channel.', 'error');
+                                            return;
+                                        }
+
+                                        channel.send({ embeds: [embed], components: [row], files: [file] }).then((msg) => {
+                                            client.switchesMessages[guild.id][id] = msg;
+                                        });
+                                    });
                                     break;
 
                                 case 'Smart Alarm':
