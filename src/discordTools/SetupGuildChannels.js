@@ -104,6 +104,12 @@ function addMissingTextChannels(client, guildId, parent) {
     }
     else {
         teamchat.setParent(parent.id);
+        teamchat.permissionOverwrites.set([
+            {
+                id: teamchat.guild.roles.everyone.id,
+                allow: [Permissions.FLAGS.SEND_MESSAGES]
+            }
+        ]);
     }
 
     let switches = undefined;
