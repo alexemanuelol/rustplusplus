@@ -1,5 +1,5 @@
 const Timer = require('../util/timer');
-const StringSimilarity = require('../util/stringSimilarity.js');
+const Str = require('../util/string.js');
 const { MessageAttachment } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
@@ -278,7 +278,7 @@ module.exports = {
 
                     /* Find the closest name */
                     for (let member of msg.response.teamInfo.members) {
-                        if (StringSimilarity.similarity(name, member.name) >= 0.9) {
+                        if (Str.similarity(name, member.name) >= 0.9) {
                             promoteToLeader(rustplus, member.steamId).then((result) => {
                                 rustplus.log('COMMAND', `Team Leadership was transferred to ${name}:` +
                                     `${member.steamId}.`);

@@ -1,5 +1,5 @@
 const Items = require('./items.json');
-const StringSimilarity = require('./stringSimilarity.js');
+const Str = require('./string.js');
 
 module.exports = {
     getName: function (id) {
@@ -11,6 +11,6 @@ module.exports = {
     },
 
     getClosestItemIdByName: function (name, similarity = 0.9) {
-        return Object.keys(Items).find(key => StringSimilarity.similarity(Items[key].name, name) >= similarity);
+        return Object.keys(Items).find(key => Str.similarity(Items[key].name, name) >= similarity);
     },
 }

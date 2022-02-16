@@ -22,7 +22,7 @@ module.exports = {
         for (let startGrid = 0; startGrid < mapSize; startGrid += module.exports.gridDiameter) {
             if (x >= startGrid && x <= (startGrid + module.exports.gridDiameter)) {
                 /* We're at the correct grid! */
-                return module.exports.toLetters(num);
+                return module.exports.numberToLetters(num);
             }
             num++;
         }
@@ -40,11 +40,11 @@ module.exports = {
         }
     },
 
-    toLetters: function (num) {
+    numberToLetters: function (num) {
         let mod = num % 26;
         let pow = num / 26 | 0;
         var out = mod ? String.fromCharCode(64 + mod) : (pow--, 'Z');
-        return pow ? module.exports.toLetters(pow) + out : out;
+        return pow ? module.exports.numberToLetters(pow) + out : out;
     },
 
     getDistance: function (x1, y1, x2, y2) {
