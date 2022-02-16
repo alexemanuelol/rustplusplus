@@ -47,8 +47,32 @@ module.exports = {
             let instance = client.readInstanceFile(rustplus.guildId);
 
             for (const [id, content] of Object.entries(instance.switches)) {
-                let active = !content.active;
-                if (command === `${rustplus.generalSettings.prefix}${content.command}`) {
+                let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
+                if (command.startsWith(cmd)) {
+                    let active;
+                    if (command === cmd) {
+                        active = !content.active;
+                    }
+                    else if (command === `${cmd} on`) {
+                        if (!content.active) {
+                            active = true;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
+                    else if (command === `${cmd} off`) {
+                        if (content.active) {
+                            active = false;
+                        }
+                        else {
+                            return true;
+                        }
+                    }
+                    else {
+                        return false;
+                    }
+
                     let file = new MessageAttachment(`src/images/${(active) ?
                         'on_logo.png' : 'off_logo.png'}`);
                     let embed = DiscordTools.getSwitchButtonsEmbed(
