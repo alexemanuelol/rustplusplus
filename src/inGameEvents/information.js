@@ -45,8 +45,8 @@ module.exports = {
         const sinceWipe = (new Date() - new Date(info.response.info.wipeTime * 1000)) / 1000;
         const wipeDay = `Day ${Math.ceil(sinceWipe / (60 * 60 * 24))}`;
 
-        const serverTime = `${Timer.convertToHoursMinutes(time.response.time.time)}`;
-        const timeLeft = Timer.getTimeBeforeSunriseOrSunset(rustplus, client, time);
+        const serverTime = `${Timer.convertDecimalToHoursMinutes(time.response.time.time)}`;
+        const timeLeft = Timer.getTimeBeforeSunriseOrSunset(rustplus, client, time, 's');
         const timeLeftTitle = getTimeLeftTillDayOrNightTitle(time);
 
         const pop = getPopString(info);
@@ -90,7 +90,7 @@ module.exports = {
         /* Cargoship */
         let cargoship = '';
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = rustplus.getTimeLeftOfTimer(timer, 's');
             let pos = rustplus.activeCargoShips[parseInt(id)].location;
             cargoship = `Egress in ${time} at ${pos}.`;
             break;
@@ -108,7 +108,7 @@ module.exports = {
                 }
                 else {
                     let secondsSince = (new Date() - rustplus.timeSinceCargoWasOut) / 1000;
-                    let timeSince = Timer.secondsToFullScale(secondsSince);
+                    let timeSince = Timer.secondsToFullScale(secondsSince, 's');
                     cargoship = `${timeSince} since last.`;
                 }
             }
@@ -129,15 +129,15 @@ module.exports = {
             else if (rustplus.timeSinceHeliWasOnMap !== null &&
                 rustplus.timeSinceHeliWasDestroyed === null) {
                 let secondsSince = (new Date() - rustplus.timeSinceHeliWasOnMap) / 1000;
-                let timeSince = Timer.secondsToFullScale(secondsSince);
+                let timeSince = Timer.secondsToFullScale(secondsSince, 's');
                 patrolHelicopter = `${timeSince} since last.`;
             }
             else if (rustplus.timeSinceHeliWasOnMap !== null &&
                 rustplus.timeSinceHeliWasDestroyed !== null) {
                 let secondsSince = (new Date() - rustplus.timeSinceHeliWasOnMap) / 1000;
-                let timeSinceOut = Timer.secondsToFullScale(secondsSince);
+                let timeSinceOut = Timer.secondsToFullScale(secondsSince, 's');
                 secondsSince = (new Date() - rustplus.timeSinceHeliWasDestroyed) / 1000;
-                let timeSinceDestroyed = Timer.secondsToFullScale(secondsSince);
+                let timeSinceDestroyed = Timer.secondsToFullScale(secondsSince, 's');
                 patrolHelicopter = `${timeSinceOut} since last.\n${timeSinceDestroyed} since destroyed.`;
             }
         }
@@ -145,7 +145,7 @@ module.exports = {
         /* Bradley APC */
         let bradley = '';
         for (const [id, timer] of Object.entries(rustplus.bradleyRespawnTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = rustplus.getTimeLeftOfTimer(timer, 's');
             bradley = `${time} before respawn.`;
             break;
         }
@@ -156,7 +156,7 @@ module.exports = {
             }
             else {
                 let secondsSince = (new Date() - rustplus.timeSinceBradleyWasDestroyed) / 1000;
-                let timeSince = Timer.secondsToFullScale(secondsSince);
+                let timeSince = Timer.secondsToFullScale(secondsSince, 's');
                 bradley = `${timeSince} since destroyed.`;
             }
         }
@@ -164,7 +164,7 @@ module.exports = {
         /* Small Oil Rig */
         let smallOil = '';
         for (const [id, timer] of Object.entries(rustplus.lockedCrateSmallOilRigTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = rustplus.getTimeLeftOfTimer(timer, 's');
             let pos = rustplus.activeLockedCrates[parseInt(id)].location;
 
             if (time !== null) {
@@ -179,7 +179,7 @@ module.exports = {
             }
             else {
                 let secondsSince = (new Date() - rustplus.timeSinceSmallOilRigWasTriggered) / 1000;
-                let timeSince = Timer.secondsToFullScale(secondsSince);
+                let timeSince = Timer.secondsToFullScale(secondsSince, 's');
                 smallOil = `${timeSince} since last event.`;
             }
         }
@@ -188,7 +188,7 @@ module.exports = {
         /* Large Oil Rig */
         let largeOil = '';
         for (const [id, timer] of Object.entries(rustplus.lockedCrateLargeOilRigTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = rustplus.getTimeLeftOfTimer(timer, 's');
             let pos = rustplus.activeLockedCrates[parseInt(id)].location;
 
             if (time !== null) {
@@ -203,7 +203,7 @@ module.exports = {
             }
             else {
                 let secondsSince = (new Date() - rustplus.timeSinceLargeOilRigWasTriggered) / 1000;
-                let timeSince = Timer.secondsToFullScale(secondsSince);
+                let timeSince = Timer.secondsToFullScale(secondsSince, 's');
                 largeOil = `${timeSince} since last event.`;
             }
         }
@@ -264,7 +264,7 @@ module.exports = {
                 }
 
                 let timeDifferenceSeconds = (new Date() - teamMember.time) / 1000;
-                let afk = Timer.secondsToMinutes(timeDifferenceSeconds);
+                let afk = Timer.secondsToFullScale(timeDifferenceSeconds, 'dhs');
 
                 if (member.isAlive) {
                     status += (timeDifferenceSeconds >= AFK_TIME_SECONDS) ?

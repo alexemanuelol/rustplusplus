@@ -366,7 +366,7 @@ module.exports = {
                 const rawTime = parseFloat(msg.response.time.time.toFixed(2));
                 const sunrise = parseFloat(msg.response.time.sunrise.toFixed(2));
                 const sunset = parseFloat(msg.response.time.sunset.toFixed(2));
-                const time = Timer.convertToHoursMinutes(msg.response.time.time);
+                const time = Timer.convertDecimalToHoursMinutes(msg.response.time.time);
                 let str = `In-Game time: ${time}.`;
 
                 let timeLeft = Timer.getTimeBeforeSunriseOrSunset(rustplus, client, msg);

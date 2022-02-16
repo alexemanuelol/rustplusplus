@@ -62,37 +62,61 @@ module.exports = {
         }
     },
 
-    secondsToFullScale: function (totalSeconds) {
-        totalSeconds = Math.floor(totalSeconds);
+    secondsToFullScale: function (totSeconds, ignore = '') {
+        totSeconds = Math.floor(totSeconds);
 
         const day = 86400;
         const hour = 3600;
         const minute = 60;
+        const second = 1;
 
-        let days = Math.floor(totalSeconds / day);
-        let hours = Math.floor((totalSeconds - days * day) / hour);
-        let minutes = Math.floor((totalSeconds - days * day - hours * hour) / minute);
-        let seconds = totalSeconds - days * day - hours * hour - minutes * minute;
+        const originalDays = Math.floor(totSeconds / day);
+        const originalHours = Math.floor((totSeconds - originalDays * day) / hour);
+        const originalMinutes = Math.floor((totSeconds - originalDays * day - originalHours * hour) / minute);
+        const originalSeconds = totSeconds - originalDays * day - originalHours * hour - originalMinutes * minute;
 
-        let time = '';
-        time += (days === 0) ? "" : `${days}d `;
-        time += (hours === 0 && totalSeconds < hour) ? "" : `${hours}h `;
-        time += (minutes === 0 && totalSeconds < minute) ? "" : `${minutes}m `;
-        time += `${seconds}s`;
+        let days = 0;
+        let hours = 0;
+        let minutes = 0;
+        let seconds = 0;
 
-        return time;
+        time = '';
+
+        days += originalDays;
+        if (days > 0 && !ignore.includes('d')) {
+            time += `${days}d `;
+        }
+        else if (days > 0 && ignore.includes('d')) {
+            hours += (day / hour) * days;
+        }
+
+        hours += originalHours;
+        if (hours > 0 && !ignore.includes('h')) {
+            time += `${hours}h `;
+        }
+        else if (hours > 0 && ignore.includes('h')) {
+            minutes += (hour / minute) * hours;
+        }
+
+        minutes += originalMinutes;
+        if (minutes > 0 && !ignore.includes('m')) {
+            time += `${minutes}m `;
+        }
+        else if (minutes > 0 && ignore.includes('m')) {
+            seconds += (minute / second) * minutes;
+        }
+
+        seconds += originalSeconds;
+        if (seconds > 0 && !ignore.includes('s')) {
+            time += `${seconds}s`;
+        }
+
+        return time.trim();
     },
 
-    secondsToMinutes: function (totalSeconds) {
-        totalSeconds = Math.floor(totalSeconds);
-        const minute = 60;
-
-        return `${Math.floor(totalSeconds / minute)}m`
-    },
-
-    convertToHoursMinutes: function (value) {
-        let hours = Math.floor(value);
-        let minutes = Math.floor((value - hours) * 60);
+    convertDecimalToHoursMinutes: function (time) {
+        let hours = Math.floor(time);
+        let minutes = Math.floor((time - hours) * 60);
 
         hours = (hours < 10) ? `0${hours}`.toString() : hours.toString();
         minutes = (minutes < 10) ? `0${minutes}`.toString() : minutes.toString();
@@ -100,31 +124,31 @@ module.exports = {
         return `${hours}:${minutes}`;
     },
 
-    getSecondsFromStringTime: function (stringTime) {
-        let matches = stringTime.match(/\d+[dhms]/g);
-        let totalSeconds = 0;
+    getSecondsFromStringTime: function (str) {
+        let matches = str.match(/\d+[dhms]/g);
+        let totSeconds = 0;
 
         if (matches === null) {
             return null;
         }
 
-        for (let time of matches) {
-            let value = parseInt(time.slice(0, -1));
-            switch (time[time.length - 1]) {
+        for (let match of matches) {
+            let value = parseInt(match.slice(0, -1));
+            switch (match[match.length - 1]) {
                 case 'd': /* Days */
-                    totalSeconds += value * 24 * 60 * 60;
+                    totSeconds += value * 24 * 60 * 60;
                     break;
 
                 case 'h': /* Hours */
-                    totalSeconds += value * 60 * 60;
+                    totSeconds += value * 60 * 60;
                     break;
 
                 case 'm': /* Minutes */
-                    totalSeconds += value * 60;
+                    totSeconds += value * 60;
                     break;
 
                 case 's': /* Seconds */
-                    totalSeconds += value;
+                    totSeconds += value;
                     break;
 
                 default:
@@ -132,7 +156,7 @@ module.exports = {
             }
         }
 
-        return totalSeconds;
+        return totSeconds;
     },
 
     getClosestTimeInObject: function (time, object) {
@@ -157,7 +181,7 @@ module.exports = {
         return closestTime;
     },
 
-    getTimeBeforeSunriseOrSunset: function (rustplus, client, time) {
+    getTimeBeforeSunriseOrSunset: function (rustplus, client, time, ignore = '') {
         const rawTime = parseFloat(time.response.time.time.toFixed(2));
         const sunrise = parseFloat(time.response.time.sunrise.toFixed(2));
         const sunset = parseFloat(time.response.time.sunset.toFixed(2));
@@ -172,12 +196,12 @@ module.exports = {
             if (rawTime >= sunrise && rawTime < sunset) {
                 /* It's Day */
                 closestTime = module.exports.getClosestTimeInObject(rawTime, instance.serverList[server].timeTillNight);
-                timeLeft = module.exports.secondsToFullScale(closestTime);
+                timeLeft = module.exports.secondsToFullScale(closestTime, ignore);
             }
             else {
                 /* It's Night */
                 closestTime = module.exports.getClosestTimeInObject(rawTime, instance.serverList[server].timeTillDay);
-                timeLeft = module.exports.secondsToFullScale(closestTime);
+                timeLeft = module.exports.secondsToFullScale(closestTime, ignore);
             }
         }
         else {
