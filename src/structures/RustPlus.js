@@ -146,14 +146,6 @@ class RustPlus extends RP {
         }
     }
 
-    getTimeLeftOfTimer(timer, ignore = '') {
-        /* Returns the time left of a timer. If timer is not running, null will be returned. */
-        if (timer.getStateRunning()) {
-            return Timer.secondsToFullScale(timer.getTimeLeft() / 1000, ignore);
-        }
-        return null;
-    }
-
     addItemToLookFor(id) {
         if (!this.itemsToLookForId.includes(id)) {
             this.itemsToLookForId.push(id);

@@ -62,6 +62,15 @@ module.exports = {
         }
     },
 
+
+    getTimeLeftOfTimer: function (timer, ignore = '') {
+        /* Returns the time left of a timer. If timer is not running, null will be returned. */
+        if (timer.getStateRunning()) {
+            return this.secondsToFullScale(timer.getTimeLeft() / 1000, ignore);
+        }
+        return null;
+    },
+
     secondsToFullScale: function (totSeconds, ignore = '') {
         totSeconds = Math.floor(totSeconds);
 

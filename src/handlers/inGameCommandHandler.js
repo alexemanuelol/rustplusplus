@@ -116,7 +116,7 @@ module.exports = {
         let timerCounter = 0;
         for (const [id, timer] of Object.entries(rustplus.bradleyRespawnTimers)) {
             timerCounter += 1;
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = Timer.getTimeLeftOfTimer(timer);
 
             if (time !== null) {
                 strings.push(`Approximately ${time} before Bradley APC respawns.`);
@@ -147,7 +147,7 @@ module.exports = {
 
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
             unhandled = unhandled.filter(e => e != parseInt(id));
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = Timer.getTimeLeftOfTimer(timer);
             let pos = rustplus.activeCargoShips[parseInt(id)].location;
 
             if (time !== null) {
@@ -222,7 +222,7 @@ module.exports = {
         let timerCounter = 0;
         for (const [id, timer] of Object.entries(rustplus.lockedCrateLargeOilRigTimers)) {
             timerCounter += 1;
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = Timer.getTimeLeftOfTimer(timer);
             let pos = rustplus.activeLockedCrates[parseInt(id)].location;
 
             if (time !== null) {
@@ -359,7 +359,7 @@ module.exports = {
         let timerCounter = 0;
         for (const [id, timer] of Object.entries(rustplus.lockedCrateSmallOilRigTimers)) {
             timerCounter += 1;
-            let time = rustplus.getTimeLeftOfTimer(timer);
+            let time = Timer.getTimeLeftOfTimer(timer);
             let pos = rustplus.activeLockedCrates[parseInt(id)].location;
 
             if (time !== null) {
@@ -487,7 +487,7 @@ module.exports = {
                     rustplus.log('COMMAND', 'Active timers:');
                 }
                 for (const [id, content] of Object.entries(rustplus.timers)) {
-                    let timeLeft = rustplus.getTimeLeftOfTimer(content.timer);
+                    let timeLeft = Timer.getTimeLeftOfTimer(content.timer);
                     let str = `- ID: ${parseInt(id)}, Time left: ${timeLeft}, Message: ${content.message}`;
                     rustplus.sendTeamMessage(str);
                     rustplus.log('COMMAND', str);

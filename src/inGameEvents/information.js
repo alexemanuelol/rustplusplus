@@ -90,7 +90,7 @@ module.exports = {
         /* Cargoship */
         let cargoship = '';
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer, 's');
+            let time = Timer.getTimeLeftOfTimer(timer, 's');
             let pos = rustplus.activeCargoShips[parseInt(id)].location;
             cargoship = `Egress in ${time} at ${pos}.`;
             break;
@@ -145,7 +145,7 @@ module.exports = {
         /* Bradley APC */
         let bradley = '';
         for (const [id, timer] of Object.entries(rustplus.bradleyRespawnTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer, 's');
+            let time = Timer.getTimeLeftOfTimer(timer, 's');
             bradley = `${time} before respawn.`;
             break;
         }
@@ -164,7 +164,7 @@ module.exports = {
         /* Small Oil Rig */
         let smallOil = '';
         for (const [id, timer] of Object.entries(rustplus.lockedCrateSmallOilRigTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer, 's');
+            let time = Timer.getTimeLeftOfTimer(timer, 's');
             let pos = rustplus.activeLockedCrates[parseInt(id)].location;
 
             if (time !== null) {
@@ -188,7 +188,7 @@ module.exports = {
         /* Large Oil Rig */
         let largeOil = '';
         for (const [id, timer] of Object.entries(rustplus.lockedCrateLargeOilRigTimers)) {
-            let time = rustplus.getTimeLeftOfTimer(timer, 's');
+            let time = Timer.getTimeLeftOfTimer(timer, 's');
             let pos = rustplus.activeLockedCrates[parseInt(id)].location;
 
             if (time !== null) {
