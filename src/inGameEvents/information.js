@@ -247,7 +247,7 @@ module.exports = {
 
             unhandled = unhandled.filter(e => parseInt(e) !== member.steamId.toNumber());
 
-            let outsidePos = Map.getCoordinatesDirection(member.x, member.y, mapSize);
+            let outsidePos = Map.getPointDirection(member.x, member.y, mapSize);
             let gridPos = Map.getGridPos(member.x, member.y, mapSize);
             let pos = (gridPos === null) ? outsidePos : gridPos;
 

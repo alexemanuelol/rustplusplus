@@ -15,7 +15,7 @@ module.exports = {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
                 let mapSize = info.response.info.mapSize;
-                let outsidePos = Map.getCoordinatesDirection(marker.x, marker.y, mapSize);
+                let outsidePos = Map.getPointDirection(marker.x, marker.y, mapSize);
                 let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
                 let pos = (gridPos === null) ? outsidePos : gridPos;
 

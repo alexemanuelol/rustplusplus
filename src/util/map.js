@@ -47,6 +47,16 @@ module.exports = {
         return pow ? module.exports.numberToLetters(pow) + out : out;
     },
 
+    getAngleBetweenPoints: function (x1, y1, x2, y2) {
+        let angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+        if (angle < 0) {
+            angle = 360 + angle;
+        }
+
+        return (Math.abs(angle - 360) + 90) % 360;
+    },
+
     getDistance: function (x1, y1, x2, y2) {
         /* Pythagoras is the man! */
         const a = x1 - x2;
@@ -62,7 +72,7 @@ module.exports = {
         return false;
     },
 
-    getCoordinatesDirection: function (x, y, size) {
+    getPointDirection: function (x, y, size) {
         /* Returns the direction of the coordinate. */
         let offset = size / 6;
         let dir;
