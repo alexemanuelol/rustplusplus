@@ -54,7 +54,7 @@ module.exports = {
             angle = 360 + angle;
         }
 
-        return (Math.abs(angle - 360) + 90) % 360;
+        return Math.floor((Math.abs(angle - 360) + 90) % 360);
     },
 
     getDistance: function (x1, y1, x2, y2) {

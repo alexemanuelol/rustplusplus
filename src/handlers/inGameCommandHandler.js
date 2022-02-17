@@ -2,6 +2,7 @@ const Timer = require('../util/timer');
 const Str = require('../util/string.js');
 const { MessageAttachment } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
+const Map = require('../util/map.js');
 
 module.exports = {
     inGameCommandHandler: function (rustplus, client, message) {
@@ -21,6 +22,9 @@ module.exports = {
         }
         else if (command.startsWith(`${rustplus.generalSettings.prefix}leader`)) {
             module.exports.commandLeader(rustplus, message);
+        }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}marker`)) {
+            module.exports.commandMarker(rustplus, client, message);
         }
         else if (command === `${rustplus.generalSettings.prefix}offline`) {
             module.exports.commandOffline(rustplus);
@@ -293,6 +297,104 @@ module.exports = {
         });
     },
 
+    commandMarker: function (rustplus, client, message) {
+        let callerId = message.broadcast.teamMessage.message.steamId.toNumber();
+        let command = message.broadcast.teamMessage.message.message;
+        let serverId = `${rustplus.server}-${rustplus.port}`;
+
+        if (!command.startsWith(`${rustplus.generalSettings.prefix}marker `)) {
+            return;
+        }
+
+        command = command.replace(`${rustplus.generalSettings.prefix}marker `, '');
+        let subcommand = command.replace(/ .*/, '');
+        command = command.slice(subcommand.length + 1);
+
+        switch (subcommand) {
+            case 'add':
+                rustplus.getTeamInfo((msg) => {
+                    let instance = client.readInstanceFile(rustplus.guildId);
+
+                    let callerLocation = null;
+                    for (let member of msg.response.teamInfo.members) {
+                        if (member.steamId.toNumber() === callerId) {
+                            callerLocation = { x: member.x, y: member.y };
+                            break;
+                        }
+                    }
+
+                    instance.markers[serverId][command] = callerLocation;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+                    rustplus.markers[command] = callerLocation;
+
+                    let str = `Marker '${command}' was added.`;
+                    rustplus.sendTeamMessage(str);
+                    rustplus.log('COMMAND', str);
+                });
+                break;
+
+            case 'remove':
+                let instance = client.readInstanceFile(rustplus.guildId);
+
+                if (command in rustplus.markers) {
+                    delete rustplus.markers[command];
+                    delete instance.markers[serverId][command];
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    let str = `Marker '${command}' was removed.`;
+                    rustplus.sendTeamMessage(str);
+                    rustplus.log('COMMAND', str);
+                }
+                break;
+
+            case 'list':
+                let str = '';
+                for (const [name, location] of Object.entries(rustplus.markers)) {
+                    str += `${name}, `;
+                }
+
+                if (str !== '') {
+                    str = str.slice(0, -2);
+                }
+                else {
+                    str = 'No markers.';
+                }
+
+                rustplus.sendTeamMessage(str);
+                rustplus.log('COMMAND', str);
+                break;
+
+            default:
+                if (!(subcommand in rustplus.markers)) {
+                    return;
+                }
+
+                rustplus.getTeamInfo((msg) => {
+                    let callerLocation = null;
+                    let callerName = null;
+                    for (let member of msg.response.teamInfo.members) {
+                        if (member.steamId.toNumber() === callerId) {
+                            callerLocation = { x: member.x, y: member.y };
+                            callerName = member.name;
+                            break;
+                        }
+                    }
+
+                    let direction = Map.getAngleBetweenPoints(
+                        callerLocation.x, callerLocation.y,
+                        rustplus.markers[subcommand].x, rustplus.markers[subcommand].y);
+                    let distance = Math.floor(Map.getDistance(
+                        callerLocation.x, callerLocation.y,
+                        rustplus.markers[subcommand].x, rustplus.markers[subcommand].y));
+
+                    let str = `Marker '${subcommand}' is ${distance}m from ${callerName} in direction ${direction}°.`;
+                    rustplus.sendTeamMessage(str);
+                    rustplus.log('COMMAND', str);
+                });
+                break;
+        }
+    },
+
     commandOffline: function (rustplus) {
         rustplus.getTeamInfo((teamInfo) => {
             if (teamInfo.response.hasOwnProperty('teamInfo')) {
@@ -412,11 +514,11 @@ module.exports = {
     },
 
     commandTimer: function (rustplus, command) {
-        if (!command.startsWith('!timer ')) {
+        if (!command.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             return;
         }
 
-        command = command.replace('!timer ', '');
+        command = command.replace(`${rustplus.generalSettings.prefix}timer `, '');
         let subcommand = command.replace(/ .*/, '');
         command = command.slice(subcommand.length + 1);
 

@@ -84,6 +84,8 @@ class RustPlus extends RP {
 
         this.interactionSwitches = [];
 
+        this.markers = new Object();
+
         /* Load rustplus events */
         this.loadEvents();
     }
@@ -154,6 +156,20 @@ class RustPlus extends RP {
 
     removeItemToLookFor(id) {
         this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
+    }
+
+    loadMarkers() {
+        let instance = Client.client.readInstanceFile(this.guildId);
+        let server = `${this.server}-${this.port}`;
+
+        if (!instance.markers.hasOwnProperty(server)) {
+            instance.markers[server] = {};
+            Client.client.writeInstanceFile(this.guildId, instance);
+        }
+
+        for (const [name, location] of Object.entries(instance.markers[server])) {
+            this.markers[name] = { x: location.x, y: location.y };
+        }
     }
 }
 

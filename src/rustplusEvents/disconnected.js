@@ -64,6 +64,8 @@ module.exports = {
 
         rustplus.teamMembers = new Object();
 
+        rustplus.markers = new Object();
+
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
             if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
                 rustplus.log('RECONNECTING', 'RUSTPLUS RECONNECTING');

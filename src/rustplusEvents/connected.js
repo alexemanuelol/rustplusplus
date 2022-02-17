@@ -20,6 +20,7 @@ module.exports = {
             rustplus.mapMonuments = map.response.map.monuments;
 
             require('../discordTools/SetupSwitches')(client, rustplus);
+            rustplus.loadMarkers();
 
             /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
             rustplus.intervalId = setInterval(PollingHandler.continuousPollingHandler,
