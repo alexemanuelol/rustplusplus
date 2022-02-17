@@ -217,6 +217,7 @@ module.exports = {
             return null;
         }
 
+        timeLeft = (timeLeft === '') ? '0m' : timeLeft;
         return timeLeft;
     },
 }
