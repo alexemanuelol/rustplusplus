@@ -117,6 +117,13 @@ class RustPlus extends RP {
         this.logger.log(title, text, level);
     }
 
+    isResponseValid(response) {
+        if (response.response.hasOwnProperty('error')) {
+            return false;
+        }
+        return true;
+    }
+
     sendEvent(setting, text, firstPoll = false, image = null) {
         let img = (image !== null) ? image : setting.image;
 

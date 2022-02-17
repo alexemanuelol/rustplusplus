@@ -19,6 +19,8 @@ module.exports = (client, rustplus) => {
         if (`${rustplus.server}-${rustplus.port}` !== `${value.ipPort}`) continue;
 
         rustplus.getEntityInfo(key, (msg) => {
+            if (!rustplus.isResponseValid(msg)) return;
+
             let active = msg.response.entityInfo.payload.value;
             instance = client.readInstanceFile(rustplus.guildId);
             instance.switches[key].active = active;

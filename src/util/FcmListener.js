@@ -95,6 +95,8 @@ module.exports = async (client, guild) => {
                                     if (instance.switches.hasOwnProperty(id)) return;
 
                                     client.rustplusInstances[guild.id].getEntityInfo(id, (msg) => {
+                                        if (!client.rustplusInstances[guild.id].isResponseValid(msg)) return;
+
                                         let active = msg.response.entityInfo.payload.value;
                                         instance.switches[id] = {
                                             active: active,
