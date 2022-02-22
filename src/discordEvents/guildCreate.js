@@ -3,8 +3,10 @@ const DiscordTools = require('../discordTools/discordTools.js');
 module.exports = {
     name: 'guildCreate',
     async execute(client, guild) {
-        require('../util/CreateInstanceFile')(client, guild);
         let instance = client.readInstanceFile(guild.id);
+
+        require('../util/CreateInstanceFile')(client, guild);
+        require('../util/CreateCredentialsFile')(client, guild);
         require('../discordTools/RegisterSlashCommands')(client, guild);
 
         /* TODO: Wait for all text channels to be created before continue */

@@ -7,8 +7,9 @@ const DEFAULT_IMG = 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg';
 
 module.exports = async (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
+    let credentials = client.readCredentialsFile(guild.id);
 
-    if (instance.credentials === null) {
+    if (credentials.credentials === null) {
         return;
     }
 
@@ -19,7 +20,7 @@ module.exports = async (client, guild) => {
 
     let startTime = new Date();
     client.currentFcmListeners[guild.id] =
-        await listen(instance.credentials.fcm_credentials, ({ notification, persistentId }) => {
+        await listen(credentials.credentials.fcm_credentials, ({ notification, persistentId }) => {
             /* Create a delay so that buffered notifications are ignored. */
             if ((new Date() - startTime) < 3000) return;
 

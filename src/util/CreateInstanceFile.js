@@ -22,8 +22,7 @@ module.exports = (client, guild) => {
             },
             switches: {},
             markers: {},
-            serverList: {},
-            credentials: null
+            serverList: {}
         }, null, 2));
     }
 };

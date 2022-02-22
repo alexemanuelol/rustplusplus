@@ -6,6 +6,7 @@ module.exports = {
         client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
 
         client.createInstanceFiles();
+        client.createCredentialsFiles();
         client.registerSlashCommands();
 
         /* TODO: Wait for all text channels to be created before continue */
