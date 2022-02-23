@@ -79,12 +79,11 @@ class RustPlus extends RP {
         this.timeTillNight = new Object();
 
         this.teamMembers = new Object();
+        this.markers = new Object();
 
         this.informationIntervalCounter = 0;
 
         this.interactionSwitches = [];
-
-        this.markers = new Object();
 
         /* Load rustplus events */
         this.loadEvents();
@@ -96,6 +95,20 @@ class RustPlus extends RP {
         for (const file of eventFiles) {
             const event = require(`../rustplusEvents/${file}`);
             this.on(event.name, (...args) => event.execute(this, Client.client, ...args));
+        }
+    }
+
+    loadMarkers() {
+        let instance = Client.client.readInstanceFile(this.guildId);
+        let server = `${this.server}-${this.port}`;
+
+        if (!instance.markers.hasOwnProperty(server)) {
+            instance.markers[server] = {};
+            Client.client.writeInstanceFile(this.guildId, instance);
+        }
+
+        for (const [name, location] of Object.entries(instance.markers[server])) {
+            this.markers[name] = { x: location.x, y: location.y };
         }
     }
 
@@ -163,20 +176,6 @@ class RustPlus extends RP {
 
     removeItemToLookFor(id) {
         this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
-    }
-
-    loadMarkers() {
-        let instance = Client.client.readInstanceFile(this.guildId);
-        let server = `${this.server}-${this.port}`;
-
-        if (!instance.markers.hasOwnProperty(server)) {
-            instance.markers[server] = {};
-            Client.client.writeInstanceFile(this.guildId, instance);
-        }
-
-        for (const [name, location] of Object.entries(instance.markers[server])) {
-            this.markers[name] = { x: location.x, y: location.y };
-        }
     }
 }
 

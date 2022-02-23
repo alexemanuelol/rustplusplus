@@ -11,14 +11,19 @@ module.exports = {
             const command = interaction.client.commands.get(interaction.commandName);
 
             /* If the command doesn't exist, return */
-            if (!command) return;
+            if (!command) {
+                return;
+            }
 
             try {
                 await command.execute(client, interaction);
             } catch (error) {
                 client.log('ERROR', error, 'error');
-                console.log(error);
-                await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+
+                await interaction.reply({
+                    content: 'There was an error while executing this command!',
+                    ephemeral: true
+                });
             }
         }
     },

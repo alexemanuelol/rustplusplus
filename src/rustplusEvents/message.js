@@ -6,8 +6,9 @@ const { MessageAttachment } = require('discord.js');
 module.exports = {
     name: 'message',
     async execute(rustplus, client, message) {
-        if (rustplus.debug)
+        if (rustplus.debug) {
             rustplus.log('MESSAGE', `MESSAGE RECEIVED:\n${JSON.stringify(message)}`);
+        }
 
         if (message.hasOwnProperty('response')) {
 
@@ -28,7 +29,9 @@ module.exports = {
                 let id = message.broadcast.entityChanged.entityId;
                 let instance = client.readInstanceFile(rustplus.guildId);
 
-                if (!instance.switches.hasOwnProperty(id)) return;
+                if (!instance.switches.hasOwnProperty(id)) {
+                    return;
+                }
 
                 if (rustplus.interactionSwitches.hasOwnProperty(id)) {
                     delete rustplus.interactionSwitches[id];
@@ -44,10 +47,9 @@ module.exports = {
                     let file = new MessageAttachment(`src/images/${(active) ? 'on_logo.png' : 'off_logo.png'}`);
                     let embed = DiscordTools.getSwitchButtonsEmbed(
                         id, sw.name, `${prefix}${sw.command}`, sw.server, active);
-
                     let row = DiscordTools.getSwitchButtonsRow(id, active);
 
-                    client.switchesMessages[rustplus.guildId][id].edit({
+                    await client.switchesMessages[rustplus.guildId][id].edit({
                         embeds: [embed], components: [row], files: [file]
                     });
                 }

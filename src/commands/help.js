@@ -5,7 +5,10 @@ module.exports = {
 		.setName('help')
 		.setDescription('Display help message'),
 	async execute(client, interaction) {
-		await interaction.reply('HAH! No help for you! >:)');
+		await interaction.reply({
+			content: 'HAH! No help for you! >:)',
+			ephemeral: true
+		});
 		client.log('INFO', 'HAH! No help for you! >:)');
 	},
 };

@@ -7,11 +7,12 @@ module.exports = {
 
         /* Get some map parameters once when connected (to avoid calling getMap continuously) */
         rustplus.getMap((map) => {
-            if (map.response.error) {
+            if (!rustplus.isResponseValid(map)) {
                 rustplus.log('ERROR', 'Something went wrong with connection', 'error');
                 rustplus.disconnect();
                 return;
             }
+
             rustplus.log('CONNECTED', 'SUCCESSFULLY CONNECTED!');
 
             rustplus.mapWidth = map.response.map.width;
@@ -21,6 +22,9 @@ module.exports = {
 
             require('../discordTools/SetupSwitches')(client, rustplus);
             rustplus.loadMarkers();
+
+            /* Run the first time before starting the interval */
+            PollingHandler.continuousPollingHandler(rustplus, client);
 
             /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
             rustplus.intervalId = setInterval(PollingHandler.continuousPollingHandler,

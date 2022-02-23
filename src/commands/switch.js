@@ -30,8 +30,28 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'edit':
+				let rustplus = client.rustplusInstances[interaction.guildId];
+				if (!rustplus) {
+					interaction.reply({
+						content: 'No active rustplus instance.',
+						ephemeral: true
+					});
+					return;
+				}
+
 				if (!Object.keys(instance.switches).includes(id)) {
-					interaction.reply('Invalid ID.');
+					interaction.reply({
+						content: 'Invalid ID.',
+						ephemeral: true
+					});
+					return;
+				}
+
+				if (instance.switches[id].ipPort !== `${rustplus.server}-${rustplus.port}`) {
+					interaction.reply({
+						content: 'That Smart Switch is not part of this Rust Server.',
+						ephemeral: true
+					});
 					return;
 				}
 
@@ -45,14 +65,12 @@ module.exports = {
 				client.writeInstanceFile(interaction.guildId, instance);
 
 				let active = instance.switches[id].active;
-				let prefix = client.rustplusInstances[interaction.guildId].generalSettings.prefix;
+				let prefix = rustplus.generalSettings.prefix;
+				let sw = instance.switches[id];
+
 				let file = new MessageAttachment(`src/images/${(active) ? 'on_logo.png' : 'off_logo.png'}`);
 				let embed = DiscordTools.getSwitchButtonsEmbed(
-					id,
-					instance.switches[id].name,
-					`${prefix}${instance.switches[id].command}`,
-					instance.switches[id].server,
-					active);
+					id, sw.name, `${prefix}${sw.command}`, sw.server, active);
 
 				let row = DiscordTools.getSwitchButtonsRow(id, active);
 

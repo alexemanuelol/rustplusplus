@@ -12,13 +12,21 @@ module.exports = {
     continuousPollingHandler: function (rustplus, client) {
         /* Continuous polling of server info, map markers, team info and time. */
         rustplus.getInfo((info) => {
-            if (!rustplus.isResponseValid(info)) return;
+            if (!rustplus.isResponseValid(info)) {
+                return;
+            }
             rustplus.getMapMarkers((mapMarkers) => {
-                if (!rustplus.isResponseValid(mapMarkers)) return;
+                if (!rustplus.isResponseValid(mapMarkers)) {
+                    return;
+                }
                 rustplus.getTeamInfo((teamInfo) => {
-                    if (!rustplus.isResponseValid(teamInfo)) return;
+                    if (!rustplus.isResponseValid(teamInfo)) {
+                        return;
+                    }
                     rustplus.getTime((time) => {
-                        if (!rustplus.isResponseValid(time)) return;
+                        if (!rustplus.isResponseValid(time)) {
+                            return;
+                        }
 
                         module.exports.checkEvents(rustplus, client, info, mapMarkers, teamInfo, time);
                         rustplus.firstPoll = false;

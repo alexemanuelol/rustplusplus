@@ -10,6 +10,18 @@ module.exports = {
 
         rustplus.firstPoll = true;
 
+        rustplus.activeCargoShips = new Object();
+        rustplus.activeChinook47s = new Object();
+        rustplus.activeLockedCrates = new Object();
+        rustplus.activePatrolHelicopters = new Object();
+        rustplus.activeExplosions = new Object();
+        rustplus.patrolHelicoptersLeft = [];
+        rustplus.smallOilRigLockedCratesLeft = [];
+        rustplus.largeOilRigLockedCratesLeft = [];
+        rustplus.activeVendingMachines = [];
+        rustplus.foundItems = [];
+        rustplus.itemsToLookForId = [];
+
         /* Stop all timers */
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
             timer.stop();
@@ -63,13 +75,14 @@ module.exports = {
         rustplus.timeTillNight = new Object();
 
         rustplus.teamMembers = new Object();
-
         rustplus.markers = new Object();
+
+        rustplus.informationIntervalCounter = 0;
+        rustplus.interactionSwitches = [];
 
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
             if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
                 rustplus.log('RECONNECTING', 'RUSTPLUS RECONNECTING');
-                rustplus.disconnect();
                 rustplus.connect();
             }
         }

@@ -28,8 +28,6 @@ module.exports = async (client, guild) => {
 
         let row = DiscordTools.getServerButtonsRow(key, state, value.url);
 
-        channel.send({ embeds: [embed], components: [row] }).then((msg) => {
-            client.serverListMessages[guild.id][key] = msg;
-        });
+        client.serverListMessages[guild.id][key] = await channel.send({ embeds: [embed], components: [row] });
     }
 };

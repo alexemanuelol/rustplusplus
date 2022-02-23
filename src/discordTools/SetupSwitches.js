@@ -1,14 +1,14 @@
 const DiscordTools = require('./discordTools.js');
 const { MessageAttachment } = require('discord.js');
 
-module.exports = (client, rustplus) => {
+module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
     let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.switches);
 
     client.switchesMessages[rustplus.guildId] = {};
 
     if (!channel) {
-        client.log('ERROR', 'Invalid guild or channel.', 'error');
+        client.log('ERROR', 'SetupSwitches: Invalid guild or channel.', 'error');
         return;
     }
 
@@ -18,11 +18,16 @@ module.exports = (client, rustplus) => {
     for (const [key, value] of Object.entries(instance.switches)) {
         if (`${rustplus.server}-${rustplus.port}` !== `${value.ipPort}`) continue;
 
-        rustplus.getEntityInfo(key, (msg) => {
-            if (!rustplus.isResponseValid(msg)) return;
+        rustplus.getEntityInfo(key, async (msg) => {
+            instance = client.readInstanceFile(rustplus.guildId);
+
+            if (!rustplus.isResponseValid(msg)) {
+                delete instance.switches[key];
+                client.writeInstanceFile(rustplus.guildId, instance);
+                return;
+            }
 
             let active = msg.response.entityInfo.payload.value;
-            instance = client.readInstanceFile(rustplus.guildId);
             instance.switches[key].active = active;
             client.writeInstanceFile(rustplus.guildId, instance);
 
@@ -32,9 +37,8 @@ module.exports = (client, rustplus) => {
 
             let row = DiscordTools.getSwitchButtonsRow(key, active);
 
-            channel.send({ embeds: [embed], components: [row], files: [file] }).then((msg) => {
-                client.switchesMessages[rustplus.guildId][key] = msg;
-            });
+            client.switchesMessages[rustplus.guildId][key] =
+                await channel.send({ embeds: [embed], components: [row], files: [file] });
         });
     }
 };

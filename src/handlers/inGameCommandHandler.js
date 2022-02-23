@@ -5,7 +5,7 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.js');
 
 module.exports = {
-    inGameCommandHandler: function (rustplus, client, message) {
+    inGameCommandHandler: async function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
 
         if (command === `${rustplus.generalSettings.prefix}bradley`) {
@@ -48,6 +48,7 @@ module.exports = {
             module.exports.commandWipe(rustplus);
         }
         else {
+            /* Maybe a custom command? */
             let instance = client.readInstanceFile(rustplus.guildId);
 
             for (const [id, content] of Object.entries(instance.switches)) {
@@ -77,26 +78,27 @@ module.exports = {
                         return false;
                     }
 
+                    let prefix = rustplus.generalSettings.prefix;
+
                     let file = new MessageAttachment(`src/images/${(active) ?
                         'on_logo.png' : 'off_logo.png'}`);
                     let embed = DiscordTools.getSwitchButtonsEmbed(
-                        id, content.name, `${rustplus.generalSettings.prefix}${content.command}`,
-                        content.server, active);
+                        id, content.name, `${prefix}${content.command}`, content.server, active);
 
                     let row = DiscordTools.getSwitchButtonsRow(id, active);
 
                     rustplus.interactionSwitches[id] = active;
 
                     if (active) {
-                        rustplus.turnSmartSwitchOn(id, (msg) => {
-                            client.switchesMessages[rustplus.guildId][id].edit({
+                        rustplus.turnSmartSwitchOn(id, async (msg) => {
+                            await client.switchesMessages[rustplus.guildId][id].edit({
                                 embeds: [embed], components: [row], files: [file]
                             });
                         });
                     }
                     else {
-                        rustplus.turnSmartSwitchOff(id, (msg) => {
-                            client.switchesMessages[rustplus.guildId][id].edit({
+                        rustplus.turnSmartSwitchOff(id, async (msg) => {
+                            await client.switchesMessages[rustplus.guildId][id].edit({
                                 embeds: [embed], components: [row], files: [file]
                             });
                         });
@@ -257,7 +259,9 @@ module.exports = {
         let callerName = message.broadcast.teamMessage.message.name;
 
         rustplus.getTeamInfo((msg) => {
-            if (!rustplus.isResponseValid(msg)) return;
+            if (!rustplus.isResponseValid(msg)) {
+                return;
+            }
 
             if (command === `${rustplus.generalSettings.prefix}leader`) {
                 promoteToLeader(rustplus, callerId).then((result) => {
@@ -313,7 +317,9 @@ module.exports = {
         switch (subcommand) {
             case 'add':
                 rustplus.getTeamInfo((msg) => {
-                    if (!rustplus.isResponseValid(msg)) return;
+                    if (!rustplus.isResponseValid(msg)) {
+                        return;
+                    }
 
                     let instance = client.readInstanceFile(rustplus.guildId);
 
@@ -372,7 +378,9 @@ module.exports = {
                 }
 
                 rustplus.getTeamInfo((msg) => {
-                    if (!rustplus.isResponseValid(msg)) return;
+                    if (!rustplus.isResponseValid(msg)) {
+                        return;
+                    }
 
                     let callerLocation = null;
                     let callerName = null;
@@ -401,7 +409,9 @@ module.exports = {
 
     commandOffline: function (rustplus) {
         rustplus.getTeamInfo((teamInfo) => {
-            if (!rustplus.isResponseValid(teamInfo)) return;
+            if (!rustplus.isResponseValid(teamInfo)) {
+                return;
+            }
 
             let str = '';
             for (let member of teamInfo.response.teamInfo.members) {
@@ -424,7 +434,9 @@ module.exports = {
 
     commandOnline: function (rustplus) {
         rustplus.getTeamInfo((teamInfo) => {
-            if (!rustplus.isResponseValid(teamInfo)) return;
+            if (!rustplus.isResponseValid(teamInfo)) {
+                return;
+            }
 
             let str = '';
             for (let member of teamInfo.response.teamInfo.members) {
@@ -442,7 +454,9 @@ module.exports = {
 
     commandPop: function (rustplus) {
         rustplus.getInfo((msg) => {
-            if (!rustplus.isResponseValid(msg)) return;
+            if (!rustplus.isResponseValid(msg)) {
+                return;
+            }
 
             const now = msg.response.info.players;
             const max = msg.response.info.maxPlayers;
@@ -492,7 +506,9 @@ module.exports = {
 
     commandTime: function (rustplus, client) {
         rustplus.getTime((msg) => {
-            if (!rustplus.isResponseValid(msg)) return;
+            if (!rustplus.isResponseValid(msg)) {
+                return;
+            }
 
             const rawTime = parseFloat(msg.response.time.time.toFixed(2));
             const sunrise = parseFloat(msg.response.time.sunrise.toFixed(2));
@@ -607,7 +623,9 @@ module.exports = {
 
     commandWipe: function (rustplus) {
         rustplus.getInfo((msg) => {
-            if (!rustplus.isResponseValid(msg)) return;
+            if (!rustplus.isResponseValid(msg)) {
+                return;
+            }
 
             const wipe = new Date(msg.response.info.wipeTime * 1000);
             const now = new Date();
