@@ -1,129 +1,36 @@
 const DiscordTools = require('../discordTools/discordTools.js');
 const { Permissions } = require('discord.js');
 
-module.exports = (client, guild) => {
-    let instance = client.readInstanceFile(guild.id);
-
-    let category = undefined;
-    if (instance.channelId.category !== null) {
-        category = DiscordTools.getCategoryById(guild.id, instance.channelId.category);
-    }
-    if (category === undefined) {
-        DiscordTools.addCategory(guild.id, 'rustPlusPlus').then(cat => {
-            instance.channelId.category = cat.id;
-            client.writeInstanceFile(guild.id, instance);
-
-            addMissingTextChannels(client, guild.id, cat);
-        });
-    }
-    else {
-        addMissingTextChannels(client, guild.id, category);
-    }
+module.exports = async (client, guild, category) => {
+    await addTextChannel('information', client, guild, category);
+    await addTextChannel('servers', client, guild, category);
+    await addTextChannel('settings', client, guild, category);
+    await addTextChannel('events', client, guild, category);
+    await addTextChannel('teamchat', client, guild, category, true);
+    await addTextChannel('switches', client, guild, category);
 };
 
+async function addTextChannel(name, client, guild, parent, permissionWrite = false) {
+    let instance = client.readInstanceFile(guild.id);
 
-function addMissingTextChannels(client, guildId, parent) {
-    let instance = client.readInstanceFile(guildId);
-
-    let information = undefined;
-    if (instance.channelId.information !== null) {
-        information = DiscordTools.getTextChannelById(guildId, instance.channelId.information);
+    let channel = undefined;
+    if (instance.channelId[name] !== null) {
+        channel = DiscordTools.getTextChannelById(guild.id, instance.channelId[name]);
     }
-    if (information === undefined) {
-        DiscordTools.addTextChannel(guildId, 'information').then(channel => {
-            channel.setParent(parent.id);
-            instance.channelId.information = channel.id;
-            client.writeInstanceFile(guildId, instance);
-        });
-    }
-    else {
-        information.setParent(parent.id);
+    if (channel === undefined) {
+        channel = await DiscordTools.addTextChannel(guild.id, name);
+        instance.channelId[name] = channel.id;
+        client.writeInstanceFile(guild.id, instance);
     }
 
-    let servers = undefined;
-    if (instance.channelId.servers !== null) {
-        servers = DiscordTools.getTextChannelById(guildId, instance.channelId.servers);
-    }
-    if (servers === undefined) {
-        DiscordTools.addTextChannel(guildId, 'servers').then(channel => {
-            channel.setParent(parent.id);
-            instance.channelId.servers = channel.id;
-            client.writeInstanceFile(guildId, instance);
-        });
-    }
-    else {
-        servers.setParent(parent.id);
-    }
+    channel.setParent(parent.id);
 
-    let settings = undefined;
-    if (instance.channelId.settings !== null) {
-        settings = DiscordTools.getTextChannelById(guildId, instance.channelId.settings);
-    }
-    if (settings === undefined) {
-        DiscordTools.addTextChannel(guildId, 'settings').then(channel => {
-            channel.setParent(parent.id);
-            instance.channelId.settings = channel.id;
-            client.writeInstanceFile(guildId, instance);
-        });
-    }
-    else {
-        settings.setParent(parent.id);
-    }
-
-    let events = undefined;
-    if (instance.channelId.events !== null) {
-        events = DiscordTools.getTextChannelById(guildId, instance.channelId.events);
-    }
-    if (events === undefined) {
-        DiscordTools.addTextChannel(guildId, 'events').then(channel => {
-            channel.setParent(parent.id);
-            instance.channelId.events = channel.id;
-            client.writeInstanceFile(guildId, instance);
-        });
-    }
-    else {
-        events.setParent(parent.id);
-    }
-
-    let teamchat = undefined;
-    if (instance.channelId.teamchat !== null) {
-        teamchat = DiscordTools.getTextChannelById(guildId, instance.channelId.teamchat);
-    }
-    if (teamchat === undefined) {
-        DiscordTools.addTextChannel(guildId, 'teamchat').then(channel => {
-            channel.setParent(parent.id);
-            instance.channelId.teamchat = channel.id;
-            channel.permissionOverwrites.set([
-                {
-                    id: channel.guild.roles.everyone.id,
-                    allow: [Permissions.FLAGS.SEND_MESSAGES]
-                }
-            ]);
-            client.writeInstanceFile(guildId, instance);
-        });
-    }
-    else {
-        teamchat.setParent(parent.id);
-        teamchat.permissionOverwrites.set([
+    if (permissionWrite) {
+        channel.permissionOverwrites.set([
             {
-                id: teamchat.guild.roles.everyone.id,
+                id: channel.guild.roles.everyone.id,
                 allow: [Permissions.FLAGS.SEND_MESSAGES]
             }
         ]);
-    }
-
-    let switches = undefined;
-    if (instance.channelId.switches !== null) {
-        switches = DiscordTools.getTextChannelById(guildId, instance.channelId.switches);
-    }
-    if (switches === undefined) {
-        DiscordTools.addTextChannel(guildId, 'switches').then(channel => {
-            channel.setParent(parent.id);
-            instance.channelId.switches = channel.id;
-            client.writeInstanceFile(guildId, instance);
-        });
-    }
-    else {
-        switches.setParent(parent.id);
     }
 }

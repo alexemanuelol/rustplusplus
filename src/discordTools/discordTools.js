@@ -58,11 +58,11 @@ module.exports = {
         return undefined;
     },
 
-    addCategory: function (guildId, name) {
+    addCategory: async function (guildId, name) {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            return guild.channels.create(name, {
+            return await guild.channels.create(name, {
                 type: 'GUILD_CATEGORY',
                 permissionOverwrites: [{
                     id: guild.roles.everyone.id,
@@ -72,11 +72,11 @@ module.exports = {
         }
     },
 
-    addTextChannel: function (guildId, name) {
+    addTextChannel: async function (guildId, name) {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            return guild.channels.create(name, {
+            return await guild.channels.create(name, {
                 type: 'GUILD_TEXT',
                 permissionOverwrites: [{
                     id: guild.roles.everyone.id,

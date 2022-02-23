@@ -1,14 +1,14 @@
 const { MessageEmbed } = require('discord.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = (client, guild) => {
+module.exports = async (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
     let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
 
     client.serverListMessages[guild.id] = {};
 
     if (!channel) {
-        client.log('ERROR', 'Invalid guild or channel.', 'error');
+        client.log('ERROR', 'SetupServerList: Invalid guild or channel.', 'error');
         return;
     }
 

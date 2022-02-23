@@ -53,54 +53,21 @@ class DiscordBot extends Client {
         this.logger.log(title, text, level);
     }
 
-    registerSlashCommands() {
-        this.guilds.cache.forEach((guild) => {
-            require('../discordTools/RegisterSlashCommands')(this, guild);
-        });
-    }
+    async setupGuild(guild) {
+        require('../util/CreateInstanceFile')(this, guild);
+        require('../util/CreateCredentialsFile')(this, guild);
+        await require('../discordTools/RegisterSlashCommands')(this, guild);
 
-    createInstanceFiles() {
-        this.guilds.cache.forEach((guild) => {
-            require('../util/CreateInstanceFile')(this, guild);
-        });
-    }
+        let category = await require('../discordTools/SetupGuildCategory')(this, guild);
+        await require('../discordTools/SetupGuildChannels')(this, guild, category);
 
-    createCredentialsFiles() {
-        this.guilds.cache.forEach((guild) => {
-            require('../util/CreateCredentialsFile')(this, guild);
-        });
-    }
+        require('../util/FcmListener')(this, guild);
+        require('../discordTools/SetupServerList')(this, guild);
+        require('../discordTools/SetupSettingsMenu')(this, guild);
 
-    setupGuildChannels() {
-        this.guilds.cache.forEach((guild) => {
-            require('../discordTools/SetupGuildChannels')(this, guild);
-        });
-    }
-
-    setupFcmListeners() {
-        this.guilds.cache.forEach((guild) => {
-            require('../util/FcmListener')(this, guild);
-        });
-    }
-
-    setupServerLists() {
-        this.guilds.cache.forEach((guild) => {
-            require('../discordTools/SetupServerList')(this, guild);
-        });
-    }
-
-    setupSettingsMenus() {
-        this.guilds.cache.forEach((guild) => {
-            require('../discordTools/SetupSettingsMenu')(this, guild);
-        });
-    }
-
-    setupInformationChannels() {
-        this.guilds.cache.forEach((guild) => {
-            let instance = this.readInstanceFile(guild.id);
-            DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
-            this.informationMessages[guild.id] = {};
-        });
+        let instance = this.readInstanceFile(guild.id);
+        DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
+        this.informationMessages[guild.id] = {};
     }
 
     readInstanceFile(guildId) {
@@ -139,6 +106,11 @@ class DiscordBot extends Client {
     }
 
     createRustplusInstancesFromConfig() {
+        /* If instances/ directory does not exist, create it */
+        if (!fs.existsSync(`${__dirname}/../instances`)) {
+            fs.mkdirSync(`${__dirname}/../instances`);
+        }
+
         let files = fs.readdirSync(`${__dirname}/../instances`);
 
         files.forEach(file => {

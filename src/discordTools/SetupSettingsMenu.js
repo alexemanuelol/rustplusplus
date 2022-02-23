@@ -6,7 +6,7 @@ module.exports = async (client, guild) => {
     let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.settings);
 
     if (!channel) {
-        client.log('ERROR', 'Invalid guild or channel.', 'error');
+        client.log('ERROR', 'SetupSettingsMenu: Invalid guild or channel.', 'error');
         return;
     }
 
