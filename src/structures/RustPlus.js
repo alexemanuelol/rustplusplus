@@ -85,6 +85,8 @@ class RustPlus extends RP {
 
         this.interactionSwitches = [];
 
+        this.deleted = false;
+
         /* Load rustplus events */
         this.loadEvents();
     }
@@ -113,13 +115,14 @@ class RustPlus extends RP {
     }
 
     build() {
+        let instance = Client.client.readInstanceFile(this.guildId);
+
         /* Setup the logger */
         this.logger = new Logger(path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
         this.logger.setGuildId(this.guildId);
-        this.logger.setRustplus(this);
+        this.logger.serverName = instance.serverList[`${this.server}-${this.port}`].title;
 
         /* Setup settings */
-        let instance = Client.client.readInstanceFile(this.guildId);
         this.generalSettings = instance.generalSettings;
         this.notificationSettings = instance.notificationSettings;
 

@@ -80,6 +80,10 @@ module.exports = {
         rustplus.informationIntervalCounter = 0;
         rustplus.interactionSwitches = [];
 
+        if (rustplus.deleted) {
+            return;
+        }
+
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
             if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
                 rustplus.log('RECONNECTING', 'RUSTPLUS RECONNECTING');

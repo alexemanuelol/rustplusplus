@@ -1,6 +1,5 @@
 const winston = require("winston");
 const colors = require("colors");
-const Client = require('../../index.js');
 
 class Logger {
     constructor(logFilePath, type) {
@@ -10,15 +9,11 @@ class Logger {
 
         this.type = type;
         this.guildId = null;
-        this.rustplus = null;
+        this.serverName = null;
     }
 
     setGuildId(guildId) {
         this.guildId = guildId;
-    }
-
-    setRustplus(rustplus) {
-        this.rustplus = rustplus;
     }
 
     getTime() {
@@ -52,19 +47,17 @@ class Logger {
                 break;
 
             case 'guild':
-                let instance = Client.client.readInstanceFile(this.guildId);
-                let serverName = instance.serverList[`${this.rustplus.server}-${this.rustplus.port}`].title;
                 text = `${title}: ${text}`;
 
                 this.logger.log({
                     level: level,
-                    message: `${time} | ${this.guildId} | ${serverName} | ${text}`
+                    message: `${time} | ${this.guildId} | ${this.serverName} | ${text}`
                 });
 
                 console.log(
                     colors.green(`${time} `) +
                     colors.cyan(`${this.guildId} `) +
-                    colors.white(`${serverName} `) +
+                    colors.white(`${this.serverName} `) +
                     ((level === 'error') ? colors.red(text) : colors.yellow(text))
                 );
                 break;

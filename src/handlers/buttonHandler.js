@@ -84,6 +84,7 @@ module.exports = async (client, interaction) => {
         if (instance.serverList[server].active) {
             if (rustplus) {
                 rustplus.disconnect();
+                rustplus.deleted = true;
                 delete client.rustplusInstances[guildId];
             }
         }
