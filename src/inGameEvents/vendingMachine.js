@@ -22,10 +22,11 @@ module.exports = {
                 if (!rustplus.activeVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
                     rustplus.activeVendingMachines.push({ x: marker.x, y: marker.y });
 
-                    rustplus.sendEvent(
-                        rustplus.notificationSettings.vendingMachineDetected,
-                        `New Vending Machine located at ${pos}.`,
-                        rustplus.firstPoll);
+                    if (!rustplus.firstPoll) {
+                        rustplus.sendEvent(
+                            rustplus.notificationSettings.vendingMachineDetected,
+                            `New Vending Machine located at ${pos}.`);
+                    }
                 }
             }
         }
