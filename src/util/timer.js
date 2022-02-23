@@ -62,7 +62,6 @@ module.exports = {
         }
     },
 
-
     getTimeLeftOfTimer: function (timer, ignore = '') {
         /* Returns the time left of a timer. If timer is not running, null will be returned. */
         if (timer.getStateRunning()) {

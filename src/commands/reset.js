@@ -15,21 +15,22 @@ module.exports = {
 		switch (interaction.options.getSubcommand()) {
 			case 'discord':
 				const guild = DiscordTools.getGuild(interaction.guildId);
-				/* TODO: Wait for all text channels to be created before continue */
-				require('../discordTools/SetupGuildChannels')(client, guild);
-				client.log('INFO', 'Waiting 5 seconds to make sure all text channels are created in guild: ' +
-					interaction.guildId);
+
+				let category = await require('../discordTools/SetupGuildCategory')(client, guild);
+				await require('../discordTools/SetupGuildChannels')(client, guild, category);
 
 				instance.firstTime = true;
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				setTimeout(() => {
-					client.log('INFO', `Creating Settings Menus for guild: ${interaction.guildId}`);
-					require('../discordTools/SetupSettingsMenu')(client, guild);
-				}, 5000);
+				require('../discordTools/SetupServerList')(client, guild);
+				require('../discordTools/SetupSettingsMenu')(client, guild);
+
+				instance = client.readInstanceFile(guild.id);
+				DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
+				client.informationMessages[guild.id] = {};
 
 				interaction.reply({
-					content: ':white_check_mark: Discord channels is reseting.',
+					content: ':white_check_mark: Discord Reset.',
 					ephemeral: true
 				});
 				break;
