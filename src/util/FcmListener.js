@@ -90,46 +90,57 @@ module.exports = async (client, guild) => {
                                 case 'Switch':
                                     client.log('FCM', `${guild.id} pairing: entity: Switch`);
 
+                                    let rustplus = client.rustplusInstances[guild.id];
                                     instance = client.readInstanceFile(guild.id);
                                     let id = body.entityId;
 
-                                    if (instance.switches.hasOwnProperty(id)) return;
+                                    if (instance.switches.hasOwnProperty(id)) {
+                                        return;
+                                    }
 
-                                    client.rustplusInstances[guild.id].getEntityInfo(id, (msg) => {
-                                        if (!client.rustplusInstances[guild.id].isResponseValid(msg)) return;
+                                    instance.switches[id] = {
+                                        active: false,
+                                        name: 'Smart Switch',
+                                        command: id,
+                                        server: body.name,
+                                        ipPort: `${body.ip}-${body.port}`
+                                    };
+                                    client.writeInstanceFile(guild.id, instance);
 
-                                        let active = msg.response.entityInfo.payload.value;
-                                        instance.switches[id] = {
-                                            active: active,
-                                            name: 'Smart Switch',
-                                            command: id,
-                                            server: body.name,
-                                            ipPort: `${body.ip}-${body.port}`
-                                        };
-                                        client.writeInstanceFile(guild.id, instance);
+                                    if (rustplus && `${body.ip}-${body.port}` === `${rustplus.server}-${rustplus.port}`) {
+                                        client.rustplusInstances[guild.id].getEntityInfo(id, (msg) => {
+                                            if (!client.rustplusInstances[guild.id].isResponseValid(msg)) {
+                                                return;
+                                            }
 
-                                        let prefix = client.rustplusInstances[guild.id].generalSettings.prefix;
+                                            let active = msg.response.entityInfo.payload.value;
+                                            instance = client.readInstanceFile(guild.id);
+                                            instance.switches[id].active = active;
+                                            client.writeInstanceFile(guild.id, instance);
 
-                                        let img = (active) ? 'on_logo.png' : 'off_logo.png';
-                                        let file = new MessageAttachment(`src/images/${img}`);
-                                        let embed = DiscordTools.getSwitchButtonsEmbed(
-                                            id, 'Smart Switch', `${prefix}${id}`, body.name, active);
+                                            let prefix = rustplus.generalSettings.prefix;
 
-                                        let row = DiscordTools.getSwitchButtonsRow(
-                                            id, active);
+                                            let img = (active) ? 'on_logo.png' : 'off_logo.png';
+                                            let file = new MessageAttachment(`src/images/${img}`);
+                                            let embed = DiscordTools.getSwitchButtonsEmbed(
+                                                id, 'Smart Switch', `${prefix}${id}`, body.name, active);
 
-                                        let channel = DiscordTools.getTextChannelById(
-                                            guild.id, instance.channelId.switches);
+                                            let row = DiscordTools.getSwitchButtonsRow(
+                                                id, active);
 
-                                        if (!channel) {
-                                            client.log('ERROR', 'Invalid guild or channel.', 'error');
-                                            return;
-                                        }
+                                            let channel = DiscordTools.getTextChannelById(
+                                                guild.id, instance.channelId.switches);
 
-                                        channel.send({ embeds: [embed], components: [row], files: [file] }).then((msg) => {
-                                            client.switchesMessages[guild.id][id] = msg;
+                                            if (!channel) {
+                                                client.log('ERROR', 'Invalid guild or channel.', 'error');
+                                                return;
+                                            }
+
+                                            channel.send({ embeds: [embed], components: [row], files: [file] }).then((msg) => {
+                                                client.switchesMessages[guild.id][id] = msg;
+                                            });
                                         });
-                                    });
+                                    }
                                     break;
 
                                 case 'Smart Alarm':
