@@ -231,6 +231,7 @@ module.exports = {
         const teamLeaderId = teamInfo.response.teamInfo.leaderSteamId.toNumber();
 
         const mapSize = info.response.info.mapSize;
+        const teamSize = teamInfo.response.teamInfo.members.length;
 
         let names = '';
         let status = '';
@@ -251,7 +252,13 @@ module.exports = {
             let gridPos = Map.getGridPos(member.x, member.y, mapSize);
             let pos = (gridPos === null) ? outsidePos : gridPos;
 
-            names += `[${member.name}](${STEAM_LINK}${member.steamId})`;
+            if (teamSize < 12) {
+                names += `[${member.name}](${STEAM_LINK}${member.steamId})`;
+            }
+            else {
+                names += `${member.name}`;
+            }
+
             names += (member.steamId.toNumber() === teamLeaderId) ? `${LEADER}\n` : '\n';
             locations += (member.isAlive) ? `${pos}\n` : '-\n';
 
