@@ -5,7 +5,7 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.js');
 
 module.exports = {
-    inGameCommandHandler: async function (rustplus, client, message) {
+    inGameCommandHandler: function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
 
         if (command === `${rustplus.generalSettings.prefix}bradley`) {
