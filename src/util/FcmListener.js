@@ -20,7 +20,7 @@ module.exports = async (client, guild) => {
 
     let startTime = new Date();
     client.currentFcmListeners[guild.id] =
-        await listen(credentials.credentials.fcm_credentials, ({ notification, persistentId }) => {
+        await listen(credentials.credentials.fcm_credentials, async ({ notification, persistentId }) => {
             /* Create a delay so that buffered notifications are ignored. */
             if ((new Date() - startTime) < 3000) return;
 
@@ -39,6 +39,13 @@ module.exports = async (client, guild) => {
                             let customId = `${body.ip}-${body.port}`;
 
                             let exist = instance.serverList.hasOwnProperty(customId);
+
+                            let message = undefined;
+                            if (exist) {
+                                message = await DiscordTools.getMessageById(
+                                    guild.id, instance.channelId.servers, instance.serverList[customId].messageId);
+                            }
+
                             instance.serverList[customId] = {
                                 active: (exist) ? instance.serverList[customId].active : false,
                                 title: data.title,
@@ -50,7 +57,8 @@ module.exports = async (client, guild) => {
                                 img: isValidUrl(body.img) ? body.img : DEFAULT_IMG,
                                 url: isValidUrl(body.url) ? body.url : DEFAULT_URL,
                                 timeTillDay: null,
-                                timeTillNight: null
+                                timeTillNight: null,
+                                messageId: (message !== undefined) ? message.id : null
                             };
                             client.writeInstanceFile(guild.id, instance);
 
@@ -65,11 +73,8 @@ module.exports = async (client, guild) => {
                                 (instance.serverList[customId].active) ? 1 : 0,
                                 instance.serverList[customId].url);
 
-                            if (exist) {
-                                client.serverListMessages[guild.id][customId].edit({
-                                    embeds: [embed],
-                                    components: [row]
-                                });
+                            if (message !== undefined) {
+                                message.edit({ embeds: [embed], components: [row] });
                             }
                             else {
                                 let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
@@ -79,9 +84,10 @@ module.exports = async (client, guild) => {
                                     break;
                                 }
 
-                                channel.send({ embeds: [embed], components: [row] }).then((msg) => {
-                                    client.serverListMessages[guild.id][customId] = msg;
-                                });
+                                instance = client.readInstanceFile(guild.id);
+                                message = await channel.send({ embeds: [embed], components: [row] });
+                                instance.serverList[customId].messageId = message.id;
+                                client.writeInstanceFile(guild.id, instance);
                             }
                             break;
 

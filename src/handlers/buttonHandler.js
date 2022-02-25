@@ -43,7 +43,13 @@ module.exports = async (client, interaction) => {
             if (value.active) {
                 instance.serverList[key].active = false;
                 let row = DiscordTools.getServerButtonsRow(key, 0, instance.serverList[key].url);
-                client.serverListMessages[guildId][key].edit({ components: [row] });
+
+                let messageId = instance.serverList[key].messageId;
+                let message = await DiscordTools.getMessageById(guildId, instance.channelId.servers, messageId);
+                if (message !== undefined) {
+                    await message.edit({ components: [row] });
+                }
+                break;
             }
         }
 
@@ -89,10 +95,13 @@ module.exports = async (client, interaction) => {
             }
         }
 
-        delete instance.serverList[server];
+        let messageId = instance.serverList[server].messageId;
+        let message = await DiscordTools.getMessageById(guildId, instance.channelId.servers, messageId);
+        if (message !== undefined) {
+            await message.delete();
+        }
 
-        await client.serverListMessages[guildId][server].delete();
-        delete client.serverListMessages[guildId][server];
+        delete instance.serverList[server];
 
         /* Remove all Smart Switches assosiated with this server */
         for (const [key, value] of Object.entries(instance.switches)) {

@@ -5,8 +5,6 @@ module.exports = async (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
     let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
 
-    client.serverListMessages[guild.id] = {};
-
     if (!channel) {
         client.log('ERROR', 'SetupServerList: Invalid guild or channel.', 'error');
         return;
@@ -28,6 +26,9 @@ module.exports = async (client, guild) => {
 
         let row = DiscordTools.getServerButtonsRow(key, state, value.url);
 
-        client.serverListMessages[guild.id][key] = await channel.send({ embeds: [embed], components: [row] });
+        let message = await channel.send({ embeds: [embed], components: [row] });
+        instance.serverList[key].messageId = message.id;
     }
+
+    client.writeInstanceFile(guild.id, instance);
 };
