@@ -15,7 +15,6 @@ class DiscordBot extends Client {
         this.commands = new Collection();
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
-        this.informationMessages = new Object();
         this.switchesMessages = new Object();
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
@@ -62,10 +61,6 @@ class DiscordBot extends Client {
 
         require('../util/FcmListener')(this, guild);
         await require('../discordTools/SetupSettingsMenu')(this, guild);
-
-        let instance = this.readInstanceFile(guild.id);
-        DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
-        this.informationMessages[guild.id] = {};
     }
 
     readInstanceFile(guildId) {

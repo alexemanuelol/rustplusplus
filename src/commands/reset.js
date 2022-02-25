@@ -27,9 +27,7 @@ module.exports = {
 				await require('../discordTools/SetupServerList')(client, guild);
 				await require('../discordTools/SetupSettingsMenu')(client, guild);
 
-				instance = client.readInstanceFile(guild.id);
 				DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
-				client.informationMessages[guild.id] = {};
 
 				await interaction.editReply({
 					content: ':white_check_mark: Discord Reset.',
