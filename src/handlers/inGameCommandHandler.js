@@ -8,7 +8,10 @@ module.exports = {
     inGameCommandHandler: function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
 
-        if (command === `${rustplus.generalSettings.prefix}bradley`) {
+        if (command === `${rustplus.generalSettings.prefix}alive`) {
+            module.exports.commandAlive(rustplus);
+        }
+        else if (command === `${rustplus.generalSettings.prefix}bradley`) {
             module.exports.commandBradley(rustplus);
         }
         else if (command === `${rustplus.generalSettings.prefix}cargo`) {
@@ -114,6 +117,44 @@ module.exports = {
         }
 
         return true;
+    },
+
+    commandAlive: function (rustplus) {
+        const date = new Date();
+
+        rustplus.getTeamInfo((teamInfo) => {
+            if (!rustplus.isResponseValid(teamInfo)) {
+                return;
+            }
+
+            let name = null;
+            let time = null;
+
+            for (let member of teamInfo.response.teamInfo.members) {
+                if (member.isAlive === true) {
+                    let memberAlive = (date - new Date(member.spawnTime * 1000)) / 1000;
+
+                    if (time === null) {
+                        name = member.name;
+                        time = memberAlive;
+                        time = (time < 0) ? 0 : time;
+                    }
+                    else if (memberAlive > time) {
+                        name = member.name;
+                        time = memberAlive;
+                        time = (time < 0) ? 0 : time;
+                    }
+                }
+            }
+
+            if (time !== null) {
+                time = Timer.secondsToFullScale(time);
+                time = (time === '') ? '0s' : time;
+                let str = `${name} has been alive the longest (${time})`;
+                rustplus.sendTeamMessage(str);
+                rustplus.log('COMMAND', str);
+            }
+        });
     },
 
     commandBradley: function (rustplus) {
