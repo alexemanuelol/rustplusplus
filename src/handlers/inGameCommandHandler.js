@@ -34,6 +34,9 @@ module.exports = {
         else if (command.startsWith(`${rustplus.generalSettings.prefix}marker`)) {
             module.exports.commandMarker(rustplus, client, message);
         }
+        else if (command === `${rustplus.generalSettings.prefix}mute`) {
+            module.exports.commandMute(rustplus, client);
+        }
         else if (command === `${rustplus.generalSettings.prefix}offline`) {
             module.exports.commandOffline(rustplus);
         }
@@ -51,6 +54,9 @@ module.exports = {
         }
         else if (command.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
+        }
+        else if (command === `${rustplus.generalSettings.prefix}unmute`) {
+            module.exports.commandUnmute(rustplus, client);
         }
         else if (command === `${rustplus.generalSettings.prefix}wipe`) {
             module.exports.commandWipe(rustplus);
@@ -491,6 +497,17 @@ module.exports = {
         }
     },
 
+    commandMute: function (rustplus, client) {
+        let str = `In-Game bot messages muted.`;
+        rustplus.sendTeamMessage(str);
+        rustplus.log('COMMAND', str);
+
+        let instance = client.readInstanceFile(rustplus.guildId);
+        rustplus.generalSettings.muteInGameBotMessages = true;
+        instance.generalSettings.muteInGameBotMessages = true;
+        client.writeInstanceFile(rustplus.guildId, instance);
+    },
+
     commandOffline: function (rustplus) {
         rustplus.getTeamInfo((teamInfo) => {
             if (!rustplus.isResponseValid(teamInfo)) {
@@ -703,6 +720,17 @@ module.exports = {
             default:
                 break;
         }
+    },
+
+    commandUnmute: function (rustplus, client) {
+        let instance = client.readInstanceFile(rustplus.guildId);
+        rustplus.generalSettings.muteInGameBotMessages = false;
+        instance.generalSettings.muteInGameBotMessages = false;
+        client.writeInstanceFile(rustplus.guildId, instance);
+
+        let str = `In-Game chat unmuted.`;
+        rustplus.sendTeamMessage(str);
+        rustplus.log('COMMAND', str);
     },
 
     commandWipe: function (rustplus) {

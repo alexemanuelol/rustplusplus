@@ -23,7 +23,9 @@ class RustPlus extends RP {
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
 
             for (let msg of strings) {
-                this.oldsendTeamMessage(`${this.trademarkString}${msg}`);
+                if (!this.generalSettings.muteInGameBotMessages) {
+                    this.oldsendTeamMessage(`${this.trademarkString}${msg}`);
+                }
             }
         }
 
