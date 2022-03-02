@@ -4,11 +4,16 @@ const { MessageAttachment } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.js');
 
+const AFK_TIME_SECONDS = 5 * 60; /* 5 Minutes */
+
 module.exports = {
     inGameCommandHandler: function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
 
-        if (command === `${rustplus.generalSettings.prefix}alive`) {
+        if (command === `${rustplus.generalSettings.prefix}afk`) {
+            module.exports.commandAfk(rustplus);
+        }
+        else if (command === `${rustplus.generalSettings.prefix}alive`) {
             module.exports.commandAlive(rustplus);
         }
         else if (command === `${rustplus.generalSettings.prefix}bradley`) {
@@ -117,6 +122,44 @@ module.exports = {
         }
 
         return true;
+    },
+
+    commandAfk: function (rustplus) {
+        const date = new Date();
+        let str = '';
+
+        rustplus.getTeamInfo((teamInfo) => {
+            if (!rustplus.isResponseValid(teamInfo)) {
+                return;
+            }
+
+            for (let member of teamInfo.response.teamInfo.members) {
+                if (!rustplus.teamMembers.hasOwnProperty(member.steamId)) {
+                    continue;
+                }
+
+                if (member.isOnline) {
+                    let teamMember = rustplus.teamMembers[member.steamId];
+
+                    let timeDifferenceSeconds = (date - teamMember.time) / 1000;
+                    let afk = Timer.secondsToFullScale(timeDifferenceSeconds, 'dhs');
+
+                    if (timeDifferenceSeconds >= AFK_TIME_SECONDS) {
+                        str += `${member.name} [${afk}], `;
+                    }
+                }
+            }
+
+            if (str !== '') {
+                str = str.slice(0, -2);
+            }
+            else {
+                str = 'No one is AFK.';
+            }
+
+            rustplus.sendTeamMessage(str);
+            rustplus.log('COMMAND', str);
+        });
     },
 
     commandAlive: function (rustplus) {
