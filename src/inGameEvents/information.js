@@ -281,7 +281,7 @@ module.exports = {
             }
 
             names += (member.steamId.toNumber() === teamLeaderId) ? `${LEADER}\n` : '\n';
-            locations += (member.isAlive) ? `${pos}\n` : '-\n';
+            locations += (member.isOnline || member.isAlive) ? `${pos}\n` : '-\n';
 
             if (member.isOnline) {
                 let teamMember = rustplus.teamMembers[member.steamId];
