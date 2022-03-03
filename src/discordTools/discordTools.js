@@ -132,6 +132,15 @@ module.exports = {
                     .setStyle((inGameActive) ? 'SUCCESS' : 'DANGER'))
     },
 
+    getTrademarkButtonsRow: function (enabled) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('showTrademark')
+                    .setLabel((enabled) ? 'SHOWING' : 'NOT SHOWING')
+                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
+    },
+
     getPrefixSelectMenu: function (currentPrefix) {
         return new MessageActionRow()
             .addComponents(

@@ -1,4 +1,5 @@
 {
     "prefix": "!",
-    "muteInGameBotMessages": false
+    "muteInGameBotMessages": false,
+    "showTrademark": true
 }

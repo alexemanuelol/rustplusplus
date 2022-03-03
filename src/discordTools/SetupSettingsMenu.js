@@ -38,7 +38,22 @@ async function setupGeneralSettings(instance, channel) {
         files: [
             new MessageAttachment('src/images/settings_logo.png')
         ]
-    })
+    });
+
+    await channel.send({
+        embeds: [
+            new MessageEmbed()
+                .setColor('#861c0c')
+                .setTitle(`Should the 'rustPlusPlus' trademark be shown for in-game bot messages?`)
+                .setThumbnail(`attachment://settings_logo.png`)
+        ],
+        components: [
+            DiscordTools.getTrademarkButtonsRow(instance.generalSettings.showTrademark)
+        ],
+        files: [
+            new MessageAttachment('src/images/settings_logo.png')
+        ]
+    });
 }
 
 async function setupNotificationSettings(instance, channel) {

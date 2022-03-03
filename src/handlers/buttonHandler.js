@@ -36,6 +36,17 @@ module.exports = async (client, interaction) => {
 
         await interaction.update({ components: [row] });
     }
+    else if (interaction.customId === 'showTrademark') {
+        instance.generalSettings.showTrademark = !instance.generalSettings.showTrademark;
+
+        if (rustplus) {
+            rustplus.generalSettings.showTrademark = instance.generalSettings.showTrademark;
+        }
+
+        let row = DiscordTools.getTrademarkButtonsRow(instance.generalSettings.showTrademark);
+
+        await interaction.update({ components: [row] });
+    }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let server = interaction.customId.replace('ServerConnect', '');
 

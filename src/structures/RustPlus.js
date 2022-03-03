@@ -19,12 +19,13 @@ class RustPlus extends RP {
 
         this.oldsendTeamMessage = this.sendTeamMessage;
         this.sendTeamMessage = function (message) {
-            let messageMaxLength = MAX_LENGTH_TEAM_MESSAGE - this.trademarkString.length;
+            let trademark = (this.generalSettings.showTrademark) ? this.trademarkString : '';
+            let messageMaxLength = MAX_LENGTH_TEAM_MESSAGE - trademark.length;
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
 
             for (let msg of strings) {
                 if (!this.generalSettings.muteInGameBotMessages) {
-                    this.oldsendTeamMessage(`${this.trademarkString}${msg}`);
+                    this.oldsendTeamMessage(`${trademark}${msg}`);
                 }
             }
         }
