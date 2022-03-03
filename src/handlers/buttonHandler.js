@@ -47,6 +47,17 @@ module.exports = async (client, interaction) => {
 
         await interaction.update({ components: [row] });
     }
+    else if (interaction.customId === 'allowInGameCommands') {
+        instance.generalSettings.inGameCommandsEnabled = !instance.generalSettings.inGameCommandsEnabled;
+
+        if (rustplus) {
+            rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
+        }
+
+        let row = DiscordTools.getInGameCommandsEnabledButtonsRow(instance.generalSettings.inGameCommandsEnabled);
+
+        await interaction.update({ components: [row] });
+    }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let server = interaction.customId.replace('ServerConnect', '');
 

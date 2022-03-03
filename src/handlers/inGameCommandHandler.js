@@ -10,7 +10,10 @@ module.exports = {
     inGameCommandHandler: function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
 
-        if (command === `${rustplus.generalSettings.prefix}afk`) {
+        if (!rustplus.generalSettings.inGameCommandsEnabled) {
+            return false;
+        }
+        else if (command === `${rustplus.generalSettings.prefix}afk`) {
             module.exports.commandAfk(rustplus);
         }
         else if (command === `${rustplus.generalSettings.prefix}alive`) {

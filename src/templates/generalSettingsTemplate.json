@@ -1,5 +1,6 @@
 {
     "prefix": "!",
     "muteInGameBotMessages": false,
-    "showTrademark": true
+    "showTrademark": true,
+    "inGameCommandsEnabled": true
 }

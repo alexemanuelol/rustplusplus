@@ -54,6 +54,21 @@ async function setupGeneralSettings(instance, channel) {
             new MessageAttachment('src/images/settings_logo.png')
         ]
     });
+
+    await channel.send({
+        embeds: [
+            new MessageEmbed()
+                .setColor('#861c0c')
+                .setTitle('Should in-game commands be enabled?')
+                .setThumbnail(`attachment://settings_logo.png`)
+        ],
+        components: [
+            DiscordTools.getInGameCommandsEnabledButtonsRow(instance.generalSettings.inGameCommandsEnabled)
+        ],
+        files: [
+            new MessageAttachment('src/images/settings_logo.png')
+        ]
+    });
 }
 
 async function setupNotificationSettings(instance, channel) {
