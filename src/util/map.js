@@ -1,13 +1,47 @@
 module.exports = {
     gridDiameter: 146.25,
 
+    getPos: function (x, y, mapSize) {
+        let correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
+
+        if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
+            if (module.exports.isOutsideRowOrColumn(x, y, correctedMapSize)) {
+                if (x < 0 && y > correctedMapSize) {
+                    return 'North West';
+                }
+                else if (x < 0 && y < 0) {
+                    return 'South West';
+                }
+                else if (x > correctedMapSize && y > correctedMapSize) {
+                    return 'North East';
+                }
+                else {
+                    return 'South East';
+                }
+            }
+            else {
+                let str = '';
+                if (x < 0 || x > correctedMapSize) {
+                    str += (x < 0) ? 'West of grid ' : 'East of grid ';
+                    str += `${module.exports.getGridPosNumberY(y, correctedMapSize)}`;
+                }
+                else {
+                    str += (y < 0) ? 'South of grid ' : 'North of grid ';
+                    str += `${module.exports.getGridPosLettersX(x, correctedMapSize)}`;
+                }
+                return str;
+            }
+        }
+        else {
+            return module.exports.getGridPos(x, y, mapSize);
+        }
+    },
+
     getGridPos: function (x, y, mapSize) {
-        let remainder = mapSize % module.exports.gridDiameter;
-        let offset = module.exports.gridDiameter - remainder;
-        let correctedMapSize = (remainder < 120) ? mapSize - remainder : mapSize + offset;
+        let correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
 
         /* Outside the grid system */
-        if (x < 0 || x > correctedMapSize || y < 0 || y > correctedMapSize) {
+        if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
             return null;
         }
 
@@ -47,6 +81,12 @@ module.exports = {
         return pow ? module.exports.numberToLetters(pow) + out : out;
     },
 
+    getCorrectedMapSize: function (mapSize) {
+        let remainder = mapSize % module.exports.gridDiameter;
+        let offset = module.exports.gridDiameter - remainder;
+        return (remainder < 120) ? mapSize - remainder : mapSize + offset;
+    },
+
     getAngleBetweenPoints: function (x1, y1, x2, y2) {
         let angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
 
@@ -72,47 +112,11 @@ module.exports = {
         return false;
     },
 
-    getPointDirection: function (x, y, size) {
-        /* Returns the direction of the coordinate. */
-        let offset = size / 6;
-        let dir;
-
-        /* Vertically */
-        if (y < offset) {
-            dir = 0;
+    isOutsideRowOrColumn: function (x, y, mapSize) {
+        if ((x < 0 && y > mapSize) || (x < 0 && y < 0) ||
+            (x > mapSize && y > mapSize) || (x > mapSize && y < 0)) {
+            return true;
         }
-        else if (y > (offset * 5)) {
-            dir = 3;
-        }
-        else {
-            if (x < (offset * 3))
-                return module.exports.directions[6];
-            else
-                return module.exports.directions[7];
-        }
-
-        /* Horizontally */
-        if (x < offset) {
-            dir += 0;
-        }
-        else if (x > (offset * 5)) {
-            dir += 2;
-        }
-        else {
-            dir += 1;
-        }
-
-        return module.exports.directions[dir];
-    },
-
-    directions: {
-        0: 'South West',
-        1: 'the South',
-        2: 'South East',
-        3: 'North West',
-        4: 'the North',
-        5: 'North East',
-        6: 'the West',
-        7: 'the East'
+        return false;
     },
 }

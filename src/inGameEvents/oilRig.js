@@ -17,10 +17,8 @@ module.exports = {
     checkNewChinook47Detected: function (rustplus, info, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Chinook47) {
-                let mapSize = info.response.info.mapSize;
-                let outsidePos = Map.getPointDirection(marker.x, marker.y, mapSize);
-                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
-                let pos = (gridPos === null) ? outsidePos : gridPos;
+                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!(marker.id in rustplus.activeChinook47s)) {
                     /* New Chinook 47 detected, save it */
@@ -45,7 +43,7 @@ module.exports = {
                         if (Map.getDistance(marker.x, marker.y, rig.x, rig.y) <=
                             OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                             found = true;
-                            let oilRigLocation = Map.getPointDirection(rig.x, rig.y, mapSize);
+                            let oilRigLocation = Map.getPos(rig.x, rig.y, mapSize);
 
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.heavyScientistCalled,
@@ -78,7 +76,7 @@ module.exports = {
                         if (Map.getDistance(marker.x, marker.y, rig.x, rig.y) <=
                             OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                             found = true;
-                            let oilRigLocation = Map.getPointDirection(rig.x, rig.y, mapSize);
+                            let oilRigLocation = Map.getPos(rig.x, rig.y, mapSize);
 
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.heavyScientistCalled,

@@ -13,10 +13,8 @@ module.exports = {
     checkNewPatrolHelicopterDetected: function (rustplus, mapMarkers, info) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.PatrolHelicopter) {
-                let mapSize = info.response.info.mapSize;
-                let outsidePos = Map.getPointDirection(marker.x, marker.y, mapSize);
-                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
-                let pos = (gridPos === null) ? outsidePos : gridPos;
+                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!(marker.id in rustplus.activePatrolHelicopters)) {
                     /* New Patrol Helicopter detected, save it */

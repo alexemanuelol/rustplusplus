@@ -251,7 +251,8 @@ module.exports = {
     updateTeamInformation: async function (rustplus, client, info, mapMarkers, teamInfo, time, instance, message) {
         const teamLeaderId = teamInfo.response.teamInfo.leaderSteamId.toNumber();
 
-        const mapSize = info.response.info.mapSize;
+        let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+
         const teamSize = teamInfo.response.teamInfo.members.length;
 
         let names = '';
@@ -269,9 +270,7 @@ module.exports = {
 
             unhandled = unhandled.filter(e => parseInt(e) !== member.steamId.toNumber());
 
-            let outsidePos = Map.getPointDirection(member.x, member.y, mapSize);
-            let gridPos = Map.getGridPos(member.x, member.y, mapSize);
-            let pos = (gridPos === null) ? outsidePos : gridPos;
+            let pos = Map.getPos(member.x, member.y, mapSize);
 
             if (teamSize < 12) {
                 names += `[${member.name}](${STEAM_LINK}${member.steamId})`;

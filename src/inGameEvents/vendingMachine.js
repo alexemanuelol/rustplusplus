@@ -14,10 +14,8 @@ module.exports = {
     checkNewVendingMachineDetected: function (rustplus, info, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
-                let mapSize = info.response.info.mapSize;
-                let outsidePos = Map.getPointDirection(marker.x, marker.y, mapSize);
-                let gridPos = Map.getGridPos(marker.x, marker.y, mapSize);
-                let pos = (gridPos === null) ? outsidePos : gridPos;
+                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!rustplus.activeVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
                     rustplus.activeVendingMachines.push({ x: marker.x, y: marker.y });
@@ -35,6 +33,9 @@ module.exports = {
     checkItemsFromSellOrders: function (rustplus, info, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
+                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let pos = Map.getPos(marker.x, marker.y, mapSize);
+
                 for (let order of marker.sellOrders) {
                     /* if itemId or currencyId is in itemsToLookForId */
                     if (rustplus.itemsToLookForId.includes(order.itemId) ||
@@ -57,11 +58,9 @@ module.exports = {
                                     item = Items.getName(order.currencyId);
                                 }
 
-                                let gridLocation = Map.getGridPos(marker.x, marker.y, info.response.info.mapSize);
-
                                 rustplus.sendEvent(
                                     rustplus.notificationSettings.vendingMachineDetected,
-                                    `${item} was found in a Vending Machine at ${gridLocation}.`);
+                                    `${item} was found in a Vending Machine at ${pos}.`);
                             }
                         }
                     }
