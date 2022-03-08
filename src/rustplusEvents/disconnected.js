@@ -60,6 +60,7 @@ module.exports = {
 
         /* Reset dates */
         rustplus.timeSinceCargoWasOut = null;
+        rustplus.timeSinceChinookWasOut = null;
         rustplus.timeSinceBradleyWasDestroyed = null;
         rustplus.timeSinceHeliWasDestroyed = null;
         rustplus.timeSinceHeliWasOnMap = null;

@@ -25,6 +25,9 @@ module.exports = {
         else if (command === `${rustplus.generalSettings.prefix}cargo`) {
             module.exports.commandCargo(rustplus);
         }
+        else if (command === `${rustplus.generalSettings.prefix}chinook`) {
+            module.exports.commandChinook(rustplus);
+        }
         else if (command === `${rustplus.generalSettings.prefix}heli`) {
             module.exports.commandHeli(rustplus);
         }
@@ -269,6 +272,34 @@ module.exports = {
                 let secondsSince = (new Date() - rustplus.timeSinceCargoWasOut) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince);
                 strings.push(`It was ${timeSince} since Cargo Ship left.`)
+            }
+        }
+
+        for (let str of strings) {
+            rustplus.sendTeamMessage(str);
+            rustplus.log('COMMAND', str);
+        }
+    },
+
+    commandChinook: function (rustplus) {
+        let strings = [];
+
+        let chinookCounter = 0;
+        for (const [id, content] of Object.entries(rustplus.activeChinook47s)) {
+            if (content.type === 'crate') {
+                chinookCounter += 1;
+                strings.push(`Chinook 47 is located at ${content.location}`);
+            }
+        }
+
+        if (chinookCounter === 0) {
+            if (rustplus.timeSinceChinookWasOut === null) {
+                strings.push('No current data on Chinook 47.');
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceChinookWasOut) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSince} since the last Chinook 47 was on the map.`);
             }
         }
 

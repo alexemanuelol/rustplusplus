@@ -44,6 +44,7 @@ module.exports = {
                             OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                             found = true;
                             let oilRigLocation = Map.getPos(rig.x, rig.y, mapSize);
+                            rustplus.activeChinook47s[marker.id].type = 'smallOil';
 
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.heavyScientistCalled,
@@ -77,6 +78,7 @@ module.exports = {
                             OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
                             found = true;
                             let oilRigLocation = Map.getPos(rig.x, rig.y, mapSize);
+                            rustplus.activeChinook47s[marker.id].type = 'largeOil';
 
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.heavyScientistCalled,
@@ -119,6 +121,7 @@ module.exports = {
                             rustplus.notificationSettings.chinook47Detected,
                             `Chinook 47 located at ${pos}.`);
                     }
+                    rustplus.activeChinook47s[marker.id].type = 'crate';
                 }
                 else {
                     /* Update Chinook 47 position */
@@ -145,17 +148,27 @@ module.exports = {
     checkChinook47Left: function (rustplus, mapMarkers) {
         let newActiveChinook47Object = new Object();
         for (const [id, content] of Object.entries(rustplus.activeChinook47s)) {
+            let active = false;
             for (let marker of mapMarkers.response.mapMarkers.markers) {
                 if (marker.type === RustPlusTypes.MarkerType.Chinook47) {
                     if (marker.id === parseInt(id)) {
                         /* Chinook 47 marker is still visable on the map */
+                        active = true;
                         newActiveChinook47Object[parseInt(id)] = {
                             x: content.x,
                             y: content.y,
-                            location: content.location
+                            location: content.location,
+                            type: content.type
                         };
                         break;
                     }
+                }
+            }
+
+            if (active === false) {
+                if (content.type === 'crate') {
+                    rustplus.timeSinceChinookWasOut = new Date();
+                    rustplus.log('EVENT', `Chinook 47 left the map at ${content.location}.`);
                 }
             }
         }
