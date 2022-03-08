@@ -119,7 +119,26 @@ module.exports = {
             time += `${seconds}s`;
         }
 
-        return time.trim();
+        time = time.trim();
+
+        if (time === '') {
+            if (!ignore.includes('s')) {
+                time = '0s';
+            }
+            else if (!ignore.includes('m')) {
+                time = '0m';
+            }
+            else if (!ignore.includes('h')) {
+                time = '0h';
+            }
+            else if (!ignore.includes('d')) {
+                time = '0d';
+            }
+            else {
+                time = '0s';
+            }
+        }
+        return time;
     },
 
     convertDecimalToHoursMinutes: function (time) {

@@ -227,6 +227,24 @@ module.exports = {
             }
         }
 
+        /* Chinook */
+        let chinook = '';
+        for (const [id, content] of Object.entries(rustplus.activeChinook47s)) {
+            chinook = `At ${content.location}.`
+            break;
+        }
+
+        if (chinook === '') {
+            if (rustplus.timeSinceChinookWasOut === null) {
+                chinook = 'Not active.';
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceChinookWasOut) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince, 's');
+                chinook = `${timeSince} since last.`;
+            }
+        }
+
         let file = new MessageAttachment(`src/images/${EVENT_IMG}`)
         let embed = new MessageEmbed()
             .setTitle('Event Information')
@@ -238,7 +256,8 @@ module.exports = {
                 { name: 'Patrol Helicopter', value: patrolHelicopter, inline: true },
                 { name: 'Bradley APC', value: bradley, inline: true },
                 { name: 'Small Oil Rig', value: smallOil, inline: true },
-                { name: 'Large Oil Rig', value: largeOil, inline: true })
+                { name: 'Large Oil Rig', value: largeOil, inline: true },
+                { name: 'Chinook 47', value: chinook, inline: true })
             .setFooter({
                 text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
             });
