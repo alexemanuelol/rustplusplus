@@ -171,6 +171,8 @@ module.exports = {
                     }
                     else {
                         if (!rustplus.firstPoll) {
+                            rustplus.timeSinceChinookDroppedCrate = new Date();
+
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.lockedCrateDroppedAtMonument,
                                 'Locked Crate just got dropped by Chinook 47 at ' +

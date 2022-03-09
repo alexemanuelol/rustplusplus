@@ -66,6 +66,7 @@ module.exports = {
         rustplus.timeSinceHeliWasOnMap = null;
         rustplus.timeSinceSmallOilRigWasTriggered = null;
         rustplus.timeSinceLargeOilRigWasTriggered = null;
+        rustplus.timeSinceChinookDroppedCrate = null;
 
         /* Reset time variables */
         rustplus.passedFirstSunriseOrSunset = false;

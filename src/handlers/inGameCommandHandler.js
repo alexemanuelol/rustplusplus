@@ -28,6 +28,9 @@ module.exports = {
         else if (command === `${rustplus.generalSettings.prefix}chinook`) {
             module.exports.commandChinook(rustplus);
         }
+        else if (command === `${rustplus.generalSettings.prefix}crate`) {
+            module.exports.commandCrate(rustplus);
+        }
         else if (command === `${rustplus.generalSettings.prefix}heli`) {
             module.exports.commandHeli(rustplus);
         }
@@ -257,7 +260,7 @@ module.exports = {
             }
         }
 
-        if (unhandled !== []) {
+        if (unhandled.length > 0) {
             for (let cargoShip of unhandled) {
                 let pos = rustplus.activeCargoShips[cargoShip].location;
                 strings.push(`Cargo Ship is located at ${pos}.`);
@@ -300,6 +303,35 @@ module.exports = {
                 let secondsSince = (new Date() - rustplus.timeSinceChinookWasOut) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince);
                 strings.push(`It was ${timeSince} since the last Chinook 47 was on the map.`);
+            }
+        }
+
+        for (let str of strings) {
+            rustplus.sendTeamMessage(str);
+            rustplus.log('COMMAND', str);
+        }
+    },
+
+    commandCrate: function (rustplus) {
+        let strings = [];
+
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateDespawnTimers)) {
+            let time = Timer.getTimeLeftOfTimer(timer);
+            let pos = rustplus.activeLockedCrates[parseInt(id)].type;
+
+            if (time !== null) {
+                strings.push(`Approximately ${time} before Locked Crate at ${pos} despawns.`);
+            }
+        }
+
+        if (strings.length === 0) {
+            if (rustplus.timeSinceChinookDroppedCrate === null) {
+                strings.push('No current data on Chinook 47 Locked Crate.');
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceChinookDroppedCrate) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince);
+                strings.push(`It was ${timeSince} since the last Chinook 47 Locked Crate was dropped.`);
             }
         }
 

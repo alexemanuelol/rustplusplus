@@ -73,6 +73,7 @@ class RustPlus extends RP {
         this.timeSinceHeliWasOnMap = null;
         this.timeSinceSmallOilRigWasTriggered = null;
         this.timeSinceLargeOilRigWasTriggered = null;
+        this.timeSinceChinookDroppedCrate = null;
 
         /* Time variables */
         this.passedFirstSunriseOrSunset = false;
