@@ -18,11 +18,11 @@ module.exports = {
 			case 'discord':
 				const guild = DiscordTools.getGuild(interaction.guildId);
 
-				let category = await require('../discordTools/SetupGuildCategory')(client, guild);
-				await require('../discordTools/SetupGuildChannels')(client, guild, category);
-
 				instance.firstTime = true;
 				client.writeInstanceFile(interaction.guildId, instance);
+
+				let category = await require('../discordTools/SetupGuildCategory')(client, guild);
+				await require('../discordTools/SetupGuildChannels')(client, guild, category);
 
 				await require('../discordTools/SetupServerList')(client, guild);
 				await require('../discordTools/SetupSettingsMenu')(client, guild);

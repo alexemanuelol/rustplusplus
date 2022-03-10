@@ -21,11 +21,14 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
         channel = await DiscordTools.addTextChannel(guild.id, name);
         instance.channelId[name] = channel.id;
         client.writeInstanceFile(guild.id, instance);
+        channel.setParent(parent.id);
     }
 
-    channel.setParent(parent.id);
+    if (instance.firstTime) {
+        channel.setParent(parent.id);
+    }
 
-    if (permissionWrite) {
+    if (permissionWrite && instance.firstTime) {
         channel.permissionOverwrites.set([
             {
                 id: channel.guild.roles.everyone.id,
