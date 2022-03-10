@@ -245,6 +245,30 @@ module.exports = {
             }
         }
 
+        /* Crate */
+        let crate = '';
+        for (const [id, timer] of Object.entries(rustplus.lockedCrateDespawnTimers)) {
+            let time = Timer.getTimeLeftOfTimer(timer, 's');
+            let pos = rustplus.activeLockedCrates[parseInt(id)].type;
+
+            if (time !== null) {
+                crate = `${time} until despawns at ${pos}.`;
+                break;
+            }
+        }
+
+        if (crate === '') {
+            if (rustplus.timeSinceChinookDroppedCrate === null) {
+                crate = 'No data.';
+            }
+            else {
+                let secondsSince = (new Date() - rustplus.timeSinceChinookDroppedCrate) / 1000;
+                let timeSince = Timer.secondsToFullScale(secondsSince, 's');
+                crate = `${timeSince} since last drop.`;
+            }
+        }
+
+
         let file = new MessageAttachment(`src/images/${EVENT_IMG}`)
         let embed = new MessageEmbed()
             .setTitle('Event Information')
@@ -257,7 +281,8 @@ module.exports = {
                 { name: 'Bradley APC', value: bradley, inline: true },
                 { name: 'Small Oil Rig', value: smallOil, inline: true },
                 { name: 'Large Oil Rig', value: largeOil, inline: true },
-                { name: 'Chinook 47', value: chinook, inline: true })
+                { name: 'Chinook 47', value: chinook, inline: true },
+                { name: 'Crate', value: crate, inline: true })
             .setFooter({
                 text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
             });
