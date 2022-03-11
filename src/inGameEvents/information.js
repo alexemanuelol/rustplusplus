@@ -293,7 +293,7 @@ module.exports = {
     },
 
     updateTeamInformation: async function (rustplus, client, info, mapMarkers, teamInfo, time, instance, message) {
-        const teamLeaderId = teamInfo.response.teamInfo.leaderSteamId.toNumber();
+        const teamLeaderId = JSON.parse(JSON.stringify(teamInfo.response.teamInfo)).leaderSteamId.toString();
 
         let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
 
@@ -304,30 +304,31 @@ module.exports = {
         let locations = '';
         let unhandled = Object.keys(rustplus.teamMembers);
         for (let member of teamInfo.response.teamInfo.members) {
-            if (!rustplus.teamMembers.hasOwnProperty(member.steamId)) {
-                rustplus.teamMembers[member.steamId] = {
+            let steamId = JSON.parse(JSON.stringify(member)).steamId.toString();
+            if (!rustplus.teamMembers.hasOwnProperty(steamId)) {
+                rustplus.teamMembers[steamId] = {
                     x: member.x,
                     y: member.y,
                     time: new Date()
                 };
             }
 
-            unhandled = unhandled.filter(e => parseInt(e) !== member.steamId.toNumber());
+            unhandled = unhandled.filter(e => e !== steamId);
 
             let pos = Map.getPos(member.x, member.y, mapSize);
 
             if (teamSize < 12) {
-                names += `[${member.name}](${STEAM_LINK}${member.steamId})`;
+                names += `[${member.name}](${STEAM_LINK}${steamId})`;
             }
             else {
                 names += `${member.name}`;
             }
 
-            names += (member.steamId.toNumber() === teamLeaderId) ? `${LEADER}\n` : '\n';
+            names += (steamId === teamLeaderId) ? `${LEADER}\n` : '\n';
             locations += (member.isOnline || member.isAlive) ? `${pos}\n` : '-\n';
 
             if (member.isOnline) {
-                let teamMember = rustplus.teamMembers[member.steamId];
+                let teamMember = rustplus.teamMembers[steamId];
                 if (member.x !== teamMember.x || member.y !== teamMember.y) {
                     teamMember.x = member.x;
                     teamMember.y = member.y;

@@ -149,12 +149,13 @@ module.exports = {
             }
 
             for (let member of teamInfo.response.teamInfo.members) {
-                if (!rustplus.teamMembers.hasOwnProperty(member.steamId)) {
+                let steamId = JSON.parse(JSON.stringify(member)).steamId.toString();
+                if (!rustplus.teamMembers.hasOwnProperty(steamId)) {
                     continue;
                 }
 
                 if (member.isOnline) {
-                    let teamMember = rustplus.teamMembers[member.steamId];
+                    let teamMember = rustplus.teamMembers[steamId];
 
                     let timeDifferenceSeconds = (date - teamMember.time) / 1000;
                     let afk = Timer.secondsToFullScale(timeDifferenceSeconds, 'dhs');
@@ -450,7 +451,7 @@ module.exports = {
     },
 
     commandMarker: function (rustplus, client, message) {
-        let callerId = message.broadcast.teamMessage.message.steamId.toNumber();
+        let callerId = JSON.parse(JSON.stringify(message.broadcast.teamMessage.message)).steamId.toString();
         let command = message.broadcast.teamMessage.message.message;
         let serverId = `${rustplus.server}-${rustplus.port}`;
 
@@ -473,7 +474,8 @@ module.exports = {
 
                     let callerLocation = null;
                     for (let member of msg.response.teamInfo.members) {
-                        if (member.steamId.toNumber() === callerId) {
+                        let steamId = JSON.parse(JSON.stringify(member)).steamId.toString();
+                        if (steamId === callerId) {
                             callerLocation = { x: member.x, y: member.y };
                             break;
                         }
@@ -530,7 +532,8 @@ module.exports = {
                     let callerLocation = null;
                     let callerName = null;
                     for (let member of msg.response.teamInfo.members) {
-                        if (member.steamId.toNumber() === callerId) {
+                        let steamId = JSON.parse(JSON.stringify(member)).steamId.toString();
+                        if (steamId === callerId) {
                             callerLocation = { x: member.x, y: member.y };
                             callerName = member.name;
                             break;
