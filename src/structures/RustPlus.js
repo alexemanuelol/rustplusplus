@@ -16,12 +16,17 @@ class RustPlus extends RP {
         this.guildId = guildId;
 
         this.trademarkString = 'rustPlusPlus | ';
+        this.messageIgnoreCounter = 0;
 
         this.oldsendTeamMessage = this.sendTeamMessage;
-        this.sendTeamMessage = function (message) {
+        this.sendTeamMessage = function (message, ignoreForward = false) {
             let trademark = (this.generalSettings.showTrademark) ? this.trademarkString : '';
             let messageMaxLength = MAX_LENGTH_TEAM_MESSAGE - trademark.length;
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
+
+            if (ignoreForward) {
+                this.messageIgnoreCounter = strings.length;
+            }
 
             for (let msg of strings) {
                 if (!this.generalSettings.muteInGameBotMessages) {
@@ -145,6 +150,11 @@ class RustPlus extends RP {
         return true;
     }
 
+    printCommandOutput(rustplus, str, type = 'COMMAND') {
+        rustplus.sendTeamMessage(str, !rustplus.generalSettings.showTrademark);
+        rustplus.log(type, str);
+    }
+
     sendEvent(setting, text, firstPoll = false, image = null) {
         let img = (image !== null) ? image : setting.image;
 
@@ -152,7 +162,7 @@ class RustPlus extends RP {
             this.sendDiscordEvent(text, img)
         }
         if (!firstPoll && setting.inGame) {
-            this.sendTeamMessage(`Event: ${text}`);
+            this.sendTeamMessage(`Event: ${text}`, !this.generalSettings.showTrademark);
         }
         this.log('EVENT', text);
     }

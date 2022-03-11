@@ -172,8 +172,7 @@ module.exports = {
                 str = 'No one is AFK.';
             }
 
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         });
     },
 
@@ -209,8 +208,7 @@ module.exports = {
                 time = Timer.secondsToFullScale(time);
                 time = (time === '') ? '0s' : time;
                 let str = `${name} has been alive the longest (${time})`;
-                rustplus.sendTeamMessage(str);
-                rustplus.log('COMMAND', str);
+                rustplus.printCommandOutput(rustplus, str);
             }
         });
     },
@@ -240,8 +238,7 @@ module.exports = {
         }
 
         for (let str of strings) {
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         }
     },
 
@@ -279,8 +276,7 @@ module.exports = {
         }
 
         for (let str of strings) {
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         }
     },
 
@@ -307,8 +303,7 @@ module.exports = {
         }
 
         for (let str of strings) {
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         }
     },
 
@@ -336,8 +331,7 @@ module.exports = {
         }
 
         for (let str of strings) {
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         }
     },
 
@@ -373,8 +367,7 @@ module.exports = {
         }
 
         for (let str of strings) {
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         }
     },
 
@@ -404,8 +397,7 @@ module.exports = {
         }
 
         for (let str of strings) {
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         }
     },
 
@@ -492,8 +484,7 @@ module.exports = {
                     rustplus.markers[command] = callerLocation;
 
                     let str = `Marker '${command}' was added.`;
-                    rustplus.sendTeamMessage(str);
-                    rustplus.log('COMMAND', str);
+                    rustplus.printCommandOutput(rustplus, str);
                 });
                 break;
 
@@ -506,8 +497,7 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     let str = `Marker '${command}' was removed.`;
-                    rustplus.sendTeamMessage(str);
-                    rustplus.log('COMMAND', str);
+                    rustplus.printCommandOutput(rustplus, str);
                 }
                 break;
 
@@ -524,8 +514,7 @@ module.exports = {
                     str = 'No markers.';
                 }
 
-                rustplus.sendTeamMessage(str);
-                rustplus.log('COMMAND', str);
+                rustplus.printCommandOutput(rustplus, str);
                 break;
 
             default:
@@ -556,8 +545,7 @@ module.exports = {
                         rustplus.markers[subcommand].x, rustplus.markers[subcommand].y));
 
                     let str = `Marker '${subcommand}' is ${distance}m from ${callerName} in direction ${direction}°.`;
-                    rustplus.sendTeamMessage(str);
-                    rustplus.log('COMMAND', str);
+                    rustplus.printCommandOutput(rustplus, str);
                 });
                 break;
         }
@@ -565,8 +553,7 @@ module.exports = {
 
     commandMute: function (rustplus, client) {
         let str = `In-Game bot messages muted.`;
-        rustplus.sendTeamMessage(str);
-        rustplus.log('COMMAND', str);
+        rustplus.printCommandOutput(rustplus, str);
 
         let instance = client.readInstanceFile(rustplus.guildId);
         rustplus.generalSettings.muteInGameBotMessages = true;
@@ -594,8 +581,7 @@ module.exports = {
                 str = str.slice(0, -2);
             }
 
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         });
     },
 
@@ -614,8 +600,7 @@ module.exports = {
 
             str = str.slice(0, -2);
 
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         });
     },
 
@@ -635,8 +620,7 @@ module.exports = {
                 str += ` and ${queue} players in queue.`;
             }
 
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         });
     },
 
@@ -666,8 +650,7 @@ module.exports = {
         }
 
         for (let str of strings) {
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         }
     },
 
@@ -695,8 +678,7 @@ module.exports = {
                 }
             }
 
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         });
     },
 
@@ -735,8 +717,7 @@ module.exports = {
                 rustplus.timers[id] = {
                     timer: new Timer.timer(
                         () => {
-                            rustplus.sendTeamMessage(`Timer: ${message}`);
-                            rustplus.log('TIMER', message);
+                            rustplus.printCommandOutput(rustplus, `Timer: ${message}`, 'TIMER');
                             delete rustplus.timers[id]
                         },
                         timeSeconds * 1000),
@@ -744,8 +725,7 @@ module.exports = {
                 };
                 rustplus.timers[id].timer.start();
 
-                rustplus.sendTeamMessage(`Timer set for ${time}.`);
-                rustplus.log('COMMAND', `Timer set for ${time}.`);
+                rustplus.printCommandOutput(rustplus, `Timer set for ${time}.`);
                 break;
 
             case 'remove':
@@ -761,25 +741,20 @@ module.exports = {
                 rustplus.timers[id].timer.stop();
                 delete rustplus.timers[id];
 
-                rustplus.sendTeamMessage(`Timer with ID: ${id} was removed.`);
-                rustplus.log('COMMAND', `Timer with ID: ${id} was removed.`);
-
+                rustplus.printCommandOutput(rustplus, `Timer with ID: ${id} was removed`);
                 break;
 
             case 'remain':
                 if (Object.keys(rustplus.timers).length === 0) {
-                    rustplus.sendTeamMessage('No active timers.');
-                    rustplus.log('COMMAND', 'No active timers');
+                    rustplus.printCommandOutput(rustplus, 'No active timers.');
                 }
                 else {
-                    rustplus.sendTeamMessage('Active timers:');
-                    rustplus.log('COMMAND', 'Active timers:');
+                    rustplus.printCommandOutput(rustplus, 'Active timers:');
                 }
                 for (const [id, content] of Object.entries(rustplus.timers)) {
                     let timeLeft = Timer.getTimeLeftOfTimer(content.timer);
                     let str = `- ID: ${parseInt(id)}, Time left: ${timeLeft}, Message: ${content.message}`;
-                    rustplus.sendTeamMessage(str);
-                    rustplus.log('COMMAND', str);
+                    rustplus.printCommandOutput(rustplus, str);
                 }
                 break;
 
@@ -795,8 +770,7 @@ module.exports = {
         client.writeInstanceFile(rustplus.guildId, instance);
 
         let str = `In-Game chat unmuted.`;
-        rustplus.sendTeamMessage(str);
-        rustplus.log('COMMAND', str);
+        rustplus.printCommandOutput(rustplus, str);
     },
 
     commandWipe: function (rustplus) {
@@ -812,8 +786,7 @@ module.exports = {
 
             let str = `${sinceWipe} since wipe.`;
 
-            rustplus.sendTeamMessage(str);
-            rustplus.log('COMMAND', str);
+            rustplus.printCommandOutput(rustplus, str);
         });
     },
 };
