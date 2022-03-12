@@ -162,7 +162,7 @@ class RustPlus extends RP {
             this.sendDiscordEvent(text, img)
         }
         if (!firstPoll && setting.inGame) {
-            this.sendTeamMessage(`Event: ${text}`, !this.generalSettings.showTrademark);
+            this.sendTeamMessage(`${text}`, !this.generalSettings.showTrademark);
         }
         this.log('EVENT', text);
     }
