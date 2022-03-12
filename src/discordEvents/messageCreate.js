@@ -9,6 +9,7 @@ module.exports = {
             return;
         }
 
-        rustplus.sendTeamMessage(`${message.author.username}: ${message.cleanContent}`)
+        rustplus.sendTeamMessage(`${message.author.username}: ${message.cleanContent}`,
+            !rustplus.generalSettings.showTrademark)
     },
 }
