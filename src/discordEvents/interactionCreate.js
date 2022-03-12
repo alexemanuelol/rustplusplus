@@ -26,5 +26,9 @@ module.exports = {
                 });
             }
         }
+        else {
+            client.log('ERROR', 'Unknown Interaction...', 'error')
+            interaction.deferUpdate();
+        }
     },
 };

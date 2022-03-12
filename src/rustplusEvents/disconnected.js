@@ -1,3 +1,5 @@
+const DiscordTools = require('../discordTools/discordTools.js');
+
 module.exports = {
     name: 'disconnected',
     async execute(rustplus, client) {
@@ -6,6 +8,7 @@ module.exports = {
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);
 
+        let server = `${rustplus.server}-${rustplus.port}`;
         let instance = client.readInstanceFile(rustplus.guildId);
 
         rustplus.firstPoll = true;
@@ -87,7 +90,25 @@ module.exports = {
         }
 
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
-            if (instance.serverList[`${rustplus.server}-${rustplus.port}`].active) {
+            if (instance.serverList[server].active) {
+                if (rustplus.connected || rustplus.firstTime) {
+                    rustplus.firstTime = false;
+                    rustplus.connected = false;
+
+                    let row = DiscordTools.getServerButtonsRow(server, 2, instance.serverList[server].url);
+
+                    let channelId = instance.channelId.servers;
+                    let messageId = instance.serverList[server].messageId;
+                    let message = undefined;
+                    if (messageId !== null) {
+                        message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
+                    }
+
+                    if (message !== undefined) {
+                        await message.edit({ components: [row] });
+                    }
+                }
+
                 rustplus.log('RECONNECTING', 'RUSTPLUS RECONNECTING');
                 rustplus.connect();
             }

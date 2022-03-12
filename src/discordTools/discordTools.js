@@ -194,6 +194,12 @@ module.exports = {
                 style = 'DANGER';
                 break;
 
+            case 2: /* RECONNECTING */
+                customId = `${ipPort}ServerReconnecting`;
+                label = 'RECONNECTING...';
+                style = 'DANGER';
+                break;
+
             default:
                 break;
         }

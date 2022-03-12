@@ -93,8 +93,10 @@ module.exports = async (client, interaction) => {
             instance.serverList[server].playerToken
         );
     }
-    else if (interaction.customId.endsWith('ServerDisconnect')) {
+    else if (interaction.customId.endsWith('ServerDisconnect') ||
+        interaction.customId.endsWith('ServerReconnecting')) {
         let server = interaction.customId.replace('ServerDisconnect', '');
+        server = server.replace('ServerReconnecting', '');
 
         instance.serverList[server].active = false;
         let row = DiscordTools.getServerButtonsRow(server, 0, instance.serverList[server].url);

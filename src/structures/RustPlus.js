@@ -96,6 +96,8 @@ class RustPlus extends RP {
         this.interactionSwitches = [];
 
         this.deleted = false;
+        this.connected = false;
+        this.firstTime = true;
 
         /* Load rustplus events */
         this.loadEvents();
