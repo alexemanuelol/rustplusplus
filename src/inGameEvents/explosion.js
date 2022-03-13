@@ -58,9 +58,16 @@ module.exports = {
                         let atLaunch = module.exports.isBradleyExplosionAtLaunchSite(marker.x, marker.y, rustplus);
                         pos = (atLaunch) ? 'Launch Site' : pos;
 
-                        rustplus.sendEvent(
-                            rustplus.notificationSettings.bradleyApcDestroyed,
-                            `Bradley APC was destroyed at ${pos}.`);
+                        if (rustplus.firstPoll) {
+                            rustplus.sendEvent(
+                                rustplus.notificationSettings.bradleyApcDestroyed,
+                                `Bradley APC or Patrol Helicopter was destroyed at ${pos}.`);
+                        }
+                        else {
+                            rustplus.sendEvent(
+                                rustplus.notificationSettings.bradleyApcDestroyed,
+                                `Bradley APC was destroyed at ${pos}.`);
+                        }
 
                         if (!rustplus.firstPoll) {
                             rustplus.bradleyRespawnTimers[marker.id] = new Timer.timer(
