@@ -4,7 +4,7 @@ const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer');
 
 module.exports = {
-    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Cargo Ship is detected */
         module.exports.checkNewCargoShipDetected(rustplus, info, mapMarkers);
 

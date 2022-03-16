@@ -6,7 +6,7 @@ const Timer = require('../util/timer');
 const OIL_RIG_CHINOOK_47_MAX_DISTANCE = 550;
 
 module.exports = {
-    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if a Chinook 47 have been detected near any of the oil rigs */
         module.exports.checkNewChinook47Detected(rustplus, info, mapMarkers);
 

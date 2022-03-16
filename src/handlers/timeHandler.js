@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 module.exports = {
-    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check current time and update time variables */
         module.exports.updateTimeVariables(rustplus, client, time);
     },

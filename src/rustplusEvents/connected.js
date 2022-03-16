@@ -1,4 +1,4 @@
-const PollingHandler = require('../handlers/continuousPollingHandler.js');
+const PollingHandler = require('../handlers/pollingHandler.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -45,10 +45,10 @@ module.exports = {
             rustplus.loadMarkers();
 
             /* Run the first time before starting the interval */
-            PollingHandler.continuousPollingHandler(rustplus, client);
+            PollingHandler.pollingHandler(rustplus, client);
 
             /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
-            rustplus.intervalId = setInterval(PollingHandler.continuousPollingHandler,
+            rustplus.intervalId = setInterval(PollingHandler.pollingHandler,
                 client.pollingIntervalMs,
                 rustplus,
                 client);

@@ -2,7 +2,7 @@ const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
-    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Patrol Helicopter is detected */
         module.exports.checkNewPatrolHelicopterDetected(rustplus, mapMarkers, info);
 

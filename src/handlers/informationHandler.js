@@ -20,7 +20,7 @@ const TEAM_IMG = 'team_info_logo.png';
 const AFK_TIME_SECONDS = 5 * 60; /* 5 Minutes */
 
 module.exports = {
-    checkEvent: async function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: async function (rustplus, client, info, mapMarkers, teamInfo, time) {
         let instance = client.readInstanceFile(rustplus.guildId);
         let channelId = instance.channelId.information;
 

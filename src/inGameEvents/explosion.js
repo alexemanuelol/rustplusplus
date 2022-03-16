@@ -7,7 +7,7 @@ const PATROL_HELI_DOWNED_RADIUS = 400;
 const LAUNCH_SITE_RADIUS = 250;
 
 module.exports = {
-    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new explosion is detected */
         module.exports.checkNewExplosionDetected(rustplus, mapMarkers, info);
 

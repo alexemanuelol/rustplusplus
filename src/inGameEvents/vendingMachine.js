@@ -3,7 +3,7 @@ const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
-    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Vending Machine is detected */
         module.exports.checkNewVendingMachineDetected(rustplus, info, mapMarkers);
 

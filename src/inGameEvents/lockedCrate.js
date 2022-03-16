@@ -9,7 +9,7 @@ const LOCKED_CRATE_CARGO_SHIP_RADIUS = 100;
 const LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS = 5;
 
 module.exports = {
-    checkEvent: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Locked Crate is detected */
         module.exports.checkNewLockedCrateDetected(rustplus, info, mapMarkers);
 
