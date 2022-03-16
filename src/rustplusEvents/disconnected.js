@@ -79,7 +79,6 @@ module.exports = {
         rustplus.timeTillDay = new Object();
         rustplus.timeTillNight = new Object();
 
-        rustplus.teamMembers = new Object();
         rustplus.markers = new Object();
 
         rustplus.informationIntervalCounter = 0;

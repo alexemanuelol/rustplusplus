@@ -43,6 +43,7 @@ class RustPlus extends RP {
         /* Map meta */
         this.intervalId = 0;
         this.debug = false;
+        this.mapSize = null;
         this.mapWidth = null;
         this.mapHeight = null;
         this.mapOceanMargin = null;
@@ -88,7 +89,7 @@ class RustPlus extends RP {
         this.timeTillDay = new Object();
         this.timeTillNight = new Object();
 
-        this.teamMembers = new Object();
+        this.team = null;
         this.markers = new Object();
 
         this.informationIntervalCounter = 0;

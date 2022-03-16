@@ -15,7 +15,7 @@ module.exports = {
         }
         else if (message.hasOwnProperty('broadcast')) {
             if (message.broadcast.hasOwnProperty('teamChanged')) {
-
+                rustplus.team.updateTeam(message.broadcast.teamChanged.teamInfo);
             }
             else if (message.broadcast.hasOwnProperty('teamMessage')) {
                 /* Let command handler handle the potential command */

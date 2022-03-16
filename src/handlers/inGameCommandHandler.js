@@ -140,78 +140,24 @@ module.exports = {
     },
 
     commandAfk: function (rustplus) {
-        const date = new Date();
         let str = '';
 
-        rustplus.getTeamInfo((teamInfo) => {
-            if (!rustplus.isResponseValid(teamInfo)) {
-                return;
-            }
-
-            for (let member of teamInfo.response.teamInfo.members) {
-                let steamId = JSON.parse(JSON.stringify(member)).steamId.toString();
-                if (!rustplus.teamMembers.hasOwnProperty(steamId)) {
-                    continue;
-                }
-
-                if (member.isOnline) {
-                    let teamMember = rustplus.teamMembers[steamId];
-
-                    let timeDifferenceSeconds = (date - teamMember.time) / 1000;
-                    let afk = Timer.secondsToFullScale(timeDifferenceSeconds, 'dhs');
-
-                    if (timeDifferenceSeconds >= AFK_TIME_SECONDS) {
-                        str += `${member.name} [${afk}], `;
-                    }
+        for (let player of rustplus.team.players) {
+            if (player.isOnline) {
+                if (player.getAfkSeconds() >= AFK_TIME_SECONDS) {
+                    str += `${player.name} [${player.getAfkTime('dhs')}], `;
                 }
             }
+        }
 
-            if (str !== '') {
-                str = str.slice(0, -2);
-            }
-            else {
-                str = 'No one is AFK.';
-            }
-
-            rustplus.printCommandOutput(rustplus, str);
-        });
+        str = (str !== '') ? str.slice(0, -2) : 'No one is AFK.';
+        rustplus.printCommandOutput(rustplus, str);
     },
 
     commandAlive: function (rustplus) {
-        const date = new Date();
-
-        rustplus.getTeamInfo((teamInfo) => {
-            if (!rustplus.isResponseValid(teamInfo)) {
-                return;
-            }
-
-            let name = null;
-            let time = null;
-
-            for (let member of teamInfo.response.teamInfo.members) {
-                if (member.isAlive === true) {
-                    let memberAlive = (date - new Date(member.spawnTime * 1000)) / 1000;
-
-                    if (time === null) {
-                        name = member.name;
-                        time = memberAlive;
-                        time = (time < 0) ? 0 : time;
-                    }
-                    else if (memberAlive > time) {
-                        name = member.name;
-                        time = memberAlive;
-                        time = (time < 0) ? 0 : time;
-                    }
-                }
-            }
-
-            if (time !== null) {
-                time = Timer.secondsToFullScale(time);
-                time = (time === '') ? '0s' : time;
-                let str = `${name} has been alive the longest (${time})`;
-                rustplus.printCommandOutput(rustplus, str);
-            }
-        });
+        let player = rustplus.team.getPlayerLongestAlive();
+        let time = player.getAliveTime();
+        rustplus.printCommandOutput(rustplus, `${player.name} has been alive the longest (${time})`);
     },
 
     commandBradley: function (rustplus) {
@@ -402,52 +348,32 @@ module.exports = {
         }
     },
 
-    commandLeader: function (rustplus, message) {
+    commandLeader: async function (rustplus, message) {
         let command = message.broadcast.teamMessage.message.message;
-        let callerId = message.broadcast.teamMessage.message.steamId;
-        let callerName = message.broadcast.teamMessage.message.name;
+        let callerId = message.broadcast.teamMessage.message.steamId.toString();
 
-        rustplus.getTeamInfo((msg) => {
-            if (!rustplus.isResponseValid(msg)) {
-                return;
-            }
+        if (command === `${rustplus.generalSettings.prefix}leader`) {
+            rustplus.team.changeLeadership(callerId);
+        }
+        else {
+            let name = command.replace(`${rustplus.generalSettings.prefix}leader `, '');
 
-            if (command === `${rustplus.generalSettings.prefix}leader`) {
-                promoteToLeader(rustplus, callerId).then((result) => {
-                    rustplus.log('COMMAND', `Team Leadership was transferred to ${callerName}:${callerId}.`);
-                }).catch((error) => {
-                    rustplus.log('ERROR', JSON.stringify(error), 'error');
-                });
-            }
-            else {
-                let name = command.replace(`${rustplus.generalSettings.prefix}leader `, '');
-
-                /* Look if the value provided is a steamId */
-                for (let member of msg.response.teamInfo.members) {
-                    if (name == member.steamId) {
-                        promoteToLeader(rustplus, member.steamId).then((result) => {
-                            rustplus.log('COMMAND', `Team Leadership was transferred to ${member.name}:${name}.`);
-                        }).catch((error) => {
-                            rustplus.log('ERROR', JSON.stringify(error), 'error');
-                        });
-                        return;
-                    }
-                }
-
-                /* Find the closest name */
-                for (let member of msg.response.teamInfo.members) {
-                    if (Str.similarity(name, member.name) >= 0.9) {
-                        promoteToLeader(rustplus, member.steamId).then((result) => {
-                            rustplus.log('COMMAND', `Team Leadership was transferred to ${name}:` +
-                                `${member.steamId}.`);
-                        }).catch((error) => {
-                            rustplus.log('ERROR', JSON.stringify(error), 'error');
-                        });
-                        return;
-                    }
+            /* Look if the value provided is a steamId */
+            for (let player of rustplus.team.players) {
+                if (name === player.steamId) {
+                    rustplus.team.changeLeadership(player.steamId);
+                    return;
                 }
             }
-        });
+
+            /* Find the closest name */
+            for (let player of rustplus.team.players) {
+                if (Str.similarity(name, player.name) >= 0.9) {
+                    rustplus.team.changeLeadership(player.steamId);
+                    return;
+                }
+            }
+        }
     },
 
     commandMarker: function (rustplus, client, message) {
@@ -565,46 +491,27 @@ module.exports = {
     },
 
     commandOffline: function (rustplus) {
-        rustplus.getTeamInfo((teamInfo) => {
-            if (!rustplus.isResponseValid(teamInfo)) {
-                return;
+        let str = '';
+        for (let player of rustplus.team.players) {
+            if (!player.isOnline) {
+                str += `${player.name}, `;
             }
+        }
 
-            let str = '';
-            for (let member of teamInfo.response.teamInfo.members) {
-                if (member.isOnline === false) {
-                    str += `${member.name}, `;
-                }
-            }
-
-            if (str === '') {
-                str = 'No one is offline.';
-            }
-            else {
-                str = str.slice(0, -2);
-            }
-
-            rustplus.printCommandOutput(rustplus, str);
-        });
+        str = (str !== '') ? str.slice(0, -2) : 'No one is offline.';
+        rustplus.printCommandOutput(rustplus, str);
     },
 
     commandOnline: function (rustplus) {
-        rustplus.getTeamInfo((teamInfo) => {
-            if (!rustplus.isResponseValid(teamInfo)) {
-                return;
+        let str = '';
+        for (let player of rustplus.team.players) {
+            if (player.isOnline) {
+                str += `${player.name}, `;
             }
+        }
 
-            let str = '';
-            for (let member of teamInfo.response.teamInfo.members) {
-                if (member.isOnline === true) {
-                    str += `${member.name}, `;
-                }
-            }
-
-            str = str.slice(0, -2);
-
-            rustplus.printCommandOutput(rustplus, str);
-        });
+        str = str.slice(0, -2);
+        rustplus.printCommandOutput(rustplus, str);
     },
 
     commandPop: function (rustplus) {

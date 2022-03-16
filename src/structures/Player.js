@@ -1,0 +1,116 @@
+const Map = require('../util/map.js');
+const Time = require('../util/timer.js');
+
+class Player {
+    constructor(player, rustplus) {
+        this._steamId = player.steamId.toString();
+        this._name = player.name;
+        this._x = player.x;
+        this._y = player.y;
+        this._isOnline = player.isOnline;
+        this._spawnTime = player.spawnTime;
+        this._isAlive = player.isAlive;
+        this._deathTime = player.deathTime;
+
+        this._rustplus = rustplus;
+
+        this._pos = null;
+        this._lastMovement = new Date();
+        this._teamLeader = false;
+
+        this.updatePos();
+    }
+
+    /* Getters and Setters */
+    get steamId() { return this._steamId; }
+    set steamId(steamId) { this._steamId = steamId; }
+    get name() { return this._name; }
+    set name(name) { this._name = name; }
+    get x() { return this._x; }
+    set x(x) { this._x = x; }
+    get y() { return this._y; }
+    set y(y) { this._y = y; }
+    get isOnline() { return this._isOnline; }
+    set isOnline(isOnline) { this._isOnline = isOnline; }
+    get spawnTime() { return this._spawnTime; }
+    set spawnTime(spawnTime) { this._spawnTime = spawnTime; }
+    get isAlive() { return this._isAlive; }
+    set isAlive(isAlive) { this._isAlive = isAlive; }
+    get deathTime() { return this._deathTime; }
+    set deathTime(deathTime) { this._deathTime = deathTime; }
+    get rustplus() { return this._rustplus; }
+    set rustplus(rustplus) { this._rustplus = rustplus; }
+    get pos() { return this._pos; }
+    set pos(pos) { this._pos = pos; }
+    get lastMovement() { return this._lastMovement; }
+    set lastMovement(lastMovement) { this._lastMovement = lastMovement; }
+    get teamLeader() { return this._teamLeader; }
+    set teamLeader(teamLeader) { this._teamLeader = teamLeader; }
+
+    /* Change checkers */
+    isSteamIdChanged(player) { return (this.steamId !== player.steamId.toString()); }
+    isNameChanged(player) { return (this.name !== player.name); }
+    isXChanged(player) { return (this.x !== player.x); }
+    isYChanged(player) { return (this.y !== player.y); }
+    isOnlineChanged(player) { return (this.isOnline !== player.isOnline); }
+    isSpawnTimeChanged(player) { return (this.spawnTime !== player.spawnTime); }
+    isAliveChanged(player) { return (this.isAlive !== player.isAlive); }
+    isDeathTimeChanged(player) { return (this.deathTime !== player.deathTime); }
+
+    /* Other checkers */
+    isGoneOnline(player) { return ((this.isOnline === false) && (player.isOnline === true)); }
+    isGoneOffline(player) { return ((this.isOnline === true) && (player.isOnline === false)); }
+    isGoneAlive(player) { return ((this.isAlive === false) && (player.isAlive === true)); }
+    isGoneDead(player) { return ((this.isAlive === true) && (player.isAlive === false)); }
+
+    updatePlayer(player) {
+        if (this.isXChanged(player) || this.isYChanged(player)) {
+            this.lastMovement = new Date();
+        }
+
+        this.steamId = player.steamId.toString();
+        this.name = player.name;
+        this.x = player.x;
+        this.y = player.y;
+        this.isOnline = player.isOnline;
+        this.spawnTime = player.spawnTime;
+        this.isAlive = player.isAlive;
+        this.deathTime = player.deathTime;
+
+        this.updatePos();
+    }
+
+    updatePos() {
+        if (this.isAlive || this.isOnline) {
+            this.pos = Map.getPos(this.x, this.y, this.rustplus.mapSize);
+        }
+        else {
+            this.pos = null;
+        }
+    }
+
+    getAfkSeconds() { return (new Date() - this.lastMovement) / 1000; }
+    getAfkTime(ignore = '') { return Time.secondsToFullScale(this.getAfkSeconds(), ignore); }
+
+    getAliveSeconds() {
+        if (this.spawnTime === 0) return 0;
+        return (new Date() - new Date(this.spawnTime * 1000)) / 1000;
+    }
+    getAliveTime(ignore = '') { return Time.secondsToFullScale(this.getAliveSeconds(), ignore); }
+
+    getDeathSeconds() {
+        if (this.deathTime === 0) return 0;
+        return (new Date() - new Date(this.deathTime * 1000)) / 1000;
+    }
+    getDeathTime(ignore = '') { return (Time.secondsToFullScale(this.getDeathSeconds(), ignore)); }
+
+    assignLeader() {
+        return this.rustplus.sendRequestAsync({
+            promoteToLeader: { steamId: this.steamId }
+        }, 2000).catch((error) => {
+            this.rustplus.log('ERROR', JSON.stringify(error), 'error');
+        });
+    }
+}
+
+module.exports = Player;

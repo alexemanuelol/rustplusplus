@@ -1,5 +1,4 @@
 const Timer = require('../util/timer');
-const Map = require('../util/map.js');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
@@ -293,70 +292,28 @@ module.exports = {
     },
 
     updateTeamInformation: async function (rustplus, client, info, mapMarkers, teamInfo, time, instance, message) {
-        const teamLeaderId = JSON.parse(JSON.stringify(teamInfo.response.teamInfo)).leaderSteamId.toString();
-
-        let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
-
-        const teamSize = teamInfo.response.teamInfo.members.length;
-
         let names = '';
         let status = '';
         let locations = '';
-        let unhandled = Object.keys(rustplus.teamMembers);
-        for (let member of teamInfo.response.teamInfo.members) {
-            let steamId = JSON.parse(JSON.stringify(member)).steamId.toString();
-            if (!rustplus.teamMembers.hasOwnProperty(steamId)) {
-                rustplus.teamMembers[steamId] = {
-                    x: member.x,
-                    y: member.y,
-                    time: new Date()
-                };
-            }
-
-            unhandled = unhandled.filter(e => e !== steamId);
-
-            let pos = Map.getPos(member.x, member.y, mapSize);
-
-            if (teamSize < 12) {
-                names += `[${member.name}](${STEAM_LINK}${steamId})`;
+        for (let player of rustplus.team.players) {
+            if (rustplus.team.teamSize < 12) {
+                names += `[${player.name}](${STEAM_LINK}${player.steamId})`;
             }
             else {
-                names += `${member.name}`;
+                names += `${player.name}`;
             }
 
-            names += (steamId === teamLeaderId) ? `${LEADER}\n` : '\n';
-            locations += (member.isOnline || member.isAlive) ? `${pos}\n` : '-\n';
+            names += (player.teamLeader) ? `${LEADER}\n` : '\n';
+            locations += (player.isOnline || player.isAlive) ? `${player.pos}\n` : '-\n';
 
-            if (member.isOnline) {
-                let teamMember = rustplus.teamMembers[steamId];
-                if (member.x !== teamMember.x || member.y !== teamMember.y) {
-                    teamMember.x = member.x;
-                    teamMember.y = member.y;
-                    teamMember.time = new Date();
-                }
-
-                let timeDifferenceSeconds = (new Date() - teamMember.time) / 1000;
-                let afk = Timer.secondsToFullScale(timeDifferenceSeconds, 'dhs');
-
-                if (member.isAlive) {
-                    status += (timeDifferenceSeconds >= AFK_TIME_SECONDS) ?
-                        `${AFK}${SLEEPING} ${afk}` : `${ONLINE}${ALIVE}`;
-                }
-                else {
-                    status += (timeDifferenceSeconds >= AFK_TIME_SECONDS) ?
-                        `${AFK}${DEAD} ${afk}` : `${ONLINE}${DEAD}`;
-                }
+            if (player.isOnline) {
+                status += (player.getAfkSeconds() >= AFK_TIME_SECONDS) ?
+                    `${AFK}${(player.isAlive) ? SLEEPING : DEAD} ${player.getAfkTime('dhs')}\n` :
+                    `${ONLINE}${(player.isAlive) ? ALIVE : DEAD}\n`;
             }
             else {
-                status += OFFLINE;
-                status += (member.isAlive) ? SLEEPING : DEAD;
+                status += `${OFFLINE}${(player.isAlive) ? SLEEPING : DEAD}\n`;
             }
-
-            status += '\n';
-        }
-
-        for (let leftMember of unhandled) {
-            delete rustplus.teamMembers[leftMember];
         }
 
         let file = new MessageAttachment(`src/images/${TEAM_IMG}`)

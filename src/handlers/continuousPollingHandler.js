@@ -8,24 +8,24 @@ const VendingMachine = require('../inGameEvents/vendingMachine.js');
 const Time = require('../inGameEvents/time.js');
 const Information = require('../inGameEvents/information.js');
 
+const Map = require('../util/map.js');
+const Team = require('../structures/Team');
+
 module.exports = {
     continuousPollingHandler: function (rustplus, client) {
         /* Continuous polling of server info, map markers, team info and time. */
         rustplus.getInfo((info) => {
-            if (!rustplus.isResponseValid(info)) {
-                return;
-            }
+            if (!rustplus.isResponseValid(info)) return;
             rustplus.getMapMarkers((mapMarkers) => {
-                if (!rustplus.isResponseValid(mapMarkers)) {
-                    return;
-                }
-                rustplus.getTeamInfo((teamInfo) => {
-                    if (!rustplus.isResponseValid(teamInfo)) {
-                        return;
-                    }
+                if (!rustplus.isResponseValid(mapMarkers)) return;
+                rustplus.getTeamInfo(async (teamInfo) => {
+                    if (!rustplus.isResponseValid(teamInfo)) return;
                     rustplus.getTime((time) => {
-                        if (!rustplus.isResponseValid(time)) {
-                            return;
+                        if (!rustplus.isResponseValid(time)) return;
+
+                        if (rustplus.firstPoll) {
+                            rustplus.mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                            rustplus.team = new Team(teamInfo.response.teamInfo, rustplus);
                         }
 
                         module.exports.checkEvents(rustplus, client, info, mapMarkers, teamInfo, time);
@@ -51,6 +51,8 @@ module.exports = {
         if (instance.serverList[server].timeTillDay === null && instance.serverList[server].timeTillNight == null) {
             Time.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
         }
+
+        rustplus.team.updateTeam(teamInfo.response.teamInfo);
 
         Information.checkEvent(rustplus, client, info, mapMarkers, teamInfo, time);
     },
