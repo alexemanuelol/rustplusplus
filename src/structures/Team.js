@@ -52,7 +52,7 @@ class Team {
             let steamId = player.steamId.toString();
             if (this.players.some(e => e.steamId === steamId)) {
                 this.getPlayer(steamId).updatePlayer(player);
-                unhandled = unhandled.filter(e => e.steamId !== steamId)
+                unhandled = unhandled.filter(e => e.steamId !== steamId);
             }
             else {
                 this.addPlayer(player);
@@ -115,6 +115,31 @@ class Team {
         if (player !== null) {
             player.assignLeader();
         }
+    }
+
+    getNewPlayers(team) {
+        let newPlayers = [];
+
+        for (let player of team.members) {
+            if (!this.isPlayerInTeam(player.steamId.toString())) {
+                newPlayers.push(player.steamId.toString());
+            }
+        }
+
+        return newPlayers;
+    }
+
+    getLeftPlayers(team) {
+        let leftPlayers = this.players.map(function (e) { return e.steamId; });
+
+        for (let player of team.members) {
+            let steamId = player.steamId.toString();
+            if (this.players.some(e => e.steamId === steamId)) {
+                leftPlayers = leftPlayers.filter(e => e !== steamId);
+            }
+        }
+
+        return leftPlayers;
     }
 }
 

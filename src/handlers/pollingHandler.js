@@ -7,8 +7,10 @@ const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
 const TimeHandler = require('../handlers/timeHandler.js');
 const InformationHandler = require('../handlers/informationHandler.js');
+const TeamHandler = require('../handlers/teamHandler.js');
 
 const Map = require('../util/map.js');
+const Scrape = require('../util/scrape.js');
 const Team = require('../structures/Team');
 
 module.exports = {
@@ -52,6 +54,7 @@ module.exports = {
             TimeHandler.handler(rustplus, client, info, mapMarkers, teamInfo, time);
         }
 
+        TeamHandler.handler(rustplus, client, teamInfo.response.teamInfo);
         rustplus.team.updateTeam(teamInfo.response.teamInfo);
 
         InformationHandler.handler(rustplus, client, info, mapMarkers, teamInfo, time);

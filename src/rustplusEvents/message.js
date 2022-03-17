@@ -2,6 +2,7 @@ const CommandHandler = require('../handlers/inGameCommandHandler.js');
 const TeamChatHandler = require("../handlers/teamChatHandler.js");
 const DiscordTools = require('../discordTools/discordTools.js');
 const { MessageAttachment } = require('discord.js');
+const TeamHandler = require('../handlers/teamHandler.js');
 
 module.exports = {
     name: 'message',
@@ -15,6 +16,7 @@ module.exports = {
         }
         else if (message.hasOwnProperty('broadcast')) {
             if (message.broadcast.hasOwnProperty('teamChanged')) {
+                TeamHandler.handler(rustplus, client, message.broadcast.teamChanged.teamInfo);
                 rustplus.team.updateTeam(message.broadcast.teamChanged.teamInfo);
             }
             else if (message.broadcast.hasOwnProperty('teamMessage')) {
