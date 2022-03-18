@@ -10,11 +10,45 @@ module.exports = {
         let server = `${rustplus.server}-${rustplus.port}`;
         let instance = client.readInstanceFile(rustplus.guildId);
 
+        let channelIdActivity = instance.channelId.activity;
+        let channelIdServers = instance.channelId.servers;
+        let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
+
         /* Get some map parameters once when connected (to avoid calling getMap continuously) */
         rustplus.getMap(async (map) => {
             if (!rustplus.isResponseValid(map)) {
-                rustplus.log('ERROR', 'Something went wrong with connection', 'error');
+                rustplus.log('ERROR', 'Something went wrong with connection.', 'error');
+
+                if (channel !== undefined) {
+                    await channel.send({
+                        embeds: [new MessageEmbed()
+                            .setColor('#ff0040')
+                            .setTitle('The connection to the server seems to be invalid. Try to re-pair to the server.')
+                            .setThumbnail(instance.serverList[server].img)
+                            .setTimestamp()
+                            .setFooter({
+                                text: instance.serverList[server].title
+                            })
+                        ]
+                    });
+                }
+
+                let row = DiscordTools.getServerButtonsRow(server, 0, instance.serverList[server].url);
+                let messageId = instance.serverList[server].messageId;
+                let message = undefined;
+                if (messageId !== null) {
+                    message = await DiscordTools.getMessageById(rustplus.guildId, channelIdServers, messageId);
+                }
+
+                if (message !== undefined) {
+                    await message.edit({ components: [row] });
+                }
+
+                instance.serverList[server].active = false;
+                client.writeInstanceFile(rustplus.guildId, instance);
+
                 rustplus.disconnect();
+                delete client.rustplusInstances[rustplus.guildId];
                 return;
             }
 
@@ -22,8 +56,6 @@ module.exports = {
 
             if (!rustplus.connected) {
                 if (rustplus.isReconnect) {
-                    let channelIdActivity = instance.channelId.activity;
-                    let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
                     if (channel !== undefined) {
                         await channel.send({
                             embeds: [new MessageEmbed()
@@ -41,7 +73,6 @@ module.exports = {
 
                 let row = DiscordTools.getServerButtonsRow(server, 1, instance.serverList[server].url);
 
-                let channelIdServers = instance.channelId.servers;
                 let messageId = instance.serverList[server].messageId;
                 let message = undefined;
                 if (messageId !== null) {
