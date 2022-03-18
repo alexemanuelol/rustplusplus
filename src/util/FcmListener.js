@@ -108,6 +108,7 @@ module.exports = async (client, guild) => {
                                         active: false,
                                         name: 'Smart Switch',
                                         command: id,
+                                        image: 'smart_switch.png',
                                         server: body.name,
                                         ipPort: `${body.ip}-${body.port}`
                                     };
@@ -126,10 +127,10 @@ module.exports = async (client, guild) => {
 
                                             let prefix = rustplus.generalSettings.prefix;
 
-                                            let img = (active) ? 'on_logo.png' : 'off_logo.png';
-                                            let file = new MessageAttachment(`src/images/${img}`);
+                                            let file = new MessageAttachment(
+                                                `src/images/electrics${instance.switches[id].image}`);
                                             let embed = DiscordTools.getSwitchButtonsEmbed(
-                                                id, 'Smart Switch', `${prefix}${id}`, body.name, active);
+                                                id, instance.switches[id], prefix);
 
                                             let row = DiscordTools.getSwitchButtonsRow(
                                                 id, active);

@@ -150,9 +150,8 @@ module.exports = async (client, interaction) => {
 
         let sw = instance.switches[id];
 
-        let file = new MessageAttachment(`src/images/${(active) ? 'on_logo.png' : 'off_logo.png'}`);
-        let embed = DiscordTools.getSwitchButtonsEmbed(
-            id, sw.name, `${prefix}${sw.command}`, sw.server, active);
+        let file = new MessageAttachment(`src/images/electrics/${sw.image}`);
+        let embed = DiscordTools.getSwitchButtonsEmbed(id, sw, prefix);
 
         let row = DiscordTools.getSwitchButtonsRow(id, active);
 

@@ -102,11 +102,11 @@ module.exports = {
                     }
 
                     let prefix = rustplus.generalSettings.prefix;
+                    instance.switches[id].active = active;
+                    client.writeInstanceFile(rustplus.guildId, instance);
 
-                    let file = new MessageAttachment(`src/images/${(active) ?
-                        'on_logo.png' : 'off_logo.png'}`);
-                    let embed = DiscordTools.getSwitchButtonsEmbed(
-                        id, content.name, `${prefix}${content.command}`, content.server, active);
+                    let file = new MessageAttachment(`src/images/electrics/${content.image}`);
+                    let embed = DiscordTools.getSwitchButtonsEmbed(id, content, prefix);
 
                     let row = DiscordTools.getSwitchButtonsRow(id, active);
 

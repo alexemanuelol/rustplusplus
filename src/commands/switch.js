@@ -21,12 +21,34 @@ module.exports = {
 				.addStringOption(option =>
 					option.setName('command')
 						.setDescription('Set the custom command for the Smart Switch.')
-						.setRequired(false))),
+						.setRequired(false))
+				.addStringOption(option =>
+					option.setName('image')
+						.setDescription('Set the image that best represent the Smart Switch.')
+						.setRequired(false)
+						.addChoice('Autoturret', 'autoturret')
+						.addChoice('Boom Box', 'boombox')
+						.addChoice('Broadcaster', 'broadcaster')
+						.addChoice('Ceiling Light', 'ceiling_light')
+						.addChoice('Discofloor', 'discofloor')
+						.addChoice('Door Controller', 'door_controller')
+						.addChoice('Elevator', 'elevator')
+						.addChoice('HBHF Sensor', 'hbhf_sensor')
+						.addChoice('Heater', 'heater')
+						.addChoice('SAM site', 'samsite')
+						.addChoice('Siren Light', 'siren_light')
+						.addChoice('Smart Alarm', 'smart_alarm')
+						.addChoice('Smart Switch', 'smart_switch')
+						.addChoice('Sprinkler', 'sprinkler')
+						.addChoice('Storage Monitor', 'storage_monitor')
+						.addChoice('Christmas Lights', 'xmas_light'))),
+
 	async execute(client, interaction) {
 		let instance = client.readInstanceFile(interaction.guildId);
 		let id = interaction.options.getString('id');
 		let name = interaction.options.getString('name');
 		let command = interaction.options.getString('command');
+		let image = interaction.options.getString('image');
 
 		switch (interaction.options.getSubcommand()) {
 			case 'edit':
@@ -58,9 +80,11 @@ module.exports = {
 				if (name !== null) {
 					instance.switches[id].name = name;
 				}
-
 				if (command !== null) {
 					instance.switches[id].command = command;
+				}
+				if (image !== null) {
+					instance.switches[id].image = `${image}.png`;
 				}
 				client.writeInstanceFile(interaction.guildId, instance);
 
@@ -68,9 +92,8 @@ module.exports = {
 				let prefix = rustplus.generalSettings.prefix;
 				let sw = instance.switches[id];
 
-				let file = new MessageAttachment(`src/images/${(active) ? 'on_logo.png' : 'off_logo.png'}`);
-				let embed = DiscordTools.getSwitchButtonsEmbed(
-					id, sw.name, `${prefix}${sw.command}`, sw.server, active);
+				let file = new MessageAttachment(`src/images/electrics/${instance.switches[id].image}`);
+				let embed = DiscordTools.getSwitchButtonsEmbed(id, sw, prefix);
 
 				let row = DiscordTools.getSwitchButtonsRow(id, active);
 

@@ -220,16 +220,16 @@ module.exports = {
                     .setStyle('SECONDARY'))
     },
 
-    getSwitchButtonsEmbed: function (id, name, command, server, active) {
+    getSwitchButtonsEmbed: function (id, sw, prefix) {
         return new MessageEmbed()
-            .setTitle(`${name}`)
-            .setColor('#ce412b')
+            .setTitle(`${sw.name}`)
+            .setColor((sw.active) ? '#00ff40' : '#ff0040')
             .setDescription(`${id}`)
-            .setThumbnail(`attachment://${(active) ? 'on_logo.png' : 'off_logo.png'}`)
+            .setThumbnail(`attachment://${sw.image}`)
             .addFields(
-                { name: 'Custom Command', value: `${command}`, inline: true }
+                { name: 'Custom Command', value: `${prefix}${sw.command}`, inline: true }
             )
-            .setFooter({ text: `${server}` })
+            .setFooter({ text: `${sw.server}` })
     },
 
     getSwitchButtonsRow: function (id, active) {

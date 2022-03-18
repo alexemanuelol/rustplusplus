@@ -31,9 +31,8 @@ module.exports = async (client, rustplus) => {
             instance.switches[key].active = active;
             client.writeInstanceFile(rustplus.guildId, instance);
 
-            let file = new MessageAttachment(`src/images/${(active) ? 'on_logo.png' : 'off_logo.png'}`);
-            let embed = DiscordTools.getSwitchButtonsEmbed(
-                key, value.name, `${prefix}${value.command}`, value.server, active);
+            let file = new MessageAttachment(`src/images/electrics/${instance.switches[key].image}`);
+            let embed = DiscordTools.getSwitchButtonsEmbed(key, instance.switches[key], prefix);
 
             let row = DiscordTools.getSwitchButtonsRow(key, active);
 
