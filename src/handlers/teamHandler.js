@@ -32,7 +32,7 @@ module.exports = {
             let png = await Scrape.scrapeSteamProfilePicture(rustplus, steamId);
             await channel.send({
                 embeds: [new MessageEmbed()
-                    .setColor('#ff0040')
+                    .setColor('#606060')
                     .setAuthor({
                         name: `${player.name} left the team.`,
                         iconURL: (png !== '') ? png : DEFAULT_IMG,

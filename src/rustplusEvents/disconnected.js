@@ -1,4 +1,5 @@
 const DiscordTools = require('../discordTools/discordTools.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: 'disconnected',
@@ -91,21 +92,37 @@ module.exports = {
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
             if (instance.serverList[server].active) {
                 if (rustplus.connected || rustplus.firstTime) {
-                    rustplus.firstTime = false;
-                    rustplus.connected = false;
+                    let channelIdActivity = instance.channelId.activity;
+                    let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
+                    if (channel !== undefined) {
+                        await channel.send({
+                            embeds: [new MessageEmbed()
+                                .setColor('#ff0040')
+                                .setTitle('Server just went offline.')
+                                .setThumbnail(instance.serverList[server].img)
+                                .setTimestamp()
+                                .setFooter({
+                                    text: instance.serverList[server].title
+                                })
+                            ]
+                        });
+                    }
 
                     let row = DiscordTools.getServerButtonsRow(server, 2, instance.serverList[server].url);
-
-                    let channelId = instance.channelId.servers;
+                    let channelIdServers = instance.channelId.servers;
                     let messageId = instance.serverList[server].messageId;
                     let message = undefined;
                     if (messageId !== null) {
-                        message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
+                        message = await DiscordTools.getMessageById(rustplus.guildId, channelIdServers, messageId);
                     }
 
                     if (message !== undefined) {
                         await message.edit({ components: [row] });
                     }
+
+                    rustplus.firstTime = false;
+                    rustplus.connected = false;
+                    rustplus.isReconnect = true;
                 }
 
                 rustplus.log('RECONNECTING', 'RUSTPLUS RECONNECTING');
