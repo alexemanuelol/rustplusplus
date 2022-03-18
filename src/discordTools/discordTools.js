@@ -224,7 +224,7 @@ module.exports = {
         return new MessageEmbed()
             .setTitle(`${sw.name}`)
             .setColor((sw.active) ? '#00ff40' : '#ff0040')
-            .setDescription(`${id}`)
+            .setDescription(`ID: \`${id}\``)
             .setThumbnail(`attachment://${sw.image}`)
             .addFields(
                 { name: 'Custom Command', value: `${prefix}${sw.command}`, inline: true }

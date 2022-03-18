@@ -117,6 +117,7 @@ module.exports = {
                             await client.switchesMessages[rustplus.guildId][id].edit({
                                 embeds: [embed], components: [row], files: [file]
                             });
+                            rustplus.sendTeamMessage(`${instance.switches[id].name} was turned on.`);
                         });
                     }
                     else {
@@ -124,6 +125,7 @@ module.exports = {
                             await client.switchesMessages[rustplus.guildId][id].edit({
                                 embeds: [embed], components: [row], files: [file]
                             });
+                            rustplus.sendTeamMessage(`${instance.switches[id].name} was turned off.`);
                         });
                     }
 
