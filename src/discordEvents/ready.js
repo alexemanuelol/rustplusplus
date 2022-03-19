@@ -4,7 +4,14 @@ module.exports = {
     async execute(client) {
         client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
         client.user.setUsername('rustPlusPlus');
-        client.user.setAvatar('./src/images/rustplusplus_logo.png');
+
+        try {
+            await client.user.setAvatar('./src/images/rustplusplus_logo.png');
+        }
+        catch (e) {
+            client.log('INFO', 'Ignored changing avatar.');
+        }
+
         client.user.setActivity('/help', { type: 'LISTENING' });
 
         client.guilds.cache.forEach(async (guild) => {
