@@ -1,16 +1,16 @@
 const CargoShip = require('../inGameEvents/cargoShip.js');
+const PatrolHelicopter = require('../inGameEvents/patrolHelicopter.js');
 const Explosion = require('../inGameEvents/explosion.js');
 const LockedCrate = require('../inGameEvents/lockedCrate.js');
 const OilRig = require('../inGameEvents/oilRig.js');
-const PatrolHelicopter = require('../inGameEvents/patrolHelicopter.js');
 const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
 const TimeHandler = require('../handlers/timeHandler.js');
-const InformationHandler = require('../handlers/informationHandler.js');
 const TeamHandler = require('../handlers/teamHandler.js');
+const InformationHandler = require('../handlers/informationHandler.js');
 
 const Map = require('../util/map.js');
-const Scrape = require('../util/scrape.js');
+const Time = require('../structures/Time');
 const Team = require('../structures/Team');
 
 module.exports = {
@@ -27,10 +27,11 @@ module.exports = {
 
                         if (rustplus.firstPoll) {
                             rustplus.mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                            rustplus.time = new Time(time.response.time, rustplus, client);
                             rustplus.team = new Team(teamInfo.response.teamInfo, rustplus);
                         }
 
-                        module.exports.checkEvents(rustplus, client, info, mapMarkers, teamInfo, time);
+                        module.exports.handlers(rustplus, client, info, mapMarkers, teamInfo, time);
                         rustplus.firstPoll = false;
                     });
                 });
@@ -38,8 +39,8 @@ module.exports = {
         });
     },
 
-    checkEvents: function (rustplus, client, info, mapMarkers, teamInfo, time) {
-        /* Check in-game events */
+    handlers: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+        /* In-game event handlers */
         CargoShip.handler(rustplus, client, info, mapMarkers, teamInfo, time);
         PatrolHelicopter.handler(rustplus, client, info, mapMarkers, teamInfo, time);
         Explosion.handler(rustplus, client, info, mapMarkers, teamInfo, time);
@@ -47,14 +48,12 @@ module.exports = {
         OilRig.handler(rustplus, client, info, mapMarkers, teamInfo, time);
         VendingMachine.handler(rustplus, client, info, mapMarkers, teamInfo, time);
 
-        let instance = client.readInstanceFile(rustplus.guildId);
-        let server = `${rustplus.server}-${rustplus.port}`;
-
-        if (instance.serverList[server].timeTillDay === null && instance.serverList[server].timeTillNight == null) {
-            TimeHandler.handler(rustplus, client, info, mapMarkers, teamInfo, time);
-        }
-
+        /* Module handlers */
+        TimeHandler.handler(rustplus, client, time.response.time);
         TeamHandler.handler(rustplus, client, teamInfo.response.teamInfo);
+
+        /* Update modules */
+        rustplus.time.updateTime(time.response.time);
         rustplus.team.updateTeam(teamInfo.response.teamInfo);
 
         InformationHandler.handler(rustplus, client, info, mapMarkers, teamInfo, time);

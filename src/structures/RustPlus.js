@@ -83,13 +83,10 @@ class RustPlus extends RP {
 
         /* Time variables */
         this.passedFirstSunriseOrSunset = false;
-        this.startTime = null;
-        this.previousTime = null;
         this.startTimeObject = new Object();
-        this.timeTillDay = new Object();
-        this.timeTillNight = new Object();
 
         this.team = null;
+        this.time = null;
         this.markers = new Object();
 
         this.informationIntervalCounter = 0;

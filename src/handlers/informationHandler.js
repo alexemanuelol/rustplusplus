@@ -61,9 +61,9 @@ module.exports = {
         const sinceWipe = (new Date() - new Date(info.response.info.wipeTime * 1000)) / 1000;
         const wipeDay = `Day ${Math.ceil(sinceWipe / (60 * 60 * 24))}`;
 
-        const serverTime = `${Timer.convertDecimalToHoursMinutes(time.response.time.time)}`;
-        const timeLeft = Timer.getTimeBeforeSunriseOrSunset(rustplus, client, time, 's');
-        const timeLeftTitle = getTimeLeftTillDayOrNightTitle(time);
+        const serverTime = `${Timer.convertDecimalToHoursMinutes(rustplus.time.time)}`;
+        const timeLeft = rustplus.time.getTimeTillDayOrNight('s');
+        const timeLeftTitle = 'Time till ' + ((rustplus.time.isDay()) ? `${NIGHT}` : `${DAY}`);
 
         const pop = getPopString(info);
 
@@ -354,14 +354,6 @@ async function sendInformationEmbed(rustplus, client, instance, embed, file, mes
         await message.edit({ embeds: [embed] });
     }
 
-}
-
-function getTimeLeftTillDayOrNightTitle(time) {
-    const rawTime = parseFloat(time.response.time.time.toFixed(2));
-    const sunrise = parseFloat(time.response.time.sunrise.toFixed(2));
-    const sunset = parseFloat(time.response.time.sunset.toFixed(2));
-
-    return (rawTime >= sunrise && rawTime < sunset) ? `Time till ${NIGHT}` : `Time till ${DAY}`;
 }
 
 function getPopString(info) {

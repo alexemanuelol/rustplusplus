@@ -59,7 +59,7 @@ module.exports = {
             module.exports.commandSmall(rustplus);
         }
         else if (command === `${rustplus.generalSettings.prefix}time`) {
-            module.exports.commandTime(rustplus, client);
+            module.exports.commandTime(rustplus);
         }
         else if (command.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
@@ -566,32 +566,21 @@ module.exports = {
         }
     },
 
-    commandTime: function (rustplus, client) {
-        rustplus.getTime((msg) => {
-            if (!rustplus.isResponseValid(msg)) {
-                return;
+    commandTime: function (rustplus) {
+        let time = Timer.convertDecimalToHoursMinutes(rustplus.time.time);
+        let str = `In-Game time: ${time}.`;
+        let timeLeft = rustplus.time.getTimeTillDayOrNight();
+
+        if (timeLeft !== null) {
+            if (rustplus.time.isDay()) {
+                str += ` Approximately ${timeLeft} before nightfall.`;
             }
-
-            const rawTime = parseFloat(msg.response.time.time.toFixed(2));
-            const sunrise = parseFloat(msg.response.time.sunrise.toFixed(2));
-            const sunset = parseFloat(msg.response.time.sunset.toFixed(2));
-            const time = Timer.convertDecimalToHoursMinutes(msg.response.time.time);
-            let str = `In-Game time: ${time}.`;
-
-            let timeLeft = Timer.getTimeBeforeSunriseOrSunset(rustplus, client, msg);
-            if (timeLeft !== null) {
-                if (rawTime >= sunrise && rawTime < sunset) {
-                    /* It's Day */
-                    str += ` Approximately ${timeLeft} before nightfall.`;
-                }
-                else {
-                    /* It's Night */
-                    str += ` Approximately ${timeLeft} before daybreak.`;
-                }
+            else {
+                str += ` Approximately ${timeLeft} before daybreak.`;
             }
+        }
 
-            rustplus.printCommandOutput(rustplus, str);
-        });
+        rustplus.printCommandOutput(rustplus, str);
     },
 
     commandTimer: function (rustplus, command) {

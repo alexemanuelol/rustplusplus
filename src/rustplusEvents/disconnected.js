@@ -74,11 +74,7 @@ module.exports = {
 
         /* Reset time variables */
         rustplus.passedFirstSunriseOrSunset = false;
-        rustplus.startTime = null;
-        rustplus.previousTime = null;
         rustplus.startTimeObject = new Object();
-        rustplus.timeTillDay = new Object();
-        rustplus.timeTillNight = new Object();
 
         rustplus.markers = new Object();
 
