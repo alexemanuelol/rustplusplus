@@ -32,12 +32,13 @@ module.exports = async (client, rustplus) => {
             client.writeInstanceFile(rustplus.guildId, instance);
 
             let file = new MessageAttachment(`src/images/electrics/${instance.switches[key].image}`);
-            let embed = DiscordTools.getSwitchButtonsEmbed(key, instance.switches[key], prefix);
+            let embed = DiscordTools.getSwitchEmbed(key, instance.switches[key], prefix);
 
-            let row = DiscordTools.getSwitchButtonsRow(key, active);
+            let selectMenu = DiscordTools.getSwitchSelectMenu(key, instance.switches[key]);
+            let buttonRow = DiscordTools.getSwitchButtonsRow(key, instance.switches[key]);
 
             client.switchesMessages[rustplus.guildId][key] =
-                await channel.send({ embeds: [embed], components: [row], files: [file] });
+                await channel.send({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
         });
     }
 };

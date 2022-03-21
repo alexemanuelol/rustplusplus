@@ -109,6 +109,7 @@ module.exports = async (client, guild) => {
                                         name: 'Smart Switch',
                                         command: id,
                                         image: 'smart_switch.png',
+                                        autoDayNight: 0,
                                         server: body.name,
                                         ipPort: `${body.ip}-${body.port}`
                                     };
@@ -128,12 +129,14 @@ module.exports = async (client, guild) => {
                                             let prefix = rustplus.generalSettings.prefix;
 
                                             let file = new MessageAttachment(
-                                                `src/images/electrics${instance.switches[id].image}`);
-                                            let embed = DiscordTools.getSwitchButtonsEmbed(
+                                                `src/images/electrics/${instance.switches[id].image}`);
+                                            let embed = DiscordTools.getSwitchEmbed(
                                                 id, instance.switches[id], prefix);
 
-                                            let row = DiscordTools.getSwitchButtonsRow(
-                                                id, active);
+                                            let selectMenu = DiscordTools.getSwitchSelectMenu(
+                                                id, instance.switches[id]);
+                                            let buttonRow = DiscordTools.getSwitchButtonsRow(
+                                                id, instance.switches[id]);
 
                                             let channel = DiscordTools.getTextChannelById(
                                                 guild.id, instance.channelId.switches);
@@ -143,7 +146,11 @@ module.exports = async (client, guild) => {
                                                 return;
                                             }
 
-                                            channel.send({ embeds: [embed], components: [row], files: [file] }).then((msg) => {
+                                            channel.send({
+                                                embeds: [embed],
+                                                components: [selectMenu, buttonRow],
+                                                files: [file]
+                                            }).then((msg) => {
                                                 client.switchesMessages[guild.id][id] = msg;
                                             });
                                         });

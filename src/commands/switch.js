@@ -88,17 +88,17 @@ module.exports = {
 				}
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				let active = instance.switches[id].active;
 				let prefix = rustplus.generalSettings.prefix;
 				let sw = instance.switches[id];
 
 				let file = new MessageAttachment(`src/images/electrics/${instance.switches[id].image}`);
-				let embed = DiscordTools.getSwitchButtonsEmbed(id, sw, prefix);
+				let embed = DiscordTools.getSwitchEmbed(id, sw, prefix);
 
-				let row = DiscordTools.getSwitchButtonsRow(id, active);
+				let selectMenu = DiscordTools.getSwitchSelectMenu(id, sw);
+				let buttonRow = DiscordTools.getSwitchButtonsRow(id, sw);
 
 				client.switchesMessages[interaction.guildId][id].edit({
-					embeds: [embed], components: [row], files: [file]
+					embeds: [embed], components: [selectMenu, buttonRow], files: [file]
 				});
 
 				interaction.reply({

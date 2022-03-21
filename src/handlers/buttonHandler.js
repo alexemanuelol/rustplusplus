@@ -151,20 +151,21 @@ module.exports = async (client, interaction) => {
         let sw = instance.switches[id];
 
         let file = new MessageAttachment(`src/images/electrics/${sw.image}`);
-        let embed = DiscordTools.getSwitchButtonsEmbed(id, sw, prefix);
+        let embed = DiscordTools.getSwitchEmbed(id, sw, prefix);
 
-        let row = DiscordTools.getSwitchButtonsRow(id, active);
+        let selectMenu = DiscordTools.getSwitchSelectMenu(id, sw);
+        let buttonRow = DiscordTools.getSwitchButtonsRow(id, sw);
 
         rustplus.interactionSwitches[id] = active;
 
         if (active) {
             client.rustplusInstances[interaction.guildId].turnSmartSwitchOn(id, async (msg) => {
-                await interaction.update({ embeds: [embed], components: [row], files: [file] });
+                await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
             });
         }
         else {
             client.rustplusInstances[interaction.guildId].turnSmartSwitchOff(id, async (msg) => {
-                await interaction.update({ embeds: [embed], components: [row], files: [file] });
+                await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
             });
         }
     }

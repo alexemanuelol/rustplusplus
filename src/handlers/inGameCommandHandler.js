@@ -106,16 +106,17 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     let file = new MessageAttachment(`src/images/electrics/${content.image}`);
-                    let embed = DiscordTools.getSwitchButtonsEmbed(id, content, prefix);
+                    let embed = DiscordTools.getSwitchEmbed(id, content, prefix);
 
-                    let row = DiscordTools.getSwitchButtonsRow(id, active);
+                    let selectMenu = DiscordTools.getSwitchSelectMenu(id, content);
+                    let buttonRow = DiscordTools.getSwitchButtonsRow(id, content);
 
                     rustplus.interactionSwitches[id] = active;
 
                     if (active) {
                         rustplus.turnSmartSwitchOn(id, async (msg) => {
                             await client.switchesMessages[rustplus.guildId][id].edit({
-                                embeds: [embed], components: [row], files: [file]
+                                embeds: [embed], components: [selectMenu, buttonRow], files: [file]
                             });
                             rustplus.sendTeamMessage(`${instance.switches[id].name} was turned on.`);
                         });
@@ -123,7 +124,7 @@ module.exports = {
                     else {
                         rustplus.turnSmartSwitchOff(id, async (msg) => {
                             await client.switchesMessages[rustplus.guildId][id].edit({
-                                embeds: [embed], components: [row], files: [file]
+                                embeds: [embed], components: [selectMenu, buttonRow], files: [file]
                             });
                             rustplus.sendTeamMessage(`${instance.switches[id].name} was turned off.`);
                         });

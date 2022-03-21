@@ -220,7 +220,7 @@ module.exports = {
                     .setStyle('SECONDARY'))
     },
 
-    getSwitchButtonsEmbed: function (id, sw, prefix) {
+    getSwitchEmbed: function (id, sw, prefix) {
         return new MessageEmbed()
             .setTitle(`${sw.name}`)
             .setColor((sw.active) ? '#00ff40' : '#ff0040')
@@ -232,18 +232,62 @@ module.exports = {
             .setFooter({ text: `${sw.server}` })
     },
 
-    getSwitchButtonsRow: function (id, active) {
+    getSwitchButtonsRow: function (id, sw) {
         return new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId(`${id}${(active) ? 'Off' : 'On'}SmartSwitch`)
-                    .setLabel((active) ? 'TURN OFF' : 'TURN ON')
-                    .setStyle((active) ? 'DANGER' : 'SUCCESS'),
+                    .setCustomId(`${id}${(sw.active) ? 'Off' : 'On'}SmartSwitch`)
+                    .setLabel((sw.active) ? 'TURN OFF' : 'TURN ON')
+                    .setStyle((sw.active) ? 'DANGER' : 'SUCCESS'),
                 new MessageButton()
                     .setCustomId(`${id}SmartSwitchDelete`)
                     .setEmoji('🗑️')
                     .setStyle('SECONDARY')
             )
 
+    },
+
+    getSwitchSelectMenu: function (id, sw) {
+        let autoDayNightString = 'AUTO SETTING: ';
+        switch (sw.autoDayNight) {
+            case 0:
+                autoDayNightString += 'OFF';
+                break;
+
+            case 1:
+                autoDayNightString += 'AUTO-DAY';
+                break;
+
+            case 2:
+                autoDayNightString += 'AUTO-NIGHT';
+                break;
+
+            default:
+                break;
+        }
+
+        return new MessageActionRow()
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId(`${id}AutoDayNight`)
+                    .setPlaceholder(`${autoDayNightString}`)
+                    .addOptions([
+                        {
+                            label: 'OFF',
+                            description: 'Smart Switch work as normal.',
+                            value: '0',
+                        },
+                        {
+                            label: 'AUTO-DAY',
+                            description: 'Smart Switch will be active only during the day.',
+                            value: '1',
+                        },
+                        {
+                            label: 'AUTO-NIGHT',
+                            description: 'Smart Switch will be active only during the night.',
+                            value: '2',
+                        },
+                    ]),
+            );
     },
 }
