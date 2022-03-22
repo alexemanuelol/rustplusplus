@@ -2,7 +2,6 @@ const fs = require('fs');
 const RP = require('rustplus.js');
 const Client = require('../../index.js');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
-const Timer = require('../util/timer');
 const Logger = require('./Logger.js');
 const path = require('path');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -196,6 +195,135 @@ class RustPlus extends RP {
 
     removeItemToLookFor(id) {
         this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
+    }
+
+    async turnSmartSwitchOnAsync(id, timeout = 2000) {
+        return await this.setEntityValueAsync(id, true, timeout);
+    }
+
+    async turnSmartSwitchOffAsync(id, timeout = 2000) {
+        return await this.setEntityValueAsync(id, false, timeout);
+    }
+
+    async setEntityValueAsync(id, value, timeout = 2000) {
+        return await this.sendRequestAsync({
+            entityId: id,
+            setEntityValue: {
+                value: value
+            }
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async sendTeamMessageAsync(message, timeout = 2000) {
+        return await this.sendRequestAsync({
+            sendTeamMessage: {
+                message: message
+            }
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getEntityInfoAsync(id, timeout = 2000) {
+        return await this.sendRequestAsync({
+            entityId: id,
+            getEntityInfo: {}
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getMapAsync(timeout = 2000) {
+        return await this.sendRequestAsync({
+            getMap: {}
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getTimeAsync(timeout = 2000) {
+        return await this.sendRequestAsync({
+            getTime: {}
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getMapMarkersAsync(timeout = 2000) {
+        return await this.sendRequestAsync({
+            getMapMarkers: {}
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getInfoAsync(timeout = 2000) {
+        return await this.sendRequestAsync({
+            getInfo: {}
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getTeamInfoAsync(timeout = 2000) {
+        return await this.sendRequestAsync({
+            getTeamInfo: {}
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async promoteToLeaderAsync(steamId, timeout = 2000) {
+        return await this.sendRequestAsync({
+            promoteToLeader: {
+                steamId: steamId
+            }
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getTeamChatAsync(timeout = 2000) {
+        return await this.sendRequestAsync({
+            getTeamChat: {
+
+            }
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async checkSubscriptionAsync(id, timeout = 2000) {
+        return await this.sendRequestAsync({
+            entityId: id,
+            checkSubscription: {}
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async setSubscriptionAsync(id, value, timeout = 2000) {
+        return await this.sendRequestAsync({
+            entityId: id,
+            setSubscription: {
+                value: value
+            }
+        }, timeout).catch((e) => {
+            return e;
+        });
+    }
+
+    async getCameraFrameAsync(identifier, frame, timeout = 2000) {
+        return await this.sendRequestAsync({
+            getCameraFrame: {
+                identifier: identifier,
+                frame: frame
+            }
+        }, timeout).catch((e) => {
+            return e;
+        });
     }
 }
 
