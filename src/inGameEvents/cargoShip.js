@@ -6,16 +6,16 @@ const Timer = require('../util/timer');
 module.exports = {
     handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Cargo Ship is detected */
-        module.exports.checkNewCargoShipDetected(rustplus, info, mapMarkers);
+        module.exports.checkNewCargoShipDetected(rustplus, mapMarkers);
 
         /* Check to see if a Cargo Ship have disappeared from the map */
         module.exports.checkCargoShipLeft(rustplus, mapMarkers);
     },
 
-    checkNewCargoShipDetected: function (rustplus, info, mapMarkers) {
+    checkNewCargoShipDetected: function (rustplus, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
-                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!(marker.id in rustplus.activeCargoShips)) {

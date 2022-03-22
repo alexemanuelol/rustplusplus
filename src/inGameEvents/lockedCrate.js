@@ -11,16 +11,16 @@ const LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS = 5;
 module.exports = {
     handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Locked Crate is detected */
-        module.exports.checkNewLockedCrateDetected(rustplus, info, mapMarkers);
+        module.exports.checkNewLockedCrateDetected(rustplus, mapMarkers);
 
         /* Check to see if an Locked Crate marker have disappeared from the map */
         module.exports.checkLockedCrateLeft(rustplus, mapMarkers);
     },
 
-    checkNewLockedCrateDetected: function (rustplus, info, mapMarkers) {
+    checkNewLockedCrateDetected: function (rustplus, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.LockedCrate) {
-                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!(marker.id in rustplus.activeLockedCrates)) {

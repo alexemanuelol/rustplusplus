@@ -5,16 +5,16 @@ const RustPlusTypes = require('../util/rustplusTypes.js');
 module.exports = {
     handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new Vending Machine is detected */
-        module.exports.checkNewVendingMachineDetected(rustplus, info, mapMarkers);
+        module.exports.checkNewVendingMachineDetected(rustplus, mapMarkers);
 
         /* Go through sellOrders to see if it includes items that we are looking for */
-        module.exports.checkItemsFromSellOrders(rustplus, info, mapMarkers);
+        module.exports.checkItemsFromSellOrders(rustplus, mapMarkers);
     },
 
-    checkNewVendingMachineDetected: function (rustplus, info, mapMarkers) {
+    checkNewVendingMachineDetected: function (rustplus, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
-                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!rustplus.activeVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
@@ -30,10 +30,10 @@ module.exports = {
         }
     },
 
-    checkItemsFromSellOrders: function (rustplus, info, mapMarkers) {
+    checkItemsFromSellOrders: function (rustplus, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
-                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 for (let order of marker.sellOrders) {

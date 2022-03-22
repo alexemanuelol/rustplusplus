@@ -87,6 +87,7 @@ class RustPlus extends RP {
 
         this.team = null;
         this.time = null;
+        this.info = null;
         this.markers = new Object();
 
         this.informationIntervalCounter = 0;

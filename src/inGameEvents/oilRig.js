@@ -8,16 +8,16 @@ const OIL_RIG_CHINOOK_47_MAX_DISTANCE = 550;
 module.exports = {
     handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if a Chinook 47 have been detected near any of the oil rigs */
-        module.exports.checkNewChinook47Detected(rustplus, info, mapMarkers);
+        module.exports.checkNewChinook47Detected(rustplus, mapMarkers);
 
         /* Check to see if a Chinook 47 have disappeared from the map */
         module.exports.checkChinook47Left(rustplus, mapMarkers);
     },
 
-    checkNewChinook47Detected: function (rustplus, info, mapMarkers) {
+    checkNewChinook47Detected: function (rustplus, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Chinook47) {
-                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!(marker.id in rustplus.activeChinook47s)) {

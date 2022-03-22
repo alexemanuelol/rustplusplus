@@ -9,16 +9,16 @@ const LAUNCH_SITE_RADIUS = 250;
 module.exports = {
     handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Check if new explosion is detected */
-        module.exports.checkNewExplosionDetected(rustplus, mapMarkers, info);
+        module.exports.checkNewExplosionDetected(rustplus, mapMarkers);
 
         /* Check to see if an Explosion marker have disappeared from the map */
         module.exports.checkExplosionLeft(rustplus, mapMarkers);
     },
 
-    checkNewExplosionDetected: function (rustplus, mapMarkers, info) {
+    checkNewExplosionDetected: function (rustplus, mapMarkers) {
         for (let marker of mapMarkers.response.mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Explosion) {
-                let mapSize = Map.getCorrectedMapSize(info.response.info.mapSize);
+                let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
 
                 if (!(marker.id in rustplus.activeExplosions)) {

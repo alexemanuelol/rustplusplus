@@ -518,23 +518,11 @@ module.exports = {
     },
 
     commandPop: function (rustplus) {
-        rustplus.getInfo((msg) => {
-            if (!rustplus.isResponseValid(msg)) {
-                return;
-            }
-
-            const now = msg.response.info.players;
-            const max = msg.response.info.maxPlayers;
-            const queue = msg.response.info.queuedPlayers;
-
-            let str = `Population: (${now}/${max}) players`;
-
-            if (queue !== 0) {
-                str += ` and ${queue} players in queue.`;
-            }
-
-            rustplus.printCommandOutput(rustplus, str);
-        });
+        let str = `Population: (${rustplus.info.players}/${rustplus.info.maxPlayers}) players`;
+        if (rustplus.info.queuedPlayers !== 0) {
+            str += ` and ${rustplus.info.queuedPlayers} players in queue.`;
+        }
+        rustplus.printCommandOutput(rustplus, str);
     },
 
     commandSmall: function (rustplus) {
@@ -676,27 +664,7 @@ module.exports = {
     },
 
     commandWipe: function (rustplus) {
-        rustplus.getInfo((msg) => {
-            if (!rustplus.isResponseValid(msg)) {
-                return;
-            }
-
-            const wipe = new Date(msg.response.info.wipeTime * 1000);
-            const now = new Date();
-
-            const sinceWipe = Timer.secondsToFullScale((now - wipe) / 1000);
-
-            let str = `${sinceWipe} since wipe.`;
-
-            rustplus.printCommandOutput(rustplus, str);
-        });
+        let str = `${rustplus.info.getTimeSinceWipe()} since wipe.`;
+        rustplus.printCommandOutput(rustplus, str);
     },
 };
-
-function promoteToLeader(rustplus, steamId) {
-    return rustplus.sendRequestAsync({
-        promoteToLeader: {
-            steamId: steamId
-        },
-    }, 2000);
-}
