@@ -45,35 +45,43 @@ module.exports = {
 
 	async execute(client, interaction) {
 		let instance = client.readInstanceFile(interaction.guildId);
-		let id = interaction.options.getString('id');
-		let name = interaction.options.getString('name');
-		let command = interaction.options.getString('command');
-		let image = interaction.options.getString('image');
+
+		await interaction.deferReply({ ephemeral: true });
+
+		const id = interaction.options.getString('id');
+		const name = interaction.options.getString('name');
+		const command = interaction.options.getString('command');
+		const image = interaction.options.getString('image');
+
+		let rustplus = client.rustplusInstances[interaction.guildId];
+		if (!rustplus) {
+			await interaction.editReply({
+				content: 'No active rustplus instance.',
+				ephemeral: true
+			});
+			client.log('WARNING', 'No active rustplus instance.');
+			return;
+		}
+
+		const server = `${rustplus.server}-${rustplus.port}`;
 
 		switch (interaction.options.getSubcommand()) {
-			case 'edit':
-				let rustplus = client.rustplusInstances[interaction.guildId];
-				if (!rustplus) {
-					interaction.reply({
-						content: 'No active rustplus instance.',
-						ephemeral: true
-					});
-					return;
-				}
-
+			case 'edit': {
 				if (!Object.keys(instance.switches).includes(id)) {
-					interaction.reply({
+					await interaction.editReply({
 						content: 'Invalid ID.',
 						ephemeral: true
 					});
+					client.log('WARNING', 'Invalid ID.');
 					return;
 				}
 
-				if (instance.switches[id].ipPort !== `${rustplus.server}-${rustplus.port}`) {
-					interaction.reply({
+				if (instance.switches[id].ipPort !== server) {
+					await interaction.editReply({
 						content: 'That Smart Switch is not part of this Rust Server.',
 						ephemeral: true
 					});
+					client.log('WARNING', 'That Smart Switch is not part of this Rust Server.');
 					return;
 				}
 
@@ -97,18 +105,19 @@ module.exports = {
 				let selectMenu = DiscordTools.getSwitchSelectMenu(id, sw);
 				let buttonRow = DiscordTools.getSwitchButtonsRow(id, sw);
 
-				client.switchesMessages[interaction.guildId][id].edit({
+				await client.switchesMessages[interaction.guildId][id].edit({
 					embeds: [embed], components: [selectMenu, buttonRow], files: [file]
 				});
 
-				interaction.reply({
+				await interaction.editReply({
 					content: 'Successfully edited Smart Switch.',
 					ephemeral: true
 				});
-				break;
+				client.log('INFO', 'Successfully edited Smart Switch.');
+			} break;
 
-			default:
-				break;
+			default: {
+			} break;
 		}
 	},
 };

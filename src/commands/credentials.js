@@ -51,81 +51,69 @@ module.exports = {
                 .setName('clear')
                 .setDescription('Clear the FCM Credentials.')),
     async execute(client, interaction) {
+        await interaction.deferReply({ ephemeral: true });
+
         switch (interaction.options.getSubcommand()) {
-            case 'set':
+            case 'set': {
                 setCredentials(client, interaction);
-                break;
+            } break;
 
-            case 'clear':
+            case 'clear': {
                 clearCredentials(client, interaction);
-                break;
+            } break;
 
-            default:
-                break;
+            default: {
+            } break;
         }
     },
 };
 
-function setCredentials(client, interaction) {
-    let instance;
-
-    let keysPrivateKey = interaction.options.getString('keys_private_key');
-    let keysPublicKey = interaction.options.getString('keys_public_key');
-    let keysAuthSecret = interaction.options.getString('keys_auth_secret');
-    let fcmToken = interaction.options.getString('fcm_token');
-    let fcmPushSet = interaction.options.getString('fcm_push_set');
-    let gcmToken = interaction.options.getString('gcm_token');
-    let gcmAndroidId = interaction.options.getString('gcm_android_id');
-    let gcmSecurityToken = interaction.options.getString('gcm_security_token');
-    let gcmAppId = interaction.options.getString('gcm_app_id');
-
+async function setCredentials(client, interaction) {
     let credentials = new Object();
     credentials.fcm_credentials = {};
 
     credentials.fcm_credentials.keys = {};
-    credentials.fcm_credentials.keys.privateKey = keysPrivateKey;
-    credentials.fcm_credentials.keys.publicKey = keysPublicKey;
-    credentials.fcm_credentials.keys.authSecret = keysAuthSecret;
+    credentials.fcm_credentials.keys.privateKey = interaction.options.getString('keys_private_key');
+    credentials.fcm_credentials.keys.publicKey = interaction.options.getString('keys_public_key');
+    credentials.fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
 
     credentials.fcm_credentials.fcm = {};
-    credentials.fcm_credentials.fcm.token = fcmToken;
-    credentials.fcm_credentials.fcm.pushSet = fcmPushSet;
+    credentials.fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
+    credentials.fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
 
     credentials.fcm_credentials.gcm = {};
-    credentials.fcm_credentials.gcm.token = gcmToken;
-    credentials.fcm_credentials.gcm.androidId = gcmAndroidId;
-    credentials.fcm_credentials.gcm.securityToken = gcmSecurityToken;
-    credentials.fcm_credentials.gcm.appId = gcmAppId;
+    credentials.fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
+    credentials.fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
+    credentials.fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
+    credentials.fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
 
     for (let guild of client.guilds.cache) {
-        let guildId = guild[0]
-
-        instance = client.readCredentialsFile(guildId);
+        let instance = client.readCredentialsFile(guild[0]);
         if (_.isEqual(credentials, instance.credentials)) {
-            interaction.reply({
-                content: 'Credentials are already used for another guild server!',
+            await interaction.editReply({
+                content: 'Credentials are already used for another discord server!',
                 ephemeral: true
             });
-            client.log('INFO', 'Credentials are already used for another guild server!');
+            client.log('WARNING', 'Credentials are already used for another discord server!');
             return;
         }
     }
 
-    instance = client.readCredentialsFile(interaction.guildId);
+    let instance = client.readCredentialsFile(interaction.guildId);
     instance.credentials = credentials;
     client.writeCredentialsFile(interaction.guildId, instance);
 
     /* Start Fcm Listener */
     require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
 
-    interaction.reply({
+    await interaction.editReply({
         content: 'Credentials were set successfully!',
         ephemeral: true
     });
     client.log('INFO', 'Credentials were set successfully!');
 }
 
-function clearCredentials(client, interaction) {
+async function clearCredentials(client, interaction) {
     if (client.currentFcmListeners[interaction.guildId]) {
         client.currentFcmListeners[interaction.guildId].destroy();
     }
@@ -134,7 +122,7 @@ function clearCredentials(client, interaction) {
     instance.credentials = null;
     client.writeCredentialsFile(interaction.guildId, instance);
 
-    interaction.reply({
+    await interaction.editReply({
         content: 'Credentials were cleared successfully!',
         ephemeral: true
     });

@@ -15,7 +15,7 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		switch (interaction.options.getSubcommand()) {
-			case 'discord':
+			case 'discord': {
 				const guild = DiscordTools.getGuild(interaction.guildId);
 
 				instance.firstTime = true;
@@ -33,10 +33,11 @@ module.exports = {
 					content: ':white_check_mark: Discord Reset.',
 					ephemeral: true
 				});
-				break;
+				client.log('INFO', 'Discord Reset.');
+			} break;
 
-			default:
-				break;
+			default: {
+			} break;
 		}
 	},
 };
