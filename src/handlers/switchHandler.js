@@ -23,10 +23,9 @@ module.exports = {
 
                     rustplus.interactionSwitches[key] = true;
 
-                    rustplus.turnSmartSwitchOn(key, async (msg) => {
-                        await client.switchesMessages[rustplus.guildId][key].edit({
-                            embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-                        });
+                    await rustplus.turnSmartSwitchOnAsync(key);
+                    await client.switchesMessages[rustplus.guildId][key].edit({
+                        embeds: [embed], components: [selectMenu, buttonRow], files: [file]
                     });
                 }
                 else if (value.autoDayNight === 2) {
@@ -41,10 +40,9 @@ module.exports = {
 
                     rustplus.interactionSwitches[key] = false;
 
-                    rustplus.turnSmartSwitchOff(key, async (msg) => {
-                        await client.switchesMessages[rustplus.guildId][key].edit({
-                            embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-                        });
+                    await rustplus.turnSmartSwitchOffAsync(key);
+                    await client.switchesMessages[rustplus.guildId][key].edit({
+                        embeds: [embed], components: [selectMenu, buttonRow], files: [file]
                     });
                 }
             }
@@ -65,10 +63,9 @@ module.exports = {
 
                     rustplus.interactionSwitches[key] = false;
 
-                    rustplus.turnSmartSwitchOff(key, async (msg) => {
-                        await client.switchesMessages[rustplus.guildId][key].edit({
-                            embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-                        });
+                    await rustplus.turnSmartSwitchOffAsync(key);
+                    await client.switchesMessages[rustplus.guildId][key].edit({
+                        embeds: [embed], components: [selectMenu, buttonRow], files: [file]
                     });
                 }
                 else if (value.autoDayNight === 2) {
@@ -83,10 +80,9 @@ module.exports = {
 
                     rustplus.interactionSwitches[key] = true;
 
-                    rustplus.turnSmartSwitchOn(key, async (msg) => {
-                        await client.switchesMessages[rustplus.guildId][key].edit({
-                            embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-                        });
+                    await rustplus.turnSmartSwitchOnAsync(key);
+                    await client.switchesMessages[rustplus.guildId][key].edit({
+                        embeds: [embed], components: [selectMenu, buttonRow], files: [file]
                     });
                 }
             }

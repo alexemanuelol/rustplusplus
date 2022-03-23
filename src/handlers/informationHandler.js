@@ -20,7 +20,7 @@ const TEAM_IMG = 'team_info_logo.png';
 const AFK_TIME_SECONDS = 5 * 60; /* 5 Minutes */
 
 module.exports = {
-    handler: async function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: async function (rustplus, client) {
         let instance = client.readInstanceFile(rustplus.guildId);
         let channelId = instance.channelId.information;
 
@@ -30,7 +30,7 @@ module.exports = {
         if (messageId !== null) {
             message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
         }
-        await module.exports.updateServerInformation(rustplus, client, info, mapMarkers, teamInfo, time, instance, message);
+        await module.exports.updateServerInformation(rustplus, client, instance, message);
 
         /* Update Event Information embed */
         messageId = instance.informationMessageId.event;
@@ -38,7 +38,7 @@ module.exports = {
         if (messageId !== null) {
             message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
         }
-        await module.exports.updateEventInformation(rustplus, client, info, mapMarkers, teamInfo, time, instance, message);
+        await module.exports.updateEventInformation(rustplus, client, instance, message);
 
         /* Update Team Information embed */
         messageId = instance.informationMessageId.team;
@@ -46,7 +46,7 @@ module.exports = {
         if (messageId !== null) {
             message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
         }
-        await module.exports.updateTeamInformation(rustplus, client, info, mapMarkers, teamInfo, time, instance, message);
+        await module.exports.updateTeamInformation(rustplus, client, instance, message);
 
         if (rustplus.informationIntervalCounter === 5) {
             rustplus.informationIntervalCounter = 0;
@@ -56,7 +56,7 @@ module.exports = {
         }
     },
 
-    updateServerInformation: async function (rustplus, client, info, mapMarkers, teamInfo, time, instance, message) {
+    updateServerInformation: async function (rustplus, client, instance, message) {
         const serverName = rustplus.info.name;
         const sinceWipe = rustplus.info.getSecondsSinceWipe();
         const wipeDay = `Day ${Math.ceil(sinceWipe / (60 * 60 * 24))}`;
@@ -65,7 +65,11 @@ module.exports = {
         const timeLeft = rustplus.time.getTimeTillDayOrNight('s');
         const timeLeftTitle = 'Time till ' + ((rustplus.time.isDay()) ? `${NIGHT}` : `${DAY}`);
 
-        const pop = getPopString(info);
+        let pop = `${rustplus.info.players}`;
+        if (rustplus.info.isQueue()) {
+            pop += `(${rustplus.info.queuedPlayers})`;
+        }
+        pop += `/${rustplus.info.maxPlayers}`;
 
         const map = `${rustplus.info.map}`;
         const mapSize = `${rustplus.info.mapSize}`;
@@ -104,7 +108,7 @@ module.exports = {
         }
     },
 
-    updateEventInformation: async function (rustplus, client, info, mapMarkers, teamInfo, time, instance, message) {
+    updateEventInformation: async function (rustplus, client, instance, message) {
         /* Cargoship */
         let cargoship = '';
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
@@ -291,7 +295,7 @@ module.exports = {
         }
     },
 
-    updateTeamInformation: async function (rustplus, client, info, mapMarkers, teamInfo, time, instance, message) {
+    updateTeamInformation: async function (rustplus, client, instance, message) {
         let names = '';
         let status = '';
         let locations = '';
@@ -354,18 +358,4 @@ async function sendInformationEmbed(rustplus, client, instance, embed, file, mes
         await message.edit({ embeds: [embed] });
     }
 
-}
-
-function getPopString(info) {
-    const players = info.response.info.players;
-    const maxPlayers = info.response.info.maxPlayers;
-    const queuedPlayers = info.response.info.queuedPlayers;
-
-    let pop = `${players}`;
-    if (queuedPlayers !== 0) {
-        pop += `(${queuedPlayers})`;
-    }
-    pop += `/${maxPlayers}`;
-
-    return pop;
 }

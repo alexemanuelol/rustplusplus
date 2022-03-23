@@ -104,12 +104,8 @@ class Player {
     }
     getDeathTime(ignore = '') { return (Time.secondsToFullScale(this.getDeathSeconds(), ignore)); }
 
-    assignLeader() {
-        return this.rustplus.sendRequestAsync({
-            promoteToLeader: { steamId: this.steamId }
-        }, 2000).catch((error) => {
-            this.rustplus.log('ERROR', JSON.stringify(error), 'error');
-        });
+    async assignLeader() {
+        return await this.rustplus.promoteToLeaderAsync(this.steamId);
     }
 }
 

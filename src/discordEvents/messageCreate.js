@@ -9,7 +9,7 @@ module.exports = {
             return;
         }
 
-        rustplus.sendTeamMessage(`${message.author.username}: ${message.cleanContent}`,
+        await rustplus.sendTeamMessageAsync(`${message.author.username}: ${message.cleanContent}`,
             !rustplus.generalSettings.showTrademark)
     },
 }

@@ -110,10 +110,10 @@ class Team {
         })
     }
 
-    changeLeadership(steamId) {
+    async changeLeadership(steamId) {
         let player = this.getPlayer(steamId);
         if (player !== null) {
-            player.assignLeader();
+            await player.assignLeader();
         }
     }
 

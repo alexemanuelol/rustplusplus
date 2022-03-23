@@ -159,14 +159,12 @@ module.exports = async (client, interaction) => {
         rustplus.interactionSwitches[id] = active;
 
         if (active) {
-            client.rustplusInstances[interaction.guildId].turnSmartSwitchOn(id, async (msg) => {
-                await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
-            });
+            await rustplus.turnSmartSwitchOnAsync(id);
+            await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
         }
         else {
-            client.rustplusInstances[interaction.guildId].turnSmartSwitchOff(id, async (msg) => {
-                await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
-            });
+            await rustplus.turnSmartSwitchOffAsync(id);
+            await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
         }
     }
     else if (interaction.customId.endsWith('SmartSwitchDelete')) {

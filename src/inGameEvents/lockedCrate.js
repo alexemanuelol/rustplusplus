@@ -9,7 +9,7 @@ const LOCKED_CRATE_CARGO_SHIP_RADIUS = 100;
 const LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS = 5;
 
 module.exports = {
-    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, mapMarkers) {
         /* Check if new Locked Crate is detected */
         module.exports.checkNewLockedCrateDetected(rustplus, mapMarkers);
 
@@ -18,7 +18,7 @@ module.exports = {
     },
 
     checkNewLockedCrateDetected: function (rustplus, mapMarkers) {
-        for (let marker of mapMarkers.response.mapMarkers.markers) {
+        for (let marker of mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.LockedCrate) {
                 let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
@@ -217,7 +217,7 @@ module.exports = {
         let newActiveLockedCratesObject = new Object();
         for (const [id, content] of Object.entries(rustplus.activeLockedCrates)) {
             let active = false;
-            for (let marker of mapMarkers.response.mapMarkers.markers) {
+            for (let marker of mapMarkers.markers) {
                 if (marker.type === RustPlusTypes.MarkerType.LockedCrate) {
                     if (marker.id === parseInt(id)) {
                         /* Locked Crate marker is still visable on the map */
@@ -413,7 +413,7 @@ module.exports = {
     },
 
     isCrateOnCargoShip: function (x, y, mapMarkers) {
-        for (let marker of mapMarkers.response.mapMarkers.markers) {
+        for (let marker of mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
                 if (Map.getDistance(x, y, marker.x, marker.y) <= LOCKED_CRATE_CARGO_SHIP_RADIUS) {
                     return true;
@@ -424,7 +424,7 @@ module.exports = {
     },
 
     getCargoShipId: function (x, y, mapMarkers) {
-        for (let marker of mapMarkers.response.mapMarkers.markers) {
+        for (let marker of mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
                 if (Map.getDistance(x, y, marker.x, marker.y) <= LOCKED_CRATE_CARGO_SHIP_RADIUS) {
                     return marker.id;

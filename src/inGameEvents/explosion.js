@@ -7,7 +7,7 @@ const PATROL_HELI_DOWNED_RADIUS = 400;
 const LAUNCH_SITE_RADIUS = 250;
 
 module.exports = {
-    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, mapMarkers) {
         /* Check if new explosion is detected */
         module.exports.checkNewExplosionDetected(rustplus, mapMarkers);
 
@@ -16,7 +16,7 @@ module.exports = {
     },
 
     checkNewExplosionDetected: function (rustplus, mapMarkers) {
-        for (let marker of mapMarkers.response.mapMarkers.markers) {
+        for (let marker of mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.Explosion) {
                 let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
@@ -95,7 +95,7 @@ module.exports = {
         let newActiveExplosionsObject = new Object();
         for (const [id, content] of Object.entries(rustplus.activeExplosions)) {
             let active = false;
-            for (let marker of mapMarkers.response.mapMarkers.markers) {
+            for (let marker of mapMarkers.markers) {
                 if (marker.type === RustPlusTypes.MarkerType.Explosion) {
                     if (marker.id === parseInt(id)) {
                         /* Explosion marker is still visable on the map */

@@ -2,7 +2,7 @@ const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
-    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, mapMarkers) {
         /* Check if new Patrol Helicopter is detected */
         module.exports.checkNewPatrolHelicopterDetected(rustplus, mapMarkers);
 
@@ -11,7 +11,7 @@ module.exports = {
     },
 
     checkNewPatrolHelicopterDetected: function (rustplus, mapMarkers) {
-        for (let marker of mapMarkers.response.mapMarkers.markers) {
+        for (let marker of mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.PatrolHelicopter) {
                 let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
@@ -53,7 +53,7 @@ module.exports = {
         let newActivePatrolHelicoptersObject = new Object();
         for (const [id, content] of Object.entries(rustplus.activePatrolHelicopters)) {
             let active = false;
-            for (let marker of mapMarkers.response.mapMarkers.markers) {
+            for (let marker of mapMarkers.markers) {
                 if (marker.type === RustPlusTypes.MarkerType.PatrolHelicopter) {
                     if (marker.id === parseInt(id)) {
                         /* Patrol Helicopter marker is still visable on the map */

@@ -18,27 +18,27 @@ module.exports = async (client, rustplus) => {
     for (const [key, value] of Object.entries(instance.switches)) {
         if (`${rustplus.server}-${rustplus.port}` !== `${value.ipPort}`) continue;
 
-        rustplus.getEntityInfo(key, async (msg) => {
-            instance = client.readInstanceFile(rustplus.guildId);
+        let info = await rustplus.getEntityInfoAsync(key);
 
-            if (!rustplus.isResponseValid(msg)) {
-                delete instance.switches[key];
-                client.writeInstanceFile(rustplus.guildId, instance);
-                return;
-            }
+        instance = client.readInstanceFile(rustplus.guildId);
 
-            let active = msg.response.entityInfo.payload.value;
-            instance.switches[key].active = active;
+        if (info.error) {
+            delete instance.switches[key];
             client.writeInstanceFile(rustplus.guildId, instance);
+            continue;
+        }
 
-            let file = new MessageAttachment(`src/images/electrics/${instance.switches[key].image}`);
-            let embed = DiscordTools.getSwitchEmbed(key, instance.switches[key], prefix);
+        let active = info.entityInfo.payload.value;
+        instance.switches[key].active = active;
+        client.writeInstanceFile(rustplus.guildId, instance);
 
-            let selectMenu = DiscordTools.getSwitchSelectMenu(key, instance.switches[key]);
-            let buttonRow = DiscordTools.getSwitchButtonsRow(key, instance.switches[key]);
+        let file = new MessageAttachment(`src/images/electrics/${instance.switches[key].image}`);
+        let embed = DiscordTools.getSwitchEmbed(key, instance.switches[key], prefix);
 
-            client.switchesMessages[rustplus.guildId][key] =
-                await channel.send({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
-        });
+        let selectMenu = DiscordTools.getSwitchSelectMenu(key, instance.switches[key]);
+        let buttonRow = DiscordTools.getSwitchButtonsRow(key, instance.switches[key]);
+
+        client.switchesMessages[rustplus.guildId][key] =
+            await channel.send({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
     }
 };

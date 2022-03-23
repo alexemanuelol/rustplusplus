@@ -116,43 +116,40 @@ module.exports = async (client, guild) => {
                                     client.writeInstanceFile(guild.id, instance);
 
                                     if (rustplus && `${body.ip}-${body.port}` === `${rustplus.server}-${rustplus.port}`) {
-                                        client.rustplusInstances[guild.id].getEntityInfo(id, (msg) => {
-                                            if (!client.rustplusInstances[guild.id].isResponseValid(msg)) {
-                                                return;
-                                            }
+                                        let info = await client.rustplusInstances[guild.id].getEntityInfoAsync(id);
+                                        if (info.error) return;
 
-                                            let active = msg.response.entityInfo.payload.value;
-                                            instance = client.readInstanceFile(guild.id);
-                                            instance.switches[id].active = active;
-                                            client.writeInstanceFile(guild.id, instance);
+                                        let active = info.entityInfo.payload.value;
+                                        instance = client.readInstanceFile(guild.id);
+                                        instance.switches[id].active = active;
+                                        client.writeInstanceFile(guild.id, instance);
 
-                                            let prefix = rustplus.generalSettings.prefix;
+                                        let prefix = rustplus.generalSettings.prefix;
 
-                                            let file = new MessageAttachment(
-                                                `src/images/electrics/${instance.switches[id].image}`);
-                                            let embed = DiscordTools.getSwitchEmbed(
-                                                id, instance.switches[id], prefix);
+                                        let file = new MessageAttachment(
+                                            `src/images/electrics/${instance.switches[id].image}`);
+                                        let embed = DiscordTools.getSwitchEmbed(
+                                            id, instance.switches[id], prefix);
 
-                                            let selectMenu = DiscordTools.getSwitchSelectMenu(
-                                                id, instance.switches[id]);
-                                            let buttonRow = DiscordTools.getSwitchButtonsRow(
-                                                id, instance.switches[id]);
+                                        let selectMenu = DiscordTools.getSwitchSelectMenu(
+                                            id, instance.switches[id]);
+                                        let buttonRow = DiscordTools.getSwitchButtonsRow(
+                                            id, instance.switches[id]);
 
-                                            let channel = DiscordTools.getTextChannelById(
-                                                guild.id, instance.channelId.switches);
+                                        let channel = DiscordTools.getTextChannelById(
+                                            guild.id, instance.channelId.switches);
 
-                                            if (!channel) {
-                                                client.log('ERROR', 'Invalid guild or channel.', 'error');
-                                                return;
-                                            }
+                                        if (!channel) {
+                                            client.log('ERROR', 'Invalid guild or channel.', 'error');
+                                            return;
+                                        }
 
-                                            channel.send({
-                                                embeds: [embed],
-                                                components: [selectMenu, buttonRow],
-                                                files: [file]
-                                            }).then((msg) => {
-                                                client.switchesMessages[guild.id][id] = msg;
-                                            });
+                                        channel.send({
+                                            embeds: [embed],
+                                            components: [selectMenu, buttonRow],
+                                            files: [file]
+                                        }).then((msg) => {
+                                            client.switchesMessages[guild.id][id] = msg;
                                         });
                                     }
                                     break;

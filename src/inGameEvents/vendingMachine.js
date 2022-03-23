@@ -3,7 +3,7 @@ const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
 module.exports = {
-    handler: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handler: function (rustplus, mapMarkers) {
         /* Check if new Vending Machine is detected */
         module.exports.checkNewVendingMachineDetected(rustplus, mapMarkers);
 
@@ -12,7 +12,7 @@ module.exports = {
     },
 
     checkNewVendingMachineDetected: function (rustplus, mapMarkers) {
-        for (let marker of mapMarkers.response.mapMarkers.markers) {
+        for (let marker of mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
                 let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
@@ -31,7 +31,7 @@ module.exports = {
     },
 
     checkItemsFromSellOrders: function (rustplus, mapMarkers) {
-        for (let marker of mapMarkers.response.mapMarkers.markers) {
+        for (let marker of mapMarkers.markers) {
             if (marker.type === RustPlusTypes.MarkerType.VendingMachine) {
                 let mapSize = rustplus.info.correctedMapSize;
                 let pos = Map.getPos(marker.x, marker.y, mapSize);
