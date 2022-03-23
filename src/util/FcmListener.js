@@ -30,176 +30,97 @@ module.exports = async (client, guild) => {
             const body = JSON.parse(data.body);
 
             switch (data.channelId) {
-                case 'pairing':
+                case 'pairing': {
                     switch (body.type) {
-                        case 'server':
+                        case 'server': {
                             client.log('FCM', `${guild.id} pairing: server`);
+                            pairingServer(client, guild, full, data, body);
+                        } break;
 
-                            instance = client.readInstanceFile(guild.id);
-                            let customId = `${body.ip}-${body.port}`;
-
-                            let exist = instance.serverList.hasOwnProperty(customId);
-
-                            let message = undefined;
-                            if (exist) {
-                                message = await DiscordTools.getMessageById(
-                                    guild.id, instance.channelId.servers, instance.serverList[customId].messageId);
-                            }
-
-                            instance.serverList[customId] = {
-                                active: (exist) ? instance.serverList[customId].active : false,
-                                title: data.title,
-                                serverIp: body.ip,
-                                appPort: body.port,
-                                steamId: body.playerId,
-                                playerToken: body.playerToken,
-                                description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
-                                img: isValidUrl(body.img) ? body.img : DEFAULT_IMG,
-                                url: isValidUrl(body.url) ? body.url : DEFAULT_URL,
-                                timeTillDay: null,
-                                timeTillNight: null,
-                                messageId: (message !== undefined) ? message.id : null
-                            };
-                            client.writeInstanceFile(guild.id, instance);
-
-                            let embed = new MessageEmbed()
-                                .setTitle(instance.serverList[customId].title)
-                                .setColor('#ce412b')
-                                .setDescription(instance.serverList[customId].description)
-                                .setThumbnail(instance.serverList[customId].img);
-
-                            let row = DiscordTools.getServerButtonsRow(
-                                customId,
-                                (instance.serverList[customId].active) ? 1 : 0,
-                                instance.serverList[customId].url);
-
-                            if (message !== undefined) {
-                                message.edit({ embeds: [embed], components: [row] });
-                            }
-                            else {
-                                let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
-
-                                if (!channel) {
-                                    client.log('ERROR', 'Invalid guild or channel.', 'error');
-                                    break;
-                                }
-
-                                instance = client.readInstanceFile(guild.id);
-                                message = await channel.send({ embeds: [embed], components: [row] });
-                                instance.serverList[customId].messageId = message.id;
-                                client.writeInstanceFile(guild.id, instance);
-                            }
-                            break;
-
-                        case 'entity':
+                        case 'entity': {
                             switch (body.entityName) {
-                                case 'Switch':
+                                case 'Switch': {
                                     client.log('FCM', `${guild.id} pairing: entity: Switch`);
+                                    pairingEntitySwitch(client, guild, full, data, body);
+                                } break;
 
-                                    let rustplus = client.rustplusInstances[guild.id];
-                                    let server = `${rustplus.server}-${rustplus.port}`;
-                                    instance = client.readInstanceFile(guild.id);
-                                    let id = body.entityId;
-
-                                    if (instance.switches.hasOwnProperty(id)) {
-                                        return;
-                                    }
-
-                                    instance.switches[id] = {
-                                        active: false,
-                                        name: 'Smart Switch',
-                                        command: id,
-                                        image: 'smart_switch.png',
-                                        autoDayNight: 0,
-                                        server: body.name,
-                                        ipPort: `${body.ip}-${body.port}`
-                                    };
-                                    client.writeInstanceFile(guild.id, instance);
-
-                                    if (rustplus && `${body.ip}-${body.port}` === server) {
-                                        let info = await rustplus.getEntityInfoAsync(id);
-                                        if (info.error) return;
-
-                                        let active = info.entityInfo.payload.value;
-                                        instance = client.readInstanceFile(guild.id);
-                                        instance.switches[id].active = active;
-                                        client.writeInstanceFile(guild.id, instance);
-
-                                        DiscordTools.sendSmartSwitchMessage(guild.id, id);
-                                    }
-                                    break;
-
-                                case 'Smart Alarm':
+                                case 'Smart Alarm': {
                                     client.log('FCM', `${guild.id} pairing: entity: Smart Alarm`);
-                                    break;
+                                    pairingEntitySmartAlarm(client, guild, full, data, body);
+                                } break;
 
-                                case 'Storage Monitor':
+                                case 'Storage Monitor': {
                                     client.log('FCM', `${guild.id} pairing: entity: Storage Monitor`);
-                                    break;
+                                    pairingEntityStorageMonitor(client, guild, full, data, body);
+                                } break;
 
-                                default:
+                                default: {
                                     client.log('FCM', `${guild.id} pairing: entity: other\n${JSON.stringify(full)}`);
-                                    break;
+                                } break;
                             }
-                            break;
+                        } break;
 
-                        default:
+                        default: {
                             client.log('FCM', `${guild.id} pairing: other\n${JSON.stringify(full)}`);
-                            break;
+                        } break;
                     }
-                    break;
+                } break;
 
-                case 'alarm':
+                case 'alarm': {
                     switch (body.type) {
-                        case 'alarm':
+                        case 'alarm': {
                             client.log('FCM', `${guild.id} alarm: alarm`);
-                            break;
+                            alarmAlarm(client, guild, full, data, body);
+                        } break;
 
-                        default:
+                        default: {
                             client.log('FCM', `${guild.id} alarm: other\n${JSON.stringify(full)}`);
-                            break;
+                        } break;
                     }
-                    break;
+                } break;
 
-                case 'player':
+                case 'player': {
                     switch (body.type) {
-                        case 'death':
+                        case 'death': {
                             client.log('FCM', `${guild.id} player: death`);
-                            break;
+                            playerDeath(client, guild, full, data, body);
+                        } break;
 
-                        default:
+                        default: {
                             client.log('FCM', `${guild.id} player: other\n${JSON.stringify(full)}`);
-                            break;
+                        } break;
                     }
-                    break;
+                } break;
 
-                case 'team':
+                case 'team': {
                     switch (body.type) {
-                        case 'login':
+                        case 'login': {
                             client.log('FCM', `${guild.id} team: login`);
-                            break;
+                            teamLogin(client, guild, full, data, body);
+                        } break;
 
-                        default:
+                        default: {
                             client.log('FCM', `${guild.id} team: other\n${JSON.stringify(full)}`);
-                            break;
+                        } break;
                     }
-                    break;
+                } break;
 
-                case 'news':
+                case 'news': {
                     switch (body.type) {
-                        case 'news':
+                        case 'news': {
                             client.log('FCM', `${guild.id} news: news`);
-                            break;
+                            newsNews(client, guild, full, data, body);
+                        } break;
 
-                        default:
+                        default: {
                             client.log('FCM', `${guild.id} news: other\n${JSON.stringify(full)}`);
-                            break;
+                        } break;
                     }
-                    break;
+                } break;
 
-                default:
+                default: {
                     client.log('FCM', `${guild.id} other\n${JSON.stringify(full)}`);
-                    break;
+                } break;
             }
         });
 };
@@ -209,4 +130,121 @@ function isValidUrl(url) {
         return true;
     }
     return false;
+}
+
+async function pairingServer(client, guild, full, data, body) {
+    let instance = client.readInstanceFile(guild.id);
+    let serverId = `${body.ip}-${body.port}`;
+
+    let exist = instance.serverList.hasOwnProperty(serverId);
+
+    let message = undefined;
+    if (exist) {
+        message = await DiscordTools.getMessageById(
+            guild.id, instance.channelId.servers, instance.serverList[serverId].messageId);
+    }
+
+    instance.serverList[serverId] = {
+        active: (exist) ? instance.serverList[serverId].active : false,
+        title: data.title,
+        serverIp: body.ip,
+        appPort: body.port,
+        steamId: body.playerId,
+        playerToken: body.playerToken,
+        description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
+        img: isValidUrl(body.img) ? body.img : DEFAULT_IMG,
+        url: isValidUrl(body.url) ? body.url : DEFAULT_URL,
+        timeTillDay: null,
+        timeTillNight: null,
+        messageId: (message !== undefined) ? message.id : null
+    };
+    client.writeInstanceFile(guild.id, instance);
+
+    let server = instance.serverList[serverId];
+
+    let embed = new MessageEmbed()
+        .setTitle(server.title)
+        .setColor('#ce412b')
+        .setDescription(server.description)
+        .setThumbnail(server.img);
+
+    let row = DiscordTools.getServerButtonsRow(serverId, (server.active) ? 1 : 0, server.url);
+
+    if (message !== undefined) {
+        message.edit({ embeds: [embed], components: [row] });
+    }
+    else {
+        let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
+
+        if (!channel) {
+            client.log('ERROR', 'pairingServer: Invalid guild or channel.', 'error');
+            return;
+        }
+
+        instance = client.readInstanceFile(guild.id);
+        message = await channel.send({ embeds: [embed], components: [row] });
+        instance.serverList[serverId].messageId = message.id;
+        client.writeInstanceFile(guild.id, instance);
+    }
+}
+
+async function pairingEntitySwitch(client, guild, full, data, body) {
+    let instance = client.readInstanceFile(guild.id);
+    let id = body.entityId;
+
+    if (instance.switches.hasOwnProperty(id)) {
+        return;
+    }
+
+    instance.switches[id] = {
+        active: false,
+        name: 'Smart Switch',
+        command: id,
+        image: 'smart_switch.png',
+        autoDayNight: 0,
+        server: body.name,
+        ipPort: `${body.ip}-${body.port}`
+    };
+    client.writeInstanceFile(guild.id, instance);
+
+    let rustplus = client.rustplusInstances[guild.id];
+    if (!rustplus) return;
+
+    let serverId = `${rustplus.server}-${rustplus.port}`;
+
+    if (`${body.ip}-${body.port}` === serverId) {
+        let info = await rustplus.getEntityInfoAsync(id);
+        if (info.error) return;
+
+        let active = info.entityInfo.payload.value;
+        instance = client.readInstanceFile(guild.id);
+        instance.switches[id].active = active;
+        client.writeInstanceFile(guild.id, instance);
+
+        DiscordTools.sendSmartSwitchMessage(guild.id, id);
+    }
+}
+
+async function pairingEntitySmartAlarm(client, guild, full, data, body) {
+
+}
+
+async function pairingEntityStorageMonitor(client, guild, full, data, body) {
+
+}
+
+async function alarmAlarm(client, guild, full, data, body) {
+
+}
+
+async function playerDeath(client, guild, full, data, body) {
+
+}
+
+async function teamLogin(client, guild, full, data, body) {
+
+}
+
+async function newsNews(client, guild, full, data, body) {
+
 }
