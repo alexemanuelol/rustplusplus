@@ -1,5 +1,4 @@
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageAttachment } = require('discord.js');
 
 module.exports = async (client, interaction) => {
     let guildId = interaction.guildId;
@@ -32,16 +31,7 @@ module.exports = async (client, interaction) => {
             instance.switches[id].autoDayNight = parseInt(interaction.values[0]);
             client.writeInstanceFile(guildId, instance);
 
-            let prefix = rustplus.generalSettings.prefix;
-            let sw = instance.switches[id];
-
-            let file = new MessageAttachment(`src/images/electrics/${sw.image}`);
-            let embed = DiscordTools.getSwitchEmbed(id, sw, prefix);
-
-            let selectMenu = DiscordTools.getSwitchSelectMenu(id, sw);
-            let buttonRow = DiscordTools.getSwitchButtonsRow(id, sw);
-
-            await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
+            DiscordTools.sendSmartSwitchMessage(guildId, id, interaction);
             break;
 
         default:

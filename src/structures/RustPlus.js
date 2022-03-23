@@ -205,6 +205,15 @@ class RustPlus extends RP {
         return await this.setEntityValueAsync(id, false, timeout);
     }
 
+    async turnSmartSwitchAsync(id, value, timeout = 2000) {
+        if (value) {
+            return await this.turnSmartSwitchOnAsync(id, timeout);
+        }
+        else {
+            return await this.turnSmartSwitchOffAsync(id, timeout);
+        }
+    }
+
     async setEntityValueAsync(id, value, timeout = 2000) {
         return await this.sendRequestAsync({
             entityId: id,

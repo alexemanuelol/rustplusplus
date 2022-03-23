@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageAttachment } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -96,18 +95,7 @@ module.exports = {
 				}
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				let prefix = rustplus.generalSettings.prefix;
-				let sw = instance.switches[id];
-
-				let file = new MessageAttachment(`src/images/electrics/${instance.switches[id].image}`);
-				let embed = DiscordTools.getSwitchEmbed(id, sw, prefix);
-
-				let selectMenu = DiscordTools.getSwitchSelectMenu(id, sw);
-				let buttonRow = DiscordTools.getSwitchButtonsRow(id, sw);
-
-				await client.switchesMessages[interaction.guildId][id].edit({
-					embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-				});
+				await DiscordTools.sendSmartSwitchMessage(interaction.guildId, id);
 
 				await interaction.editReply({
 					content: 'Successfully edited Smart Switch.',

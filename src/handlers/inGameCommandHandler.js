@@ -1,6 +1,5 @@
 const Timer = require('../util/timer');
 const Str = require('../util/string.js');
-const { MessageAttachment } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.js');
 
@@ -101,35 +100,15 @@ module.exports = {
                         return false;
                     }
 
-                    let prefix = rustplus.generalSettings.prefix;
                     instance.switches[id].active = active;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
-                    let file = new MessageAttachment(`src/images/electrics/${content.image}`);
-                    let embed = DiscordTools.getSwitchEmbed(id, content, prefix);
-
-                    let selectMenu = DiscordTools.getSwitchSelectMenu(id, content);
-                    let buttonRow = DiscordTools.getSwitchButtonsRow(id, content);
+                    rustplus.turnSmartSwitchAsync(id, active);
+                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id);
+                    let str = `${instance.switches[id].name} was turned ` + (active) ? 'on.' : 'off.';
+                    rustplus.sendTeamMessageAsync(str);
 
                     rustplus.interactionSwitches[id] = active;
-
-                    if (active) {
-                        await rustplus.turnSmartSwitchOnAsync(id);
-                        await client.switchesMessages[rustplus.guildId][id].edit({
-                            embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-                        });
-                        await rustplus.sendTeamMessageAsync(`${instance.switches[id].name} was turned on.`);
-                    }
-                    else {
-                        await rustplus.turnSmartSwitchOffAsync(id);
-                        await client.switchesMessages[rustplus.guildId][id].edit({
-                            embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-                        });
-                        await rustplus.sendTeamMessageAsync(`${instance.switches[id].name} was turned off.`);
-                    }
-
-                    instance.switches[id].active = active;
-                    client.writeInstanceFile(rustplus.guildId, instance);
 
                     return true;
                 }

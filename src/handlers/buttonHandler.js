@@ -1,5 +1,4 @@
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageAttachment } = require('discord.js');
 
 module.exports = async (client, interaction) => {
     let guildId = interaction.guildId;
@@ -20,6 +19,8 @@ module.exports = async (client, interaction) => {
             instance.notificationSettings[setting].inGame);
 
         await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.endsWith('InGameNotification')) {
         let setting = interaction.customId.replace('InGameNotification', '');
@@ -35,6 +36,8 @@ module.exports = async (client, interaction) => {
             instance.notificationSettings[setting].inGame);
 
         await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId === 'showTrademark') {
         instance.generalSettings.showTrademark = !instance.generalSettings.showTrademark;
@@ -46,6 +49,8 @@ module.exports = async (client, interaction) => {
         let row = DiscordTools.getTrademarkButtonsRow(instance.generalSettings.showTrademark);
 
         await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId === 'allowInGameCommands') {
         instance.generalSettings.inGameCommandsEnabled = !instance.generalSettings.inGameCommandsEnabled;
@@ -57,6 +62,8 @@ module.exports = async (client, interaction) => {
         let row = DiscordTools.getInGameCommandsEnabledButtonsRow(instance.generalSettings.inGameCommandsEnabled);
 
         await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let server = interaction.customId.replace('ServerConnect', '');
@@ -92,6 +99,8 @@ module.exports = async (client, interaction) => {
             instance.serverList[server].steamId,
             instance.serverList[server].playerToken
         );
+
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.endsWith('ServerDisconnect') ||
         interaction.customId.endsWith('ServerReconnecting')) {
@@ -107,6 +116,8 @@ module.exports = async (client, interaction) => {
             rustplus.disconnect();
             delete client.rustplusInstances[guildId];
         }
+
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.endsWith('ServerDelete')) {
         let server = interaction.customId.replace('ServerDelete', '');
@@ -133,6 +144,8 @@ module.exports = async (client, interaction) => {
                 delete instance.switches[key];
             }
         }
+
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.endsWith('SmartSwitch')) {
         let id = interaction.customId.replace('OnSmartSwitch', '').replace('OffSmartSwitch', '');
@@ -144,28 +157,13 @@ module.exports = async (client, interaction) => {
         }
 
         let active = (interaction.customId.endsWith('OnSmartSwitch')) ? true : false;
-        let prefix = rustplus.generalSettings.prefix;
-
         instance.switches[id].active = active;
+        client.writeInstanceFile(guildId, instance);
 
-        let sw = instance.switches[id];
-
-        let file = new MessageAttachment(`src/images/electrics/${sw.image}`);
-        let embed = DiscordTools.getSwitchEmbed(id, sw, prefix);
-
-        let selectMenu = DiscordTools.getSwitchSelectMenu(id, sw);
-        let buttonRow = DiscordTools.getSwitchButtonsRow(id, sw);
+        rustplus.turnSmartSwitchAsync(id, active);
+        DiscordTools.sendSmartSwitchMessage(guildId, id, interaction);
 
         rustplus.interactionSwitches[id] = active;
-
-        if (active) {
-            await rustplus.turnSmartSwitchOnAsync(id);
-            await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
-        }
-        else {
-            await rustplus.turnSmartSwitchOffAsync(id);
-            await interaction.update({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
-        }
     }
     else if (interaction.customId.endsWith('SmartSwitchDelete')) {
         let id = interaction.customId.replace('SmartSwitchDelete', '');
@@ -174,7 +172,7 @@ module.exports = async (client, interaction) => {
 
         await client.switchesMessages[guildId][id].delete();
         delete client.switchesMessages[guildId][id];
-    }
 
-    client.writeInstanceFile(guildId, instance);
+        client.writeInstanceFile(guildId, instance);
+    }
 }
