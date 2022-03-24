@@ -1,4 +1,4 @@
-const Constants = require('../util/eventConstants.js');
+const Constants = require('../util/constants.js');
 const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer');
@@ -38,7 +38,7 @@ module.exports = {
 
                         rustplus.cargoShipEgressTimers[marker.id] = new Timer.timer(
                             module.exports.notifyCargoShipEgress,
-                            Constants.CARGO_SHIP_EGRESS_TIME_MS,
+                            Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
                             rustplus,
                             marker.id);
                         rustplus.cargoShipEgressTimers[marker.id].start();

@@ -1,23 +1,7 @@
 const Timer = require('../util/timer');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-
-const STEAM_LINK = 'https://steamcommunity.com/profiles/';
-const ONLINE = ':green_circle:';
-const OFFLINE = ':red_circle:';
-const AFK = ':yellow_circle:';
-const ALIVE = ':nerd:';
-const SLEEPING = ':sleeping:';
-const DEAD = ':skull:';
-const LEADER = ':crown:';
-const DAY = ':sunny:';
-const NIGHT = ':crescent_moon:';
-
-const SERVER_IMG = 'server_info_logo.png';
-const EVENT_IMG = 'event_info_logo.png';
-const TEAM_IMG = 'team_info_logo.png';
-
-const AFK_TIME_SECONDS = 5 * 60; /* 5 Minutes */
+const Constants = require('../util/constants.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -63,7 +47,7 @@ module.exports = {
 
         const serverTime = `${Timer.convertDecimalToHoursMinutes(rustplus.time.time)}`;
         const timeLeft = rustplus.time.getTimeTillDayOrNight('s');
-        const timeLeftTitle = 'Time till ' + ((rustplus.time.isDay()) ? `${NIGHT}` : `${DAY}`);
+        const timeLeftTitle = 'Time till ' + ((rustplus.time.isDay()) ? `${Constants.NIGHT_EMOJI}` : `${Constants.DAY_EMOJI}`);
 
         let pop = `${rustplus.info.players}`;
         if (rustplus.info.isQueue()) {
@@ -76,11 +60,11 @@ module.exports = {
         const mapSeed = `${rustplus.info.seed}`;
         const mapSalt = `${rustplus.info.salt}`;
 
-        let file = new MessageAttachment(`src/images/${SERVER_IMG}`)
+        let file = new MessageAttachment('src/images/server_info_logo.png');
         let embed = new MessageEmbed()
             .setTitle('Server Information')
             .setColor('#ce412b')
-            .setThumbnail(`attachment://${SERVER_IMG}`)
+            .setThumbnail('attachment://server_info_logo.png')
             .setDescription(serverName)
             .addFields(
                 { name: 'Players', value: pop, inline: true },
@@ -272,11 +256,11 @@ module.exports = {
         }
 
 
-        let file = new MessageAttachment(`src/images/${EVENT_IMG}`)
+        let file = new MessageAttachment('src/images/event_info_logo.png')
         let embed = new MessageEmbed()
             .setTitle('Event Information')
             .setColor('#ce412b')
-            .setThumbnail(`attachment://${EVENT_IMG}`)
+            .setThumbnail('attachment://event_info_logo.png')
             .setDescription('In-game event information')
             .addFields(
                 { name: 'Cargoship', value: cargoship, inline: true },
@@ -301,30 +285,30 @@ module.exports = {
         let locations = '';
         for (let player of rustplus.team.players) {
             if (rustplus.team.teamSize < 12) {
-                names += `[${player.name}](${STEAM_LINK}${player.steamId})`;
+                names += `[${player.name}](${Constants.STEAM_PROFILES_URL}${player.steamId})`;
             }
             else {
                 names += `${player.name}`;
             }
 
-            names += (player.teamLeader) ? `${LEADER}\n` : '\n';
+            names += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
             locations += (player.isOnline || player.isAlive) ? `${player.pos}\n` : '-\n';
 
             if (player.isOnline) {
-                status += (player.getAfkSeconds() >= AFK_TIME_SECONDS) ?
-                    `${AFK}${(player.isAlive) ? SLEEPING : DEAD} ${player.getAfkTime('dhs')}\n` :
-                    `${ONLINE}${(player.isAlive) ? ALIVE : DEAD}\n`;
+                status += (player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS) ?
+                    `${Constants.AFK_EMOJI}${(player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI} ${player.getAfkTime('dhs')}\n` :
+                    `${Constants.ONLINE_EMOJI}${(player.isAlive) ? Constants.ALIVE_EMOJI : Constants.DEAD_EMOJI}\n`;
             }
             else {
-                status += `${OFFLINE}${(player.isAlive) ? SLEEPING : DEAD}\n`;
+                status += `${Constants.OFFLINE_EMOJI}${(player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI}\n`;
             }
         }
 
-        let file = new MessageAttachment(`src/images/${TEAM_IMG}`)
+        let file = new MessageAttachment('src/images/team_info_logo.png')
         let embed = new MessageEmbed()
             .setTitle('Team Member Information')
             .setColor('#ce412b')
-            .setThumbnail(`attachment://${TEAM_IMG}`)
+            .setThumbnail('attachment://team_info_logo.png')
             .addFields(
                 { name: 'Team Member', value: names, inline: true },
                 { name: 'Status', value: status, inline: true },

@@ -5,8 +5,7 @@ const { MessageEmbed, MessageAttachment } = require('discord.js');
 const Logger = require('./Logger.js');
 const path = require('path');
 const DiscordTools = require('../discordTools/discordTools.js');
-
-const MAX_LENGTH_TEAM_MESSAGE = 128;
+const Constants = require('../util/constants.js');
 
 class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
@@ -20,7 +19,7 @@ class RustPlus extends RP {
         this.oldsendTeamMessageAsync = this.sendTeamMessageAsync;
         this.sendTeamMessageAsync = async function (message, ignoreForward = false) {
             let trademark = (this.generalSettings.showTrademark) ? this.trademarkString : '';
-            let messageMaxLength = MAX_LENGTH_TEAM_MESSAGE - trademark.length;
+            let messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - trademark.length;
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
 
             if (ignoreForward) {

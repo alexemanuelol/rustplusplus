@@ -1,6 +1,5 @@
 const Axios = require('axios');
-
-const STEAM_LINK = 'https://steamcommunity.com/profiles/';
+const Constants = require('../util/constants.js');
 
 module.exports = {
     scrape: async function (url) {
@@ -13,10 +12,10 @@ module.exports = {
     },
 
     scrapeSteamProfilePicture: async function (rustplus, steamId) {
-        const response = await module.exports.scrape(`${STEAM_LINK}${steamId}`);
+        const response = await module.exports.scrape(`${Constants.STEAM_PROFILES_URL}${steamId}`);
 
         if (response === '') {
-            rustplus.log('ERROR', `Failed to scrape '${STEAM_LINK}${steamId}'.`, 'error');
+            rustplus.log('ERROR', `Failed to scrape '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
             return response;
         }
 

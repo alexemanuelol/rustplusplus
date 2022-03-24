@@ -10,7 +10,6 @@ const TimeHandler = require('../handlers/timeHandler.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const InformationHandler = require('../handlers/informationHandler.js');
 
-const Map = require('../util/map.js');
 const Time = require('../structures/Time');
 const Team = require('../structures/Team');
 const Info = require('../structures/Info');

@@ -1,12 +1,9 @@
 const { MessageEmbed } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
-
-const DEFAULT_URL = 'https://rust.facepunch.com/';
-const DEFAULT_IMG = 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg';
+const Constants = require('../util/constants.js');
 
 module.exports = async (client, guild) => {
-    let instance = client.readInstanceFile(guild.id);
     let credentials = client.readCredentialsFile(guild.id);
 
     if (credentials.credentials === null) {
@@ -152,8 +149,8 @@ async function pairingServer(client, guild, full, data, body) {
         steamId: body.playerId,
         playerToken: body.playerToken,
         description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
-        img: isValidUrl(body.img) ? body.img : DEFAULT_IMG,
-        url: isValidUrl(body.url) ? body.url : DEFAULT_URL,
+        img: isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMG,
+        url: isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL,
         timeTillDay: null,
         timeTillNight: null,
         messageId: (message !== undefined) ? message.id : null

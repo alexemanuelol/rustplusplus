@@ -1,10 +1,7 @@
-const Constants = require('../util/eventConstants.js');
+const Constants = require('../util/constants.js');
 const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer');
-
-const PATROL_HELI_DOWNED_RADIUS = 400;
-const LAUNCH_SITE_RADIUS = 250;
 
 module.exports = {
     handler: function (rustplus, mapMarkers) {
@@ -33,7 +30,7 @@ module.exports = {
                     if (rustplus.patrolHelicoptersLeft.length !== 0) {
                         for (let heli of rustplus.patrolHelicoptersLeft) {
                             if (Map.getDistance(marker.x, marker.y, heli.x, heli.y) <=
-                                PATROL_HELI_DOWNED_RADIUS) {
+                                Constants.PATROL_HELI_DOWNED_RADIUS) {
                                 isExplosionMarkerHeli = true;
                                 delete rustplus.activePatrolHelicopters[heli.id]
 
@@ -72,7 +69,7 @@ module.exports = {
                         if (!rustplus.firstPoll) {
                             rustplus.bradleyRespawnTimers[marker.id] = new Timer.timer(
                                 module.exports.notifyBradleyRespawn,
-                                Constants.BRADLEY_APC_RESPAWN_TIME_MS,
+                                Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
                                 rustplus,
                                 marker.id);
                             rustplus.bradleyRespawnTimers[marker.id].start();
@@ -132,7 +129,7 @@ module.exports = {
         /* Check where the explosion marker is located, if near Launch Site, return true */
         for (let monument of rustplus.mapMonuments) {
             if (monument.token === 'launchsite') {
-                return (Map.getDistance(x, y, monument.x, monument.y) <= LAUNCH_SITE_RADIUS);
+                return (Map.getDistance(x, y, monument.x, monument.y) <= Constants.LAUNCH_SITE_RADIUS);
             }
         }
         return false;

@@ -2,8 +2,7 @@ const Timer = require('../util/timer');
 const Str = require('../util/string.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.js');
-
-const AFK_TIME_SECONDS = 5 * 60; /* 5 Minutes */
+const Constants = require('../util/constants.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
@@ -124,7 +123,7 @@ module.exports = {
 
         for (let player of rustplus.team.players) {
             if (player.isOnline) {
-                if (player.getAfkSeconds() >= AFK_TIME_SECONDS) {
+                if (player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS) {
                     str += `${player.name} [${player.getAfkTime('dhs')}], `;
                 }
             }

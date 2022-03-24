@@ -1,9 +1,7 @@
-const Constants = require('../util/eventConstants.js');
+const Constants = require('../util/constants.js');
 const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 const Timer = require('../util/timer');
-
-const OIL_RIG_CHINOOK_47_MAX_DISTANCE = 550;
 
 module.exports = {
     handler: function (rustplus, mapMarkers) {
@@ -41,7 +39,7 @@ module.exports = {
                     let found = false;
                     for (let rig of smallOil) {
                         if (Map.getDistance(marker.x, marker.y, rig.x, rig.y) <=
-                            OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
+                            Constants.OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE) {
                             found = true;
                             let oilRigLocation = Map.getPos(rig.x, rig.y, mapSize);
                             rustplus.activeChinook47s[marker.id].type = 'smallOil';
@@ -57,7 +55,7 @@ module.exports = {
                             if (lockedCrateId !== null) {
                                 rustplus.lockedCrateSmallOilRigTimers[lockedCrateId] = new Timer.timer(
                                     module.exports.notifyLockedCrateSmallOpen,
-                                    Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+                                    Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
                                     rustplus,
                                     oilRigLocation,
                                     lockedCrateId);
@@ -75,7 +73,7 @@ module.exports = {
 
                     for (let rig of largeOil) {
                         if (Map.getDistance(marker.x, marker.y, rig.x, rig.y) <=
-                            OIL_RIG_CHINOOK_47_MAX_DISTANCE) {
+                            Constants.OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE) {
                             found = true;
                             let oilRigLocation = Map.getPos(rig.x, rig.y, mapSize);
                             rustplus.activeChinook47s[marker.id].type = 'largeOil';
@@ -91,7 +89,7 @@ module.exports = {
                             if (lockedCrateId !== null) {
                                 rustplus.lockedCrateLargeOilRigTimers[lockedCrateId] = new Timer.timer(
                                     module.exports.notifyLockedCrateLargeOpen,
-                                    Constants.OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+                                    Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
                                     rustplus,
                                     oilRigLocation,
                                     lockedCrateId);

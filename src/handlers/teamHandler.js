@@ -1,9 +1,7 @@
 const DiscordTools = require('../discordTools/discordTools.js');
 const { MessageEmbed } = require('discord.js');
 const Scrape = require('../util/scrape.js');
-
-const DEFAULT_IMG = 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg';
-const STEAM_LINK = 'https://steamcommunity.com/profiles/';
+const Constants = require('../util/constants.js');
 
 module.exports = {
     handler: async function (rustplus, client, teamInfo) {
@@ -35,8 +33,8 @@ module.exports = {
                     .setColor('#606060')
                     .setAuthor({
                         name: `${player.name} left the team.`,
-                        iconURL: (png !== '') ? png : DEFAULT_IMG,
-                        url: `${STEAM_LINK}${steamId}`
+                        iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                        url: `${Constants.STEAM_PROFILES_URL}${steamId}`
                     })
                     .setTimestamp()
                     .setFooter({
@@ -55,8 +53,8 @@ module.exports = {
                             .setColor('#00ff40')
                             .setAuthor({
                                 name: `${player.name} joined the team.`,
-                                iconURL: (png !== '') ? png : DEFAULT_IMG,
-                                url: `${STEAM_LINK}${steamId}`
+                                iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                                url: `${Constants.STEAM_PROFILES_URL}${steamId}`
                             })
                             .setTimestamp()
                             .setFooter({
@@ -82,8 +80,8 @@ module.exports = {
                                 .setColor('#00ff40')
                                 .setAuthor({
                                     name: `${player.name} just connected.`,
-                                    iconURL: (png !== '') ? png : DEFAULT_IMG,
-                                    url: `${STEAM_LINK}${player.steamId}`
+                                    iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                                    url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
                                 })
                                 .setTimestamp()
                                 .setFooter({
@@ -100,8 +98,8 @@ module.exports = {
                                 .setColor('#ff0040')
                                 .setAuthor({
                                     name: `${player.name} just disconnected.`,
-                                    iconURL: (png !== '') ? png : DEFAULT_IMG,
-                                    url: `${STEAM_LINK}${player.steamId}`
+                                    iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                                    url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
                                 })
                                 .setTimestamp()
                                 .setFooter({
@@ -119,8 +117,8 @@ module.exports = {
                                 .setColor('#ff0040')
                                 .setAuthor({
                                     name: `${player.name} just got offline killed at ${pos}.`,
-                                    iconURL: (png !== '') ? png : DEFAULT_IMG,
-                                    url: `${STEAM_LINK}${player.steamId}`
+                                    iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                                    url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
                                 })
                                 .setTimestamp()
                                 .setFooter({

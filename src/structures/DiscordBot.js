@@ -4,7 +4,6 @@ const Config = require('../../config.json');
 const RustPlus = require('../structures/RustPlus');
 const Logger = require('./Logger.js');
 const path = require('path');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 class DiscordBot extends Client {
     constructor(props) {
