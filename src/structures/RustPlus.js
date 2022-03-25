@@ -143,13 +143,6 @@ class RustPlus extends RP {
         this.logger.log(title, text, level);
     }
 
-    isResponseValid(response) {
-        if (response.response.hasOwnProperty('error')) {
-            return false;
-        }
-        return true;
-    }
-
     async printCommandOutput(rustplus, str, type = 'COMMAND') {
         await rustplus.sendTeamMessageAsync(str, !rustplus.generalSettings.showTrademark);
         rustplus.log(type, str);
@@ -196,15 +189,25 @@ class RustPlus extends RP {
         this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
     }
 
-    async turnSmartSwitchOnAsync(id, timeout = 2000) {
-        return await this.setEntityValueAsync(id, true, timeout);
+    async turnSmartSwitchOnAsync(id, timeout = 10000) {
+        try {
+            return await this.setEntityValueAsync(id, true, timeout);
+        }
+        catch (e) {
+            return e;
+        }
     }
 
-    async turnSmartSwitchOffAsync(id, timeout = 2000) {
-        return await this.setEntityValueAsync(id, false, timeout);
+    async turnSmartSwitchOffAsync(id, timeout = 10000) {
+        try {
+            return await this.setEntityValueAsync(id, false, timeout);
+        }
+        catch (e) {
+            return e;
+        }
     }
 
-    async turnSmartSwitchAsync(id, value, timeout = 2000) {
+    async turnSmartSwitchAsync(id, value, timeout = 10000) {
         if (value) {
             return await this.turnSmartSwitchOnAsync(id, timeout);
         }
@@ -213,125 +216,212 @@ class RustPlus extends RP {
         }
     }
 
-    async setEntityValueAsync(id, value, timeout = 2000) {
-        return await this.sendRequestAsync({
-            entityId: id,
-            setEntityValue: {
-                value: value
-            }
-        }, timeout).catch((e) => {
+    async setEntityValueAsync(id, value, timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                entityId: id,
+                setEntityValue: {
+                    value: value
+                }
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async sendTeamMessageAsync(message, timeout = 2000) {
-        return await this.sendRequestAsync({
-            sendTeamMessage: {
-                message: message
-            }
-        }, timeout).catch((e) => {
+    async sendTeamMessageAsync(message, timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                sendTeamMessage: {
+                    message: message
+                }
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getEntityInfoAsync(id, timeout = 2000) {
-        return await this.sendRequestAsync({
-            entityId: id,
-            getEntityInfo: {}
-        }, timeout).catch((e) => {
+    async getEntityInfoAsync(id, timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                entityId: id,
+                getEntityInfo: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getMapAsync(timeout = 2000) {
-        return await this.sendRequestAsync({
-            getMap: {}
-        }, timeout).catch((e) => {
+    async getMapAsync(timeout = 30000) {
+        try {
+            return await this.sendRequestAsync({
+                getMap: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getTimeAsync(timeout = 2000) {
-        return await this.sendRequestAsync({
-            getTime: {}
-        }, timeout).catch((e) => {
+    async getTimeAsync(timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                getTime: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getMapMarkersAsync(timeout = 2000) {
-        return await this.sendRequestAsync({
-            getMapMarkers: {}
-        }, timeout).catch((e) => {
+    async getMapMarkersAsync(timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                getMapMarkers: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getInfoAsync(timeout = 2000) {
-        return await this.sendRequestAsync({
-            getInfo: {}
-        }, timeout).catch((e) => {
+    async getInfoAsync(timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                getInfo: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getTeamInfoAsync(timeout = 2000) {
-        return await this.sendRequestAsync({
-            getTeamInfo: {}
-        }, timeout).catch((e) => {
+    async getTeamInfoAsync(timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                getTeamInfo: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async promoteToLeaderAsync(steamId, timeout = 2000) {
-        return await this.sendRequestAsync({
-            promoteToLeader: {
-                steamId: steamId
-            }
-        }, timeout).catch((e) => {
+    async promoteToLeaderAsync(steamId, timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                promoteToLeader: {
+                    steamId: steamId
+                }
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getTeamChatAsync(timeout = 2000) {
-        return await this.sendRequestAsync({
-            getTeamChat: {
+    async getTeamChatAsync(timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                getTeamChat: {
 
-            }
-        }, timeout).catch((e) => {
+                }
+            }, timeout).catch((e) => {
+                return e;
+            })
+        }
+        catch (e) {
             return e;
-        });
+        }
+
     }
 
-    async checkSubscriptionAsync(id, timeout = 2000) {
-        return await this.sendRequestAsync({
-            entityId: id,
-            checkSubscription: {}
-        }, timeout).catch((e) => {
+    async checkSubscriptionAsync(id, timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                entityId: id,
+                checkSubscription: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async setSubscriptionAsync(id, value, timeout = 2000) {
-        return await this.sendRequestAsync({
-            entityId: id,
-            setSubscription: {
-                value: value
-            }
-        }, timeout).catch((e) => {
+    async setSubscriptionAsync(id, value, timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                entityId: id,
+                setSubscription: {
+                    value: value
+                }
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
     }
 
-    async getCameraFrameAsync(identifier, frame, timeout = 2000) {
-        return await this.sendRequestAsync({
-            getCameraFrame: {
-                identifier: identifier,
-                frame: frame
-            }
-        }, timeout).catch((e) => {
+    async getCameraFrameAsync(identifier, frame, timeout = 10000) {
+        try {
+            return await this.sendRequestAsync({
+                getCameraFrame: {
+                    identifier: identifier,
+                    frame: frame
+                }
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
             return e;
-        });
+        }
+    }
+
+    async isResponseValid(response) {
+        if (response === undefined) {
+            this.log('ERROR', 'Response is undefined.', 'error');
+            return false;
+        }
+        else if (response.toString() === 'Error: Timeout reached while waiting for response') {
+            this.log('ERROR', 'Timeout reached while waiting for response.', 'error');
+            return false;
+        }
+        else if (response.hasOwnProperty('error')) {
+            this.log('ERROR', `Response contain error property with value: ${response.error}.`, 'error');
+            return false;
+        }
+        else if (Object.keys(response).length === 0) {
+            this.log('ERROR', 'Response is empty.', 'error');
+            clearInterval(this.intervalId);
+            return false;
+        }
+        return true;
     }
 }
 

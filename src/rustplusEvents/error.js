@@ -4,16 +4,14 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
     name: 'error',
     async execute(rustplus, client, err) {
-        rustplus.log('ERROR', JSON.stringify(err), 'error');
-
         if (err.code === 'ETIMEDOUT' && err.syscall === 'connect') {
-            rustplus.log('ERROR', `Could not connect to: ${rustplus.server}:${rustplus.port}`, 'error');
+            rustplus.log('ERROR', `Could not connect to: ${rustplus.server}:${rustplus.port}.`, 'error');
         }
         else if (err.code === 'ENOTFOUND' && err.stscall === 'getaddrinfo') {
-
+            rustplus.log('ERROR', `Could not connect to: ${rustplus.server}:${rustplus.port}.`, 'error');
         }
         else if (err.code === 'ECONNREFUSED') {
-            rustplus.log('ERROR', 'Connection refused.', 'error');
+            rustplus.log('ERROR', `Connection refused to: ${rustplus.server}:${rustplus.port}.`, 'error');
 
             let server = `${rustplus.server}-${rustplus.port}`;
             let instance = client.readInstanceFile(rustplus.guildId);
@@ -52,6 +50,12 @@ module.exports = {
 
             rustplus.disconnect();
             delete client.rustplusInstances[rustplus.guildId];
+        }
+        else if (err.toString() === 'Error: WebSocket was closed before the connection was established') {
+            rustplus.log('ERROR', 'WebSocket was closed before the connection was established.', 'error');
+        }
+        else {
+            rustplus.log('ERROR', err, 'error');
         }
     },
 };

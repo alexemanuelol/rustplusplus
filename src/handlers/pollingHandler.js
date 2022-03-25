@@ -18,13 +18,13 @@ module.exports = {
     pollingHandler: async function (rustplus, client) {
         /* Poll information such as info, mapMarkers, teamInfo and time */
         let info = await rustplus.getInfoAsync();
-        if (info.error) return;
+        if (!(await rustplus.isResponseValid(info))) return;
         let mapMarkers = await rustplus.getMapMarkersAsync();
-        if (mapMarkers.error) return;
+        if (!(await rustplus.isResponseValid(mapMarkers))) return;
         let teamInfo = await rustplus.getTeamInfoAsync();
-        if (teamInfo.error) return;
+        if (!(await rustplus.isResponseValid(teamInfo))) return;
         let time = await rustplus.getTimeAsync();
-        if (time.error) return;
+        if (!(await rustplus.isResponseValid(time))) return;
 
         if (rustplus.firstPoll) {
             rustplus.time = new Time(time.time, rustplus, client);

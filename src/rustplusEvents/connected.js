@@ -15,8 +15,8 @@ module.exports = {
         let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
 
         /* Get some map parameters once when connected (to avoid calling getMap continuously) */
-        let map = await rustplus.getMapAsync();
-        if (map.error) {
+        let map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
+        if (!(await rustplus.isResponseValid(map))) {
             rustplus.log('ERROR', 'Something went wrong with connection.', 'error');
 
             if (channel !== undefined) {
