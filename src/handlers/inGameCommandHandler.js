@@ -104,7 +104,8 @@ module.exports = {
 
                     rustplus.turnSmartSwitchAsync(id, active);
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id);
-                    let str = `${instance.switches[id].name} was turned ` + (active) ? 'on.' : 'off.';
+                    let str = `${instance.switches[id].name} was turned `;
+                    str += (active) ? 'on.' : 'off.';
                     rustplus.sendTeamMessageAsync(str);
 
                     rustplus.interactionSwitches[id] = active;
