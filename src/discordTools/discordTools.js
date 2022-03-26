@@ -317,13 +317,19 @@ module.exports = {
         }
 
         if (Client.client.switchesMessages[guildId][id]) {
-            await Client.client.switchesMessages[guildId][id].edit({
-                embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-            });
+            try {
+                await Client.client.switchesMessages[guildId][id].edit({
+                    embeds: [embed], components: [selectMenu, buttonRow], files: [file]
+                });
+            }
+            catch (e) {
+                Client.client.log('ERROR', `While editing smart switch message: ${e}`, 'error');
+                return;
+            }
         }
         else {
             if (!channel) {
-                client.log('ERROR', 'sendSmartSwitchMessage: Invalid guild or channel.', 'error');
+                Client.client.log('ERROR', 'sendSmartSwitchMessage: Invalid guild or channel.', 'error');
                 return;
             }
             Client.client.switchesMessages[guildId][id] =
