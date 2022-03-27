@@ -14,6 +14,14 @@ module.exports = async (client, guild) => {
 
     const rest = new REST({ version: '9' }).setToken(Config.discord.token);
 
-    await rest.put(Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
+    try {
+        await rest.put(Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
+    }
+    catch (e) {
+        client.log('ERROR',
+            `Could not register Slash Commands for guild: ${guild.id}. ` +
+            'Make sure applications.commands is checked when creating the invite URL.', 'error');
+        process.exit(1);
+    }
     client.log('INFO', `Successfully registered application commands for guild: ${guild.id}.`)
 };
