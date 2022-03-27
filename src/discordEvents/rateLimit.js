@@ -8,7 +8,6 @@ module.exports = {
             `Method: ${info.method}, ` +
             `Path: ${info.path}, ` +
             `Route: ${info.route}, ` +
-            `Global: ${info.global}`,
-            'error');
+            `Global: ${info.global}`);
     },
 }
