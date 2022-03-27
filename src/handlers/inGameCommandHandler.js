@@ -103,7 +103,7 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.turnSmartSwitchAsync(id, active);
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id);
+                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
                     let str = `${instance.switches[id].name} was turned `;
                     str += (active) ? 'on.' : 'off.';
                     rustplus.sendTeamMessageAsync(str);

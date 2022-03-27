@@ -31,7 +31,7 @@ module.exports = async (client, interaction) => {
             instance.switches[id].autoDayNight = parseInt(interaction.values[0]);
             client.writeInstanceFile(guildId, instance);
 
-            DiscordTools.sendSmartSwitchMessage(guildId, id, interaction);
+            DiscordTools.sendSmartSwitchMessage(guildId, id, false, true, false, interaction);
             break;
 
         default:

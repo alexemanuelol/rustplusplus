@@ -52,6 +52,9 @@ module.exports = {
 		const command = interaction.options.getString('command');
 		const image = interaction.options.getString('image');
 
+		let embedChanged = false;
+		let filesChanged = false;
+
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus) {
 			await interaction.editReply({
@@ -86,16 +89,20 @@ module.exports = {
 
 				if (name !== null) {
 					instance.switches[id].name = name;
+					embedChanged = true;
 				}
 				if (command !== null) {
 					instance.switches[id].command = command;
+					embedChanged = true;
 				}
 				if (image !== null) {
 					instance.switches[id].image = `${image}.png`;
+					embedChanged = true;
+					filesChanged = true;
 				}
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				await DiscordTools.sendSmartSwitchMessage(interaction.guildId, id);
+				await DiscordTools.sendSmartSwitchMessage(interaction.guildId, id, embedChanged, false, filesChanged);
 
 				await interaction.editReply({
 					content: 'Successfully edited Smart Switch.',

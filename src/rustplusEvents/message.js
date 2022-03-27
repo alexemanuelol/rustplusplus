@@ -42,7 +42,7 @@ module.exports = {
                     instance.switches[id].active = active;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id);
+                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
                 }
             }
         }

@@ -161,7 +161,7 @@ module.exports = async (client, interaction) => {
         client.writeInstanceFile(guildId, instance);
 
         rustplus.turnSmartSwitchAsync(id, active);
-        DiscordTools.sendSmartSwitchMessage(guildId, id, interaction);
+        DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false, interaction);
 
         rustplus.interactionSwitches[id] = active;
     }

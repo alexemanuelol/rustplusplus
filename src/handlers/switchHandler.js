@@ -14,7 +14,7 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.turnSmartSwitchOnAsync(key);
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = true;
                 }
@@ -23,7 +23,7 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.turnSmartSwitchOffAsync(key);
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = false;
                 }
@@ -38,7 +38,7 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.turnSmartSwitchOffAsync(key);
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = false;
                 }
@@ -47,7 +47,7 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.turnSmartSwitchOnAsync(key);
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = true;
                 }

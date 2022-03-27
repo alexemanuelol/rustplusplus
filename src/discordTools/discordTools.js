@@ -220,7 +220,7 @@ module.exports = {
                     .setStyle('SECONDARY'))
     },
 
-    getSwitchEmbed: function (guildId, id) {
+    getSmartSwitchEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
         return new MessageEmbed()
@@ -237,24 +237,7 @@ module.exports = {
             .setFooter({ text: `${instance.switches[id].server}` })
     },
 
-    getSwitchButtonsRow: function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        return new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId(`${id}${(instance.switches[id].active) ? 'Off' : 'On'}SmartSwitch`)
-                    .setLabel((instance.switches[id].active) ? 'TURN OFF' : 'TURN ON')
-                    .setStyle((instance.switches[id].active) ? 'DANGER' : 'SUCCESS'),
-                new MessageButton()
-                    .setCustomId(`${id}SmartSwitchDelete`)
-                    .setEmoji('🗑️')
-                    .setStyle('SECONDARY')
-            )
-
-    },
-
-    getSwitchSelectMenu: function (guildId, id) {
+    getSmartSwitchSelectMenu: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
         let autoDayNightString = 'AUTO SETTING: ';
@@ -300,27 +283,50 @@ module.exports = {
             );
     },
 
-    sendSmartSwitchMessage: async function (guildId, id, interaction = null) {
+    getSmartSwitchButtons: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
-        const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
+
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`${id}${(instance.switches[id].active) ? 'Off' : 'On'}SmartSwitch`)
+                    .setLabel((instance.switches[id].active) ? 'TURN OFF' : 'TURN ON')
+                    .setStyle((instance.switches[id].active) ? 'DANGER' : 'SUCCESS'),
+                new MessageButton()
+                    .setCustomId(`${id}SmartSwitchDelete`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY')
+            )
+
+    },
+
+    sendSmartSwitchMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
 
         const file = new MessageAttachment(`src/images/electrics/${instance.switches[id].image}`);
-        const embed = module.exports.getSwitchEmbed(guildId, id);
-        const selectMenu = module.exports.getSwitchSelectMenu(guildId, id);
-        const buttonRow = module.exports.getSwitchButtonsRow(guildId, id);
+        const embed = module.exports.getSmartSwitchEmbed(guildId, id);
+        const selectMenu = module.exports.getSmartSwitchSelectMenu(guildId, id);
+        const buttons = module.exports.getSmartSwitchButtons(guildId, id);
+
+        let content = new Object();
+        if (e) {
+            content.embeds = [embed];
+        }
+        if (c) {
+            content.components = [selectMenu, buttons];
+        }
+        if (f) {
+            content.files = [file];
+        }
 
         if (interaction) {
-            await interaction.update({
-                embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-            });
+            await interaction.update(content);
             return;
         }
 
         if (Client.client.switchesMessages[guildId][id]) {
             try {
-                await Client.client.switchesMessages[guildId][id].edit({
-                    embeds: [embed], components: [selectMenu, buttonRow], files: [file]
-                });
+                await Client.client.switchesMessages[guildId][id].edit(content);
             }
             catch (e) {
                 Client.client.log('ERROR', `While editing smart switch message: ${e}`, 'error');
@@ -328,12 +334,14 @@ module.exports = {
             }
         }
         else {
+            const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
+
             if (!channel) {
                 Client.client.log('ERROR', 'sendSmartSwitchMessage: Invalid guild or channel.', 'error');
                 return;
             }
             Client.client.switchesMessages[guildId][id] =
-                await channel.send({ embeds: [embed], components: [selectMenu, buttonRow], files: [file] });
+                await channel.send(content);
         }
     },
 }
