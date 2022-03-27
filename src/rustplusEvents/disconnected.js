@@ -86,7 +86,7 @@ module.exports = {
         }
 
         if (instance.serverList.hasOwnProperty(`${rustplus.server}-${rustplus.port}`)) {
-            if (instance.serverList[server].active) {
+            if (instance.serverList[server].active && !rustplus.refusedConnectionRetry) {
                 if (rustplus.connected || rustplus.firstTime) {
                     let channelIdActivity = instance.channelId.activity;
                     let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);

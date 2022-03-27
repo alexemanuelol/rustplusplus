@@ -95,6 +95,7 @@ class RustPlus extends RP {
         this.deleted = false;
         this.connected = false;
         this.isReconnect = false;
+        this.refusedConnectionRetry = false;
         this.firstTime = true;
 
         /* Load rustplus events */

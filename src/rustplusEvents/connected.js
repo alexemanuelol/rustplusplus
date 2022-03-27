@@ -66,6 +66,7 @@ module.exports = {
 
             rustplus.connected = true;
             rustplus.isReconnect = false;
+            rustplus.refusedConnectionRetry = false;
         }
 
         rustplus.mapWidth = map.map.width;

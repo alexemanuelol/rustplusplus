@@ -12,35 +12,38 @@ module.exports = {
         }
         else if (err.code === 'ECONNREFUSED') {
             rustplus.log('ERROR', `Connection refused to: ${rustplus.server}:${rustplus.port}.`, 'error');
-
-            let server = `${rustplus.server}-${rustplus.port}`;
             let instance = client.readInstanceFile(rustplus.guildId);
 
-            let channelIdActivity = instance.channelId.activity;
-            let channelIdServers = instance.channelId.servers;
-            let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
+            rustplus.refusedConnectionRetry = true;
 
-            if (channel !== undefined) {
-                await channel.send({
-                    embeds: [new MessageEmbed()
-                        .setColor('#ff0040')
-                        .setTitle('The connection to the server seems to be invalid. Try to re-pair to the server.')
-                        .setThumbnail(instance.serverList[server].img)
-                        .setTimestamp()
-                        .setFooter({
-                            text: instance.serverList[server].title
-                        })
-                    ]
-                });
+            if (rustplus.connected || rustplus.firstTime) {
+                let channelIdActivity = instance.channelId.activity;
+                let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
+                if (channel !== undefined) {
+                    await channel.send({
+                        embeds: [new MessageEmbed()
+                            .setColor('#ff0040')
+                            .setTitle('Server just went offline.')
+                            .setThumbnail(instance.serverList[server].img)
+                            .setTimestamp()
+                            .setFooter({
+                                text: instance.serverList[server].title
+                            })
+                        ]
+                    });
+                }
+
+                await DiscordTools.sendServerMessage(rustplus.guildId, server, 2, false, true);
+
+                rustplus.firstTime = false;
+                rustplus.connected = false;
+                rustplus.isReconnect = true;
             }
 
-            instance.serverList[server].active = false;
-            client.writeInstanceFile(rustplus.guildId, instance);
-
-            await DiscordTools.sendServerMessage(rustplus.guildId, server, null, false, true);
-
-            rustplus.disconnect();
-            delete client.rustplusInstances[rustplus.guildId];
+            setTimeout(() => {
+                rustplus.log('RECONNECTING', 'RUSTPLUS RECONNECTING');
+                rustplus.connect();
+            }, 20000);
         }
         else if (err.toString() === 'Error: WebSocket was closed before the connection was established') {
             rustplus.log('ERROR', 'WebSocket was closed before the connection was established.', 'error');
