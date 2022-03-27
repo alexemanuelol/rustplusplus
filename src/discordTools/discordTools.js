@@ -104,16 +104,32 @@ module.exports = {
         }
     },
 
-    clearTextChannel: function (guildId, channelId, numberOfMessages) {
+    clearTextChannel: async function (guildId, channelId, numberOfMessages) {
         const channel = module.exports.getTextChannelById(guildId, channelId);
 
         if (channel) {
             for (let messagesLeft = numberOfMessages; messagesLeft > 0; messagesLeft -= 100) {
                 if (messagesLeft >= 100) {
-                    channel.bulkDelete(100, true);
+                    await channel.bulkDelete(100, true);
                 }
                 else {
-                    channel.bulkDelete(messagesLeft, true);
+                    await channel.bulkDelete(messagesLeft, true);
+                }
+            }
+
+            /* Fix for messages older than 14 days */
+            let messages = await channel.messages.fetch({ limit: 100 });
+            for (let message of messages) {
+                message = message[1];
+                if (!message.author.bot) {
+                    break;
+                }
+
+                try {
+                    await message.delete();
+                }
+                catch (e) {
+
                 }
             }
         }
@@ -176,26 +192,42 @@ module.exports = {
             );
     },
 
-    getServerButtonsRow: function (ipPort, state, url) {
+    getServerEmbed: function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        return new MessageEmbed()
+            .setTitle(`${instance.serverList[id].title}`)
+            .setColor('#ce412b')
+            .setDescription(`${instance.serverList[id].description}`)
+            .setThumbnail(`${instance.serverList[id].img}`);
+    },
+
+    getServerButtons: function (guildId, id, state = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        if (state === null) {
+            state = (instance.serverList[id].active) ? 1 : 0;
+        }
+
         let customId = null;
         let label = null;
         let style = null;
 
         switch (state) {
             case 0: /* CONNECT */
-                customId = `${ipPort}ServerConnect`;
+                customId = `${id}ServerConnect`;
                 label = 'CONNECT';
                 style = 'PRIMARY';
                 break;
 
             case 1: /* DISCONNECT */
-                customId = `${ipPort}ServerDisconnect`;
+                customId = `${id}ServerDisconnect`;
                 label = 'DISCONNECT';
                 style = 'DANGER';
                 break;
 
             case 2: /* RECONNECTING */
-                customId = `${ipPort}ServerReconnecting`;
+                customId = `${id}ServerReconnecting`;
                 label = 'RECONNECTING...';
                 style = 'DANGER';
                 break;
@@ -213,11 +245,59 @@ module.exports = {
                 new MessageButton()
                     .setStyle('LINK')
                     .setLabel('WEBSITE')
-                    .setURL(url),
+                    .setURL(instance.serverList[id].url),
                 new MessageButton()
-                    .setCustomId(`${ipPort}ServerDelete`)
+                    .setCustomId(`${id}ServerDelete`)
                     .setEmoji('🗑️')
                     .setStyle('SECONDARY'))
+    },
+
+    sendServerMessage: async function (guildId, id, state = null, e = true, c = true, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const embed = module.exports.getServerEmbed(guildId, id);
+        const buttons = module.exports.getServerButtons(guildId, id, state);
+
+        let content = new Object();
+        if (e) {
+            content.embeds = [embed];
+        }
+        if (c) {
+            content.components = [buttons];
+        }
+
+        if (interaction) {
+            await interaction.update(content);
+            return;
+        }
+
+        let messageId = instance.serverList[id].messageId;
+        let message = undefined;
+        if (messageId !== null) {
+            message = await module.exports.getMessageById(guildId, instance.channelId.servers, messageId);
+        }
+
+        if (message !== undefined) {
+            try {
+                await message.edit(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `While editing server message: ${e}`, 'error');
+                return;
+            }
+        }
+        else {
+            const channel = module.exports.getTextChannelById(guildId, instance.channelId.servers);
+
+            if (!channel) {
+                Client.client.log('ERROR', 'sendServerMessage: Invalid guild or channel.', 'error');
+                return;
+            }
+
+            message = await channel.send(content);
+            instance.serverList[id].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
     },
 
     getSmartSwitchEmbed: function (guildId, id) {
@@ -340,8 +420,7 @@ module.exports = {
                 Client.client.log('ERROR', 'sendSmartSwitchMessage: Invalid guild or channel.', 'error');
                 return;
             }
-            Client.client.switchesMessages[guildId][id] =
-                await channel.send(content);
+            Client.client.switchesMessages[guildId][id] = await channel.send(content);
         }
     },
 }

@@ -157,32 +157,7 @@ async function pairingServer(client, guild, full, data, body) {
     };
     client.writeInstanceFile(guild.id, instance);
 
-    let server = instance.serverList[serverId];
-
-    let embed = new MessageEmbed()
-        .setTitle(server.title)
-        .setColor('#ce412b')
-        .setDescription(server.description)
-        .setThumbnail(server.img);
-
-    let row = DiscordTools.getServerButtonsRow(serverId, (server.active) ? 1 : 0, server.url);
-
-    if (message !== undefined) {
-        message.edit({ embeds: [embed], components: [row] });
-    }
-    else {
-        let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.servers);
-
-        if (!channel) {
-            client.log('ERROR', 'pairingServer: Invalid guild or channel.', 'error');
-            return;
-        }
-
-        instance = client.readInstanceFile(guild.id);
-        message = await channel.send({ embeds: [embed], components: [row] });
-        instance.serverList[serverId].messageId = message.id;
-        client.writeInstanceFile(guild.id, instance);
-    }
+    await DiscordTools.sendServerMessage(guild.id, serverId, null);
 }
 
 async function pairingEntitySwitch(client, guild, full, data, body) {

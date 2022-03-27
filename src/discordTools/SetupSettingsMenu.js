@@ -11,7 +11,7 @@ module.exports = async (client, guild) => {
     }
 
     if (instance.firstTime) {
-        DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
+        await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
         await setupGeneralSettings(instance, channel);
         await setupNotificationSettings(instance, channel);

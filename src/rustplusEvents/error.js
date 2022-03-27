@@ -34,19 +34,10 @@ module.exports = {
                 });
             }
 
-            let row = DiscordTools.getServerButtonsRow(server, 0, instance.serverList[server].url);
-            let messageId = instance.serverList[server].messageId;
-            let message = undefined;
-            if (messageId !== null) {
-                message = await DiscordTools.getMessageById(rustplus.guildId, channelIdServers, messageId);
-            }
-
-            if (message !== undefined) {
-                await message.edit({ components: [row] });
-            }
-
             instance.serverList[server].active = false;
             client.writeInstanceFile(rustplus.guildId, instance);
+
+            await DiscordTools.sendServerMessage(rustplus.guildId, server, null, false, true);
 
             rustplus.disconnect();
             delete client.rustplusInstances[rustplus.guildId];

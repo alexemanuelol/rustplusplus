@@ -71,20 +71,17 @@ module.exports = async (client, interaction) => {
         for (const [key, value] of Object.entries(instance.serverList)) {
             if (value.active) {
                 instance.serverList[key].active = false;
-                let row = DiscordTools.getServerButtonsRow(key, 0, instance.serverList[key].url);
-
-                let messageId = instance.serverList[key].messageId;
-                let message = await DiscordTools.getMessageById(guildId, instance.channelId.servers, messageId);
-                if (message !== undefined) {
-                    await message.edit({ components: [row] });
-                }
+                client.writeInstanceFile(guildId, instance);
+                await DiscordTools.sendServerMessage(guildId, key, null, false, true);
                 break;
             }
         }
 
+        instance = client.readInstanceFile(guildId);
         instance.serverList[server].active = true;
-        let row = DiscordTools.getServerButtonsRow(server, 1, instance.serverList[server].url);
-        await interaction.update({ components: [row] });
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendServerMessage(guildId, server, null, false, true, interaction);
 
         /* Disconnect previous instance is any */
         if (rustplus) {
@@ -100,7 +97,6 @@ module.exports = async (client, interaction) => {
             instance.serverList[server].playerToken
         );
 
-        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.endsWith('ServerDisconnect') ||
         interaction.customId.endsWith('ServerReconnecting')) {
@@ -108,16 +104,15 @@ module.exports = async (client, interaction) => {
         server = server.replace('ServerReconnecting', '');
 
         instance.serverList[server].active = false;
-        let row = DiscordTools.getServerButtonsRow(server, 0, instance.serverList[server].url);
-        await interaction.update({ components: [row] });
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendServerMessage(guildId, server, null, false, true, interaction);
 
         /* Disconnect previous instance if any */
         if (rustplus) {
             rustplus.disconnect();
             delete client.rustplusInstances[guildId];
         }
-
-        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.endsWith('ServerDelete')) {
         let server = interaction.customId.replace('ServerDelete', '');

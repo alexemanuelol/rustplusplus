@@ -6,7 +6,7 @@ module.exports = async (client, rustplus) => {
 
     client.switchesMessages[rustplus.guildId] = {};
 
-    DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
+    await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
 
     for (const [key, value] of Object.entries(instance.switches)) {
         if (server !== `${value.ipPort}`) continue;
