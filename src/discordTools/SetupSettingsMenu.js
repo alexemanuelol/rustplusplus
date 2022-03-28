@@ -48,7 +48,7 @@ async function setupGeneralSettings(instance, channel) {
                 .setThumbnail(`attachment://settings_logo.png`)
         ],
         components: [
-            DiscordTools.getTrademarkButtonsRow(instance.generalSettings.showTrademark)
+            DiscordTools.getTrademarkButton(instance.generalSettings.showTrademark)
         ],
         files: [
             new MessageAttachment('src/images/settings_logo.png')
@@ -63,7 +63,7 @@ async function setupGeneralSettings(instance, channel) {
                 .setThumbnail(`attachment://settings_logo.png`)
         ],
         components: [
-            DiscordTools.getInGameCommandsEnabledButtonsRow(instance.generalSettings.inGameCommandsEnabled)
+            DiscordTools.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)
         ],
         files: [
             new MessageAttachment('src/images/settings_logo.png')
@@ -83,7 +83,7 @@ async function setupNotificationSettings(instance, channel) {
                     .setThumbnail(`attachment://${instance.notificationSettings[setting].image}`)
             ],
             components: [
-                DiscordTools.getNotificationButtonsRow(
+                DiscordTools.getNotificationButtons(
                     setting,
                     instance.notificationSettings[setting].discord,
                     instance.notificationSettings[setting].inGame)

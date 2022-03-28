@@ -13,7 +13,7 @@ module.exports = async (client, interaction) => {
             rustplus.notificationSettings[setting].discord = instance.notificationSettings[setting].discord;
         }
 
-        let row = DiscordTools.getNotificationButtonsRow(
+        let row = DiscordTools.getNotificationButtons(
             setting,
             instance.notificationSettings[setting].discord,
             instance.notificationSettings[setting].inGame);
@@ -30,7 +30,7 @@ module.exports = async (client, interaction) => {
             rustplus.notificationSettings[setting].inGame = instance.notificationSettings[setting].inGame;
         }
 
-        let row = DiscordTools.getNotificationButtonsRow(
+        let row = DiscordTools.getNotificationButtons(
             setting,
             instance.notificationSettings[setting].discord,
             instance.notificationSettings[setting].inGame);
@@ -46,7 +46,7 @@ module.exports = async (client, interaction) => {
             rustplus.generalSettings.showTrademark = instance.generalSettings.showTrademark;
         }
 
-        let row = DiscordTools.getTrademarkButtonsRow(instance.generalSettings.showTrademark);
+        let row = DiscordTools.getTrademarkButton(instance.generalSettings.showTrademark);
 
         await interaction.update({ components: [row] });
 
@@ -59,7 +59,7 @@ module.exports = async (client, interaction) => {
             rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
         }
 
-        let row = DiscordTools.getInGameCommandsEnabledButtonsRow(instance.generalSettings.inGameCommandsEnabled);
+        let row = DiscordTools.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled);
 
         await interaction.update({ components: [row] });
 

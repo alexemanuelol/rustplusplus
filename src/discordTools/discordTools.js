@@ -135,7 +135,7 @@ module.exports = {
         }
     },
 
-    getNotificationButtonsRow: function (setting, discordActive, inGameActive) {
+    getNotificationButtons: function (setting, discordActive, inGameActive) {
         return new MessageActionRow()
             .addComponents(
                 new MessageButton()
@@ -148,7 +148,7 @@ module.exports = {
                     .setStyle((inGameActive) ? 'SUCCESS' : 'DANGER'))
     },
 
-    getTrademarkButtonsRow: function (enabled) {
+    getTrademarkButton: function (enabled) {
         return new MessageActionRow()
             .addComponents(
                 new MessageButton()
@@ -157,7 +157,7 @@ module.exports = {
                     .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
     },
 
-    getInGameCommandsEnabledButtonsRow: function (enabled) {
+    getInGameCommandsEnabledButton: function (enabled) {
         return new MessageActionRow()
             .addComponents(
                 new MessageButton()
