@@ -10,9 +10,7 @@ module.exports = {
         let server = `${rustplus.server}-${rustplus.port}`;
         let instance = client.readInstanceFile(rustplus.guildId);
 
-        let channelIdActivity = instance.channelId.activity;
-        let channelIdServers = instance.channelId.servers;
-        let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
+        let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
 
         /* Get some map parameters once when connected (to avoid calling getMap continuously) */
         let map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
