@@ -267,7 +267,12 @@ module.exports = {
         }
 
         if (interaction) {
-            await interaction.update(content);
+            try {
+                await interaction.update(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Unknown interaction`, 'error');
+            }
             return;
         }
 
