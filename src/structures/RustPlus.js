@@ -40,7 +40,6 @@ class RustPlus extends RP {
 
         /* Map meta */
         this.intervalId = 0;
-        this.debug = false;
         this.mapSize = null;
         this.mapWidth = null;
         this.mapHeight = null;
