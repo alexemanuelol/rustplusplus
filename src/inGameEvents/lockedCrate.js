@@ -166,13 +166,16 @@ module.exports = {
                         }
                     }
                     else {
+                        let name = (Monuments.Monument.hasOwnProperty(closestMonument.token)) ?
+                            Monuments.Monument[closestMonument.token].clean : closestMonument.token;
+
                         if (!rustplus.firstPoll) {
                             rustplus.timeSinceChinookDroppedCrate = new Date();
 
                             rustplus.sendEvent(
                                 rustplus.notificationSettings.lockedCrateDroppedAtMonument,
                                 'Locked Crate just got dropped by Chinook 47 at ' +
-                                `${Monuments.Monument[closestMonument.token].clean}.`);
+                                `${name}.`);
 
                             rustplus.lockedCrateDespawnTimers[marker.id] = new Timer.timer(
                                 () => { },
@@ -183,7 +186,7 @@ module.exports = {
                                 module.exports.notifyLockedCrateWarningDespawn,
                                 Constants.DEFAULT_LOCKED_CRATE_DESPAWN_TIME_MS - Constants.DEFAULT_LOCKED_CRATE_DESPAWN_WARNING_TIME_MS,
                                 rustplus,
-                                Monuments.Monument[closestMonument.token].clean);
+                                name);
                             rustplus.lockedCrateDespawnWarningTimers[marker.id].start();
                         }
                         else {
@@ -192,7 +195,7 @@ module.exports = {
                                 `Locked Crate located at ${Monuments.Monument[closestMonument.token].clean}.`);
                         }
 
-                        rustplus.activeLockedCrates[marker.id].type = Monuments.Monument[closestMonument.token].clean;
+                        rustplus.activeLockedCrates[marker.id].type = name;
                     }
                 }
                 else {

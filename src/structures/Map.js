@@ -118,9 +118,13 @@ class Map {
                 }
                 else {
                     /* Compensate for the text placement */
-                    let comp = Monuments.Monument[monument.token].map.length * 5;
+                    if (monument.token === 'DungeonBase') continue;
+
+                    let name = (Monuments.Monument.hasOwnProperty(monument.token)) ?
+                        Monuments.Monument[monument.token].map : monument.token;
+                    let comp = name.length * 5;
                     this.mapMarkerImageMeta.map.jimp.print(
-                        this.font, x - comp, y - 10, Monuments.Monument[monument.token].map);
+                        this.font, x - comp, y - 10, name);
                 }
             }
             catch (e) {
