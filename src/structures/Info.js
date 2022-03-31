@@ -49,7 +49,7 @@ class Info {
     isHeaderImageChanged(info) { return ((this.headerImage) !== (info.headerImage)); }
     isUrlChanged(info) { return ((this.url) !== (info.url)); }
     isMapChanged(info) { return ((this.map) !== (info.map)); }
-    isMapSizeChanged(info) { return ((this.mapSize) !== (Map.getCorrectedMapSize(info.mapSize))); }
+    isMapSizeChanged(info) { return ((this.mapSize) !== (info.mapSize)); }
     isWipeTimeChanged(info) { return ((this.wipeTime) !== (info.wipeTime)); }
     isPlayersChanged(info) { return ((this.players) !== (info.players)); }
     isMaxPlayersChanged(info) { return ((this.maxPlayers) !== (info.maxPlayers)); }

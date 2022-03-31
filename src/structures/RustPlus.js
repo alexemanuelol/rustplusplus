@@ -12,6 +12,21 @@ class RustPlus extends RP {
         super(serverIp, appPort, steamId, playerToken);
 
         this.guildId = guildId;
+        this.intervalId = 0;
+        this.logger = null;
+        this.firstPoll = true;
+        this.generalSettings = null;
+        this.notificationSettings = null;
+        this.deleted = false;
+        this.connected = false;
+        this.isReconnect = false;
+        this.refusedConnectionRetry = false;
+        this.firstTime = true;
+
+        this.map = null;
+        this.info = null;
+        this.time = null;
+        this.team = null;
 
         this.trademarkString = 'rustPlusPlus | ';
         this.messageIgnoreCounter = 0;
@@ -32,19 +47,6 @@ class RustPlus extends RP {
                 }
             }
         }
-
-        this.logger = null;
-        this.firstPoll = true;
-        this.generalSettings = null;
-        this.notificationSettings = null;
-
-        /* Map meta */
-        this.intervalId = 0;
-        this.mapSize = null;
-        this.mapWidth = null;
-        this.mapHeight = null;
-        this.mapOceanMargin = null;
-        this.mapMonuments = null;
 
         /* Event active entities */
         this.activeCargoShips = new Object();
@@ -82,20 +84,11 @@ class RustPlus extends RP {
         this.passedFirstSunriseOrSunset = false;
         this.startTimeObject = new Object();
 
-        this.team = null;
-        this.time = null;
-        this.info = null;
         this.markers = new Object();
 
         this.informationIntervalCounter = 0;
 
         this.interactionSwitches = [];
-
-        this.deleted = false;
-        this.connected = false;
-        this.isReconnect = false;
-        this.refusedConnectionRetry = false;
-        this.firstTime = true;
 
         /* Load rustplus events */
         this.loadEvents();

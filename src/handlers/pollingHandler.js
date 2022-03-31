@@ -27,10 +27,9 @@ module.exports = {
         if (!(await rustplus.isResponseValid(time))) return;
 
         if (rustplus.firstPoll) {
+            rustplus.info = new Info(info.info);
             rustplus.time = new Time(time.time, rustplus, client);
             rustplus.team = new Team(teamInfo.teamInfo, rustplus);
-            rustplus.info = new Info(info.info);
-            rustplus.mapSize = rustplus.info.correctedMapSize;
         }
 
         module.exports.handlers(rustplus, client, info, mapMarkers, teamInfo, time);

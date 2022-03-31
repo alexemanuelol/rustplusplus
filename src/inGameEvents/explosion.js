@@ -127,7 +127,7 @@ module.exports = {
 
     isBradleyExplosionAtLaunchSite: function (x, y, rustplus) {
         /* Check where the explosion marker is located, if near Launch Site, return true */
-        for (let monument of rustplus.mapMonuments) {
+        for (let monument of rustplus.map.monuments) {
             if (monument.token === 'launchsite') {
                 return (Map.getDistance(x, y, monument.x, monument.y) <= Constants.LAUNCH_SITE_RADIUS);
             }

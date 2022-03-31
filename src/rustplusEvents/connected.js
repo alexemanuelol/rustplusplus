@@ -1,6 +1,9 @@
 const PollingHandler = require('../handlers/pollingHandler.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, MessageAttachment } = require('discord.js');
+
+const Map = require('../structures/Map');
+const Info = require('../structures/Info');
 
 module.exports = {
     name: 'connected',
@@ -41,6 +44,35 @@ module.exports = {
             return;
         }
 
+        if (rustplus.map === null) {
+            rustplus.map = new Map(map.map, rustplus);
+        }
+
+        if (rustplus.map.isJpgImageChanged(map.map)) {
+            await rustplus.map.updateMap(map.map);
+            rustplus.info = new Info((await rustplus.getInfoAsync()).info);
+            if (channel !== undefined) {
+                await rustplus.map.writeMap(true, true);
+
+                let file = new MessageAttachment(`src/images/maps/${rustplus.guildId}_map.png`);
+                await channel.send({
+                    embeds: [new MessageEmbed()
+                        .setColor('#ce412b')
+                        .setTitle('Wipe detected!')
+                        .setImage(`attachment://${rustplus.guildId}_map.png`)
+                        .setTimestamp()
+                        .setFooter({
+                            text: instance.serverList[server].title
+                        })
+                    ],
+                    files: [file]
+                });
+            }
+        }
+        else {
+            await rustplus.map.updateMap(map.map);
+        }
+
         rustplus.log('CONNECTED', 'SUCCESSFULLY CONNECTED!');
 
         if (!rustplus.connected) {
@@ -66,11 +98,6 @@ module.exports = {
             rustplus.isReconnect = false;
             rustplus.refusedConnectionRetry = false;
         }
-
-        rustplus.mapWidth = map.map.width;
-        rustplus.mapHeight = map.map.height;
-        rustplus.mapOceanMargin = map.map.oceanMargin;
-        rustplus.mapMonuments = map.map.monuments;
 
         require('../discordTools/SetupSwitches')(client, rustplus);
         rustplus.loadMarkers();

@@ -27,7 +27,7 @@ module.exports = {
                     };
 
                     let smallOil = [], largeOil = [];
-                    for (let monument of rustplus.mapMonuments) {
+                    for (let monument of rustplus.map.monuments) {
                         if (monument.token === 'oil_rig_small') {
                             smallOil.push({ x: monument.x, y: monument.y })
                         }
