@@ -23,7 +23,7 @@ module.exports = async (client, guild) => {
 };
 
 async function setupGeneralSettings(instance, channel) {
-    await channel.send({ files: [new MessageAttachment('src/images/general_settings_logo.png')] });
+    await channel.send({ files: [new MessageAttachment('src/resources/images/general_settings_logo.png')] });
 
     await channel.send({
         embeds: [
@@ -36,7 +36,7 @@ async function setupGeneralSettings(instance, channel) {
             DiscordTools.getPrefixSelectMenu(instance.generalSettings.prefix)
         ],
         files: [
-            new MessageAttachment('src/images/settings_logo.png')
+            new MessageAttachment('src/resources/images/settings_logo.png')
         ]
     });
 
@@ -51,7 +51,7 @@ async function setupGeneralSettings(instance, channel) {
             DiscordTools.getTrademarkButton(instance.generalSettings.showTrademark)
         ],
         files: [
-            new MessageAttachment('src/images/settings_logo.png')
+            new MessageAttachment('src/resources/images/settings_logo.png')
         ]
     });
 
@@ -66,13 +66,13 @@ async function setupGeneralSettings(instance, channel) {
             DiscordTools.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)
         ],
         files: [
-            new MessageAttachment('src/images/settings_logo.png')
+            new MessageAttachment('src/resources/images/settings_logo.png')
         ]
     });
 }
 
 async function setupNotificationSettings(instance, channel) {
-    await channel.send({ files: [new MessageAttachment('src/images/notification_settings_logo.png')] });
+    await channel.send({ files: [new MessageAttachment('src/resources/images/notification_settings_logo.png')] });
 
     for (let setting in instance.notificationSettings) {
         await channel.send({
@@ -89,7 +89,7 @@ async function setupNotificationSettings(instance, channel) {
                     instance.notificationSettings[setting].inGame)
             ],
             files: [
-                new MessageAttachment(`src/images/${instance.notificationSettings[setting].image}`)
+                new MessageAttachment(`src/resources/images/events/${instance.notificationSettings[setting].image}`)
             ]
         });
     }

@@ -388,7 +388,7 @@ module.exports = {
     sendSmartSwitchMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        const file = new MessageAttachment(`src/images/electrics/${instance.switches[id].image}`);
+        const file = new MessageAttachment(`src/resources/images/electrics/${instance.switches[id].image}`);
         const embed = module.exports.getSmartSwitchEmbed(guildId, id);
         const selectMenu = module.exports.getSmartSwitchSelectMenu(guildId, id);
         const buttons = module.exports.getSmartSwitchButtons(guildId, id);

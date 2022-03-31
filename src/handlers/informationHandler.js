@@ -60,7 +60,7 @@ module.exports = {
         const mapSeed = `${rustplus.info.seed}`;
         const mapSalt = `${rustplus.info.salt}`;
 
-        let file = new MessageAttachment('src/images/server_info_logo.png');
+        let file = new MessageAttachment('src/resources/images/server_info_logo.png');
         let embed = new MessageEmbed()
             .setTitle('Server Information')
             .setColor('#ce412b')
@@ -256,7 +256,7 @@ module.exports = {
         }
 
 
-        let file = new MessageAttachment('src/images/event_info_logo.png')
+        let file = new MessageAttachment('src/resources/images/event_info_logo.png')
         let embed = new MessageEmbed()
             .setTitle('Event Information')
             .setColor('#ce412b')
@@ -304,7 +304,7 @@ module.exports = {
             }
         }
 
-        let file = new MessageAttachment('src/images/team_info_logo.png')
+        let file = new MessageAttachment('src/resources/images/team_info_logo.png')
         let embed = new MessageEmbed()
             .setTitle('Team Member Information')
             .setColor('#ce412b')

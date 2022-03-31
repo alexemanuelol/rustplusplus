@@ -6,7 +6,7 @@ module.exports = {
         client.user.setUsername('rustPlusPlus');
 
         try {
-            await client.user.setAvatar('./src/images/rustplusplus_logo.png');
+            await client.user.setAvatar('./src/resources/images/rustplusplus_logo.png');
         }
         catch (e) {
             client.log('INFO', 'Ignored changing avatar.');

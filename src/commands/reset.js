@@ -27,6 +27,12 @@ module.exports = {
 				await require('../discordTools/SetupServerList')(client, guild);
 				await require('../discordTools/SetupSettingsMenu')(client, guild);
 
+				instance = client.readInstanceFile(interaction.guildId);
+				instance.informationMessageId.server = null;
+				instance.informationMessageId.event = null;
+				instance.informationMessageId.team = null;
+				client.writeInstanceFile(interaction.guildId, instance);
+
 				await DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
 
 				await interaction.editReply({

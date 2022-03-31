@@ -158,7 +158,7 @@ class RustPlus extends RP {
         let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
 
         if (channel !== undefined) {
-            let file = new MessageAttachment(`src/images/${image}`);
+            let file = new MessageAttachment(`src/resources/images/events/${image}`);
             let embed = new MessageEmbed()
                 .setColor('#ce412b')
                 .setThumbnail(`attachment://${image}`)

@@ -69,8 +69,8 @@ class DiscordBot extends Client {
         require('../util/CreateCredentialsFile')(this, guild);
 
         /* If maps/ directory does not exist, create it */
-        if (!fs.existsSync(`${__dirname}/../images/maps`)) {
-            fs.mkdirSync(`${__dirname}/../images/maps`);
+        if (!fs.existsSync(`${__dirname}/../resources/images/maps`)) {
+            fs.mkdirSync(`${__dirname}/../resources/images/maps`);
         }
 
         await require('../discordTools/RegisterSlashCommands')(this, guild);

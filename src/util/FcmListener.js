@@ -1,4 +1,3 @@
-const { MessageEmbed } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
