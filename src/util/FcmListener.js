@@ -1,3 +1,4 @@
+const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
@@ -217,5 +218,26 @@ async function teamLogin(client, guild, full, data, body) {
 }
 
 async function newsNews(client, guild, full, data, body) {
+    let instance = client.readInstanceFile(guild.id);
+    let channelId = instance.channelIdactivity;
+    let channel = DiscordTools.getTextChannelById(guild.id, channelId);
 
+    if (channel !== undefined) {
+        await channel.send({
+            embeds: [new MessageEmbed()
+                .setTitle(`NEWS: ${data.title}`)
+                .setColor('#ce412b')
+                .setDescription(`${data.message}`)
+                .setThumbnail(Constants.DEFAULT_SERVER_IMG)
+            ],
+            components: [new MessageActionRow()
+                .addComponents(
+                    new MessageButton()
+                        .setStyle('LINK')
+                        .setLabel('LINK')
+                        .setURL(isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL))
+            ]
+        });
+
+    }
 }
