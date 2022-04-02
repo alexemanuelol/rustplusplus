@@ -2,6 +2,7 @@ const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
+const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild) => {
     let credentials = client.readCredentialsFile(guild.id);
@@ -214,7 +215,31 @@ async function playerDeath(client, guild, full, data, body) {
 }
 
 async function teamLogin(client, guild, full, data, body) {
+    let instance = client.readInstanceFile(guild.id);
+    let channelId = instance.channelId.activity;
+    let channel = DiscordTools.getTextChannelById(guild.id, channelId);
+    let rustplus = client.rustplusInstances[guild.id];
+    let loginServerId = `${body.ip}-${body.port}`;
 
+    if (!rustplus || (rustplus && (`${rustplus.server}-${rustplus.port}` !== loginServerId))) {
+        if (channel !== undefined) {
+            let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
+            await channel.send({
+                embeds: [new MessageEmbed()
+                    .setColor('#00ff40')
+                    .setAuthor({
+                        name: `${body.targetName} just connected.`,
+                        iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                        url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
+                    })
+                    .setTimestamp()
+                    .setFooter({
+                        text: body.name
+                    })
+                ]
+            });
+        }
+    }
 }
 
 async function newsNews(client, guild, full, data, body) {
