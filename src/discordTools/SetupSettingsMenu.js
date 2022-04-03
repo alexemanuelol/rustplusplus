@@ -69,6 +69,26 @@ async function setupGeneralSettings(instance, channel) {
             new MessageAttachment('src/resources/images/settings_logo.png')
         ]
     });
+
+    await channel.send({
+        embeds: [
+            new MessageEmbed()
+                .setColor('#861c0c')
+                .setTitle('Should Smart Alarms notify even if they are not setup on the connected rust server?')
+                .addFields(
+                    { name: 'NOTE', value: '- These Alarm notifications will use the title and message given to the Smart Alarm in-game.\n- These Smart Alarms might not be available in the alarms text channel in discord.', inline: true }
+                )
+                .setThumbnail(`attachment://settings_logo.png`)
+        ],
+        components: [
+            DiscordTools.getFcmAlarmNotificationButtons(
+                instance.generalSettings.fcmAlarmNotificationEnabled,
+                instance.generalSettings.fcmAlarmNotificationEveryone)
+        ],
+        files: [
+            new MessageAttachment('src/resources/images/settings_logo.png')
+        ]
+    });
 }
 
 async function setupNotificationSettings(instance, channel) {

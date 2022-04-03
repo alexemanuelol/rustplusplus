@@ -2,5 +2,7 @@
     "prefix": "!",
     "muteInGameBotMessages": false,
     "showTrademark": true,
-    "inGameCommandsEnabled": true
+    "inGameCommandsEnabled": true,
+    "fcmAlarmNotificationEnabled": false,
+    "fcmAlarmNotificationEveryone": false
 }

@@ -65,6 +65,36 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'fcmAlarmNotification') {
+        instance.generalSettings.fcmAlarmNotificationEnabled = !instance.generalSettings.fcmAlarmNotificationEnabled;
+
+        if (rustplus) {
+            rustplus.generalSettings.fcmAlarmNotificationEnabled = instance.generalSettings.fcmAlarmNotificationEnabled;
+        }
+
+        let row = DiscordTools.getFcmAlarmNotificationButtons(
+            instance.generalSettings.fcmAlarmNotificationEnabled,
+            instance.generalSettings.fcmAlarmNotificationEveryone);
+
+        await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId === 'fcmAlarmNotificationEveryone') {
+        instance.generalSettings.fcmAlarmNotificationEveryone = !instance.generalSettings.fcmAlarmNotificationEveryone;
+
+        if (rustplus) {
+            rustplus.generalSettings.fcmAlarmNotificationEveryone = instance.generalSettings.fcmAlarmNotificationEveryone;
+        }
+
+        let row = DiscordTools.getFcmAlarmNotificationButtons(
+            instance.generalSettings.fcmAlarmNotificationEnabled,
+            instance.generalSettings.fcmAlarmNotificationEveryone);
+
+        await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let server = interaction.customId.replace('ServerConnect', '');
 

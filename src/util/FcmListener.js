@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageButton, MessageEmbed, MessageAttachment } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
@@ -244,13 +244,53 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
 }
 
 async function alarmAlarm(client, guild, full, data, body) {
-    /* Unfortunately this alarm notification from the fcm listener is unreliable. The notification does not include
+    /* Unfortunately the alarm notification from the fcm listener is unreliable. The notification does not include
     which entityId that got triggered which makes it impossible to know which Smart Alarms are still being used
     actively. Also, from testing it seems that notifications don't always reach this fcm listener which makes it even
     more unreliable. The only advantage to using the fcm listener alarm notification is that it includes the title and
     description messagethat is configured on the Smart Alarm in the game. Due to missing out on this data, Smart Alarm
-    title and description message needs to be re-configured via the /alarm slash command. All Smart Alarm notifications
-    are handled through the message event for rustplus. */
+    title and description message needs to be re-configured via the /alarm slash command. Alarms that are used on the
+    connected rust server will be handled through the message event from rustplus. Smart Alarms that are still attached
+    to the credential owner and which is not part of the currently connected rust server can notify IF the general
+    setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
+
+    let instance = client.readInstanceFile(guild.id);
+    let rustplus = client.rustplusInstances[guild.id];
+    let alarmServerId = `${body.ip}-${body.port}`;
+
+    if (!rustplus || (rustplus && (alarmServerId !== `${rustplus.server}-${rustplus.port}`))) {
+        if (instance.generalSettings.fcmAlarmNotificationEnabled) {
+            let content = {};
+            content.embeds = [
+                new MessageEmbed()
+                    .setColor('#ce412b')
+                    .setThumbnail('attachment://smart_alarm.png')
+                    .setTitle((data.title !== '') ? data.title : 'Smart Alarm')
+                    .addFields(
+                        {
+                            name: 'Message',
+                            value: (data.message !== '') ? `\`${data.message}\`` : 'Your base is under attack!',
+                            inline: true
+                        }
+                    )
+                    .setFooter({
+                        text: body.name
+                    })
+                    .setTimestamp()];
+
+            content.files = [
+                new MessageAttachment('src/resources/images/electrics/smart_alarm.png')];
+
+            if (instance.generalSettings.fcmAlarmNotificationEveryone) {
+                content.content = '@everyone';
+            }
+
+            let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
+            if (channel) {
+                await channel.send(content);
+            }
+        }
+    }
 }
 
 async function playerDeath(client, guild, full, data, body, ownerId) {

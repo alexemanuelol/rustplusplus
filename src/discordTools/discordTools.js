@@ -179,6 +179,19 @@ module.exports = {
                     .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
     },
 
+    getFcmAlarmNotificationButtons: function (enabled, everyone) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('fcmAlarmNotification')
+                    .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
+                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId('fcmAlarmNotificationEveryone')
+                    .setLabel('@everyone')
+                    .setStyle((everyone) ? 'SUCCESS' : 'DANGER'));
+    },
+
     getPrefixSelectMenu: function (currentPrefix) {
         return new MessageActionRow()
             .addComponents(
