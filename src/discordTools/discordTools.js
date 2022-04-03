@@ -76,6 +76,19 @@ module.exports = {
         return undefined;
     },
 
+    getMemberById: async function (guildId, memberId) {
+        const guild = module.exports.getGuild(guildId);
+
+        if (guild) {
+            const member = await Client.client.users.fetch(memberId);
+
+            if (member) {
+                return member;
+            }
+        }
+        return undefined;
+    },
+
     addCategory: async function (guildId, name) {
         const guild = module.exports.getGuild(guildId);
 

@@ -8,8 +8,11 @@ module.exports = async (client, guild) => {
     let credentials = client.readCredentialsFile(guild.id);
 
     if (credentials.credentials === null) {
+        client.log('Credentials is not set, cannot start fcm-listener.');
         return;
     }
+
+    const ownerId = credentials.credentials.owner;
 
     /* Destroy previous instance of fcm listener */
     if (client.currentFcmListeners[guild.id]) {
@@ -81,7 +84,7 @@ module.exports = async (client, guild) => {
                     switch (body.type) {
                         case 'death': {
                             client.log('FCM', `${guild.id} player: death`);
-                            playerDeath(client, guild, full, data, body);
+                            playerDeath(client, guild, full, data, body, ownerId);
                         } break;
 
                         default: {
@@ -210,8 +213,33 @@ async function alarmAlarm(client, guild, full, data, body) {
 
 }
 
-async function playerDeath(client, guild, full, data, body) {
+async function playerDeath(client, guild, full, data, body, ownerId) {
+    let member = await DiscordTools.getMemberById(guild.id, ownerId);
 
+    if (member !== undefined) {
+        let png = null;
+        if (body.targetId !== '') {
+            png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
+        }
+        else {
+            png = (isValidUrl(body.img)) ? body.img : Constants.DEFAULT_SERVER_IMG;
+        }
+
+        let embed = new MessageEmbed()
+            .setColor('#ff0040')
+            .setThumbnail(png)
+            .setTitle(data.title)
+            .setTimestamp()
+            .setFooter({
+                text: body.name
+            });
+
+        if (body.targetId !== '') {
+            embed.setURL(`${Constants.STEAM_PROFILES_URL}${body.targetId}`)
+        }
+
+        await member.send({ embeds: [embed] });
+    }
 }
 
 async function teamLogin(client, guild, full, data, body) {

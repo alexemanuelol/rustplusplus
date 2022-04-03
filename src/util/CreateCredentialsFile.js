@@ -7,6 +7,8 @@ module.exports = (client, guild) => {
     }
 
     if (!fs.existsSync(`${__dirname}/../credentials/${guild.id}.json`)) {
-        fs.writeFileSync(`${__dirname}/../credentials/${guild.id}.json`, JSON.stringify({ credentials: null }, null, 2));
+        fs.writeFileSync(`${__dirname}/../credentials/${guild.id}.json`, JSON.stringify({
+            credentials: null
+        }, null, 2));
     }
 };

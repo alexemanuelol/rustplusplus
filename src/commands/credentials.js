@@ -87,6 +87,8 @@ async function setCredentials(client, interaction) {
     credentials.fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
     credentials.fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
 
+    credentials.owner = interaction.member.user.id;
+
     for (let guild of client.guilds.cache) {
         let instance = client.readCredentialsFile(guild[0]);
         if (_.isEqual(credentials, instance.credentials)) {
