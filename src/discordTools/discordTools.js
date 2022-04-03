@@ -441,4 +441,90 @@ module.exports = {
             Client.client.switchesMessages[guildId][id] = await channel.send(content);
         }
     },
+
+    getSmartAlarmEmbed: function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        return new MessageEmbed()
+            .setTitle(`${instance.alarms[id].name}`)
+            .setColor((instance.alarms[id].active) ? '#00ff40' : '#ce412b')
+            .addFields(
+                { name: 'ID', value: `\`${id}\``, inline: true },
+                { name: 'Message', value: `\`${instance.alarms[id].message}\``, inline: true }
+            )
+            .setThumbnail(`attachment://${instance.alarms[id].image}`)
+            .setFooter({ text: `${instance.alarms[id].server}` })
+    },
+
+    getSmartAlarmButtons: function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`${id}SmartAlarmEveryone`)
+                    .setLabel('@everyone')
+                    .setStyle((instance.alarms[id].everyone) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId(`${id}SmartAlarmDelete`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY'))
+    },
+
+    sendSmartAlarmMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const file = new MessageAttachment(`src/resources/images/electrics/${instance.alarms[id].image}`);
+        const embed = module.exports.getSmartAlarmEmbed(guildId, id);
+        const buttons = module.exports.getSmartAlarmButtons(guildId, id);
+
+        let content = new Object();
+        if (e) {
+            content.embeds = [embed];
+        }
+        if (c) {
+            content.components = [buttons];
+        }
+        if (f) {
+            content.files = [file];
+        }
+
+        if (interaction) {
+            try {
+                await interaction.update(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Unknown interaction`, 'error');
+            }
+            return;
+        }
+
+        let messageId = instance.alarms[id].messageId;
+        let message = undefined;
+        if (messageId !== null) {
+            message = await module.exports.getMessageById(guildId, instance.channelId.alarms, messageId);
+        }
+
+        if (message !== undefined) {
+            try {
+                await message.edit(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `While editing smart alarm message: ${e}`, 'error');
+                return;
+            }
+        }
+        else {
+            const channel = module.exports.getTextChannelById(guildId, instance.channelId.alarms);
+
+            if (!channel) {
+                Client.client.log('ERROR', 'sendSmartAlarmMessage: Invalid guild or channel.', 'error');
+                return;
+            }
+
+            message = await channel.send(content);
+            instance.alarms[id].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
 }

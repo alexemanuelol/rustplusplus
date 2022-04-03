@@ -19,6 +19,7 @@ module.exports = (client, guild) => {
                 events: null,
                 teamchat: null,
                 switches: null,
+                alarms: null,
                 activity: null
             },
             informationMessageId: {
@@ -27,6 +28,7 @@ module.exports = (client, guild) => {
                 team: null
             },
             switches: {},
+            alarms: {},
             markers: {},
             serverList: {}
         }, null, 2));

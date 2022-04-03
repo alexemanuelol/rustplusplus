@@ -139,6 +139,23 @@ module.exports = async (client, interaction) => {
                 delete instance.switches[key];
             }
         }
+        if (rustplus && (server === `${rustplus.server}-${rustplus.port}`)) {
+            await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
+        }
+
+        /* Remove all Smart Alarms assosiated with this server */
+        for (const [key, value] of Object.entries(instance.alarms)) {
+            if (`${value.ipPort}` === server) {
+                let messageId = instance.alarms[key].messageId;
+                let message = await DiscordTools.getMessageById(
+                    rustplus.guildId, instance.channelId.alarms, messageId);
+                if (message !== undefined) {
+                    await message.delete();
+                }
+
+                delete instance.alarms[key];
+            }
+        }
 
         client.writeInstanceFile(guildId, instance);
     }
@@ -168,6 +185,26 @@ module.exports = async (client, interaction) => {
         await client.switchesMessages[guildId][id].delete();
         delete client.switchesMessages[guildId][id];
 
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId.endsWith('SmartAlarmEveryone')) {
+        let id = interaction.customId.replace('SmartAlarmEveryone', '');
+
+        instance.alarms[id].everyone = !instance.alarms[id].everyone;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id, false, true, false, interaction);
+    }
+    else if (interaction.customId.endsWith('SmartAlarmDelete')) {
+        let id = interaction.customId.replace('SmartAlarmDelete', '');
+
+        let messageId = instance.alarms[id].messageId;
+        let message = await DiscordTools.getMessageById(guildId, instance.channelId.alarms, messageId);
+        if (message !== undefined) {
+            await message.delete();
+        }
+
+        delete instance.alarms[id];
         client.writeInstanceFile(guildId, instance);
     }
 }

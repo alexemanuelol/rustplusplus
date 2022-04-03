@@ -202,7 +202,41 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
 }
 
 async function pairingEntitySmartAlarm(client, guild, full, data, body) {
+    let instance = client.readInstanceFile(guild.id);
+    let id = body.entityId;
 
+    if (instance.alarms.hasOwnProperty(id)) {
+        return;
+    }
+
+    instance.alarms[id] = {
+        active: false,
+        everyone: false,
+        name: 'Smart Alarm',
+        message: 'Your base is under attack!',
+        id: id,
+        image: 'smart_alarm.png',
+        server: body.name,
+        ipPort: `${body.ip}-${body.port}`,
+        messageId: null
+    };
+    client.writeInstanceFile(guild.id, instance);
+
+    let rustplus = client.rustplusInstances[guild.id];
+    if (!rustplus) return;
+
+    let serverId = `${rustplus.server}-${rustplus.port}`;
+
+    if (`${body.ip}-${body.port}` === serverId) {
+        let info = await rustplus.getEntityInfoAsync(id);
+        if (info.error) return;
+
+        let active = info.entityInfo.payload.value;
+        instance.alarms[id].active = active;
+        client.writeInstanceFile(guild.id, instance);
+    }
+
+    await DiscordTools.sendSmartAlarmMessage(guild.id, id);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
@@ -210,7 +244,13 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
 }
 
 async function alarmAlarm(client, guild, full, data, body) {
-
+    /* Unfortunately this alarm notification from the fcm listener is unreliable. The notification does not include
+    which entityId that got triggered which makes it impossible to know which Smart Alarms are still being used
+    actively. Also, from testing it seems that notifications don't always reach this fcm listener which makes it even
+    more unreliable. The only advantage to using the fcm listener alarm notification is that it includes the title and
+    description messagethat is configured on the Smart Alarm in the game. Due to missing out on this data, Smart Alarm
+    title and description message needs to be re-configured via the /alarm slash command. All Smart Alarm notifications
+    are handled through the message event for rustplus. */
 }
 
 async function playerDeath(client, guild, full, data, body, ownerId) {

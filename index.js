@@ -10,7 +10,8 @@ if (!fs.existsSync(`${__dirname}/src/logs`)) {
 const client = new DiscordBot({
     intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES],
     retryLimit: 2,
-    restRequestTimeout: 60000
+    restRequestTimeout: 60000,
+    disableEveryone: false
 });
 
 client.build();
