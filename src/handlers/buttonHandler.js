@@ -198,6 +198,14 @@ module.exports = async (client, interaction) => {
             return;
         }
 
+        if (!(rustplus &&
+            instance.switches[id].ipPort === `${rustplus.server}-${rustplus.port}` &&
+            rustplus.connected)) {
+            client.log('ERROR', 'Rustplus is not connected, cannot use Smart Switches...', 'error')
+            interaction.deferUpdate();
+            return;
+        }
+
         let active = (interaction.customId.endsWith('OnSmartSwitch')) ? true : false;
         instance.switches[id].active = active;
         client.writeInstanceFile(guildId, instance);
