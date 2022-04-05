@@ -9,6 +9,7 @@ const SwitchHandler = require('../handlers/switchHandler.js');
 const TimeHandler = require('../handlers/timeHandler.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const InformationHandler = require('../handlers/informationHandler.js');
+const StorageMonitorHandler = require('../handlers/storageMonitorHandler.js');
 
 const Time = require('../structures/Time');
 const Team = require('../structures/Team');
@@ -48,6 +49,8 @@ module.exports = {
         rustplus.info.updateInfo(info.info);
 
         InformationHandler.handler(rustplus, client);
+        StorageMonitorHandler.handler(rustplus, client);
+
 
         /* In-game event handlers */
         CargoShip.handler(rustplus, mapMarkers.mapMarkers);

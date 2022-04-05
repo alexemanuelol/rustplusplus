@@ -23,6 +23,8 @@ class RustPlus extends RP {
         this.refusedConnectionRetry = false;
         this.firstTime = true;
 
+        this.storageMonitors = new Object();
+
         this.map = null;
         this.info = null;
         this.time = null;
@@ -87,6 +89,7 @@ class RustPlus extends RP {
         this.markers = new Object();
 
         this.informationIntervalCounter = 0;
+        this.storageMonitorIntervalCounter = 0;
 
         this.interactionSwitches = [];
 

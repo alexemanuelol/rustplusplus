@@ -77,6 +77,44 @@ module.exports = {
 
                     DiscordTools.sendSmartAlarmMessage(rustplus.guildId, id, true, false, false);
                 }
+                else if (instance.storageMonitors.hasOwnProperty(id)) {
+                    if (message.broadcast.entityChanged.payload.value === true) return;
+
+                    if (instance.storageMonitors[id].type === 'toolcupboard') {
+                        setTimeout(async () => {
+                            let info = await rustplus.getEntityInfoAsync(id);
+                            if (info.error) return;
+
+                            rustplus.storageMonitors[id] = {
+                                items: info.entityInfo.payload.items,
+                                expiry: info.entityInfo.payload.protectionExpiry
+                            }
+
+                            let instance = client.readInstanceFile(rustplus.guildId);
+                            if (info.entityInfo.payload.protectionExpiry === 0 &&
+                                instance.storageMonitors[id].decaying === false) {
+                                instance.storageMonitors[id].decaying = true;
+                                client.writeInstanceFile(rustplus.guildId, instance);
+
+                                await DiscordTools.sendDecayingNotification(rustplus.guildId, id);
+                            }
+                            else if (info.entityInfo.payload.protectionExpiry !== 0) {
+                                instance.storageMonitors[id].decaying = false;
+                                client.writeInstanceFile(rustplus.guildId, instance);
+                            }
+
+                            await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
+                        }, 2000);
+                    }
+                    else {
+                        rustplus.storageMonitors[id] = {
+                            items: message.broadcast.entityChanged.payload.items,
+                            expiry: message.broadcast.entityChanged.payload.protectionExpiry
+                        }
+
+                        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
+                    }
+                }
             }
         }
     },

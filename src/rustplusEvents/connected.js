@@ -101,6 +101,7 @@ module.exports = {
 
         require('../discordTools/SetupSwitches')(client, rustplus);
         require('../discordTools/SetupAlarms')(client, rustplus);
+        require('../discordTools/SetupStorageMonitors')(client, rustplus);
         rustplus.loadMarkers();
 
         /* Run the first time before starting the interval */

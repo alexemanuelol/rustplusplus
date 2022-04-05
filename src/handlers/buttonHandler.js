@@ -245,4 +245,32 @@ module.exports = async (client, interaction) => {
         delete instance.alarms[id];
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId.endsWith('StorageMonitorToolCupboardEveryone')) {
+        let id = interaction.customId.replace('StorageMonitorToolCupboardEveryone', '');
+
+        instance.storageMonitors[id].everyone = !instance.storageMonitors[id].everyone;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendStorageMonitorMessage(interaction.guildId, id, false, true, false, interaction);
+    }
+    else if (interaction.customId.endsWith('StorageMonitorToolCupboardDelete')) {
+        let id = interaction.customId.replace('StorageMonitorToolCupboardDelete', '');
+
+        delete instance.storageMonitors[id];
+
+        await client.storageMonitorsMessages[guildId][id].delete();
+        delete client.storageMonitorsMessages[guildId][id];
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId.endsWith('StorageMonitorContainerDelete')) {
+        let id = interaction.customId.replace('StorageMonitorContainerDelete', '');
+
+        delete instance.storageMonitors[id];
+
+        await client.storageMonitorsMessages[guildId][id].delete();
+        delete client.storageMonitorsMessages[guildId][id];
+
+        client.writeInstanceFile(guildId, instance);
+    }
 }

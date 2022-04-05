@@ -1,5 +1,7 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu, Permissions, MessageEmbed, MessageAttachment } = require('discord.js');
 const Client = require('../../index.js');
+const Timer = require('../util/timer');
+const Items = require('../util/items.js');
 
 module.exports = {
     getGuild: function (guildId) {
@@ -431,7 +433,12 @@ module.exports = {
         }
 
         if (interaction) {
-            await interaction.update(content);
+            try {
+                await interaction.update(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Unknown interaction`, 'error');
+            }
             return;
         }
 
@@ -538,6 +545,194 @@ module.exports = {
             message = await channel.send(content);
             instance.alarms[id].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
+
+    getStorageMonitorEmbed: function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        let rustplus = Client.client.rustplusInstances[guildId];
+        const isTc = (instance.storageMonitors[id].type === 'toolcupboard');
+        const items = rustplus.storageMonitors[id].items;
+        const expiry = rustplus.storageMonitors[id].expiry;
+
+        let description = `**ID** \`${id}\``;
+        description += `\n**Type** \`${(isTc) ? 'Tool Cupboard' : 'Container'}\``;
+
+        if (isTc) {
+            let seconds = 0;
+            if (expiry !== 0) {
+                seconds = (new Date(expiry * 1000) - new Date()) / 1000;
+            }
+
+            let upkeep = null;
+            if (seconds === 0) {
+                upkeep = ':warning:\`DECAYING\`:warning:';
+            }
+            else {
+                upkeep = `\`${Timer.secondsToFullScale(seconds)}\``;
+            }
+            description += `\n**Upkeep** ${upkeep}`;
+        }
+
+        let itemName = '';
+        let itemQuantity = '';
+        let storageItems = new Object();
+        for (let item of items) {
+            if (storageItems.hasOwnProperty(item.itemId)) {
+                storageItems[item.itemId] += item.quantity;
+            }
+            else {
+                storageItems[item.itemId] = item.quantity;
+            }
+        }
+
+        for (const [id, quantity] of Object.entries(storageItems)) {
+            itemName += `${Items.getName(id)}\n`;
+            itemQuantity += `\`${quantity}\`\n`;
+        }
+
+        if (itemName === '' || itemQuantity === '') {
+            itemName = 'Empty';
+            itemQuantity = 'Empty';
+        }
+
+        return new MessageEmbed()
+            .setTitle(`${instance.storageMonitors[id].name}`)
+            .setColor('#ce412b')
+            .setDescription(description)
+            .addFields(
+                { name: 'Item', value: itemName, inline: true },
+                { name: 'Quantity', value: itemQuantity, inline: true }
+            )
+            .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
+            .setFooter({ text: `${instance.storageMonitors[id].server}` });
+    },
+
+    getStorageMonitorToolCupboardButtons: function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`${id}StorageMonitorToolCupboardEveryone`)
+                    .setLabel('@everyone')
+                    .setStyle((instance.storageMonitors[id].everyone) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId(`${id}StorageMonitorToolCupboardDelete`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY'))
+    },
+
+    getStorageMonitorContainerButton: function (guildId, id) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`${id}StorageMonitorContainerDelete`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY'))
+    },
+
+    sendStorageMonitorMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const embed = module.exports.getStorageMonitorEmbed(guildId, id);
+        let buttons = null;
+        if (instance.storageMonitors[id].type === 'toolcupboard') {
+            buttons = module.exports.getStorageMonitorToolCupboardButtons(guildId, id);
+        }
+        else {
+            buttons = module.exports.getStorageMonitorContainerButton(guildId, id);
+        }
+
+        let content = new Object();
+        if (e) {
+            content.embeds = [embed];
+        }
+        if (c) {
+            content.components = [buttons];
+        }
+        if (f) {
+            content.files = [file];
+        }
+
+        if (interaction) {
+            try {
+                await interaction.update(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Unknown interaction`, 'error');
+            }
+            return;
+        }
+
+        if (Client.client.storageMonitorsMessages[guildId][id]) {
+            try {
+                await Client.client.storageMonitorsMessages[guildId][id].edit(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `While editing storage monitor message: ${e}`, 'error');
+                return;
+            }
+        }
+        else {
+            const channel = module.exports.getTextChannelById(guildId, instance.channelId.storageMonitors);
+
+            if (!channel) {
+                Client.client.log('ERROR', 'sendStorageMonitorMessage: Invalid guild or channel.', 'error');
+                return;
+            }
+            Client.client.storageMonitorsMessages[guildId][id] = await channel.send(content);
+        }
+    },
+
+    sendDecayingNotification: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
+        const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+
+        if (channel) {
+            let content = {};
+            content.embeds = [new MessageEmbed()
+                .setTitle(`${instance.storageMonitors[id].name} is decaying!`)
+                .setColor('#ff0040')
+                .setDescription(`**ID** \`${id}\``)
+                .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
+                .setFooter({ text: `${instance.storageMonitors[id].server}` })
+                .setTimestamp()];
+
+            content.files = [file];
+
+            if (instance.storageMonitors[id].everyone) {
+                content.content = '@everyone';
+            }
+
+            await channel.send(content);
+        }
+    },
+
+    sendToolcupboardNotFound: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
+        const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+
+        if (channel) {
+            let content = {};
+            content.embeds = [new MessageEmbed()
+                .setTitle(`${instance.storageMonitors[id].name} could not be found! Might have been destroyed.`)
+                .setColor('#ff0040')
+                .setDescription(`**ID** \`${id}\``)
+                .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
+                .setFooter({ text: `${instance.storageMonitors[id].server}` })
+                .setTimestamp()];
+
+            content.files = [file];
+
+            if (instance.storageMonitors[id].everyone) {
+                content.content = '@everyone';
+            }
+
+            await channel.send(content);
         }
     },
 }

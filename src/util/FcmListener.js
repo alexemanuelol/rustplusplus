@@ -19,6 +19,8 @@ module.exports = async (client, guild) => {
         client.currentFcmListeners[guild.id].destroy();
     }
 
+    client.log('INFO', `FCM-listener started for guild: ${guild.id}`);
+
     let startTime = new Date();
     client.currentFcmListeners[guild.id] =
         await listen(credentials.credentials.fcm_credentials, async ({ notification, persistentId }) => {
@@ -240,7 +242,53 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
+    let instance = client.readInstanceFile(guild.id);
+    let id = body.entityId;
 
+    if (instance.storageMonitors.hasOwnProperty(id)) {
+        return;
+    }
+
+    instance.storageMonitors[id] = {
+        name: 'Storage Monitor',
+        id: id,
+        type: null,
+        decaying: false,
+        everyone: false,
+        image: 'storage_monitor.png',
+        server: body.name,
+        ipPort: `${body.ip}-${body.port}`
+    };
+    client.writeInstanceFile(guild.id, instance);
+
+    let rustplus = client.rustplusInstances[guild.id];
+    if (!rustplus) return;
+
+    let serverId = `${rustplus.server}-${rustplus.port}`;
+
+    if (`${body.ip}-${body.port}` === serverId) {
+        let info = await rustplus.getEntityInfoAsync(id);
+        if (info.error) return;
+
+        if (info.entityInfo.payload.capacity === 28) {
+            instance.storageMonitors[id].type = 'toolcupboard';
+            instance.storageMonitors[id].image = 'tool_cupboard.png';
+            if (info.entityInfo.payload.protectionExpiry === 0) {
+                instance.storageMonitors[id].decaying = true;
+            }
+        }
+        else {
+            instance.storageMonitors[id].type = 'container';
+        }
+        client.writeInstanceFile(guild.id, instance);
+
+        rustplus.storageMonitors[id] = {
+            items: info.entityInfo.payload.items,
+            expiry: info.entityInfo.payload.protectionExpiry
+        }
+
+        await DiscordTools.sendStorageMonitorMessage(guild.id, id);
+    }
 }
 
 async function alarmAlarm(client, guild, full, data, body) {

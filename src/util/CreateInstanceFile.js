@@ -20,6 +20,7 @@ module.exports = (client, guild) => {
                 teamchat: null,
                 switches: null,
                 alarms: null,
+                storageMonitors: null,
                 activity: null
             },
             informationMessageId: {
@@ -29,6 +30,7 @@ module.exports = (client, guild) => {
             },
             switches: {},
             alarms: {},
+            storageMonitors: {},
             markers: {},
             serverList: {}
         }, null, 2));
@@ -75,6 +77,7 @@ module.exports = (client, guild) => {
                 teamchat: null,
                 switches: null,
                 alarms: null,
+                storageMonitors: null,
                 activity: null
             }
         }
@@ -87,6 +90,7 @@ module.exports = (client, guild) => {
             if (!inst.channelId.hasOwnProperty('teamchat')) inst.channelId.teamchat = null;
             if (!inst.channelId.hasOwnProperty('switches')) inst.channelId.switches = null;
             if (!inst.channelId.hasOwnProperty('alarms')) inst.channelId.alarms = null;
+            if (!inst.channelId.hasOwnProperty('storageMonitors')) inst.channelId.storageMonitors = null;
             if (!inst.channelId.hasOwnProperty('activity')) inst.channelId.activity = null;
         }
 
@@ -105,6 +109,7 @@ module.exports = (client, guild) => {
 
         if (!inst.hasOwnProperty('switches')) inst.switches = {};
         if (!inst.hasOwnProperty('alarms')) inst.alarms = {};
+        if (!inst.hasOwnProperty('storageMonitors')) inst.storageMonitors = {};
         if (!inst.hasOwnProperty('markers')) inst.markers = {};
         if (!inst.hasOwnProperty('serverList')) inst.serverList = {};
 
