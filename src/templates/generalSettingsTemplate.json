@@ -4,5 +4,6 @@
     "showTrademark": true,
     "inGameCommandsEnabled": true,
     "fcmAlarmNotificationEnabled": false,
-    "fcmAlarmNotificationEveryone": false
+    "fcmAlarmNotificationEveryone": false,
+    "smartAlarmNotifyInGame": true
 }

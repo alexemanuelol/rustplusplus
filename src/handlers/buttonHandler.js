@@ -95,6 +95,19 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'smartAlarmNotifyInGame') {
+        instance.generalSettings.smartAlarmNotifyInGame = !instance.generalSettings.smartAlarmNotifyInGame;
+
+        if (rustplus) {
+            rustplus.generalSettings.smartAlarmNotifyInGame = instance.generalSettings.smartAlarmNotifyInGame;
+        }
+
+        let row = DiscordTools.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame);
+
+        await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let server = interaction.customId.replace('ServerConnect', '');
 

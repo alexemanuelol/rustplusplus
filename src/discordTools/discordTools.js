@@ -193,6 +193,15 @@ module.exports = {
                     .setStyle((everyone) ? 'SUCCESS' : 'DANGER'));
     },
 
+    getSmartAlarmNotifyInGameButton: function (enabled) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('smartAlarmNotifyInGame')
+                    .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
+                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
+    },
+
     getPrefixSelectMenu: function (currentPrefix) {
         return new MessageActionRow()
             .addComponents(

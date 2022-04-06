@@ -89,6 +89,21 @@ async function setupGeneralSettings(instance, channel) {
             new MessageAttachment('src/resources/images/settings_logo.png')
         ]
     });
+
+    await channel.send({
+        embeds: [
+            new MessageEmbed()
+                .setColor('#861c0c')
+                .setTitle('Should Smart Alarms notify In-Game?')
+                .setThumbnail(`attachment://settings_logo.png`)
+        ],
+        components: [
+            DiscordTools.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame)
+        ],
+        files: [
+            new MessageAttachment('src/resources/images/settings_logo.png')
+        ]
+    });
 }
 
 async function setupNotificationSettings(instance, channel) {

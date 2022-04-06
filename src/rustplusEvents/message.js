@@ -47,15 +47,18 @@ module.exports = {
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     if (active) {
+                        let title = instance.alarms[id].name;
+                        let message = instance.alarms[id].message;
+
                         let content = {};
                         content.embeds = [
                             new MessageEmbed()
                                 .setColor('#ce412b')
                                 .setThumbnail(`attachment://${instance.alarms[id].image}`)
-                                .setTitle(instance.alarms[id].name)
+                                .setTitle(title)
                                 .addFields(
                                     { name: 'ID', value: `\`${id}\``, inline: true },
-                                    { name: 'Message', value: `\`${instance.alarms[id].message}\``, inline: true }
+                                    { name: 'Message', value: `\`${message}\``, inline: true }
                                 )
                                 .setFooter({
                                     text: instance.alarms[id].server
@@ -72,6 +75,10 @@ module.exports = {
                         let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
                         if (channel) {
                             await channel.send(content);
+                        }
+
+                        if (instance.generalSettings.smartAlarmNotifyInGame) {
+                            rustplus.sendTeamMessageAsync(`${title}: ${message}`);
                         }
                     }
 

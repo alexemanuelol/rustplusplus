@@ -308,16 +308,19 @@ async function alarmAlarm(client, guild, full, data, body) {
 
     if (!rustplus || (rustplus && (alarmServerId !== `${rustplus.server}-${rustplus.port}`))) {
         if (instance.generalSettings.fcmAlarmNotificationEnabled) {
+            let title = (data.title !== '') ? data.title : 'Smart Alarm';
+            let message = (data.message !== '') ? data.message : 'Your base is under attack!';
+
             let content = {};
             content.embeds = [
                 new MessageEmbed()
                     .setColor('#ce412b')
                     .setThumbnail('attachment://smart_alarm.png')
-                    .setTitle((data.title !== '') ? data.title : 'Smart Alarm')
+                    .setTitle(title)
                     .addFields(
                         {
                             name: 'Message',
-                            value: (data.message !== '') ? `\`${data.message}\`` : 'Your base is under attack!',
+                            value: `\`${message}\``,
                             inline: true
                         }
                     )
@@ -336,6 +339,10 @@ async function alarmAlarm(client, guild, full, data, body) {
             let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
             if (channel) {
                 await channel.send(content);
+            }
+
+            if (instance.generalSettings.smartAlarmNotifyInGame && rustplus) {
+                rustplus.sendTeamMessageAsync(`${title}: ${message}`);
             }
         }
     }
