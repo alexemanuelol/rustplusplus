@@ -1,4 +1,3 @@
-const Items = require('../util/items.js');
 const Map = require('../util/map.js');
 const RustPlusTypes = require('../util/rustplusTypes.js');
 
@@ -48,14 +47,14 @@ module.exports = {
                                 let item = '';
                                 if (rustplus.itemsToLookForId.includes(order.itemId) &&
                                     rustplus.itemsToLookForId.includes(order.currencyId)) {
-                                    item = Items.getName(order.itemId) + ' and ';
-                                    item += Items.getName(order.currencyId);
+                                    item = rustplus.items.getName(order.itemId) + ' and ';
+                                    item += rustplus.items.getName(order.currencyId);
                                 }
                                 else if (rustplus.itemsToLookForId.includes(order.itemId)) {
-                                    item = Items.getName(order.itemId);
+                                    item = rustplus.items.getName(order.itemId);
                                 }
                                 else if (rustplus.itemsToLookForId.includes(order.currencyId)) {
-                                    item = Items.getName(order.currencyId);
+                                    item = rustplus.items.getName(order.currencyId);
                                 }
 
                                 rustplus.sendEvent(

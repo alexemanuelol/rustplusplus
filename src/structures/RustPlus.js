@@ -6,6 +6,7 @@ const Logger = require('./Logger.js');
 const path = require('path');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
+const Items = require('./Items');
 
 class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
@@ -29,6 +30,8 @@ class RustPlus extends RP {
         this.info = null;
         this.time = null;
         this.team = null;
+
+        this.items = new Items();
 
         this.trademarkString = 'rustPlusPlus | ';
         this.messageIgnoreCounter = 0;

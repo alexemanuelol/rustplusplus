@@ -4,6 +4,7 @@ const Config = require('../../config.json');
 const RustPlus = require('../structures/RustPlus');
 const Logger = require('./Logger.js');
 const path = require('path');
+const Items = require('./Items');
 
 class DiscordBot extends Client {
     constructor(props) {
@@ -16,6 +17,8 @@ class DiscordBot extends Client {
         this.currentFcmListeners = new Object();
         this.switchesMessages = new Object();
         this.storageMonitorsMessages = new Object();
+
+        this.items = new Items();
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 

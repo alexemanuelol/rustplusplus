@@ -1,7 +1,6 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu, Permissions, MessageEmbed, MessageAttachment } = require('discord.js');
 const Client = require('../../index.js');
 const Timer = require('../util/timer');
-const Items = require('../util/items.js');
 
 module.exports = {
     getGuild: function (guildId) {
@@ -587,7 +586,7 @@ module.exports = {
         }
 
         for (const [id, quantity] of Object.entries(storageItems)) {
-            itemName += `${Items.getName(id)}\n`;
+            itemName += `${Client.client.items.getName(id)}\n`;
             itemQuantity += `\`${quantity}\`\n`;
         }
 
