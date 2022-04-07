@@ -95,6 +95,14 @@ module.exports = {
                             return true;
                         }
                     }
+                    else if (command === `${cmd} status`) {
+                        let info = await rustplus.getEntityInfoAsync(id);
+                        if (!(await rustplus.isResponseValid(info))) return false;
+
+                        active = (info.entityInfo.payload.value) ? 'ON' : 'OFF';
+                        rustplus.printCommandOutput(`${instance.switches[id].name} is currently ${active}.`);
+                        return true;
+                    }
                     else {
                         return false;
                     }
@@ -106,7 +114,7 @@ module.exports = {
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
                     let str = `${instance.switches[id].name} was turned `;
                     str += (active) ? 'on.' : 'off.';
-                    rustplus.sendTeamMessageAsync(str);
+                    rustplus.printCommandOutput(str);
 
                     rustplus.interactionSwitches[id] = active;
 
