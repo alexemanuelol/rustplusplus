@@ -343,7 +343,7 @@ async function alarmAlarm(client, guild, full, data, body) {
             }
 
             if (instance.generalSettings.smartAlarmNotifyInGame && rustplus) {
-                rustplus.sendTeamMessageAsync(`${title}: ${message}`, !rustplus.generalSettings.showTrademark);
+                rustplus.sendTeamMessageAsync(`${title}: ${message}`);
             }
         }
     }

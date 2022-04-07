@@ -78,7 +78,7 @@ module.exports = {
                         }
 
                         if (instance.generalSettings.smartAlarmNotifyInGame) {
-                            rustplus.sendTeamMessageAsync(`${title}: ${message}`, !rustplus.generalSettings.showTrademark);
+                            rustplus.sendTeamMessageAsync(`${title}: ${message}`);
                         }
                     }
 
@@ -106,9 +106,7 @@ module.exports = {
                                 await DiscordTools.sendDecayingNotification(rustplus.guildId, id);
 
                                 if (instance.storageMonitors[id].inGame) {
-                                    rustplus.sendTeamMessageAsync(
-                                        `${instance.storageMonitors[id].name} is decaying!`,
-                                        !rustplus.generalSettings.showTrademark);
+                                    rustplus.sendTeamMessageAsync(`${instance.storageMonitors[id].name} is decaying!`);
                                 }
                             }
                             else if (info.entityInfo.payload.protectionExpiry !== 0) {
