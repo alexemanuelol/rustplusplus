@@ -331,9 +331,26 @@ module.exports = {
     commandLeader: async function (rustplus, message) {
         let command = message.broadcast.teamMessage.message.message;
         let callerId = message.broadcast.teamMessage.message.steamId.toString();
+        let str = 'Team leadership was transferred to ';
+
+        if (rustplus.team.leaderSteamId !== rustplus.playerId) {
+            let player = rustplus.team.getPlayer(rustplus.playerId);
+            rustplus.printCommandOutput(`Leader command only works if the current leader is ${player.name}.`);
+            return;
+        }
 
         if (command === `${rustplus.generalSettings.prefix}leader`) {
-            await rustplus.team.changeLeadership(callerId);
+            if (rustplus.team.leaderSteamId !== callerId) {
+                await rustplus.team.changeLeadership(callerId);
+                let player = rustplus.team.getPlayer(callerId);
+                str += `${player.name}.`;
+                rustplus.printCommandOutput(str);
+                return;
+            }
+            else {
+                rustplus.printCommandOutput('You are already leader.');
+                return;
+            }
         }
         else {
             let name = command.replace(`${rustplus.generalSettings.prefix}leader `, '');
@@ -342,6 +359,8 @@ module.exports = {
             for (let player of rustplus.team.players) {
                 if (name === player.steamId) {
                     await rustplus.team.changeLeadership(player.steamId);
+                    str += `${player.name}.`;
+                    rustplus.printCommandOutput(str);
                     return;
                 }
             }
@@ -350,6 +369,8 @@ module.exports = {
             for (let player of rustplus.team.players) {
                 if (player.name.toLowerCase().includes(name.toLowerCase())) {
                     await rustplus.team.changeLeadership(player.steamId);
+                    str += `${player.name}.`;
+                    rustplus.printCommandOutput(str);
                     return;
                 }
             }
@@ -358,9 +379,13 @@ module.exports = {
             for (let player of rustplus.team.players) {
                 if (Str.similarity(name, player.name) >= 0.9) {
                     await rustplus.team.changeLeadership(player.steamId);
+                    str += `${player.name}.`;
+                    rustplus.printCommandOutput(str);
                     return;
                 }
             }
+
+            rustplus.printCommandOutput(`Could not identify team member: ${name}.`);
         }
     },
 
