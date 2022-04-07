@@ -242,7 +242,7 @@
     "286193827": {
         "shortname": "jar.pickle",
         "name": "Pickles",
-        "description": "Cucumbers in a vinegar bath, jarred by an amatuer. Eat at your own risk."
+        "description": "Cucumbers in a vinegar bath, jarred by an amateur. Eat at your own risk."
     },
     "286648290": {
         "shortname": "discofloor",
@@ -799,6 +799,11 @@
         "name": "Duo Submarine",
         "description": "A small two-person submarine."
     },
+    "1036321299": {
+        "shortname": "bluedogtags",
+        "name": "Blue Dog Tags",
+        "description": "Blue Dog Tags"
+    },
     "1052926200": {
         "shortname": "mining.quarry",
         "name": "Mining Quarry",
@@ -963,6 +968,11 @@
         "shortname": "door.double.hinged.toptier",
         "name": "Armored Double Door",
         "description": "Extremely strong door with a hatch to see and shoot out of."
+    },
+    "1223900335": {
+        "shortname": "dogtagneutral",
+        "name": "Dog Tag",
+        "description": "Neutral Dog Tag"
     },
     "1230323789": {
         "shortname": "smgbody",
@@ -1968,6 +1978,11 @@
         "shortname": "attire.bunnyears",
         "name": "Bunny Ears",
         "description": "Bunny Ears. Grants additional Egg Vision allowing you to detect more eggs during an Easter egg hunt."
+    },
+    "-747743875": {
+        "shortname": "attire.egg.suit",
+        "name": "Egg Suit",
+        "description": "An eggsquisite egg costume, can be painted when unequipped."
     },
     "-1773144852": {
         "shortname": "attire.hide.skirt",
@@ -3044,6 +3059,11 @@
         "name": "Pure Anti-Rad Tea",
         "description": "A tea that reduces the amount of health lost due to radiation."
     },
+    "-602717596": {
+        "shortname": "reddogtags",
+        "name": "Red Dog Tags",
+        "description": "Red Dog Tags"
+    },
     "-1861522751": {
         "shortname": "research.table",
         "name": "Research Table",
@@ -3233,6 +3253,11 @@
         "shortname": "sickle",
         "name": "Sickle",
         "description": "A very sharp curved cutting weapon. While its traditional role was to cut grass, this tool is also extremely versatile at cutting throats, perhaps trees, too."
+    },
+    "-394470247": {
+        "shortname": "sign.egg.suit",
+        "name": "Egg Suit Sign Test",
+        "description": "A 1-meter by 0.5-meter wooden sign that you can write on."
     },
     "-1647846966": {
         "shortname": "sign.hanging.ornate",
@@ -3516,8 +3541,8 @@
     },
     "-1663759755": {
         "shortname": "trap.landmine",
-        "name": "Land Mine",
-        "description": "An old military Landmine. If you stand on one, you can ask a friend to disarm it before it explodes."
+        "name": "Homemade Landmine",
+        "description": "Homemade Landmine. If you stand on one, you can ask a friend to disarm it before it explodes."
     },
     "-1478445584": {
         "shortname": "tunalight",
