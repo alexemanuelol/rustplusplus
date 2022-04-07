@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools.js');
+const Keywords = require('../util/keywords.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -51,6 +52,15 @@ module.exports = {
 		const name = interaction.options.getString('name');
 		const command = interaction.options.getString('command');
 		const image = interaction.options.getString('image');
+
+		if (Keywords.getListOfUsedKeywords(client, interaction.guildId).includes(command)) {
+			await interaction.editReply({
+				content: 'The provided command is already in use, please choose another command.',
+				ephemeral: true
+			});
+			client.log('WARNING', 'The provided command is already in use, please choose another command.');
+			return;
+		}
 
 		let embedChanged = false;
 		let filesChanged = false;
