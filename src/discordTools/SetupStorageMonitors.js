@@ -12,6 +12,7 @@ module.exports = async (client, rustplus) => {
         if (server !== `${value.ipPort}`) continue;
 
         let info = await rustplus.getEntityInfoAsync(key);
+        if (!(await rustplus.isResponseValid(info))) return;
 
         instance = client.readInstanceFile(rustplus.guildId);
 

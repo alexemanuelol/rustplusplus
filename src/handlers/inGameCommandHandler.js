@@ -413,7 +413,7 @@ module.exports = {
         switch (subcommand) {
             case 'add': {
                 let teamInfo = await rustplus.getTeamInfoAsync();
-                if (teamInfo.error) return;
+                if (!(await rustplus.isResponseValid(teamInfo))) return;
 
                 let instance = client.readInstanceFile(rustplus.guildId);
 
@@ -468,7 +468,7 @@ module.exports = {
                 }
 
                 let teamInfo = await rustplus.getTeamInfoAsync();
-                if (teamInfo.error) return;
+                if (!(await rustplus.isResponseValid(teamInfo))) return;
 
                 let callerLocation = null;
                 let callerName = null;

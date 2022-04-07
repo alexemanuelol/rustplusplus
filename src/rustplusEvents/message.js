@@ -90,7 +90,7 @@ module.exports = {
                     if (instance.storageMonitors[id].type === 'toolcupboard') {
                         setTimeout(async () => {
                             let info = await rustplus.getEntityInfoAsync(id);
-                            if (info.error) return;
+                            if (!(await rustplus.isResponseValid(info))) return;
 
                             rustplus.storageMonitors[id] = {
                                 items: info.entityInfo.payload.items,

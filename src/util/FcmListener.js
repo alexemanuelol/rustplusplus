@@ -192,7 +192,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
 
     if (`${body.ip}-${body.port}` === serverId) {
         let info = await rustplus.getEntityInfoAsync(id);
-        if (info.error) return;
+        if (!(await rustplus.isResponseValid(info))) return;
 
         let active = info.entityInfo.payload.value;
         instance = client.readInstanceFile(guild.id);
@@ -231,7 +231,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
 
     if (`${body.ip}-${body.port}` === serverId) {
         let info = await rustplus.getEntityInfoAsync(id);
-        if (info.error) return;
+        if (!(await rustplus.isResponseValid(info))) return;
 
         let active = info.entityInfo.payload.value;
         instance.alarms[id].active = active;
@@ -269,7 +269,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
 
     if (`${body.ip}-${body.port}` === serverId) {
         let info = await rustplus.getEntityInfoAsync(id);
-        if (info.error) return;
+        if (!(await rustplus.isResponseValid(info))) return;
 
         if (info.entityInfo.payload.capacity === 28) {
             instance.storageMonitors[id].type = 'toolcupboard';
