@@ -255,6 +255,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         type: null,
         decaying: false,
         everyone: false,
+        inGame: true,
         image: 'storage_monitor.png',
         server: body.name,
         ipPort: `${body.ip}-${body.port}`

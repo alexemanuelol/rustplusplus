@@ -266,6 +266,14 @@ module.exports = async (client, interaction) => {
 
         await DiscordTools.sendStorageMonitorMessage(interaction.guildId, id, false, true, false, interaction);
     }
+    else if (interaction.customId.endsWith('StorageMonitorToolCupboardInGame')) {
+        let id = interaction.customId.replace('StorageMonitorToolCupboardInGame', '');
+
+        instance.storageMonitors[id].inGame = !instance.storageMonitors[id].inGame;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendStorageMonitorMessage(interaction.guildId, id, false, true, false, interaction);
+    }
     else if (interaction.customId.endsWith('StorageMonitorToolCupboardDelete')) {
         let id = interaction.customId.replace('StorageMonitorToolCupboardDelete', '');
 

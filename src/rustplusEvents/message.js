@@ -104,6 +104,12 @@ module.exports = {
                                 client.writeInstanceFile(rustplus.guildId, instance);
 
                                 await DiscordTools.sendDecayingNotification(rustplus.guildId, id);
+
+                                if (instance.storageMonitors[id].inGame) {
+                                    rustplus.sendTeamMessageAsync(
+                                        `${instance.storageMonitors[id].name} is decaying!`,
+                                        !rustplus.generalSettings.showTrademark);
+                                }
                             }
                             else if (info.entityInfo.payload.protectionExpiry !== 0) {
                                 instance.storageMonitors[id].decaying = false;
@@ -111,6 +117,7 @@ module.exports = {
                             }
 
                             await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
+
                         }, 2000);
                     }
                     else {

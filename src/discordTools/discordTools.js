@@ -626,6 +626,10 @@ module.exports = {
                     .setLabel('@everyone')
                     .setStyle((instance.storageMonitors[id].everyone) ? 'SUCCESS' : 'DANGER'),
                 new MessageButton()
+                    .setCustomId(`${id}StorageMonitorToolCupboardInGame`)
+                    .setLabel('IN-GAME')
+                    .setStyle((instance.storageMonitors[id].inGame) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
                     .setCustomId(`${id}StorageMonitorToolCupboardDelete`)
                     .setEmoji('🗑️')
                     .setStyle('SECONDARY'))
