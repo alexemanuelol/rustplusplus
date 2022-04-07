@@ -78,7 +78,7 @@ module.exports = {
                         }
 
                         if (instance.generalSettings.smartAlarmNotifyInGame) {
-                            rustplus.sendTeamMessageAsync(`${title}: ${message}`);
+                            rustplus.sendTeamMessageAsync(`${title}: ${message}`, !rustplus.generalSettings.showTrademark);
                         }
                     }
 
