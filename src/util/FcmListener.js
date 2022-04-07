@@ -408,7 +408,7 @@ async function teamLogin(client, guild, full, data, body) {
 
 async function newsNews(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
-    let channelId = instance.channelIdactivity;
+    let channelId = instance.channelId.activity;
     let channel = DiscordTools.getTextChannelById(guild.id, channelId);
 
     if (channel !== undefined) {
