@@ -346,6 +346,14 @@ module.exports = {
                 }
             }
 
+            /* Look for parts of the name */
+            for (let player of rustplus.team.players) {
+                if (player.name.toLowerCase().includes(name.toLowerCase())) {
+                    await rustplus.team.changeLeadership(player.steamId);
+                    return;
+                }
+            }
+
             /* Find the closest name */
             for (let player of rustplus.team.players) {
                 if (Str.similarity(name, player.name) >= 0.9) {
