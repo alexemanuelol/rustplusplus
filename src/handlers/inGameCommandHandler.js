@@ -3,6 +3,7 @@ const Str = require('../util/string.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.js');
 const Constants = require('../util/constants.js');
+const TeamHandler = require('../handlers/teamHandler.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
@@ -52,6 +53,9 @@ module.exports = {
         }
         else if (command === `${rustplus.generalSettings.prefix}pop`) {
             module.exports.commandPop(rustplus);
+        }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}prox`)) {
+            module.exports.commandProx(rustplus, client, message);
         }
         else if (command === `${rustplus.generalSettings.prefix}small`) {
             module.exports.commandSmall(rustplus);
@@ -533,6 +537,95 @@ module.exports = {
             str += ` and ${rustplus.info.queuedPlayers} players in queue.`;
         }
         rustplus.printCommandOutput(str);
+    },
+
+    commandProx: async function (rustplus, client, message) {
+        let callerId = message.broadcast.teamMessage.message.steamId.toString();
+        let caller = rustplus.team.getPlayer(callerId);
+        let command = message.broadcast.teamMessage.message.message;
+
+        if (command === `${rustplus.generalSettings.prefix}prox`) {
+            let teamInfo = await rustplus.getTeamInfoAsync();
+            if (!(await rustplus.isResponseValid(teamInfo))) return;
+            TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
+            rustplus.team.updateTeam(teamInfo.teamInfo);
+
+            let topClosestPlayers = [];
+            let players = [...rustplus.team.players].filter(e => e.steamId !== callerId);
+
+            if (players.length === 0) {
+                rustplus.printCommandOutput('You are the only one in the team.');
+            }
+
+            for (let player of players) {
+                if (!player.isAlive) {
+                    players = players.filter(e => e.steamId !== player.steamId);
+                }
+            }
+
+            for (let i = 0; i < 3; i++) {
+                if (players.length > 0) {
+                    let player = players.reduce(function (prev, current) {
+                        if (Map.getDistance(prev.x, prev.y, caller.x, caller.y) <
+                            Map.getDistance(current.x, current.y, caller.x, caller.y)) {
+                            return prev;
+                        }
+                        else {
+                            return current;
+                        }
+                    });
+                    topClosestPlayers.push(player);
+                    players = players.filter(e => e.steamId !== player.steamId);
+                }
+            }
+
+            let str = '';
+            for (let player of topClosestPlayers) {
+                let distance = Math.floor(Map.getDistance(player.x, player.y, caller.x, caller.y));
+                str += `${player.name} (${distance}m), `;
+            }
+
+            if (str === '') {
+                str = 'All your teammates are dead.';
+            }
+            else {
+                str = str.slice(0, -2);
+            }
+
+            rustplus.printCommandOutput(str);
+            return;
+        }
+
+        memberName = command.replace(`${rustplus.generalSettings.prefix}prox`, '').trim();
+
+        let teamInfo = await rustplus.getTeamInfoAsync();
+        if (!(await rustplus.isResponseValid(teamInfo))) return;
+        TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
+        rustplus.team.updateTeam(teamInfo.teamInfo);
+
+        /* Look for parts of the name */
+        for (let player of rustplus.team.players) {
+            if (player.name.toLowerCase().includes(memberName.toLowerCase())) {
+                let distance = Math.floor(Map.getDistance(caller.x, caller.y, player.x, player.y));
+                let direction = Map.getAngleBetweenPoints(caller.x, caller.y, player.x, player.y);
+                let str = `${player.name} is ${distance}m from ${caller.name} in direction ${direction}.`;
+                rustplus.printCommandOutput(str);
+                return;
+            }
+        }
+
+        /* Find the closest name */
+        for (let player of rustplus.team.players) {
+            if (Str.similarity(memberName, player.name) >= 0.9) {
+                let distance = Math.floor(Map.getDistance(caller.x, caller.y, player.x, player.y));
+                let direction = Map.getAngleBetweenPoints(caller.x, caller.y, player.x, player.y);
+                let str = `${player.name} is ${distance}m from ${caller.name} in direction ${direction}.`;
+                rustplus.printCommandOutput(str);
+                return;
+            }
+        }
+
+        rustplus.printCommandOutput(`Could not identify team member: ${memberName}.`);
     },
 
     commandSmall: function (rustplus) {
