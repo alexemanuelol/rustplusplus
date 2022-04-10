@@ -18,7 +18,7 @@ module.exports = {
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 let info = await rustplus.getEntityInfoAsync(id);
-                if (info.error && info.error === 'not_found') {
+                if (!(await rustplus.isResponseValid(info))) {
                     await DiscordTools.sendToolcupboardNotFound(rustplus.guildId, id);
 
                     delete instance.storageMonitors[id];
