@@ -723,7 +723,7 @@ module.exports = {
         }
     },
 
-    sendToolcupboardNotFound: async function (guildId, id) {
+    sendStorageMonitorNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
         const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);

@@ -14,27 +14,28 @@ module.exports = {
 
         let instance = client.readInstanceFile(rustplus.guildId);
         for (const [id, content] of Object.entries(instance.storageMonitors)) {
-            if (content.type === 'toolcupboard' && content.ipPort === server) {
-                instance = client.readInstanceFile(rustplus.guildId);
+            if (server !== content.ipPort) continue;
+            instance = client.readInstanceFile(rustplus.guildId);
 
-                let info = await rustplus.getEntityInfoAsync(id);
-                if (!(await rustplus.isResponseValid(info))) {
-                    await DiscordTools.sendToolcupboardNotFound(rustplus.guildId, id);
+            let info = await rustplus.getEntityInfoAsync(id);
+            if (!(await rustplus.isResponseValid(info))) {
+                await DiscordTools.sendStorageMonitorNotFound(rustplus.guildId, id);
 
-                    delete instance.storageMonitors[id];
+                delete instance.storageMonitors[id];
 
-                    await client.storageMonitorsMessages[rustplus.guildId][id].delete();
-                    delete client.storageMonitorsMessages[rustplus.guildId][id];
+                await client.storageMonitorsMessages[rustplus.guildId][id].delete();
+                delete client.storageMonitorsMessages[rustplus.guildId][id];
 
-                    client.writeInstanceFile(rustplus.guildId, instance);
-                    continue;
-                }
+                client.writeInstanceFile(rustplus.guildId, instance);
+                continue;
+            }
 
-                rustplus.storageMonitors[id] = {
-                    items: info.entityInfo.payload.items,
-                    expiry: info.entityInfo.payload.protectionExpiry
-                }
+            rustplus.storageMonitors[id] = {
+                items: info.entityInfo.payload.items,
+                expiry: info.entityInfo.payload.protectionExpiry
+            }
 
+            if (content.type === 'toolcupboard') {
                 if (info.entityInfo.payload.protectionExpiry === 0 &&
                     instance.storageMonitors[id].decaying === false) {
                     instance.storageMonitors[id].decaying = true;
@@ -46,9 +47,9 @@ module.exports = {
                     instance.storageMonitors[id].decaying = false;
                     client.writeInstanceFile(rustplus.guildId, instance);
                 }
-
-                await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
             }
+
+            await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
         }
     },
 }
