@@ -4,7 +4,7 @@ module.exports = {
     handler: async function (rustplus, client) {
         let server = `${rustplus.server}-${rustplus.port}`;
 
-        if (rustplus.storageMonitorIntervalCounter === 30) {
+        if (rustplus.storageMonitorIntervalCounter === 29) {
             rustplus.storageMonitorIntervalCounter = 0;
         }
         else {

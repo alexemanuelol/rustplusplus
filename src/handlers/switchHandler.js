@@ -5,6 +5,29 @@ module.exports = {
         let instance = client.readInstanceFile(rustplus.guildId);
         let server = `${rustplus.server}-${rustplus.port}`;
 
+        if (rustplus.smartSwitchIntervalCounter === 29) {
+            rustplus.smartSwitchIntervalCounter = 0;
+            for (const [key, value] of Object.entries(instance.switches)) {
+                if (server !== `${value.ipPort}`) continue;
+                instance = client.readInstanceFile(rustplus.guildId);
+
+                let info = await rustplus.getEntityInfoAsync(key);
+                if (!(await rustplus.isResponseValid(info))) {
+                    await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+
+                    delete instance.switches[key];
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    await client.switchesMessages[rustplus.guildId][key].delete();
+                    delete client.switchesMessages[rustplus.guildId][key];
+                    continue;
+                }
+            }
+        }
+        else {
+            rustplus.smartSwitchIntervalCounter += 1;
+        }
+
         if (rustplus.time.isTurnedDay(time)) {
             for (const [key, value] of Object.entries(instance.switches)) {
                 if (server !== `${value.ipPort}`) continue;

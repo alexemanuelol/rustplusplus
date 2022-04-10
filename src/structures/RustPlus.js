@@ -92,6 +92,7 @@ class RustPlus extends RP {
 
         this.informationIntervalCounter = 0;
         this.storageMonitorIntervalCounter = 0;
+        this.smartSwitchIntervalCounter = 15;
 
         this.interactionSwitches = [];
 
