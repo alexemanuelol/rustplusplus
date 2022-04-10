@@ -45,6 +45,9 @@ module.exports = {
         else if (command === `${rustplus.generalSettings.prefix}mute`) {
             module.exports.commandMute(rustplus, client);
         }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}note`)) {
+            module.exports.commandNote(rustplus, client, message)
+        }
         else if (command === `${rustplus.generalSettings.prefix}offline`) {
             module.exports.commandOffline(rustplus);
         }
@@ -507,6 +510,58 @@ module.exports = {
         client.writeInstanceFile(rustplus.guildId, instance);
     },
 
+    commandNote: function (rustplus, client, message) {
+        let command = message.broadcast.teamMessage.message.message;
+        let instance = client.readInstanceFile(rustplus.guildId);
+        let serverId = `${rustplus.server}-${rustplus.port}`;
+
+        if (!instance.serverList[serverId].hasOwnProperty('notes')) {
+            instance.serverList[serverId].notes = {};
+        }
+
+        if (command === `${rustplus.generalSettings.prefix}notes`) {
+            if (Object.keys(instance.serverList[serverId].notes).length === 0) {
+                rustplus.printCommandOutput('There are no saved notes.');
+            }
+            else {
+                rustplus.printCommandOutput('Notes:');
+            }
+            for (const [id, note] of Object.entries(instance.serverList[serverId].notes)) {
+                let str = `${id}: ${note}`;
+                rustplus.printCommandOutput(str);
+            }
+        }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}note remove`)) {
+            let id = parseInt(command.replace(`${rustplus.generalSettings.prefix}note remove`, '').trim());
+
+            if (!isNaN(id)) {
+                if (!Object.keys(instance.serverList[serverId].notes).map(Number).includes(id)) {
+                    rustplus.printCommandOutput('Note ID does not exist.');
+                    return;
+                }
+
+                delete instance.serverList[serverId].notes[id];
+                rustplus.printCommandOutput(`Note with ID: ${id} was removed.`);
+                client.writeInstanceFile(rustplus.guildId, instance);
+                return;
+            }
+        }
+
+        if (command.startsWith(`${rustplus.generalSettings.prefix}note `)) {
+            let note = command.replace(`${rustplus.generalSettings.prefix}note `, '').trim();
+
+            index = 0;
+            while (Object.keys(instance.serverList[serverId].notes).map(Number).includes(index)) {
+                index += 1;
+            }
+
+            instance.serverList[serverId].notes[index] = `${note}`;
+            rustplus.printCommandOutput('Note saved.');
+        }
+
+        client.writeInstanceFile(rustplus.guildId, instance);
+    },
+
     commandOffline: function (rustplus) {
         let str = '';
         for (let player of rustplus.team.players) {
@@ -555,6 +610,7 @@ module.exports = {
 
             if (players.length === 0) {
                 rustplus.printCommandOutput('You are the only one in the team.');
+                return;
             }
 
             for (let player of players) {

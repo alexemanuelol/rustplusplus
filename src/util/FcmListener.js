@@ -159,6 +159,7 @@ async function pairingServer(client, guild, full, data, body) {
         url: isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL,
         timeTillDay: null,
         timeTillNight: null,
+        notes: {},
         messageId: (message !== undefined) ? message.id : null
     };
     client.writeInstanceFile(guild.id, instance);
