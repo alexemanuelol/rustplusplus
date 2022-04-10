@@ -41,6 +41,10 @@ class RustPlus extends RP {
             let messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - trademark.length;
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
 
+            if (this.team.allOffline) {
+                return;
+            }
+
             for (let msg of strings) {
                 if (!this.generalSettings.muteInGameBotMessages) {
                     await this.oldsendTeamMessageAsync(`${trademark}${msg}`);
