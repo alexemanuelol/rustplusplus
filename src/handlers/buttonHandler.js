@@ -108,6 +108,19 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'leaderCommandEnabled') {
+        instance.generalSettings.leaderCommandEnabled = !instance.generalSettings.leaderCommandEnabled;
+
+        if (rustplus) {
+            rustplus.generalSettings.leaderCommandEnabled = instance.generalSettings.leaderCommandEnabled;
+        }
+
+        let row = DiscordTools.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled);
+
+        await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let server = interaction.customId.replace('ServerConnect', '');
 

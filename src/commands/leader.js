@@ -24,6 +24,15 @@ module.exports = {
 			return;
 		}
 
+		if (!rustplus.generalSettings.leaderCommandEnabled) {
+			await interaction.editReply({
+				content: 'Leader command is turned OFF in settings.',
+				ephemeral: true
+			});
+			client.log('WARNING', 'Leader command is turned OFF in settings.');
+			return;
+		}
+
 		if (rustplus.team.leaderSteamId !== rustplus.playerId) {
 			let player = rustplus.team.getPlayer(rustplus.playerId);
 			await interaction.editReply({

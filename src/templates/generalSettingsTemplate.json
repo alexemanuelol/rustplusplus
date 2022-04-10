@@ -5,5 +5,6 @@
     "inGameCommandsEnabled": true,
     "fcmAlarmNotificationEnabled": false,
     "fcmAlarmNotificationEveryone": false,
-    "smartAlarmNotifyInGame": true
+    "smartAlarmNotifyInGame": true,
+    "leaderCommandEnabled": true
 }

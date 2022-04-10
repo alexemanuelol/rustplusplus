@@ -367,6 +367,11 @@ module.exports = {
         let callerId = message.broadcast.teamMessage.message.steamId.toString();
         let str = 'Team leadership was transferred to ';
 
+        if (!rustplus.generalSettings.leaderCommandEnabled) {
+            rustplus.printCommandOutput('Leader command is turned OFF in settings.');
+            return;
+        }
+
         if (rustplus.team.leaderSteamId !== rustplus.playerId) {
             let player = rustplus.team.getPlayer(rustplus.playerId);
             rustplus.printCommandOutput(`Leader command only works if the current leader is ${player.name}.`);

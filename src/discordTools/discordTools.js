@@ -202,6 +202,15 @@ module.exports = {
                     .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
     },
 
+    getLeaderCommandEnabledButton: function (enabled) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('leaderCommandEnabled')
+                    .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
+                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
+    },
+
     getPrefixSelectMenu: function (currentPrefix) {
         return new MessageActionRow()
             .addComponents(
