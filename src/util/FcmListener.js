@@ -272,21 +272,25 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         let info = await rustplus.getEntityInfoAsync(id);
         if (!(await rustplus.isResponseValid(info))) return;
 
-        if (info.entityInfo.payload.capacity === 28) {
-            instance.storageMonitors[id].type = 'toolcupboard';
-            instance.storageMonitors[id].image = 'tool_cupboard.png';
-            if (info.entityInfo.payload.protectionExpiry === 0) {
-                instance.storageMonitors[id].decaying = true;
+        if (info.entityInfo.payload.capacity !== 0) {
+            if (info.entityInfo.payload.capacity === 28) {
+                instance.storageMonitors[id].type = 'toolcupboard';
+                instance.storageMonitors[id].image = 'tool_cupboard.png';
+                if (info.entityInfo.payload.protectionExpiry === 0) {
+                    instance.storageMonitors[id].decaying = true;
+                }
             }
+            else {
+                instance.storageMonitors[id].type = 'container';
+            }
+            client.writeInstanceFile(guild.id, instance);
         }
-        else {
-            instance.storageMonitors[id].type = 'container';
-        }
-        client.writeInstanceFile(guild.id, instance);
 
         rustplus.storageMonitors[id] = {
             items: info.entityInfo.payload.items,
-            expiry: info.entityInfo.payload.protectionExpiry
+            expiry: info.entityInfo.payload.protectionExpiry,
+            capacity: info.entityInfo.payload.capacity,
+            hasProtection: info.entityInfo.payload.hasProtection
         }
 
         await DiscordTools.sendStorageMonitorMessage(guild.id, id);

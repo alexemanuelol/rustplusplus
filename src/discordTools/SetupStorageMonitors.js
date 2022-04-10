@@ -12,11 +12,10 @@ module.exports = async (client, rustplus) => {
         if (server !== `${value.ipPort}`) continue;
 
         let info = await rustplus.getEntityInfoAsync(key);
-        if (!(await rustplus.isResponseValid(info))) return;
 
         instance = client.readInstanceFile(rustplus.guildId);
 
-        if (info.error) {
+        if (!(await rustplus.isResponseValid(info))) {
             delete instance.storageMonitors[key];
             client.writeInstanceFile(rustplus.guildId, instance);
             continue;
@@ -24,16 +23,26 @@ module.exports = async (client, rustplus) => {
 
         rustplus.storageMonitors[key] = {
             items: info.entityInfo.payload.items,
-            expiry: info.entityInfo.payload.protectionExpiry
+            expiry: info.entityInfo.payload.protectionExpiry,
+            capacity: info.entityInfo.payload.capacity,
+            hasProtection: info.entityInfo.payload.hasProtection
         }
 
-        if (info.entityInfo.payload.protectionExpiry === 0) {
-            instance.storageMonitors[key].decaying = true;
+        if (info.entityInfo.payload.capacity !== 0) {
+            if (info.entityInfo.payload.capacity === 28) {
+                instance.storageMonitors[key].type = 'toolcupboard';
+                if (info.entityInfo.payload.protectionExpiry === 0) {
+                    instance.storageMonitors[key].decaying = true;
+                }
+                else {
+                    instance.storageMonitors[key].decaying = false;
+                }
+            }
+            else {
+                instance.storageMonitors[key].type = 'container';
+            }
+            client.writeInstanceFile(rustplus.guildId, instance);
         }
-        else {
-            instance.storageMonitors[key].decaying = false;
-        }
-        client.writeInstanceFile(rustplus.guildId, instance);
 
         DiscordTools.sendStorageMonitorMessage(rustplus.guildId, key);
     }

@@ -8,11 +8,10 @@ module.exports = async (client, rustplus) => {
         if (server !== `${value.ipPort}`) continue;
 
         let info = await rustplus.getEntityInfoAsync(key);
-        if (!(await rustplus.isResponseValid(info))) return;
 
         instance = client.readInstanceFile(rustplus.guildId);
 
-        if (info.error) {
+        if (!(await rustplus.isResponseValid(info))) {
             let messageId = instance.alarms[key].messageId;
             let message = await DiscordTools.getMessageById(rustplus.guildId, instance.channelId.alarms, messageId);
             if (message !== undefined) {
