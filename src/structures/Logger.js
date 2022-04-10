@@ -4,7 +4,12 @@ const colors = require("colors");
 class Logger {
     constructor(logFilePath, type) {
         this.logger = winston.createLogger({
-            transports: [new winston.transports.File({ filename: logFilePath })],
+            transports: [new winston.transports.File({
+                filename: logFilePath,
+                maxsize: 10000000,
+                maxFiles: 2,
+                tailable: true
+            })],
         });
 
         this.type = type;
