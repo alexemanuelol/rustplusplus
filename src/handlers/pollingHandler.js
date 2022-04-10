@@ -5,11 +5,12 @@ const LockedCrate = require('../inGameEvents/lockedCrate.js');
 const OilRig = require('../inGameEvents/oilRig.js');
 const VendingMachine = require('../inGameEvents/vendingMachine.js');
 
-const SwitchHandler = require('../handlers/switchHandler.js');
+const SmartSwitchHandler = require('../handlers/smartSwitchHandler.js');
 const TimeHandler = require('../handlers/timeHandler.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const InformationHandler = require('../handlers/informationHandler.js');
 const StorageMonitorHandler = require('../handlers/storageMonitorHandler.js');
+const SmartAlarmHandler = require('../handlers/smartAlarmHandler.js');
 
 const Time = require('../structures/Time');
 const Team = require('../structures/Team');
@@ -39,7 +40,7 @@ module.exports = {
 
     handlers: function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Module handlers */
-        SwitchHandler.handler(rustplus, client, time.time);
+        SmartSwitchHandler.handler(rustplus, client, time.time);
         TimeHandler.handler(rustplus, client, time.time);
         TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
 
@@ -50,6 +51,7 @@ module.exports = {
 
         InformationHandler.handler(rustplus, client);
         StorageMonitorHandler.handler(rustplus, client);
+        SmartAlarmHandler.handler(rustplus, client);
 
 
         /* In-game event handlers */

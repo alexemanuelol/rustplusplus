@@ -570,7 +570,7 @@ module.exports = {
             return new MessageEmbed()
                 .setTitle(`${instance.storageMonitors[id].name}`)
                 .setColor('#ce412b')
-                .setDescription(`${description}\n \`STATUS:\` NOT ELECTRICALLY CONNECTED!`)
+                .setDescription(`${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``)
                 .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
                 .setFooter({ text: `${instance.storageMonitors[id].server}` });
         }
@@ -797,6 +797,27 @@ module.exports = {
                 .setDescription(`**ID** \`${id}\``)
                 .setThumbnail(`attachment://${instance.switches[id].image}`)
                 .setFooter({ text: `${instance.switches[id].server}` })
+                .setTimestamp()];
+
+            content.files = [file];
+
+            await channel.send(content);
+        }
+    },
+
+    sendSmartAlarmNotFound: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
+        const file = new MessageAttachment(`src/resources/images/electrics/${instance.alarms[id].image}`);
+
+        if (channel) {
+            let content = {};
+            content.embeds = [new MessageEmbed()
+                .setTitle(`${instance.alarms[id].name} could not be found! Might have been destroyed.`)
+                .setColor('#ff0040')
+                .setDescription(`**ID** \`${id}\``)
+                .setThumbnail(`attachment://${instance.alarms[id].image}`)
+                .setFooter({ text: `${instance.alarms[id].server}` })
                 .setTimestamp()];
 
             content.files = [file];
