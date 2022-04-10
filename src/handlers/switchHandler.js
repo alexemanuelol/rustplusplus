@@ -8,21 +8,44 @@ module.exports = {
         if (rustplus.time.isTurnedDay(time)) {
             for (const [key, value] of Object.entries(instance.switches)) {
                 if (server !== `${value.ipPort}`) continue;
+                instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
+                    let response = await rustplus.turnSmartSwitchOnAsync(key);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+
+                        delete instance.switches[key];
+                        client.writeInstanceFile(rustplus.guildId, instance);
+
+                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        delete client.switchesMessages[rustplus.guildId][key];
+                        continue;
+                    }
+
                     instance.switches[key].active = true;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
-                    rustplus.turnSmartSwitchOnAsync(key);
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = true;
                 }
                 else if (value.autoDayNight === 2) {
+                    let response = await rustplus.turnSmartSwitchOffAsync(key);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+
+                        delete instance.switches[key];
+                        client.writeInstanceFile(rustplus.guildId, instance);
+
+                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        delete client.switchesMessages[rustplus.guildId][key];
+                        continue;
+                    }
+
                     instance.switches[key].active = false;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
-                    rustplus.turnSmartSwitchOffAsync(key);
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = false;
@@ -32,21 +55,44 @@ module.exports = {
         else if (rustplus.time.isTurnedNight(time)) {
             for (const [key, value] of Object.entries(instance.switches)) {
                 if (server !== `${value.ipPort}`) continue;
+                instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
+                    let response = await rustplus.turnSmartSwitchOffAsync(key);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+
+                        delete instance.switches[key];
+                        client.writeInstanceFile(rustplus.guildId, instance);
+
+                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        delete client.switchesMessages[rustplus.guildId][key];
+                        continue;
+                    }
+
                     instance.switches[key].active = false;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
-                    rustplus.turnSmartSwitchOffAsync(key);
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = false;
                 }
                 else if (value.autoDayNight === 2) {
+                    let response = await rustplus.turnSmartSwitchOnAsync(key);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+
+                        delete instance.switches[key];
+                        client.writeInstanceFile(rustplus.guildId, instance);
+
+                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        delete client.switchesMessages[rustplus.guildId][key];
+                        continue;
+                    }
+
                     instance.switches[key].active = true;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
-                    rustplus.turnSmartSwitchOnAsync(key);
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
 
                     rustplus.interactionSwitches[key] = true;

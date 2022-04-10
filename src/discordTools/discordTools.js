@@ -747,4 +747,25 @@ module.exports = {
             await channel.send(content);
         }
     },
+
+    sendSmartSwitchNotFound: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
+        const file = new MessageAttachment(`src/resources/images/electrics/${instance.switches[id].image}`);
+
+        if (channel) {
+            let content = {};
+            content.embeds = [new MessageEmbed()
+                .setTitle(`${instance.switches[id].name} could not be found! Might have been destroyed.`)
+                .setColor('#ff0040')
+                .setDescription(`**ID** \`${id}\``)
+                .setThumbnail(`attachment://${instance.switches[id].image}`)
+                .setFooter({ text: `${instance.switches[id].server}` })
+                .setTimestamp()];
+
+            content.files = [file];
+
+            await channel.send(content);
+        }
+    },
 }

@@ -220,10 +220,29 @@ module.exports = async (client, interaction) => {
         }
 
         let active = (interaction.customId.endsWith('OnSmartSwitch')) ? true : false;
+
+        let response = null;
+        if (active) {
+            response = await rustplus.turnSmartSwitchOnAsync(id);
+        }
+        else {
+            response = await rustplus.turnSmartSwitchOffAsync(id);
+        }
+
+        if (!(await rustplus.isResponseValid(response))) {
+            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+
+            delete instance.switches[id];
+            client.writeInstanceFile(rustplus.guildId, instance);
+
+            await client.switchesMessages[rustplus.guildId][id].delete();
+            delete client.switchesMessages[rustplus.guildId][id];
+            return;
+        }
+
         instance.switches[id].active = active;
         client.writeInstanceFile(guildId, instance);
 
-        rustplus.turnSmartSwitchAsync(id, active);
         DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false, interaction);
 
         rustplus.interactionSwitches[id] = active;
