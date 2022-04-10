@@ -34,17 +34,12 @@ class RustPlus extends RP {
         this.items = new Items();
 
         this.trademarkString = 'rustPlusPlus | ';
-        this.messageIgnoreCounter = 0;
 
         this.oldsendTeamMessageAsync = this.sendTeamMessageAsync;
         this.sendTeamMessageAsync = async function (message) {
             let trademark = (this.generalSettings.showTrademark) ? this.trademarkString : '';
             let messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - trademark.length;
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
-
-            if (!this.generalSettings.showTrademark) {
-                this.messageIgnoreCounter = strings.length;
-            }
 
             for (let msg of strings) {
                 if (!this.generalSettings.muteInGameBotMessages) {
