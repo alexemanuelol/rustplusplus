@@ -370,37 +370,45 @@ module.exports = {
         else {
             let name = command.replace(`${rustplus.generalSettings.prefix}leader `, '');
 
+            let matchedPlayer = null;
             /* Look if the value provided is a steamId */
             for (let player of rustplus.team.players) {
                 if (name === player.steamId) {
-                    await rustplus.team.changeLeadership(player.steamId);
-                    str += `${player.name}.`;
-                    rustplus.printCommandOutput(str);
-                    return;
+                    matchedPlayer = player;
                 }
             }
 
-            /* Look for parts of the name */
-            for (let player of rustplus.team.players) {
-                if (player.name.toLowerCase().includes(name.toLowerCase())) {
-                    await rustplus.team.changeLeadership(player.steamId);
-                    str += `${player.name}.`;
-                    rustplus.printCommandOutput(str);
-                    return;
+            if (matchedPlayer === null) {
+                /* Look for parts of the name */
+                for (let player of rustplus.team.players) {
+                    if (player.name.toLowerCase().includes(name.toLowerCase())) {
+                        matchedPlayer = player;
+                    }
                 }
             }
 
-            /* Find the closest name */
-            for (let player of rustplus.team.players) {
-                if (Str.similarity(name, player.name) >= 0.9) {
-                    await rustplus.team.changeLeadership(player.steamId);
-                    str += `${player.name}.`;
-                    rustplus.printCommandOutput(str);
-                    return;
+            if (matchedPlayer === null) {
+                /* Find the closest name */
+                for (let player of rustplus.team.players) {
+                    if (Str.similarity(name, player.name) >= 0.9) {
+                        matchedPlayer = player;
+                    }
                 }
             }
 
-            rustplus.printCommandOutput(`Could not identify team member: ${name}.`);
+            if (matchedPlayer === null) {
+                rustplus.printCommandOutput(`Could not identify team member: ${name}.`);
+            }
+            else {
+                if (rustplus.team.leaderSteamId === matchedPlayer.steamId) {
+                    rustplus.printCommandOutput(`${matchedPlayer.name} is already leader.`);
+                }
+                else {
+                    await rustplus.team.changeLeadership(matchedPlayer.steamId);
+                    str += `${matchedPlayer.name}.`;
+                    rustplus.printCommandOutput(str);
+                }
+            }
         }
     },
 

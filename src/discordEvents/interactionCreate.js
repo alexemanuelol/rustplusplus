@@ -4,9 +4,11 @@ module.exports = {
         let instance = client.readInstanceFile(interaction.guildId);
 
         /* Check so that the interaction comes from valid channels */
-        if (!Object.values(instance.channelId).includes(interaction.channelId)) {
+        if (!Object.values(instance.channelId).includes(interaction.channelId) && !interaction.isCommand) {
             client.log('WARNING', 'Interaction from an invalild channel.')
-            interaction.deferUpdate();
+            if (interaction.isButton()) {
+                interaction.deferUpdate();
+            }
         }
 
         if (interaction.isButton()) {
@@ -36,7 +38,9 @@ module.exports = {
         }
         else {
             client.log('ERROR', 'Unknown Interaction...', 'error')
-            interaction.deferUpdate();
+            if (interaction.isButton()) {
+                interaction.deferUpdate();
+            }
         }
     },
 };
