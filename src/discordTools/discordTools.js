@@ -1,6 +1,7 @@
 const { MessageActionRow, MessageButton, MessageSelectMenu, Permissions, MessageEmbed, MessageAttachment } = require('discord.js');
 const Client = require('../../index.js');
 const Timer = require('../util/timer');
+const Constants = require('../util/constants.js');
 
 module.exports = {
     getGuild: function (guildId) {
@@ -832,6 +833,118 @@ module.exports = {
             content.files = [file];
 
             await channel.send(content);
+        }
+    },
+
+    getSmartSwitchGroupEmbed: function (guildId, name) {
+        const instance = Client.client.readInstanceFile(guildId);
+        let rustplus = Client.client.rustplusInstances[guildId];
+        let server = `${rustplus.server}-${rustplus.port}`;
+        let group = instance.serverList[server].switchGroups[name];
+
+        let switchName = '';
+        let switchId = '';
+        let switchActive = '';
+        for (let groupSwitchId of group.switches) {
+            if (instance.switches.hasOwnProperty(groupSwitchId)) {
+                let active = instance.switches[groupSwitchId].active;
+                switchName += `\`${instance.switches[groupSwitchId].name}\`\n`;
+                switchId += `\`${groupSwitchId}\`\n`;
+                switchActive += `${(active) ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI}\n`;
+            }
+            else {
+                instance.serverList[server].switchGroups[name].switches =
+                    instance.serverList[server].switchGroups[name].switches.filter(e => e !== groupSwitchId);
+            }
+        }
+        Client.client.writeInstanceFile(guildId, instance);
+
+        if (switchName === '' || switchId === '' || switchActive === '') {
+            switchName = 'None';
+            switchId = 'None';
+            switchActive = 'None';
+        }
+
+        return new MessageEmbed()
+            .setTitle(name)
+            .setColor('#ce412b')
+            .setDescription(``)
+            .setThumbnail('attachment://smart_switch.png')
+            .addFields(
+                {
+                    name: 'Custom Command',
+                    value: `\`${instance.generalSettings.prefix}${group.command}\``,
+                    inline: false
+                },
+                { name: 'Switches', value: switchName, inline: true },
+                { name: 'ID', value: switchId, inline: true },
+                { name: 'Active', value: switchActive, inline: true }
+            )
+            .setFooter({ text: `${instance.serverList[server].title}` })
+    },
+
+    getSmartSwitchGroupButtons: function (name) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`${name}TurnOnGroup`)
+                    .setLabel('TURN ON')
+                    .setStyle('PRIMARY'),
+                new MessageButton()
+                    .setCustomId(`${name}TurnOffGroup`)
+                    .setLabel('TURN OFF')
+                    .setStyle('PRIMARY'),
+                new MessageButton()
+                    .setCustomId(`${name}DeleteGroup`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY'));
+    },
+
+    sendSmartSwitchGroupMessage: async function (guildId, name, e = true, c = true, f = true, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const file = new MessageAttachment('src/resources/images/electrics/smart_switch.png');
+        const embed = module.exports.getSmartSwitchGroupEmbed(guildId, name);
+        const buttons = module.exports.getSmartSwitchGroupButtons(name);
+
+        let content = new Object();
+        if (e) {
+            content.embeds = [embed];
+        }
+        if (c) {
+            content.components = [buttons];
+        }
+        if (f) {
+            content.files = [file];
+        }
+
+        if (interaction) {
+            try {
+                await interaction.update(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Unknown interaction`, 'error');
+            }
+            return;
+        }
+
+        if (Client.client.switchesMessages[guildId][name]) {
+            try {
+                await Client.client.switchesMessages[guildId][name].edit(content);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `While editing smart switch group message: ${e}`, 'error');
+                return;
+            }
+        }
+        else {
+            const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
+
+            if (!channel) {
+                Client.client.log('ERROR', 'sendSmartSwotchGroupMessage: Invalid guild or channel.', 'error');
+                return;
+            }
+            Client.client.switchesMessages[guildId][name] = await channel.send(content);
         }
     },
 }

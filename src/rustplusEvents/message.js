@@ -3,6 +3,7 @@ const TeamChatHandler = require("../handlers/teamChatHandler.js");
 const DiscordTools = require('../discordTools/discordTools.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
+const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
 module.exports = {
     name: 'message',
@@ -30,8 +31,8 @@ module.exports = {
                 let id = message.broadcast.entityChanged.entityId;
 
                 if (instance.switches.hasOwnProperty(id)) {
-                    if (rustplus.interactionSwitches.hasOwnProperty(id)) {
-                        delete rustplus.interactionSwitches[id];
+                    if (rustplus.interactionSwitches.includes(`${id}`)) {
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== `${id}`);
                     }
                     else {
                         let active = message.broadcast.entityChanged.payload.value;
@@ -39,6 +40,8 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+                            client, rustplus.guildId, `${rustplus.server}-${rustplus.port}`, id);
                     }
                 }
                 else if (instance.alarms.hasOwnProperty(id)) {

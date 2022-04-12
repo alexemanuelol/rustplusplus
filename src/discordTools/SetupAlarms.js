@@ -27,7 +27,7 @@ module.exports = async (client, rustplus) => {
             instance.alarms[key].active = info.entityInfo.payload.value;
             client.writeInstanceFile(rustplus.guildId, instance);
 
-            DiscordTools.sendSmartAlarmMessage(rustplus.guildId, key);
+            await DiscordTools.sendSmartAlarmMessage(rustplus.guildId, key);
         }
     }
 };

@@ -26,6 +26,6 @@ module.exports = async (client, rustplus) => {
         instance.switches[key].active = active;
         client.writeInstanceFile(rustplus.guildId, instance);
 
-        DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
+        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
     }
 };

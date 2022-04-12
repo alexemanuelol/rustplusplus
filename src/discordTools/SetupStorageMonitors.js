@@ -44,6 +44,6 @@ module.exports = async (client, rustplus) => {
             client.writeInstanceFile(rustplus.guildId, instance);
         }
 
-        DiscordTools.sendStorageMonitorMessage(rustplus.guildId, key);
+        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, key);
     }
 };

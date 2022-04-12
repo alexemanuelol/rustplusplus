@@ -4,6 +4,7 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.js');
 const Constants = require('../util/constants.js');
 const TeamHandler = require('../handlers/teamHandler.js');
+const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
@@ -114,6 +115,11 @@ module.exports = {
                         return false;
                     }
 
+                    instance.switches[id].active = active;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    rustplus.interactionSwitches.push(id);
+
                     let response = null;
                     if (active) {
                         response = await rustplus.turnSmartSwitchOnAsync(id);
@@ -129,24 +135,47 @@ module.exports = {
                         delete instance.switches[id];
                         client.writeInstanceFile(rustplus.guildId, instance);
 
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
+
                         await client.switchesMessages[rustplus.guildId][id].delete();
                         delete client.switchesMessages[rustplus.guildId][id];
                         return false;
                     }
 
-                    instance.switches[id].active = active;
-                    client.writeInstanceFile(rustplus.guildId, instance);
-
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                    SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+                        client, rustplus.guildId, `${rustplus.server}-${rustplus.port}`, id);
+
                     let str = `${instance.switches[id].name} was turned `;
                     str += (active) ? 'on.' : 'off.';
                     rustplus.printCommandOutput(str);
 
-                    rustplus.interactionSwitches[id] = active;
+                    return true;
+                }
+            }
+
+            let groups = instance.serverList[`${rustplus.server}-${rustplus.port}`].switchGroups;
+            for (const [groupName, content] of Object.entries(groups)) {
+                let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
+                if (command.startsWith(cmd)) {
+                    let active;
+                    if (command === `${cmd} on`) {
+                        active = true;
+                    }
+                    else if (command === `${cmd} off`) {
+                        active = false;
+                    }
+                    else {
+                        return false;
+                    }
+
+                    await SmartSwitchGroupHandler.TurnOnOffGroup(
+                        client, rustplus, rustplus.guildId, `${rustplus.server}-${rustplus.port}`, groupName, active);
 
                     return true;
                 }
             }
+
             return false;
         }
 

@@ -160,6 +160,7 @@ async function pairingServer(client, guild, full, data, body) {
         timeTillDay: null,
         timeTillNight: null,
         notes: {},
+        switchGroups: {},
         messageId: (message !== undefined) ? message.id : null
     };
     client.writeInstanceFile(guild.id, instance);

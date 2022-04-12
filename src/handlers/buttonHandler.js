@@ -1,4 +1,5 @@
 const DiscordTools = require('../discordTools/discordTools.js');
+const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = async (client, interaction) => {
     let guildId = interaction.guildId;
@@ -234,6 +235,11 @@ module.exports = async (client, interaction) => {
 
         let active = (interaction.customId.endsWith('OnSmartSwitch')) ? true : false;
 
+        instance.switches[id].active = active;
+        client.writeInstanceFile(guildId, instance);
+
+        rustplus.interactionSwitches.push(id);
+
         let response = null;
         if (active) {
             response = await rustplus.turnSmartSwitchOnAsync(id);
@@ -248,17 +254,16 @@ module.exports = async (client, interaction) => {
             delete instance.switches[id];
             client.writeInstanceFile(rustplus.guildId, instance);
 
+            rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
+
             await client.switchesMessages[rustplus.guildId][id].delete();
             delete client.switchesMessages[rustplus.guildId][id];
             return;
         }
 
-        instance.switches[id].active = active;
-        client.writeInstanceFile(guildId, instance);
-
         DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false, interaction);
-
-        rustplus.interactionSwitches[id] = active;
+        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+            client, interaction.guildId, instance.switches[id].ipPort, id);
     }
     else if (interaction.customId.endsWith('SmartSwitchDelete')) {
         let id = interaction.customId.replace('SmartSwitchDelete', '');
@@ -323,6 +328,32 @@ module.exports = async (client, interaction) => {
 
         await client.storageMonitorsMessages[guildId][id].delete();
         delete client.storageMonitorsMessages[guildId][id];
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId.endsWith('TurnOnGroup') ||
+        interaction.customId.endsWith('TurnOffGroup')) {
+        let id = interaction.customId.replace('TurnOnGroup', '');
+        id = id.replace('TurnOffGroup', '');
+
+        if (!rustplus) {
+            client.log('ERROR', 'Rustplus is not connected, cannot use Smart Switch Groups...', 'error')
+            interaction.deferUpdate();
+            return false;
+        }
+
+        let active = (interaction.customId.endsWith('TurnOnGroup') ? true : false);
+
+        await SmartSwitchGroupHandler.TurnOnOffGroup(
+            client, rustplus, interaction.guildId, `${rustplus.server}-${rustplus.port}`, id, active);
+    }
+    else if (interaction.customId.endsWith('DeleteGroup')) {
+        let id = interaction.customId.replace('DeleteGroup', '');
+
+        delete instance.serverList[`${rustplus.server}-${rustplus.port}`].switchGroups[id];
+
+        await client.switchesMessages[guildId][id].delete();
+        delete client.switchesMessages[guildId][id];
 
         client.writeInstanceFile(guildId, instance);
     }

@@ -1,4 +1,5 @@
 const DiscordTools = require('../discordTools/discordTools.js');
+const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = {
     handler: async function (rustplus, client, time) {
@@ -28,12 +29,18 @@ module.exports = {
             rustplus.smartSwitchIntervalCounter += 1;
         }
 
+        let changedSwitches = [];
         if (rustplus.time.isTurnedDay(time)) {
             for (const [key, value] of Object.entries(instance.switches)) {
                 if (server !== `${value.ipPort}`) continue;
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
+                    instance.switches[key].active = true;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    rustplus.interactionSwitches.push(key);
+
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
@@ -41,19 +48,23 @@ module.exports = {
                         delete instance.switches[key];
                         client.writeInstanceFile(rustplus.guildId, instance);
 
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
+
                         await client.switchesMessages[rustplus.guildId][key].delete();
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }
 
-                    instance.switches[key].active = true;
-                    client.writeInstanceFile(rustplus.guildId, instance);
 
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
-
-                    rustplus.interactionSwitches[key] = true;
+                    changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
+                    instance.switches[key].active = false;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    rustplus.interactionSwitches.push(key);
+
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
@@ -61,17 +72,15 @@ module.exports = {
                         delete instance.switches[key];
                         client.writeInstanceFile(rustplus.guildId, instance);
 
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
+
                         await client.switchesMessages[rustplus.guildId][key].delete();
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }
 
-                    instance.switches[key].active = false;
-                    client.writeInstanceFile(rustplus.guildId, instance);
-
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
-
-                    rustplus.interactionSwitches[key] = false;
+                    changedSwitches.push(key);
                 }
             }
         }
@@ -81,6 +90,11 @@ module.exports = {
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
+                    instance.switches[key].active = false;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    rustplus.interactionSwitches.push(key);
+
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
@@ -88,19 +102,22 @@ module.exports = {
                         delete instance.switches[key];
                         client.writeInstanceFile(rustplus.guildId, instance);
 
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
+
                         await client.switchesMessages[rustplus.guildId][key].delete();
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }
 
-                    instance.switches[key].active = false;
-                    client.writeInstanceFile(rustplus.guildId, instance);
-
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
-
-                    rustplus.interactionSwitches[key] = false;
+                    changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
+                    instance.switches[key].active = true;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                    rustplus.interactionSwitches.push(key);
+
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
@@ -108,19 +125,24 @@ module.exports = {
                         delete instance.switches[key];
                         client.writeInstanceFile(rustplus.guildId, instance);
 
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
+
                         await client.switchesMessages[rustplus.guildId][key].delete();
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }
 
-                    instance.switches[key].active = true;
-                    client.writeInstanceFile(rustplus.guildId, instance);
-
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
-
-                    rustplus.interactionSwitches[key] = true;
+                    changedSwitches.push(key);
                 }
             }
+        }
+
+        let groups = SmartSwitchGroupHandler.getGroupsFromSwitchList(
+            client, rustplus.guildId, server, changedSwitches);
+
+        for (let group of groups) {
+            await DiscordTools.sendSmartSwitchGroupMessage(rustplus.guildId, group);
         }
     },
 }
