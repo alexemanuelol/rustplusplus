@@ -848,8 +848,8 @@ module.exports = {
         for (let groupSwitchId of group.switches) {
             if (instance.switches.hasOwnProperty(groupSwitchId)) {
                 let active = instance.switches[groupSwitchId].active;
-                switchName += `\`${instance.switches[groupSwitchId].name}\`\n`;
-                switchId += `\`${groupSwitchId}\`\n`;
+                switchName += `${instance.switches[groupSwitchId].name}\n`;
+                switchId += `${groupSwitchId}\n`;
                 switchActive += `${(active) ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI}\n`;
             }
             else {
