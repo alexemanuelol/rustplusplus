@@ -7,7 +7,10 @@ module.exports = {
         if (!Object.values(instance.channelId).includes(interaction.channelId) && !interaction.isCommand) {
             client.log('WARNING', 'Interaction from an invalild channel.')
             if (interaction.isButton()) {
-                interaction.deferUpdate();
+                try {
+                    interaction.deferUpdate();
+                }
+                catch (e) { }
             }
         }
 
@@ -39,7 +42,10 @@ module.exports = {
         else {
             client.log('ERROR', 'Unknown Interaction...', 'error')
             if (interaction.isButton()) {
-                interaction.deferUpdate();
+                try {
+                    interaction.deferUpdate();
+                }
+                catch (e) { }
             }
         }
     },

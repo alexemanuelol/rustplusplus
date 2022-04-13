@@ -228,8 +228,11 @@ module.exports = async (client, interaction) => {
         if (!(rustplus &&
             instance.switches[id].ipPort === `${rustplus.server}-${rustplus.port}` &&
             rustplus.connected)) {
+            try {
+                interaction.deferUpdate();
+            }
+            catch (e) { }
             client.log('ERROR', 'Rustplus is not connected, cannot use Smart Switches...', 'error')
-            interaction.deferUpdate();
             return;
         }
 
@@ -336,9 +339,13 @@ module.exports = async (client, interaction) => {
         let id = interaction.customId.replace('TurnOnGroup', '');
         id = id.replace('TurnOffGroup', '');
 
+        try {
+            interaction.deferUpdate();
+        }
+        catch (e) { }
+
         if (!rustplus) {
             client.log('ERROR', 'Rustplus is not connected, cannot use Smart Switch Groups...', 'error')
-            interaction.deferUpdate();
             return false;
         }
 

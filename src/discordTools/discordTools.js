@@ -941,7 +941,7 @@ module.exports = {
             const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
 
             if (!channel) {
-                Client.client.log('ERROR', 'sendSmartSwotchGroupMessage: Invalid guild or channel.', 'error');
+                Client.client.log('ERROR', 'sendSmartSwitchGroupMessage: Invalid guild or channel.', 'error');
                 return;
             }
             Client.client.switchesMessages[guildId][name] = await channel.send(content);
