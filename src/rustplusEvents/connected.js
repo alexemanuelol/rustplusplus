@@ -10,6 +10,8 @@ module.exports = {
     async execute(rustplus, client) {
         rustplus.log('CONNECTED', 'RUSTPLUS CONNECTED');
 
+        rustplus.tokens_replenish_task = setInterval(rustplus.replenish_tokens.bind(rustplus), 1000);
+
         let server = `${rustplus.server}-${rustplus.port}`;
         let instance = client.readInstanceFile(rustplus.guildId);
 

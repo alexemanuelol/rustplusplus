@@ -8,6 +8,7 @@ module.exports = {
 
         /* Clear the current interval of inGameEventHandler */
         clearInterval(rustplus.intervalId);
+        clearInterval(rustplus.tokens_replenish_task);
 
         let server = `${rustplus.server}-${rustplus.port}`;
         let instance = client.readInstanceFile(rustplus.guildId);

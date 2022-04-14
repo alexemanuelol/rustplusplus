@@ -7,6 +7,7 @@ const path = require('path');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
 const Items = require('./Items');
+const Timer = require('../util/timer.js');
 
 class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
@@ -99,6 +100,11 @@ class RustPlus extends RP {
 
         /* Load rustplus events */
         this.loadEvents();
+
+        this.tokens = 24;
+        this.tokens_limit = 24;     /* Per player */
+        this.tokens_replenish = 3;  /* Per second */
+        this.tokens_replenish_task = 0;
     }
 
     loadEvents() {
@@ -189,6 +195,34 @@ class RustPlus extends RP {
         this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
     }
 
+    replenish_tokens() {
+        this.tokens += this.tokens_replenish;
+        if (this.tokens > this.tokens_limit) {
+            this.tokens = this.tokens_limit;
+        }
+    }
+
+    async waitForAvailableTokens(cost) {
+        let timeoutCounter = 0;
+        while (this.tokens < cost) {
+            if (timeoutCounter === 90) return false;
+
+            await Timer.sleep(333);
+            timeoutCounter += 1;
+        }
+        this.tokens -= cost;
+        return true;
+    }
+
+    async turnSmartSwitchAsync(id, value, timeout = 10000) {
+        if (value) {
+            return await this.turnSmartSwitchOnAsync(id, timeout);
+        }
+        else {
+            return await this.turnSmartSwitchOffAsync(id, timeout);
+        }
+    }
+
     async turnSmartSwitchOnAsync(id, timeout = 10000) {
         try {
             return await this.setEntityValueAsync(id, true, timeout);
@@ -207,17 +241,12 @@ class RustPlus extends RP {
         }
     }
 
-    async turnSmartSwitchAsync(id, value, timeout = 10000) {
-        if (value) {
-            return await this.turnSmartSwitchOnAsync(id, timeout);
-        }
-        else {
-            return await this.turnSmartSwitchOffAsync(id, timeout);
-        }
-    }
-
     async setEntityValueAsync(id, value, timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 entityId: id,
                 setEntityValue: {
@@ -234,6 +263,10 @@ class RustPlus extends RP {
 
     async sendTeamMessageAsync(message, timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(2))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 sendTeamMessage: {
                     message: message
@@ -249,6 +282,10 @@ class RustPlus extends RP {
 
     async getEntityInfoAsync(id, timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 entityId: id,
                 getEntityInfo: {}
@@ -263,6 +300,10 @@ class RustPlus extends RP {
 
     async getMapAsync(timeout = 30000) {
         try {
+            if (!(await this.waitForAvailableTokens(5))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 getMap: {}
             }, timeout).catch((e) => {
@@ -276,6 +317,10 @@ class RustPlus extends RP {
 
     async getTimeAsync(timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 getTime: {}
             }, timeout).catch((e) => {
@@ -289,6 +334,10 @@ class RustPlus extends RP {
 
     async getMapMarkersAsync(timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 getMapMarkers: {}
             }, timeout).catch((e) => {
@@ -302,6 +351,10 @@ class RustPlus extends RP {
 
     async getInfoAsync(timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 getInfo: {}
             }, timeout).catch((e) => {
@@ -315,6 +368,10 @@ class RustPlus extends RP {
 
     async getTeamInfoAsync(timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 getTeamInfo: {}
             }, timeout).catch((e) => {
@@ -328,6 +385,10 @@ class RustPlus extends RP {
 
     async promoteToLeaderAsync(steamId, timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 promoteToLeader: {
                     steamId: steamId
@@ -343,10 +404,12 @@ class RustPlus extends RP {
 
     async getTeamChatAsync(timeout = 10000) {
         try {
-            return await this.sendRequestAsync({
-                getTeamChat: {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
 
-                }
+            return await this.sendRequestAsync({
+                getTeamChat: {}
             }, timeout).catch((e) => {
                 return e;
             })
@@ -354,11 +417,14 @@ class RustPlus extends RP {
         catch (e) {
             return e;
         }
-
     }
 
     async checkSubscriptionAsync(id, timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 entityId: id,
                 checkSubscription: {}
@@ -373,6 +439,10 @@ class RustPlus extends RP {
 
     async setSubscriptionAsync(id, value, timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 entityId: id,
                 setSubscription: {
@@ -389,6 +459,10 @@ class RustPlus extends RP {
 
     async getCameraFrameAsync(identifier, frame, timeout = 10000) {
         try {
+            if (!(await this.waitForAvailableTokens(2))) {
+                return { error: 'Tokens did not replenish in time.' };
+            }
+
             return await this.sendRequestAsync({
                 getCameraFrame: {
                     identifier: identifier,
