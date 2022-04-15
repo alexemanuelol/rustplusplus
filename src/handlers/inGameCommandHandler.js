@@ -241,16 +241,20 @@ module.exports = {
             unhandled = unhandled.filter(e => e != parseInt(id));
             let time = Timer.getTimeLeftOfTimer(timer);
             let pos = rustplus.activeCargoShips[parseInt(id)].location;
+            let crates = rustplus.activeCargoShips[parseInt(id)].crates.length;
 
             if (time !== null) {
-                strings.push(`Approximately ${time} before Cargo Ship at ${pos} enters egress stage.`);
+                strings.push(
+                    `Approximately ${time} before Cargo Ship at ${pos} enters egress stage.` +
+                    ` Active crates: (${crates}/3)`);
             }
         }
 
         if (unhandled.length > 0) {
             for (let cargoShip of unhandled) {
                 let pos = rustplus.activeCargoShips[cargoShip].location;
-                strings.push(`Cargo Ship is located at ${pos}.`);
+                let crates = rustplus.activeCargoShips[cargoShip].crates.length;
+                strings.push(`Cargo Ship is located at ${pos}. Active crates: (${crates}/3)`);
             }
         }
 

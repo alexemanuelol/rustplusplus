@@ -33,17 +33,22 @@ module.exports = {
                     if (module.exports.isCrateOnCargoShip(marker.x, marker.y, mapMarkers)) {
                         let cargoShipId = module.exports.getCargoShipId(marker.x, marker.y, mapMarkers);
 
-                        rustplus.sendEvent(
-                            rustplus.notificationSettings.lockedCrateSpawnCargoShip,
-                            `Locked Crate just spawned on Cargo Ship at ${pos}.`,
-                            rustplus.firstPoll);
-
                         rustplus.activeLockedCrates[marker.id].type = 'cargoShip';
                         rustplus.activeLockedCrates[marker.id].cargoShipId = cargoShipId;
 
+                        let crates = '';
                         if (rustplus.activeCargoShips[cargoShipId]) {
                             rustplus.activeCargoShips[cargoShipId].crates.push(marker.id);
+                            let crateNumber = rustplus.activeCargoShips[cargoShipId].crateCounter;
+                            rustplus.activeCargoShips[cargoShipId].crateCounter += 1;
+                            rustplus.activeLockedCrates[marker.id].crateNumber = crateNumber;
+                            crates = ` (${crateNumber}/3)`;
                         }
+
+                        rustplus.sendEvent(
+                            rustplus.notificationSettings.lockedCrateSpawnCargoShip,
+                            `Locked Crate${crates} just spawned on Cargo Ship at ${pos}.`,
+                            rustplus.firstPoll);
                     }
                     else if (closestMonument.token === 'oil_rig_small' &&
                         distance < Constants.LOCKED_CRATE_MONUMENT_RADIUS) {
@@ -225,7 +230,8 @@ module.exports = {
                             x: content.x,
                             y: content.y,
                             location: content.location,
-                            type: content.type
+                            type: content.type,
+                            crateNumber: content.crateNumber
                         };
 
                         if (content.type === 'cargoShip') {
@@ -238,9 +244,13 @@ module.exports = {
 
             if (active === false) {
                 if (content.type === 'cargoShip') {
+                    let cargoShipId = content.cargoShipId;
+                    rustplus.activeCargoShips[cargoShipId].crates =
+                        rustplus.activeCargoShips[cargoShipId].crates.filter(e => e !== parseInt(id));
+                    let crateNumber = content.crateNumber;
                     rustplus.sendEvent(
                         rustplus.notificationSettings.lockedCrateLeftCargoShip,
-                        `Locked Crate on Cargo Ship at ${content.location} just got looted.`);
+                        `Locked Crate (${crateNumber}/3) on Cargo Ship at ${content.location} just got looted.`);
                 }
                 else if (content.type === 'grid') {
                     rustplus.sendEvent(

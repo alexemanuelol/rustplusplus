@@ -24,7 +24,8 @@ module.exports = {
                         x: marker.x,
                         y: marker.y,
                         location: pos,
-                        crates: []
+                        crates: [],
+                        crateCounter: 1
                     };
 
                     /* Offset that is used to determine if the Cargo Ship just spawned */
@@ -72,7 +73,8 @@ module.exports = {
                             x: content.x,
                             y: content.y,
                             location: content.location,
-                            crates: content.crates
+                            crates: content.crates,
+                            crateCounter: content.crateCounter
                         };
                         break;
                     }

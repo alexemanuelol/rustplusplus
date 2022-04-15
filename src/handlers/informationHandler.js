@@ -98,13 +98,17 @@ module.exports = {
         for (const [id, timer] of Object.entries(rustplus.cargoShipEgressTimers)) {
             let time = Timer.getTimeLeftOfTimer(timer, 's');
             let pos = rustplus.activeCargoShips[parseInt(id)].location;
+            let crates = rustplus.activeCargoShips[parseInt(id)].crates.length;
             cargoship = `Egress in ${time} at ${pos}.`;
+            cargoship += `\nCrates: (${crates}/3)`;
             break;
         }
 
         if (cargoship === '') {
             for (const [id, content] of Object.entries(rustplus.activeCargoShips)) {
+                let crates = rustplus.activeCargoShips[parseInt(id)].crates.length;
                 cargoship = `At ${content.location}.`
+                cargoship += `\nCrates: (${crates}/3)`;
                 break;
             }
 
