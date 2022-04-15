@@ -6,5 +6,6 @@
     "fcmAlarmNotificationEnabled": false,
     "fcmAlarmNotificationEveryone": false,
     "smartAlarmNotifyInGame": true,
-    "leaderCommandEnabled": true
+    "leaderCommandEnabled": true,
+    "updateMapInformation": true
 }

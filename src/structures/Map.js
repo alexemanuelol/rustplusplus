@@ -19,7 +19,7 @@ class Map {
 
         this._mapMarkerImageMeta = {
             map: {
-                image: `./src/resources/images/maps/${this.rustplus.guildId}_map.png`,
+                image: `./src/resources/images/maps/${this.rustplus.guildId}_map_clean.png`,
                 size: null, type: null, jimp: null
             },
             player: { image: './src/resources/images/markers/player.png', size: 20, type: 1, jimp: null },
@@ -33,6 +33,7 @@ class Map {
             tunnels: { image: './src/resources/images/markers/tunnels.png', size: 35, type: 9, jimp: null }
         }
 
+        this.writeMapClean();
         this.resetImageAndMeta();
     }
 
@@ -76,7 +77,6 @@ class Map {
     }
 
     async resetImageAndMeta() {
-        await this.writeMapClean();
         await this.setupFont();
         await this.setupMapMarkerImages();
     }
@@ -180,7 +180,16 @@ class Map {
             await this.mapAppendMonuments();
         }
 
-        await this.mapMarkerImageMeta.map.jimp.writeAsync(this.mapMarkerImageMeta.map.image);
+        let oceanMarginOffset = this.oceanMargin * (1 / 2);
+
+        await this.mapMarkerImageMeta.map.jimp.crop(
+            oceanMarginOffset,
+            oceanMarginOffset,
+            this.width - (oceanMarginOffset * 2),
+            this.height - (oceanMarginOffset * 2));
+
+        await this.mapMarkerImageMeta.map.jimp.writeAsync(
+            this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
     }
 
     getMarkerImageMetaByType(type) {

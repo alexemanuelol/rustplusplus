@@ -122,6 +122,32 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'updateMapInformation') {
+        instance.generalSettings.updateMapInformation = !instance.generalSettings.updateMapInformation;
+
+        if (rustplus) {
+            rustplus.generalSettings.updateMapInformation = instance.generalSettings.updateMapInformation;
+
+            if (!rustplus.generalSettings.updateMapInformation) {
+                let channelId = instance.channelId.information;
+                let messageId = instance.informationMessageId.map;
+                let message = undefined;
+                if (messageId !== null) {
+                    message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
+                    instance.informationMessageId.map = null;
+                    if (message !== undefined) {
+                        await message.delete();
+                    }
+                }
+            }
+        }
+
+        let row = DiscordTools.getUpdateMapInformationButton(instance.generalSettings.updateMapInformation);
+
+        await interaction.update({ components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let server = interaction.customId.replace('ServerConnect', '');
 

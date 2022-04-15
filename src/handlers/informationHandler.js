@@ -8,6 +8,19 @@ module.exports = {
         let instance = client.readInstanceFile(rustplus.guildId);
         let channelId = instance.channelId.information;
 
+        if (rustplus.informationIntervalCounter === 0 && instance.generalSettings.updateMapInformation) {
+            /* Update Map image */
+            let messageId = instance.informationMessageId.map;
+            let message = undefined;
+            if (messageId !== null) {
+                message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
+            }
+
+            await module.exports.updateMapInformation(rustplus, client, instance, message);
+        }
+
+        instance = client.readInstanceFile(rustplus.guildId);
+
         /* Update Server Information embed */
         let messageId = instance.informationMessageId.server;
         let message = undefined;
@@ -40,6 +53,29 @@ module.exports = {
         }
     },
 
+    updateMapInformation: async function (rustplus, client, instance, message) {
+        await rustplus.map.writeMap(true, true);
+        let file = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
+
+        if (message === undefined) {
+            let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
+
+            if (!channel) {
+                client.log('ERROR', 'Invalid guild or channel.', 'error');
+                return;
+            }
+
+            instance = client.readInstanceFile(rustplus.guildId);
+
+            let msg = await channel.send({ files: [file] });
+            instance.informationMessageId.map = msg.id;
+            client.writeInstanceFile(rustplus.guildId, instance);
+        }
+        else {
+            await message.edit({ files: [file] });
+        }
+    },
+
     updateServerInformation: async function (rustplus, client, instance, message) {
         const serverName = rustplus.info.name;
         const sinceWipe = rustplus.info.getSecondsSinceWipe();
@@ -60,7 +96,7 @@ module.exports = {
         const mapSeed = `${rustplus.info.seed}`;
         const mapSalt = `${rustplus.info.salt}`;
 
-        let file = new MessageAttachment('src/resources/images/server_info_logo.png');
+        let files = [new MessageAttachment('src/resources/images/server_info_logo.png')];
         let embed = new MessageEmbed()
             .setTitle('Server Information')
             .setColor('#ce412b')
@@ -88,7 +124,7 @@ module.exports = {
             { name: 'Map', value: map, inline: true });
 
         if (rustplus.informationIntervalCounter === 0) {
-            await sendInformationEmbed(rustplus, client, instance, embed, file, message, 'server');
+            await sendInformationEmbed(rustplus, client, instance, embed, files, message, 'server');
         }
     },
 
@@ -260,7 +296,7 @@ module.exports = {
         }
 
 
-        let file = new MessageAttachment('src/resources/images/event_info_logo.png')
+        let files = [new MessageAttachment('src/resources/images/event_info_logo.png')];
         let embed = new MessageEmbed()
             .setTitle('Event Information')
             .setColor('#ce412b')
@@ -279,7 +315,7 @@ module.exports = {
             });
 
         if (rustplus.informationIntervalCounter === 0) {
-            await sendInformationEmbed(rustplus, client, instance, embed, file, message, 'event');
+            await sendInformationEmbed(rustplus, client, instance, embed, files, message, 'event');
         }
     },
 
@@ -308,7 +344,7 @@ module.exports = {
             }
         }
 
-        let file = new MessageAttachment('src/resources/images/team_info_logo.png')
+        let files = [new MessageAttachment('src/resources/images/team_info_logo.png')];
         let embed = new MessageEmbed()
             .setTitle('Team Member Information')
             .setColor('#ce412b')
@@ -322,12 +358,12 @@ module.exports = {
             });
 
         if (rustplus.informationIntervalCounter === 0) {
-            await sendInformationEmbed(rustplus, client, instance, embed, file, message, 'team');
+            await sendInformationEmbed(rustplus, client, instance, embed, files, message, 'team');
         }
     }
 }
 
-async function sendInformationEmbed(rustplus, client, instance, embed, file, message, messageType) {
+async function sendInformationEmbed(rustplus, client, instance, embed, files, message, messageType) {
     if (message === undefined) {
         let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
 
@@ -338,12 +374,11 @@ async function sendInformationEmbed(rustplus, client, instance, embed, file, mes
 
         instance = client.readInstanceFile(rustplus.guildId);
 
-        let msg = await channel.send({ embeds: [embed], files: [file] });
+        let msg = await channel.send({ embeds: [embed], files: files });
         instance.informationMessageId[messageType] = msg.id;
         client.writeInstanceFile(rustplus.guildId, instance);
     }
     else {
         await message.edit({ embeds: [embed] });
     }
-
 }

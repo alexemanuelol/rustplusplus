@@ -24,6 +24,7 @@ module.exports = (client, guild) => {
                 activity: null
             },
             informationMessageId: {
+                map: null,
                 server: null,
                 event: null,
                 team: null
@@ -96,12 +97,14 @@ module.exports = (client, guild) => {
 
         if (!inst.hasOwnProperty('informationMessageId')) {
             inst.informationMessageId = {
+                map: null,
                 server: null,
                 event: null,
                 team: null
             }
         }
         else {
+            if (!inst.informationMessageId.hasOwnProperty('map')) inst.informationMessageId.map = null;
             if (!inst.informationMessageId.hasOwnProperty('server')) inst.informationMessageId.server = null;
             if (!inst.informationMessageId.hasOwnProperty('event')) inst.informationMessageId.event = null;
             if (!inst.informationMessageId.hasOwnProperty('team')) inst.informationMessageId.team = null;
