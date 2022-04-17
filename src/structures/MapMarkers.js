@@ -467,36 +467,38 @@ class MapMarkers {
             }
 
             let found = false;
-            for (let oilRig of smallOilRig) {
-                if (Map.getDistance(marker.x, marker.y, oilRig.x, oilRig.y) <=
-                    Constants.OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE) {
-                    found = true;
-                    let oilRigLocation = Map.getPos(oilRig.x, oilRig.y, mapSize);
-                    marker.ch47Type = 'smallOilRig';
+            if (!this.rustplus.firstPoll) {
+                for (let oilRig of smallOilRig) {
+                    if (Map.getDistance(marker.x, marker.y, oilRig.x, oilRig.y) <=
+                        Constants.OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE) {
+                        found = true;
+                        let oilRigLocation = Map.getPos(oilRig.x, oilRig.y, mapSize);
+                        marker.ch47Type = 'smallOilRig';
 
-                    this.rustplus.sendEvent(
-                        this.rustplus.notificationSettings.heavyScientistCalled,
-                        `Heavy Scientists got called to the Small Oil Rig at ${oilRigLocation}.`,
-                        this.rustplus.firstPoll,
-                        'small_oil_rig_logo.png');
+                        this.rustplus.sendEvent(
+                            this.rustplus.notificationSettings.heavyScientistCalled,
+                            `Heavy Scientists got called to the Small Oil Rig at ${oilRigLocation}.`,
+                            this.rustplus.firstPoll,
+                            'small_oil_rig_logo.png');
 
-                    let crateId = this.getOilRigCrateId(oilRig.x, oilRig.y, mapMarkers);
+                        let crateId = this.getOilRigCrateId(oilRig.x, oilRig.y, mapMarkers);
 
-                    if (crateId !== null) {
-                        this.crateSmallOilRigTimers[crateId] = new Timer.timer(
-                            this.notifyCrateSmallOilRigOpen.bind(this),
-                            Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
-                            oilRigLocation,
-                            crateId);
-                        this.crateSmallOilRigTimers[crateId].start();
+                        if (crateId !== null) {
+                            this.crateSmallOilRigTimers[crateId] = new Timer.timer(
+                                this.notifyCrateSmallOilRigOpen.bind(this),
+                                Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+                                oilRigLocation,
+                                crateId);
+                            this.crateSmallOilRigTimers[crateId].start();
+                        }
+
+                        this.timeSinceSmallOilRigWasTriggered = new Date();
+                        break;
                     }
-
-                    this.timeSinceSmallOilRigWasTriggered = new Date();
-                    break;
                 }
             }
 
-            if (!found) {
+            if (!found && !this.rustplus.firstPoll) {
                 for (let oilRig of largeOilRig) {
                     if (Map.getDistance(marker.x, marker.y, oilRig.x, oilRig.y) <=
                         Constants.OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE) {
