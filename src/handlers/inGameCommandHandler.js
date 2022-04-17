@@ -809,13 +809,13 @@ module.exports = {
         let subcommand = command.replace(/ .*/, '');
         command = command.slice(subcommand.length + 1);
 
-        if (subcommand !== 'remain' && command === '') {
+        if (subcommand !== 'list' && command === '') {
             return;
         }
 
         let id;
         switch (subcommand) {
-            case 'add':
+            case 'add': {
                 let time = command.replace(/ .*/, '');
                 let timeSeconds = Timer.getSecondsFromStringTime(time);
                 if (timeSeconds === null) {
@@ -844,9 +844,9 @@ module.exports = {
                 rustplus.timers[id].timer.start();
 
                 rustplus.printCommandOutput(`Timer set for ${time}.`);
-                break;
+            } break;
 
-            case 'remove':
+            case 'remove': {
                 id = parseInt(command.replace(/ .*/, ''));
                 if (id === 'NaN') {
                     return;
@@ -860,24 +860,25 @@ module.exports = {
                 delete rustplus.timers[id];
 
                 rustplus.printCommandOutput(`Timer with ID: ${id} was removed.`);
-                break;
+            } break;
 
-            case 'remain':
+            case 'list': {
                 if (Object.keys(rustplus.timers).length === 0) {
                     rustplus.printCommandOutput('No active timers.');
                 }
                 else {
                     rustplus.printCommandOutput('Active timers:');
                 }
+
                 for (const [id, content] of Object.entries(rustplus.timers)) {
                     let timeLeft = Timer.getTimeLeftOfTimer(content.timer);
                     let str = `- ID: ${parseInt(id)}, Time left: ${timeLeft}, Message: ${content.message}`;
                     rustplus.printCommandOutput(str);
                 }
-                break;
+            } break;
 
-            default:
-                break;
+            default: {
+            } break;
         }
     },
 
