@@ -5,6 +5,7 @@ const Map = require('../util/map.js');
 const Constants = require('../util/constants.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
+const string = require('../util/string.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
@@ -193,30 +194,27 @@ module.exports = {
             }
         }
 
-        str = (str !== '') ? str.slice(0, -2) : 'No one is AFK.';
+        str = (str !== '') ? `${str.slice(0, -2)}.` : 'No one is AFK.';
         rustplus.printCommandOutput(str);
     },
 
     commandAlive: function (rustplus) {
         let player = rustplus.team.getPlayerLongestAlive();
         let time = player.getAliveTime();
-        rustplus.printCommandOutput(`${player.name} has been alive the longest (${time})`);
+        rustplus.printCommandOutput(`${player.name} has been alive the longest (${time}).`);
     },
 
     commandBradley: function (rustplus) {
         let strings = [];
 
-        let timerCounter = 0;
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.bradleyAPCRespawnTimers)) {
-            timerCounter += 1;
             let time = Timer.getTimeLeftOfTimer(timer);
-
             if (time !== null) {
                 strings.push(`Approximately ${time} before Bradley APC respawns.`);
             }
         }
 
-        if (timerCounter === 0) {
+        if (strings.length === 0) {
             if (rustplus.mapMarkers.timeSinceBradleyAPCWasDestroyed === null) {
                 strings.push('Bradley APC is probably roaming around at Launch Site.');
             }
@@ -235,29 +233,27 @@ module.exports = {
     commandCargo: function (rustplus) {
         let strings = [];
         let unhandled = rustplus.mapMarkers.cargoShips.map(e => e.id);
-        let numOfShips = unhandled.length;
 
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.cargoShipEgressTimers)) {
-            unhandled = unhandled.filter(e => e != parseInt(id));
-            let time = Timer.getTimeLeftOfTimer(timer);
             let cargoShip = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.CargoShip, parseInt(id));
+            let time = Timer.getTimeLeftOfTimer(timer);
 
             if (time !== null) {
-                strings.push(
-                    `Approximately ${time} before Cargo Ship at ${cargoShip.location} enters egress stage.` +
-                    ` Active crates: (${cargoShip.crates.length}/3)`);
+                strings.push(`Approximately ${time} before Cargo Ship at ${cargoShip.location} enters egress stage.` +
+                    ` Active crates: (${cargoShip.crates.length}/3).`);
             }
+            unhandled = unhandled.filter(e => e != parseInt(id));
         }
 
         if (unhandled.length > 0) {
             for (let id of unhandled) {
                 let cargoShip = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.CargoShip, id);
                 strings.push(`Cargo Ship is located at ${cargoShip.location}.` +
-                    ` Active crates: (${cargoShip.crates.length}/3)`);
+                    ` Active crates: (${cargoShip.crates.length}/3).`);
             }
         }
 
-        if (numOfShips === 0) {
+        if (strings.length === 0) {
             if (rustplus.mapMarkers.timeSinceCargoShipWasOut === null) {
                 strings.push('Cargo Ship is currently not on the map.');
             }
@@ -276,15 +272,13 @@ module.exports = {
     commandChinook: function (rustplus) {
         let strings = [];
 
-        let chinookCounter = 0;
         for (let ch47 of rustplus.mapMarkers.ch47s) {
             if (ch47.ch47Type === 'crate') {
-                chinookCounter += 1;
-                strings.push(`Chinook 47 is located at ${ch47.location}`);
+                strings.push(`Chinook 47 is located at ${ch47.location}.`);
             }
         }
 
-        if (chinookCounter === 0) {
+        if (strings.length === 0) {
             if (rustplus.mapMarkers.timeSinceCH47WasOut === null) {
                 strings.push('No current data on Chinook 47.');
             }
@@ -304,8 +298,8 @@ module.exports = {
         let strings = [];
 
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.crateDespawnTimers)) {
-            let time = Timer.getTimeLeftOfTimer(timer);
             let crate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
+            let time = Timer.getTimeLeftOfTimer(timer);
 
             if (time !== null) {
                 strings.push(`Approximately ${time} before Locked Crate at ${crate.crateType} despawns.`);
@@ -314,13 +308,13 @@ module.exports = {
 
         if (strings.length === 0) {
             if (rustplus.mapMarkers.timeSinceCH47DroppedCrate === null) {
-                for (let ch47Crate of rustplus.mapMarkers.crates) {
-                    if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(ch47Crate.crateType)) {
-                        if (ch47Crate.crateType === 'grid') {
-                            strings.push(`A Locked Crate is located at ${ch47Crate.location}.`);
+                for (let crate of rustplus.mapMarkers.crates) {
+                    if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(crate.crateType)) {
+                        if (crate.crateType === 'grid') {
+                            strings.push(`A Locked Crate is located at ${crate.location}.`);
                         }
                         else {
-                            strings.push(`A Locked Crate is located at ${ch47Crate.crateType}.`);
+                            strings.push(`A Locked Crate is located at ${crate.crateType}.`);
                         }
                     }
                 }
@@ -344,30 +338,30 @@ module.exports = {
     commandHeli: function (rustplus) {
         let strings = [];
 
-        let heliCounter = 0;
         for (let patrolHelicopter of rustplus.mapMarkers.patrolHelicopters) {
-            heliCounter += 1;
             strings.push(`Patrol Helicopter is located at ${patrolHelicopter.location}.`);
         }
 
-        if (heliCounter === 0) {
-            if (rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap === null &&
-                rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed === null) {
+        if (strings.length === 0) {
+            let wasOnMap = rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap;
+            let wasDestroyed = rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed;
+
+            if (wasOnMap === null && WasDestroyed === null) {
                 strings.push('No current data on Patrol Helicopter.');
             }
-            else if (rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap !== null &&
-                rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed === null) {
-                let secondsSince = (new Date() - rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap) / 1000;
+            else if (wasOnMap !== null && wasDestroyed === null) {
+                let secondsSince = (new Date() - wasOnMap) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince);
                 strings.push(`It was ${timeSince} since the last Patrol Helicopter was on the map.`);
             }
-            else if (rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap !== null &&
-                rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed !== null) {
-                let secondsSince = (new Date() - rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap) / 1000;
-                let timeSinceOut = Timer.secondsToFullScale(secondsSince);
-                secondsSince = (new Date() - rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed) / 1000;
+            else if (wasOnMap !== null && wasDestroyed !== null) {
+                let secondsSince = (new Date() - wasOnMap) / 1000;
+                let timeSinceOnMap = Timer.secondsToFullScale(secondsSince);
+
+                secondsSince = (new Date() - wasDestroyed) / 1000;
                 let timeSinceDestroyed = Timer.secondsToFullScale(secondsSince);
-                strings.push(`It was ${timeSinceOut} since Patrol Helicopter was on the map and ` +
+
+                strings.push(`It was ${timeSinceOnMap} since Patrol Helicopter was on the map and ` +
                     `${timeSinceDestroyed} since it got downed.`);
             }
         }
@@ -380,11 +374,9 @@ module.exports = {
     commandLarge: function (rustplus) {
         let strings = [];
 
-        let timerCounter = 0;
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.crateLargeOilRigTimers)) {
-            timerCounter += 1;
-            let time = Timer.getTimeLeftOfTimer(timer);
             let crate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
+            let time = Timer.getTimeLeftOfTimer(timer);
 
             if (time !== null) {
                 strings.push(
@@ -392,7 +384,7 @@ module.exports = {
             }
         }
 
-        if (timerCounter === 0) {
+        if (strings.length === 0) {
             if (rustplus.mapMarkers.timeSinceLargeOilRigWasTriggered === null) {
                 strings.push('No current data on Large Oil Rig.');
             }
@@ -648,7 +640,7 @@ module.exports = {
             }
         }
 
-        str = (str !== '') ? str.slice(0, -2) : 'No one is offline.';
+        str = (str !== '') ? `${str.slice(0, -2)}.` : 'No one is offline.';
         rustplus.printCommandOutput(str);
     },
 
@@ -660,7 +652,7 @@ module.exports = {
             }
         }
 
-        str = str.slice(0, -2);
+        str = `${str.slice(0, -2)}.`;
         rustplus.printCommandOutput(str);
     },
 
@@ -723,7 +715,7 @@ module.exports = {
                 str = 'All your teammates are dead.';
             }
             else {
-                str = str.slice(0, -2);
+                str = `${str.slice(0, -2)}.`;
             }
 
             rustplus.printCommandOutput(str);
@@ -765,11 +757,9 @@ module.exports = {
     commandSmall: function (rustplus) {
         let strings = [];
 
-        let timerCounter = 0;
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.crateSmallOilRigTimers)) {
-            timerCounter += 1;
-            let time = Timer.getTimeLeftOfTimer(timer);
             let crate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
+            let time = Timer.getTimeLeftOfTimer(timer);
 
             if (time !== null) {
                 strings.push(
@@ -777,7 +767,7 @@ module.exports = {
             }
         }
 
-        if (timerCounter === 0) {
+        if (strings.length === 0) {
             if (rustplus.mapMarkers.timeSinceSmallOilRigWasTriggered === null) {
                 strings.push('No current data on Small Oil Rig.');
             }
@@ -845,7 +835,7 @@ module.exports = {
                 rustplus.timers[id] = {
                     timer: new Timer.timer(
                         () => {
-                            rustplus.printCommandOutput(`Timer: ${message}`, 'TIMER');
+                            rustplus.printCommandOutput(`Timer: ${message}.`, 'TIMER');
                             delete rustplus.timers[id]
                         },
                         timeSeconds * 1000),
@@ -869,7 +859,7 @@ module.exports = {
                 rustplus.timers[id].timer.stop();
                 delete rustplus.timers[id];
 
-                rustplus.printCommandOutput(`Timer with ID: ${id} was removed`);
+                rustplus.printCommandOutput(`Timer with ID: ${id} was removed.`);
                 break;
 
             case 'remain':

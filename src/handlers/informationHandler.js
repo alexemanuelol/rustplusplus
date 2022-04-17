@@ -134,181 +134,183 @@ module.exports = {
     },
 
     updateEventInformation: async function (rustplus, client, instance, message) {
-        /* Cargoship */
-        let cargoship = '';
+        /* CargoShip */
+        let cargoShipMessage = '';
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.cargoShipEgressTimers)) {
-            let time = Timer.getTimeLeftOfTimer(timer, 's');
             let cargoShip = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.CargoShip, parseInt(id));
-            cargoship = `Egress in ${time} at ${cargoShip.location}.`;
-            cargoship += `\nCrates: (${cargoShip.crates.length}/3)`;
+            let time = Timer.getTimeLeftOfTimer(timer, 's');
+            cargoShipMessage = `Egress in ${time} at ${cargoShip.location}.`;
+            cargoShipMessage += `\nCrates: (${cargoShip.crates.length}/3).`;
             break;
         }
 
-        if (cargoship === '') {
+        if (cargoShipMessage === '') {
             for (let cargoShip of rustplus.mapMarkers.cargoShips) {
-                cargoship = `At ${cargoShip.location}.`;
-                cargoShip += `\nCrates: (${cargoShip.crates.length}/3)`;
+                cargoShipMessage = `At ${cargoShip.location}.`;
+                cargoShipMessage += `\nCrates: (${cargoShip.crates.length}/3).`;
                 break;
             }
 
-            if (cargoship === '') {
+            if (cargoShipMessage === '') {
                 if (rustplus.mapMarkers.timeSinceCargoShipWasOut === null) {
-                    cargoship = 'Not active.';
+                    cargoShipMessage = 'Not active.';
                 }
                 else {
                     let secondsSince = (new Date() - rustplus.mapMarkers.timeSinceCargoShipWasOut) / 1000;
                     let timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                    cargoship = `${timeSince} since last.`;
+                    cargoShipMessage = `${timeSince} since last.`;
                 }
             }
         }
 
-        /* Patrol Helicopter */
-        let patrolHelicopter = '';
-        for (let pHelicopter of rustplus.mapMarkers.patrolHelicopters) {
-            patrolHelicopter = `At ${pHelicopter.location}.`
+        /* PatrolHelicopter */
+        let patrolHelicopterMessage = '';
+        for (let patrolHelicopter of rustplus.mapMarkers.patrolHelicopters) {
+            patrolHelicopterMessage = `At ${patrolHelicopter.location}.`
             break;
         }
 
-        if (patrolHelicopter === '') {
-            if (rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap === null &&
-                rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed === null) {
-                patrolHelicopter = 'Not active.';
+        if (patrolHelicopterMessage === '') {
+            let wasOnMap = rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap;
+            let wasDestroyed = rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed;
+
+            if (wasOnMap === null && wasDestroyed === null) {
+                patrolHelicopterMessage = 'Not active.';
             }
-            else if (rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap !== null &&
-                rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed === null) {
-                let secondsSince = (new Date() - rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap) / 1000;
+            else if (wasOnMap !== null && wasDestroyed === null) {
+                let secondsSince = (new Date() - wasOnMap) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                patrolHelicopter = `${timeSince} since last.`;
+                patrolHelicopterMessage = `${timeSince} since last.`;
             }
-            else if (rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap !== null &&
-                rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed !== null) {
-                let secondsSince = (new Date() - rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap) / 1000;
-                let timeSinceOut = Timer.secondsToFullScale(secondsSince, 's');
-                secondsSince = (new Date() - rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed) / 1000;
+            else if (wasOnMap !== null && wasDestroyed !== null) {
+                let secondsSince = (new Date() - wasOnMap) / 1000;
+                let timeSinceOnMap = Timer.secondsToFullScale(secondsSince, 's');
+
+                secondsSince = (new Date() - wasDestroyed) / 1000;
                 let timeSinceDestroyed = Timer.secondsToFullScale(secondsSince, 's');
-                patrolHelicopter = `${timeSinceOut} since last.\n${timeSinceDestroyed} since destroyed.`;
+
+                patrolHelicopterMessage = `${timeSinceOnMap} since last.\n${timeSinceDestroyed} since destroyed.`;
             }
         }
 
-        /* Bradley APC */
-        let bradley = '';
+        /* BradleyAPC */
+        let bradleyAPCMessage = '';
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.bradleyAPCRespawnTimers)) {
             let time = Timer.getTimeLeftOfTimer(timer, 's');
-            bradley = `${time} before respawn.`;
+            bradleyAPCMessage = `${time} before respawn.`;
             break;
         }
 
-        if (bradley === '') {
+        if (bradleyAPCMessage === '') {
             if (rustplus.mapMarkers.timeSinceBradleyAPCWasDestroyed === null) {
-                bradley = 'At Launchsite.';
+                bradleyAPCMessage = 'At Launchsite.';
             }
             else {
                 let secondsSince = (new Date() - rustplus.mapMarkers.timeSinceBradleyAPCWasDestroyed) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                bradley = `${timeSince} since destroyed.`;
+                bradleyAPCMessage = `${timeSince} since destroyed.`;
             }
         }
 
         /* Small Oil Rig */
-        let smallOil = '';
+        let smallOilMessage = '';
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.crateSmallOilRigTimers)) {
+            let crate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
             let time = Timer.getTimeLeftOfTimer(timer, 's');
-            let smallOilCrate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
 
             if (time !== null) {
-                smallOil = `${time} until unlocks at ${smallOilCrate.location}.`;
+                smallOilMessage = `${time} until unlocks at ${crate.location}.`;
                 break;
             }
         }
 
-        if (smallOil === '') {
+        if (smallOilMessage === '') {
             if (rustplus.mapMarkers.timeSinceSmallOilRigWasTriggered === null) {
-                smallOil = 'No data.';
+                smallOilMessage = 'No data.';
             }
             else {
                 let secondsSince = (new Date() - rustplus.mapMarkers.timeSinceSmallOilRigWasTriggered) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                smallOil = `${timeSince} since last event.`;
+                smallOilMessage = `${timeSince} since last event.`;
             }
         }
 
 
         /* Large Oil Rig */
-        let largeOil = '';
+        let largeOilMessage = '';
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.crateLargeOilRigTimers)) {
+            let crate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
             let time = Timer.getTimeLeftOfTimer(timer, 's');
-            let largeOilCrate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
 
             if (time !== null) {
-                largeOil = `${time} until unlocks at ${largeOilCrate.location}.`;
+                largeOilMessage = `${time} until unlocks at ${crate.location}.`;
                 break;
             }
         }
 
-        if (largeOil === '') {
+        if (largeOilMessage === '') {
             if (rustplus.mapMarkers.timeSinceLargeOilRigWasTriggered === null) {
-                largeOil = 'No data.';
+                largeOilMessage = 'No data.';
             }
             else {
                 let secondsSince = (new Date() - rustplus.mapMarkers.timeSinceLargeOilRigWasTriggered) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                largeOil = `${timeSince} since last event.`;
+                largeOilMessage = `${timeSince} since last event.`;
             }
         }
 
-        /* Chinook */
-        let chinook = '';
+        /* CH47 */
+        let ch47Message = '';
         for (let ch47 of rustplus.mapMarkers.ch47s) {
-            chinook = `At ${ch47.location}.`
+            ch47Message = `At ${ch47.location}.`
             break;
         }
 
-        if (chinook === '') {
+        if (ch47Message === '') {
             if (rustplus.mapMarkers.timeSinceCH47WasOut === null) {
-                chinook = 'Not active.';
+                ch47Message = 'Not active.';
             }
             else {
                 let secondsSince = (new Date() - rustplus.mapMarkers.timeSinceCH47WasOut) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                chinook = `${timeSince} since last.`;
+                ch47Message = `${timeSince} since last.`;
             }
         }
 
         /* Crate */
-        let crate = '';
+        let crateMessage = '';
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.crateDespawnTimers)) {
+            let crate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
             let time = Timer.getTimeLeftOfTimer(timer, 's');
-            let ch47Crate = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.Crate, parseInt(id));
 
             if (time !== null) {
-                crate = `${time} until despawns at ${ch47Crate.crateType}.`;
+                crateMessage = `${time} until despawns at ${crate.crateType}.`;
                 break;
             }
         }
 
-        if (crate === '') {
+        if (crateMessage === '') {
             if (rustplus.mapMarkers.timeSinceCH47DroppedCrate === null) {
-                for (let ch47Crate of rustplus.mapMarkers.crates) {
-                    if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(ch47Crate.crateType)) {
-                        if (ch47Crate.crateType === 'grid') {
-                            crate = `At ${ch47Crate.location}.`;
+                for (let crate of rustplus.mapMarkers.crates) {
+                    if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(crate.crateType)) {
+                        if (crate.crateType === 'grid') {
+                            crateMessage = `At ${crate.location}.`;
                         }
                         else {
-                            crate = `At ${ch47Crate.crateType}.`;
+                            crateMessage = `At ${crate.crateType}.`;
                         }
                         break;
                     }
                 }
 
-                if (crate === '') {
-                    crate = 'No active Crates.';
+                if (crateMessage === '') {
+                    crateMessage = 'No active Crates.';
                 }
             }
             else {
                 let secondsSince = (new Date() - rustplus.mapMarkers.timeSinceCH47DroppedCrate) / 1000;
                 let timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                crate = `${timeSince} since last drop.`;
+                crateMessage = `${timeSince} since last drop.`;
             }
         }
 
@@ -320,13 +322,13 @@ module.exports = {
             .setThumbnail('attachment://event_info_logo.png')
             .setDescription('In-game event information')
             .addFields(
-                { name: 'Cargoship', value: cargoship, inline: true },
-                { name: 'Patrol Helicopter', value: patrolHelicopter, inline: true },
-                { name: 'Bradley APC', value: bradley, inline: true },
-                { name: 'Small Oil Rig', value: smallOil, inline: true },
-                { name: 'Large Oil Rig', value: largeOil, inline: true },
-                { name: 'Chinook 47', value: chinook, inline: true },
-                { name: 'Crate', value: crate, inline: true })
+                { name: 'Cargoship', value: cargoShipMessage, inline: true },
+                { name: 'Patrol Helicopter', value: patrolHelicopterMessage, inline: true },
+                { name: 'Bradley APC', value: bradleyAPCMessage, inline: true },
+                { name: 'Small Oil Rig', value: smallOilMessage, inline: true },
+                { name: 'Large Oil Rig', value: largeOilMessage, inline: true },
+                { name: 'Chinook 47', value: ch47Message, inline: true },
+                { name: 'Crate', value: crateMessage, inline: true })
             .setFooter({
                 text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
             });
