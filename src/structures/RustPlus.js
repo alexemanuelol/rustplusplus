@@ -31,6 +31,7 @@ class RustPlus extends RP {
         this.info = null;
         this.time = null;
         this.team = null;
+        this.mapMarkers = null;
 
         this.items = new Items();
 
@@ -53,37 +54,8 @@ class RustPlus extends RP {
             }
         }
 
-        /* Event active entities */
-        this.activeCargoShips = new Object();
-        this.activeChinook47s = new Object();
-        this.activeLockedCrates = new Object();
-        this.activePatrolHelicopters = new Object();
-        this.activeExplosions = new Object();
-        this.patrolHelicoptersLeft = [];
-        this.smallOilRigLockedCratesLeft = [];
-        this.largeOilRigLockedCratesLeft = [];
-        this.activeVendingMachines = [];
-        this.foundItems = [];
-        this.itemsToLookForId = [];
-
         /* Event timers */
-        this.cargoShipEgressTimers = new Object();
-        this.lockedCrateSmallOilRigTimers = new Object();
-        this.lockedCrateLargeOilRigTimers = new Object();
-        this.lockedCrateDespawnTimers = new Object();
-        this.lockedCrateDespawnWarningTimers = new Object();
-        this.bradleyRespawnTimers = new Object();
         this.timers = new Object();
-
-        /* Event dates */
-        this.timeSinceCargoWasOut = null;
-        this.timeSinceChinookWasOut = null;
-        this.timeSinceBradleyWasDestroyed = null;
-        this.timeSinceHeliWasDestroyed = null;
-        this.timeSinceHeliWasOnMap = null;
-        this.timeSinceSmallOilRigWasTriggered = null;
-        this.timeSinceLargeOilRigWasTriggered = null;
-        this.timeSinceChinookDroppedCrate = null;
 
         /* Time variables */
         this.passedFirstSunriseOrSunset = false;

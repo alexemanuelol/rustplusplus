@@ -28,6 +28,7 @@ module.exports = {
 				await require('../discordTools/SetupSettingsMenu')(client, guild);
 
 				instance = client.readInstanceFile(interaction.guildId);
+				instance.informationMessageId.map = null;
 				instance.informationMessageId.server = null;
 				instance.informationMessageId.event = null;
 				instance.informationMessageId.team = null;

@@ -1,10 +1,3 @@
-const CargoShip = require('../inGameEvents/cargoShip.js');
-const PatrolHelicopter = require('../inGameEvents/patrolHelicopter.js');
-const Explosion = require('../inGameEvents/explosion.js');
-const LockedCrate = require('../inGameEvents/lockedCrate.js');
-const OilRig = require('../inGameEvents/oilRig.js');
-const VendingMachine = require('../inGameEvents/vendingMachine.js');
-
 const SmartSwitchHandler = require('../handlers/smartSwitchHandler.js');
 const TimeHandler = require('../handlers/timeHandler.js');
 const TeamHandler = require('../handlers/teamHandler.js');
@@ -15,6 +8,7 @@ const SmartAlarmHandler = require('../handlers/smartAlarmHandler.js');
 const Time = require('../structures/Time');
 const Team = require('../structures/Team');
 const Info = require('../structures/Info');
+const MapMarkers = require('../structures/MapMarkers.js');
 
 module.exports = {
     pollingHandler: async function (rustplus, client) {
@@ -32,6 +26,7 @@ module.exports = {
             rustplus.info = new Info(info.info);
             rustplus.time = new Time(time.time, rustplus, client);
             rustplus.team = new Team(teamInfo.teamInfo, rustplus);
+            rustplus.mapMarkers = new MapMarkers(mapMarkers.mapMarkers, rustplus);
         }
 
         module.exports.handlers(rustplus, client, info, mapMarkers, teamInfo, time);
@@ -48,18 +43,10 @@ module.exports = {
         rustplus.time.updateTime(time.time);
         rustplus.team.updateTeam(teamInfo.teamInfo);
         rustplus.info.updateInfo(info.info);
+        rustplus.mapMarkers.updateMapMarkers(mapMarkers.mapMarkers);
 
         InformationHandler.handler(rustplus, client);
         StorageMonitorHandler.handler(rustplus, client);
         SmartAlarmHandler.handler(rustplus, client);
-
-
-        /* In-game event handlers */
-        CargoShip.handler(rustplus, mapMarkers.mapMarkers);
-        PatrolHelicopter.handler(rustplus, mapMarkers.mapMarkers);
-        Explosion.handler(rustplus, mapMarkers.mapMarkers);
-        LockedCrate.handler(rustplus, mapMarkers.mapMarkers);
-        OilRig.handler(rustplus, mapMarkers.mapMarkers);
-        VendingMachine.handler(rustplus, mapMarkers.mapMarkers);
     },
 };
