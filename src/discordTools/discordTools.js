@@ -269,26 +269,26 @@ module.exports = {
         let style = null;
 
         switch (state) {
-            case 0: /* CONNECT */
+            case 0: { /* CONNECT */
                 customId = `${id}ServerConnect`;
                 label = 'CONNECT';
                 style = 'PRIMARY';
-                break;
+            } break;
 
-            case 1: /* DISCONNECT */
+            case 1: { /* DISCONNECT */
                 customId = `${id}ServerDisconnect`;
                 label = 'DISCONNECT';
                 style = 'DANGER';
-                break;
+            } break;
 
-            case 2: /* RECONNECTING */
+            case 2: { /* RECONNECTING */
                 customId = `${id}ServerReconnecting`;
                 label = 'RECONNECTING...';
                 style = 'DANGER';
-                break;
+            } break;
 
-            default:
-                break;
+            default: {
+            } break;
         }
 
         return new MessageActionRow()
@@ -382,20 +382,20 @@ module.exports = {
 
         let autoDayNightString = 'AUTO SETTING: ';
         switch (instance.switches[id].autoDayNight) {
-            case 0:
+            case 0: {
                 autoDayNightString += 'OFF';
-                break;
+            } break;
 
-            case 1:
+            case 1: {
                 autoDayNightString += 'AUTO-DAY';
-                break;
+            } break;
 
-            case 2:
+            case 2: {
                 autoDayNightString += 'AUTO-NIGHT';
-                break;
+            } break;
 
-            default:
-                break;
+            default: {
+            } break;
         }
 
         return new MessageActionRow()

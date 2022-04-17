@@ -49,17 +49,17 @@ class DiscordBot extends Client {
     build() {
         this.login(Config.discord.token).catch(error => {
             switch (error.code) {
-                case 502:
+                case 502: {
                     this.log('ERROR', `Bad Gateway: ${JSON.stringify(error)}`, 'error');
-                    break;
+                } break;
 
-                case 503:
+                case 503: {
                     this.log('ERROR', `Service Unavailable: ${JSON.stringify(error)}`, 'error');
-                    break;
+                } break;
 
-                default:
+                default: {
                     this.log('ERROR', `${JSON.stringify(error)}`, 'error');
-                    break;
+                } break;
             }
         });
     }

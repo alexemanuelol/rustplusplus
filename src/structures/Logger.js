@@ -38,7 +38,7 @@ class Logger {
         let time = this.getTime();
 
         switch (this.type) {
-            case 'default':
+            case 'default': {
                 text = `${title}: ${text}`;
                 this.logger.log({
                     level: level,
@@ -49,9 +49,9 @@ class Logger {
                     colors.green(`${time} `) +
                     ((level === 'error') ? colors.red(text) : colors.yellow(text))
                 );
-                break;
+            } break;
 
-            case 'guild':
+            case 'guild': {
                 text = `${title}: ${text}`;
 
                 this.logger.log({
@@ -65,10 +65,10 @@ class Logger {
                     colors.white(`${this.serverName} `) +
                     ((level === 'error') ? colors.red(text) : colors.yellow(text))
                 );
-                break;
+            } break;
 
-            default:
-                break;
+            default: {
+            } break;
         }
     }
 }

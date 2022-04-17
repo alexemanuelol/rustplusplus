@@ -162,24 +162,24 @@ module.exports = {
         for (let match of matches) {
             let value = parseInt(match.slice(0, -1));
             switch (match[match.length - 1]) {
-                case 'd': /* Days */
+                case 'd': { /* Days */
                     totSeconds += value * 24 * 60 * 60;
-                    break;
+                } break;
 
-                case 'h': /* Hours */
+                case 'h': { /* Hours */
                     totSeconds += value * 60 * 60;
-                    break;
+                } break;
 
-                case 'm': /* Minutes */
+                case 'm': { /* Minutes */
                     totSeconds += value * 60;
-                    break;
+                } break;
 
-                case 's': /* Seconds */
+                case 's': { /* Seconds */
                     totSeconds += value;
-                    break;
+                } break;
 
-                default:
-                    break;
+                default: {
+                } break;
             }
         }
 

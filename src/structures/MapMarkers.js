@@ -106,24 +106,41 @@ class MapMarkers {
         }
 
         switch (type) {
-            case this.types.Player:
+            case this.types.Player: {
                 return this.players;
-            case this.types.Explosion:
+            } break;
+
+            case this.types.Explosion: {
                 return this.explosions;
-            case this.types.VendingMachine:
+            } break;
+
+            case this.types.VendingMachine: {
                 return this.vendingMachines;
-            case this.types.CH47:
+            } break;
+
+            case this.types.CH47: {
                 return this.ch47s;
-            case this.types.CargoShip:
+            } break;
+
+            case this.types.CargoShip: {
                 return this.cargoShips;
-            case this.types.Crate:
+            } break;
+
+            case this.types.Crate: {
                 return this.crates;
-            case this.types.GenericRadius:
+            } break;
+
+            case this.types.GenericRadius: {
                 return this.genericRadiuses;
-            case this.types.PatrolHelicopter:
+            } break;
+
+            case this.types.PatrolHelicopter: {
                 return this.patrolHelicopters;
-            default:
+            } break;
+
+            default: {
                 return null;
+            } break;
         }
     }
 
