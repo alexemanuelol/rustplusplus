@@ -2,7 +2,6 @@ const Jimp = require("jimp");
 const fs = require("fs");
 
 const Monuments = require('../util/monuments.js');
-const RustPlusTypes = require('../util/rustplusTypes.js');
 
 class Map {
     constructor(map, rustplus) {
@@ -148,7 +147,7 @@ class Map {
             let y = this.height - (marker.y * (n / this.rustplus.info.mapSize) + this.oceanMargin);
 
             /* Compensate rotations */
-            if (marker.type === RustPlusTypes.MarkerType.CargoShip) {
+            if (marker.type === this.rustplus.mapMarkers.types.CargoShip) {
                 x -= 20;
                 y -= 20;
             }

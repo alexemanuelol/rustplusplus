@@ -15,7 +15,9 @@ module.exports = {
 
         rustplus.firstPoll = true;
 
-        rustplus.mapMarkers.reset();
+        if (rustplus.mapMarkers) {
+            rustplus.mapMarkers.reset();
+        }
 
         for (const [id, timer] of Object.entries(rustplus.timers)) {
             timer.stop();
