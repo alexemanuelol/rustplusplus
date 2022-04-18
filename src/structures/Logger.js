@@ -1,5 +1,6 @@
 const winston = require("winston");
 const colors = require("colors");
+const Config = require('../../config.json');
 
 class Logger {
     constructor(logFilePath, type) {
@@ -49,6 +50,13 @@ class Logger {
                     colors.green(`${time} `) +
                     ((level === 'error') ? colors.red(text) : colors.yellow(text))
                 );
+
+                if (level === 'error' && Config.general.showCallStackError) {
+                    for (let line of (new Error().stack.split(/\r?\n/))) {
+                        this.logger.log({ level: level, message: `${time} | ${line}` });
+                        console.log(colors.green(`${time} `) + colors.red(line));
+                    }
+                }
             } break;
 
             case 'guild': {
@@ -65,6 +73,20 @@ class Logger {
                     colors.white(`${this.serverName} `) +
                     ((level === 'error') ? colors.red(text) : colors.yellow(text))
                 );
+
+                if (level === 'error' && Config.general.showCallStackError) {
+                    for (let line of (new Error().stack.split(/\r?\n/))) {
+                        this.logger.log({
+                            level: level,
+                            message: `${time} | ${this.guildId} | ${this.serverName} | ${line}`
+                        });
+                        console.log(
+                            colors.green(`${time} `) +
+                            colors.cyan(`${this.guildId} `) +
+                            colors.white(`${this.serverName} `) +
+                            colors.red(line));
+                    }
+                }
             } break;
 
             default: {

@@ -1,6 +1,7 @@
 {
     "general": {
-        "pollingIntervalMs": 10000
+        "pollingIntervalMs": 10000,
+        "showCallStackError": false
     },
     "discord": {
         "clientId": "",

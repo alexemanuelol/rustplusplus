@@ -155,9 +155,6 @@ class DiscordBot extends Client {
         }
         catch (e) {
             this.log('ERROR', `Interaction failed: ${e}`, 'error');
-            for (let line of (new Error().stack.split(/\r?\n/))) {
-                this.log('- ', `${line}`, 'error');
-            }
         }
 
         return undefined;
@@ -169,9 +166,6 @@ class DiscordBot extends Client {
         }
         catch (e) {
             this.log('ERROR', `Message edit failed: ${e}`, 'error');
-            for (let line of (new Error().stack.split(/\r?\n/))) {
-                this.log('- ', `${line}`, 'error');
-            }
         }
 
         return undefined;
@@ -183,9 +177,6 @@ class DiscordBot extends Client {
         }
         catch (e) {
             this.log('ERROR', `Message send failed: ${e}`, 'error');
-            for (let line of (new Error().stack.split(/\r?\n/))) {
-                this.log('- ', `${line}`, 'error');
-            }
         }
 
         return undefined;
