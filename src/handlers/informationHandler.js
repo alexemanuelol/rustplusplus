@@ -134,8 +134,6 @@ module.exports = {
     },
 
     updateEventInformation: async function (rustplus, client, instance, message) {
-        let serverId = `${rustplus.server}-${rustplus.port}`;
-
         /* CargoShip */
         let cargoShipMessage = '';
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.cargoShipEgressTimers)) {
@@ -332,7 +330,7 @@ module.exports = {
                 { name: 'Chinook 47', value: ch47Message, inline: true },
                 { name: 'Crate', value: crateMessage, inline: true })
             .setFooter({
-                text: instance.serverList[serverId].title
+                text: instance.serverList[rustplus.serverId].title
             });
 
         if (rustplus.informationIntervalCounter === 0) {
@@ -341,8 +339,6 @@ module.exports = {
     },
 
     updateTeamInformation: async function (rustplus, client, instance, message) {
-        let serverId = `${rustplus.server}-${rustplus.port}`;
-
         let names = '';
         let status = '';
         let locations = '';
@@ -377,7 +373,7 @@ module.exports = {
                 { name: 'Status', value: status, inline: true },
                 { name: 'Location', value: locations, inline: true })
             .setFooter({
-                text: instance.serverList[serverId].title
+                text: instance.serverList[rustplus.serverId].title
             });
 
         if (rustplus.informationIntervalCounter === 0) {

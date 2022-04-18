@@ -29,7 +29,6 @@ module.exports = {
             }
             else if (message.broadcast.hasOwnProperty('entityChanged')) {
                 let entityId = message.broadcast.entityChanged.entityId;
-                let serverId = `${rustplus.server}-${rustplus.port}`;
 
                 if (instance.switches.hasOwnProperty(entityId)) {
                     if (rustplus.interactionSwitches.includes(`${entityId}`)) {
@@ -42,7 +41,7 @@ module.exports = {
 
                         DiscordTools.sendSmartSwitchMessage(rustplus.guildId, entityId, true, true, false);
                         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                            client, rustplus.guildId, serverId, entityId);
+                            client, rustplus.guildId, rustplus.serverId, entityId);
                     }
                 }
                 else if (instance.alarms.hasOwnProperty(entityId)) {

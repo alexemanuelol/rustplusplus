@@ -118,8 +118,6 @@ module.exports = {
             return;
         }
 
-        const server = `${rustplus.server}-${rustplus.port}`;
-
         switch (interaction.options.getSubcommand()) {
             case 'edit_switch': {
                 const id = interaction.options.getString('id');
@@ -127,7 +125,7 @@ module.exports = {
                 const command = interaction.options.getString('command');
                 const image = interaction.options.getString('image');
 
-                if (Keywords.getListOfUsedKeywords(client, interaction.guildId, server).includes(command)) {
+                if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
                     await interaction.editReply({
                         content: `The command '${command}' is already in use, please choose another command.`,
                         ephemeral: true
@@ -145,7 +143,7 @@ module.exports = {
                     return;
                 }
 
-                if (instance.switches[id].ipPort !== server) {
+                if (instance.switches[id].serverId !== rustplus.serverId) {
                     await interaction.editReply({
                         content: 'That Smart Switch is not part of this Rust Server.',
                         ephemeral: true
@@ -171,7 +169,7 @@ module.exports = {
 
                 DiscordTools.sendSmartSwitchMessage(interaction.guildId, id, embedChanged, false, filesChanged);
                 SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                    client, interaction.guildId, server, id);
+                    client, interaction.guildId, rustplus.serverId, id);
 
                 await interaction.editReply({
                     content: 'Successfully edited Smart Switch.',
@@ -184,12 +182,12 @@ module.exports = {
                 const groupName = interaction.options.getString('group_name');
                 const command = interaction.options.getString('command');
 
-                if (!instance.serverList[server].hasOwnProperty('switchGroups')) {
-                    instance.serverList[server].switchGroups = {};
+                if (!instance.serverList[rustplus.serverId].hasOwnProperty('switchGroups')) {
+                    instance.serverList[rustplus.serverId].switchGroups = {};
                     client.writeInstanceFile(interaction.guildId, instance);
                 }
 
-                if (Object.keys(instance.serverList[server].switchGroups).includes(groupName)) {
+                if (Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     await interaction.editReply({
                         content: `The Group name '${groupName}' is already in use.`,
                         ephemeral: true
@@ -198,7 +196,7 @@ module.exports = {
                     return;
                 }
 
-                if (Keywords.getListOfUsedKeywords(client, interaction.guildId, server).includes(command)) {
+                if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
                     await interaction.editReply({
                         content: `The command '${command}' is already in use, please choose another command.`,
                         ephemeral: true
@@ -207,8 +205,8 @@ module.exports = {
                     return;
                 }
 
-                instance.serverList[server].switchGroups[groupName] = {
-                    ipPort: server,
+                instance.serverList[rustplus.serverId].switchGroups[groupName] = {
+                    serverId: rustplus.serverId,
                     command: command,
                     switches: []
                 }
@@ -227,7 +225,7 @@ module.exports = {
                 const groupName = interaction.options.getString('group_name');
                 const command = interaction.options.getString('command');
 
-                if (!Object.keys(instance.serverList[server].switchGroups).includes(groupName)) {
+                if (!Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     await interaction.editReply({
                         content: `The Group name '${groupName}' does not exist.`,
                         ephemeral: true
@@ -245,7 +243,7 @@ module.exports = {
                     return;
                 }
 
-                if (Keywords.getListOfUsedKeywords(client, interaction.guildId, server).includes(command)) {
+                if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
                     await interaction.editReply({
                         content: `The command '${command}' is already in use, please choose another command.`,
                         ephemeral: true
@@ -255,7 +253,7 @@ module.exports = {
                 }
 
                 if (command !== null) {
-                    instance.serverList[server].switchGroups[groupName].command = command;
+                    instance.serverList[rustplus.serverId].switchGroups[groupName].command = command;
                     embedChanged = true;
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
@@ -274,7 +272,7 @@ module.exports = {
                 const groupName = interaction.options.getString('group_name');
                 const switchId = interaction.options.getString('switch_id');
 
-                if (!Object.keys(instance.serverList[server].switchGroups).includes(groupName)) {
+                if (!Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     await interaction.editReply({
                         content: `The Group name '${groupName}' does not exist.`,
                         ephemeral: true
@@ -292,7 +290,7 @@ module.exports = {
                     return;
                 }
 
-                if (instance.serverList[server].switchGroups[groupName].switches.includes(switchId)) {
+                if (instance.serverList[rustplus.serverId].switchGroups[groupName].switches.includes(switchId)) {
                     await interaction.editReply({
                         content: `The Switch ID '${switchId}' is already part of the Group '${groupName}'.`,
                         ephemeral: true
@@ -303,7 +301,7 @@ module.exports = {
 
                 let sw = instance.switches[switchId];
 
-                if (sw.ipPort !== server) {
+                if (sw.serverId !== rustplus.serverId) {
                     await interaction.editReply({
                         content: `The Switch '${switchId}' is not part of this server.`,
                         ephemeral: true
@@ -312,7 +310,7 @@ module.exports = {
                     return;
                 }
 
-                instance.serverList[server].switchGroups[groupName].switches.push(switchId);
+                instance.serverList[rustplus.serverId].switchGroups[groupName].switches.push(switchId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
                 await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);
@@ -328,7 +326,7 @@ module.exports = {
                 const groupName = interaction.options.getString('group_name');
                 const switchId = interaction.options.getString('switch_id');
 
-                if (!Object.keys(instance.serverList[server].switchGroups).includes(groupName)) {
+                if (!Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     await interaction.editReply({
                         content: `The Group name '${groupName}' does not exist.`,
                         ephemeral: true
@@ -337,7 +335,7 @@ module.exports = {
                     return;
                 }
 
-                if (!instance.serverList[server].switchGroups[groupName].switches.includes(switchId)) {
+                if (!instance.serverList[rustplus.serverId].switchGroups[groupName].switches.includes(switchId)) {
                     await interaction.editReply({
                         content: `The Switch '${switchId}' does not exist in the Group '${groupName}'`,
                         ephemeral: true
@@ -346,8 +344,8 @@ module.exports = {
                     return;
                 }
 
-                instance.serverList[server].switchGroups[groupName].switches =
-                    instance.serverList[server].switchGroups[groupName].switches.filter(e => e !== switchId);
+                instance.serverList[rustplus.serverId].switchGroups[groupName].switches =
+                    instance.serverList[rustplus.serverId].switchGroups[groupName].switches.filter(e => e !== switchId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
                 await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);

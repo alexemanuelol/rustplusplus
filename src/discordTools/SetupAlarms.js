@@ -2,10 +2,9 @@ const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
-    let serverId = `${rustplus.server}-${rustplus.port}`;
 
     for (const [key, value] of Object.entries(instance.alarms)) {
-        if (serverId !== `${value.ipPort}`) continue;
+        if (rustplus.serverId !== `${value.serverId}`) continue;
 
         let info = await rustplus.getEntityInfoAsync(key);
 

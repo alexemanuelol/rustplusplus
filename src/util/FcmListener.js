@@ -181,15 +181,14 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         image: 'smart_switch.png',
         autoDayNight: 0,
         server: body.name,
-        ipPort: serverId
+        serverId: serverId
     };
     client.writeInstanceFile(guild.id, instance);
 
     let rustplus = client.rustplusInstances[guild.id];
     if (!rustplus) return;
 
-    let rustplusId = `${rustplus.server}-${rustplus.port}`;
-    if (serverId === rustplusId) {
+    if (serverId === rustplus.serverId) {
         let info = await rustplus.getEntityInfoAsync(entityId);
         if (!(await rustplus.isResponseValid(info))) return;
 
@@ -215,7 +214,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         id: entityId,
         image: 'smart_alarm.png',
         server: body.name,
-        ipPort: serverId,
+        serverId: serverId,
         messageId: null
     };
     client.writeInstanceFile(guild.id, instance);
@@ -223,8 +222,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     let rustplus = client.rustplusInstances[guild.id];
     if (!rustplus) return;
 
-    let rustplusId = `${rustplus.server}-${rustplus.port}`;
-    if (serverId === rustplusId) {
+    if (serverId === rustplus.serverId) {
         let info = await rustplus.getEntityInfoAsync(entityId);
         if (!(await rustplus.isResponseValid(info))) return;
 
@@ -251,15 +249,14 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         inGame: true,
         image: 'storage_monitor.png',
         server: body.name,
-        ipPort: serverId
+        serverId: serverId
     };
     client.writeInstanceFile(guild.id, instance);
 
     let rustplus = client.rustplusInstances[guild.id];
     if (!rustplus) return;
 
-    let rustplusId = `${rustplus.server}-${rustplus.port}`;
-    if (serverId === rustplusId) {
+    if (serverId === rustplus.serverId) {
         let info = await rustplus.getEntityInfoAsync(entityId);
         if (!(await rustplus.isResponseValid(info))) return;
 
@@ -302,9 +299,8 @@ async function alarmAlarm(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
     let serverId = `${body.ip}-${body.port}`;
     let rustplus = client.rustplusInstances[guild.id];
-    let rustplusId = `${rustplus.server}-${rustplus.port}`;
 
-    if (!rustplus || (rustplus && (serverId !== rustplusId))) {
+    if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
         if (instance.generalSettings.fcmAlarmNotificationEnabled) {
             let title = (data.title !== '') ? data.title : 'Smart Alarm';
             let message = (data.message !== '') ? data.message : 'Your base is under attack!';
@@ -367,10 +363,9 @@ async function teamLogin(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
     let serverId = `${body.ip}-${body.port}`;
     let rustplus = client.rustplusInstances[guild.id];
-    let rustplusId = `${rustplus.server}-${rustplus.port}`;
     let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.activity);
 
-    if (!rustplus || (rustplus && (serverId !== rustplusId))) {
+    if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
         if (channel !== undefined) {
             let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
             await channel.send({

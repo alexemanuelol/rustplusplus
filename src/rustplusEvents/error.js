@@ -12,7 +12,6 @@ module.exports = {
         }
         else if (err.code === 'ECONNREFUSED') {
             rustplus.log('ERROR', `Connection refused to: ${rustplus.server}:${rustplus.port}.`, 'error');
-            let serverId = `${rustplus.server}-${rustplus.port}`;
             let instance = client.readInstanceFile(rustplus.guildId);
 
             rustplus.refusedConnectionRetry = true;
@@ -25,14 +24,14 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor('#ff0040')
                             .setTitle('Server just went offline.')
-                            .setThumbnail(instance.serverList[serverId].img)
+                            .setThumbnail(instance.serverList[rustplus.serverId].img)
                             .setTimestamp()
-                            .setFooter({ text: instance.serverList[serverId].title })
+                            .setFooter({ text: instance.serverList[rustplus.serverId].title })
                         ]
                     });
                 }
 
-                await DiscordTools.sendServerMessage(rustplus.guildId, serverId, 2, false, true);
+                await DiscordTools.sendServerMessage(rustplus.guildId, rustplus.serverId, 2, false, true);
 
                 rustplus.firstTime = false;
                 rustplus.connected = false;

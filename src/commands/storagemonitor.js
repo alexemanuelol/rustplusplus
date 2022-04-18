@@ -48,8 +48,6 @@ module.exports = {
 			return;
 		}
 
-		const server = `${rustplus.server}-${rustplus.port}`;
-
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
 				if (!Object.keys(instance.storageMonitors).includes(id)) {
@@ -61,7 +59,7 @@ module.exports = {
 					return;
 				}
 
-				if (instance.storageMonitors[id].ipPort !== server) {
+				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
 					await interaction.editReply({
 						content: 'That Storage Monitor is not part of this Rust Server.',
 						ephemeral: true

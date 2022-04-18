@@ -58,13 +58,12 @@ class Time {
 
     loadTimeTillConfig() {
         let instance = this.client.readInstanceFile(this.rustplus.guildId);
-        let serverId = `${this.rustplus.server}-${this.rustplus.port}`;
 
-        if (instance.serverList[serverId].timeTillDay !== null) {
-            this.timeTillDay = instance.serverList[serverId].timeTillDay;
+        if (instance.serverList[this.rustplus.serverId].timeTillDay !== null) {
+            this.timeTillDay = instance.serverList[this.rustplus.serverId].timeTillDay;
         }
-        if (instance.serverList[serverId].timeTillNight !== null) {
-            this.timeTillNight = instance.serverList[serverId].timeTillNight;
+        if (instance.serverList[this.rustplus.serverId].timeTillNight !== null) {
+            this.timeTillNight = instance.serverList[this.rustplus.serverId].timeTillNight;
         }
 
         this.timeTillActive =

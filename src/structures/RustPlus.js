@@ -13,6 +13,8 @@ class RustPlus extends RP {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
 
+        this.serverId = `${this.server}-${this.port}`;
+
         this.guildId = guildId;
         this.intervalId = 0;
         this.logger = null;

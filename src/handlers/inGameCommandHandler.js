@@ -145,7 +145,7 @@ module.exports = {
 
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
                     SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                        client, rustplus.guildId, `${rustplus.server}-${rustplus.port}`, id);
+                        client, rustplus.guildId, rustplus.serverId, id);
 
                     let str = `${instance.switches[id].name} was turned `;
                     str += (active) ? 'on.' : 'off.';
@@ -155,7 +155,7 @@ module.exports = {
                 }
             }
 
-            let groups = instance.serverList[`${rustplus.server}-${rustplus.port}`].switchGroups;
+            let groups = instance.serverList[rustplus.serverId].switchGroups;
             for (const [groupName, content] of Object.entries(groups)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
                 if (command.startsWith(cmd)) {
@@ -171,7 +171,7 @@ module.exports = {
                     }
 
                     await SmartSwitchGroupHandler.TurnOnOffGroup(
-                        client, rustplus, rustplus.guildId, `${rustplus.server}-${rustplus.port}`, groupName, active);
+                        client, rustplus, rustplus.guildId, rustplus.serverId, groupName, active);
 
                     return true;
                 }
@@ -477,7 +477,6 @@ module.exports = {
     commandMarker: async function (rustplus, client, message) {
         let callerId = message.broadcast.teamMessage.message.steamId.toString();
         let command = message.broadcast.teamMessage.message.message;
-        let serverId = `${rustplus.server}-${rustplus.port}`;
 
         if (!command.startsWith(`${rustplus.generalSettings.prefix}marker `)) {
             return;
@@ -502,7 +501,7 @@ module.exports = {
                     }
                 }
 
-                instance.markers[serverId][command] = callerLocation;
+                instance.markers[rustplus.serverId][command] = callerLocation;
                 client.writeInstanceFile(rustplus.guildId, instance);
                 rustplus.markers[command] = callerLocation;
 
@@ -515,7 +514,7 @@ module.exports = {
 
                 if (command in rustplus.markers) {
                     delete rustplus.markers[command];
-                    delete instance.markers[serverId][command];
+                    delete instance.markers[rustplus.serverId][command];
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     let str = `Marker '${command}' was removed.`;
@@ -583,20 +582,19 @@ module.exports = {
     commandNote: function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
         let instance = client.readInstanceFile(rustplus.guildId);
-        let serverId = `${rustplus.server}-${rustplus.port}`;
 
-        if (!instance.serverList[serverId].hasOwnProperty('notes')) {
-            instance.serverList[serverId].notes = {};
+        if (!instance.serverList[rustplus.serverId].hasOwnProperty('notes')) {
+            instance.serverList[rustplus.serverId].notes = {};
         }
 
         if (command === `${rustplus.generalSettings.prefix}notes`) {
-            if (Object.keys(instance.serverList[serverId].notes).length === 0) {
+            if (Object.keys(instance.serverList[rustplus.serverId].notes).length === 0) {
                 rustplus.printCommandOutput('There are no saved notes.');
             }
             else {
                 rustplus.printCommandOutput('Notes:');
             }
-            for (const [id, note] of Object.entries(instance.serverList[serverId].notes)) {
+            for (const [id, note] of Object.entries(instance.serverList[rustplus.serverId].notes)) {
                 let str = `${id}: ${note}`;
                 rustplus.printCommandOutput(str);
             }
@@ -605,12 +603,12 @@ module.exports = {
             let id = parseInt(command.replace(`${rustplus.generalSettings.prefix}note remove`, '').trim());
 
             if (!isNaN(id)) {
-                if (!Object.keys(instance.serverList[serverId].notes).map(Number).includes(id)) {
+                if (!Object.keys(instance.serverList[rustplus.serverId].notes).map(Number).includes(id)) {
                     rustplus.printCommandOutput('Note ID does not exist.');
                     return;
                 }
 
-                delete instance.serverList[serverId].notes[id];
+                delete instance.serverList[rustplus.serverId].notes[id];
                 rustplus.printCommandOutput(`Note with ID: ${id} was removed.`);
                 client.writeInstanceFile(rustplus.guildId, instance);
                 return;
@@ -621,11 +619,11 @@ module.exports = {
             let note = command.replace(`${rustplus.generalSettings.prefix}note `, '').trim();
 
             index = 0;
-            while (Object.keys(instance.serverList[serverId].notes).map(Number).includes(index)) {
+            while (Object.keys(instance.serverList[rustplus.serverId].notes).map(Number).includes(index)) {
                 index += 1;
             }
 
-            instance.serverList[serverId].notes[index] = `${note}`;
+            instance.serverList[rustplus.serverId].notes[index] = `${note}`;
             rustplus.printCommandOutput('Note saved.');
         }
 

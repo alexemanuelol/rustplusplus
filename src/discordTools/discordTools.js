@@ -848,8 +848,7 @@ module.exports = {
     getSmartSwitchGroupEmbed: function (guildId, name) {
         const instance = Client.client.readInstanceFile(guildId);
         let rustplus = Client.client.rustplusInstances[guildId];
-        let server = `${rustplus.server}-${rustplus.port}`;
-        let group = instance.serverList[server].switchGroups[name];
+        let group = instance.serverList[rustplus.serverId].switchGroups[name];
 
         let switchName = '';
         let switchId = '';
@@ -862,8 +861,8 @@ module.exports = {
                 switchActive += `${(active) ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI}\n`;
             }
             else {
-                instance.serverList[server].switchGroups[name].switches =
-                    instance.serverList[server].switchGroups[name].switches.filter(e => e !== groupSwitchId);
+                instance.serverList[rustplus.serverId].switchGroups[name].switches =
+                    instance.serverList[rustplus.serverId].switchGroups[name].switches.filter(e => e !== groupSwitchId);
             }
         }
         Client.client.writeInstanceFile(guildId, instance);
@@ -889,7 +888,7 @@ module.exports = {
                 { name: 'ID', value: switchId, inline: true },
                 { name: 'Active', value: switchActive, inline: true }
             )
-            .setFooter({ text: `${instance.serverList[server].title}` })
+            .setFooter({ text: `${instance.serverList[rustplus.serverId].title}` })
     },
 
     getSmartSwitchGroupButtons: function (name) {

@@ -31,7 +31,7 @@ module.exports = {
                 list.push(value.command);
             }
             else {
-                if (value.ipPort === serverId) {
+                if (value.serverId === serverId) {
                     list.push(value.command);
                 }
             }
