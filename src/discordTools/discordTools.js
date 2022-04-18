@@ -415,12 +415,13 @@ module.exports = {
         return new MessageEmbed()
             .setTitle(`${instance.switches[id].name}`)
             .setColor((instance.switches[id].active) ? '#00ff40' : '#ff0040')
-            .setDescription(`ID: \`${id}\``)
+            .setDescription(`**ID**: \`${id}\``)
             .setThumbnail(`attachment://${instance.switches[id].image}`)
             .addFields(
                 {
                     name: 'Custom Command',
-                    value: `${instance.generalSettings.prefix}${instance.switches[id].command}`, inline: true
+                    value: `\`${instance.generalSettings.prefix}${instance.switches[id].command}\``,
+                    inline: true
                 }
             )
             .setFooter({ text: `${instance.switches[id].server}` })
@@ -534,8 +535,8 @@ module.exports = {
         return new MessageEmbed()
             .setTitle(`${instance.alarms[id].name}`)
             .setColor((instance.alarms[id].active) ? '#00ff40' : '#ce412b')
+            .setDescription(`**ID**: \`${id}\``)
             .addFields(
-                { name: 'ID', value: `\`${id}\``, inline: true },
                 { name: 'Message', value: `\`${instance.alarms[id].message}\``, inline: true }
             )
             .setThumbnail(`attachment://${instance.alarms[id].image}`)
@@ -653,7 +654,7 @@ module.exports = {
         }
 
         for (const [id, quantity] of Object.entries(storageItems)) {
-            itemName += `${Client.client.items.getName(id)}\n`;
+            itemName += `\`${Client.client.items.getName(id)}\`\n`;
             itemQuantity += `\`${quantity}\`\n`;
         }
 

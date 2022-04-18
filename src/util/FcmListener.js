@@ -397,6 +397,7 @@ async function newsNews(client, guild, full, data, body) {
                     .setColor('#ce412b')
                     .setDescription(`${data.message}`)
                     .setThumbnail(Constants.DEFAULT_SERVER_IMG)
+                    .setTimestamp()
             ],
             components: [
                 new MessageActionRow()
