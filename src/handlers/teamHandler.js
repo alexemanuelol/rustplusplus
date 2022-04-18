@@ -11,6 +11,7 @@ module.exports = {
 
     checkChanges: async function (rustplus, client, teamInfo) {
         let instance = client.readInstanceFile(rustplus.guildId);
+        let serverId = `${rustplus.server}-${rustplus.port}`;
         let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
 
         if (!channel) {
@@ -18,9 +19,7 @@ module.exports = {
             return;
         }
 
-        if (rustplus.team.isLeaderSteamIdChanged(teamInfo)) {
-            return;
-        }
+        if (rustplus.team.isLeaderSteamIdChanged(teamInfo)) return;
 
         let newPlayers = rustplus.team.getNewPlayers(teamInfo);
         let leftPlayers = rustplus.team.getLeftPlayers(teamInfo);
@@ -37,9 +36,7 @@ module.exports = {
                         url: `${Constants.STEAM_PROFILES_URL}${steamId}`
                     })
                     .setTimestamp()
-                    .setFooter({
-                        text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
-                    })
+                    .setFooter({ text: instance.serverList[serverId].title })
                 ]
             });
         }
@@ -57,9 +54,7 @@ module.exports = {
                                 url: `${Constants.STEAM_PROFILES_URL}${steamId}`
                             })
                             .setTimestamp()
-                            .setFooter({
-                                text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
-                            })
+                            .setFooter({ text: instance.serverList[serverId].title })
                         ]
                     });
                 }
@@ -84,9 +79,7 @@ module.exports = {
                                     url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
                                 })
                                 .setTimestamp()
-                                .setFooter({
-                                    text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
-                                })
+                                .setFooter({ text: instance.serverList[serverId].title })
                             ]
                         });
                     }
@@ -102,9 +95,7 @@ module.exports = {
                                     url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
                                 })
                                 .setTimestamp()
-                                .setFooter({
-                                    text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
-                                })
+                                .setFooter({ text: instance.serverList[serverId].title })
                             ]
                         });
                     }
@@ -121,9 +112,7 @@ module.exports = {
                                     url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
                                 })
                                 .setTimestamp()
-                                .setFooter({
-                                    text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
-                                })
+                                .setFooter({ text: instance.serverList[serverId].title })
                             ]
                         });
                     }

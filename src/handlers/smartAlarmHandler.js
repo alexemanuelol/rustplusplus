@@ -2,13 +2,13 @@ const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
-        let server = `${rustplus.server}-${rustplus.port}`;
+        let serverId = `${rustplus.server}-${rustplus.port}`;
 
         if (rustplus.smartAlarmIntervalCounter === 29) {
             rustplus.smartAlarmIntervalCounter = 0;
             let instance = client.readInstanceFile(rustplus.guildId);
             for (const [key, value] of Object.entries(instance.alarms)) {
-                if (server !== `${value.ipPort}`) continue;
+                if (serverId !== `${value.ipPort}`) continue;
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 let info = await rustplus.getEntityInfoAsync(key);

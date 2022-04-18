@@ -157,16 +157,6 @@ class RustPlus extends RP {
         }
     }
 
-    addItemToLookFor(id) {
-        if (!this.itemsToLookForId.includes(id)) {
-            this.itemsToLookForId.push(id);
-        }
-    }
-
-    removeItemToLookFor(id) {
-        this.itemsToLookForId = this.itemsToLookForId.filter(e => e !== id);
-    }
-
     replenish_tokens() {
         this.tokens += this.tokens_replenish;
         if (this.tokens > this.tokens_limit) {

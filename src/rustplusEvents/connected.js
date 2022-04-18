@@ -12,7 +12,7 @@ module.exports = {
 
         rustplus.tokens_replenish_task = setInterval(rustplus.replenish_tokens.bind(rustplus), 1000);
 
-        let server = `${rustplus.server}-${rustplus.port}`;
+        let serverId = `${rustplus.server}-${rustplus.port}`;
         let instance = client.readInstanceFile(rustplus.guildId);
 
         let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
@@ -27,19 +27,17 @@ module.exports = {
                     embeds: [new MessageEmbed()
                         .setColor('#ff0040')
                         .setTitle('The connection to the server seems to be invalid. Try to re-pair to the server.')
-                        .setThumbnail(instance.serverList[server].img)
+                        .setThumbnail(instance.serverList[serverId].img)
                         .setTimestamp()
-                        .setFooter({
-                            text: instance.serverList[server].title
-                        })
+                        .setFooter({ text: instance.serverList[serverId].title })
                     ]
                 });
             }
 
-            instance.serverList[server].active = false;
+            instance.serverList[serverId].active = false;
             client.writeInstanceFile(rustplus.guildId, instance);
 
-            await DiscordTools.sendServerMessage(rustplus.guildId, server, null, false, true);
+            await DiscordTools.sendServerMessage(rustplus.guildId, serverId, null, false, true);
 
             rustplus.disconnect();
             delete client.rustplusInstances[rustplus.guildId];
@@ -63,9 +61,7 @@ module.exports = {
                         .setTitle('Wipe detected!')
                         .setImage(`attachment://${rustplus.guildId}_map_full.png`)
                         .setTimestamp()
-                        .setFooter({
-                            text: instance.serverList[server].title
-                        })
+                        .setFooter({ text: instance.serverList[serverId].title })
                     ],
                     files: [file]
                 });
@@ -84,17 +80,15 @@ module.exports = {
                         embeds: [new MessageEmbed()
                             .setColor('#00ff40')
                             .setTitle('Server just went online.')
-                            .setThumbnail(instance.serverList[server].img)
+                            .setThumbnail(instance.serverList[serverId].img)
                             .setTimestamp()
-                            .setFooter({
-                                text: instance.serverList[server].title
-                            })
+                            .setFooter({ text: instance.serverList[serverId].title })
                         ]
                     });
                 }
             }
 
-            await DiscordTools.sendServerMessage(rustplus.guildId, server, null, false, true);
+            await DiscordTools.sendServerMessage(rustplus.guildId, serverId, null, false, true);
 
             rustplus.connected = true;
             rustplus.isReconnect = false;

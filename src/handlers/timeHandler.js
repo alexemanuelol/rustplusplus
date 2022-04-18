@@ -99,18 +99,14 @@ module.exports = {
             return;
         }
 
-        if (newTime >= time.sunrise && newTime < time.sunset) {
-            /* It's Day */
-            /* Increment all values in the object */
+        if (newTime >= time.sunrise && newTime < time.sunset) { /* It's Day */
             for (let id of Object.keys(rustplus.time.timeTillNight)) {
                 rustplus.time.timeTillNight[id] += (client.pollingIntervalMs / 1000);
             }
 
             rustplus.time.timeTillNight[newTime] = 0;
         }
-        else {
-            /* It's Night */
-            /* Increment all values in the object */
+        else { /* It's Night */
             for (let id of Object.keys(rustplus.time.timeTillDay)) {
                 rustplus.time.timeTillDay[id] += (client.pollingIntervalMs / 1000);
             }

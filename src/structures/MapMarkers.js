@@ -1262,6 +1262,16 @@ class MapMarkers {
         });
     }
 
+    addItemToSubscribeTo(id) {
+        if (!this.subscribedItemsId.includes(id)) {
+            this.subscribedItemsId.push(id);
+        }
+    }
+
+    removeItemFromSubscription(id) {
+        this.subscribedItemsId = this.subscribedItemsId.filter(e => e !== id);
+    }
+
     reset() {
         this.players = [];
         this.explosions = [];

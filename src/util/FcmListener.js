@@ -8,7 +8,7 @@ module.exports = async (client, guild) => {
     let credentials = client.readCredentialsFile(guild.id);
 
     if (credentials.credentials === null) {
-        client.log('Credentials is not set, cannot start fcm-listener.');
+        client.log(`Credentials is not set for guild: ${guild.id}, cannot start FCM-listener.`);
         return;
     }
 
@@ -19,13 +19,13 @@ module.exports = async (client, guild) => {
         client.currentFcmListeners[guild.id].destroy();
     }
 
-    client.log('INFO', `FCM-listener started for guild: ${guild.id}`);
+    client.log('INFO', `FCM-listener will start in 5 seconds for guild: ${guild.id}`);
 
     let startTime = new Date();
     client.currentFcmListeners[guild.id] =
         await listen(credentials.credentials.fcm_credentials, async ({ notification, persistentId }) => {
             /* Create a delay so that buffered notifications are ignored. */
-            if ((new Date() - startTime) < 3000) return;
+            if ((new Date() - startTime) < 5000) return;
 
             /* Parse the notification body. */
             const full = notification
@@ -138,17 +138,16 @@ function isValidUrl(url) {
 async function pairingServer(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
     let serverId = `${body.ip}-${body.port}`;
-
-    let exist = instance.serverList.hasOwnProperty(serverId);
-
+    let serversId = instance.channelId.servers;
     let message = undefined;
-    if (exist) {
-        message = await DiscordTools.getMessageById(
-            guild.id, instance.channelId.servers, instance.serverList[serverId].messageId);
+
+    let serverExist = instance.serverList.hasOwnProperty(serverId);
+    if (serverExist) {
+        message = await DiscordTools.getMessageById(guild.id, serversId, instance.serverList[serverId].messageId);
     }
 
     instance.serverList[serverId] = {
-        active: (exist) ? instance.serverList[serverId].active : false,
+        active: (serverExist) ? instance.serverList[serverId].active : false,
         title: data.title,
         serverIp: body.ip,
         appPort: body.port,
@@ -170,58 +169,53 @@ async function pairingServer(client, guild, full, data, body) {
 
 async function pairingEntitySwitch(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
-    let id = body.entityId;
+    let serverId = `${body.ip}-${body.port}`;
+    let entityId = body.entityId;
 
-    if (instance.switches.hasOwnProperty(id)) {
-        return;
-    }
+    if (instance.switches.hasOwnProperty(entityId)) return;
 
-    instance.switches[id] = {
+    instance.switches[entityId] = {
         active: false,
         name: 'Smart Switch',
-        command: id,
+        command: entityId,
         image: 'smart_switch.png',
         autoDayNight: 0,
         server: body.name,
-        ipPort: `${body.ip}-${body.port}`
+        ipPort: serverId
     };
     client.writeInstanceFile(guild.id, instance);
 
     let rustplus = client.rustplusInstances[guild.id];
     if (!rustplus) return;
 
-    let serverId = `${rustplus.server}-${rustplus.port}`;
-
-    if (`${body.ip}-${body.port}` === serverId) {
-        let info = await rustplus.getEntityInfoAsync(id);
+    let rustplusId = `${rustplus.server}-${rustplus.port}`;
+    if (serverId === rustplusId) {
+        let info = await rustplus.getEntityInfoAsync(entityId);
         if (!(await rustplus.isResponseValid(info))) return;
 
-        let active = info.entityInfo.payload.value;
-        instance = client.readInstanceFile(guild.id);
-        instance.switches[id].active = active;
+        instance.switches[entityId].active = info.entityInfo.payload.value;
         client.writeInstanceFile(guild.id, instance);
 
-        DiscordTools.sendSmartSwitchMessage(guild.id, id);
+        await DiscordTools.sendSmartSwitchMessage(guild.id, entityId);
     }
 }
 
 async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
-    let id = body.entityId;
+    let serverId = `${body.ip}-${body.port}`;
+    let entityId = body.entityId;
 
-    if (instance.alarms.hasOwnProperty(id)) {
-        return;
-    }
+    if (instance.alarms.hasOwnProperty(entityId)) return;
 
-    instance.alarms[id] = {
+    instance.alarms[entityId] = {
         active: false,
         everyone: false,
         name: 'Smart Alarm',
         message: 'Your base is under attack!',
-        id: id,
+        id: entityId,
         image: 'smart_alarm.png',
         server: body.name,
-        ipPort: `${body.ip}-${body.port}`,
+        ipPort: serverId,
         messageId: null
     };
     client.writeInstanceFile(guild.id, instance);
@@ -229,72 +223,68 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     let rustplus = client.rustplusInstances[guild.id];
     if (!rustplus) return;
 
-    let serverId = `${rustplus.server}-${rustplus.port}`;
-
-    if (`${body.ip}-${body.port}` === serverId) {
-        let info = await rustplus.getEntityInfoAsync(id);
+    let rustplusId = `${rustplus.server}-${rustplus.port}`;
+    if (serverId === rustplusId) {
+        let info = await rustplus.getEntityInfoAsync(entityId);
         if (!(await rustplus.isResponseValid(info))) return;
 
-        let active = info.entityInfo.payload.value;
-        instance.alarms[id].active = active;
+        instance.alarms[entityId].active = info.entityInfo.payload.value;
         client.writeInstanceFile(guild.id, instance);
     }
 
-    await DiscordTools.sendSmartAlarmMessage(guild.id, id);
+    await DiscordTools.sendSmartAlarmMessage(guild.id, entityId);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
-    let id = body.entityId;
+    let serverId = `${body.ip}-${body.port}`;
+    let entityId = body.entityId;
 
-    if (instance.storageMonitors.hasOwnProperty(id)) {
-        return;
-    }
+    if (instance.storageMonitors.hasOwnProperty(entityId)) return;
 
-    instance.storageMonitors[id] = {
+    instance.storageMonitors[entityId] = {
         name: 'Storage Monitor',
-        id: id,
+        id: entityId,
         type: null,
         decaying: false,
         everyone: false,
         inGame: true,
         image: 'storage_monitor.png',
         server: body.name,
-        ipPort: `${body.ip}-${body.port}`
+        ipPort: serverId
     };
     client.writeInstanceFile(guild.id, instance);
 
     let rustplus = client.rustplusInstances[guild.id];
     if (!rustplus) return;
 
-    let serverId = `${rustplus.server}-${rustplus.port}`;
-
-    if (`${body.ip}-${body.port}` === serverId) {
-        let info = await rustplus.getEntityInfoAsync(id);
+    let rustplusId = `${rustplus.server}-${rustplus.port}`;
+    if (serverId === rustplusId) {
+        let info = await rustplus.getEntityInfoAsync(entityId);
         if (!(await rustplus.isResponseValid(info))) return;
 
         if (info.entityInfo.payload.capacity !== 0) {
             if (info.entityInfo.payload.capacity === 28) {
-                instance.storageMonitors[id].type = 'toolcupboard';
-                instance.storageMonitors[id].image = 'tool_cupboard.png';
+                instance.storageMonitors[entityId].type = 'toolcupboard';
+                instance.storageMonitors[entityId].image = 'tool_cupboard.png';
                 if (info.entityInfo.payload.protectionExpiry === 0) {
-                    instance.storageMonitors[id].decaying = true;
+                    instance.storageMonitors[entityId].decaying = true;
                 }
             }
             else {
-                instance.storageMonitors[id].type = 'container';
+                instance.storageMonitors[entityId].type = 'container';
             }
             client.writeInstanceFile(guild.id, instance);
         }
 
-        rustplus.storageMonitors[id] = {
+        rustplus.storageMonitors[entityId] = {
             items: info.entityInfo.payload.items,
             expiry: info.entityInfo.payload.protectionExpiry,
             capacity: info.entityInfo.payload.capacity,
             hasProtection: info.entityInfo.payload.hasProtection
         }
 
-        await DiscordTools.sendStorageMonitorMessage(guild.id, id);
+        await DiscordTools.sendStorageMonitorMessage(guild.id, entityId);
     }
 }
 
@@ -310,10 +300,11 @@ async function alarmAlarm(client, guild, full, data, body) {
     setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
 
     let instance = client.readInstanceFile(guild.id);
+    let serverId = `${body.ip}-${body.port}`;
     let rustplus = client.rustplusInstances[guild.id];
-    let alarmServerId = `${body.ip}-${body.port}`;
+    let rustplusId = `${rustplus.server}-${rustplus.port}`;
 
-    if (!rustplus || (rustplus && (alarmServerId !== `${rustplus.server}-${rustplus.port}`))) {
+    if (!rustplus || (rustplus && (serverId !== rustplusId))) {
         if (instance.generalSettings.fcmAlarmNotificationEnabled) {
             let title = (data.title !== '') ? data.title : 'Smart Alarm';
             let message = (data.message !== '') ? data.message : 'Your base is under attack!';
@@ -324,20 +315,10 @@ async function alarmAlarm(client, guild, full, data, body) {
                     .setColor('#ce412b')
                     .setThumbnail('attachment://smart_alarm.png')
                     .setTitle(title)
-                    .addFields(
-                        {
-                            name: 'Message',
-                            value: `\`${message}\``,
-                            inline: true
-                        }
-                    )
-                    .setFooter({
-                        text: body.name
-                    })
+                    .addFields({ name: 'Message', value: `\`${message}\``, inline: true })
+                    .setFooter({ text: body.name })
                     .setTimestamp()];
-
-            content.files = [
-                new MessageAttachment('src/resources/images/electrics/smart_alarm.png')];
+            content.files = [new MessageAttachment('src/resources/images/electrics/smart_alarm.png')];
 
             if (instance.generalSettings.fcmAlarmNotificationEveryone) {
                 content.content = '@everyone';
@@ -372,9 +353,7 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
             .setThumbnail(png)
             .setTitle(data.title)
             .setTimestamp()
-            .setFooter({
-                text: body.name
-            });
+            .setFooter({ text: body.name });
 
         if (body.targetId !== '') {
             embed.setURL(`${Constants.STEAM_PROFILES_URL}${body.targetId}`)
@@ -386,26 +365,25 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
 
 async function teamLogin(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
-    let channelId = instance.channelId.activity;
-    let channel = DiscordTools.getTextChannelById(guild.id, channelId);
+    let serverId = `${body.ip}-${body.port}`;
     let rustplus = client.rustplusInstances[guild.id];
-    let loginServerId = `${body.ip}-${body.port}`;
+    let rustplusId = `${rustplus.server}-${rustplus.port}`;
+    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.activity);
 
-    if (!rustplus || (rustplus && (`${rustplus.server}-${rustplus.port}` !== loginServerId))) {
+    if (!rustplus || (rustplus && (serverId !== rustplusId))) {
         if (channel !== undefined) {
             let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
             await channel.send({
-                embeds: [new MessageEmbed()
-                    .setColor('#00ff40')
-                    .setAuthor({
-                        name: `${body.targetName} just connected.`,
-                        iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
-                        url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
-                    })
-                    .setTimestamp()
-                    .setFooter({
-                        text: body.name
-                    })
+                embeds: [
+                    new MessageEmbed()
+                        .setColor('#00ff40')
+                        .setAuthor({
+                            name: `${body.targetName} just connected.`,
+                            iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                            url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
+                        })
+                        .setTimestamp()
+                        .setFooter({ text: body.name })
                 ]
             });
         }
@@ -414,25 +392,25 @@ async function teamLogin(client, guild, full, data, body) {
 
 async function newsNews(client, guild, full, data, body) {
     let instance = client.readInstanceFile(guild.id);
-    let channelId = instance.channelId.activity;
-    let channel = DiscordTools.getTextChannelById(guild.id, channelId);
+    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.activity);
 
     if (channel !== undefined) {
         await channel.send({
-            embeds: [new MessageEmbed()
-                .setTitle(`NEWS: ${data.title}`)
-                .setColor('#ce412b')
-                .setDescription(`${data.message}`)
-                .setThumbnail(Constants.DEFAULT_SERVER_IMG)
+            embeds: [
+                new MessageEmbed()
+                    .setTitle(`NEWS: ${data.title}`)
+                    .setColor('#ce412b')
+                    .setDescription(`${data.message}`)
+                    .setThumbnail(Constants.DEFAULT_SERVER_IMG)
             ],
-            components: [new MessageActionRow()
-                .addComponents(
-                    new MessageButton()
-                        .setStyle('LINK')
-                        .setLabel('LINK')
-                        .setURL(isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL))
+            components: [
+                new MessageActionRow()
+                    .addComponents(
+                        new MessageButton()
+                            .setStyle('LINK')
+                            .setLabel('LINK')
+                            .setURL(isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL))
             ]
         });
-
     }
 }

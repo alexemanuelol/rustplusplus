@@ -28,50 +28,50 @@ module.exports = {
                 }
             }
             else if (message.broadcast.hasOwnProperty('entityChanged')) {
-                let id = message.broadcast.entityChanged.entityId;
+                let entityId = message.broadcast.entityChanged.entityId;
+                let serverId = `${rustplus.server}-${rustplus.port}`;
 
-                if (instance.switches.hasOwnProperty(id)) {
-                    if (rustplus.interactionSwitches.includes(`${id}`)) {
-                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== `${id}`);
+                if (instance.switches.hasOwnProperty(entityId)) {
+                    if (rustplus.interactionSwitches.includes(`${entityId}`)) {
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== `${entityId}`);
                     }
                     else {
                         let active = message.broadcast.entityChanged.payload.value;
-                        instance.switches[id].active = active;
+                        instance.switches[entityId].active = active;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                        DiscordTools.sendSmartSwitchMessage(rustplus.guildId, entityId, true, true, false);
                         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                            client, rustplus.guildId, `${rustplus.server}-${rustplus.port}`, id);
+                            client, rustplus.guildId, serverId, entityId);
                     }
                 }
-                else if (instance.alarms.hasOwnProperty(id)) {
+                else if (instance.alarms.hasOwnProperty(entityId)) {
                     let active = message.broadcast.entityChanged.payload.value;
-                    instance.alarms[id].active = active;
+                    instance.alarms[entityId].active = active;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     if (active) {
-                        let title = instance.alarms[id].name;
-                        let message = instance.alarms[id].message;
+                        let title = instance.alarms[entityId].name;
+                        let message = instance.alarms[entityId].message;
 
                         let content = {};
                         content.embeds = [
                             new MessageEmbed()
                                 .setColor('#ce412b')
-                                .setThumbnail(`attachment://${instance.alarms[id].image}`)
+                                .setThumbnail(`attachment://${instance.alarms[entityId].image}`)
                                 .setTitle(title)
                                 .addFields(
-                                    { name: 'ID', value: `\`${id}\``, inline: true },
+                                    { name: 'ID', value: `\`${entityId}\``, inline: true },
                                     { name: 'Message', value: `\`${message}\``, inline: true }
                                 )
-                                .setFooter({
-                                    text: instance.alarms[id].server
-                                })
+                                .setFooter({ text: instance.alarms[entityId].server })
                                 .setTimestamp()];
 
                         content.files = [
-                            new MessageAttachment(`src/resources/images/electrics/${instance.alarms[id].image}`)];
+                            new MessageAttachment(
+                                `src/resources/images/electrics/${instance.alarms[entityId].image}`)];
 
-                        if (instance.alarms[id].everyone) {
+                        if (instance.alarms[entityId].everyone) {
                             content.content = '@everyone';
                         }
 
@@ -85,18 +85,18 @@ module.exports = {
                         }
                     }
 
-                    DiscordTools.sendSmartAlarmMessage(rustplus.guildId, id, true, false, false);
+                    DiscordTools.sendSmartAlarmMessage(rustplus.guildId, entityId, true, false, false);
                 }
-                else if (instance.storageMonitors.hasOwnProperty(id)) {
+                else if (instance.storageMonitors.hasOwnProperty(entityId)) {
                     if (message.broadcast.entityChanged.payload.value === true) return;
 
-                    if (instance.storageMonitors[id].type === 'toolcupboard' ||
+                    if (instance.storageMonitors[entityId].type === 'toolcupboard' ||
                         message.broadcast.entityChanged.payload.capacity === 28) {
                         setTimeout(async () => {
-                            let info = await rustplus.getEntityInfoAsync(id);
+                            let info = await rustplus.getEntityInfoAsync(entityId);
                             if (!(await rustplus.isResponseValid(info))) return;
 
-                            rustplus.storageMonitors[id] = {
+                            rustplus.storageMonitors[entityId] = {
                                 items: info.entityInfo.payload.items,
                                 expiry: info.entityInfo.payload.protectionExpiry,
                                 capacity: info.entityInfo.payload.capacity,
@@ -104,36 +104,38 @@ module.exports = {
                             }
 
                             let instance = client.readInstanceFile(rustplus.guildId);
-                            instance.storageMonitors[id].type = 'toolcupboard';
+                            instance.storageMonitors[entityId].type = 'toolcupboard';
 
                             if (info.entityInfo.payload.protectionExpiry === 0 &&
-                                instance.storageMonitors[id].decaying === false) {
-                                instance.storageMonitors[id].decaying = true;
+                                instance.storageMonitors[entityId].decaying === false) {
+                                instance.storageMonitors[entityId].decaying = true;
 
-                                await DiscordTools.sendDecayingNotification(rustplus.guildId, id);
+                                await DiscordTools.sendDecayingNotification(rustplus.guildId, entityId);
 
-                                if (instance.storageMonitors[id].inGame) {
-                                    rustplus.sendTeamMessageAsync(`${instance.storageMonitors[id].name} is decaying!`);
+                                if (instance.storageMonitors[entityId].inGame) {
+                                    rustplus.sendTeamMessageAsync(
+                                        `${instance.storageMonitors[entityId].name} is decaying!`);
                                 }
                             }
                             else if (info.entityInfo.payload.protectionExpiry !== 0) {
-                                instance.storageMonitors[id].decaying = false;
+                                instance.storageMonitors[entityId].decaying = false;
                             }
                             client.writeInstanceFile(rustplus.guildId, instance);
 
-                            await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
+                            await DiscordTools.sendStorageMonitorMessage(
+                                rustplus.guildId, entityId, true, false, false);
 
                         }, 2000);
                     }
                     else {
-                        rustplus.storageMonitors[id] = {
+                        rustplus.storageMonitors[entityId] = {
                             items: message.broadcast.entityChanged.payload.items,
                             expiry: message.broadcast.entityChanged.payload.protectionExpiry,
                             capacity: message.broadcast.entityChanged.payload.capacity,
                             hasProtection: message.broadcast.entityChanged.payload.hasProtection
                         }
 
-                        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
+                        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, entityId, true, false, false);
                     }
                 }
             }

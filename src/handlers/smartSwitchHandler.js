@@ -4,12 +4,12 @@ const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 module.exports = {
     handler: async function (rustplus, client, time) {
         let instance = client.readInstanceFile(rustplus.guildId);
-        let server = `${rustplus.server}-${rustplus.port}`;
+        let serverId = `${rustplus.server}-${rustplus.port}`;
 
         if (rustplus.smartSwitchIntervalCounter === 29) {
             rustplus.smartSwitchIntervalCounter = 0;
             for (const [key, value] of Object.entries(instance.switches)) {
-                if (server !== `${value.ipPort}`) continue;
+                if (serverId !== `${value.ipPort}`) continue;
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 let info = await rustplus.getEntityInfoAsync(key);
@@ -32,7 +32,7 @@ module.exports = {
         let changedSwitches = [];
         if (rustplus.time.isTurnedDay(time)) {
             for (const [key, value] of Object.entries(instance.switches)) {
-                if (server !== `${value.ipPort}`) continue;
+                if (serverId !== `${value.ipPort}`) continue;
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
@@ -86,7 +86,7 @@ module.exports = {
         }
         else if (rustplus.time.isTurnedNight(time)) {
             for (const [key, value] of Object.entries(instance.switches)) {
-                if (server !== `${value.ipPort}`) continue;
+                if (serverId !== `${value.ipPort}`) continue;
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
@@ -139,7 +139,7 @@ module.exports = {
         }
 
         let groups = SmartSwitchGroupHandler.getGroupsFromSwitchList(
-            client, rustplus.guildId, server, changedSwitches);
+            client, rustplus.guildId, serverId, changedSwitches);
 
         for (let group of groups) {
             await DiscordTools.sendSmartSwitchGroupMessage(rustplus.guildId, group);

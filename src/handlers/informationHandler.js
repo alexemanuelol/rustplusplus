@@ -76,7 +76,7 @@ module.exports = {
                 await message.edit({ files: [file] });
             }
             catch (e) {
-                rustplus.log('ERROR', 'Could not update OMG', 'error');
+                rustplus.log('ERROR', 'Could not update map', 'error');
             }
         }
     },
@@ -134,6 +134,8 @@ module.exports = {
     },
 
     updateEventInformation: async function (rustplus, client, instance, message) {
+        let serverId = `${rustplus.server}-${rustplus.port}`;
+
         /* CargoShip */
         let cargoShipMessage = '';
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.cargoShipEgressTimers)) {
@@ -330,7 +332,7 @@ module.exports = {
                 { name: 'Chinook 47', value: ch47Message, inline: true },
                 { name: 'Crate', value: crateMessage, inline: true })
             .setFooter({
-                text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
+                text: instance.serverList[serverId].title
             });
 
         if (rustplus.informationIntervalCounter === 0) {
@@ -339,6 +341,8 @@ module.exports = {
     },
 
     updateTeamInformation: async function (rustplus, client, instance, message) {
+        let serverId = `${rustplus.server}-${rustplus.port}`;
+
         let names = '';
         let status = '';
         let locations = '';
@@ -373,7 +377,7 @@ module.exports = {
                 { name: 'Status', value: status, inline: true },
                 { name: 'Location', value: locations, inline: true })
             .setFooter({
-                text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title
+                text: instance.serverList[serverId].title
             });
 
         if (rustplus.informationIntervalCounter === 0) {

@@ -39,8 +39,9 @@ module.exports = (client, guild) => {
     else {
         let inst = client.readInstanceFile(guild.id);
 
-        if (!inst.hasOwnProperty('firstTime'))
+        if (!inst.hasOwnProperty('firstTime')) {
             inst.firstTime = true;
+        }
 
         if (!inst.hasOwnProperty('generalSettings')) {
             inst.generalSettings = client.readGeneralSettingsTemplate();
