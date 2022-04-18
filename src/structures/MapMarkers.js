@@ -1,7 +1,6 @@
 const Constants = require('../util/constants.js');
 const Map = require('../util/map.js');
 const Timer = require('../util/timer');
-const Monuments = require('../util/monuments.js');
 
 class MapMarkers {
     constructor(mapMarkers, rustplus) {
@@ -702,7 +701,7 @@ class MapMarkers {
                 if (this.smallOilRigCratesLeft.some(e => e.crateType === 'oil_rig_small' &&
                     Map.getDistance(e.x, e.y, marker.x, marker.y) < Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                     /* Refresh of Crate at Small Oil Rig, Scenario 1 */
-                    let oilRig = Monuments.Monument['oil_rig_small'].clean;
+                    let oilRig = this.rustplus.map.monumentNames['oil_rig_small'].clean;
                     this.rustplus.sendEvent(
                         this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                         `Locked Crate just got refreshed on Small ${oilRig} at ${pos}.`,
@@ -725,7 +724,7 @@ class MapMarkers {
                             Map.getDistance(crate.x, crate.y, marker.x, marker.y) <
                             Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                             /* Refresh of Crate at Small Oil Rig, Scenario 2 */
-                            let oilRig = Monuments.Monument['oil_rig_small'].clean;
+                            let oilRig = this.rustplus.map.monumentNames['oil_rig_small'].clean;
                             this.rustplus.sendEvent(
                                 this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                                 `Locked Crate just got refreshed on Small ${oilRig} at ${pos}.`,
@@ -736,7 +735,7 @@ class MapMarkers {
                     }
 
                     if (!refreshed && !this.rustplus.firstPoll) {
-                        let oilRig = Monuments.Monument['oil_rig_small'].clean;
+                        let oilRig = this.rustplus.map.monumentNames['oil_rig_small'].clean;
                         this.rustplus.sendEvent(
                             this.rustplus.notificationSettings.lockedCrateRespawnOilRig,
                             `Locked Crate just respawned on Small ${oilRig} at ${pos}.`,
@@ -751,7 +750,7 @@ class MapMarkers {
                 if (this.largeOilRigCratesLeft.some(e => e.crateType === 'large_oil_rig' &&
                     Map.getDistance(e.x, e.y, marker.x, marker.y) < Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                     /* Refresh of Crate at Large Oil Rig, Scenario 1 */
-                    let oilRig = Monuments.Monument['large_oil_rig'].clean;
+                    let oilRig = this.rustplus.map.monumentNames['large_oil_rig'].clean;
                     this.rustplus.sendEvent(
                         this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                         `Locked Crate just got refreshed on ${oilRig} at ${pos}.`,
@@ -774,7 +773,7 @@ class MapMarkers {
                             Map.getDistance(crate.x, crate.y, marker.x, marker.y) <
                             Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                             /* Refresh of Crate at Large Oil Rig, Scenario 2 */
-                            let oilRig = Monuments.Monument['large_oil_rig'].clean;
+                            let oilRig = this.rustplus.map.monumentNames['large_oil_rig'].clean;
                             this.rustplus.sendEvent(
                                 this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                                 `Locked Crate just got refreshed on ${oilRig} at ${pos}.`,
@@ -785,7 +784,7 @@ class MapMarkers {
                     }
 
                     if (!refreshed && !this.rustplus.firstPoll) {
-                        let oilRig = Monuments.Monument['large_oil_rig'].clean;
+                        let oilRig = this.rustplus.map.monumentNames['large_oil_rig'].clean;
                         this.rustplus.sendEvent(
                             this.rustplus.notificationSettings.lockedCrateRespawnOilRig,
                             `Locked Crate just respawned on ${oilRig} at ${pos}.`,
@@ -817,8 +816,8 @@ class MapMarkers {
                 }
             }
             else {
-                let name = (Monuments.Monument.hasOwnProperty(closestMonument.token)) ?
-                    Monuments.Monument[closestMonument.token].clean : closestMonument.token;
+                let name = (this.rustplus.map.monumentNames.hasOwnProperty(closestMonument.token)) ?
+                    this.rustplus.map.monumentNames[closestMonument.token].clean : closestMonument.token;
 
                 if (!this.rustplus.firstPoll) {
                     this.timeSinceCH47DroppedCrate = new Date();
