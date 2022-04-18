@@ -10,7 +10,9 @@ module.exports = {
                 try {
                     interaction.deferUpdate();
                 }
-                catch (e) { }
+                catch (e) {
+                    client.log('ERROR', 'Could not defer interaction.', 'error');
+                }
             }
         }
 
@@ -33,10 +35,15 @@ module.exports = {
             } catch (error) {
                 client.log('ERROR', error, 'error');
 
-                await interaction.editReply({
-                    content: 'There was an error while executing this command!',
-                    ephemeral: true
-                });
+                try {
+                    await interaction.editReply({
+                        content: 'There was an error while executing this command!',
+                        ephemeral: true
+                    });
+                }
+                catch (e) {
+                    client.log('ERROR', 'Could not edit interaction reply.', 'error');
+                }
             }
         }
         else {
@@ -45,7 +52,9 @@ module.exports = {
                 try {
                     interaction.deferUpdate();
                 }
-                catch (e) { }
+                catch (e) {
+                    client.log('ERROR', 'Could not defer interaction.', 'error');
+                }
             }
         }
     },

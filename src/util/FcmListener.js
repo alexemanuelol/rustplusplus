@@ -322,7 +322,7 @@ async function alarmAlarm(client, guild, full, data, body) {
 
             let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
             if (channel) {
-                await channel.send(content);
+                await client.messageSend(channel, content);
             }
 
             if (instance.generalSettings.smartAlarmNotifyInGame && rustplus) {
@@ -355,7 +355,7 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
             embed.setURL(`${Constants.STEAM_PROFILES_URL}${body.targetId}`)
         }
 
-        await member.send({ embeds: [embed] });
+        await client.messageSend(member, { embeds: [embed] });
     }
 }
 
@@ -368,7 +368,7 @@ async function teamLogin(client, guild, full, data, body) {
     if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
         if (channel !== undefined) {
             let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
-            await channel.send({
+            await client.messageSend(channel, {
                 embeds: [
                     new MessageEmbed()
                         .setColor('#00ff40')
@@ -390,7 +390,7 @@ async function newsNews(client, guild, full, data, body) {
     let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.activity);
 
     if (channel !== undefined) {
-        await channel.send({
+        await client.messageSend(channel, {
             embeds: [
                 new MessageEmbed()
                     .setTitle(`NEWS: ${data.title}`)

@@ -42,7 +42,7 @@ module.exports = {
                     let channelIdActivity = instance.channelId.activity;
                     let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
                     if (channel !== undefined) {
-                        await channel.send({
+                        await client.messageSend(channel, {
                             embeds: [new MessageEmbed()
                                 .setColor('#ff0040')
                                 .setTitle('Server just went offline.')

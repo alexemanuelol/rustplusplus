@@ -13,8 +13,8 @@ module.exports = async (client, guild) => {
     if (instance.firstTime) {
         await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
-        await setupGeneralSettings(instance, channel);
-        await setupNotificationSettings(instance, channel);
+        await setupGeneralSettings(client, instance, channel);
+        await setupNotificationSettings(client, instance, channel);
 
         instance.firstTime = false;
         client.writeInstanceFile(guild.id, instance);
@@ -22,10 +22,12 @@ module.exports = async (client, guild) => {
 
 };
 
-async function setupGeneralSettings(instance, channel) {
-    await channel.send({ files: [new MessageAttachment('src/resources/images/general_settings_logo.png')] });
+async function setupGeneralSettings(client, instance, channel) {
+    await client.messageSend(channel, {
+        files: [new MessageAttachment('src/resources/images/general_settings_logo.png')]
+    });
 
-    await channel.send({
+    await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
             .setTitle('Select what in-game command prefix that should be used:')
@@ -34,7 +36,7 @@ async function setupGeneralSettings(instance, channel) {
         files: [new MessageAttachment('src/resources/images/settings_logo.png')]
     });
 
-    await channel.send({
+    await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
             .setTitle(`Should the 'rustPlusPlus' trademark be shown for in-game bot messages?`)
@@ -43,7 +45,7 @@ async function setupGeneralSettings(instance, channel) {
         files: [new MessageAttachment('src/resources/images/settings_logo.png')]
     });
 
-    await channel.send({
+    await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
             .setTitle('Should in-game commands be enabled?')
@@ -52,7 +54,7 @@ async function setupGeneralSettings(instance, channel) {
         files: [new MessageAttachment('src/resources/images/settings_logo.png')]
     });
 
-    await channel.send({
+    await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
             .setTitle('Should Smart Alarms notify even if they are not setup on the connected rust server?')
@@ -67,7 +69,7 @@ async function setupGeneralSettings(instance, channel) {
         files: [new MessageAttachment('src/resources/images/settings_logo.png')]
     });
 
-    await channel.send({
+    await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
             .setTitle('Should Smart Alarms notify In-Game?')
@@ -76,7 +78,7 @@ async function setupGeneralSettings(instance, channel) {
         files: [new MessageAttachment('src/resources/images/settings_logo.png')]
     });
 
-    await channel.send({
+    await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
             .setTitle('Should the leader command be enabled?')
@@ -85,7 +87,7 @@ async function setupGeneralSettings(instance, channel) {
         files: [new MessageAttachment('src/resources/images/settings_logo.png')]
     });
 
-    await channel.send({
+    await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
             .setTitle('Should the map be updated in the information channel?')
@@ -95,11 +97,13 @@ async function setupGeneralSettings(instance, channel) {
     });
 }
 
-async function setupNotificationSettings(instance, channel) {
-    await channel.send({ files: [new MessageAttachment('src/resources/images/notification_settings_logo.png')] });
+async function setupNotificationSettings(client, instance, channel) {
+    await client.messageSend(channel, {
+        files: [new MessageAttachment('src/resources/images/notification_settings_logo.png')]
+    });
 
     for (let setting in instance.notificationSettings) {
-        await channel.send({
+        await client.messageSend(channel, {
             embeds: [new MessageEmbed()
                 .setColor('#861c0c')
                 .setTitle(instance.notificationSettings[setting].description)

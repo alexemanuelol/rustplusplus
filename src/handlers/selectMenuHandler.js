@@ -14,13 +14,19 @@ module.exports = async (client, interaction) => {
         }
 
         let row = DiscordTools.getPrefixSelectMenu(interaction.values[0]);
-        await interaction.update({ components: [row] });
+
+        await client.interactionUpdate(interaction, { components: [row] });
     }
     else if (interaction.customId.endsWith('AutoDayNight')) {
         let id = interaction.customId.replace('AutoDayNight', '');
 
         if (!instance.switches.hasOwnProperty(id)) {
-            await client.switchesMessages[guildId][id].delete();
+            try {
+                await client.switchesMessages[guildId][id].delete();
+            }
+            catch (e) {
+                client.log('ERROR', `Could not delete switch message for entityId: ${id}.`, 'error');
+            }
             delete client.switchesMessages[guildId][id];
             return;
         }

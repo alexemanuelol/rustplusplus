@@ -11,6 +11,6 @@ module.exports = async function (rustplus, client, message) {
             .setColor(message.color)
             .setDescription(`**${message.name}**: ${message.message}`)
 
-        await channel.send({ embeds: [embed] });
+        await client.messageSend(channel, { embeds: [embed] });
     }
 }

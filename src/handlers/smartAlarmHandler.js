@@ -17,7 +17,12 @@ module.exports = {
                     let message = await DiscordTools.getMessageById(
                         rustplus.guildId, instance.channelId.alarms, messageId);
                     if (message !== undefined) {
-                        await message.delete();
+                        try {
+                            await message.delete();
+                        }
+                        catch (e) {
+                            client.log('ERROR', `Could not delete alarm message for entityId: ${key}.`, 'error');
+                        }
                     }
 
                     delete instance.alarms[key];

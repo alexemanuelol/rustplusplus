@@ -21,7 +21,12 @@ module.exports = {
 
                 delete instance.storageMonitors[id];
 
-                await client.storageMonitorsMessages[rustplus.guildId][id].delete();
+                try {
+                    await client.storageMonitorsMessages[rustplus.guildId][id].delete();
+                }
+                catch (e) {
+                    client.log('ERROR', `Could not delete storage monitor message for entityId: ${id}.`, 'error');
+                }
                 delete client.storageMonitorsMessages[rustplus.guildId][id];
 
                 client.writeInstanceFile(rustplus.guildId, instance);

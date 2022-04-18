@@ -74,7 +74,12 @@ module.exports = {
 
                 rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
 
-                await client.switchesMessages[rustplus.guildId][id].delete();
+                try {
+                    await client.switchesMessages[rustplus.guildId][id].delete();
+                }
+                catch (e) {
+                    client.log('ERROR', `Could not delete switch group message for entityId: ${id}.`, 'error');
+                }
                 delete client.switchesMessages[rustplus.guildId][id];
                 return;
             }

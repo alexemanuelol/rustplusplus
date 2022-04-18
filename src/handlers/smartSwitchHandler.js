@@ -18,7 +18,12 @@ module.exports = {
                     delete instance.switches[key];
                     client.writeInstanceFile(rustplus.guildId, instance);
 
-                    await client.switchesMessages[rustplus.guildId][key].delete();
+                    try {
+                        await client.switchesMessages[rustplus.guildId][key].delete();
+                    }
+                    catch (e) {
+                        client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
+                    }
                     delete client.switchesMessages[rustplus.guildId][key];
                     continue;
                 }
@@ -49,7 +54,12 @@ module.exports = {
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
 
-                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        try {
+                            await client.switchesMessages[rustplus.guildId][key].delete();
+                        }
+                        catch (e) {
+                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
+                        }
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }
@@ -73,7 +83,12 @@ module.exports = {
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
 
-                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        try {
+                            await client.switchesMessages[rustplus.guildId][key].delete();
+                        }
+                        catch (e) {
+                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
+                        }
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }
@@ -103,7 +118,12 @@ module.exports = {
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
 
-                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        try {
+                            await client.switchesMessages[rustplus.guildId][key].delete();
+                        }
+                        catch (e) {
+                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
+                        }
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }
@@ -126,7 +146,12 @@ module.exports = {
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
 
-                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        try {
+                            await client.switchesMessages[rustplus.guildId][key].delete();
+                        }
+                        catch (e) {
+                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
+                        }
                         delete client.switchesMessages[rustplus.guildId][key];
                         continue;
                     }

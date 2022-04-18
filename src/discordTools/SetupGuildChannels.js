@@ -24,19 +24,35 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
         channel = await DiscordTools.addTextChannel(guild.id, name);
         instance.channelId[name] = channel.id;
         client.writeInstanceFile(guild.id, instance);
-        channel.setParent(parent.id);
+
+        try {
+            channel.setParent(parent.id);
+        }
+        catch (e) {
+            client.log('ERROR', `Could not set parent for channel: ${channel.id}`, 'error');
+        }
     }
 
     if (instance.firstTime) {
-        channel.setParent(parent.id);
+        try {
+            channel.setParent(parent.id);
+        }
+        catch (e) {
+            client.log('ERROR', `Could not set parent for channel: ${channel.id}`, 'error');
+        }
     }
 
     if (permissionWrite && instance.firstTime) {
-        channel.permissionOverwrites.set([
-            {
-                id: channel.guild.roles.everyone.id,
-                allow: [Permissions.FLAGS.SEND_MESSAGES]
-            }
-        ]);
+        try {
+            channel.permissionOverwrites.set([
+                {
+                    id: channel.guild.roles.everyone.id,
+                    allow: [Permissions.FLAGS.SEND_MESSAGES]
+                }
+            ]);
+        }
+        catch (e) {
+            client.log('ERROR', 'Could not set permissionOverwrite.', 'error');
+        }
     }
 }

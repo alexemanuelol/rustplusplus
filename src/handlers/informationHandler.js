@@ -67,17 +67,12 @@ module.exports = {
 
             instance = client.readInstanceFile(rustplus.guildId);
 
-            let msg = await channel.send({ files: [file] });
+            let msg = await client.messageSend(channel, { files: [file] });
             instance.informationMessageId.map = msg.id;
             client.writeInstanceFile(rustplus.guildId, instance);
         }
         else {
-            try {
-                await message.edit({ files: [file] });
-            }
-            catch (e) {
-                rustplus.log('ERROR', 'Could not update map', 'error');
-            }
+            await client.messageEdit(message, { files: [file] });
         }
     },
 
@@ -393,11 +388,11 @@ async function sendInformationEmbed(rustplus, client, instance, embed, files, me
 
         instance = client.readInstanceFile(rustplus.guildId);
 
-        let msg = await channel.send({ embeds: [embed], files: files });
+        let msg = await client.messageSend(channel, { embeds: [embed], files: files });
         instance.informationMessageId[messageType] = msg.id;
         client.writeInstanceFile(rustplus.guildId, instance);
     }
     else {
-        await message.edit({ embeds: [embed] });
+        await client.messageEdit(message, { embeds: [embed] });
     }
 }

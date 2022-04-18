@@ -155,7 +155,7 @@ class RustPlus extends RP {
                 })
                 .setTimestamp();
 
-            channel.send({ embeds: [embed], files: [file] });
+            Client.client.messageSend(channel, { embeds: [embed], files: [file] });
         }
     }
 

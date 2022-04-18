@@ -5,14 +5,26 @@ const Constants = require('../util/constants.js');
 
 module.exports = {
     getGuild: function (guildId) {
-        return Client.client.guilds.cache.get(guildId);
+        try {
+            return Client.client.guilds.cache.get(guildId);
+        }
+        catch (e) {
+            Client.client.log('ERROR', `Could not find guild: ${guildId}`, 'error');
+        }
+        return undefined;
     },
 
     getTextChannelById: function (guildId, channelId) {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            const channel = guild.channels.cache.get(channelId);
+            let channel = undefined;
+            try {
+                channel = guild.channels.cache.get(channelId);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not find channel: ${channelId}`, 'error');
+            }
 
             if (channel && channel.type === 'GUILD_TEXT') {
                 return channel;
@@ -25,7 +37,13 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            const channel = guild.channels.cache.find(c => c.name === name);
+            let channel = undefined;
+            try {
+                channel = guild.channels.cache.find(c => c.name === name);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not find channel: ${name}`, 'error');
+            }
 
             if (channel && channel.type === 'GUILD_TEXT') {
                 return channel;
@@ -38,7 +56,13 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            const category = guild.channels.cache.get(categoryId);
+            let category = undefined;
+            try {
+                category = guild.channels.cache.get(categoryId);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not find category: ${categoryId}`, 'error');
+            }
 
             if (category && category.type === 'GUILD_CATEGORY') {
                 return category;
@@ -51,7 +75,13 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            const category = guild.channels.cache.find(c => c.name === name);
+            let category = undefined;
+            try {
+                category = guild.channels.cache.find(c => c.name === name);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not find category: ${name}`, 'error');
+            }
 
             if (category && category.type === 'GUILD_CATEGORY') {
                 return category;
@@ -64,14 +94,14 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            const channel = guild.channels.cache.get(channelId);
+            const channel = module.exports.getTextChannelById(guildId, channelId);
 
             if (channel) {
                 try {
                     return await channel.messages.fetch(messageId);
                 }
                 catch (e) {
-                    return undefined;
+                    Client.client.log('ERROR', `Could not find message: ${messageId}`, 'error');
                 }
             }
         }
@@ -82,7 +112,13 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            const member = await Client.client.users.fetch(memberId);
+            let member = undefined;
+            try {
+                member = await Client.client.users.fetch(memberId);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not find member: ${memberId}`, 'error');
+            }
 
             if (member) {
                 return member;
@@ -95,28 +131,40 @@ module.exports = {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            return await guild.channels.create(name, {
-                type: 'GUILD_CATEGORY',
-                permissionOverwrites: [{
-                    id: guild.roles.everyone.id,
-                    deny: [Permissions.FLAGS.SEND_MESSAGES]
-                }]
-            });
+            try {
+                return await guild.channels.create(name, {
+                    type: 'GUILD_CATEGORY',
+                    permissionOverwrites: [{
+                        id: guild.roles.everyone.id,
+                        deny: [Permissions.FLAGS.SEND_MESSAGES]
+                    }]
+                });
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not create category: ${name}`, 'error');
+            }
         }
+        return undefined;
     },
 
     addTextChannel: async function (guildId, name) {
         const guild = module.exports.getGuild(guildId);
 
         if (guild) {
-            return await guild.channels.create(name, {
-                type: 'GUILD_TEXT',
-                permissionOverwrites: [{
-                    id: guild.roles.everyone.id,
-                    deny: [Permissions.FLAGS.SEND_MESSAGES]
-                }],
-            });
+            try {
+                return await guild.channels.create(name, {
+                    type: 'GUILD_TEXT',
+                    permissionOverwrites: [{
+                        id: guild.roles.everyone.id,
+                        deny: [Permissions.FLAGS.SEND_MESSAGES]
+                    }],
+                });
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not create text channel: ${name}`, 'error');
+            }
         }
+        return undefined;
     },
 
     clearTextChannel: async function (guildId, channelId, numberOfMessages) {
@@ -124,16 +172,28 @@ module.exports = {
 
         if (channel) {
             for (let messagesLeft = numberOfMessages; messagesLeft > 0; messagesLeft -= 100) {
-                if (messagesLeft >= 100) {
-                    await channel.bulkDelete(100, true);
+                try {
+                    if (messagesLeft >= 100) {
+                        await channel.bulkDelete(100, true);
+                    }
+                    else {
+                        await channel.bulkDelete(messagesLeft, true);
+                    }
                 }
-                else {
-                    await channel.bulkDelete(messagesLeft, true);
+                catch (e) {
+                    Client.client.log('ERROR', `Could not perform bulkDelete on channel: ${channelId}`, 'error');
                 }
             }
 
             /* Fix for messages older than 14 days */
-            let messages = await channel.messages.fetch({ limit: 100 });
+            let messages = [];
+            try {
+                messages = await channel.messages.fetch({ limit: 100 });
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not perform messages fetch on channel: ${channelId}`, 'error');
+            }
+
             for (let message of messages) {
                 message = message[1];
                 if (!message.author.bot) {
@@ -144,7 +204,7 @@ module.exports = {
                     await message.delete();
                 }
                 catch (e) {
-
+                    Client.client.log('ERROR', 'Could not perform message delete', 'error');
                 }
             }
         }
@@ -322,12 +382,7 @@ module.exports = {
         }
 
         if (interaction) {
-            try {
-                await interaction.update(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `Unknown interaction`, 'error');
-            }
+            await Client.client.interactionUpdate(interaction, content);
             return;
         }
 
@@ -338,13 +393,7 @@ module.exports = {
         }
 
         if (message !== undefined) {
-            try {
-                await message.edit(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `While editing server message: ${e}`, 'error');
-                return;
-            }
+            if (await Client.client.messageEdit(message, content) === undefined) return;
         }
         else {
             const channel = module.exports.getTextChannelById(guildId, instance.channelId.servers);
@@ -354,7 +403,7 @@ module.exports = {
                 return;
             }
 
-            message = await channel.send(content);
+            message = await Client.client.messageSend(channel, content);
             instance.serverList[id].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
@@ -460,23 +509,13 @@ module.exports = {
         }
 
         if (interaction) {
-            try {
-                await interaction.update(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `Unknown interaction`, 'error');
-            }
+            await Client.client.interactionUpdate(interaction, content);
             return;
         }
 
         if (Client.client.switchesMessages[guildId][id]) {
-            try {
-                await Client.client.switchesMessages[guildId][id].edit(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `While editing smart switch message: ${e}`, 'error');
-                return;
-            }
+            let message = Client.client.switchesMessages[guildId][id];
+            if (await Client.client.messageEdit(message, content) === undefined) return;
         }
         else {
             const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
@@ -485,7 +524,7 @@ module.exports = {
                 Client.client.log('ERROR', 'sendSmartSwitchMessage: Invalid guild or channel.', 'error');
                 return;
             }
-            Client.client.switchesMessages[guildId][id] = await channel.send(content);
+            Client.client.switchesMessages[guildId][id] = await Client.client.messageSend(channel, content);
         }
     },
 
@@ -537,12 +576,7 @@ module.exports = {
         }
 
         if (interaction) {
-            try {
-                await interaction.update(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `Unknown interaction`, 'error');
-            }
+            await Client.client.interactionUpdate(interaction, content);
             return;
         }
 
@@ -553,13 +587,7 @@ module.exports = {
         }
 
         if (message !== undefined) {
-            try {
-                await message.edit(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `While editing smart alarm message: ${e}`, 'error');
-                return;
-            }
+            if (await Client.client.messageEdit(message, content) === undefined) return;
         }
         else {
             const channel = module.exports.getTextChannelById(guildId, instance.channelId.alarms);
@@ -569,7 +597,7 @@ module.exports = {
                 return;
             }
 
-            message = await channel.send(content);
+            message = await Client.client.messageSend(channel, content);
             instance.alarms[id].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
@@ -699,23 +727,13 @@ module.exports = {
         }
 
         if (interaction) {
-            try {
-                await interaction.update(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `Unknown interaction`, 'error');
-            }
+            await Client.client.interactionUpdate(interaction, content);
             return;
         }
 
         if (Client.client.storageMonitorsMessages[guildId][id]) {
-            try {
-                await Client.client.storageMonitorsMessages[guildId][id].edit(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `While editing storage monitor message: ${e}`, 'error');
-                return;
-            }
+            let message = Client.client.storageMonitorsMessages[guildId][id];
+            if (await Client.client.messageEdit(message, content) === undefined) return;
         }
         else {
             const channel = module.exports.getTextChannelById(guildId, instance.channelId.storageMonitors);
@@ -724,7 +742,7 @@ module.exports = {
                 Client.client.log('ERROR', 'sendStorageMonitorMessage: Invalid guild or channel.', 'error');
                 return;
             }
-            Client.client.storageMonitorsMessages[guildId][id] = await channel.send(content);
+            Client.client.storageMonitorsMessages[guildId][id] = await Client.client.messageSend(channel, content);
         }
     },
 
@@ -749,7 +767,7 @@ module.exports = {
                 content.content = '@everyone';
             }
 
-            await channel.send(content);
+            await Client.client.messageSend(channel, content);
         }
     },
 
@@ -774,7 +792,7 @@ module.exports = {
                 content.content = '@everyone';
             }
 
-            await channel.send(content);
+            await Client.client.messageSend(channel, content);
         }
     },
 
@@ -799,7 +817,7 @@ module.exports = {
                 content.content = '@everyone';
             }
 
-            await channel.send(content);
+            await Client.client.messageSend(channel, content);
         }
     },
 
@@ -820,7 +838,7 @@ module.exports = {
 
             content.files = [file];
 
-            await channel.send(content);
+            await Client.client.messageSend(channel, content);
         }
     },
 
@@ -841,7 +859,7 @@ module.exports = {
 
             content.files = [file];
 
-            await channel.send(content);
+            await Client.client.messageSend(channel, content);
         }
     },
 
@@ -927,23 +945,13 @@ module.exports = {
         }
 
         if (interaction) {
-            try {
-                await interaction.update(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `Unknown interaction`, 'error');
-            }
+            await Client.client.interactionUpdate(interaction, content);
             return;
         }
 
         if (Client.client.switchesMessages[guildId][name]) {
-            try {
-                await Client.client.switchesMessages[guildId][name].edit(content);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `While editing smart switch group message: ${e}`, 'error');
-                return;
-            }
+            let message = Client.client.switchesMessages[guildId][name];
+            if (await Client.client.messageEdit(message, content) === undefined) return;
         }
         else {
             const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
@@ -952,7 +960,7 @@ module.exports = {
                 Client.client.log('ERROR', 'sendSmartSwitchGroupMessage: Invalid guild or channel.', 'error');
                 return;
             }
-            Client.client.switchesMessages[guildId][name] = await channel.send(content);
+            Client.client.switchesMessages[guildId][name] = await Client.client.messageSend(channel, content);
         }
     },
 }

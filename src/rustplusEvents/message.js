@@ -76,7 +76,7 @@ module.exports = {
 
                         let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
                         if (channel) {
-                            await channel.send(content);
+                            await client.messageSend(channel, content);
                         }
 
                         if (instance.generalSettings.smartAlarmNotifyInGame) {
