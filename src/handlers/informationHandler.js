@@ -123,6 +123,15 @@ module.exports = {
             { name: 'Map Salt', value: `\`${mapSalt}\``, inline: true },
             { name: 'Map', value: `\`${map}\``, inline: true });
 
+        if (instance.serverList[rustplus.serverId].connect !== null) {
+            embed.addFields(
+                {
+                    name: 'Connect',
+                    value: `\`${instance.serverList[rustplus.serverId].connect}\``,
+                    inline: false
+                });
+        }
+
         if (rustplus.informationIntervalCounter === 0) {
             await sendInformationEmbed(rustplus, client, instance, embed, files, message, 'server');
         }

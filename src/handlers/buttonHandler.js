@@ -186,6 +186,16 @@ module.exports = async (client, interaction) => {
         );
 
     }
+    else if (interaction.customId.endsWith('CreateTracker')) {
+        let battlemetricsId = interaction.customId.replace('CreateTracker', '');
+
+        try {
+            interaction.deferUpdate();
+        }
+        catch (e) {
+            client.log('ERROR', 'Could not defer interaction.', 'error');
+        }
+    }
     else if (interaction.customId.endsWith('ServerDisconnect') ||
         interaction.customId.endsWith('ServerReconnecting')) {
         let serverId = interaction.customId.replace('ServerDisconnect', '');

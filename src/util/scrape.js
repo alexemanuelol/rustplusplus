@@ -7,16 +7,16 @@ module.exports = {
             return await Axios.get(url);
         }
         catch (e) {
-            return '';
+            return {};
         }
     },
 
-    scrapeSteamProfilePicture: async function (rustplus, steamId) {
+    scrapeSteamProfilePicture: async function (client, steamId) {
         const response = await module.exports.scrape(`${Constants.STEAM_PROFILES_URL}${steamId}`);
 
-        if (response === '') {
-            rustplus.log('ERROR', `Failed to scrape '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
-            return response;
+        if (response.status !== 200) {
+            client.log('ERROR', `Failed to scrape: '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
+            return null;
         }
 
         let png = response.data.match(/<img src="(.*_full.jpg)(.*?(?="))/);
@@ -24,6 +24,6 @@ module.exports = {
             return png[1];
         }
 
-        return '';
+        return null;
     },
 }

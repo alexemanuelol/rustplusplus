@@ -3,6 +3,7 @@ const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
 const Scrape = require('../util/scrape.js');
+const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
 
 module.exports = async (client, guild) => {
     let credentials = client.readCredentialsFile(guild.id);
@@ -146,6 +147,16 @@ async function pairingServer(client, guild, full, data, body) {
         message = await DiscordTools.getMessageById(guild.id, serversId, instance.serverList[serverId].messageId);
     }
 
+    let info = null;
+    let battlemetricsId = await BattlemetricsAPI.getBattlemetricsServerId(client, data.title);
+    if (battlemetricsId !== null) {
+        info = await BattlemetricsAPI.getBattlemetricsServerInfo(client, battlemetricsId);
+        let onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(client, battlemetricsId);
+        if (BattlemetricsAPI.isBattlemetricsServerHidden(onlinePlayers)) {
+            battlemetricsId = null;
+        }
+    }
+
     instance.serverList[serverId] = {
         active: (serverExist) ? instance.serverList[serverId].active : false,
         title: data.title,
@@ -160,7 +171,9 @@ async function pairingServer(client, guild, full, data, body) {
         timeTillNight: null,
         notes: {},
         switchGroups: {},
-        messageId: (message !== undefined) ? message.id : null
+        messageId: (message !== undefined) ? message.id : null,
+        battlemetricsId: battlemetricsId,
+        connect: (info === null) ? info : `connect ${info.ip}:${info.port}`
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -340,7 +353,8 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
         if (body.targetId !== '') {
             png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
         }
-        else {
+
+        if (png === null) {
             png = (isValidUrl(body.img)) ? body.img : Constants.DEFAULT_SERVER_IMG;
         }
 
@@ -374,7 +388,7 @@ async function teamLogin(client, guild, full, data, body) {
                         .setColor('#00ff40')
                         .setAuthor({
                             name: `${body.targetName} just connected.`,
-                            iconURL: (png !== '') ? png : Constants.DEFAULT_SERVER_IMG,
+                            iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                             url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
                         })
                         .setTimestamp()

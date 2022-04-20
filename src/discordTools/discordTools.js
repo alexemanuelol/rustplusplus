@@ -310,11 +310,17 @@ module.exports = {
     getServerEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageEmbed()
+        let embed = new MessageEmbed()
             .setTitle(`${instance.serverList[id].title}`)
             .setColor('#ce412b')
             .setDescription(`${instance.serverList[id].description}`)
             .setThumbnail(`${instance.serverList[id].img}`);
+
+        if (instance.serverList[id].connect !== null) {
+            embed.addField('Connect', `\`${instance.serverList[id].connect}\``, true);
+        }
+
+        return embed;
     },
 
     getServerButtons: function (guildId, id, state = null) {
@@ -351,20 +357,40 @@ module.exports = {
             } break;
         }
 
-        return new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId(customId)
-                    .setLabel(label)
-                    .setStyle(style),
-                new MessageButton()
-                    .setStyle('LINK')
-                    .setLabel('WEBSITE')
-                    .setURL(instance.serverList[id].url),
-                new MessageButton()
-                    .setCustomId(`${id}ServerDelete`)
-                    .setEmoji('🗑️')
-                    .setStyle('SECONDARY'))
+        let trackerAvailable = (instance.serverList[id].battlemetricsId !== null) ? true : false;
+
+        let connectionButton = new MessageButton()
+            .setCustomId(customId)
+            .setLabel(label)
+            .setStyle(style);
+        let trackerButton = new MessageButton()
+            .setCustomId(`${id}CreateTracker`)
+            .setLabel('CREATE TRACKER')
+            .setStyle('PRIMARY');
+        let linkButton = new MessageButton()
+            .setStyle('LINK')
+            .setLabel('WEBSITE')
+            .setURL(instance.serverList[id].url);
+        let deleteButton = new MessageButton()
+            .setCustomId(`${id}ServerDelete`)
+            .setEmoji('🗑️')
+            .setStyle('SECONDARY');
+
+        if (trackerAvailable) {
+            return new MessageActionRow()
+                .addComponents(
+                    connectionButton,
+                    trackerButton,
+                    linkButton,
+                    deleteButton);
+        }
+        else {
+            return new MessageActionRow()
+                .addComponents(
+                    connectionButton,
+                    linkButton,
+                    deleteButton);
+        }
     },
 
     sendServerMessage: async function (guildId, id, state = null, e = true, c = true, interaction = null) {
