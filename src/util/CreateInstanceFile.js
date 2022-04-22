@@ -21,7 +21,8 @@ module.exports = (client, guild) => {
                 switches: null,
                 alarms: null,
                 storageMonitors: null,
-                activity: null
+                activity: null,
+                trackers: null
             },
             informationMessageId: {
                 map: null,
@@ -33,7 +34,8 @@ module.exports = (client, guild) => {
             alarms: {},
             storageMonitors: {},
             markers: {},
-            serverList: {}
+            serverList: {},
+            trackers: {}
         }, null, 2));
     }
     else {
@@ -80,7 +82,8 @@ module.exports = (client, guild) => {
                 switches: null,
                 alarms: null,
                 storageMonitors: null,
-                activity: null
+                activity: null,
+                trackers: null
             }
         }
         else {
@@ -94,6 +97,7 @@ module.exports = (client, guild) => {
             if (!inst.channelId.hasOwnProperty('alarms')) inst.channelId.alarms = null;
             if (!inst.channelId.hasOwnProperty('storageMonitors')) inst.channelId.storageMonitors = null;
             if (!inst.channelId.hasOwnProperty('activity')) inst.channelId.activity = null;
+            if (!inst.channelId.hasOwnProperty('trackers')) inst.channelId.trackers = null;
         }
 
         if (!inst.hasOwnProperty('informationMessageId')) {
@@ -116,6 +120,7 @@ module.exports = (client, guild) => {
         if (!inst.hasOwnProperty('storageMonitors')) inst.storageMonitors = {};
         if (!inst.hasOwnProperty('markers')) inst.markers = {};
         if (!inst.hasOwnProperty('serverList')) inst.serverList = {};
+        if (!inst.hasOwnProperty('trackers')) inst.trackers = {};
 
         client.writeInstanceFile(guild.id, inst);
     }

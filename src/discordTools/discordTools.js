@@ -281,6 +281,19 @@ module.exports = {
                     .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
     },
 
+    getTrackerNotifyButtons: function (allOffline, anyOnline) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('trackerNotifyAllOffline')
+                    .setLabel('ALL OFFLINE')
+                    .setStyle((allOffline) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId('trackerNotifyAnyOnline')
+                    .setLabel('ANY ONLINE')
+                    .setStyle((anyOnline) ? 'SUCCESS' : 'DANGER'));
+    },
+
     getPrefixSelectMenu: function (currentPrefix) {
         return new MessageActionRow()
             .addComponents(
@@ -431,6 +444,105 @@ module.exports = {
 
             message = await Client.client.messageSend(channel, content);
             instance.serverList[id].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
+
+    getTrackerEmbed: function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const serverId = instance.trackers[trackerName].serverId;
+        const battlemetricsId = instance.trackers[trackerName].battlemetricsId;
+        const serverStatus = (instance.trackers[trackerName].status) ?
+            Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
+
+        let playerName = '';
+        let playerSteamId = '';
+        let playerStatus = '';
+        for (let player of instance.trackers[trackerName].players) {
+            playerName += `${player.name}\n`;
+            playerSteamId += `${player.steamId}\n`;
+            playerStatus += `${(player.status === true) ?
+                `${Constants.ONLINE_EMOJI} [${player.time}]` : `${Constants.OFFLINE_EMOJI}`}\n`;
+        }
+
+        if (playerName === '' || playerSteamId === '' || playerStatus === '') {
+            playerName = 'Empty';
+            playerSteamId = 'Empty';
+            playerStatus = 'Empty';
+        }
+
+        let embed = new MessageEmbed()
+            .setTitle(`${trackerName}`)
+            .setColor('#ce412b')
+            .setDescription(`**Battlemetrics ID:** \`${battlemetricsId}\`\n**Server Status:** ${serverStatus}`)
+            .setThumbnail(`${instance.serverList[serverId].img}`)
+            .addFields(
+                { name: 'Name', value: playerName, inline: true },
+                { name: 'SteamID', value: playerSteamId, inline: true },
+                { name: 'Status', value: playerStatus, inline: true }
+            )
+            .setFooter({ text: `${instance.serverList[serverId].title}` })
+
+        return embed;
+    },
+
+    getTrackerButtons: function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId(`${trackerName}TrackerActive`)
+                    .setLabel((instance.trackers[trackerName].active) ? 'ACTIVE' : 'INACTIVE')
+                    .setStyle((instance.trackers[trackerName].active) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId(`${trackerName}TrackerEveryone`)
+                    .setLabel('@everyone')
+                    .setStyle((instance.trackers[trackerName].everyone) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId(`${trackerName}TrackerDelete`)
+                    .setEmoji('🗑️')
+                    .setStyle('SECONDARY'))
+    },
+
+    sendTrackerMessage: async function (guildId, trackerName, e = true, c = true, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const embed = module.exports.getTrackerEmbed(guildId, trackerName);
+        const buttons = module.exports.getTrackerButtons(guildId, trackerName);
+
+        let content = new Object();
+        if (e) {
+            content.embeds = [embed];
+        }
+        if (c) {
+            content.components = [buttons];
+        }
+
+        if (interaction) {
+            await Client.client.interactionUpdate(interaction, content);
+            return;
+        }
+
+        let messageId = instance.trackers[trackerName].messageId;
+        let message = undefined;
+        if (messageId !== null) {
+            message = await module.exports.getMessageById(guildId, instance.channelId.trackers, messageId);
+        }
+
+        if (message !== undefined) {
+            if (await Client.client.messageEdit(message, content) === undefined) return;
+        }
+        else {
+            const channel = module.exports.getTextChannelById(guildId, instance.channelId.trackers);
+
+            if (!channel) {
+                Client.client.log('ERROR', 'sendTrackerMessage: Invalid guild or channel.', 'error');
+                return;
+            }
+
+            message = await Client.client.messageSend(channel, content);
+            instance.trackers[trackerName].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
@@ -988,6 +1100,50 @@ module.exports = {
                 return;
             }
             Client.client.switchesMessages[guildId][name] = await Client.client.messageSend(channel, content);
+        }
+    },
+
+    sendTrackerAllOffline: async function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const serverId = instance.trackers[trackerName].serverId;
+        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
+
+        if (channel) {
+            let content = {};
+            content.embeds = [new MessageEmbed()
+                .setTitle(`Everyone from the tracker \`${trackerName}\` just went offline.`)
+                .setColor('#ff0040')
+                .setThumbnail(`${instance.serverList[serverId].img}`)
+                .setFooter({ text: `${instance.serverList[serverId].title}` })
+                .setTimestamp()];
+
+            if (instance.trackers[trackerName].everyone) {
+                content.content = '@everyone';
+            }
+
+            await Client.client.messageSend(channel, content);
+        }
+    },
+
+    sendTrackerAnyOnline: async function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const serverId = instance.trackers[trackerName].serverId;
+        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
+
+        if (channel) {
+            let content = {};
+            content.embeds = [new MessageEmbed()
+                .setTitle(`Someone from tracker \`${trackerName}\` just went online.`)
+                .setColor('#00ff40')
+                .setThumbnail(`${instance.serverList[serverId].img}`)
+                .setFooter({ text: `${instance.serverList[serverId].title}` })
+                .setTimestamp()];
+
+            if (instance.trackers[trackerName].everyone) {
+                content.content = '@everyone';
+            }
+
+            await Client.client.messageSend(channel, content);
         }
     },
 }

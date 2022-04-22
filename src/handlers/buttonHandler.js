@@ -153,6 +153,36 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'trackerNotifyAllOffline') {
+        instance.generalSettings.trackerNotifyAllOffline = !instance.generalSettings.trackerNotifyAllOffline;
+
+        if (rustplus) {
+            rustplus.generalSettings.trackerNotifyAllOffline = instance.generalSettings.trackerNotifyAllOffline;
+        }
+
+        let row = DiscordTools.getTrackerNotifyButtons(
+            instance.generalSettings.trackerNotifyAllOffline,
+            instance.generalSettings.trackerNotifyAnyOnline);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId === 'trackerNotifyAnyOnline') {
+        instance.generalSettings.trackerNotifyAnyOnline = !instance.generalSettings.trackerNotifyAnyOnline;
+
+        if (rustplus) {
+            rustplus.generalSettings.trackerNotifyAnyOnline = instance.generalSettings.trackerNotifyAnyOnline;
+        }
+
+        let row = DiscordTools.getTrackerNotifyButtons(
+            instance.generalSettings.trackerNotifyAllOffline,
+            instance.generalSettings.trackerNotifyAnyOnline);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
     else if (interaction.customId.endsWith('ServerConnect')) {
         let serverId = interaction.customId.replace('ServerConnect', '');
 
@@ -187,7 +217,8 @@ module.exports = async (client, interaction) => {
 
     }
     else if (interaction.customId.endsWith('CreateTracker')) {
-        let battlemetricsId = interaction.customId.replace('CreateTracker', '');
+        let serverId = interaction.customId.replace('CreateTracker', '');
+        let battlemetricsId = instance.serverList[serverId].battlemetricsId;
 
         try {
             interaction.deferUpdate();
@@ -195,6 +226,23 @@ module.exports = async (client, interaction) => {
         catch (e) {
             client.log('ERROR', 'Could not defer interaction.', 'error');
         }
+
+        /* Find an available tracker name */
+        let name = client.findAvailableTrackerName(interaction.guildId);
+
+        instance.trackers[name] = {
+            serverId: serverId,
+            battlemetricsId: battlemetricsId,
+            status: false,
+            allOffline: true,
+            messageId: null,
+            active: true,
+            everyone: false,
+            players: []
+        }
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendTrackerMessage(guildId, name);
     }
     else if (interaction.customId.endsWith('ServerDisconnect') ||
         interaction.customId.endsWith('ServerReconnecting')) {
@@ -451,6 +499,39 @@ module.exports = async (client, interaction) => {
         }
         delete client.switchesMessages[guildId][id];
 
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId.endsWith('TrackerActive')) {
+        let trackerName = interaction.customId.replace('TrackerActive', '');
+
+        instance.trackers[trackerName].active = !instance.trackers[trackerName].active;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName, false, true, interaction);
+    }
+    else if (interaction.customId.endsWith('TrackerEveryone')) {
+        let trackerName = interaction.customId.replace('TrackerEveryone', '');
+
+        instance.trackers[trackerName].everyone = !instance.trackers[trackerName].everyone;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName, false, true, interaction);
+    }
+    else if (interaction.customId.endsWith('TrackerDelete')) {
+        let trackerName = interaction.customId.replace('TrackerDelete', '');
+
+        let messageId = instance.trackers[trackerName].messageId;
+        let message = await DiscordTools.getMessageById(guildId, instance.channelId.trackers, messageId);
+        if (message !== undefined) {
+            try {
+                await message.delete();
+            }
+            catch (e) {
+                client.log('ERROR', `Could not delete tracker message with id: ${messageId}.`, 'error');
+            }
+        }
+
+        delete instance.trackers[trackerName];
         client.writeInstanceFile(guildId, instance);
     }
 }

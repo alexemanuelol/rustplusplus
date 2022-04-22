@@ -15,11 +15,29 @@ module.exports = {
         const response = await module.exports.scrape(`${Constants.STEAM_PROFILES_URL}${steamId}`);
 
         if (response.status !== 200) {
-            client.log('ERROR', `Failed to scrape: '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
+            client.log('ERROR',
+                `Failed to scrape profile picture: '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
             return null;
         }
 
         let png = response.data.match(/<img src="(.*_full.jpg)(.*?(?="))/);
+        if (png) {
+            return png[1];
+        }
+
+        return null;
+    },
+
+    scrapeSteamProfileName: async function (client, steamId) {
+        const response = await module.exports.scrape(`${Constants.STEAM_PROFILES_URL}${steamId}`);
+
+        if (response.status !== 200) {
+            client.log('ERROR',
+                `Failed to scrape profile name: '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
+            return null;
+        }
+
+        let png = response.data.match(/"personaname":"(.+?)"(\};|,"summary":")/);
         if (png) {
             return png[1];
         }

@@ -11,6 +11,7 @@ module.exports = async (client, guild, category) => {
     await addTextChannel('alarms', client, guild, category);
     await addTextChannel('storageMonitors', client, guild, category);
     await addTextChannel('activity', client, guild, category);
+    await addTextChannel('trackers', client, guild, category);
 };
 
 async function addTextChannel(name, client, guild, parent, permissionWrite = false) {

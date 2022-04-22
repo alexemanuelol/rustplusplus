@@ -45,11 +45,17 @@ module.exports = {
         }
 
         let regex = new RegExp(
-            `"id":"${serverId}".*?"ip":"(.+?)","port":(.+?),".*?"rank":(\\d+?),".*?"country":"(.+?)"`, 'g');
+            `"id":"${serverId}".*?"ip":"(.+?)","port":(.+?),".*?"rank":(\\d+?),".*?"country":"(.+?)","status":"(.+?)"`, 'g');
         let data = regex.exec(page);
 
-        if (data.length === 5) {
-            return { ip: data[1], port: data[2], rank: data[3], country: data[4] }
+        if (data.length === 6) {
+            return {
+                ip: data[1],
+                port: data[2],
+                rank: data[3],
+                country: data[4],
+                status: (data[5] === 'online') ? true : false
+            }
         }
 
         return null;

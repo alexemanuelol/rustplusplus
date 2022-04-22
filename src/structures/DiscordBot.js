@@ -22,6 +22,9 @@ class DiscordBot extends Client {
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 
+        this.battlemetricsIntervalId = null;
+        this.battlemetricsIntervalCounter = 0;
+
         this.loadCommands();
         this.loadEvents();
     }
@@ -147,6 +150,26 @@ class DiscordBot extends Client {
                 }
             }
         });
+    }
+
+    findAvailableTrackerName(guildId) {
+        let instance = this.readInstanceFile(guildId);
+        let baseName = 'Tracker';
+
+        let index = 0;
+        while (true) {
+            let testName = `${baseName}${(index === 0) ? '' : index}`;
+            let exist = false;
+            if (Object.keys(instance.trackers).includes(testName)) {
+                exist = true;
+            }
+
+            if (exist) {
+                index += 1;
+                continue;
+            }
+            return testName;
+        }
     }
 
     async interactionUpdate(interaction, content) {
