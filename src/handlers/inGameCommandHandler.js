@@ -168,13 +168,15 @@ module.exports = {
                         rustplus.printCommandOutput(`Turning ${groupName} off.`);
                     }
                     else if (command === `${cmd}`) {
-                        // Get switch info, create message
+                        /* Get switch info, create message */
                         var switchStatus = content.switches.map(switchId => {
                             const {active, name} = instance.switches[switchId];
                             return {active, name}
                         });
-                        rustplus.printCommandOutput(`Status: ${switchStatus.map(status => `${status.name}: ${status.active ? 'on' : 'off'}`).join(', ')}`);
-                        return true;
+                        const statusMessage = switchStatus.map(status => 
+                            `${status.name}: ${status.active ? 'ON' : 'OFF'}
+                        `).join(', ');
+                        rustplus.printCommandOutput(`Status: ${statusMessage}`);
                     }
                     else {
                         return false;
