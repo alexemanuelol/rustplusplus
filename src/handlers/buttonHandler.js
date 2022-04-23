@@ -40,19 +40,6 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
-    else if (interaction.customId === 'showTrademark') {
-        instance.generalSettings.showTrademark = !instance.generalSettings.showTrademark;
-
-        if (rustplus) {
-            rustplus.generalSettings.showTrademark = instance.generalSettings.showTrademark;
-        }
-
-        let row = DiscordTools.getTrademarkButton(instance.generalSettings.showTrademark);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
-        client.writeInstanceFile(guildId, instance);
-    }
     else if (interaction.customId === 'allowInGameCommands') {
         instance.generalSettings.inGameCommandsEnabled = !instance.generalSettings.inGameCommandsEnabled;
 

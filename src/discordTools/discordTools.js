@@ -223,15 +223,6 @@ module.exports = {
                     .setStyle((inGameActive) ? 'SUCCESS' : 'DANGER'))
     },
 
-    getTrademarkButton: function (enabled) {
-        return new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('showTrademark')
-                    .setLabel((enabled) ? 'SHOWING' : 'NOT SHOWING')
-                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
-    },
-
     getInGameCommandsEnabledButton: function (enabled) {
         return new MessageActionRow()
             .addComponents(
@@ -306,6 +297,32 @@ module.exports = {
                             label: '.',
                             description: 'Dot',
                             value: '.',
+                        },
+                    ])
+            );
+    },
+
+    getTrademarkSelectMenu: function (currentTrademark) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('trademark')
+                    .setPlaceholder(`${currentTrademark}`)
+                    .addOptions([
+                        {
+                            label: 'rustPlusPlus',
+                            description: 'rustPlusPlus will be shown before messages.',
+                            value: 'rustPlusPlus',
+                        },
+                        {
+                            label: 'Rust++',
+                            description: 'Rust++ will be shown before messages.',
+                            value: 'Rust++',
+                        },
+                        {
+                            label: 'NOT SHOWING',
+                            description: 'Not showing any trademark before messages.',
+                            value: 'NOT SHOWING',
                         },
                     ])
             );

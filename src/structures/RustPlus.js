@@ -37,12 +37,13 @@ class RustPlus extends RP {
 
         this.items = new Items();
 
-        this.trademarkString = 'rustPlusPlus | ';
+        let instance = Client.client.readInstanceFile(guildId);
+        this.trademarkString = (instance.generalSettings.trademark === 'NOT SHOWING') ?
+            '' : `${instance.generalSettings.trademark} | `;
 
         this.oldsendTeamMessageAsync = this.sendTeamMessageAsync;
         this.sendTeamMessageAsync = async function (message) {
-            let trademark = (this.generalSettings.showTrademark) ? this.trademarkString : '';
-            let messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - trademark.length;
+            let messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - this.trademarkString.length;
             let strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
 
             if (this.team === null || this.team.allOffline) {
@@ -51,7 +52,7 @@ class RustPlus extends RP {
 
             for (let msg of strings) {
                 if (!this.generalSettings.muteInGameBotMessages) {
-                    await this.oldsendTeamMessageAsync(`${trademark}${msg}`);
+                    await this.oldsendTeamMessageAsync(`${this.trademarkString}${msg}`);
                 }
             }
         }

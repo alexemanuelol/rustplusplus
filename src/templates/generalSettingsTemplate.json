@@ -1,7 +1,7 @@
 {
     "prefix": "!",
     "muteInGameBotMessages": false,
-    "showTrademark": true,
+    "trademark": "rustPlusPlus",
     "inGameCommandsEnabled": true,
     "fcmAlarmNotificationEnabled": false,
     "fcmAlarmNotificationEveryone": false,

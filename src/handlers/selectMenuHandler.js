@@ -17,6 +17,20 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, { components: [row] });
     }
+    else if (interaction.customId === 'trademark') {
+        instance.generalSettings.trademark = interaction.values[0];
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) {
+            rustplus.generalSettings.trademark = interaction.values[0];
+            rustplus.trademarkString = (instance.generalSettings.trademark === 'NOT SHOWING') ?
+                '' : `${instance.generalSettings.trademark} | `;
+        }
+
+        let row = DiscordTools.getTrademarkSelectMenu(interaction.values[0]);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+    }
     else if (interaction.customId.endsWith('AutoDayNight')) {
         let id = interaction.customId.replace('AutoDayNight', '');
 
