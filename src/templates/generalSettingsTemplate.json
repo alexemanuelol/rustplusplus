@@ -7,7 +7,6 @@
     "fcmAlarmNotificationEveryone": false,
     "smartAlarmNotifyInGame": true,
     "leaderCommandEnabled": true,
-    "updateMapInformation": true,
     "trackerNotifyAllOffline": true,
     "trackerNotifyAnyOnline": false
 }

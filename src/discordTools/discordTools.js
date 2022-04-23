@@ -272,15 +272,6 @@ module.exports = {
                     .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
     },
 
-    getUpdateMapInformationButton: function (enabled) {
-        return new MessageActionRow()
-            .addComponents(
-                new MessageButton()
-                    .setCustomId('updateMapInformation')
-                    .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
-    },
-
     getTrackerNotifyButtons: function (allOffline, anyOnline) {
         return new MessageActionRow()
             .addComponents(

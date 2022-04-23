@@ -44,14 +44,46 @@ module.exports = {
 
         if (rustplus.map === null) {
             rustplus.map = new Map(map.map, rustplus);
+            rustplus.info = new Info((await rustplus.getInfoAsync()).info);
         }
 
+        let isWipe = false;
         if (rustplus.map.isJpgImageChanged(map.map)) {
-            await rustplus.map.updateMap(map.map);
-            rustplus.info = new Info((await rustplus.getInfoAsync()).info);
-            if (channel !== undefined) {
-                await rustplus.map.writeMap(true, true);
+            isWipe = true;
+        }
 
+        await rustplus.map.updateMap(map.map);
+        rustplus.info = new Info((await rustplus.getInfoAsync()).info);
+
+        await rustplus.map.writeMap(false, true);
+
+        let messageId = instance.informationMessageId.map;
+        let message = undefined;
+        if (messageId !== null) {
+            message = await DiscordTools.getMessageById(rustplus.guildId, instance.channelId.information, messageId);
+        }
+
+        let mapFile = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
+        if (message === undefined) {
+            let infoChannel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
+
+            if (!infoChannel) {
+                client.log('ERROR', 'Invalid guild or channel.', 'error');
+            }
+            else {
+                instance = client.readInstanceFile(rustplus.guildId);
+
+                let msg = await client.messageSend(infoChannel, { files: [mapFile] });
+                instance.informationMessageId.map = msg.id;
+                client.writeInstanceFile(rustplus.guildId, instance);
+            }
+        }
+        else {
+            await client.messageEdit(message, { files: [mapFile] });
+        }
+
+        if (isWipe) {
+            if (channel !== undefined) {
                 let file = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
                 await client.messageSend(channel, {
                     embeds: [new MessageEmbed()
@@ -64,9 +96,6 @@ module.exports = {
                     files: [file]
                 });
             }
-        }
-        else {
-            await rustplus.map.updateMap(map.map);
         }
 
         rustplus.log('CONNECTED', 'SUCCESSFULLY CONNECTED!');

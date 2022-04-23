@@ -8,19 +8,6 @@ module.exports = {
         let instance = client.readInstanceFile(rustplus.guildId);
         let channelId = instance.channelId.information;
 
-        if (rustplus.informationIntervalCounter === 0 && instance.generalSettings.updateMapInformation) {
-            /* Update Map image */
-            let messageId = instance.informationMessageId.map;
-            let message = undefined;
-            if (messageId !== null) {
-                message = await DiscordTools.getMessageById(rustplus.guildId, channelId, messageId);
-            }
-
-            await module.exports.updateMapInformation(rustplus, client, instance, message);
-        }
-
-        instance = client.readInstanceFile(rustplus.guildId);
-
         /* Update Server Information embed */
         let messageId = instance.informationMessageId.server;
         let message = undefined;
@@ -50,29 +37,6 @@ module.exports = {
         }
         else {
             rustplus.informationIntervalCounter += 1;
-        }
-    },
-
-    updateMapInformation: async function (rustplus, client, instance, message) {
-        await rustplus.map.writeMap(true, true);
-        let file = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
-
-        if (message === undefined) {
-            let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
-
-            if (!channel) {
-                client.log('ERROR', 'Invalid guild or channel.', 'error');
-                return;
-            }
-
-            instance = client.readInstanceFile(rustplus.guildId);
-
-            let msg = await client.messageSend(channel, { files: [file] });
-            instance.informationMessageId.map = msg.id;
-            client.writeInstanceFile(rustplus.guildId, instance);
-        }
-        else {
-            await client.messageEdit(message, { files: [file] });
         }
     },
 

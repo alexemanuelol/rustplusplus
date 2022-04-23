@@ -66,7 +66,6 @@ class Map {
             water_treatment_plant_display_name: { clean: 'Water Treatment Plant', map: 'WATER TREATMENT PLANT' }
         }
 
-        this.writeMapClean();
         this.resetImageAndMeta();
     }
 
@@ -112,6 +111,7 @@ class Map {
     }
 
     async resetImageAndMeta() {
+        await this.writeMapClean();
         await this.setupFont();
         await this.setupMapMarkerImages();
     }

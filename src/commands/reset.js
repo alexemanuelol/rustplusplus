@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools.js');
+const { MessageAttachment } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -36,6 +37,25 @@ module.exports = {
 				client.writeInstanceFile(interaction.guildId, instance);
 
 				await DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
+
+				let rustplus = client.rustplusInstances[guild.id];
+				if (rustplus) {
+					await rustplus.map.writeMap(false, true);
+
+					let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.information);
+
+					if (!channel) {
+						client.log('ERROR', 'Invalid guild or channel.', 'error');
+					}
+					else {
+						instance = client.readInstanceFile(guild.id);
+
+						let file = new MessageAttachment(`src/resources/images/maps/${guild.id}_map_full.png`);
+						let msg = await client.messageSend(channel, { files: [file] });
+						instance.informationMessageId.map = msg.id;
+						client.writeInstanceFile(guild.id, instance);
+					}
+				}
 
 				await interaction.editReply({
 					content: ':white_check_mark: Discord Reset.',

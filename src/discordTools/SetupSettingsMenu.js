@@ -90,15 +90,6 @@ async function setupGeneralSettings(client, instance, channel) {
     await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
-            .setTitle('Should the map be updated in the information channel?')
-            .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getUpdateMapInformationButton(instance.generalSettings.updateMapInformation)],
-        files: [new MessageAttachment('src/resources/images/settings_logo.png')]
-    });
-
-    await client.messageSend(channel, {
-        embeds: [new MessageEmbed()
-            .setColor('#861c0c')
             .setTitle('When should the Battlemetrics trackers notify?')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getTrackerNotifyButtons(
