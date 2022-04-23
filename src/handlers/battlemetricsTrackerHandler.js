@@ -7,7 +7,6 @@ module.exports = {
         let forceSearch = (client.battlemetricsIntervalCounter === 0) ? true : false;
         client.guilds.cache.forEach(async (guild) => {
             let instance = client.readInstanceFile(guild.id);
-            client.log('INFO', 'UPDATE')
 
             let calledPages = new Object();
             let calledSteamIdNames = new Object();
@@ -97,7 +96,6 @@ module.exports = {
 
                 instance.trackers[key].allOffline = allOffline;
                 client.writeInstanceFile(guild.id, instance);
-                client.log('INFO', 'SENDING')
                 await DiscordTools.sendTrackerMessage(guild.id, key, true, false);
             }
         });

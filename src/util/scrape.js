@@ -37,9 +37,10 @@ module.exports = {
             return null;
         }
 
-        let png = response.data.match(/"personaname":"(.+?)"(\};|,"summary":")/);
-        if (png) {
-            return png[1];
+        let regex = new RegExp(`class="actual_persona_name">(.+?)</span>`, 'gm');
+        let data = regex.exec(response.data);
+        if (data) {
+            return data[1];
         }
 
         return null;
