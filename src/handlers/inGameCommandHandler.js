@@ -87,7 +87,7 @@ module.exports = {
                     if (command === cmd) {
                         active = !content.active;
                     }
-                    else if (command === `${cmd} on`) {
+                    else if (command === `${cmd} ON`) {
                         if (!content.active) {
                             active = true;
                         }
@@ -95,7 +95,7 @@ module.exports = {
                             return true;
                         }
                     }
-                    else if (command === `${cmd} off`) {
+                    else if (command === `${cmd} OFF`) {
                         if (content.active) {
                             active = false;
                         }
