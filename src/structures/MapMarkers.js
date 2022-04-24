@@ -666,6 +666,8 @@ class MapMarkers {
         let leftMarkers = this.getLeftMarkersOfTypeId(this.types.Crate, mapMarkers.markers);
         let remainingMarkers = this.getRemainingMarkersOfTypeId(this.types.Crate, mapMarkers.markers);
 
+        let oilRigLeft = false;
+
         /* Crate markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
@@ -912,6 +914,9 @@ class MapMarkers {
 
                         /* Add fakeLeft, in case it actually was looted rather than refreshed */
                         crate.fakeLeft = true;
+
+                        /* Oil Rig crate left, call new poll sooner */
+                        oilRigLeft = true;
                         continue;
                     }
                 }
@@ -955,6 +960,9 @@ class MapMarkers {
 
                         /* Add fakeLeft, in case it actually was looted rather than refreshed */
                         crate.fakeLeft = true;
+
+                        /* Oil Rig crate left, call new poll sooner */
+                        oilRigLeft = true;
                         continue;
                     }
                 }
@@ -1004,6 +1012,14 @@ class MapMarkers {
             crate.x = marker.x;
             crate.y = marker.y;
             crate.location = pos;
+        }
+
+        if (oilRigLeft) {
+            setTimeout(async () => {
+                let mapMarkers = await this.rustplus.getMapMarkersAsync();
+                if (!(await this.rustplus.isResponseValid(mapMarkers))) return;
+                this.updateCrates(mapMarkers.mapMarkers);
+            }, 2000);
         }
     }
 
