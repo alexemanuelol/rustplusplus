@@ -43,17 +43,43 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
         }
     }
 
-    if (permissionWrite && instance.firstTime) {
-        try {
-            channel.permissionOverwrites.set([
-                {
-                    id: channel.guild.roles.everyone.id,
-                    allow: [Permissions.FLAGS.SEND_MESSAGES]
-                }
-            ]);
+    let perms = [];
+    let everyoneAllow = [];
+    let everyoneDeny = [];
+    let roleAllow = [];
+    let roleDeny = [];
+    if (instance.role !== null) {
+        if (permissionWrite) {
+            roleAllow.push(Permissions.FLAGS.SEND_MESSAGES);
         }
-        catch (e) {
-            client.log('ERROR', 'Could not set permissionOverwrite.', 'error');
+        else {
+            roleDeny.push(Permissions.FLAGS.SEND_MESSAGES);
         }
+
+        everyoneDeny.push(Permissions.FLAGS.VIEW_CHANNEL);
+        everyoneDeny.push(Permissions.FLAGS.SEND_MESSAGES);
+        roleAllow.push(Permissions.FLAGS.VIEW_CHANNEL);
+
+        perms.push({ id: guild.roles.everyone.id, deny: everyoneDeny });
+        perms.push({ id: instance.role, allow: roleAllow, deny: roleDeny });
+    }
+    else {
+        if (permissionWrite) {
+            everyoneAllow.push(Permissions.FLAGS.SEND_MESSAGES);
+        }
+        else {
+            everyoneDeny.push(Permissions.FLAGS.SEND_MESSAGES);
+        }
+
+        everyoneAllow.push(Permissions.FLAGS.VIEW_CHANNEL);
+
+        perms.push({ id: guild.roles.everyone.id, allow: everyoneAllow, deny: everyoneDeny });
+    }
+
+    try {
+        channel.permissionOverwrites.set(perms);
+    }
+    catch (e) {
+        /* Ignore */
     }
 }

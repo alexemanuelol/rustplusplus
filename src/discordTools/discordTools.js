@@ -14,6 +14,20 @@ module.exports = {
         return undefined;
     },
 
+    getRole: function (guildId, roleId) {
+        let guild = module.exports.getGuild(guildId);
+
+        if (guild) {
+            try {
+                return guild.roles.cache.get(roleId);
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not find role: ${roleId}`, 'error');
+            }
+        }
+        return undefined;
+    },
+
     getTextChannelById: function (guildId, channelId) {
         const guild = module.exports.getGuild(guildId);
 

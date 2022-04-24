@@ -9,6 +9,7 @@ module.exports = (client, guild) => {
     if (!fs.existsSync(`${__dirname}/../instances/${guild.id}.json`)) {
         fs.writeFileSync(`${__dirname}/../instances/${guild.id}.json`, JSON.stringify({
             firstTime: true,
+            role: null,
             generalSettings: client.readGeneralSettingsTemplate(),
             notificationSettings: client.readNotificationSettingsTemplate(),
             channelId: {
@@ -43,6 +44,10 @@ module.exports = (client, guild) => {
 
         if (!inst.hasOwnProperty('firstTime')) {
             inst.firstTime = true;
+        }
+
+        if (!inst.hasOwnProperty('role')) {
+            inst.role = null;
         }
 
         if (!inst.hasOwnProperty('generalSettings')) {
