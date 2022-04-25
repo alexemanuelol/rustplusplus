@@ -87,7 +87,7 @@ module.exports = {
                     if (command === cmd) {
                         active = !content.active;
                     }
-                    else if (command === `${cmd} ON`) {
+                    else if (command === `${cmd} on`) {
                         if (!content.active) {
                             active = true;
                         }
@@ -95,7 +95,7 @@ module.exports = {
                             return true;
                         }
                     }
-                    else if (command === `${cmd} OFF`) {
+                    else if (command === `${cmd} off`) {
                         if (content.active) {
                             active = false;
                         }
@@ -161,11 +161,11 @@ module.exports = {
                     let active;
                     if (command === `${cmd} on`) {
                         active = true;
-                        rustplus.printCommandOutput(`Turning ${groupName} on.`);
+                        rustplus.printCommandOutput(`Turning ${groupName} ON.`);
                     }
                     else if (command === `${cmd} off`) {
                         active = false;
-                        rustplus.printCommandOutput(`Turning ${groupName} off.`);
+                        rustplus.printCommandOutput(`Turning ${groupName} OFF.`);
                     }
                     else if (command === `${cmd}`) {
                         /* Get switch info, create message */
