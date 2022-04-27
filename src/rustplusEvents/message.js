@@ -21,6 +21,10 @@ module.exports = {
             }
             else if (message.broadcast.hasOwnProperty('teamMessage')) {
                 /* Let command handler handle the potential command */
+                message.broadcast.teamMessage.message.message =
+                    message.broadcast.teamMessage.message.message.replace(
+                        /^<color.+?<\/color>/g, '');
+
                 let handled = await CommandHandler.inGameCommandHandler(rustplus, client, message);
 
                 if (!handled) {
