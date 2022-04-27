@@ -4,7 +4,8 @@ const RandomUsernames = require('./RandomUsernames.json');
 module.exports = {
     getBattlemetricsServerId: async function (client, serverName) {
         serverName = module.exports.escapeRegExp(serverName);
-        const search = `https://www.battlemetrics.com/servers/search?q=${serverName}&sort=score`;
+        const searchServerName = serverName.replace('\#', '\*');
+        const search = `https://www.battlemetrics.com/servers/search?q=${searchServerName}&sort=score`;
         const response = await Scrape.scrape(search);
 
         if (response.status !== 200) {
@@ -15,9 +16,12 @@ module.exports = {
         let regex = new RegExp(`"id":"(\\d+?)","game_id":"rust","name":"${serverName}","`, 'g');
         let data = regex.exec(response.data);
 
-        if (data.length === 2) {
-            return data[1];
+        try {
+            if (data.length === 2) {
+                return data[1];
+            }
         }
+        catch (e) { }
 
         return null;
     },
@@ -48,15 +52,18 @@ module.exports = {
             `"id":"${serverId}".*?"ip":"(.+?)","port":(.+?),".*?"rank":(\\d+?),".*?"country":"(.+?)","status":"(.+?)"`, 'g');
         let data = regex.exec(page);
 
-        if (data.length === 6) {
-            return {
-                ip: data[1],
-                port: data[2],
-                rank: data[3],
-                country: data[4],
-                status: (data[5] === 'online') ? true : false
+        try {
+            if (data.length === 6) {
+                return {
+                    ip: data[1],
+                    port: data[2],
+                    rank: data[3],
+                    country: data[4],
+                    status: (data[5] === 'online') ? true : false
+                }
             }
         }
+        catch (e) { }
 
         return null;
     },
@@ -78,9 +85,12 @@ module.exports = {
         let players = page.matchAll(regex)
 
         for (let player of players) {
-            if (player.length === 4) {
-                onlinePlayers.push({ id: player[1], name: player[2], time: player[3] });
+            try {
+                if (player.length === 4) {
+                    onlinePlayers.push({ id: player[1], name: player[2], time: player[3] });
+                }
             }
+            catch (e) { }
         }
 
         return onlinePlayers;
