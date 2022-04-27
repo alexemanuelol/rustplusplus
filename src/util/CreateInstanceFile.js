@@ -36,7 +36,8 @@ module.exports = (client, guild) => {
             storageMonitors: {},
             markers: {},
             serverList: {},
-            trackers: {}
+            trackers: {},
+            marketSubscribeItemIds: []
         }, null, 2));
     }
     else {
@@ -126,6 +127,7 @@ module.exports = (client, guild) => {
         if (!inst.hasOwnProperty('markers')) inst.markers = {};
         if (!inst.hasOwnProperty('serverList')) inst.serverList = {};
         if (!inst.hasOwnProperty('trackers')) inst.trackers = {};
+        if (!inst.hasOwnProperty('marketSubscribeItemIds')) inst.marketSubscribeItemIds = [];
 
         client.writeInstanceFile(guild.id, inst);
     }

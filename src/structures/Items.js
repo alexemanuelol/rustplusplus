@@ -34,7 +34,8 @@ class Items {
     }
 
     getClosestItemIdByName(name, similarity = 0.9) {
-        return Object.keys(this.items).find(id => Str.similarity(this.items[id].name, name) >= similarity);
+        return Object.keys(this.items).find(id =>
+            Str.similarity(this.items[id].name.toLowerCase(), name.toLowerCase()) >= similarity);
     }
 }
 

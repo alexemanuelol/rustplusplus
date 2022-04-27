@@ -172,12 +172,34 @@ class DiscordBot extends Client {
         }
     }
 
+    async interactionReply(interaction, content) {
+        try {
+            return await interaction.reply(content);
+        }
+        catch (e) {
+            this.log('ERROR', `Interaction reply failed: ${e}`, 'error');
+        }
+
+        return undefined;
+    }
+
+    async interactionEditReply(interaction, content) {
+        try {
+            return await interaction.editReply(content);
+        }
+        catch (e) {
+            this.log('ERROR', `Interaction edit reply failed: ${e}`, 'error');
+        }
+
+        return undefined;
+    }
+
     async interactionUpdate(interaction, content) {
         try {
             return await interaction.update(content);
         }
         catch (e) {
-            this.log('ERROR', `Interaction failed: ${e}`, 'error');
+            this.log('ERROR', `Interaction update failed: ${e}`, 'error');
         }
 
         return undefined;
