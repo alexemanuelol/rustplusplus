@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -33,12 +34,14 @@ module.exports = {
 			if (!interaction.member.permissions.has('ADMINISTRATOR') &&
 				!interaction.member.roles.cache.has(instance.role)) {
 				let role = DiscordTools.getRole(interaction.guildId, instance.role);
-				await interaction.reply({
-					content: `You are not part of the \`${role.name}\` role, therefore you can't run bot commands.`,
+				let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
+				await client.interactionReply(interaction, {
+					embeds: [new MessageEmbed()
+						.setColor('#ff0040')
+						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 					ephemeral: true
 				});
-				client.log('INFO',
-					`You are not part of the '${role.name}' role, therefore you can't run bot commands.`);
+				client.log('WARNING', str);
 				return;
 			}
 		}
@@ -54,31 +57,42 @@ module.exports = {
 
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus) {
-			await interaction.editReply({
-				content: 'No active rustplus instance.',
+			let str = 'Not currently connected to a rust server.';
+			await client.interactionEditReply(interaction, {
+				embeds: [new MessageEmbed()
+					.setColor('#ff0040')
+					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
 			});
-			client.log('WARNING', 'No active rustplus instance.');
+			client.log('WARNING', str);
 			return;
 		}
 
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
 				if (!Object.keys(instance.storageMonitors).includes(id)) {
-					await interaction.editReply({
-						content: 'Invalid ID.',
+					let str = `Invalid ID: '${id}'.`;
+					await client.interactionEditReply(interaction, {
+						embeds: [new MessageEmbed()
+							.setColor('#ff0040')
+							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
+							.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 						ephemeral: true
 					});
-					client.log('WARNING', 'Invalid ID.');
+					rustplus.log('WARNING', str);
 					return;
 				}
 
 				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
-					await interaction.editReply({
-						content: 'That Storage Monitor is not part of this Rust Server.',
+					let str = 'That Storage Monitor is not part of this Rust Server.';
+					await client.interactionEditReply(interaction, {
+						embeds: [new MessageEmbed()
+							.setColor('#ff0040')
+							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
+							.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 						ephemeral: true
 					});
-					client.log('WARNING', 'That Storage Monitor is not part of this Rust Server.');
+					rustplus.log('WARNING', str);
 					return;
 				}
 
@@ -96,11 +110,15 @@ module.exports = {
 				await DiscordTools.sendStorageMonitorMessage(
 					interaction.guildId, id, embedChanged, false, filesChanged);
 
-				await interaction.editReply({
-					content: 'Successfully edited Storage Monitor.',
+				let str = `Successfully edited Storage Monitor '${instance.storageMonitors[id].name}'.`;
+				await client.interactionEditReply(interaction, {
+					embeds: [new MessageEmbed()
+						.setColor('#ce412b')
+						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
+						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 					ephemeral: true
 				});
-				client.log('INFO', 'Successfully edited Storage Monitor.');
+				rustplus.log('INFO', str);
 			} break;
 
 			default: {

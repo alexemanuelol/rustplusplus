@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -17,12 +18,14 @@ module.exports = {
 			if (!interaction.member.permissions.has('ADMINISTRATOR') &&
 				!interaction.member.roles.cache.has(instance.role)) {
 				let role = DiscordTools.getRole(interaction.guildId, instance.role);
-				await interaction.reply({
-					content: `You are not part of the \`${role.name}\` role, therefore you can't run bot commands.`,
+				let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
+				await client.interactionReply(interaction, {
+					embeds: [new MessageEmbed()
+						.setColor('#ff0040')
+						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 					ephemeral: true
 				});
-				client.log('INFO',
-					`You are not part of the '${role.name}' role, therefore you can't run bot commands.`);
+				client.log('WARNING', str);
 				return;
 			}
 		}
@@ -33,30 +36,41 @@ module.exports = {
 
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus) {
-			await interaction.editReply({
-				content: 'No active rustplus instance.',
+			let str = 'Not currently connected to a rust server.';
+			await client.interactionEditReply(interaction, {
+				embeds: [new MessageEmbed()
+					.setColor('#ff0040')
+					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
 			});
-			client.log('WARNING', 'No active rustplus instance.');
+			client.log('WARNING', str);
 			return;
 		}
 
 		if (!rustplus.generalSettings.leaderCommandEnabled) {
-			await interaction.editReply({
-				content: 'Leader command is turned OFF in settings.',
+			let str = 'Leader command is turned OFF in settings.';
+			await client.interactionEditReply(interaction, {
+				embeds: [new MessageEmbed()
+					.setColor('#ff0040')
+					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
+					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 				ephemeral: true
 			});
-			client.log('WARNING', 'Leader command is turned OFF in settings.');
+			rustplus.log('WARNING', str);
 			return;
 		}
 
 		if (rustplus.team.leaderSteamId !== rustplus.playerId) {
 			let player = rustplus.team.getPlayer(rustplus.playerId);
-			await interaction.editReply({
-				content: `Leader command only works if the current leader is ${player.name}.`,
+			let str = `Leader command only works if the current leader is ${player.name}.`;
+			await client.interactionEditReply(interaction, {
+				embeds: [new MessageEmbed()
+					.setColor('#ff0040')
+					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
+					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 				ephemeral: true
 			});
-			client.log('WARNING', `Leader command only works if the current leader is ${player.name}.`);
+			rustplus.log('WARNING', str);
 			return;
 		}
 
@@ -80,27 +94,39 @@ module.exports = {
 		}
 
 		if (matchedPlayer === null) {
-			await interaction.editReply({
-				content: `Could not identify team member: ${member}.`,
+			let str = `Could not identify team member: ${member}.`;
+			await client.interactionEditReply(interaction, {
+				embeds: [new MessageEmbed()
+					.setColor('#ff0040')
+					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
+					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 				ephemeral: true
 			});
-			client.log('WARNING', `Could not identify team member: ${member}.`);
+			rustplus.log('WARNING', str);
 		}
 		else {
 			if (rustplus.team.leaderSteamId === matchedPlayer.steamId) {
-				await interaction.editReply({
-					content: `${matchedPlayer.name} is already team leader.`,
+				let str = `${matchedPlayer.name} is already team leader.`;
+				await client.interactionEditReply(interaction, {
+					embeds: [new MessageEmbed()
+						.setColor('#ff0040')
+						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
+						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 					ephemeral: true
 				});
-				client.log('WARNING', `${matchedPlayer.name} is already team leader.`);
+				rustplus.log('WARNING', str);
 			}
 			else {
 				await rustplus.team.changeLeadership(matchedPlayer.steamId);
-				await interaction.editReply({
-					content: `Team leadership was transferred to ${matchedPlayer.name}.`,
+				let str = `Team leadership was transferred to ${matchedPlayer.name}.`;
+				await client.interactionEditReply(interaction, {
+					embeds: [new MessageEmbed()
+						.setColor('#ce412b')
+						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
+						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 					ephemeral: true
 				});
-				client.log('WARNING', `Team leadership was transferred to ${matchedPlayer.name}.`);
+				rustplus.log('INFO', str);
 			}
 		}
 	},

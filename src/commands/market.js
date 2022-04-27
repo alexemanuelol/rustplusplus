@@ -50,7 +50,7 @@ module.exports = {
             if (!interaction.member.permissions.has('ADMINISTRATOR') &&
                 !interaction.member.roles.cache.has(instance.role)) {
                 let role = DiscordTools.getRole(interaction.guildId, instance.role);
-                let str = `You are not part of the ${role.name} role, therefore you can't run bot commands.`;
+                let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
                 await client.interactionReply(interaction, {
                     embeds: [new MessageEmbed()
                         .setColor('#ff0040')
@@ -178,7 +178,7 @@ module.exports = {
                     .setDescription(foundLines)
                     .setFooter({ text: `${instance.serverList[rustplus.serverId].title}` });
 
-                interaction.editReply({ embeds: [embed] });
+                await client.interactionEditReply(interaction, { embeds: [embed] });
                 rustplus.log('INFO', `Showing the result for item: ${itemName}`);
             } break;
 
@@ -259,7 +259,8 @@ module.exports = {
                     await client.interactionEditReply(interaction, {
                         embeds: [new MessageEmbed()
                             .setColor('#ce412b')
-                            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
+                            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
+                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
                         ephemeral: true
                     });
                     rustplus.log('INFO', str);
@@ -327,7 +328,8 @@ module.exports = {
                     await client.interactionEditReply(interaction, {
                         embeds: [new MessageEmbed()
                             .setColor('#ce412b')
-                            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
+                            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
+                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
                         ephemeral: true
                     });
                     rustplus.log('INFO', str);
@@ -337,7 +339,8 @@ module.exports = {
                     await client.interactionEditReply(interaction, {
                         embeds: [new MessageEmbed()
                             .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
+                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
+                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
                         ephemeral: true
                     });
                     rustplus.log('WARNING', str);
@@ -345,7 +348,6 @@ module.exports = {
             } break;
 
             case 'list': {
-
                 let names = '';
                 let ids = '';
                 for (let item of instance.marketSubscribeItemIds) {
@@ -358,7 +360,8 @@ module.exports = {
                     content = {
                         embeds: [new MessageEmbed()
                             .setColor('#ff0040')
-                            .setDescription('```diff\n- Item subcription list is empty.\n```')],
+                            .setDescription('```diff\n- Item subcription list is empty.\n```')
+                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
                         ephemeral: true
                     }
                 }
@@ -369,8 +372,8 @@ module.exports = {
                             .setTitle('Subscription list')
                             .addFields(
                                 { name: 'Name', value: names, inline: true },
-                                { name: 'ID', value: ids, inline: true }
-                            )],
+                                { name: 'ID', value: ids, inline: true })
+                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
                         ephemeral: true
                     }
                 }
@@ -383,6 +386,5 @@ module.exports = {
 
             } break;
         }
-
     },
 }

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageAttachment } = require('discord.js');
+const { MessageAttachment, MessageEmbed } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools');
 
 module.exports = {
@@ -30,12 +30,14 @@ module.exports = {
 			if (!interaction.member.permissions.has('ADMINISTRATOR') &&
 				!interaction.member.roles.cache.has(instance.role)) {
 				let role = DiscordTools.getRole(interaction.guildId, instance.role);
-				await interaction.reply({
-					content: `You are not part of the \`${role.name}\` role, therefore you can't run bot commands.`,
+				let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
+				await client.interactionReply(interaction, {
+					embeds: [new MessageEmbed()
+						.setColor('#ff0040')
+						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 					ephemeral: true
 				});
-				client.log('INFO',
-					`You are not part of the '${role.name}' role, therefore you can't run bot commands.`);
+				client.log('WARNING', str);
 				return;
 			}
 		}
@@ -44,11 +46,14 @@ module.exports = {
 
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus) {
-			await interaction.editReply({
-				content: 'No active rustplus instance.',
+			let str = 'Not currently connected to a rust server.';
+			await client.interactionEditReply(interaction, {
+				embeds: [new MessageEmbed()
+					.setColor('#ff0040')
+					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
 			});
-			client.log('WARNING', 'No active rustplus instance.');
+			client.log('WARNING', str);
 			return;
 		}
 
@@ -81,9 +86,15 @@ module.exports = {
 			file = new MessageAttachment(`src/resources/images/maps/${interaction.guildId}_map_full.png`);
 		}
 
-		await interaction.editReply({
+		let fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';
+		await client.interactionEditReply(interaction, {
+			embeds: [new MessageEmbed()
+				.setColor('#ce412b')
+				.setImage(`attachment://${interaction.guildId}_map_${fileName}.png`)
+				.setFooter({ text: instance.serverList[rustplus.serverId].title })],
 			files: [file],
 			ephemeral: true
 		});
+		rustplus.log('INFO', `Displaying ${fileName} map.`);
 	},
 };

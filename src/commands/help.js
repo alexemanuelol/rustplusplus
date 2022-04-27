@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,20 +13,25 @@ module.exports = {
 			if (!interaction.member.permissions.has('ADMINISTRATOR') &&
 				!interaction.member.roles.cache.has(instance.role)) {
 				let role = DiscordTools.getRole(interaction.guildId, instance.role);
-				await interaction.reply({
-					content: `You are not part of the \`${role.name}\` role, therefore you can't run bot commands.`,
+				let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
+				await client.interactionReply(interaction, {
+					embeds: [new MessageEmbed()
+						.setColor('#ff0040')
+						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 					ephemeral: true
 				});
-				client.log('INFO',
-					`You are not part of the '${role.name}' role, therefore you can't run bot commands.`);
+				client.log('WARNING', str);
 				return;
 			}
 		}
 
-		await interaction.reply({
-			content: 'HAH! No help for you! >:)',
+		let str = `TBD.`;
+		await client.interactionReply(interaction, {
+			embeds: [new MessageEmbed()
+				.setColor('#ce412b')
+				.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 			ephemeral: true
 		});
-		client.log('INFO', 'HAH! No help for you! >:)');
+		client.log('WARNING', str);
 	},
 };

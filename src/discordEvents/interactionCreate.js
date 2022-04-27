@@ -35,15 +35,14 @@ module.exports = {
             } catch (error) {
                 client.log('ERROR', error, 'error');
 
-                try {
-                    await interaction.editReply({
-                        content: 'There was an error while executing this command!',
-                        ephemeral: true
-                    });
-                }
-                catch (e) {
-                    client.log('ERROR', 'Could not edit interaction reply.', 'error');
-                }
+                let str = 'There was an error while executing this command!';
+                await client.interactionEditReply(interaction, {
+                    embeds: [new MessageEmbed()
+                        .setColor('#ff0040')
+                        .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
+                    ephemeral: true
+                });
+                client.log('ERROR', str, 'error');
             }
         }
         else {
