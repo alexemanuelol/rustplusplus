@@ -1,0 +1,6155 @@
+{
+  "3222790": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "3380160": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "14241751": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-858312878",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "15388698": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "20489901": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "21402876": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "23352662": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "23391694": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "28201841": [
+    {
+      "id": "-1021495308",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "176787552",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "37122747": [],
+  "39600618": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "42535890": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "51984655": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1581843485",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "60528587": [
+    {
+      "id": "1199391518",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "62577426": [],
+  "69511070": [],
+  "73681876": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "95950017": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "98508942": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 88
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "99588025": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 750
+    }
+  ],
+  "106959911": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "121049755": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "122783240": [],
+  "143803535": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "170758448": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "171931394": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "174866732": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 40
+    }
+  ],
+  "176787552": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "177226991": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "190184021": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "196700171": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "198438816": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "200773292": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "204391461": [
+    {
+      "id": "-321733511",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "204970153": [],
+  "215754713": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "223891266": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "237239288": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "1234880403",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "254522515": [
+    {
+      "id": "1079279582",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "261913429": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "263834859": [],
+  "268565518": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 63
+    }
+  ],
+  "271048478": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "2048317869",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "273172220": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "273951840": [],
+  "277730763": [],
+  "282103175": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "286193827": [],
+  "286648290": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "296519935": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "304481038": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "317398316": [],
+  "342438846": [],
+  "343045591": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "73681876",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "349762871": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "95950017",
+      "probability": 0.25,
+      "quantity": 1
+    },
+    {
+      "id": "-592016202",
+      "probability": 0.25,
+      "quantity": 1
+    }
+  ],
+  "352130972": [],
+  "352321488": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "352499047": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 125
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "1414245522",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "359723196": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "363163265": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "363467698": [],
+  "390728933": [],
+  "418081930": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "1414245522",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "442289265": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 6
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "442886268": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "443432036": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "476066818": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "479143914": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "479292118": [],
+  "492357192": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "524678627": [],
+  "528668503": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-1673693549",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "553270375": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "73681876",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "553887414": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "996293980",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "559147458": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "567235583": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "567871954": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "573676040": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 400
+    }
+  ],
+  "573926264": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "576509618": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 60
+    }
+  ],
+  "588596902": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "593465182": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "596469572": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "602741290": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "603811464": [],
+  "605467368": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-1581843485",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "609049394": [],
+  "613961768": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "621915341": [],
+  "634478325": [
+    {
+      "id": "73681876",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "642482233": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "649912614": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 63
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "656371026": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 85
+    }
+  ],
+  "656371027": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "656371028": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 20
+    }
+  ],
+  "657352755": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "665332906": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "671063303": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "671706427": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "674734128": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "680234026": [],
+  "696029452": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "699075597": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 200
+    }
+  ],
+  "709206314": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "2048317869",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "722955039": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 63
+    }
+  ],
+  "755224797": [],
+  "756517185": [],
+  "762289806": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 60
+    }
+  ],
+  "782422285": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "785728077": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "794356786": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "794443127": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "795236088": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-858312878",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "-946369541",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "795371088": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "803222026": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 63
+    }
+  ],
+  "803954639": [],
+  "809199956": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 200
+    }
+  ],
+  "809942731": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "813023040": [],
+  "818877484": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "573926264",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "826309791": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "830839496": [],
+  "832133926": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "1414245522",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "833533164": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 125
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "835042040": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "838831151": [],
+  "844440409": [],
+  "850280505": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 18
+    }
+  ],
+  "853471967": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "854447607": [],
+  "858486327": [],
+  "866332017": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 125
+    }
+  ],
+  "866889860": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "1414245522",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "882559853": [],
+  "884424049": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "1414245522",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "888415708": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "895374329": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 88
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 63
+    }
+  ],
+  "915408809": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "95950017",
+      "probability": 0.25,
+      "quantity": 1
+    }
+  ],
+  "926800282": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 35
+    }
+  ],
+  "935692442": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "936496778": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "946662961": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "952603248": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "963906841": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "968019378": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 18
+    }
+  ],
+  "968421290": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "980333378": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "988652725": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "989925924": [],
+  "996293980": [],
+  "998894949": [],
+  "999690781": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1036321299": [],
+  "1052926200": [],
+  "1055319033": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "1058261682": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1072924620": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 60
+    }
+  ],
+  "1079279582": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "1081315464": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "2048317869",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1090916276": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1094293920": [],
+  "1099314009": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1103488722": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "1104520648": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "1882709339",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "1107575710": [
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "1110385766": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "1112162468": [],
+  "1121925526": [],
+  "1142993169": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "1149964039": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1153652756": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "1158340331": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 35
+    }
+  ],
+  "1158340332": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 60
+    }
+  ],
+  "1158340334": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "1159991980": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1160881421": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "1171735914": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1177596584": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1181207482": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1994909036",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1186655046": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 88
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1189981699": [],
+  "1199391518": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "1205084994": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1205607945": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "1221063409": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "1223900335": [],
+  "1230323789": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "1230691307": [],
+  "1234878710": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1234880403": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "1414245522",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "1242482355": [
+    {
+      "id": "-567909622",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "1242522330": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1248356124": [
+    {
+      "id": "-592016202",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "73681876",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "1259919256": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1263920163": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 18
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "1266491000": [
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "1268178466": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1272194103": [],
+  "1272430949": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1272768630": [],
+  "1293102274": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1305578813": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "1315082560": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "2048317869",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1318558775": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "-1021495308",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "1230323789",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1319617282": [],
+  "1324203999": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1326180354": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1882709339",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1327005675": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 150
+    }
+  ],
+  "1330084809": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "1346158228": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1353298668": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "1358643074": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 63
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1366282552": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "1234880403",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1367190888": [],
+  "1371909803": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1373240771": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 125
+    }
+  ],
+  "1373971859": [
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1376065505": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1381010055": [],
+  "1382263453": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "1414245522",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1390353317": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "1391703481": [],
+  "1397052267": [],
+  "1400460850": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1401987718": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-1899491405",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1409529282": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1413014235": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "1414245162": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "1414245522": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1422530437": [],
+  "1424075905": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1426574435": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 250
+    }
+  ],
+  "1443579727": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "1451568081": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "1478091698": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "1480022580": [],
+  "1488979457": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "1882709339",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1491189398": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "1882709339",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1491753484": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1512054436": [],
+  "1516985844": [
+    {
+      "id": "1414245522",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1521286012": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "1523195708": [
+    {
+      "id": "73681876",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1523403414": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "1524187186": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1524980732": [
+    {
+      "id": "-567909622",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1525520776": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1533551194": [],
+  "1534542921": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "1536610005": [],
+  "1540934679": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    }
+  ],
+  "1542290441": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "1545779598": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-1021495308",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "176787552",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1548091822": [],
+  "1553078977": [],
+  "1559779253": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "1568388703": [],
+  "1569882109": [
+    {
+      "id": "1414245522",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "1575635062": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "1581210395": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "1588298435": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "176787552",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1601468620": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "1602646136": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "1540934679",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1608640313": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1614528785": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1623701499": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1629293099": [
+    {
+      "id": "-1938052175",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1638322904": [
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 125
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 125
+    },
+    {
+      "id": "-592016202",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1643667218": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 175
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "1655650836": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "1882709339",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "1655979682": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1658229558": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "1659114910": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 18
+    }
+  ],
+  "1659447559": [
+    {
+      "id": "1414245522",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    }
+  ],
+  "1660145984": [],
+  "1668129151": [],
+  "1668858301": [],
+  "1675639563": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "1686524871": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1696050067": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1697996440": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1711033574": [
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1712070256": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "1712261904": [],
+  "1714496074": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "1719978075": [],
+  "1722154847": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "1723747470": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "1729120840": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    }
+  ],
+  "1729374708": [],
+  "1729712564": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1744298439": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "1746956556": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 35
+    }
+  ],
+  "1751045826": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "1234880403",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1757265204": [],
+  "1770475779": [],
+  "1771755747": [],
+  "1776460938": [],
+  "1783512007": [],
+  "1784406797": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1789825282": [],
+  "1796682209": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 4
+    },
+    {
+      "id": "1230323789",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1803831286": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1814288539": [
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1819863051": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "1827479659": [],
+  "1835946060": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "1840570710": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 250
+    }
+  ],
+  "1840822026": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1849887541": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "1850456855": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "1199391518",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1856217390": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1873897110": [],
+  "1874610722": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "1877339384": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "1882709339": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "1883981798": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "1883981800": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 60
+    }
+  ],
+  "1883981801": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 35
+    }
+  ],
+  "1885488976": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 200
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1895235349": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "1898094925": [],
+  "1899610628": [],
+  "1903654061": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "2019042823",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1905387657": [],
+  "1911552868": [],
+  "1917703890": [],
+  "1931713481": [],
+  "1946219319": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1948067030": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-316250604",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "1950721418": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "1951603367": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "1953903201": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "1965232394": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "1414245522",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "1973165031": [],
+  "1973684065": [],
+  "1975934948": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "1983621560": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "1989785143": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "1992974553": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "2009734114": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "2019042823": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "2021351233": [],
+  "2023888403": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "2024467711": [],
+  "2040726127": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "317398316",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "2041899972": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-316250604",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "2048317869": [],
+  "2063916636": [],
+  "2070189026": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "2087678962": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "2090395347": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "2100007442": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "2104517339": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "2106561762": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "2114754781": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-1673693549",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "2126889441": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "2133269020": [],
+  "-194509282": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-765183617": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 88
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-75944661": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-1215753368": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-1673693549",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-778367295": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-1021495308",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "176787552",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1812555177": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "-1021495308",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "176787552",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1469578201": [
+    {
+      "id": "1882709339",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-2069578888": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "-1021495308",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "176787552",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-852563019": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "573926264",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1966748496": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-1137865085": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 20
+    }
+  ],
+  "-1123473824": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-1405508498": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1978999529": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "1199391518",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-904863145": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 225
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "573926264",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1850571427": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-855748505": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-363689972": [],
+  "-41440462": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1021495308",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-1517740219": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "-1673693549",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1758372725": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "1230323789",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1815301988": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1367281941": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-132516482": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1117626326": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1950721390": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-148794216": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-691113464": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 1500
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-967648160": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 750
+    }
+  ],
+  "-335089230": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 1500
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-985781766": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 750
+    }
+  ],
+  "-850982208": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1100168350": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-148229307": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 125
+    }
+  ],
+  "-1199897172": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-819720157": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1199897169": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-956706906": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-1429456799": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-1130709577": [],
+  "-559599960": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-2067472972": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-796583652": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-132247350": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "2019042823",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1614955425": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-97956382": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 500
+    }
+  ],
+  "-463122489": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 125
+    }
+  ],
+  "-1336109173": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 175
+    }
+  ],
+  "-1023374709": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-316250604": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "1414245522",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-1183726687": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-2027793839": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1273339005": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1916473915": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1488398114": [
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-854270928": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1519126340": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-979302481": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1230433643": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1379835144": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1999722522": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-1442559428": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-143132326": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 125
+    }
+  ],
+  "-1824943010": [
+    {
+      "id": "-567909622",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-845557339": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1992717673": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 300
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-110921842": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-586784898": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1819233322": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1832422579": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1651220691": [],
+  "-1370759135": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1861522751": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-1985799200": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1104881824": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-465682601": [],
+  "-216116642": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1754948969": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-1293296287": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 125
+    }
+  ],
+  "-369760990": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1138208076": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-555122905": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-1100422738": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-1535621066": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-1478445584": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-1557377697",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1647846966": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1863559151": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 125
+    },
+    {
+      "id": "2019042823",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-180129657": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-41896755": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1607980696": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 500
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-996185386": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-1018587433": [],
+  "-1938052175": [],
+  "-858312878": [],
+  "-321733511": [],
+  "-1557377697": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-592016202": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1581843485",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-930193596": [],
+  "-265876753": [
+    {
+      "id": "-1938052175",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1581843485",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1982036270": [],
+  "-1579932985": [],
+  "-946369541": [
+    {
+      "id": "-1018587433",
+      "probability": 0.38,
+      "quantity": 1
+    },
+    {
+      "id": "-858312878",
+      "probability": 0.13,
+      "quantity": 1
+    }
+  ],
+  "-4031221": [],
+  "-1779183908": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-804769727": [],
+  "-602717596": [],
+  "-544317637": [],
+  "-277057363": [],
+  "-932201673": [],
+  "-2099697608": [],
+  "-1581843485": [],
+  "-1157596551": [],
+  "-1779180711": [],
+  "-151838493": [],
+  "-1215166612": [],
+  "-470439097": [],
+  "-702051347": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1622110948": [
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "-1022661119": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1211268013": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-1903165497": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-23994173": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1549739227": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1234880403",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1004426654": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1266045928": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 20
+    }
+  ],
+  "-761829530": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-803263829": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "1234880403",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-113413047": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 35
+    }
+  ],
+  "-2022172587": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-22883916": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "2048317869",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-747743875": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1000573653": [
+    {
+      "id": "2019042823",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1043618880": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-690276911": [],
+  "-1569700847": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-297099594": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-2024549027": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-1102429027": [
+    {
+      "id": "-1994909036",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-1778159885": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1994909036",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1772746857": [
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "-1773144852": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1997543660": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-2012470695": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-1163532624": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-97459906": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-134959124": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1624770297": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-763071910": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "1234880403",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1732475823": [
+    {
+      "id": "-1709878924",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-194953424": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1539025626": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-2047081330": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1518883088": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "73681876",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1506417026": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-575744869": [],
+  "-324675402": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-2002277461": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "1199391518",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-699558439": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "1199391518",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-575483084": [],
+  "-253079493": [
+    {
+      "id": "2019042823",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "-2025184684": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1695367501": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-48090175": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "1234880403",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-842267147": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1785231475": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 30
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1108136649": [
+    {
+      "id": "1381010055",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "1234880403",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1101924344": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1478212975": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "2048317869",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-2094954543": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-1262185308": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 20
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1316706473": [],
+  "-1707425764": [],
+  "-196667575": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-1252059217": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-2001260025": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1302129395": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 63
+    }
+  ],
+  "-262590403": [
+    {
+      "id": "1882709339",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1506397857": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1780802565": [
+    {
+      "id": "1882709339",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1878475007": [],
+  "-596876839": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1583967946": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1432674913": [],
+  "-2072273936": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-1729415579": [],
+  "-2123125470": [],
+  "-541206665": [],
+  "-487356515": [],
+  "-929092070": [],
+  "-1184406448": [],
+  "-649128577": [],
+  "-586342290": [],
+  "-989755543": [],
+  "-78533081": [],
+  "-682687162": [],
+  "-700591459": [],
+  "-1941646328": [],
+  "-587989372": [],
+  "-1848736516": [],
+  "-1509851560": [],
+  "-1162759543": [],
+  "-242084766": [],
+  "-778875547": [],
+  "-746030907": [],
+  "-1305326964": [],
+  "-1776128552": [],
+  "-568419968": [],
+  "-886280491": [],
+  "-237809779": [],
+  "-1698937385": [],
+  "-542577259": [],
+  "-1962971928": [],
+  "-1904821376": [],
+  "-2086926071": [],
+  "-2084071424": [],
+  "-567909622": [],
+  "-1511285251": [],
+  "-33009419": [],
+  "-1677315902": [],
+  "-557539629": [],
+  "-496584751": [],
+  "-1520560807": [],
+  "-1440987069": [],
+  "-1130350864": [],
+  "-1709878924": [],
+  "-395377963": [],
+  "-851988960": [],
+  "-1654233406": [],
+  "-1768880890": [],
+  "-1878764039": [],
+  "-1039528932": [],
+  "-751151717": [],
+  "-1167031859": [],
+  "-119235651": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-992286106": [],
+  "-520133715": [],
+  "-1685290200": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1036635990": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-1581843485",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-727717969": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1211166256": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1321651331": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-1581843485",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1691396643": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 4
+    }
+  ],
+  "-1023065463": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-1841918730": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1843426638": [
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-2097376851": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-742865266": [
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "-592016202",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-384243979": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "95950017",
+      "probability": 0.8,
+      "quantity": 1
+    }
+  ],
+  "-17123659": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 40
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1800345240": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 9
+    }
+  ],
+  "-1671551935": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "95950017",
+      "probability": 0.17,
+      "quantity": 1
+    }
+  ],
+  "-1234735557": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 7
+    },
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1663759755": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-1009359066": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-582782051": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-92759291": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-484206264": [],
+  "-1667224349": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-129230242": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-209869746": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1112793865": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1973785141": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "95950017",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-695124222": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-1002156085": [],
+  "-1679267738": [
+    {
+      "id": "-2099697608",
+      "probability": 1,
+      "quantity": 125
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1759188988": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 150
+    }
+  ],
+  "-888153050": [],
+  "-489848205": [
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1622660759": [],
+  "-126305173": [],
+  "-1880870149": [],
+  "-173268132": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-173268125": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-173268126": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-173268131": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-173268129": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1884328185": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 750
+    }
+  ],
+  "-1368584029": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-2058362263": [
+    {
+      "id": "-1018587433",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-722241321": [],
+  "-1331212963": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-1615281216": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-1040518150": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 88
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 63
+    }
+  ],
+  "-1501451746": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-629028935": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 20
+    }
+  ],
+  "-1673693549": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1880231361": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-1899491405": [],
+  "-1802083073": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 60
+    }
+  ],
+  "-1693832478": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    }
+  ],
+  "-89874794": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-493159321": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 35
+    }
+  ],
+  "-1021495308": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-1994909036": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 8
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-626174997": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 88
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 63
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-2139580305": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "1523195708",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "634478325",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-690968985": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1778897469": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1588628467": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    },
+    {
+      "id": "1523195708",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "-1044468317",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "888415708",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-216999575": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-151387974": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-502177121": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-784870360": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-1448252298": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-939424778": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 60
+    }
+  ],
+  "-265292885": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1166712463": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1507239837": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-44876289": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-798293154": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1423304443": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    }
+  ],
+  "-746647361": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1286302544": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-365097295": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 150
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-2049214035": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "-1021495308",
+      "probability": 0.5,
+      "quantity": 1
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1044468317": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-566907190": [
+    {
+      "id": "-932201673",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1736356576": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1160621614": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-458565393": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-282113991": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-692338819": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-695978112": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "73681876",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-563624462": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-781014061": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-295829489": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "95950017",
+      "probability": 1,
+      "quantity": 1
+    },
+    {
+      "id": "-629028935",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-1284169891": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 125
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "479143914",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1819763926": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 250
+    },
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "479143914",
+      "probability": 1,
+      "quantity": 2
+    },
+    {
+      "id": "-1994909036",
+      "probability": 1,
+      "quantity": 2
+    }
+  ],
+  "-144417939": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 1
+    }
+  ],
+  "-2124352573": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-321431890": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1621539785": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-8312704": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 15
+    }
+  ],
+  "-515830359": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1478094705": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "2019042823",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-1113501606": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 10
+    }
+  ],
+  "-1379036069": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-912398867": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-1530414568": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1049881973": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 18
+    }
+  ],
+  "-1961560162": [
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-656349006": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-1306288356": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-697981032": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    },
+    {
+      "id": "2019042823",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-979951147": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-1330640246": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 100
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-583379016": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-20045316": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 63
+    }
+  ],
+  "-961457160": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    }
+  ],
+  "-7270019": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-733625651": [
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "2019042823",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-2040817543": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-858312878",
+      "probability": 1,
+      "quantity": 3
+    }
+  ],
+  "-379734527": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-1553999294": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-1486461488": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-454370658": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-2107018088": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 25
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 38
+    }
+  ],
+  "-1073015016": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 75
+    },
+    {
+      "id": "996293980",
+      "probability": 0.5,
+      "quantity": 1
+    }
+  ],
+  "-769647921": [
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 50
+    },
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    }
+  ],
+  "-135252633": [
+    {
+      "id": "317398316",
+      "probability": 1,
+      "quantity": 5
+    },
+    {
+      "id": "-151838493",
+      "probability": 1,
+      "quantity": 250
+    }
+  ],
+  "-343857907": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 50
+    }
+  ],
+  "-280223496": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 15
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-99886070": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 13
+    },
+    {
+      "id": "-946369541",
+      "probability": 1,
+      "quantity": 5
+    }
+  ],
+  "-1538109120": [
+    {
+      "id": "69511070",
+      "probability": 1,
+      "quantity": 10
+    },
+    {
+      "id": "-265876753",
+      "probability": 1,
+      "quantity": 8
+    }
+  ],
+  "-211235948": [
+    {
+      "id": "1719978075",
+      "probability": 1,
+      "quantity": 25
+    }
+  ]
+}

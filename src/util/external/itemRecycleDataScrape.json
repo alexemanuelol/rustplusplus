@@ -1,0 +1,8324 @@
+{
+  "16x-zoom-scope": {
+    "id": "174866732",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 40
+      }
+    ]
+  },
+  "8x-zoom-scope": {
+    "id": "567235583",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "assault-rifle": {
+    "id": "1545779598",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-spring",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "rifle-body",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "beancan-grenade": {
+    "id": "1840822026",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "bolt-action-rifle": {
+    "id": "1588298435",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "rifle-body",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "bone-club": {
+    "id": "1711033574",
+    "recycle": [
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "bone-knife": {
+    "id": "1814288539",
+    "recycle": [
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "butcher-knife": {
+    "id": "-194509282",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "candy-cane-club": {
+    "id": "1789825282",
+    "recycle": []
+  },
+  "combat-knife": {
+    "id": "2040726127",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "compound-bow": {
+    "id": "884424049",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "rope",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "crossbow": {
+    "id": "1965232394",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "rope",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "custom-smg": {
+    "id": "1796682209",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 4
+      },
+      {
+        "name": "smg-body",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "double-barrel-shotgun": {
+    "id": "-765183617",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 88
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "eoka-pistol": {
+    "id": "-75944661",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "f1-grenade": {
+    "id": "143803535",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "flame-thrower": {
+    "id": "-1215753368",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "empty-propane-tank",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "holosight": {
+    "id": "442289265",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 6
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "hunting-bow": {
+    "id": "1443579727",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "l96-rifle": {
+    "id": "-778367295",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "metal-spring",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "rifle-body",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "lr-300-assault-rifle": {
+    "id": "-1812555177",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "metal-spring",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "rifle-body",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "longsword": {
+    "id": "-1469578201",
+    "recycle": [
+      {
+        "name": "metal-blade",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "m249": {
+    "id": "-2069578888",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "metal-spring",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "rifle-body",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "m39-rifle": {
+    "id": "28201841",
+    "recycle": [
+      {
+        "name": "metal-spring",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "rifle-body",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "m92-pistol": {
+    "id": "-852563019",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "semi-automatic-body",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "mp5a4": {
+    "id": "1318558775",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-spring",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "smg-body",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "mace": {
+    "id": "-1966748496",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "machete": {
+    "id": "-1137865085",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 20
+      }
+    ]
+  },
+  "multiple-grenade-launcher": {
+    "id": "-1123473824",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "muzzle-boost": {
+    "id": "-1405508498",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "muzzle-brake": {
+    "id": "1478091698",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "nailgun": {
+    "id": "1953903201",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "paddle": {
+    "id": "1491189398",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-blade",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "pitchfork": {
+    "id": "1090916276",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "pump-shotgun": {
+    "id": "795371088",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "python-revolver": {
+    "id": "1373971859",
+    "recycle": [
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "revolver": {
+    "id": "649912614",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 63
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "rocket-launcher": {
+    "id": "442886268",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "salvaged-cleaver": {
+    "id": "-1978999529",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "road-signs",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "salvaged-sword": {
+    "id": "1326180354",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-blade",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "semi-automatic-pistol": {
+    "id": "818877484",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "semi-automatic-body",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "semi-automatic-rifle": {
+    "id": "-904863145",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 225
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "semi-automatic-body",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "silencer": {
+    "id": "-1850571427",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "simple-handmade-sight": {
+    "id": "-855748505",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "snowball": {
+    "id": "-363689972",
+    "recycle": []
+  },
+  "snowball-gun": {
+    "id": "1103488722",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "spas-12-shotgun": {
+    "id": "-41440462",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "metal-spring",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "speargun": {
+    "id": "-1517740219",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "empty-propane-tank",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "stone-spear": {
+    "id": "1602646136",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "wooden-spear",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "thompson": {
+    "id": "-1758372725",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "smg-body",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "water-gun": {
+    "id": "722955039",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 63
+      }
+    ]
+  },
+  "water-pistol": {
+    "id": "-1815301988",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "waterpipe-shotgun": {
+    "id": "-1367281941",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "weapon-lasersight": {
+    "id": "-132516482",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "weapon-flashlight": {
+    "id": "952603248",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "wooden-spear": {
+    "id": "1540934679",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      }
+    ]
+  },
+  "armored-door": {
+    "id": "1353298668",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "armored-double-door": {
+    "id": "1221063409",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "barbed-wooden-barricade": {
+    "id": "1382263453",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "rope",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "building-plan": {
+    "id": "1525520776",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "chainlink-fence": {
+    "id": "-1117626326",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "chainlink-fence-gate": {
+    "id": "1451568081",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "code-lock": {
+    "id": "1159991980",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "concrete-barricade": {
+    "id": "-1950721390",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "door-closer": {
+    "id": "1409529282",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "floor-grill": {
+    "id": "936496778",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "floor-triangle-grill": {
+    "id": "1983621560",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "garage-door": {
+    "id": "-148794216",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "high-external-stone-gate": {
+    "id": "-691113464",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 1500
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "high-external-stone-wall": {
+    "id": "-967648160",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 750
+      }
+    ]
+  },
+  "high-external-wooden-gate": {
+    "id": "-335089230",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 1500
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "high-external-wooden-wall": {
+    "id": "99588025",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 750
+      }
+    ]
+  },
+  "high-ice-wall": {
+    "id": "-985781766",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 750
+      }
+    ]
+  },
+  "key-lock": {
+    "id": "-850982208",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "ladder-hatch": {
+    "id": "1948067030",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "wooden-ladder",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "large-water-catcher": {
+    "id": "-1100168350",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "metal-barricade": {
+    "id": "1655650836",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-blade",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "metal-shop-front": {
+    "id": "-148229307",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 125
+      }
+    ]
+  },
+  "metal-vertical-embrasure": {
+    "id": "-1199897172",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "metal-window-bars": {
+    "id": "-819720157",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "metal-horizontal-embrasure": {
+    "id": "-1199897169",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "mining-quarry": {
+    "id": "1052926200",
+    "recycle": []
+  },
+  "netting": {
+    "id": "1516985844",
+    "recycle": [
+      {
+        "name": "rope",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "prison-cell-gate": {
+    "id": "-956706906",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "prison-cell-wall": {
+    "id": "-1429456799",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "pump-jack": {
+    "id": "-1130709577",
+    "recycle": []
+  },
+  "reinforced-glass-window": {
+    "id": "671706427",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "sandbag-barricade": {
+    "id": "-559599960",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "sheet-metal-door": {
+    "id": "-2067472972",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "sheet-metal-double-door": {
+    "id": "1390353317",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "shop-front": {
+    "id": "-796583652",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "short-ice-wall": {
+    "id": "1327005675",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 150
+      }
+    ]
+  },
+  "small-water-catcher": {
+    "id": "-132247350",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "tarp",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "stone-barricade": {
+    "id": "15388698",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "strengthened-glass-window": {
+    "id": "-1614955425",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "tool-cupboard": {
+    "id": "-97956382",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 500
+      }
+    ]
+  },
+  "triangle-ladder-hatch": {
+    "id": "2041899972",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "wooden-ladder",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "watch-tower": {
+    "id": "-463122489",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 125
+      }
+    ]
+  },
+  "wood-double-door": {
+    "id": "-1336109173",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 175
+      }
+    ]
+  },
+  "wood-shutters": {
+    "id": "-1023374709",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "wooden-barricade": {
+    "id": "866889860",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "rope",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wooden-barricade-cover": {
+    "id": "1373240771",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 125
+      }
+    ]
+  },
+  "wooden-door": {
+    "id": "1729120840",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      }
+    ]
+  },
+  "wooden-ladder": {
+    "id": "-316250604",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "rope",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "wooden-window-bars": {
+    "id": "-1183726687",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "advent-calendar": {
+    "id": "-2027793839",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "barbeque": {
+    "id": "1099314009",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "bed": {
+    "id": "-1273339005",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "bota-bag": {
+    "id": "613961768",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "camp-fire": {
+    "id": "1946219319",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "carvable-pumpkin": {
+    "id": "1524980732",
+    "recycle": [
+      {
+        "name": "pumpkin",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "chair": {
+    "id": "1534542921",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "chinese-lantern": {
+    "id": "-1916473915",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "chippy-arcade-game": {
+    "id": "359723196",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "christmas-door-wreath": {
+    "id": "2009734114",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "christmas-lights": {
+    "id": "1058261682",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "christmas-tree": {
+    "id": "794443127",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "composter": {
+    "id": "-1488398114",
+    "recycle": [
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "double-sign-post": {
+    "id": "1521286012",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "dragon-door-knocker": {
+    "id": "-854270928",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "drop-box": {
+    "id": "-1519126340",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "easter-door-wreath": {
+    "id": "-979302481",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "festive-doorway-garland": {
+    "id": "674734128",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "festive-double-doorway-garland": {
+    "id": "-1230433643",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "festive-window-garland": {
+    "id": "-1379835144",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "frankenstein-table": {
+    "id": "1575635062",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "fridge": {
+    "id": "1413014235",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "furnace": {
+    "id": "-1999722522",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "hitch-&-trough": {
+    "id": "1160881421",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "hobo-barrel": {
+    "id": "-1442559428",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "huge-wooden-sign": {
+    "id": "-143132326",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 125
+      }
+    ]
+  },
+  "jack-o-lantern-angry": {
+    "id": "1242482355",
+    "recycle": [
+      {
+        "name": "pumpkin",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "jack-o-lantern-happy": {
+    "id": "-1824943010",
+    "recycle": [
+      {
+        "name": "pumpkin",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "kayak": {
+    "id": "190184021",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "landscape-photo-frame": {
+    "id": "1697996440",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "landscape-picture-frame": {
+    "id": "-845557339",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "lantern": {
+    "id": "1658229558",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "large-banner-hanging": {
+    "id": "23352662",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "large-banner-on-pole": {
+    "id": "2070189026",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "large-furnace": {
+    "id": "-1992717673",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 300
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "large-photo-frame": {
+    "id": "1205084994",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "large-planter-box": {
+    "id": "1581210395",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "large-wood-box": {
+    "id": "833533164",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 125
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "large-wooden-sign": {
+    "id": "1153652756",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "locker": {
+    "id": "-110921842",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "mail-box": {
+    "id": "-586784898",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "medium-wooden-sign": {
+    "id": "-1819233322",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "mixing-table": {
+    "id": "1259919256",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "one-sided-town-sign-post": {
+    "id": "-1832422579",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "paper-map": {
+    "id": "696029452",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "pookie-bear": {
+    "id": "-1651220691",
+    "recycle": []
+  },
+  "portrait-photo-frame": {
+    "id": "1729712564",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "portrait-picture-frame": {
+    "id": "-1370759135",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "repair-bench": {
+    "id": "803222026",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 63
+      }
+    ]
+  },
+  "research-table": {
+    "id": "-1861522751",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "rug": {
+    "id": "-1985799200",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "rug-bear-skin": {
+    "id": "-1104881824",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "super-stocking": {
+    "id": "-465682601",
+    "recycle": []
+  },
+  "salvaged-shelves": {
+    "id": "1950721418",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "scarecrow": {
+    "id": "177226991",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "secret-lab-chair": {
+    "id": "567871954",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "single-sign-post": {
+    "id": "1542290441",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "skull-door-knocker": {
+    "id": "-216116642",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "skull-fire-pit": {
+    "id": "553887414",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "human-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "sleeping-bag": {
+    "id": "-1754948969",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "small-oil-refinery": {
+    "id": "-1293296287",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 125
+      }
+    ]
+  },
+  "small-planter-box": {
+    "id": "1903654061",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "tarp",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "small-stash": {
+    "id": "-369760990",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "small-stocking": {
+    "id": "1668858301",
+    "recycle": []
+  },
+  "small-wooden-sign": {
+    "id": "-1138208076",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "snowman": {
+    "id": "1629293099",
+    "recycle": [
+      {
+        "name": "charcoal",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "sofa": {
+    "id": "-555122905",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "sofa-pattern": {
+    "id": "782422285",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "spinning-wheel": {
+    "id": "-1100422738",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "stone-fireplace": {
+    "id": "-1535621066",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "survival-fish-trap": {
+    "id": "559147458",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "table": {
+    "id": "593465182",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "tall-picture-frame": {
+    "id": "121049755",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "tuna-can-lamp": {
+    "id": "-1478445584",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "empty-tuna-can",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "two-sided-hanging-sign": {
+    "id": "1205607945",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "two-sided-ornate-hanging-sign": {
+    "id": "-1647846966",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "two-sided-town-sign-post": {
+    "id": "826309791",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "vending-machine": {
+    "id": "198438816",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "water-barrel": {
+    "id": "-1863559151",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 125
+      },
+      {
+        "name": "tarp",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "water-purifier": {
+    "id": "2114754781",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "empty-propane-tank",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wood-storage-box": {
+    "id": "-180129657",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "workbench-level-1": {
+    "id": "1524187186",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "workbench-level-2": {
+    "id": "-41896755",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "workbench-level-3": {
+    "id": "-1607980696",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 500
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "xl-picture-frame": {
+    "id": "-996185386",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "xxl-picture-frame": {
+    "id": "98508942",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 88
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "animal-fat": {
+    "id": "-1018587433",
+    "recycle": []
+  },
+  "battery-small": {
+    "id": "609049394",
+    "recycle": []
+  },
+  "blue-dog-tags": {
+    "id": "1036321299",
+    "recycle": []
+  },
+  "bone-fragments": {
+    "id": "1719978075",
+    "recycle": []
+  },
+  "cctv-camera": {
+    "id": "634478325",
+    "recycle": [
+      {
+        "name": "tech-trash",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "charcoal": {
+    "id": "-1938052175",
+    "recycle": []
+  },
+  "cloth": {
+    "id": "-858312878",
+    "recycle": []
+  },
+  "coal-:(": {
+    "id": "204391461",
+    "recycle": [
+      {
+        "name": "crude-oil",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "crude-oil": {
+    "id": "-321733511",
+    "recycle": []
+  },
+  "diesel-fuel": {
+    "id": "1568388703",
+    "recycle": []
+  },
+  "dog-tag": {
+    "id": "1223900335",
+    "recycle": []
+  },
+  "empty-can-of-beans": {
+    "id": "1655979682",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "empty-tuna-can": {
+    "id": "-1557377697",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "explosives": {
+    "id": "-592016202",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "sulfur",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "fertilizer": {
+    "id": "-930193596",
+    "recycle": []
+  },
+  "gun-powder": {
+    "id": "-265876753",
+    "recycle": [
+      {
+        "name": "charcoal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "sulfur",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "high-quality-metal": {
+    "id": "317398316",
+    "recycle": []
+  },
+  "high-quality-metal-ore": {
+    "id": "-1982036270",
+    "recycle": []
+  },
+  "horse-dung": {
+    "id": "-1579932985",
+    "recycle": []
+  },
+  "human-skull": {
+    "id": "996293980",
+    "recycle": []
+  },
+  "leather": {
+    "id": "1381010055",
+    "recycle": []
+  },
+  "low-grade-fuel": {
+    "id": "-946369541",
+    "recycle": [
+      {
+        "name": "animal-fat",
+        "probability": 0.38,
+        "quantity": 1
+      },
+      {
+        "name": "cloth",
+        "probability": 0.13,
+        "quantity": 1
+      }
+    ]
+  },
+  "metal-fragments": {
+    "id": "69511070",
+    "recycle": []
+  },
+  "metal-ore": {
+    "id": "-4031221",
+    "recycle": []
+  },
+  "paper": {
+    "id": "-1779183908",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "plant-fiber": {
+    "id": "-804769727",
+    "recycle": []
+  },
+  "red-dog-tags": {
+    "id": "-602717596",
+    "recycle": []
+  },
+  "research-paper": {
+    "id": "-544317637",
+    "recycle": []
+  },
+  "salt-water": {
+    "id": "-277057363",
+    "recycle": []
+  },
+  "scrap": {
+    "id": "-932201673",
+    "recycle": []
+  },
+  "stones": {
+    "id": "-2099697608",
+    "recycle": []
+  },
+  "sulfur": {
+    "id": "-1581843485",
+    "recycle": []
+  },
+  "sulfur-ore": {
+    "id": "-1157596551",
+    "recycle": []
+  },
+  "targeting-computer": {
+    "id": "1523195708",
+    "recycle": [
+      {
+        "name": "tech-trash",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "water": {
+    "id": "-1779180711",
+    "recycle": []
+  },
+  "wolf-skull": {
+    "id": "2048317869",
+    "recycle": []
+  },
+  "wood": {
+    "id": "-151838493",
+    "recycle": []
+  },
+  "a-barrel-costume": {
+    "id": "-1215166612",
+    "recycle": []
+  },
+  "arctic-scientist-suit": {
+    "id": "1107575710",
+    "recycle": [
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "arctic-suit": {
+    "id": "-470439097",
+    "recycle": []
+  },
+  "bandana-mask": {
+    "id": "-702051347",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "bandit-guard-gear": {
+    "id": "-1622110948",
+    "recycle": [
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "baseball-cap": {
+    "id": "-1022661119",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "basic-horse-shoes": {
+    "id": "-1211268013",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "beenie-hat": {
+    "id": "1675639563",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "blue-jumpsuit": {
+    "id": "1601468620",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "bone-armor": {
+    "id": "1746956556",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 35
+      }
+    ]
+  },
+  "bone-helmet": {
+    "id": "-1903165497",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "boonie-hat": {
+    "id": "-23994173",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "boots": {
+    "id": "-1549739227",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "bucket-helmet": {
+    "id": "850280505",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 18
+      }
+    ]
+  },
+  "bunny-ears": {
+    "id": "-1004426654",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "bunny-hat": {
+    "id": "23391694",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "bunny-onesie": {
+    "id": "-1266045928",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 20
+      }
+    ]
+  },
+  "burlap-gloves": {
+    "id": "21402876",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "burlap-headwrap": {
+    "id": "1877339384",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "burlap-shirt": {
+    "id": "602741290",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "burlap-shoes": {
+    "id": "-761829530",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "burlap-trousers": {
+    "id": "1992974553",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "candle-hat": {
+    "id": "1714496074",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "card-movember-moustache": {
+    "id": "3380160",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "clatter-helmet": {
+    "id": "968019378",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 18
+      }
+    ]
+  },
+  "coffee-can-helmet": {
+    "id": "-803263829",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "crate-costume": {
+    "id": "1189981699",
+    "recycle": []
+  },
+  "diving-fins": {
+    "id": "296519935",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "diving-mask": {
+    "id": "-113413047",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 35
+      }
+    ]
+  },
+  "diving-tank": {
+    "id": "-2022172587",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "dragon-mask": {
+    "id": "-22883916",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wolf-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "egg-suit": {
+    "id": "-747743875",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "frog-boots": {
+    "id": "-1000573653",
+    "recycle": [
+      {
+        "name": "tarp",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "gas-mask": {
+    "id": "1659114910",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 18
+      }
+    ]
+  },
+  "ghost-costume": {
+    "id": "-1043618880",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "glowing-eyes": {
+    "id": "-690276911",
+    "recycle": []
+  },
+  "hazmat-suit": {
+    "id": "1266491000",
+    "recycle": [
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "headset": {
+    "id": "-1569700847",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "heavy-frankenstein-head": {
+    "id": "-297099594",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "heavy-frankenstein-legs": {
+    "id": "-2024549027",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "heavy-frankenstein-torso": {
+    "id": "1614528785",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "heavy-plate-helmet": {
+    "id": "1181207482",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "sheet-metal",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "heavy-plate-jacket": {
+    "id": "-1102429027",
+    "recycle": [
+      {
+        "name": "sheet-metal",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "heavy-plate-pants": {
+    "id": "-1778159885",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "sheet-metal",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "heavy-scientist-suit": {
+    "id": "-1772746857",
+    "recycle": [
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "hide-boots": {
+    "id": "794356786",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "hide-halterneck": {
+    "id": "3222790",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "hide-pants": {
+    "id": "1722154847",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "hide-poncho": {
+    "id": "980333378",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "hide-skirt": {
+    "id": "-1773144852",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "hide-vest": {
+    "id": "196700171",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "high-quality-horse-shoes": {
+    "id": "1989785143",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "hoodie": {
+    "id": "1751045826",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "horse-saddle": {
+    "id": "-1997543660",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "improvised-balaclava": {
+    "id": "-2012470695",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "jacket": {
+    "id": "-1163532624",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "jumpsuit": {
+    "id": "-97459906",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "leather-gloves": {
+    "id": "1366282552",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "light-frankenstein-head": {
+    "id": "-134959124",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "light-frankenstein-legs": {
+    "id": "106959911",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "light-frankenstein-torso": {
+    "id": "-1624770297",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "longsleeve-t-shirt": {
+    "id": "935692442",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "lumberjack-hoodie": {
+    "id": "-763071910",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "medium-frankenstein-head": {
+    "id": "-1732475823",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "medium-frankenstein-legs": {
+    "id": "835042040",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "medium-frankenstein-torso": {
+    "id": "1491753484",
+    "recycle": [
+      {
+        "name": "raw-human-meat",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "metal-chest-plate": {
+    "id": "1110385766",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "metal-facemask": {
+    "id": "-194953424",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "miners-hat": {
+    "id": "-1539025626",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "movember-moustache": {
+    "id": "-2047081330",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "mummy-suit": {
+    "id": "277730763",
+    "recycle": []
+  },
+  "nest-hat": {
+    "id": "1081315464",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wolf-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "night-vision-goggles": {
+    "id": "-1518883088",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "tech-trash",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "ninja-suit": {
+    "id": "-1506417026",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "ox-mask": {
+    "id": "1315082560",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wolf-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "pants": {
+    "id": "237239288",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "party-hat": {
+    "id": "-575744869",
+    "recycle": []
+  },
+  "purple-sunglasses": {
+    "id": "20489901",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "rat-mask": {
+    "id": "271048478",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wolf-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "reindeer-antlers": {
+    "id": "-324675402",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "riot-helmet": {
+    "id": "671063303",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "road-sign-jacket": {
+    "id": "-2002277461",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "road-signs",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "road-sign-kilt": {
+    "id": "1850456855",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "road-signs",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "roadsign-gloves": {
+    "id": "-699558439",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "road-signs",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "roadsign-horse-armor": {
+    "id": "60528587",
+    "recycle": [
+      {
+        "name": "road-signs",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "saddle-bag": {
+    "id": "1400460850",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "santa-beard": {
+    "id": "2126889441",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "santa-hat": {
+    "id": "-575483084",
+    "recycle": []
+  },
+  "scarecrow-suit": {
+    "id": "273951840",
+    "recycle": []
+  },
+  "scarecrow-wrap": {
+    "id": "809942731",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "scientist-suit": {
+    "id": "-253079493",
+    "recycle": [
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "shirt": {
+    "id": "-2025184684",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "shorts": {
+    "id": "-1695367501",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "snow-jacket": {
+    "id": "-48090175",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "snowman-helmet": {
+    "id": "-842267147",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "sunglasses": {
+    "id": "352321488",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "surgeon-scrubs": {
+    "id": "-1785231475",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "t-shirt": {
+    "id": "223891266",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "tactical-gloves": {
+    "id": "-1108136649",
+    "recycle": [
+      {
+        "name": "leather",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "sewing-kit",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "tank-top": {
+    "id": "1608640313",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "tiger-mask": {
+    "id": "709206314",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wolf-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wetsuit": {
+    "id": "-1101924344",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "wolf-headdress": {
+    "id": "-1478212975",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wolf-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wood-armor-helmet": {
+    "id": "-2094954543",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "wood-armor-pants": {
+    "id": "832133926",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "rope",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wood-chestplate": {
+    "id": "418081930",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "rope",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wooden-horse-armor": {
+    "id": "1659447559",
+    "recycle": [
+      {
+        "name": "rope",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 150
+      }
+    ]
+  },
+  "binoculars": {
+    "id": "-1262185308",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "birthday-cake": {
+    "id": "1973165031",
+    "recycle": []
+  },
+  "camera": {
+    "id": "-1316706473",
+    "recycle": []
+  },
+  "chainsaw": {
+    "id": "1104520648",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "metal-blade",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "fishing-tackle": {
+    "id": "-1707425764",
+    "recycle": []
+  },
+  "flare": {
+    "id": "304481038",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "flashlight": {
+    "id": "-196667575",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "garry's-mod-tool-gun": {
+    "id": "1803831286",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "geiger-counter": {
+    "id": "999690781",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "hammer": {
+    "id": "200773292",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "handmade-fishing-rod": {
+    "id": "1569882109",
+    "recycle": [
+      {
+        "name": "rope",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "hatchet": {
+    "id": "-1252059217",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "instant-camera": {
+    "id": "-2001260025",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "jackhammer": {
+    "id": "1488979457",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 30
+      },
+      {
+        "name": "metal-blade",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "pickaxe": {
+    "id": "-1302129395",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 63
+      }
+    ]
+  },
+  "rf-transmitter": {
+    "id": "596469572",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "rock": {
+    "id": "963906841",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "salvaged-axe": {
+    "id": "-262590403",
+    "recycle": [
+      {
+        "name": "metal-blade",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "salvaged-hammer": {
+    "id": "-1506397857",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "salvaged-icepick": {
+    "id": "-1780802565",
+    "recycle": [
+      {
+        "name": "metal-blade",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "satchel-charge": {
+    "id": "-1878475007",
+    "recycle": []
+  },
+  "smoke-grenade": {
+    "id": "1263920163",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 18
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "spray-can": {
+    "id": "-596876839",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "stone-hatchet": {
+    "id": "-1583967946",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "stone-pickaxe": {
+    "id": "171931394",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "supply-signal": {
+    "id": "1397052267",
+    "recycle": []
+  },
+  "survey-charge": {
+    "id": "1975934948",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "timed-explosive-charge": {
+    "id": "1248356124",
+    "recycle": [
+      {
+        "name": "explosives",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "tech-trash",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "torch": {
+    "id": "795236088",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "cloth",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "water-bucket": {
+    "id": "1424075905",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "anti-radiation-pills": {
+    "id": "-1432674913",
+    "recycle": []
+  },
+  "bandage": {
+    "id": "-2072273936",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "blood": {
+    "id": "1776460938",
+    "recycle": []
+  },
+  "large-medkit": {
+    "id": "254522515",
+    "recycle": [
+      {
+        "name": "medical-syringe",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "medical-syringe": {
+    "id": "1079279582",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "adv.-anti-rad-tea": {
+    "id": "-1729415579",
+    "recycle": []
+  },
+  "advanced-healing-tea": {
+    "id": "-2123125470",
+    "recycle": []
+  },
+  "advanced-max-health-tea": {
+    "id": "603811464",
+    "recycle": []
+  },
+  "advanced-ore-tea": {
+    "id": "2063916636",
+    "recycle": []
+  },
+  "advanced-rad.-removal-tea": {
+    "id": "2021351233",
+    "recycle": []
+  },
+  "advanced-scrap-tea": {
+    "id": "524678627",
+    "recycle": []
+  },
+  "advanced-wood-tea": {
+    "id": "-541206665",
+    "recycle": []
+  },
+  "anchovy": {
+    "id": "342438846",
+    "recycle": []
+  },
+  "anti-rad-tea": {
+    "id": "-487356515",
+    "recycle": []
+  },
+  "apple": {
+    "id": "1548091822",
+    "recycle": []
+  },
+  "basic-healing-tea": {
+    "id": "-929092070",
+    "recycle": []
+  },
+  "basic-max-health-tea": {
+    "id": "-1184406448",
+    "recycle": []
+  },
+  "basic-ore-tea": {
+    "id": "1480022580",
+    "recycle": []
+  },
+  "basic-scrap-tea": {
+    "id": "263834859",
+    "recycle": []
+  },
+  "basic-wood-tea": {
+    "id": "-649128577",
+    "recycle": []
+  },
+  "black-berry": {
+    "id": "1771755747",
+    "recycle": []
+  },
+  "black-berry-clone": {
+    "id": "122783240",
+    "recycle": []
+  },
+  "black-berry-seed": {
+    "id": "1911552868",
+    "recycle": []
+  },
+  "black-raspberries": {
+    "id": "1931713481",
+    "recycle": []
+  },
+  "blue-berry": {
+    "id": "1112162468",
+    "recycle": []
+  },
+  "blue-berry-clone": {
+    "id": "838831151",
+    "recycle": []
+  },
+  "blue-berry-seed": {
+    "id": "803954639",
+    "recycle": []
+  },
+  "blueberries": {
+    "id": "-586342290",
+    "recycle": []
+  },
+  "burnt-bear-meat": {
+    "id": "-989755543",
+    "recycle": []
+  },
+  "burnt-chicken": {
+    "id": "1973684065",
+    "recycle": []
+  },
+  "burnt-deer-meat": {
+    "id": "-78533081",
+    "recycle": []
+  },
+  "burnt-horse-meat": {
+    "id": "1917703890",
+    "recycle": []
+  },
+  "burnt-human-meat": {
+    "id": "-682687162",
+    "recycle": []
+  },
+  "burnt-pork": {
+    "id": "1391703481",
+    "recycle": []
+  },
+  "burnt-wolf-meat": {
+    "id": "1827479659",
+    "recycle": []
+  },
+  "cactus-flesh": {
+    "id": "1783512007",
+    "recycle": []
+  },
+  "can-of-beans": {
+    "id": "-700591459",
+    "recycle": []
+  },
+  "can-of-tuna": {
+    "id": "-1941646328",
+    "recycle": []
+  },
+  "candy-cane": {
+    "id": "1121925526",
+    "recycle": []
+  },
+  "catfish": {
+    "id": "-587989372",
+    "recycle": []
+  },
+  "chocolate-bar": {
+    "id": "363467698",
+    "recycle": []
+  },
+  "cooked-bear-meat": {
+    "id": "1873897110",
+    "recycle": []
+  },
+  "cooked-chicken": {
+    "id": "-1848736516",
+    "recycle": []
+  },
+  "cooked-deer-meat": {
+    "id": "-1509851560",
+    "recycle": []
+  },
+  "cooked-fish": {
+    "id": "1668129151",
+    "recycle": []
+  },
+  "cooked-horse-meat": {
+    "id": "-1162759543",
+    "recycle": []
+  },
+  "cooked-human-meat": {
+    "id": "1536610005",
+    "recycle": []
+  },
+  "cooked-pork": {
+    "id": "-242084766",
+    "recycle": []
+  },
+  "cooked-wolf-meat": {
+    "id": "813023040",
+    "recycle": []
+  },
+  "corn": {
+    "id": "1367190888",
+    "recycle": []
+  },
+  "corn-clone": {
+    "id": "-778875547",
+    "recycle": []
+  },
+  "corn-seed": {
+    "id": "998894949",
+    "recycle": []
+  },
+  "granola-bar": {
+    "id": "-746030907",
+    "recycle": []
+  },
+  "green-berry": {
+    "id": "858486327",
+    "recycle": []
+  },
+  "green-berry-clone": {
+    "id": "-1305326964",
+    "recycle": []
+  },
+  "green-berry-seed": {
+    "id": "-1776128552",
+    "recycle": []
+  },
+  "grub": {
+    "id": "-568419968",
+    "recycle": []
+  },
+  "hemp-clone": {
+    "id": "-886280491",
+    "recycle": []
+  },
+  "hemp-seed": {
+    "id": "-237809779",
+    "recycle": []
+  },
+  "herring": {
+    "id": "-1698937385",
+    "recycle": []
+  },
+  "minnows": {
+    "id": "-542577259",
+    "recycle": []
+  },
+  "mushroom": {
+    "id": "-1962971928",
+    "recycle": []
+  },
+  "orange-roughy": {
+    "id": "-1904821376",
+    "recycle": []
+  },
+  "pickles": {
+    "id": "286193827",
+    "recycle": []
+  },
+  "potato": {
+    "id": "-2086926071",
+    "recycle": []
+  },
+  "potato-clone": {
+    "id": "1512054436",
+    "recycle": []
+  },
+  "potato-seed": {
+    "id": "-2084071424",
+    "recycle": []
+  },
+  "pumpkin": {
+    "id": "-567909622",
+    "recycle": []
+  },
+  "pumpkin-plant-clone": {
+    "id": "1898094925",
+    "recycle": []
+  },
+  "pumpkin-seed": {
+    "id": "-1511285251",
+    "recycle": []
+  },
+  "pure-anti-rad-tea": {
+    "id": "-33009419",
+    "recycle": []
+  },
+  "pure-healing-tea": {
+    "id": "-1677315902",
+    "recycle": []
+  },
+  "pure-max-health-tea": {
+    "id": "1712261904",
+    "recycle": []
+  },
+  "pure-ore-tea": {
+    "id": "1729374708",
+    "recycle": []
+  },
+  "pure-rad.-removal-tea": {
+    "id": "1905387657",
+    "recycle": []
+  },
+  "pure-scrap-tea": {
+    "id": "2024467711",
+    "recycle": []
+  },
+  "pure-wood-tea": {
+    "id": "-557539629",
+    "recycle": []
+  },
+  "rad.-removal-tea": {
+    "id": "-496584751",
+    "recycle": []
+  },
+  "raw-bear-meat": {
+    "id": "-1520560807",
+    "recycle": []
+  },
+  "raw-chicken-breast": {
+    "id": "-1440987069",
+    "recycle": []
+  },
+  "raw-deer-meat": {
+    "id": "1422530437",
+    "recycle": []
+  },
+  "raw-fish": {
+    "id": "989925924",
+    "recycle": []
+  },
+  "raw-horse-meat": {
+    "id": "-1130350864",
+    "recycle": []
+  },
+  "raw-human-meat": {
+    "id": "-1709878924",
+    "recycle": []
+  },
+  "raw-pork": {
+    "id": "621915341",
+    "recycle": []
+  },
+  "raw-wolf-meat": {
+    "id": "-395377963",
+    "recycle": []
+  },
+  "red-berry": {
+    "id": "1272194103",
+    "recycle": []
+  },
+  "red-berry-clone": {
+    "id": "2133269020",
+    "recycle": []
+  },
+  "red-berry-seed": {
+    "id": "830839496",
+    "recycle": []
+  },
+  "rotten-apple": {
+    "id": "352130972",
+    "recycle": []
+  },
+  "salmon": {
+    "id": "-851988960",
+    "recycle": []
+  },
+  "sardine": {
+    "id": "-1654233406",
+    "recycle": []
+  },
+  "small-shark": {
+    "id": "-1768880890",
+    "recycle": []
+  },
+  "small-trout": {
+    "id": "-1878764039",
+    "recycle": []
+  },
+  "small-water-bottle": {
+    "id": "-1039528932",
+    "recycle": []
+  },
+  "spoiled-chicken": {
+    "id": "-751151717",
+    "recycle": []
+  },
+  "spoiled-human-meat": {
+    "id": "1272768630",
+    "recycle": []
+  },
+  "spoiled-wolf-meat": {
+    "id": "-1167031859",
+    "recycle": []
+  },
+  "vodka-bottle": {
+    "id": "755224797",
+    "recycle": []
+  },
+  "water-jug": {
+    "id": "-119235651",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "white-berry": {
+    "id": "854447607",
+    "recycle": []
+  },
+  "white-berry-clone": {
+    "id": "1533551194",
+    "recycle": []
+  },
+  "white-berry-seed": {
+    "id": "-992286106",
+    "recycle": []
+  },
+  "worm": {
+    "id": "1770475779",
+    "recycle": []
+  },
+  "yellow-berry": {
+    "id": "1660145984",
+    "recycle": []
+  },
+  "yellow-berry-clone": {
+    "id": "390728933",
+    "recycle": []
+  },
+  "yellow-berry-seed": {
+    "id": "-520133715",
+    "recycle": []
+  },
+  "yellow-perch": {
+    "id": "680234026",
+    "recycle": []
+  },
+  "12-gauge-buckshot": {
+    "id": "-1685290200",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "12-gauge-incendiary-shell": {
+    "id": "-1036635990",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "sulfur",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "12-gauge-slug": {
+    "id": "-727717969",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "40mm-he-grenade": {
+    "id": "349762871",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.25,
+        "quantity": 1
+      },
+      {
+        "name": "explosives",
+        "probability": 0.25,
+        "quantity": 1
+      }
+    ]
+  },
+  "40mm-shotgun-round": {
+    "id": "1055319033",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "40mm-smoke-grenade": {
+    "id": "915408809",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.25,
+        "quantity": 1
+      }
+    ]
+  },
+  "5.56-rifle-ammo": {
+    "id": "-1211166256",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "bone-arrow": {
+    "id": "215754713",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "explosive-5.56-rifle-ammo": {
+    "id": "-1321651331",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "sulfur",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "fire-arrow": {
+    "id": "14241751",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "cloth",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "hv-5.56-rifle-ammo": {
+    "id": "1712070256",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "hv-pistol-ammo": {
+    "id": "-1691396643",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 4
+      }
+    ]
+  },
+  "handmade-shell": {
+    "id": "588596902",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "high-velocity-arrow": {
+    "id": "-1023065463",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "high-velocity-rocket": {
+    "id": "-1841918730",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "incendiary-5.56-rifle-ammo": {
+    "id": "605467368",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "sulfur",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "incendiary-pistol-bullet": {
+    "id": "51984655",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "sulfur",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "incendiary-rocket": {
+    "id": "1638322904",
+    "recycle": [
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 125
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 125
+      },
+      {
+        "name": "explosives",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "mlrs-rocket": {
+    "id": "-1843426638",
+    "recycle": [
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "nailgun-nails": {
+    "id": "-2097376851",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "pistol-bullet": {
+    "id": "785728077",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "rocket": {
+    "id": "-742865266",
+    "recycle": [
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "explosives",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "sam-ammo": {
+    "id": "-384243979",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.8,
+        "quantity": 1
+      }
+    ]
+  },
+  "smoke-rocket-wip!!!!": {
+    "id": "-17123659",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 40
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "speargun-spear": {
+    "id": "-1800345240",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 9
+      }
+    ]
+  },
+  "torpedo": {
+    "id": "-1671551935",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.17,
+        "quantity": 1
+      }
+    ]
+  },
+  "wooden-arrow": {
+    "id": "-1234735557",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 7
+      },
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "flame-turret": {
+    "id": "528668503",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "empty-propane-tank",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "homemade-landmine": {
+    "id": "-1663759755",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "sam-site": {
+    "id": "-1009359066",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "shotgun-trap": {
+    "id": "352499047",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 125
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "rope",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "snap-trap": {
+    "id": "-582782051",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wooden-floor-spikes": {
+    "id": "-92759291",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "blue-keycard": {
+    "id": "-484206264",
+    "recycle": []
+  },
+  "bronze-egg": {
+    "id": "844440409",
+    "recycle": []
+  },
+  "captain's-log": {
+    "id": "1230691307",
+    "recycle": []
+  },
+  "car-key": {
+    "id": "946662961",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "coffin": {
+    "id": "573676040",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 400
+      }
+    ]
+  },
+  "cursed-cauldron": {
+    "id": "1242522330",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "decorative-baubels": {
+    "id": "-1667224349",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "decorative-gingerbread-men": {
+    "id": "1686524871",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "decorative-pinecones": {
+    "id": "-129230242",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "decorative-plastic-candy-canes": {
+    "id": "-209869746",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "decorative-tinsel": {
+    "id": "2106561762",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "door-key": {
+    "id": "-1112793865",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "egg-basket": {
+    "id": "1856217390",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "fogger-3000": {
+    "id": "-1973785141",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "giant-candy-decor": {
+    "id": "-695124222",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "giant-lollipop-decor": {
+    "id": "282103175",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "gold-egg": {
+    "id": "-1002156085",
+    "recycle": []
+  },
+  "gravestone": {
+    "id": "809199956",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 200
+      }
+    ]
+  },
+  "graveyard-fence": {
+    "id": "-1679267738",
+    "recycle": [
+      {
+        "name": "stones",
+        "probability": 1,
+        "quantity": 125
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "green-keycard": {
+    "id": "37122747",
+    "recycle": []
+  },
+  "hab-repair": {
+    "id": "-1759188988",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 150
+      }
+    ]
+  },
+  "halloween-candy": {
+    "id": "-888153050",
+    "recycle": []
+  },
+  "large-candle-set": {
+    "id": "-489848205",
+    "recycle": [
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "large-loot-bag": {
+    "id": "479292118",
+    "recycle": []
+  },
+  "large-present": {
+    "id": "-1622660759",
+    "recycle": []
+  },
+  "mc-repair": {
+    "id": "1426574435",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 250
+      }
+    ]
+  },
+  "medium-loot-bag": {
+    "id": "1899610628",
+    "recycle": []
+  },
+  "medium-present": {
+    "id": "756517185",
+    "recycle": []
+  },
+  "note": {
+    "id": "1414245162",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "painted-egg": {
+    "id": "-126305173",
+    "recycle": []
+  },
+  "photograph": {
+    "id": "62577426",
+    "recycle": []
+  },
+  "pumpkin-bucket": {
+    "id": "1346158228",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "red-keycard": {
+    "id": "-1880870149",
+    "recycle": []
+  },
+  "rustige-egg-blue": {
+    "id": "-173268132",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "rustige-egg-green": {
+    "id": "-173268125",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "rustige-egg-ivory": {
+    "id": "-173268126",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "rustige-egg-purple": {
+    "id": "-173268131",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "rustige-egg-red": {
+    "id": "-173268129",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "scraptransporthelirepair": {
+    "id": "-1884328185",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 750
+      }
+    ]
+  },
+  "sickle": {
+    "id": "-1368584029",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "silver-egg": {
+    "id": "1757265204",
+    "recycle": []
+  },
+  "small-candle-set": {
+    "id": "-2058362263",
+    "recycle": [
+      {
+        "name": "animal-fat",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "small-loot-bag": {
+    "id": "1319617282",
+    "recycle": []
+  },
+  "small-present": {
+    "id": "-722241321",
+    "recycle": []
+  },
+  "snow-machine": {
+    "id": "1358643074",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 63
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "spider-webs": {
+    "id": "882559853",
+    "recycle": []
+  },
+  "spooky-speaker": {
+    "id": "1885488976",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 200
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "star-tree-topper": {
+    "id": "-1331212963",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "strobe-light": {
+    "id": "2104517339",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "tree-lights": {
+    "id": "1723747470",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "wooden-cross": {
+    "id": "699075597",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 200
+      }
+    ]
+  },
+  "armored-cockpit-vehicle-module": {
+    "id": "1874610722",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "armored-passenger-vehicle-module": {
+    "id": "-1615281216",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "bleach": {
+    "id": "1553078977",
+    "recycle": []
+  },
+  "camper-vehicle-module": {
+    "id": "-1040518150",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 88
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 63
+      }
+    ]
+  },
+  "cockpit-vehicle-module": {
+    "id": "-1501451746",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "cockpit-with-engine-vehicle-module": {
+    "id": "170758448",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "duct-tape": {
+    "id": "1401987718",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "glue",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "electric-fuse": {
+    "id": "-629028935",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 20
+      }
+    ]
+  },
+  "empty-propane-tank": {
+    "id": "-1673693549",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "engine-vehicle-module": {
+    "id": "1559779253",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "flatbed-vehicle-module": {
+    "id": "-1880231361",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "fuel-tank-vehicle-module": {
+    "id": "1186655046",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 88
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "gears": {
+    "id": "479143914",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "glue": {
+    "id": "-1899491405",
+    "recycle": []
+  },
+  "high-quality-carburetor": {
+    "id": "656371026",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 85
+      }
+    ]
+  },
+  "high-quality-crankshaft": {
+    "id": "1158340332",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 60
+      }
+    ]
+  },
+  "high-quality-pistons": {
+    "id": "1883981800",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 60
+      }
+    ]
+  },
+  "high-quality-spark-plugs": {
+    "id": "1072924620",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 60
+      }
+    ]
+  },
+  "high-quality-valves": {
+    "id": "-1802083073",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 60
+      }
+    ]
+  },
+  "large-flatbed-vehicle-module": {
+    "id": "-1693832478",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "low-quality-carburetor": {
+    "id": "656371028",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 20
+      }
+    ]
+  },
+  "low-quality-crankshaft": {
+    "id": "1158340334",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "low-quality-pistons": {
+    "id": "1883981798",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "low-quality-spark-plugs": {
+    "id": "-89874794",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "low-quality-valves": {
+    "id": "1330084809",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "mlrs-aiming-module": {
+    "id": "343045591",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "tech-trash",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "medium-quality-carburetor": {
+    "id": "656371027",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "medium-quality-crankshaft": {
+    "id": "1158340331",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 35
+      }
+    ]
+  },
+  "medium-quality-pistons": {
+    "id": "1883981801",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 35
+      }
+    ]
+  },
+  "medium-quality-spark-plugs": {
+    "id": "-493159321",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 35
+      }
+    ]
+  },
+  "medium-quality-valves": {
+    "id": "926800282",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 35
+      }
+    ]
+  },
+  "metal-blade": {
+    "id": "1882709339",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "metal-pipe": {
+    "id": "95950017",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "metal-spring": {
+    "id": "-1021495308",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "passenger-vehicle-module": {
+    "id": "895374329",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 88
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 63
+      }
+    ]
+  },
+  "rear-seats-vehicle-module": {
+    "id": "1376065505",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "rifle-body": {
+    "id": "176787552",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "road-signs": {
+    "id": "1199391518",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "rope": {
+    "id": "1414245522",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "smg-body": {
+    "id": "1230323789",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "semi-automatic-body": {
+    "id": "573926264",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "sewing-kit": {
+    "id": "1234880403",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "rope",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "sheet-metal": {
+    "id": "-1994909036",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 8
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "sticks": {
+    "id": "642482233",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "storage-vehicle-module": {
+    "id": "268565518",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 63
+      }
+    ]
+  },
+  "tarp": {
+    "id": "2019042823",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "taxi-vehicle-module": {
+    "id": "-626174997",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 88
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 63
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "tech-trash": {
+    "id": "73681876",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 20
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "and-switch": {
+    "id": "1171735914",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "audio-alarm": {
+    "id": "2100007442",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "auto-turret": {
+    "id": "-2139580305",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "targeting-computer",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "cctv-camera",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "blocker": {
+    "id": "-690968985",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "button": {
+    "id": "-1778897469",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "cable-tunnel": {
+    "id": "1835946060",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "ceiling-light": {
+    "id": "1142993169",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "computer-station": {
+    "id": "-1588628467",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "targeting-computer",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "rf-broadcaster",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "rf-receiver",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "counter": {
+    "id": "-216999575",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "deluxe-christmas-lights": {
+    "id": "-151387974",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "door-controller": {
+    "id": "-502177121",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "electric-heater": {
+    "id": "-784870360",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "electrical-branch": {
+    "id": "-1448252298",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "elevator": {
+    "id": "1177596584",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "flasher-light": {
+    "id": "-939424778",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 60
+      }
+    ]
+  },
+  "fluid-combiner": {
+    "id": "-265292885",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "fluid-splitter": {
+    "id": "-1166712463",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "fluid-switch-&-pump": {
+    "id": "443432036",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "green-industrial-wall-light": {
+    "id": "1268178466",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "hbhf-sensor": {
+    "id": "-1507239837",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "hose-tool": {
+    "id": "363163265",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "igniter": {
+    "id": "-44876289",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "industrial-wall-light": {
+    "id": "1623701499",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "large-animated-neon-sign": {
+    "id": "1643667218",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 175
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "large-neon-sign": {
+    "id": "866332017",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 125
+      }
+    ]
+  },
+  "large-rechargeable-battery": {
+    "id": "553270375",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "tech-trash",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "large-solar-panel": {
+    "id": "2090395347",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "laser-detector": {
+    "id": "-798293154",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "medium-animated-neon-sign": {
+    "id": "42535890",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "medium-neon-sign": {
+    "id": "-1423304443",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "medium-rechargeable-battery": {
+    "id": "2023888403",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "memory-cell": {
+    "id": "-746647361",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "modular-car-lift": {
+    "id": "1696050067",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "or-switch": {
+    "id": "-1286302544",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "powered-water-purifier": {
+    "id": "-365097295",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 150
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "pressure-pad": {
+    "id": "-2049214035",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "metal-spring",
+        "probability": 0.5,
+        "quantity": 1
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "rand-switch": {
+    "id": "492357192",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "rf-broadcaster": {
+    "id": "-1044468317",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "rf-pager": {
+    "id": "-566907190",
+    "recycle": [
+      {
+        "name": "scrap",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "rf-receiver": {
+    "id": "888415708",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "reactive-target": {
+    "id": "-1736356576",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "red-industrial-wall-light": {
+    "id": "-1160621614",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "root-combiner": {
+    "id": "-458565393",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "search-light": {
+    "id": "2087678962",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      }
+    ]
+  },
+  "simple-light": {
+    "id": "-282113991",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "siren-light": {
+    "id": "762289806",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 60
+      }
+    ]
+  },
+  "small-generator": {
+    "id": "1849887541",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "small-neon-sign": {
+    "id": "1305578813",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 75
+      }
+    ]
+  },
+  "small-rechargeable-battery": {
+    "id": "-692338819",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "smart-alarm": {
+    "id": "-695978112",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "smart-switch": {
+    "id": "988652725",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "splitter": {
+    "id": "-563624462",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "sprinkler": {
+    "id": "-781014061",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "storage-monitor": {
+    "id": "1149964039",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "switch": {
+    "id": "1951603367",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "tesla-coil": {
+    "id": "1371909803",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "test-generator": {
+    "id": "-295829489",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "metal-pipe",
+        "probability": 1,
+        "quantity": 1
+      },
+      {
+        "name": "electric-fuse",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "timer": {
+    "id": "665332906",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "water-pump": {
+    "id": "-1284169891",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 125
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "gears",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "wind-turbine": {
+    "id": "-1819763926",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 250
+      },
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "gears",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "sheet-metal",
+        "probability": 1,
+        "quantity": 2
+      }
+    ]
+  },
+  "wire-tool": {
+    "id": "-144417939",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  "xor-switch": {
+    "id": "1293102274",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "above-ground-pool": {
+    "id": "1840570710",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "tarp",
+        "probability": 1,
+        "quantity": 2
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 250
+      }
+    ]
+  },
+  "acoustic-guitar": {
+    "id": "-2124352573",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "beach-chair": {
+    "id": "-321431890",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "beach-parasol": {
+    "id": "-1621539785",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "beach-table": {
+    "id": "657352755",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "beach-towel": {
+    "id": "-8312704",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "blue-boomer": {
+    "id": "1744298439",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "blue-roman-candle": {
+    "id": "-515830359",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "boogie-board": {
+    "id": "-1478094705",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "tarp",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "boom-box": {
+    "id": "-1113501606",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 10
+      }
+    ]
+  },
+  "canbourine": {
+    "id": "-1379036069",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "cassette-long": {
+    "id": "476066818",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "cassette-medium": {
+    "id": "-912398867",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "cassette-short": {
+    "id": "1523403414",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "cassette-recorder": {
+    "id": "-1530414568",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "champagne-boomer": {
+    "id": "1324203999",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 15
+      }
+    ]
+  },
+  "connected-speaker": {
+    "id": "968421290",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "cowbell": {
+    "id": "-1049881973",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 18
+      }
+    ]
+  },
+  "disco-ball": {
+    "id": "1895235349",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "disco-floor": {
+    "id": "286648290",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "firecracker-string": {
+    "id": "-1961560162",
+    "recycle": [
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "green-boomer": {
+    "id": "-656349006",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "green-roman-candle": {
+    "id": "-1306288356",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "inner-tube": {
+    "id": "-697981032",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      },
+      {
+        "name": "tarp",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "jerry-can-guitar": {
+    "id": "-979951147",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "junkyard-drum-kit": {
+    "id": "-1330640246",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "laser-light": {
+    "id": "853471967",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "megaphone": {
+    "id": "-583379016",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "microphone-stand": {
+    "id": "39600618",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "mobile-phone": {
+    "id": "-20045316",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 63
+      }
+    ]
+  },
+  "new-year-gong": {
+    "id": "-961457160",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  },
+  "orange-boomer": {
+    "id": "-7270019",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "paddling-pool": {
+    "id": "-733625651",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "tarp",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "pan-flute": {
+    "id": "-2040817543",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "pattern-boomer": {
+    "id": "-379734527",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "plumber's-trumpet": {
+    "id": "273172220",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "portable-boom-box": {
+    "id": "576509618",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 60
+      }
+    ]
+  },
+  "red-boomer": {
+    "id": "-1553999294",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "red-roman-candle": {
+    "id": "-1486461488",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "red-volcano-firework": {
+    "id": "-454370658",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "shovel-bass": {
+    "id": "-2107018088",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 38
+      }
+    ]
+  },
+  "skull-spikes": {
+    "id": "-1073015016",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 75
+      },
+      {
+        "name": "human-skull",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "skull-trophy": {
+    "id": "-769647921",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      }
+    ]
+  },
+  "sky-lantern": {
+    "id": "1819863051",
+    "recycle": [
+      {
+        "name": "cloth",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 3
+      }
+    ]
+  },
+  "sled": {
+    "id": "-135252633",
+    "recycle": [
+      {
+        "name": "high-quality-metal",
+        "probability": 1,
+        "quantity": 5
+      },
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 250
+      }
+    ]
+  },
+  "sound-light": {
+    "id": "-343857907",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "sousaphone": {
+    "id": "1784406797",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "telephone": {
+    "id": "1234878710",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 25
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      },
+      {
+        "name": "tech-trash",
+        "probability": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "violet-boomer": {
+    "id": "-280223496",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 15
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "violet-roman-candle": {
+    "id": "-99886070",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 13
+      },
+      {
+        "name": "low-grade-fuel",
+        "probability": 1,
+        "quantity": 5
+      }
+    ]
+  },
+  "violet-volcano-firework": {
+    "id": "-1538109120",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "wheelbarrow-piano": {
+    "id": "1272430949",
+    "recycle": [
+      {
+        "name": "wood",
+        "probability": 1,
+        "quantity": 100
+      },
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 50
+      }
+    ]
+  },
+  "white-volcano-firework": {
+    "id": "261913429",
+    "recycle": [
+      {
+        "name": "metal-fragments",
+        "probability": 1,
+        "quantity": 10
+      },
+      {
+        "name": "gun-powder",
+        "probability": 1,
+        "quantity": 8
+      }
+    ]
+  },
+  "wrapped-gift": {
+    "id": "204970153",
+    "recycle": []
+  },
+  "wrapping-paper": {
+    "id": "1094293920",
+    "recycle": []
+  },
+  "xylobone": {
+    "id": "-211235948",
+    "recycle": [
+      {
+        "name": "bone-fragments",
+        "probability": 1,
+        "quantity": 25
+      }
+    ]
+  }
+}
