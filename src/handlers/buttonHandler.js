@@ -559,29 +559,17 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        if (!instance.serverList[rustplus.guildId].switchGroups.hasOwnProperty(id)) {
+        if (!instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(id)) {
             client.log('ERROR', 'Switch group does not exist.', 'error')
             return;
         }
 
-        if (instance.serverList[rustplus.guildId].switchGroups !== rustplus.serverId) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer the interaction.', 'error')
-            }
+        if (instance.serverList[rustplus.serverId].switchGroups[id].serverId !== rustplus.serverId) {
             client.log('ERROR', 'Smart Switch Group is not part of the connected rustplus instance.', 'error');
             return;
         }
         else {
             if (!rustplus.connected) {
-                try {
-                    interaction.deferUpdate();
-                }
-                catch (e) {
-                    client.log('ERROR', 'Could not defer the interaction.', 'error')
-                }
                 client.log('ERROR', 'Rustplus is not connected, cannot use  the Smart Switch Group...', 'error');
                 return;
             }
