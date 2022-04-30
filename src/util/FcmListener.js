@@ -258,6 +258,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         id: entityId,
         type: null,
         decaying: false,
+        upkeep: null,
         everyone: false,
         inGame: true,
         image: 'storage_monitor.png',

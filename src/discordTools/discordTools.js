@@ -794,11 +794,15 @@ module.exports = {
             let upkeep = null;
             if (seconds === 0) {
                 upkeep = ':warning:\`DECAYING\`:warning:';
+                instance.storageMonitors[id].upkeep = 'DECAYING';
             }
             else {
-                upkeep = `\`${Timer.secondsToFullScale(seconds)}\``;
+                let upkeepTime = Timer.secondsToFullScale(seconds);
+                upkeep = `\`${upkeepTime}\``;
+                instance.storageMonitors[id].upkeep = `${upkeepTime}`;
             }
             description += `\n**Upkeep** ${upkeep}`;
+            Client.client.writeInstanceFile(guildId, instance);
         }
 
         let itemName = '';
@@ -864,10 +868,12 @@ module.exports = {
     },
 
     sendStorageMonitorMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
+        let instance = Client.client.readInstanceFile(guildId);
 
         const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
         const embed = module.exports.getStorageMonitorEmbed(guildId, id);
+        instance = Client.client.readInstanceFile(guildId);
+
         let buttons = null;
         if (instance.storageMonitors[id].type === 'toolcupboard') {
             buttons = module.exports.getStorageMonitorToolCupboardButtons(guildId, id);

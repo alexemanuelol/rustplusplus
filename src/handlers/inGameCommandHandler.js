@@ -74,6 +74,9 @@ module.exports = {
         else if (command === `${rustplus.generalSettings.prefix}unmute`) {
             module.exports.commandUnmute(rustplus, client);
         }
+        else if (command === `${rustplus.generalSettings.prefix}upkeep`) {
+            module.exports.commandUpkeep(rustplus, client);
+        }
         else if (command === `${rustplus.generalSettings.prefix}wipe`) {
             module.exports.commandWipe(rustplus);
         }
@@ -905,6 +908,20 @@ module.exports = {
 
         let str = `In-Game chat unmuted.`;
         rustplus.printCommandOutput(str);
+    },
+
+    commandUpkeep: function (rustplus, client) {
+        let instance = client.readInstanceFile(rustplus.guildId);
+
+        for (const [key, value] of Object.entries(instance.storageMonitors)) {
+            if (rustplus.serverId !== `${value.serverId}`) continue;
+            if (value.type !== 'toolcupboard') continue;
+
+            if (value.upkeep !== null) {
+                rustplus.printCommandOutput(
+                    `${value.name} [${key}] upkeep: ${value.upkeep}`);
+            }
+        }
     },
 
     commandWipe: function (rustplus) {
