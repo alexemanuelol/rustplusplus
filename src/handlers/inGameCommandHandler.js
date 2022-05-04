@@ -5,7 +5,6 @@ const Map = require('../util/map.js');
 const Constants = require('../util/constants.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
-const string = require('../util/string.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
@@ -55,6 +54,9 @@ module.exports = {
         }
         else if (command === `${rustplus.generalSettings.prefix}online`) {
             module.exports.commandOnline(rustplus);
+        }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}player`)) {
+            module.exports.commandPlayer(rustplus, client, message);
         }
         else if (command === `${rustplus.generalSettings.prefix}pop`) {
             module.exports.commandPop(rustplus);
@@ -671,6 +673,77 @@ module.exports = {
         }
 
         str = `${str.slice(0, -2)}.`;
+        rustplus.printCommandOutput(str);
+    },
+
+    commandPlayer: function (rustplus, client, message) {
+        let instance = client.readInstanceFile(rustplus.guildId);
+        const battlemetricsId = instance.serverList[rustplus.serverId].battlemetricsId;
+        let command = message.broadcast.teamMessage.message.message;
+        let nameSearch = '';
+
+        if (battlemetricsId === null) {
+            rustplus.printCommandOutput('This server is using streamer mode.');
+            return;
+        }
+
+        if (!Object.keys(client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
+            rustplus.printCommandOutput('Could not find players for this server.');
+            return;
+        }
+
+        let foundPlayers = [];
+        if (command === `${rustplus.generalSettings.prefix}players`) {
+            foundPlayers = client.battlemetricsOnlinePlayers[battlemetricsId].slice();
+        }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}player `)) {
+            nameSearch = command.replace(`${rustplus.generalSettings.prefix}player `, '');
+
+            for (let player of client.battlemetricsOnlinePlayers[battlemetricsId]) {
+                if (player.name.includes(nameSearch)) {
+                    foundPlayers.push(player);
+                }
+            }
+        }
+
+        let allPlayersLength = foundPlayers.length;
+        let messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - rustplus.trademarkString.length;
+        let leftLength = `...xxx more.`.length;
+        let str = '';
+
+        let playerIndex = 0;
+        for (let player of foundPlayers) {
+            let playerStr = `${player.name} [${player.time}], `;
+
+            if ((str.length + playerStr.length + leftLength) < messageMaxLength) {
+                str += playerStr;
+            }
+            else if ((str.length + playerStr.length + leftLength) > messageMaxLength) {
+                break;
+            }
+
+            playerIndex += 1;
+        }
+
+        if (str !== '') {
+            str = str.slice(0, -2);
+
+            if (playerIndex < allPlayersLength) {
+                str += ` ...${allPlayersLength - playerIndex} more.`;
+            }
+            else {
+                str += '.';
+            }
+        }
+        else {
+            if (command === `${rustplus.generalSettings.prefix}players`) {
+                str = 'Could not find any players.';
+            }
+            else {
+                str = `Could not find a player '${nameSearch}'.`;
+            }
+        }
+
         rustplus.printCommandOutput(str);
     },
 

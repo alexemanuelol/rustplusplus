@@ -5,11 +5,24 @@ const Scrape = require('../util/scrape.js');
 module.exports = {
     handler: async function (client) {
         let forceSearch = (client.battlemetricsIntervalCounter === 0) ? true : false;
-        client.guilds.cache.forEach(async (guild) => {
-            let instance = client.readInstanceFile(guild.id);
 
-            let calledPages = new Object();
-            let calledSteamIdNames = new Object();
+        let calledPages = new Object();
+        let calledSteamIdNames = new Object();
+
+        for (let guildItem of client.guilds.cache) {
+            let guild = guildItem[1];
+            let instance = client.readInstanceFile(guild.id);
+            let activeServer = getActiveServerId(instance.serverList);
+
+            if (activeServer !== null && instance.serverList[activeServer].battlemetricsId !== null) {
+                let battlemetricsId = instance.serverList[activeServer].battlemetricsId;
+                if (!Object.keys(calledPages).includes(battlemetricsId)) {
+                    let page = await BattlemetricsAPI.getBattlemetricsServerPage(client, battlemetricsId);
+                    if (page !== null) {
+                        calledPages[battlemetricsId] = page;
+                    }
+                }
+            }
 
             for (const [key, value] of Object.entries(instance.trackers)) {
                 if (!value.active) continue;
@@ -17,8 +30,7 @@ module.exports = {
 
                 let page = null;
                 if (!Object.keys(calledPages).includes(value.battlemetricsId)) {
-                    page = await BattlemetricsAPI.getBattlemetricsServerPage(
-                        client, value.battlemetricsId);
+                    page = await BattlemetricsAPI.getBattlemetricsServerPage(client, value.battlemetricsId);
                     if (page === null) continue;
                     calledPages[value.battlemetricsId] = page;
                 }
@@ -98,7 +110,16 @@ module.exports = {
                 client.writeInstanceFile(guild.id, instance);
                 await DiscordTools.sendTrackerMessage(guild.id, key, true, false);
             }
-        });
+        }
+
+        /* Update onlinePlayers Object */
+        let battlemetricsOnlinePlayers = new Object();
+        for (const [key, value] of Object.entries(calledPages)) {
+            let onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(client, key, value);
+            if (onlinePlayers === null) continue;
+            battlemetricsOnlinePlayers[key] = onlinePlayers;
+        }
+        client.battlemetricsOnlinePlayers = JSON.parse(JSON.stringify(battlemetricsOnlinePlayers));
 
         if (client.battlemetricsIntervalCounter === 29) {
             client.battlemetricsIntervalCounter = 0;
@@ -106,6 +127,14 @@ module.exports = {
         else {
             client.battlemetricsIntervalCounter += 1;
         }
+    }
+}
 
-    },
+function getActiveServerId(serverList) {
+    for (const [key, value] of Object.entries(serverList)) {
+        if (value.active) {
+            return key;
+        }
+    }
+    return null;
 }

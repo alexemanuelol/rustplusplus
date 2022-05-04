@@ -22,6 +22,7 @@ class DiscordBot extends Client {
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 
+        this.battlemetricsOnlinePlayers = new Object();
         this.battlemetricsIntervalId = null;
         this.battlemetricsIntervalCounter = 0;
 
