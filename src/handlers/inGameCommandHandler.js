@@ -73,6 +73,9 @@ module.exports = {
         else if (command.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
         }
+        else if (command.startsWith(`${rustplus.generalSettings.prefix}tts `)) {
+            module.exports.commandTTS(rustplus, client, message);
+        }
         else if (command === `${rustplus.generalSettings.prefix}unmute`) {
             module.exports.commandUnmute(rustplus, client);
         }
@@ -970,6 +973,20 @@ module.exports = {
 
             default: {
             } break;
+        }
+    },
+
+    commandTTS: async function (rustplus, client, message) {
+        let instance = client.readInstanceFile(rustplus.guildId);
+        let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.teamchat);
+        let command = message.broadcast.teamMessage.message.message;
+        let text = command.replace(`${rustplus.generalSettings.prefix}tts `, '');
+
+        if (channel !== undefined) {
+            await client.messageSend(channel, {
+                content: `${message.broadcast.teamMessage.message.name} said: ${text}`,
+                tts: true
+            });
         }
     },
 
