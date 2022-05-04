@@ -690,7 +690,7 @@ class MapMarkers {
                     cargoShip.crates.push(marker.id);
                     let crateNumber = cargoShip.crateCounter;
                     cargoShip.crateCounter += 1;
-                    cargoShip.crateNumber = crateNumber;
+                    marker.crateNumber = crateNumber;
                     crates = ` (${crateNumber}/3)`;
                 }
 
