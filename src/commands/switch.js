@@ -126,7 +126,7 @@ module.exports = {
         let filesChanged = false;
 
         let rustplus = client.rustplusInstances[interaction.guildId];
-        if (!rustplus) {
+        if (!rustplus || (rustplus && !rustplus.ready)) {
             let str = 'Not currently connected to a rust server.';
             await client.interactionEditReply(interaction, {
                 embeds: [new MessageEmbed()

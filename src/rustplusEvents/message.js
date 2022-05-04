@@ -10,6 +10,7 @@ module.exports = {
     async execute(rustplus, client, message) {
         /* rustplus.log('MESSAGE', 'MESSAGE RECEIVED'); */
         let instance = client.readInstanceFile(rustplus.guildId);
+        if (!rustplus.ready) return;
 
         if (message.hasOwnProperty('response')) {
 

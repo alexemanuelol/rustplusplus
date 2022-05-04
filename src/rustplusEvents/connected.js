@@ -131,6 +131,8 @@ module.exports = {
         /* Run the first time before starting the interval */
         PollingHandler.pollingHandler(rustplus, client);
 
+        rustplus.ready = true;
+
         /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
         rustplus.intervalId = setInterval(PollingHandler.pollingHandler,
             client.pollingIntervalMs,

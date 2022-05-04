@@ -13,6 +13,7 @@ module.exports = {
         let instance = client.readInstanceFile(rustplus.guildId);
 
         rustplus.firstPoll = true;
+        rustplus.ready = false;
 
         if (rustplus.mapMarkers) {
             rustplus.mapMarkers.reset();
