@@ -1,22 +1,25 @@
 module.exports = {
     gridDiameter: 146.25,
 
-    getPos: function (x, y, mapSize) {
+    getPos: function (x, y, mapSize, showMonument = true, rustplus = null) {
         let correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
+        let pos = null;
 
+        let isOutside = false;
         if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
+            isOutside = true;
             if (module.exports.isOutsideRowOrColumn(x, y, correctedMapSize)) {
                 if (x < 0 && y > correctedMapSize) {
-                    return 'North West';
+                    pos = 'North West';
                 }
                 else if (x < 0 && y < 0) {
-                    return 'South West';
+                    pos = 'South West';
                 }
                 else if (x > correctedMapSize && y > correctedMapSize) {
-                    return 'North East';
+                    pos = 'North East';
                 }
                 else {
-                    return 'South East';
+                    pos = 'South East';
                 }
             }
             else {
@@ -29,12 +32,38 @@ module.exports = {
                     str += (y < 0) ? 'South of grid ' : 'North of grid ';
                     str += `${module.exports.getGridPosLettersX(x, correctedMapSize)}`;
                 }
-                return str;
+                pos = str;
             }
         }
         else {
-            return module.exports.getGridPos(x, y, mapSize);
+            pos = module.exports.getGridPos(x, y, mapSize);
         }
+
+        if (showMonument) {
+            if (rustplus === null || (rustplus && !rustplus.ready)) return pos;
+
+            let monumentObj = null;
+            for (let monument of rustplus.map.monuments) {
+                if (monument.token === 'DungeonBase') continue;
+                if (module.exports.getDistance(x, y, monument.x, monument.y) <=
+                    rustplus.map.monumentInfo[monument.token].radius) {
+                    monumentObj = rustplus.map.monumentInfo[monument.token];
+                    break;
+                }
+            }
+
+            if (monumentObj !== null && isOutside) {
+                return `${monumentObj.clean}`;
+            }
+            else if (monumentObj !== null) {
+                return `${pos} (${monumentObj.clean})`;
+            }
+            else {
+                return pos;
+            }
+        }
+
+        return pos;
     },
 
     getGridPos: function (x, y, mapSize) {

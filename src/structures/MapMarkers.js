@@ -280,7 +280,7 @@ class MapMarkers {
         /* Player markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
 
             marker.location = pos;
 
@@ -295,7 +295,7 @@ class MapMarkers {
         /* Player markers that still remains. */
         for (let marker of remainingMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
             let player = this.getMarkerByTypeId(this.types.Player, marker.id);
 
             player.x = marker.x;
@@ -312,7 +312,7 @@ class MapMarkers {
         /* Explosion markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
 
             marker.location = pos;
 
@@ -377,7 +377,7 @@ class MapMarkers {
         /* Explosion markers that still remains. */
         for (let marker of remainingMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
             let explosion = this.getMarkerByTypeId(this.types.Explosion, marker.id);
 
             explosion.x = marker.x;
@@ -394,7 +394,7 @@ class MapMarkers {
         /* VendingMachine markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
 
             marker.location = pos;
 
@@ -418,7 +418,7 @@ class MapMarkers {
         /* VendingMachine markers that still remains. */
         for (let marker of remainingMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
             let vendingMachine = this.getMarkerByTypeXY(this.types.VendingMachine, marker.x, marker.y);
 
             vendingMachine.id = marker.id;
@@ -428,7 +428,7 @@ class MapMarkers {
         let vendingMachines = this.getMarkersOfType(this.types.VendingMachine, mapMarkers.markers);
         for (let vendingMachine of vendingMachines) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(vendingMachine.x, vendingMachine.y, mapSize);
+            let pos = Map.getPos(vendingMachine.x, vendingMachine.y, mapSize, true, this.rustplus);
 
             for (let order of vendingMachine.sellOrders) {
                 if (this.subscribedItemsId.includes(order.itemId) ||
@@ -468,7 +468,7 @@ class MapMarkers {
         /* CH47 markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
 
             marker.location = pos;
 
@@ -488,7 +488,7 @@ class MapMarkers {
                     if (Map.getDistance(marker.x, marker.y, oilRig.x, oilRig.y) <=
                         Constants.OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE) {
                         found = true;
-                        let oilRigLocation = Map.getPos(oilRig.x, oilRig.y, mapSize);
+                        let oilRigLocation = Map.getPos(oilRig.x, oilRig.y, mapSize, true, this.rustplus);
                         marker.ch47Type = 'smallOilRig';
 
                         this.rustplus.sendEvent(
@@ -519,7 +519,7 @@ class MapMarkers {
                     if (Map.getDistance(marker.x, marker.y, oilRig.x, oilRig.y) <=
                         Constants.OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE) {
                         found = true;
-                        let oilRigLocation = Map.getPos(oilRig.x, oilRig.y, mapSize);
+                        let oilRigLocation = Map.getPos(oilRig.x, oilRig.y, mapSize, true, this.rustplus);
                         marker.ch47Type = 'largeOilRig';
 
                         this.rustplus.sendEvent(
@@ -579,7 +579,7 @@ class MapMarkers {
         /* CH47 markers that still remains. */
         for (let marker of remainingMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
             let ch47 = this.getMarkerByTypeId(this.types.CH47, marker.id);
 
             ch47.x = marker.x;
@@ -596,7 +596,7 @@ class MapMarkers {
         /* CargoShip markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
 
             marker.location = pos;
             marker.crates = [];
@@ -652,7 +652,7 @@ class MapMarkers {
         /* CargoShip markers that still remains. */
         for (let marker of remainingMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
             let cargoShip = this.getMarkerByTypeId(this.types.CargoShip, marker.id);
 
             cargoShip.x = marker.x;
@@ -671,7 +671,7 @@ class MapMarkers {
         /* Crate markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
 
             marker.location = pos;
 
@@ -703,7 +703,7 @@ class MapMarkers {
                 if (this.smallOilRigCratesLeft.some(e => e.crateType === 'oil_rig_small' &&
                     Map.getDistance(e.x, e.y, marker.x, marker.y) < Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                     /* Refresh of Crate at Small Oil Rig, Scenario 1 */
-                    let oilRig = this.rustplus.map.monumentNames['oil_rig_small'].clean;
+                    let oilRig = this.rustplus.map.monumentInfo['oil_rig_small'].clean;
                     this.rustplus.sendEvent(
                         this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                         `Locked Crate just got refreshed on Small ${oilRig} at ${pos}.`,
@@ -726,7 +726,7 @@ class MapMarkers {
                             Map.getDistance(crate.x, crate.y, marker.x, marker.y) <
                             Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                             /* Refresh of Crate at Small Oil Rig, Scenario 2 */
-                            let oilRig = this.rustplus.map.monumentNames['oil_rig_small'].clean;
+                            let oilRig = this.rustplus.map.monumentInfo['oil_rig_small'].clean;
                             this.rustplus.sendEvent(
                                 this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                                 `Locked Crate just got refreshed on Small ${oilRig} at ${pos}.`,
@@ -737,7 +737,7 @@ class MapMarkers {
                     }
 
                     if (!refreshed && !this.rustplus.firstPoll) {
-                        let oilRig = this.rustplus.map.monumentNames['oil_rig_small'].clean;
+                        let oilRig = this.rustplus.map.monumentInfo['oil_rig_small'].clean;
                         this.rustplus.sendEvent(
                             this.rustplus.notificationSettings.lockedCrateRespawnOilRig,
                             `Locked Crate just respawned on Small ${oilRig} at ${pos}.`,
@@ -752,7 +752,7 @@ class MapMarkers {
                 if (this.largeOilRigCratesLeft.some(e => e.crateType === 'large_oil_rig' &&
                     Map.getDistance(e.x, e.y, marker.x, marker.y) < Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                     /* Refresh of Crate at Large Oil Rig, Scenario 1 */
-                    let oilRig = this.rustplus.map.monumentNames['large_oil_rig'].clean;
+                    let oilRig = this.rustplus.map.monumentInfo['large_oil_rig'].clean;
                     this.rustplus.sendEvent(
                         this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                         `Locked Crate just got refreshed on ${oilRig} at ${pos}.`,
@@ -775,7 +775,7 @@ class MapMarkers {
                             Map.getDistance(crate.x, crate.y, marker.x, marker.y) <
                             Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS) {
                             /* Refresh of Crate at Large Oil Rig, Scenario 2 */
-                            let oilRig = this.rustplus.map.monumentNames['large_oil_rig'].clean;
+                            let oilRig = this.rustplus.map.monumentInfo['large_oil_rig'].clean;
                             this.rustplus.sendEvent(
                                 this.rustplus.notificationSettings.lockedCrateOilRigRefreshed,
                                 `Locked Crate just got refreshed on ${oilRig} at ${pos}.`,
@@ -786,7 +786,7 @@ class MapMarkers {
                     }
 
                     if (!refreshed && !this.rustplus.firstPoll) {
-                        let oilRig = this.rustplus.map.monumentNames['large_oil_rig'].clean;
+                        let oilRig = this.rustplus.map.monumentInfo['large_oil_rig'].clean;
                         this.rustplus.sendEvent(
                             this.rustplus.notificationSettings.lockedCrateRespawnOilRig,
                             `Locked Crate just respawned on ${oilRig} at ${pos}.`,
@@ -818,8 +818,8 @@ class MapMarkers {
                 }
             }
             else {
-                let name = (this.rustplus.map.monumentNames.hasOwnProperty(closestMonument.token)) ?
-                    this.rustplus.map.monumentNames[closestMonument.token].clean : closestMonument.token;
+                let name = (this.rustplus.map.monumentInfo.hasOwnProperty(closestMonument.token)) ?
+                    this.rustplus.map.monumentInfo[closestMonument.token].clean : closestMonument.token;
 
                 if (!this.rustplus.firstPoll) {
                     this.timeSinceCH47DroppedCrate = new Date();
@@ -1006,7 +1006,7 @@ class MapMarkers {
         /* Crate markers that still remains. */
         for (let marker of remainingMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
             let crate = this.getMarkerByTypeId(this.types.Crate, marker.id);
 
             crate.x = marker.x;
@@ -1055,7 +1055,7 @@ class MapMarkers {
         /* PatrolHelicopter markers that are new. */
         for (let marker of newMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
 
             marker.location = pos;
 
@@ -1116,7 +1116,7 @@ class MapMarkers {
         /* PatrolHelicopter markers that still remains. */
         for (let marker of remainingMarkers) {
             let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize);
+            let pos = Map.getPos(marker.x, marker.y, mapSize, true, this.rustplus);
             let patrolHelicopter = this.getMarkerByTypeId(this.types.PatrolHelicopter, marker.id);
 
             patrolHelicopter.x = marker.x;

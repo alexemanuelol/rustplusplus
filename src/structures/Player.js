@@ -82,7 +82,7 @@ class Player {
 
     updatePos() {
         if (this.isAlive || this.isOnline) {
-            this.pos = Map.getPos(this.x, this.y, this.rustplus.info.mapSize);
+            this.pos = Map.getPos(this.x, this.y, this.rustplus.info.mapSize, true, this.rustplus);
         }
         else {
             this.pos = null;

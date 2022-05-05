@@ -30,40 +30,172 @@ class Map {
             tunnels: { image: './src/resources/images/markers/tunnels.png', size: 35, type: 9, jimp: null }
         }
 
-        this._monumentNames = {
-            AbandonedMilitaryBase: { clean: 'Abandoned Military Base', map: 'ABANDONED MILITARY BASE' },
-            airfield_display_name: { clean: 'Airfield', map: 'AIRFIELD' },
-            arctic_base_a: { clean: 'Arctic Research Base', map: 'ARCTIC RESEARCH BASE' },
-            bandit_camp: { clean: 'Bandit Camp', map: 'BANDIT CAMP' },
-            dome_monument_name: { clean: 'The Dome', map: 'THE DOME' },
-            excavator: { clean: 'Giant Excavator Pit', map: 'GIANT EXCAVATOR PIT' },
-            fishing_village_display_name: { clean: 'Fishing Village', map: 'FISHING VILLAGE' },
-            gas_station: { clean: "Oxum's Gas Station", map: 'OXUM\'S GAS STATION' },
-            harbor_2_display_name: { clean: 'Harbor', map: 'HARBOR' },
-            harbor_display_name: { clean: 'Harbor', map: 'HARBOR' },
-            junkyard_display_name: { clean: 'Junkyard', map: 'JUNKYARD' },
-            large_fishing_village_display_name: { clean: 'Large Fishing Village', map: 'LARGE FISHING VILLAGE' },
-            large_oil_rig: { clean: 'Large Oil Rig', map: 'LARGE OIL RIG' },
-            launchsite: { clean: 'Launch Site', map: 'LAUNCH SITE' },
-            lighthouse_display_name: { clean: 'Lighthouse', map: 'LIGHTHOUSE' },
-            military_tunnels_display_name: { clean: 'Military Tunnel', map: 'MILITARY TUNNEL' },
-            mining_outpost_display_name: { clean: 'Mining Outpost', map: 'MINING OUTPOST' },
-            mining_quarry_hqm_display_name: { clean: 'HQM Quarry', map: 'HQM QUARRY' },
-            mining_quarry_stone_display_name: { clean: 'Stone Quarry', map: 'STONE QUARRY' },
-            mining_quarry_sulfur_display_name: { clean: 'Sulfur Quarry', map: 'SULFUR QUARRY' },
-            oil_rig_small: { clean: 'Oil Rig', map: 'OIL RIG' },
-            outpost: { clean: 'Outpost', map: 'OUTPOST' },
-            power_plant_display_name: { clean: 'Power Plant', map: 'POWER PLANT' },
-            satellite_dish_display_name: { clean: 'Satellite Dish', map: 'SATELLITE DISH' },
-            sewer_display_name: { clean: 'Sewer Branch', map: 'SEWER BRANCH' },
-            stables_a: { clean: 'Ranch', map: 'RANCH' },
-            stables_b: { clean: 'Large Barn', map: 'LARGE BARN' },
-            supermarket: { clean: 'Abandoned Supermarket', map: 'ABANDONED SUPERMARKET' },
-            swamp_c: { clean: 'Abandoned Cabins', map: 'ABANDONED CABINS' },
-            train_tunnel_display_name: { clean: '', map: '' },
-            train_yard_display_name: { clean: 'Train Yard', map: 'TRAIN YARD' },
-            underwater_lab: { clean: 'Underwater Lab', map: 'UNDERWATER LAB' },
-            water_treatment_plant_display_name: { clean: 'Water Treatment Plant', map: 'WATER TREATMENT PLANT' }
+        this._monumentInfo = {
+            AbandonedMilitaryBase: {
+                clean: 'Abandoned Military Base',
+                map: 'ABANDONED MILITARY BASE',
+                radius: 46
+            },
+            airfield_display_name: {
+                clean: 'Airfield',
+                map: 'AIRFIELD',
+                radius: 120
+            },
+            arctic_base_a: {
+                clean: 'Arctic Research Base',
+                map: 'ARCTIC RESEARCH BASE',
+                radius: 64
+            },
+            bandit_camp: {
+                clean: 'Bandit Camp',
+                map: 'BANDIT CAMP',
+                radius: 82
+            },
+            dome_monument_name: {
+                clean: 'The Dome',
+                map: 'THE DOME',
+                radius: 50
+            },
+            excavator: {
+                clean: 'Giant Excavator Pit',
+                map: 'GIANT EXCAVATOR PIT',
+                radius: 110
+            },
+            fishing_village_display_name: {
+                clean: 'Fishing Village',
+                map: 'FISHING VILLAGE',
+                radius: 31
+            },
+            gas_station: {
+                clean: "Oxum's Gas Station",
+                map: 'OXUM\'S GAS STATION',
+                radius: 28
+            },
+            harbor_2_display_name: {
+                clean: 'Harbor',
+                map: 'HARBOR',
+                radius: 96
+            },
+            harbor_display_name: {
+                clean: 'Harbor',
+                map: 'HARBOR',
+                radius: 96
+            },
+            junkyard_display_name: {
+                clean: 'Junkyard',
+                map: 'JUNKYARD',
+                radius: 88
+            },
+            large_fishing_village_display_name: {
+                clean: 'Large Fishing Village',
+                map: 'LARGE FISHING VILLAGE',
+                radius: 40
+            },
+            large_oil_rig: {
+                clean: 'Large Oil Rig',
+                map: 'LARGE OIL RIG',
+                radius: 40
+            },
+            launchsite: {
+                clean: 'Launch Site',
+                map: 'LAUNCH SITE',
+                radius: 200
+            },
+            lighthouse_display_name: {
+                clean: 'Lighthouse',
+                map: 'LIGHTHOUSE',
+                radius: 28
+            },
+            military_tunnels_display_name: {
+                clean: 'Military Tunnel',
+                map: 'MILITARY TUNNEL',
+                radius: 122
+            },
+            mining_outpost_display_name: {
+                clean: 'Mining Outpost',
+                map: 'MINING OUTPOST',
+                radius: 17
+            },
+            mining_quarry_hqm_display_name: {
+                clean: 'HQM Quarry',
+                map: 'HQM QUARRY',
+                radius: 27
+            },
+            mining_quarry_stone_display_name: {
+                clean: 'Stone Quarry',
+                map: 'STONE QUARRY',
+                radius: 35
+            },
+            mining_quarry_sulfur_display_name: {
+                clean: 'Sulfur Quarry',
+                map: 'SULFUR QUARRY',
+                radius: 33
+            },
+            oil_rig_small: {
+                clean: 'Oil Rig',
+                map: 'OIL RIG',
+                radius: 32
+            },
+            outpost: {
+                clean: 'Outpost',
+                map: 'OUTPOST',
+                radius: 81
+            },
+            power_plant_display_name: {
+                clean: 'Power Plant',
+                map: 'POWER PLANT',
+                radius: 112
+            },
+            satellite_dish_display_name: {
+                clean: 'Satellite Dish',
+                map: 'SATELLITE DISH',
+                radius: 78
+            },
+            sewer_display_name: {
+                clean: 'Sewer Branch',
+                map: 'SEWER BRANCH',
+                radius: 87
+            },
+            stables_a: {
+                clean: 'Ranch',
+                map: 'RANCH',
+                radius: 35
+            },
+            stables_b: {
+                clean: 'Large Barn',
+                map: 'LARGE BARN',
+                radius: 35
+            },
+            supermarket: {
+                clean: 'Abandoned Supermarket',
+                map: 'ABANDONED SUPERMARKET',
+                radius: 19
+            },
+            swamp_c: {
+                clean: 'Abandoned Cabins',
+                map: 'ABANDONED CABINS',
+                radius: 42
+            },
+            train_tunnel_display_name: {
+                clean: '',
+                map: '',
+                radius: 0
+            },
+            train_yard_display_name: {
+                clean: 'Train Yard',
+                map: 'TRAIN YARD',
+                radius: 115
+            },
+            underwater_lab: {
+                clean: 'Underwater Lab',
+                map: 'UNDERWATER LAB',
+                radius: 75
+            },
+            water_treatment_plant_display_name: {
+                clean: 'Water Treatment Plant',
+                map: 'WATER TREATMENT PLANT',
+                radius: 110
+            }
         }
 
         this.resetImageAndMeta();
@@ -88,8 +220,8 @@ class Map {
     set font(font) { this._font = font; }
     get mapMarkerImageMeta() { return this._mapMarkerImageMeta; }
     set mapMarkerImageMeta(mapMarkerImageMeta) { this._mapMarkerImageMeta = mapMarkerImageMeta; }
-    get monumentNames() { return this._monumentNames; }
-    set monumentNames(monumentNames) { this._monumentNames = monumentNames; }
+    get monumentInfo() { return this._monumentInfo; }
+    set monumentInfo(monumentInfo) { this._monumentInfo = monumentInfo; }
 
     /* Change checkers */
     isWidthChanged(map) { return ((this.width) !== (map.width)); }
@@ -155,8 +287,8 @@ class Map {
                     /* Compensate for the text placement */
                     if (monument.token === 'DungeonBase') continue;
 
-                    let name = (this.monumentNames.hasOwnProperty(monument.token)) ?
-                        this.monumentNames[monument.token].map : monument.token;
+                    let name = (this.monumentInfo.hasOwnProperty(monument.token)) ?
+                        this.monumentInfo[monument.token].map : monument.token;
                     let comp = name.length * 5;
                     this.mapMarkerImageMeta.map.jimp.print(
                         this.font, x - comp, y - 10, name);
