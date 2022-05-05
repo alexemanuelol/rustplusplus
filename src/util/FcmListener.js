@@ -9,7 +9,7 @@ module.exports = async (client, guild) => {
     let credentials = client.readCredentialsFile(guild.id);
 
     if (credentials.credentials === null) {
-        client.log(`Credentials is not set for guild: ${guild.id}, cannot start FCM-listener.`);
+        client.log('WARNING', `Credentials is not set for guild: ${guild.id}, cannot start FCM-listener.`);
         return;
     }
 
