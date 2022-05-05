@@ -3,8 +3,9 @@ const RandomUsernames = require('./RandomUsernames.json');
 
 module.exports = {
     getBattlemetricsServerId: async function (client, serverName) {
+        searchServerName = encodeURI(serverName);
         serverName = module.exports.escapeRegExp(serverName);
-        const searchServerName = serverName.replace('\#', '\*');
+        searchServerName = searchServerName.replace('\#', '\*');
         const search = `https://www.battlemetrics.com/servers/search?q=${searchServerName}&sort=score`;
         const response = await Scrape.scrape(search);
 
