@@ -3,10 +3,11 @@ const Map = require('../util/map.js');
 const Timer = require('../util/timer');
 
 class MapMarkers {
-    constructor(mapMarkers, rustplus) {
+    constructor(mapMarkers, rustplus, client) {
         this._markers = mapMarkers.markers;
 
         this._rustplus = rustplus;
+        this._client = client;
 
         this._types = {
             Player: 1,
@@ -80,6 +81,8 @@ class MapMarkers {
     set markers(markers) { this._markers = markers; }
     get rustplus() { return this._rustplus; }
     set rustplus(rustplus) { this._rustplus = rustplus; }
+    get client() { return this._client; }
+    set client(client) { this._client = client; }
     get types() { return this._types; }
     set types(types) { this._types = types; }
     get players() { return this._players; }
@@ -353,9 +356,11 @@ class MapMarkers {
                         `Bradley APC was destroyed at ${pos}.`);
                 }
 
+                let instance = this.client.readInstanceFile(this.rustplus.guildId);
                 if (!this.rustplus.firstPoll) {
                     this.bradleyAPCRespawnTimers[marker.id] = new Timer.timer(
                         this.notifyBradleyAPCRespawn.bind(this),
+                        instance.serverList[this.rustplus.serverId].bradleyApcRespawnTimeMs,
                         Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
                         marker.id);
                     this.bradleyAPCRespawnTimers[marker.id].start();
@@ -500,9 +505,10 @@ class MapMarkers {
                         let crateId = this.getOilRigCrateId(oilRig.x, oilRig.y, mapMarkers);
 
                         if (crateId !== null) {
+                            let instance = this.client.readInstanceFile(this.rustplus.guildId);
                             this.crateSmallOilRigTimers[crateId] = new Timer.timer(
                                 this.notifyCrateSmallOilRigOpen.bind(this),
-                                Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+                                instance.serverList[this.rustplus.serverId].oilRigLockedCrateUnlockTimeMs,
                                 oilRigLocation,
                                 crateId);
                             this.crateSmallOilRigTimers[crateId].start();
@@ -531,9 +537,10 @@ class MapMarkers {
                         let crateId = this.getOilRigCrateId(oilRig.x, oilRig.y, mapMarkers);
 
                         if (crateId !== null) {
+                            let instance = this.client.readInstanceFile(this.rustplus.guildId);
                             this.crateLargeOilRigTimers[crateId] = new Timer.timer(
                                 this.notifyCrateLargeOilRigOpen.bind(this),
-                                Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+                                instance.serverList[this.rustplus.serverId].oilRigLockedCrateUnlockTimeMs,
                                 oilRigLocation,
                                 crateId);
                             this.crateLargeOilRigTimers[crateId].start();
@@ -611,9 +618,10 @@ class MapMarkers {
                     this.rustplus.notificationSettings.cargoShipDetected,
                     `Cargo Ship enters the map from ${pos}.`);
 
+                let instance = this.client.readInstanceFile(this.rustplus.guildId);
                 this.cargoShipEgressTimers[marker.id] = new Timer.timer(
                     this.notifyCargoShipEgress.bind(this),
-                    Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
+                    instance.serverList[this.rustplus.serverId].cargoShipEgressTimeMs,
                     marker.id);
                 this.cargoShipEgressTimers[marker.id].start();
             }
@@ -699,7 +707,8 @@ class MapMarkers {
                     `Locked Crate${crates} just spawned on Cargo Ship at ${pos}.`,
                     this.rustplus.firstPoll);
             }
-            else if (closestMonument.token === 'oil_rig_small' && distance < Constants.LOCKED_CRATE_MONUMENT_RADIUS) {
+            else if (closestMonument.token === 'oil_rig_small' && distance <
+                this.rustplus.map.monumentInfo[closestMonument.token].radius) {
                 if (this.smallOilRigCratesLeft.some(e => e.crateType === 'oil_rig_small' &&
                     Map.getDistance(e.x, e.y, marker.x, marker.y) < Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                     /* Refresh of Crate at Small Oil Rig, Scenario 1 */
@@ -748,7 +757,8 @@ class MapMarkers {
 
                 marker.crateType = 'oil_rig_small';
             }
-            else if (closestMonument.token === 'large_oil_rig' && distance < Constants.LOCKED_CRATE_MONUMENT_RADIUS) {
+            else if (closestMonument.token === 'large_oil_rig' && distance <
+                this.rustplus.map.monumentInfo[closestMonument.token].radius) {
                 if (this.largeOilRigCratesLeft.some(e => e.crateType === 'large_oil_rig' &&
                     Map.getDistance(e.x, e.y, marker.x, marker.y) < Constants.LOCKED_CRATE_OIL_RIG_REFRESH_RADIUS)) {
                     /* Refresh of Crate at Large Oil Rig, Scenario 1 */
@@ -797,7 +807,7 @@ class MapMarkers {
 
                 marker.crateType = 'large_oil_rig';
             }
-            else if (distance > Constants.LOCKED_CRATE_MONUMENT_RADIUS) {
+            else if (distance > this.rustplus.map.monumentInfo[closestMonument.token].radius) {
                 if (!Map.isOutsideGridSystem(marker.x, marker.y, mapSize)) {
                     if (!this.rustplus.firstPoll) {
                         this.rustplus.sendEvent(
@@ -828,14 +838,16 @@ class MapMarkers {
                         this.rustplus.notificationSettings.lockedCrateDroppedAtMonument,
                         `Locked Crate just got dropped by Chinook 47 at ${name}.`);
 
+                    let instance = this.client.readInstanceFile(this.rustplus.guildId);
                     this.crateDespawnTimers[marker.id] = new Timer.timer(
                         () => { },
-                        Constants.DEFAULT_LOCKED_CRATE_DESPAWN_TIME_MS);
+                        instance.serverList[this.rustplus.serverId].lockedCrateDespawnTimeMs);
                     this.crateDespawnTimers[marker.id].start();
 
                     this.crateDespawnWarningTimers[marker.id] = new Timer.timer(
                         this.notifyCrateWarningDespawn.bind(this),
-                        Constants.DEFAULT_LOCKED_CRATE_DESPAWN_TIME_MS - Constants.DEFAULT_LOCKED_CRATE_DESPAWN_WARNING_TIME_MS,
+                        instance.serverList[this.rustplus.serverId].lockedCrateDespawnTimeMs -
+                        instance.serverList[this.rustplus.serverId].lockedCrateDespawnWarningTimeMs,
                         name);
                     this.crateDespawnWarningTimers[marker.id].start();
                 }
@@ -1190,10 +1202,11 @@ class MapMarkers {
 
     notifyCrateWarningDespawn(args) {
         let name = args[0];
+        let instance = this.client.readInstanceFile(this.rustplus.guildId);
         this.rustplus.sendEvent(
             this.rustplus.notificationSettings.lockedCrateMonumentDespawnWarning,
             `Locked Crate at ${name} despawns in ` +
-            `${Constants.DEFAULT_LOCKED_CRATE_DESPAWN_WARNING_TIME_MS / (60 * 1000)} minutes.`);
+            `${instance.serverList[this.rustplus.serverId].lockedCrateDespawnWarningTimeMs / (60 * 1000)} minutes.`);
     }
 
     /* Help functions */
@@ -1214,7 +1227,8 @@ class MapMarkers {
         /* Check where the explosion marker is located, if near Launch Site, return true */
         for (let monument of this.rustplus.map.monuments) {
             if (monument.token === 'launchsite') {
-                return (Map.getDistance(x, y, monument.x, monument.y) <= Constants.LAUNCH_SITE_RADIUS);
+                return (Map.getDistance(x, y, monument.x, monument.y) <=
+                    this.rustplus.map.monumentInfo['launchsite'].radius);
             }
         }
         return false;

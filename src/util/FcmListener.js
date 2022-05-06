@@ -173,7 +173,12 @@ async function pairingServer(client, guild, full, data, body) {
         switchGroups: {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
-        connect: (info === null) ? info : `connect ${info.ip}:${info.port}`
+        connect: (info === null) ? info : `connect ${info.ip}:${info.port}`,
+        cargoShipEgressTimeMs: Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
+        bradleyApcRespawnTimeMs: Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
+        lockedCrateDespawnTimeMs: Constants.DEFAULT_LOCKED_CRATE_DESPAWN_TIME_MS,
+        lockedCrateDespawnWarningTimeMs: Constants.DEFAULT_LOCKED_CRATE_DESPAWN_WARNING_TIME_MS,
+        oilRigLockedCrateUnlockTimeMs: Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS
     };
     client.writeInstanceFile(guild.id, instance);
 

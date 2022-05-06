@@ -99,7 +99,7 @@ class Map {
             launchsite: {
                 clean: 'Launch Site',
                 map: 'LAUNCH SITE',
-                radius: 200
+                radius: 250
             },
             lighthouse_display_name: {
                 clean: 'Lighthouse',
