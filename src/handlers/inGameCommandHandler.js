@@ -1002,15 +1002,20 @@ module.exports = {
 
     commandUpkeep: function (rustplus, client) {
         let instance = client.readInstanceFile(rustplus.guildId);
-
+        let cupboardFound = false;
         for (const [key, value] of Object.entries(instance.storageMonitors)) {
             if (rustplus.serverId !== `${value.serverId}`) continue;
             if (value.type !== 'toolcupboard') continue;
 
             if (value.upkeep !== null) {
+                cupboardFound = true;
                 rustplus.printCommandOutput(
                     `${value.name} [${key}] upkeep: ${value.upkeep}`);
             }
+        }
+        if(!cupboardFound) {
+            rustplus.printCommandOutput(
+                `No tool cupboard monitors found.`);
         }
     },
 
