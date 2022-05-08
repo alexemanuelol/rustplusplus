@@ -75,7 +75,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('add_switch')
-                .setDescription('Add a Smart Switch to a Group')
+                .setDescription('Add a Smart Switch to a Group.')
                 .addStringOption(option =>
                     option
                         .setName('group_name')
@@ -89,7 +89,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('remove_switch')
-                .setDescription('Remove a Smart Switch from a Group')
+                .setDescription('Remove a Smart Switch from a Group.')
                 .addStringOption(option =>
                     option
                         .setName('group_name')

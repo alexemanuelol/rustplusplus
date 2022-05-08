@@ -5,7 +5,7 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('players')
-		.setDescription('Get player/players information based on battlemetrics.')
+		.setDescription('Get player/players information based on Battlemetrics.')
 		.addStringOption(option =>
 			option.setName('name')
 				.setDescription('The name or part of the name of the player.')

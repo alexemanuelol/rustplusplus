@@ -6,7 +6,7 @@ const Timer = require('../util/timer');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('customizetimers')
-		.setDescription('Operations so customize im-game timers.')
+		.setDescription('Operations to customize In-Game timers.')
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('cargo_ship_egress_time')
@@ -21,7 +21,7 @@ module.exports = {
 			subcommand
 				.setName('bradley_apc_respawn_time')
 				.setDescription(
-					'Get/Set time for bradley apc respawn timer for connected server, default: 60 min (3600s).')
+					'Get/Set time for Bradley APC respawn timer for connected server, default: 60 min (3600s).')
 				.addIntegerOption(option =>
 					option
 						.setName('seconds')
@@ -55,7 +55,7 @@ module.exports = {
 				.addIntegerOption(option =>
 					option
 						.setName('seconds')
-						.setDescription('Seconds till Locked Crate on Oil Rig Unlocks.')
+						.setDescription('Seconds till Locked Crate on Oil Rig unlocks.')
 						.setRequired(false))),
 
 	async execute(client, interaction) {

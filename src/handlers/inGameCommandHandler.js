@@ -371,7 +371,7 @@ module.exports = {
             let wasOnMap = rustplus.mapMarkers.timeSincePatrolHelicopterWasOnMap;
             let wasDestroyed = rustplus.mapMarkers.timeSincePatrolHelicopterWasDestroyed;
 
-            if (wasOnMap === null && WasDestroyed === null) {
+            if (wasOnMap === null && wasDestroyed === null) {
                 strings.push('No current data on Patrol Helicopter.');
             }
             else if (wasOnMap !== null && wasDestroyed === null) {
@@ -987,6 +987,7 @@ module.exports = {
                 content: `${message.broadcast.teamMessage.message.name} said: ${text}`,
                 tts: true
             });
+            rustplus.printCommandOutput('Sent the Text-To-Speech.');
         }
     },
 

@@ -5,7 +5,7 @@ const DiscordTools = require('../discordTools/discordTools');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('map')
-		.setDescription('Get currently connected server map.')
+		.setDescription('Get the currently connected server map image.')
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('all')

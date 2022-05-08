@@ -54,7 +54,7 @@ module.exports = {
         .addSubcommand(subcommand =>
             subcommand
                 .setName('is_set')
-                .setDescription('Is the FCM Credentials already set for this discord server?')),
+                .setDescription('Is the FCM Credentials already set for this Discord Server?')),
     async execute(client, interaction) {
         let instance = client.readInstanceFile(interaction.guildId);
 

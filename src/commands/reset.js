@@ -5,7 +5,7 @@ const { MessageAttachment, MessageEmbed } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('reset')
-		.setDescription('Reset discord channels.')
+		.setDescription('Reset Discord channels.')
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('discord')

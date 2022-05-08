@@ -28,7 +28,7 @@ module.exports = {
                         .setRequired(true))
                 .addStringOption(option =>
                     option.setName('steam_id')
-                        .setDescription('The steam id for the player.')
+                        .setDescription('The steam ID for the player.')
                         .setRequired(true)))
         .addSubcommand(subcommand =>
             subcommand
@@ -40,7 +40,7 @@ module.exports = {
                         .setRequired(true))
                 .addStringOption(option =>
                     option.setName('steam_id')
-                        .setDescription('The steam id for the player.')
+                        .setDescription('The steam ID for the player.')
                         .setRequired(true))),
 
     async execute(client, interaction) {

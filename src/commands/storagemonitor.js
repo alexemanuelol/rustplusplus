@@ -30,10 +30,10 @@ module.exports = {
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('recycle')
-				.setDescription('Calculate the resources gained from recycling the content of a storage monitor.')
+				.setDescription('Calculate the resources gained from recycling the content of a Storage Monitor.')
 				.addStringOption(option =>
 					option.setName('id')
-						.setDescription('The ID of the storage Monitor.')
+						.setDescription('The ID of the Storage Monitor.')
 						.setRequired(true))),
 
 	async execute(client, interaction) {
