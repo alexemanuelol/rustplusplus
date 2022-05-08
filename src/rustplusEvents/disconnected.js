@@ -20,7 +20,7 @@ module.exports = {
         }
 
         for (const [id, timer] of Object.entries(rustplus.timers)) {
-            timer.stop();
+            timer.timer.stop();
         }
         rustplus.timers = new Object();
 
