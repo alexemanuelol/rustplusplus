@@ -14,3 +14,17 @@ This will open up an instance of Google Chrome where you need to login with your
 
 ![FCM Credentials Script Image](images/credentials_script_image.png)
 ![FCM Credentials discord Image](images/credentials_discord.png)
+
+
+## Why is FCM Credentials necessary?
+
+FCM Credentials are necessary in order to get the following:
+
+* Server Pairing Notifications
+* Smart Devices Pairing Notifications
+* Smart Alarm Notifications
+* Player Offline Death Notifications
+* Teammate Login Notifications
+* Facepunch News
+
+Without these, the bot would not operate properly.
