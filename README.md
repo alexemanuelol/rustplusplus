@@ -7,126 +7,48 @@
 <a href="https://www.reddit.com/user/Alexemanuelol"><img src="https://img.shields.io/badge/Reddit-Alexemanuelol-FF4500?style=flat&logo=reddit" alt="reddit"/></a>
 <a href="https://ko-fi.com/alexemanuelol"><img src="https://img.shields.io/badge/Donate%20a%20Coffee-alexemanuelol-yellow?style=flat&logo=buy-me-a-coffee" alt="donate on ko-fi"/></a>
 
-<h1 align="center"><em><b>rustPlusPlus</b> ~~~ A Rust+ Discord Bot</em></h1>
+<h1 align="center"><em><b>rustPlusPlus</b> ~~~ Rust+ Discord Bot</em></h1>
 </p>
 
-Version 2 of the previous RustPlus-Discord-Bot. A NodeJS Discord Bot that uses the rustplus.js library.
+A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/rustplus.js) library to utilize the power of the [Rust+ Companion App](https://rust.facepunch.com/companion) with additional Quality-of-Life features.
 
-# Setup
 
-## Required Software
-- NodeJS (Since the bot is using discordjs v13, NodeJS version needs to be 16.6 or higher)
-    - https://nodejs.org/en/download/
-- Git
-    - https://git-scm.com/downloads
+## **Features**
 
-## Clone the repository
-Run the following commands to clone the repository:
+* Receive notifications for [In-Game Events](docs/discord_text_channels.md#events-channel) (Patrol Helicopter, Bradley APC, Cargo Ship, Chinook 47, Oil Rigs triggered and Locked Crate dropped).
+* Control [Smart Switches](docs/smart_devices.md#smart-switches) or Groups of Smart Switches via Discord or In-Game Team Chat.
+* Setup [Smart Alarms](docs/smart_devices.md#smart-alarms) to notify in Discord or In-Game Team Chat whenever they are triggered.
+* Use [Storage Monitors](docs/smart_devices.md#storage-monitors) to keep track of Tool Cupboard Upkeep or Large Wooden Box/Vending Machine content.
+* Head over to the [Information Text Channel](docs/images/information_channel.png) to see all sorts of information about the server, ongoing events and team member status.
+* Communicate with teammates from [Discord to In-Game](docs/discord_text_channels.md#teamchat-channel) and vice versa.
+* Keep track of other teams on the server with the [Battlemetrics Player Tracker](docs/discord_text_channels.md#trackers-channel).
+* Alot of [QoL Commands](docs/commands.md) that can be used In-Game or from Discord.
+* View the [Full list of features](docs/full_list_features.md).
 
-    $ git clone https://github.com/alexemanuelol/rustPlusPlus.git
-    $ cd rustPlusPlus
-    $ npm install
+## **Documentation**
 
-## Create a discord bot
-- Go to this website: https://discord.com/developers/docs/intro
-- Click on **Application** in the top left corner.
-- Click on **New Application** in the top right corner.
-- Give it a name and click **Create**.
-- You should now be able to see the **Application Id** or **Client Id**, add that ID to the config.json file under the clientId property.
-- Click on the **Bot** tab on the website.
-- Click on **Add Bot**.
-- Click **Yes, Do it!**.
-- Click on the **Copy** button to copy the bot token, then paste it to the config.json file under the token property.
-- Click on **OAuth2** tab on the website.
-- Scroll down to **OAuth2 URL Generator**.
-- Check the following boxes: **bot** and **applications.commands**
-- Scroll down to Bot permissions and select the following: **Administrator**
-- Copy the URL (This is used to invite you discord bot to discord servers (guilds))
+> Documentation can be found [here](docs/documentation.md). The documentation explains the features as well as `how to setup the bot`, so make sure to take a look at it 😉
 
-## How to run the bot
-Run the following command to start the bot (starting from repository root):
+## **How to run the bot**
+
+> To run the bot, simply open the terminal of your choice and run the following from repository root:
 
     $ node .
 
-## How to set credentials **(IMPORTANT)**
-Run the following commands to retrieve credential data (starting from repository root):
 
-    $ cd src/external
-    $ npm install
-    $ node .
+## **How to update the repository**
 
-This will open up an instance of **Google Chrome** where you need to login with your Steam Account to get access to Rust+ credentials. Once the login is successful, you will be given a **Discord Slash Command** string (/credential set) that you shall copy and then run in your Discord Server Text Channel. Which Text Channel you run the Slash Command is not important, as long as the bot has access to it.
+> Depending on your OS / choice of terminal you can run:
 
-## How to update the repository (If it does not work, re-clone the repository)
-Most of the time it should be possible to run the simple command:
+    $ update.bat
 
-    $ git stash && git pull --rebase && git stash pop
+or
 
-If it complains about it not having any local changes to save, just run the following command:
-
-    $ git pull --rebase
+    $ ./update.sh
 
 
-# TODO
+## **Thanks to**
 
-## Discord commands
-- [x] /help command to display a help message
-- [x] /reset command to reset rustplus instance for the guild
-- [ ] /switch command with subcommands: add, remove, removeall, on, off. Set auto-ON, custom name.
-
-
-## In-Game commands
-- [x] bradley, time before bradley should respawn
-- [x] cargo, time before cargo enters egress stage
-- [x] heli, time since heli got downed and since last time it was on map.
-- [x] leader, give team leadership
-- [x] pop, to get the current population of the server, max players and size of queue.
-- [x] time, to get the current time of the server.
-- [x] timer, set a custom timer
-- [x] wipe, to get the time since the wipe.
-- [x] small, to get the time left before crate on small oilrig unlocks.
-- [x] large, to get the time left before crate on large oilrig unlocks.
-
-
-## Information Text Channel
-- [ ] Display things like Server name, ip and port, players, current time, time since wipe, etc...
-
-
-## Events Discord Text Channel
-- [x] Cargo Ship detected notification
-- [x] Cargo Ship left notification
-- [x] Cargo Ship entered egress stage notification
-- [x] Bradley APC got destroyed notification
-- [x] Bradley APC should respawn notification
-- [x] Patrol Helicopter got downed notification
-- [x] Locked Crate spawned on Cargo Ship notification
-- [x] Locked Crate respawned on Oil Rig notification
-- [x] Locked Crate got dropped at a monument notification
-- [x] Locked Crate got looted or despawned on Cargo Ship notification
-- [x] Locked Crate got looted at Oil Rig notification
-- [x] Locked Crate got looted or despawned on monument notification
-- [x] Locked Crate at monunment despawn warning notification
-- [x] Locked Crate at Oil Rig unlocked notification
-- [x] Heavy Scientists called at Oil Rig notification
-- [x] Chinook 47 detected notification
-- [x] New Vending Machine detected notification
-- [ ] Patrol Helicopter enters the map
-
-
-## Alerts Discord Text Channel
-- [ ] Smart Alarms
-- [ ] Tool Cupboard decay Alert
-- [ ] Vending Machine item detected
-
-
-## Switches Discord Text Channel
-- [ ] Interface of Smart Switches to turn then on or off
-- [ ] Clear all messages on restart
-
-
-## Storage Monitor Text Channel
-- [ ] Interface of Storage Monitors that display time left, content, etc...
-- [ ] Clear all messages on restart
-
-
-## General Discord Text Channel
+**liamcottle**@GitHub - for the [rustplus.js](https://github.com/liamcottle/rustplus.js) library.
+<br>
+**.Vegas.#4844**@Discord - for the awesome icons!
