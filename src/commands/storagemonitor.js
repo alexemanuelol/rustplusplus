@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools.js');
 const { MessageEmbed, MessageAttachment } = require('discord.js');
 const Recycler = require('../util/recycler.js');
-const { validatePermissions } = require('./base');
+const { validatePermissions } = require('./_base');
 
 module.exports = {
 	data: new SlashCommandBuilder()

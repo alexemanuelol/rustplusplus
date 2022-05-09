@@ -5,7 +5,10 @@ const Config = require('../../config.json');
 
 module.exports = async (client, guild) => {
     const commands = [];
-    const commandFiles = fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
+    const commandFiles = fs
+        .readdirSync(`${__dirname}/../commands`)
+        .filter(file => 
+            file.endsWith('.js') && !file.startsWith("_"));
 
     for (const file of commandFiles) {
         const command = require(`../commands/${file}`);
@@ -15,7 +18,10 @@ module.exports = async (client, guild) => {
     const rest = new REST({ version: '9' }).setToken(Config.discord.token);
 
     try {
-        await rest.put(Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
+        await rest.put(
+            Routes.applicationGuildCommands(Config.discord.clientId, guild.id), 
+            { body: commands }
+        );
     }
     catch (e) {
         client.log('ERROR',
