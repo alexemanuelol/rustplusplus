@@ -147,6 +147,7 @@ Subcommand | Options | Description | Required
 ## **/reset**
 
 > **Reset Discord channels.**
+
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `discord` | &nbsp; | Reset discord channels. | &nbsp;
