@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools');
 const { MessageEmbed } = require('discord.js');
+const { validatePermissions } = require('./base');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -16,20 +17,8 @@ module.exports = {
 
 		const name = interaction.options.getString('name');
 
-		if (instance.role !== null) {
-			if (!interaction.member.permissions.has('ADMINISTRATOR') &&
-				!interaction.member.roles.cache.has(instance.role)) {
-				let role = DiscordTools.getRole(interaction.guildId, instance.role);
-				let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
-				await client.interactionReply(interaction, {
-					embeds: [new MessageEmbed()
-						.setColor('#ff0040')
-						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-					ephemeral: true
-				});
-				client.log('WARNING', str);
-				return;
-			}
+				if(!validatePermissions(client, interaction, instance)) {
+			return;
 		}
 
 		await interaction.deferReply({ ephemeral: true });
