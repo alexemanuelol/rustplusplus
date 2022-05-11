@@ -190,6 +190,7 @@ module.exports = {
                         const statusMessage = switchStatus.map(status =>
                             `${status.name}: ${status.active ? 'ON' : 'OFF'}`).join(', ');
                         rustplus.printCommandOutput(`Status: ${statusMessage}`);
+                        return true;
                     }
                     else {
                         return false;
