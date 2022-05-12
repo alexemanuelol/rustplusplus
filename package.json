@@ -1,7 +1,7 @@
 {
     "name": "rustPlusPlus",
-    "version": "0.0.1",
-    "description": "A NodeJS Discord Bot that uses the rustplus.js library.",
+    "version": "1.0.0",
+    "description": "A NodeJS Discord Bot that uses the rustplus.js library to utilize the power of the Rust+ Companion App with additional Quality-of-Life features.",
     "main": "index.js",
     "scripts": {
         "run": "node ."
