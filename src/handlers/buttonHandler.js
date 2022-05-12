@@ -217,7 +217,9 @@ module.exports = async (client, interaction) => {
             messageId: null,
             active: true,
             everyone: false,
-            players: []
+            players: [],
+            img: instance.serverList[serverId].img,
+            title: instance.serverList[serverId].title
         }
         client.writeInstanceFile(guildId, instance);
 

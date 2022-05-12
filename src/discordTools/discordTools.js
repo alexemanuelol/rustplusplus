@@ -472,7 +472,6 @@ module.exports = {
 
     getTrackerEmbed: function (guildId, trackerName) {
         const instance = Client.client.readInstanceFile(guildId);
-        const serverId = instance.trackers[trackerName].serverId;
         const battlemetricsId = instance.trackers[trackerName].battlemetricsId;
         const serverStatus = (instance.trackers[trackerName].status) ?
             Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
@@ -497,13 +496,13 @@ module.exports = {
             .setTitle(`${trackerName}`)
             .setColor('#ce412b')
             .setDescription(`**Battlemetrics ID:** \`${battlemetricsId}\`\n**Server Status:** ${serverStatus}`)
-            .setThumbnail(`${instance.serverList[serverId].img}`)
+            .setThumbnail(`${instance.trackers[trackerName].img}`)
             .addFields(
                 { name: 'Name', value: playerName, inline: true },
                 { name: 'SteamID', value: playerSteamId, inline: true },
                 { name: 'Status', value: playerStatus, inline: true }
             )
-            .setFooter({ text: `${instance.serverList[serverId].title}` })
+            .setFooter({ text: `${instance.trackers[trackerName].title}` })
 
         return embed;
     },
