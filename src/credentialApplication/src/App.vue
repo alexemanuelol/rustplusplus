@@ -110,6 +110,9 @@ export default {
 
             /* Save fcm credentials to store */
             window.DataStore.FCM.setCredentials(data.credentials);
+
+            /* Configure expo data */
+            this.setupExpo();
         },
 
         onFCMRegisterError(data) {
@@ -126,7 +129,7 @@ export default {
                  * installs.
                  */
                 let expoDeviceId = window.DataStore.Config.getExpoDeviceId();
-                let deviceId = '@liamcottle/atlas-for-rust:' + expoDeviceId;
+                let deviceId = 'rustPlusPlus-FCM-Credential-Application:' + expoDeviceId;
                 let rustplusToken = window.DataStore.Config.getRustPlusToken();
 
                 this.rustCompanionReceiver.register(deviceId, rustplusToken, data.expoPushToken);
@@ -164,11 +167,23 @@ export default {
 
                 /* Clear saved persistent ids */
                 window.DataStore.FCM.clearPersistentIds();
+
+                /* Configure expo data */
+                this.setupExpo();
             }
             else {
                 /* Register for a new set of fcm credentials */
                 this.fcmNotificationReceiver.register('976529667804');
             }
+        },
+
+        setupExpo() {
+            var deviceId = window.DataStore.Config.getExpoDeviceId();
+            var experienceId = '@facepunch/RustCompanion';
+            var appId = 'com.facepunch.rust.companion';
+            var fcmToken = window.DataStore.FCM.getCredentials().fcm.token;
+
+            this.expoPushTokenReceiver.register(deviceId, experienceId, appId, fcmToken);
         },
 
         logout() {

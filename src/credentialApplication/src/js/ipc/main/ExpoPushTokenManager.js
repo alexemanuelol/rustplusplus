@@ -1,5 +1,6 @@
 const axios = require('axios');
 const https = require('https');
+const { v4: uuidv4 } = require('uuid');
 
 /**
  * This class is responsible for obtaining an Expo Push Token.
@@ -36,7 +37,7 @@ class ExpoPushTokenManager {
     async onRegister(event, data) {
         /* Register with expo */
         axios.post('https://exp.host/--/api/v2/push/getExpoPushToken', {
-            deviceId: data.deviceId,
+            deviceId: uuidv4(),
             experienceId: data.experienceId,
             appId: data.appId,
             deviceToken: data.deviceToken,
