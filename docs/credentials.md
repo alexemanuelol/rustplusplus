@@ -4,17 +4,23 @@
 
 ## Retrieving FCM Credentials
 
-Open a terminal (`Git Bash` / `CMD` / `Terminal` / `PowerShell` or similar) and run the following commands:
+* Download and install the [rustPlusPlus FCM Credential Application](https://github.com/alexemanuelol/rustPlusPlus/releases/download/v1.0.0/rustPlusPlus-FCM-Credential-Application-1.0.0-win-x64.exe)
+* Once downloaded and installed, open it and press the button `Connect with Rust+`.
 
-    $ cd src/external
-    $ npm install
-    $ node .
+![rustPlusPlus FCM Credential Application Image](images/fcm_credential_application_connect.png)
 
-This will open up an instance of Google Chrome where you need to login with your Steam Account to get access to FCM Credentials. Once the login is successful, you will be given a `Discord Slash Command` string (/credential set) that you shall copy and then run in your Discord Server Text Channel. Which Text Channel you run the Slash Command is not important, as long as the bot has access to it.
+* Another window will pop up where you need to login with your Steam Account.
 
-![FCM Credentials Script Image](images/credentials_script_image.png)
+![Steam Account login Image](images/steam_login.png)
+
+* When you have logged in, you should be greeted with a window that display the Slash Command /credentials set .....
+* Click `Copy` to copy the Slash Command.
+
+![Credentials copy Image](images/credentials_copy.png)
+
+* Paste the Slash command in your Discord Server Text Channel. Which Text Channel you run the Slash Command is not important, as long as the bot has access to it.
+
 ![FCM Credentials discord Image](images/credentials_discord.png)
-
 
 ## Why is FCM Credentials necessary?
 

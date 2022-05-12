@@ -20,7 +20,11 @@ module.exports = {
 					new MessageButton()
 						.setStyle('LINK')
 						.setLabel('DOCUMENTATION')
-						.setURL('https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md')
+						.setURL('https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md'),
+					new MessageButton()
+						.setStyle('LINK')
+						.setLabel('CREDENTIALS')
+						.setURL('https://github.com/alexemanuelol/rustPlusPlus/releases/tag/v1.0.0')
 				)
 			],
 			ephemeral: true

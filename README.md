@@ -25,9 +25,15 @@ A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/r
 * Alot of [QoL Commands](docs/commands.md) that can be used In-Game or from Discord.
 * View the [Full list of features](docs/full_list_features.md).
 
+
 ## **Documentation**
 
 > Documentation can be found [here](docs/documentation.md). The documentation explains the features as well as `how to setup the bot`, so make sure to take a look at it 😉
+
+## **Credentials**
+
+> You can get your credentials by running the `rustPlusPlus FCM Credential Application`. Download it [here](https://github.com/alexemanuelol/rustPlusPlus/releases/download/v1.0.0/rustPlusPlus-FCM-Credential-Application-1.0.0-win-x64.exe)
+
 
 ## **How to run the bot**
 
