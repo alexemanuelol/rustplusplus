@@ -1,0 +1,41 @@
+{
+    "name": "rustPlusPlus-FCM-Credential-Application",
+    "description": "rustPlusPlus FCM Credentials Application",
+    "version": "0.0.1",
+    "author": "Alexemanuelol",
+    "private": true,
+    "main": "background.js",
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "electron:build": "vue-cli-service electron:build",
+        "electron:serve": "vue-cli-service electron:serve",
+        "postinstall": "electron-builder install-app-deps",
+        "postuninstall": "electron-builder install-app-deps"
+    },
+    "dependencies": {
+        "@tailwindcss/forms": "^0.2.1",
+        "@tailwindcss/postcss7-compat": "^2.0.2",
+        "autoprefixer": "^9",
+        "axios": "^0.21.1",
+        "core-js": "^3.6.5",
+        "electron-store": "^7.0.2",
+        "json-bigint": "^1.0.0",
+        "long": "^4.0.0",
+        "postcss": "^7",
+        "push-receiver": "^2.1.1",
+        "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+        "uuid": "^8.3.2",
+        "vue": "^2.6.11",
+        "vue-cookie": "^1.1.4"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "electron": "^11.0.0",
+        "electron-devtools-installer": "^3.1.0",
+        "vue-cli-plugin-electron-builder": "~2.0.0-rc.6",
+        "vue-cli-plugin-tailwind": "~2.0.6",
+        "vue-template-compiler": "^2.6.11"
+    }
+}
