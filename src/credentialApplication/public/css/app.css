@@ -1,0 +1,46 @@
+/* Remove default margin and padding */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Disable selection */
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+input,
+button,
+textarea,
+:focus {
+    outline: none;
+}
+
+/* Disable image and anchor dragging */
+a:not([draggable=true]),
+img:not([draggable=true]) {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
+a[href^="http://"],
+a[href^="https://"],
+a[href^="ftp://"] {
+    -webkit-user-drag: auto;
+    user-drag: auto;
+}
+
+/* Hide the scrollbar */
+::-webkit-scrollbar {
+    width: 0;
+}
+
+/* Remove default styles from leaflet div icons */
+.leaflet-div-icon {
+    background: unset !important;
+    border: unset !important;
+}
