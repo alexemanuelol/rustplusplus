@@ -74,8 +74,10 @@ module.exports = {
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 let msg = await client.messageSend(infoChannel, { files: [mapFile] });
-                instance.informationMessageId.map = msg.id;
-                client.writeInstanceFile(rustplus.guildId, instance);
+                if (msg) {
+                    instance.informationMessageId.map = msg.id;
+                    client.writeInstanceFile(rustplus.guildId, instance);
+                }
             }
         }
         else {
