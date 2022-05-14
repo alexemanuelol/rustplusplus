@@ -160,6 +160,9 @@ module.exports = {
 
 				let entityInfo = await rustplus.getEntityInfoAsync(id);
 				if (!(await rustplus.isResponseValid(entityInfo))) {
+					instance.storageMonitors[id].reachable = false;
+					client.writeInstanceFile(interaction.guildId, instance);
+
 					let str = `Could not get items from Storage Monitor: ${id}`;
 					await client.interactionEditReply(interaction, {
 						embeds: [new MessageEmbed()
@@ -169,8 +172,12 @@ module.exports = {
 						ephemeral: true
 					});
 					rustplus.log('WARNING', str);
+
+					await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id);
 					return;
 				}
+				instance.storageMonitors[id].reachable = true;
+				client.writeInstanceFile(interaction.guildId, instance);
 
 				let items = Recycler.calculate(entityInfo.entityInfo.payload.items);
 

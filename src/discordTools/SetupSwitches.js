@@ -16,14 +16,17 @@ module.exports = async (client, rustplus) => {
 
         if (!(await rustplus.isResponseValid(info))) {
             await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
-            delete instance.switches[key];
-            client.writeInstanceFile(rustplus.guildId, instance);
-            continue;
+            instance.switches[key].reachable = false;
         }
-
-        let active = info.entityInfo.payload.value;
-        instance.switches[key].active = active;
+        else {
+            instance.switches[key].reachable = true;
+        }
         client.writeInstanceFile(rustplus.guildId, instance);
+
+        if (instance.switches[key].reachable) {
+            instance.switches[key].active = info.entityInfo.payload.value;
+            client.writeInstanceFile(rustplus.guildId, instance);
+        }
 
         await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
     }

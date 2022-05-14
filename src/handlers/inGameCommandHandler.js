@@ -114,7 +114,17 @@ module.exports = {
                     }
                     else if (command === `${cmd} status`) {
                         let info = await rustplus.getEntityInfoAsync(id);
-                        if (!(await rustplus.isResponseValid(info))) return false;
+                        if (!(await rustplus.isResponseValid(info))) {
+                            instance.switches[id].reachable = false;
+                            client.writeInstanceFile(rustplus.guildId, instance);
+                            DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                            SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+                                client, rustplus.guildId, rustplus.serverId, id);
+
+                            rustplus.printCommandOutput(
+                                `Could not communicate with Smart Switch: ${instance.switches[id].name}`);
+                            return false;
+                        }
 
                         active = (info.entityInfo.payload.value) ? 'ON' : 'OFF';
                         rustplus.printCommandOutput(`${instance.switches[id].name} is currently ${active}.`);
@@ -124,6 +134,7 @@ module.exports = {
                         return false;
                     }
 
+                    let prevActive = instance.switches[id].active;
                     instance.switches[id].active = active;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
@@ -139,30 +150,29 @@ module.exports = {
 
                     if (!(await rustplus.isResponseValid(response))) {
                         rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
-                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
-
-                        delete instance.switches[id];
+                        if (instance.switches[id].reachable) {
+                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                        }
+                        instance.switches[id].reachable = false;
+                        instance.switches[id].active = prevActive;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
-
-                        try {
-                            await client.switchesMessages[rustplus.guildId][id].delete();
-                        }
-                        catch (e) {
-                            client.log('ERROR', `Could not delete switch message for entityId: ${id}.`, 'error');
-                        }
-                        delete client.switchesMessages[rustplus.guildId][id];
-                        return false;
+                    }
+                    else {
+                        instance.switches[id].reachable = true;
+                        client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
                     SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                         client, rustplus.guildId, rustplus.serverId, id);
 
-                    let str = `${instance.switches[id].name} was turned `;
-                    str += (active) ? 'on.' : 'off.';
-                    rustplus.printCommandOutput(str);
+                    if (instance.switches[id].reachable) {
+                        let str = `${instance.switches[id].name} was turned `;
+                        str += (active) ? 'on.' : 'off.';
+                        rustplus.printCommandOutput(str);
+                    }
 
                     return true;
                 }
@@ -184,11 +194,12 @@ module.exports = {
                     else if (command === `${cmd}`) {
                         /* Get switch info, create message */
                         var switchStatus = content.switches.map(switchId => {
-                            const { active, name } = instance.switches[switchId];
-                            return { active, name }
+                            const { active, name, reachable } = instance.switches[switchId];
+                            return { active, name, reachable }
                         });
                         const statusMessage = switchStatus.map(status =>
-                            `${status.name}: ${status.active ? 'ON' : 'OFF'}`).join(', ');
+                            `${status.name}: ${status.reachable ? (status.active ? 'ON' : 'OFF') : 'NOT FOUND'}`)
+                            .join(', ');
                         rustplus.printCommandOutput(`Status: ${statusMessage}`);
                         return true;
                     }
@@ -1015,7 +1026,7 @@ module.exports = {
                     `${value.name} [${key}] upkeep: ${value.upkeep}`);
             }
         }
-        if(!cupboardFound) {
+        if (!cupboardFound) {
             rustplus.printCommandOutput(
                 `No tool cupboard monitors found.`);
         }

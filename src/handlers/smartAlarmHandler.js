@@ -11,23 +11,22 @@ module.exports = {
 
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
-                    await DiscordTools.sendSmartAlarmNotFound(rustplus.guildId, key);
+                    if (instance.alarms[key].reachable) {
+                        await DiscordTools.sendSmartAlarmNotFound(rustplus.guildId, key);
 
-                    let messageId = instance.alarms[key].messageId;
-                    let message = await DiscordTools.getMessageById(
-                        rustplus.guildId, instance.channelId.alarms, messageId);
-                    if (message !== undefined) {
-                        try {
-                            await message.delete();
-                        }
-                        catch (e) {
-                            client.log('ERROR', `Could not delete alarm message for entityId: ${key}.`, 'error');
-                        }
+                        instance.alarms[key].reachable = false;
+                        client.writeInstanceFile(rustplus.guildId, instance);
+
+                        await DiscordTools.sendSmartAlarmMessage(rustplus.guildId, key, true, false, false);
                     }
+                }
+                else {
+                    if (!instance.alarms[key].reachable) {
+                        instance.alarms[key].reachable = true;
+                        client.writeInstanceFile(rustplus.guildId, instance);
 
-                    delete instance.alarms[key];
-                    client.writeInstanceFile(rustplus.guildId, instance);
-                    continue;
+                        await DiscordTools.sendSmartAlarmMessage(rustplus.guildId, key, true, false, false);
+                    }
                 }
             }
         }

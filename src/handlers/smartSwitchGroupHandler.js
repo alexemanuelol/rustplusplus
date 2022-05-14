@@ -53,6 +53,7 @@ module.exports = {
         }
 
         for (let id of actionSwitches) {
+            let prevActive = instance.switches[id].active;
             instance.switches[id].active = value;
             client.writeInstanceFile(guildId, instance);
 
@@ -67,21 +68,18 @@ module.exports = {
             }
 
             if (!(await rustplus.isResponseValid(response))) {
-                await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
-
-                delete instance.switches[id];
+                if (instance.switches[id].reachable) {
+                    await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                }
+                instance.switches[id].reachable = false;
+                instance.switches[id].active = prevActive;
                 client.writeInstanceFile(rustplus.guildId, instance);
 
                 rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
-
-                try {
-                    await client.switchesMessages[rustplus.guildId][id].delete();
-                }
-                catch (e) {
-                    client.log('ERROR', `Could not delete switch group message for entityId: ${id}.`, 'error');
-                }
-                delete client.switchesMessages[rustplus.guildId][id];
-                return;
+            }
+            else {
+                instance.switches[id].reachable = true;
+                client.writeInstanceFile(rustplus.guildId, instance);
             }
 
             DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false);

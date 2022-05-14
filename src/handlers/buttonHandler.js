@@ -389,6 +389,7 @@ module.exports = async (client, interaction) => {
 
         let active = (interaction.customId.endsWith('OnSmartSwitch')) ? true : false;
 
+        let prevActive = instance.switches[id].active;
         instance.switches[id].active = active;
         client.writeInstanceFile(guildId, instance);
 
@@ -403,26 +404,18 @@ module.exports = async (client, interaction) => {
         }
 
         if (!(await rustplus.isResponseValid(response))) {
-            if (response.hasOwnProperty('error') && response.error === 'not_found') {
+            if (instance.switches[id].reachable) {
                 await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
-
-                delete instance.switches[id];
-                client.writeInstanceFile(rustplus.guildId, instance);
-
-                rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
-
-                if (client.switchesMessages[guildId].hasOwnProperty(id)) {
-                    try {
-                        await client.switchesMessages[rustplus.guildId][id].delete();
-                    }
-                    catch (e) {
-                        client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
-                    }
-                    delete client.switchesMessages[rustplus.guildId][id];
-                }
             }
+            instance.switches[id].reachable = false;
+            instance.switches[id].active = prevActive;
+            client.writeInstanceFile(rustplus.guildId, instance);
 
-            return;
+            rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
+        }
+        else {
+            instance.switches[id].reachable = true;
+            client.writeInstanceFile(rustplus.guildId, instance);
         }
 
         DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false, interaction);
@@ -431,8 +424,10 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId.endsWith('SmartSwitchDelete')) {
         let id = interaction.customId.replace('SmartSwitchDelete', '');
+        let serverId = null;
 
         if (instance.switches.hasOwnProperty(id)) {
+            serverId = instance.switches[id].serverId;
             delete instance.switches[id];
         }
 
@@ -444,6 +439,15 @@ module.exports = async (client, interaction) => {
                 client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
             }
             delete client.switchesMessages[guildId][id];
+        }
+
+        for (const [groupName, groupContent] of Object.entries(instance.serverList[serverId].switchGroups)) {
+            if (groupContent.switches.includes(id)) {
+                instance.serverList[serverId].switchGroups[groupName].switches =
+                    groupContent.switches.filter(e => e !== id);
+                client.writeInstanceFile(guildId, instance);
+                await DiscordTools.sendSmartSwitchGroupMessage(guildId, groupName, true, false, false);
+            }
         }
 
         client.writeInstanceFile(guildId, instance);

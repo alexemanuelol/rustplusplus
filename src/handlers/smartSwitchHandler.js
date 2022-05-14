@@ -5,6 +5,7 @@ module.exports = {
     handler: async function (rustplus, client, time) {
         let instance = client.readInstanceFile(rustplus.guildId);
 
+        let changedSwitches = [];
         if (rustplus.smartSwitchIntervalCounter === 29) {
             rustplus.smartSwitchIntervalCounter = 0;
             for (const [key, value] of Object.entries(instance.switches)) {
@@ -13,19 +14,23 @@ module.exports = {
 
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
-                    await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                    if (instance.switches[key].reachable) {
+                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                        instance.switches[key].reachable = false;
+                        client.writeInstanceFile(rustplus.guildId, instance);
 
-                    delete instance.switches[key];
-                    client.writeInstanceFile(rustplus.guildId, instance);
+                        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                        changedSwitches.push(key);
+                    }
+                }
+                else {
+                    if (!instance.switches[key].reachable) {
+                        instance.switches[key].reachable = true;
+                        client.writeInstanceFile(rustplus.guildId, instance);
 
-                    try {
-                        await client.switchesMessages[rustplus.guildId][key].delete();
+                        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                        changedSwitches.push(key);
                     }
-                    catch (e) {
-                        client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
-                    }
-                    delete client.switchesMessages[rustplus.guildId][key];
-                    continue;
                 }
             }
         }
@@ -33,7 +38,6 @@ module.exports = {
             rustplus.smartSwitchIntervalCounter += 1;
         }
 
-        let changedSwitches = [];
         if (rustplus.time.isTurnedDay(time)) {
             for (const [key, value] of Object.entries(instance.switches)) {
                 if (rustplus.serverId !== `${value.serverId}`) continue;
@@ -47,23 +51,18 @@ module.exports = {
 
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
-
-                        delete instance.switches[key];
+                        if (instance.switches[key].reachable) {
+                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                        }
+                        instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
-
-                        try {
-                            await client.switchesMessages[rustplus.guildId][key].delete();
-                        }
-                        catch (e) {
-                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
-                        }
-                        delete client.switchesMessages[rustplus.guildId][key];
-                        continue;
                     }
-
+                    else {
+                        instance.switches[key].reachable = true;
+                        client.writeInstanceFile(rustplus.guildId, instance);
+                    }
 
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
                     changedSwitches.push(key);
@@ -76,21 +75,17 @@ module.exports = {
 
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
-
-                        delete instance.switches[key];
+                        if (instance.switches[key].reachable) {
+                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                        }
+                        instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
-
-                        try {
-                            await client.switchesMessages[rustplus.guildId][key].delete();
-                        }
-                        catch (e) {
-                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
-                        }
-                        delete client.switchesMessages[rustplus.guildId][key];
-                        continue;
+                    }
+                    else {
+                        instance.switches[key].reachable = true;
+                        client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
@@ -111,21 +106,17 @@ module.exports = {
 
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
-
-                        delete instance.switches[key];
+                        if (instance.switches[key].reachable) {
+                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                        }
+                        instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
-
-                        try {
-                            await client.switchesMessages[rustplus.guildId][key].delete();
-                        }
-                        catch (e) {
-                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
-                        }
-                        delete client.switchesMessages[rustplus.guildId][key];
-                        continue;
+                    }
+                    else {
+                        instance.switches[key].reachable = true;
+                        client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
@@ -139,21 +130,17 @@ module.exports = {
 
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
-
-                        delete instance.switches[key];
+                        if (instance.switches[key].reachable) {
+                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                        }
+                        instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
-
-                        try {
-                            await client.switchesMessages[rustplus.guildId][key].delete();
-                        }
-                        catch (e) {
-                            client.log('ERROR', `Could not delete switch message for entityId: ${key}.`, 'error');
-                        }
-                        delete client.switchesMessages[rustplus.guildId][key];
-                        continue;
+                    }
+                    else {
+                        instance.switches[key].reachable = true;
+                        client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
                     DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);

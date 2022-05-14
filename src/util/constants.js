@@ -21,6 +21,7 @@ module.exports = {
     /* Emojis */
     ONLINE_EMOJI: ':green_circle:',
     OFFLINE_EMOJI: ':red_circle:',
+    NOT_FOUND_EMOJI: ':x:',
     AFK_EMOJI: ':yellow_circle:',
     ALIVE_EMOJI: ':nerd:',
     SLEEPING_EMOJI: ':sleeping:',

@@ -653,9 +653,13 @@ module.exports = {
         const instance = Client.client.readInstanceFile(guildId);
 
         const file = new MessageAttachment(`src/resources/images/electrics/${instance.switches[id].image}`);
-        const embed = module.exports.getSmartSwitchEmbed(guildId, id);
-        const selectMenu = module.exports.getSmartSwitchSelectMenu(guildId, id);
-        const buttons = module.exports.getSmartSwitchButtons(guildId, id);
+        let embed = module.exports.getSmartSwitchEmbed(guildId, id);
+        let selectMenu = module.exports.getSmartSwitchSelectMenu(guildId, id);
+        let buttons = module.exports.getSmartSwitchButtons(guildId, id);
+
+        if (!instance.switches[id].reachable) {
+            embed = module.exports.getNotFoundSmartDeviceEmbed(guildId, id, 'switches');
+        }
 
         let content = new Object();
         if (e) {
@@ -721,8 +725,12 @@ module.exports = {
         const instance = Client.client.readInstanceFile(guildId);
 
         const file = new MessageAttachment(`src/resources/images/electrics/${instance.alarms[id].image}`);
-        const embed = module.exports.getSmartAlarmEmbed(guildId, id);
-        const buttons = module.exports.getSmartAlarmButtons(guildId, id);
+        let embed = module.exports.getSmartAlarmEmbed(guildId, id);
+        let buttons = module.exports.getSmartAlarmButtons(guildId, id);
+
+        if (!instance.alarms[id].reachable) {
+            embed = module.exports.getNotFoundSmartDeviceEmbed(guildId, id, 'alarms');
+        }
 
         let content = new Object();
         if (e) {
@@ -870,8 +878,15 @@ module.exports = {
         let instance = Client.client.readInstanceFile(guildId);
 
         const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
-        const embed = module.exports.getStorageMonitorEmbed(guildId, id);
-        instance = Client.client.readInstanceFile(guildId);
+        let embed = null;
+
+        if (instance.storageMonitors[id].reachable) {
+            embed = module.exports.getStorageMonitorEmbed(guildId, id);
+            instance = Client.client.readInstanceFile(guildId);
+        }
+        else {
+            embed = module.exports.getNotFoundSmartDeviceEmbed(guildId, id, 'storageMonitors');
+        }
 
         let buttons = null;
         if (instance.storageMonitors[id].type === 'toolcupboard') {
@@ -970,7 +985,8 @@ module.exports = {
         if (channel) {
             let content = {};
             content.embeds = [new MessageEmbed()
-                .setTitle(`${instance.storageMonitors[id].name} could not be found! Might have been destroyed.`)
+                .setTitle(`${instance.storageMonitors[id].name} could not be found!` +
+                    ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
                 .setDescription(`**ID** \`${id}\``)
                 .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
@@ -995,7 +1011,8 @@ module.exports = {
         if (channel) {
             let content = {};
             content.embeds = [new MessageEmbed()
-                .setTitle(`${instance.switches[id].name} could not be found! Might have been destroyed.`)
+                .setTitle(`${instance.switches[id].name} could not be found!` +
+                    ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
                 .setDescription(`**ID** \`${id}\``)
                 .setThumbnail(`attachment://${instance.switches[id].image}`)
@@ -1016,7 +1033,8 @@ module.exports = {
         if (channel) {
             let content = {};
             content.embeds = [new MessageEmbed()
-                .setTitle(`${instance.alarms[id].name} could not be found! Might have been destroyed.`)
+                .setTitle(`${instance.alarms[id].name} could not be found!` +
+                    ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
                 .setDescription(`**ID** \`${id}\``)
                 .setThumbnail(`attachment://${instance.alarms[id].image}`)
@@ -1042,7 +1060,12 @@ module.exports = {
                 let active = instance.switches[groupSwitchId].active;
                 switchName += `${instance.switches[groupSwitchId].name}\n`;
                 switchId += `${groupSwitchId}\n`;
-                switchActive += `${(active) ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI}\n`;
+                if (instance.switches[groupSwitchId].reachable) {
+                    switchActive += `${(active) ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI}\n`;
+                }
+                else {
+                    switchActive += `${Constants.NOT_FOUND_EMOJI}\n`;
+                }
             }
             else {
                 instance.serverList[rustplus.serverId].switchGroups[name].switches =
@@ -1172,5 +1195,16 @@ module.exports = {
 
             await Client.client.messageSend(channel, content);
         }
+    },
+
+    getNotFoundSmartDeviceEmbed: function (guildId, id, type) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        return new MessageEmbed()
+            .setTitle(`${instance[type][id].name}`)
+            .setColor('#ff0040')
+            .setDescription(`**ID**: \`${id}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`)
+            .setThumbnail(`attachment://${instance[type][id].image}`)
+            .setFooter({ text: `${instance[type][id].server}` })
     },
 }
