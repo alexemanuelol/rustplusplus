@@ -361,7 +361,6 @@ class MapMarkers {
                     this.bradleyAPCRespawnTimers[marker.id] = new Timer.timer(
                         this.notifyBradleyAPCRespawn.bind(this),
                         instance.serverList[this.rustplus.serverId].bradleyApcRespawnTimeMs,
-                        Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
                         marker.id);
                     this.bradleyAPCRespawnTimers[marker.id].start();
                 }
