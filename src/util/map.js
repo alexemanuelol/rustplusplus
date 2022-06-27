@@ -44,7 +44,7 @@ module.exports = {
 
             let monumentObj = null;
             for (let monument of rustplus.map.monuments) {
-                if (monument.token === 'DungeonBase') continue;
+                if (monument.token === 'DungeonBase' || !(monument.token in rustplus.map.monumentInfo)) continue;
                 if (module.exports.getDistance(x, y, monument.x, monument.y) <=
                     rustplus.map.monumentInfo[monument.token].radius) {
                     monumentObj = rustplus.map.monumentInfo[monument.token];
