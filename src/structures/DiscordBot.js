@@ -5,6 +5,8 @@ const RustPlus = require('../structures/RustPlus');
 const Logger = require('./Logger.js');
 const path = require('path');
 const Items = require('./Items');
+const DiscordTools = require('../discordTools/discordTools');
+const { MessageEmbed } = require('discord.js');
 
 class DiscordBot extends Client {
     constructor(props) {
@@ -226,6 +228,29 @@ class DiscordBot extends Client {
         }
 
         return undefined;
+    }
+
+    async validatePermissions(interaction) {
+        let instance = this.readInstanceFile(interaction.guildId);
+
+        /* If role isn't setup yet, validate as true */
+        if (instance.role === null) return true;
+
+        if (!interaction.member.permissions.has('ADMINISTRATOR') &&
+            !interaction.member.roles.cache.has(instance.role)) {
+            let role = DiscordTools.getRole(interaction.guildId, instance.role);
+            let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
+            await this.interactionReply(interaction, {
+                embeds: [new MessageEmbed()
+                    .setColor('#ff0040')
+                    .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
+                ephemeral: true
+            });
+
+            this.log('WARNING', str);
+            return false;
+        }
+        return true;
     }
 }
 
