@@ -9,80 +9,81 @@ const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
         let command = message.broadcast.teamMessage.message.message;
+        let commandLowerCase = message.broadcast.teamMessage.message.message.toLowerCase();
 
         if (!rustplus.generalSettings.inGameCommandsEnabled) {
             return false;
         }
-        else if (command === `${rustplus.generalSettings.prefix}afk`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}afk`) {
             module.exports.commandAfk(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}alive`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}alive`) {
             module.exports.commandAlive(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}bradley`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}bradley`) {
             module.exports.commandBradley(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}cargo`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}cargo`) {
             module.exports.commandCargo(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}chinook`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}chinook`) {
             module.exports.commandChinook(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}crate`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}crate`) {
             module.exports.commandCrate(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}heli`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}heli`) {
             module.exports.commandHeli(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}large`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}large`) {
             module.exports.commandLarge(rustplus);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}leader`)) {
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}leader`)) {
             module.exports.commandLeader(rustplus, message);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}marker`)) {
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}marker`)) {
             module.exports.commandMarker(rustplus, client, message);
         }
-        else if (command === `${rustplus.generalSettings.prefix}mute`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}mute`) {
             module.exports.commandMute(rustplus, client);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}note`)) {
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}note`)) {
             module.exports.commandNote(rustplus, client, message)
         }
-        else if (command === `${rustplus.generalSettings.prefix}offline`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}offline`) {
             module.exports.commandOffline(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}online`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}online`) {
             module.exports.commandOnline(rustplus);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}player`)) {
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}player`)) {
             module.exports.commandPlayer(rustplus, client, message);
         }
-        else if (command === `${rustplus.generalSettings.prefix}pop`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}pop`) {
             module.exports.commandPop(rustplus);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}prox`)) {
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}prox`)) {
             module.exports.commandProx(rustplus, client, message);
         }
-        else if (command === `${rustplus.generalSettings.prefix}small`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}small`) {
             module.exports.commandSmall(rustplus);
         }
-        else if (command === `${rustplus.generalSettings.prefix}time`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}time`) {
             module.exports.commandTime(rustplus);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}tts `)) {
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}tts `)) {
             module.exports.commandTTS(rustplus, client, message);
         }
-        else if (command === `${rustplus.generalSettings.prefix}unmute`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}unmute`) {
             module.exports.commandUnmute(rustplus, client);
         }
-        else if (command === `${rustplus.generalSettings.prefix}upkeep`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}upkeep`) {
             module.exports.commandUpkeep(rustplus, client);
         }
-        else if (command === `${rustplus.generalSettings.prefix}wipe`) {
+        else if (commandLowerCase === `${rustplus.generalSettings.prefix}wipe`) {
             module.exports.commandWipe(rustplus);
         }
         else {
@@ -453,7 +454,7 @@ module.exports = {
             return;
         }
 
-        if (command === `${rustplus.generalSettings.prefix}leader`) {
+        if (command.toLowerCase() === `${rustplus.generalSettings.prefix}leader`) {
             if (rustplus.team.leaderSteamId !== callerId) {
                 await rustplus.team.changeLeadership(callerId);
                 let player = rustplus.team.getPlayer(callerId);
@@ -467,7 +468,7 @@ module.exports = {
             }
         }
         else {
-            let name = command.replace(`${rustplus.generalSettings.prefix}leader `, '');
+            let name = command.slice(8);
 
             let matchedPlayer = null;
             /* Look if the value provided is a steamId */
@@ -515,15 +516,15 @@ module.exports = {
         let callerId = message.broadcast.teamMessage.message.steamId.toString();
         let command = message.broadcast.teamMessage.message.message;
 
-        if (!command.startsWith(`${rustplus.generalSettings.prefix}marker `)) {
+        if (!command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}marker `)) {
             return;
         }
 
-        command = command.replace(`${rustplus.generalSettings.prefix}marker `, '');
+        command = command.slice(8);
         let subcommand = command.replace(/ .*/, '');
         command = command.slice(subcommand.length + 1);
 
-        switch (subcommand) {
+        switch (subcommand.toLowerCase()) {
             case 'add': {
                 let teamInfo = await rustplus.getTeamInfoAsync();
                 if (!(await rustplus.isResponseValid(teamInfo))) return;
@@ -624,7 +625,7 @@ module.exports = {
             instance.serverList[rustplus.serverId].notes = {};
         }
 
-        if (command === `${rustplus.generalSettings.prefix}notes`) {
+        if (command.toLowerCase() === `${rustplus.generalSettings.prefix}notes`) {
             if (Object.keys(instance.serverList[rustplus.serverId].notes).length === 0) {
                 rustplus.printCommandOutput('There are no saved notes.');
             }
@@ -636,8 +637,8 @@ module.exports = {
                 rustplus.printCommandOutput(str);
             }
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}note remove`)) {
-            let id = parseInt(command.replace(`${rustplus.generalSettings.prefix}note remove`, '').trim());
+        else if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}note remove`)) {
+            let id = parseInt(command.slice(12).trim());
 
             if (!isNaN(id)) {
                 if (!Object.keys(instance.serverList[rustplus.serverId].notes).map(Number).includes(id)) {
@@ -652,8 +653,8 @@ module.exports = {
             }
         }
 
-        if (command.startsWith(`${rustplus.generalSettings.prefix}note `)) {
-            let note = command.replace(`${rustplus.generalSettings.prefix}note `, '').trim();
+        if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}note `)) {
+            let note = command.slice(5).trim();
 
             index = 0;
             while (Object.keys(instance.serverList[rustplus.serverId].notes).map(Number).includes(index)) {
@@ -708,11 +709,11 @@ module.exports = {
         }
 
         let foundPlayers = [];
-        if (command === `${rustplus.generalSettings.prefix}players`) {
+        if (command.toLowerCase() === `${rustplus.generalSettings.prefix}players`) {
             foundPlayers = client.battlemetricsOnlinePlayers[battlemetricsId].slice();
         }
-        else if (command.startsWith(`${rustplus.generalSettings.prefix}player `)) {
-            nameSearch = command.replace(`${rustplus.generalSettings.prefix}player `, '');
+        else if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}player `)) {
+            nameSearch = command.slice(7).trim();
 
             for (let player of client.battlemetricsOnlinePlayers[battlemetricsId]) {
                 if (player.name.includes(nameSearch)) {
@@ -751,7 +752,7 @@ module.exports = {
             }
         }
         else {
-            if (command === `${rustplus.generalSettings.prefix}players`) {
+            if (command.toLowerCase() === `${rustplus.generalSettings.prefix}players`) {
                 str = 'Could not find any players.';
             }
             else {
@@ -775,7 +776,7 @@ module.exports = {
         let caller = rustplus.team.getPlayer(callerId);
         let command = message.broadcast.teamMessage.message.message;
 
-        if (command === `${rustplus.generalSettings.prefix}prox`) {
+        if (command.toLowerCase() === `${rustplus.generalSettings.prefix}prox`) {
             let teamInfo = await rustplus.getTeamInfoAsync();
             if (!(await rustplus.isResponseValid(teamInfo))) return;
             TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
@@ -828,7 +829,7 @@ module.exports = {
             return;
         }
 
-        memberName = command.replace(`${rustplus.generalSettings.prefix}prox`, '').trim();
+        memberName = command.slice(5).trim();
 
         let teamInfo = await rustplus.getTeamInfoAsync();
         if (!(await rustplus.isResponseValid(teamInfo))) return;
@@ -907,20 +908,20 @@ module.exports = {
     },
 
     commandTimer: function (rustplus, command) {
-        if (!command.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
+        if (!command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             return;
         }
 
-        command = command.replace(`${rustplus.generalSettings.prefix}timer `, '');
+        command = command.slice(6).trim();
         let subcommand = command.replace(/ .*/, '');
         command = command.slice(subcommand.length + 1);
 
-        if (subcommand !== 'list' && command === '') {
+        if (subcommand.toLowerCase() !== 'list' && command === '') {
             return;
         }
 
         let id;
-        switch (subcommand) {
+        switch (subcommand.toLowerCase()) {
             case 'add': {
                 let time = command.replace(/ .*/, '');
                 let timeSeconds = Timer.getSecondsFromStringTime(time);
@@ -992,7 +993,7 @@ module.exports = {
         let instance = client.readInstanceFile(rustplus.guildId);
         let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.teamchat);
         let command = message.broadcast.teamMessage.message.message;
-        let text = command.replace(`${rustplus.generalSettings.prefix}tts `, '');
+        let text = command.slice(4).trim();
 
         if (channel !== undefined) {
             await client.messageSend(channel, {
