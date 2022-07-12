@@ -13,6 +13,10 @@
 A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/rustplus.js) library to utilize the power of the [Rust+ Companion App](https://rust.facepunch.com/companion) with additional Quality-of-Life features.
 
 
+## **How-to Setup Video**
+
+[![Image of setup video](https://www.youtube.com/s/desktop/4a88d8c6/img/favicon_144x144.png)](https://www.youtube.com/watch?v=xqcqXcWypEo)
+
 ## **Features**
 
 * Receive notifications for [In-Game Events](docs/discord_text_channels.md#events-channel) (Patrol Helicopter, Bradley APC, Cargo Ship, Chinook 47, Oil Rigs triggered and Locked Crate dropped).
