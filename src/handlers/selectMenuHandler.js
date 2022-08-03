@@ -31,6 +31,18 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, { components: [row] });
     }
+    else if (interaction.customId === 'commandDelay') {
+        instance.generalSettings.commandDelay = interaction.values[0];
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) {
+            rustplus.generalSettings.commandDelay = interaction.values[0];
+        }
+
+        let row = DiscordTools.getCommandDelaySelectMenu(interaction.values[0]);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+    }
     else if (interaction.customId.endsWith('AutoDayNight')) {
         let id = interaction.customId.replace('AutoDayNight', '');
 

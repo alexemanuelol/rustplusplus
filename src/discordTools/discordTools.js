@@ -342,6 +342,62 @@ module.exports = {
             );
     },
 
+    getCommandDelaySelectMenu: function (currentDelay) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('commandDelay')
+                    .setPlaceholder(`Current Command Delay: ${currentDelay} seconds`)
+                    .addOptions([
+                        {
+                            label: 'NO DELAY',
+                            description: 'No command delay.',
+                            value: '0',
+                        },
+                        {
+                            label: '1 second',
+                            description: 'One second command delay.',
+                            value: '1',
+                        },
+                        {
+                            label: '2 seconds',
+                            description: 'Two seconds command delay.',
+                            value: '2',
+                        },
+                        {
+                            label: '3 seconds',
+                            description: 'Three seconds command delay.',
+                            value: '3',
+                        },
+                        {
+                            label: '4 seconds',
+                            description: 'Four seconds command delay.',
+                            value: '4',
+                        },
+                        {
+                            label: '5 seconds',
+                            description: 'Five seconds command delay.',
+                            value: '5',
+                        },
+                        {
+                            label: '6 seconds',
+                            description: 'Six seconds command delay.',
+                            value: '6',
+                        },
+                        {
+                            label: '7 seconds',
+                            description: 'Seven seconds command delay.',
+                            value: '7',
+                        },
+                        {
+                            label: '8 seconds',
+                            description: 'Eight seconds command delay.',
+                            value: '8',
+                        }
+                    ])
+            );
+    },
+
     getServerEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
