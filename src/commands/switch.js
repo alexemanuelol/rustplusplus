@@ -28,22 +28,71 @@ module.exports = {
                     option.setName('image')
                         .setDescription('Set the image that best represent the Smart Switch.')
                         .setRequired(false)
-                        .addChoice('Autoturret', 'autoturret')
-                        .addChoice('Boom Box', 'boombox')
-                        .addChoice('Broadcaster', 'broadcaster')
-                        .addChoice('Ceiling Light', 'ceiling_light')
-                        .addChoice('Discofloor', 'discofloor')
-                        .addChoice('Door Controller', 'door_controller')
-                        .addChoice('Elevator', 'elevator')
-                        .addChoice('HBHF Sensor', 'hbhf_sensor')
-                        .addChoice('Heater', 'heater')
-                        .addChoice('SAM site', 'samsite')
-                        .addChoice('Siren Light', 'siren_light')
-                        .addChoice('Smart Alarm', 'smart_alarm')
-                        .addChoice('Smart Switch', 'smart_switch')
-                        .addChoice('Sprinkler', 'sprinkler')
-                        .addChoice('Storage Monitor', 'storage_monitor')
-                        .addChoice('Christmas Lights', 'xmas_light')))
+                        .addChoices(
+                            {
+                                name: 'Autoturret',
+                                value: 'autoturret'
+                            },
+                            {
+                                name: 'Boom Box',
+                                value: 'boombox'
+                            },
+                            {
+                                name: 'Broadcaster',
+                                value: 'broadcaster'
+                            },
+                            {
+                                name: 'Ceiling Light',
+                                value: 'ceiling_light'
+                            },
+                            {
+                                name: 'Discofloor',
+                                value: 'discofloor'
+                            },
+                            {
+                                name: 'Door Controller',
+                                value: 'door_controller'
+                            },
+                            {
+                                name: 'Elevator',
+                                value: 'elevator'
+                            },
+                            {
+                                name: 'HBHF Sensor',
+                                value: 'hbhf_sensor'
+                            },
+                            {
+                                name: 'Heater',
+                                value: 'heater'
+                            },
+                            {
+                                name: 'SAM site',
+                                value: 'samsite'
+                            },
+                            {
+                                name: 'Siren Light',
+                                value: 'siren_light'
+                            },
+                            {
+                                name: 'Smart Alarm',
+                                value: 'smart_alarm'
+                            },
+                            {
+                                name: 'Smart Switch',
+                                value: 'smart_switch'
+                            },
+                            {
+                                name: 'Sprinkler',
+                                value: 'sprinkler'
+                            },
+                            {
+                                name: 'Storage Monitor',
+                                value: 'storage_monitor'
+                            },
+                            {
+                                name: 'Christmas Lights',
+                                value: 'xmas_light'
+                            })))
         .addSubcommand(subcommand =>
             subcommand
                 .setName('create_group')

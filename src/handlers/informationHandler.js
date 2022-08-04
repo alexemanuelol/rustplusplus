@@ -78,7 +78,7 @@ module.exports = {
                 { name: '\u200B', value: '\u200B', inline: true });
         }
         else {
-            embed.addField('\u200B', '\u200B');
+            embed.addFields({ name: '\u200B', value: '\u200B', inline: false });
         }
 
         embed.addFields(

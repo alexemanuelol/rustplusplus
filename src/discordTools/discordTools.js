@@ -408,7 +408,11 @@ module.exports = {
             .setThumbnail(`${instance.serverList[id].img}`);
 
         if (instance.serverList[id].connect !== null) {
-            embed.addField('Connect', `\`${instance.serverList[id].connect}\``, true);
+            embed.addFields({
+                name: 'Connect',
+                value: `\`${instance.serverList[id].connect}\``,
+                inline: true
+            });
         }
 
         return embed;

@@ -108,16 +108,22 @@ module.exports = {
 			}
 		}
 		else if (playerIndex === 1) {
-			embed.addField('Players', playerColumns[0], true);
+			embed.addFields({
+				name: 'Players', value: playerColumns[0], inline: true
+			});
 		}
 		else if (playerIndex === 2) {
-			embed.addField('Players', playerColumns[0], true);
-			embed.addField('\u200B', playerColumns[1], true);
+			embed.addFields(
+				{ name: 'Players', value: playerColumns[0], inline: true },
+				{ name: '\u200B', value: playerColumns[1], inline: true }
+			);
 		}
 		else if (playerIndex >= 3) {
-			embed.addField('Players', playerColumns[0], true);
-			embed.addField('\u200B', playerColumns[1], true);
-			embed.addField('\u200B', playerColumns[2], true);
+			embed.addFields(
+				{ name: 'Players', value: playerColumns[0], inline: true },
+				{ name: '\u200B', value: playerColumns[1], inline: true },
+				{ name: '\u200B', value: playerColumns[2], inline: true }
+			);
 		}
 
 		if (description === '' && isFull) {
