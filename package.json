@@ -31,6 +31,6 @@
         "jimp": "^0.16.1"
     },
     "resolutions": {
-        "jpeg-js": "^0.4.4"
+        "jpeg-js": "^0.4.3"
     }
 }
