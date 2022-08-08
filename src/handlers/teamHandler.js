@@ -38,6 +38,7 @@ module.exports = {
                     .setFooter({ text: instance.serverList[rustplus.serverId].title })
                 ]
             });
+            rustplus.log('INFO', `${player.name} left the team.`);
         }
 
         for (let steamId of newPlayers) {
@@ -56,6 +57,7 @@ module.exports = {
                             .setFooter({ text: instance.serverList[rustplus.serverId].title })
                         ]
                     });
+                    rustplus.log('INFO', `${player.name} joined the team.`);
                 }
             }
         }
@@ -81,6 +83,7 @@ module.exports = {
                                 .setFooter({ text: instance.serverList[rustplus.serverId].title })
                             ]
                         });
+                        rustplus.log('INFO', `${player.name} just connected to ${instance.serverList[rustplus.serverId].title}.`);
                     }
 
                     if (player.isGoneOffline(playerUpdated)) {
@@ -97,6 +100,7 @@ module.exports = {
                                 .setFooter({ text: instance.serverList[rustplus.serverId].title })
                             ]
                         });
+                        rustplus.log('INFO', `${player.name} just disconnected from ${instance.serverList[rustplus.serverId].title}.`);
                     }
 
                     if (!player.isOnline && !playerUpdated.isOnline && player.isGoneDead(playerUpdated)) {
@@ -114,6 +118,7 @@ module.exports = {
                                 .setFooter({ text: instance.serverList[rustplus.serverId].title })
                             ]
                         });
+                        rustplus.log('INFO', `${player.name} just got offline killed at ${pos}.`);
                     }
                     break;
                 }
