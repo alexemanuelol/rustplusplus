@@ -22,6 +22,8 @@ module.exports = {
         'small',
         'time',
         'timer',
+        'tr',
+        'trf',
         'tts',
         'unmute',
         'upkeep',

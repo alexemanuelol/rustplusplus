@@ -28,7 +28,8 @@
         "push-receiver": "^2.1.1",
         "lodash": "^4.0.0",
         "axios": "^0.26.1",
-        "jimp": "^0.16.1"
+        "jimp": "^0.16.1",
+        "translate": "^1.4.1"
     },
     "resolutions": {
         "jpeg-js": "0.4.4"

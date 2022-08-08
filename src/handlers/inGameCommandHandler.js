@@ -5,6 +5,8 @@ const Map = require('../util/map.js');
 const Constants = require('../util/constants.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
+const Translate = require('translate');
+const Languages = require('../util/languages.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
@@ -73,6 +75,12 @@ module.exports = {
         }
         else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
+        }
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}tr `)) {
+            module.exports.commandTranslateTo(rustplus, command);
+        }
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}trf `)) {
+            module.exports.commandTranslateFromTo(rustplus, command);
         }
         else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}tts `)) {
             module.exports.commandTTS(rustplus, client, message);
@@ -908,10 +916,6 @@ module.exports = {
     },
 
     commandTimer: function (rustplus, command) {
-        if (!command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}timer `)) {
-            return;
-        }
-
         command = command.slice(6).trim();
         let subcommand = command.replace(/ .*/, '');
         command = command.slice(subcommand.length + 1);
@@ -986,6 +990,76 @@ module.exports = {
 
             default: {
             } break;
+        }
+    },
+
+    commandTranslateTo: async function (rustplus, command) {
+        if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}tr language `)) {
+            let lang = command.replace(`${rustplus.generalSettings.prefix}tr language `, '')
+            if (lang in Languages) {
+                rustplus.printCommandOutput(`Language code: '${Languages[lang]}'`)
+            }
+            else {
+                rustplus.printCommandOutput(`Could not find language: '${lang}'`)
+            }
+            return;
+        }
+
+        command = command.slice(3).trim();
+        let language = command.replace(/ .*/, '');
+        let text = command.slice(language.length).trim();
+
+        if (language === '' || text === '') {
+            rustplus.printCommandOutput('Too few arguments.');
+            return;
+        }
+
+        let translation = undefined;
+        try {
+            translation = await Translate(text, language);
+        }
+        catch (e) {
+            rustplus.printCommandOutput(`The language '${language}' is not available.`);
+            return;
+        }
+
+        if (translation !== undefined) {
+            rustplus.printCommandOutput(translation);
+        }
+    },
+
+    commandTranslateFromTo: async function (rustplus, command) {
+        command = command.slice(4).trim();
+        let languageFrom = command.replace(/ .*/, '');
+        command = command.slice(languageFrom.length).trim();
+        let languageTo = command.replace(/ .*/, '');
+        let text = command.slice(languageTo.length).trim();
+
+        if (languageFrom === '' || languageTo === '' || text === '') {
+            rustplus.printCommandOutput('Too few arguments.');
+            return;
+        }
+
+        let translation = undefined;
+        try {
+            translation = await Translate(text, { from: languageFrom, to: languageTo });
+        }
+        catch (e) {
+            let regex = new RegExp('The language "(.*?)"');
+            let invalidLanguage = regex.exec(e.message);
+
+            if (invalidLanguage.length === 2) {
+                invalidLanguage = invalidLanguage[1];
+                rustplus.printCommandOutput(`The language '${invalidLanguage}' is not available.`);
+                return;
+            }
+
+            rustplus.printCommandOutput(`The language is not available.`);
+            return;
+        }
+
+        if (translation !== undefined) {
+            rustplus.printCommandOutput(translation);
         }
     },
 
