@@ -541,7 +541,12 @@ module.exports = {
         let playerStatus = '';
         for (let player of instance.trackers[trackerName].players) {
             playerName += `${player.name}\n`;
-            playerSteamId += `${player.steamId}\n`;
+            if (instance.trackers[trackerName].players.length < 12) {
+                playerSteamId += `[${player.steamId}](${Constants.STEAM_PROFILES_URL}${player.steamId})`;
+            }
+            else {
+                playerSteamId += `${player.steamId}\n`;
+            }
             playerStatus += `${(player.status === true) ?
                 `${Constants.ONLINE_EMOJI} [${player.time}]` : `${Constants.OFFLINE_EMOJI}`}\n`;
         }
