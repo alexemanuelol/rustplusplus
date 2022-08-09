@@ -542,7 +542,7 @@ module.exports = {
         for (let player of instance.trackers[trackerName].players) {
             playerName += `${player.name}\n`;
             if (instance.trackers[trackerName].players.length < 12) {
-                playerSteamId += `[${player.steamId}](${Constants.STEAM_PROFILES_URL}${player.steamId})`;
+                playerSteamId += `[${player.steamId}](${Constants.STEAM_PROFILES_URL}${player.steamId})\n`;
             }
             else {
                 playerSteamId += `${player.steamId}\n`;
