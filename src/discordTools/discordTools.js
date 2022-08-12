@@ -246,6 +246,23 @@ module.exports = {
                     .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
     },
 
+    getInGameTeammateNotificationsButtons: function (instance) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('inGameTeammateConnection')
+                    .setLabel('CONNECTIONS')
+                    .setStyle((instance.generalSettings.connectionNotify) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId('inGameTeammateAfk')
+                    .setLabel('AFK')
+                    .setStyle((instance.generalSettings.afkNotify) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId('inGameTeammateDeath')
+                    .setLabel('DEATH')
+                    .setStyle((instance.generalSettings.deathNotify) ? 'SUCCESS' : 'DANGER'))
+    },
+
     getFcmAlarmNotificationButtons: function (enabled, everyone) {
         return new MessageActionRow()
             .addComponents(

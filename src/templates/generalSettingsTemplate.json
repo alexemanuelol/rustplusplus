@@ -9,5 +9,8 @@
     "leaderCommandEnabled": true,
     "trackerNotifyAllOffline": true,
     "trackerNotifyAnyOnline": false,
-    "commandDelay": 0
+    "commandDelay": 0,
+    "connectionNotify": false,
+    "afkNotify": false,
+    "deathNotify": false
 }

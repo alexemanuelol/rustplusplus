@@ -53,6 +53,45 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'inGameTeammateConnection') {
+        instance.generalSettings.connectionNotify = !instance.generalSettings.connectionNotify;
+
+        if (rustplus) {
+            rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
+        }
+
+        let row = DiscordTools.getInGameTeammateNotificationsButtons(instance);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId === 'inGameTeammateAfk') {
+        instance.generalSettings.afkNotify = !instance.generalSettings.afkNotify;
+
+        if (rustplus) {
+            rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
+        }
+
+        let row = DiscordTools.getInGameTeammateNotificationsButtons(instance);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId === 'inGameTeammateDeath') {
+        instance.generalSettings.deathNotify = !instance.generalSettings.deathNotify;
+
+        if (rustplus) {
+            rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
+        }
+
+        let row = DiscordTools.getInGameTeammateNotificationsButtons(instance);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
     else if (interaction.customId === 'fcmAlarmNotification') {
         instance.generalSettings.fcmAlarmNotificationEnabled = !instance.generalSettings.fcmAlarmNotificationEnabled;
 

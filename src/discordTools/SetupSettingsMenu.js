@@ -57,6 +57,15 @@ async function setupGeneralSettings(client, instance, channel) {
     await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
+            .setTitle('In-game teammate notifications.')
+            .setThumbnail(`attachment://settings_logo.png`)],
+        components: [DiscordTools.getInGameTeammateNotificationsButtons(instance)],
+        files: [new MessageAttachment('src/resources/images/settings_logo.png')]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [new MessageEmbed()
+            .setColor('#861c0c')
             .setTitle('Should there be a command delay? How long?')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getCommandDelaySelectMenu(instance.generalSettings.commandDelay)],
