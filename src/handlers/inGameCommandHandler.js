@@ -19,8 +19,8 @@ module.exports = {
         else if (commandLowerCase === `${rustplus.generalSettings.prefix}afk`) {
             module.exports.commandAfk(rustplus);
         }
-        else if (commandLowerCase === `${rustplus.generalSettings.prefix}alive`) {
-            module.exports.commandAlive(rustplus);
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}alive`)) {
+            module.exports.commandAlive(rustplus, message);
         }
         else if (commandLowerCase === `${rustplus.generalSettings.prefix}bradley`) {
             module.exports.commandBradley(rustplus);
@@ -244,10 +244,30 @@ module.exports = {
         rustplus.printCommandOutput(str);
     },
 
-    commandAlive: function (rustplus) {
-        let player = rustplus.team.getPlayerLongestAlive();
-        let time = player.getAliveTime();
-        rustplus.printCommandOutput(`${player.name} has been alive the longest (${time}).`);
+    commandAlive: function (rustplus, message) {
+        let command = message.broadcast.teamMessage.message.message;
+        if (command.toLowerCase() === `${rustplus.generalSettings.prefix}alive`) {
+            let player = rustplus.team.getPlayerLongestAlive();
+            let time = player.getAliveTime();
+            rustplus.printCommandOutput(`${player.name} has been alive the longest (${time}).`);
+        }
+        else if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}alive `)) {
+            nameSearch = command.slice(6).trim();
+
+            let found = false;
+            for (let player of rustplus.team.players) {
+                if (player.name.includes(nameSearch)) {
+                    let time = player.getAliveTime();
+                    rustplus.printCommandOutput(`${player.name} has been alive for ${time}.`);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                rustplus.printCommandOutput(`Could not find teammate: '${nameSearch}'`);
+            }
+        }
     },
 
     commandBradley: function (rustplus) {
