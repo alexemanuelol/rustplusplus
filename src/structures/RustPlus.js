@@ -27,6 +27,7 @@ class RustPlus extends RP {
         this.refusedConnectionRetry = false;
         this.firstTime = true;
         this.ready = false;
+        this.currentSwitchTimeouts = new Object();
 
         this.storageMonitors = new Object();
 

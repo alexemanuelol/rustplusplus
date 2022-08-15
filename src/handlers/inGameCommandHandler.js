@@ -101,11 +101,10 @@ module.exports = {
             for (const [id, content] of Object.entries(instance.switches)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
                 if (command.startsWith(cmd)) {
+                    let rest = command;
                     let active;
-                    if (command === cmd) {
-                        active = !content.active;
-                    }
-                    else if (command === `${cmd} on`) {
+                    if (command.startsWith(`${cmd} on`)) {
+                        rest = rest.replace(`${cmd} on`, '').trim();
                         if (!content.active) {
                             active = true;
                         }
@@ -113,7 +112,8 @@ module.exports = {
                             return true;
                         }
                     }
-                    else if (command === `${cmd} off`) {
+                    else if (command.startsWith(`${cmd} off`)) {
+                        rest = rest.replace(`${cmd} off`, '').trim();
                         if (content.active) {
                             active = false;
                         }
@@ -139,9 +139,20 @@ module.exports = {
                         rustplus.printCommandOutput(`${instance.switches[id].name} is currently ${active}.`);
                         return true;
                     }
+                    else if (command.startsWith(`${cmd}`)) {
+                        rest = rest.replace(`${cmd}`, '').trim();
+                        active = !content.active;
+                    }
                     else {
                         return false;
                     }
+
+                    if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
+                        clearTimeout(rustplus.currentSwitchTimeouts[id]);
+                        delete rustplus.currentSwitchTimeouts[id];
+                    }
+
+                    let timeSeconds = Timer.getSecondsFromStringTime(rest);
 
                     let prevActive = instance.switches[id].active;
                     instance.switches[id].active = active;
@@ -179,7 +190,57 @@ module.exports = {
 
                     if (instance.switches[id].reachable) {
                         let str = `${instance.switches[id].name} was turned `;
-                        str += (active) ? 'on.' : 'off.';
+                        str += (active) ? 'ON.' : 'OFF.';
+
+                        if (timeSeconds !== null) {
+                            let time = Timer.secondsToFullScale(timeSeconds);
+                            str += ` Automatically turned back ${(active) ? 'OFF' : 'ON'} in ${time}.`;
+
+                            rustplus.currentSwitchTimeouts[id] = setTimeout(async function () {
+                                let instance = client.readInstanceFile(rustplus.guildId);
+                                if (!instance.switches.hasOwnProperty(id)) {
+                                    return false;
+                                }
+
+                                let prevActive = instance.switches[id].active;
+                                instance.switches[id].active = !active;
+                                client.writeInstanceFile(rustplus.guildId, instance);
+
+                                rustplus.interactionSwitches.push(id);
+
+                                let response = null;
+                                if (!active) {
+                                    response = await rustplus.turnSmartSwitchOnAsync(id);
+                                }
+                                else {
+                                    response = await rustplus.turnSmartSwitchOffAsync(id);
+                                }
+
+                                if (!(await rustplus.isResponseValid(response))) {
+                                    rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
+                                    if (instance.switches[id].reachable) {
+                                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                                    }
+                                    instance.switches[id].reachable = false;
+                                    instance.switches[id].active = prevActive;
+                                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                                    rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
+                                }
+                                else {
+                                    instance.switches[id].reachable = true;
+                                    client.writeInstanceFile(rustplus.guildId, instance);
+                                }
+
+                                DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                                SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+                                    client, rustplus.guildId, rustplus.serverId, id);
+
+                                let str = `Automatically turning ${instance.switches[id].name} back ${(!active) ? 'ON' : 'OFF'}.`;
+                                rustplus.printCommandOutput(str);
+                            }, timeSeconds * 1000);
+                        }
+
                         rustplus.printCommandOutput(str);
                     }
 
@@ -191,14 +252,15 @@ module.exports = {
             for (const [groupName, content] of Object.entries(groups)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
                 if (command.startsWith(cmd)) {
+                    let rest = command;
                     let active;
-                    if (command === `${cmd} on`) {
+                    if (command.startsWith(`${cmd} on`)) {
+                        rest = rest.replace(`${cmd} on`, '').trim();
                         active = true;
-                        rustplus.printCommandOutput(`Turning ${groupName} ON.`);
                     }
-                    else if (command === `${cmd} off`) {
+                    else if (command.startsWith(`${cmd} off`)) {
+                        rest = rest.replace(`${cmd} off`, '').trim();
                         active = false;
-                        rustplus.printCommandOutput(`Turning ${groupName} OFF.`);
                     }
                     else if (command === `${cmd}`) {
                         /* Get switch info, create message */
@@ -215,6 +277,36 @@ module.exports = {
                     else {
                         return false;
                     }
+
+                    if (rustplus.currentSwitchTimeouts.hasOwnProperty(groupName)) {
+                        clearTimeout(rustplus.currentSwitchTimeouts[groupName]);
+                        delete rustplus.currentSwitchTimeouts[groupName];
+                    }
+
+                    let timeSeconds = Timer.getSecondsFromStringTime(rest);
+
+                    let str = `Turning Group ${groupName} ${(active) ? 'ON' : 'OFF'}.`;
+
+                    if (timeSeconds !== null) {
+                        let time = Timer.secondsToFullScale(timeSeconds);
+                        str += ` Automatically turned back ${(active) ? 'OFF' : 'ON'} in ${time}.`;
+
+                        rustplus.currentSwitchTimeouts[groupName] = setTimeout(async function () {
+                            let instance = client.readInstanceFile(rustplus.guildId);
+                            if (!instance.serverList.hasOwnProperty(rustplus.serverId) ||
+                                !instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(groupName)) {
+                                return false;
+                            }
+                            let str = `Automatically turning ${groupName} back ${(!active) ? 'ON' : 'OFF'}.`;
+                            rustplus.printCommandOutput(str);
+
+                            await SmartSwitchGroupHandler.TurnOnOffGroup(
+                                client, rustplus, rustplus.guildId, rustplus.serverId, groupName, !active);
+
+                        }, timeSeconds * 1000);
+                    }
+
+                    rustplus.printCommandOutput(str);
 
                     await SmartSwitchGroupHandler.TurnOnOffGroup(
                         client, rustplus, rustplus.guildId, rustplus.serverId, groupName, active);

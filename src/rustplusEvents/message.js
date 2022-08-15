@@ -36,6 +36,11 @@ module.exports = {
                 let entityId = message.broadcast.entityChanged.entityId;
 
                 if (instance.switches.hasOwnProperty(entityId)) {
+                    if (rustplus.currentSwitchTimeouts.hasOwnProperty(entityId)) {
+                        clearTimeout(rustplus.currentSwitchTimeouts[entityId]);
+                        delete rustplus.currentSwitchTimeouts[entityId];
+                    }
+
                     if (rustplus.interactionSwitches.includes(`${entityId}`)) {
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== `${entityId}`);
                     }
