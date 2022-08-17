@@ -57,6 +57,12 @@ or
     $ ./update.sh
 
 
+## **Running via docker**
+
+```
+    docker run --rm -it -v ${pwd}/credentials:/app/credentials -v ${pwd}/instances:/app/instances -v ${pwd}/logs:/app/logs -e DISCORD_CLIENT_ID=111....1111 -e DISCORD_TOKEN=token --name rpp ghcr.io/alexemanuelol/rustPlusPlus
+```
+
 ## **Thanks to**
 
 **liamcottle**@GitHub - for the [rustplus.js](https://github.com/liamcottle/rustplus.js) library.
