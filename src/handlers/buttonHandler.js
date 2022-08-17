@@ -53,6 +53,45 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'inGameTeammateConnection') {
+        instance.generalSettings.connectionNotify = !instance.generalSettings.connectionNotify;
+
+        if (rustplus) {
+            rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
+        }
+
+        let row = DiscordTools.getInGameTeammateNotificationsButtons(instance);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId === 'inGameTeammateAfk') {
+        instance.generalSettings.afkNotify = !instance.generalSettings.afkNotify;
+
+        if (rustplus) {
+            rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
+        }
+
+        let row = DiscordTools.getInGameTeammateNotificationsButtons(instance);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId === 'inGameTeammateDeath') {
+        instance.generalSettings.deathNotify = !instance.generalSettings.deathNotify;
+
+        if (rustplus) {
+            rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
+        }
+
+        let row = DiscordTools.getInGameTeammateNotificationsButtons(instance);
+
+        await client.interactionUpdate(interaction, { components: [row] });
+
+        client.writeInstanceFile(guildId, instance);
+    }
     else if (interaction.customId === 'fcmAlarmNotification') {
         instance.generalSettings.fcmAlarmNotificationEnabled = !instance.generalSettings.fcmAlarmNotificationEnabled;
 
@@ -352,6 +391,8 @@ module.exports = async (client, interaction) => {
             return;
         }
 
+
+
         if (!rustplus) {
             try {
                 interaction.deferUpdate();
@@ -385,6 +426,11 @@ module.exports = async (client, interaction) => {
                     return;
                 }
             }
+        }
+
+        if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
+            clearTimeout(rustplus.currentSwitchTimeouts[id]);
+            delete rustplus.currentSwitchTimeouts[id];
         }
 
         let active = (interaction.customId.endsWith('OnSmartSwitch')) ? true : false;
@@ -429,6 +475,11 @@ module.exports = async (client, interaction) => {
         if (instance.switches.hasOwnProperty(id)) {
             serverId = instance.switches[id].serverId;
             delete instance.switches[id];
+        }
+
+        if (rustplus) {
+            clearTimeout(rustplus.currentSwitchTimeouts[id]);
+            delete rustplus.currentSwitchTimeouts[id];
         }
 
         if (client.switchesMessages[guildId].hasOwnProperty(id)) {
@@ -553,6 +604,11 @@ module.exports = async (client, interaction) => {
         let id = interaction.customId.replace('TurnOnGroup', '');
         id = id.replace('TurnOffGroup', '');
 
+        if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
+            clearTimeout(rustplus.currentSwitchTimeouts[id]);
+            delete rustplus.currentSwitchTimeouts[id];
+        }
+
         try {
             interaction.deferUpdate();
         }
@@ -593,6 +649,9 @@ module.exports = async (client, interaction) => {
             client.log('ERROR', 'Rustplus is not connected, cannot delete the Smart Switch Group...', 'error');
             return;
         }
+
+        clearTimeout(rustplus.currentSwitchTimeouts[id]);
+        delete rustplus.currentSwitchTimeouts[id];
 
         if (instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(id)) {
             delete instance.serverList[rustplus.serverId].switchGroups[id];

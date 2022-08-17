@@ -414,6 +414,7 @@ async function teamLogin(client, guild, full, data, body) {
                         .setFooter({ text: body.name })
                 ]
             });
+            client.log('INFO', `${body.targetName} just connected to ${body.name}.`);
         }
     }
 }

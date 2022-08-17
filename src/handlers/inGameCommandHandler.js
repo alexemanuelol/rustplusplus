@@ -5,6 +5,8 @@ const Map = require('../util/map.js');
 const Constants = require('../util/constants.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
+const Translate = require('translate');
+const Languages = require('../util/languages.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
@@ -17,8 +19,8 @@ module.exports = {
         else if (commandLowerCase === `${rustplus.generalSettings.prefix}afk`) {
             module.exports.commandAfk(rustplus);
         }
-        else if (commandLowerCase === `${rustplus.generalSettings.prefix}alive`) {
-            module.exports.commandAlive(rustplus);
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}alive`)) {
+            module.exports.commandAlive(rustplus, message);
         }
         else if (commandLowerCase === `${rustplus.generalSettings.prefix}bradley`) {
             module.exports.commandBradley(rustplus);
@@ -74,6 +76,12 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}timer `)) {
             module.exports.commandTimer(rustplus, command);
         }
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}tr `)) {
+            module.exports.commandTranslateTo(rustplus, command);
+        }
+        else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}trf `)) {
+            module.exports.commandTranslateFromTo(rustplus, command);
+        }
         else if (commandLowerCase.startsWith(`${rustplus.generalSettings.prefix}tts `)) {
             module.exports.commandTTS(rustplus, client, message);
         }
@@ -93,11 +101,10 @@ module.exports = {
             for (const [id, content] of Object.entries(instance.switches)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
                 if (command.startsWith(cmd)) {
+                    let rest = command;
                     let active;
-                    if (command === cmd) {
-                        active = !content.active;
-                    }
-                    else if (command === `${cmd} on`) {
+                    if (command.startsWith(`${cmd} on`)) {
+                        rest = rest.replace(`${cmd} on`, '').trim();
                         if (!content.active) {
                             active = true;
                         }
@@ -105,7 +112,8 @@ module.exports = {
                             return true;
                         }
                     }
-                    else if (command === `${cmd} off`) {
+                    else if (command.startsWith(`${cmd} off`)) {
+                        rest = rest.replace(`${cmd} off`, '').trim();
                         if (content.active) {
                             active = false;
                         }
@@ -131,9 +139,20 @@ module.exports = {
                         rustplus.printCommandOutput(`${instance.switches[id].name} is currently ${active}.`);
                         return true;
                     }
+                    else if (command.startsWith(`${cmd}`)) {
+                        rest = rest.replace(`${cmd}`, '').trim();
+                        active = !content.active;
+                    }
                     else {
                         return false;
                     }
+
+                    if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
+                        clearTimeout(rustplus.currentSwitchTimeouts[id]);
+                        delete rustplus.currentSwitchTimeouts[id];
+                    }
+
+                    let timeSeconds = Timer.getSecondsFromStringTime(rest);
 
                     let prevActive = instance.switches[id].active;
                     instance.switches[id].active = active;
@@ -171,7 +190,57 @@ module.exports = {
 
                     if (instance.switches[id].reachable) {
                         let str = `${instance.switches[id].name} was turned `;
-                        str += (active) ? 'on.' : 'off.';
+                        str += (active) ? 'ON.' : 'OFF.';
+
+                        if (timeSeconds !== null) {
+                            let time = Timer.secondsToFullScale(timeSeconds);
+                            str += ` Automatically turned back ${(active) ? 'OFF' : 'ON'} in ${time}.`;
+
+                            rustplus.currentSwitchTimeouts[id] = setTimeout(async function () {
+                                let instance = client.readInstanceFile(rustplus.guildId);
+                                if (!instance.switches.hasOwnProperty(id)) {
+                                    return false;
+                                }
+
+                                let prevActive = instance.switches[id].active;
+                                instance.switches[id].active = !active;
+                                client.writeInstanceFile(rustplus.guildId, instance);
+
+                                rustplus.interactionSwitches.push(id);
+
+                                let response = null;
+                                if (!active) {
+                                    response = await rustplus.turnSmartSwitchOnAsync(id);
+                                }
+                                else {
+                                    response = await rustplus.turnSmartSwitchOffAsync(id);
+                                }
+
+                                if (!(await rustplus.isResponseValid(response))) {
+                                    rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
+                                    if (instance.switches[id].reachable) {
+                                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                                    }
+                                    instance.switches[id].reachable = false;
+                                    instance.switches[id].active = prevActive;
+                                    client.writeInstanceFile(rustplus.guildId, instance);
+
+                                    rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
+                                }
+                                else {
+                                    instance.switches[id].reachable = true;
+                                    client.writeInstanceFile(rustplus.guildId, instance);
+                                }
+
+                                DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                                SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+                                    client, rustplus.guildId, rustplus.serverId, id);
+
+                                let str = `Automatically turning ${instance.switches[id].name} back ${(!active) ? 'ON' : 'OFF'}.`;
+                                rustplus.printCommandOutput(str);
+                            }, timeSeconds * 1000);
+                        }
+
                         rustplus.printCommandOutput(str);
                     }
 
@@ -183,14 +252,15 @@ module.exports = {
             for (const [groupName, content] of Object.entries(groups)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
                 if (command.startsWith(cmd)) {
+                    let rest = command;
                     let active;
-                    if (command === `${cmd} on`) {
+                    if (command.startsWith(`${cmd} on`)) {
+                        rest = rest.replace(`${cmd} on`, '').trim();
                         active = true;
-                        rustplus.printCommandOutput(`Turning ${groupName} ON.`);
                     }
-                    else if (command === `${cmd} off`) {
+                    else if (command.startsWith(`${cmd} off`)) {
+                        rest = rest.replace(`${cmd} off`, '').trim();
                         active = false;
-                        rustplus.printCommandOutput(`Turning ${groupName} OFF.`);
                     }
                     else if (command === `${cmd}`) {
                         /* Get switch info, create message */
@@ -207,6 +277,36 @@ module.exports = {
                     else {
                         return false;
                     }
+
+                    if (rustplus.currentSwitchTimeouts.hasOwnProperty(groupName)) {
+                        clearTimeout(rustplus.currentSwitchTimeouts[groupName]);
+                        delete rustplus.currentSwitchTimeouts[groupName];
+                    }
+
+                    let timeSeconds = Timer.getSecondsFromStringTime(rest);
+
+                    let str = `Turning Group ${groupName} ${(active) ? 'ON' : 'OFF'}.`;
+
+                    if (timeSeconds !== null) {
+                        let time = Timer.secondsToFullScale(timeSeconds);
+                        str += ` Automatically turned back ${(active) ? 'OFF' : 'ON'} in ${time}.`;
+
+                        rustplus.currentSwitchTimeouts[groupName] = setTimeout(async function () {
+                            let instance = client.readInstanceFile(rustplus.guildId);
+                            if (!instance.serverList.hasOwnProperty(rustplus.serverId) ||
+                                !instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(groupName)) {
+                                return false;
+                            }
+                            let str = `Automatically turning ${groupName} back ${(!active) ? 'ON' : 'OFF'}.`;
+                            rustplus.printCommandOutput(str);
+
+                            await SmartSwitchGroupHandler.TurnOnOffGroup(
+                                client, rustplus, rustplus.guildId, rustplus.serverId, groupName, !active);
+
+                        }, timeSeconds * 1000);
+                    }
+
+                    rustplus.printCommandOutput(str);
 
                     await SmartSwitchGroupHandler.TurnOnOffGroup(
                         client, rustplus, rustplus.guildId, rustplus.serverId, groupName, active);
@@ -236,10 +336,30 @@ module.exports = {
         rustplus.printCommandOutput(str);
     },
 
-    commandAlive: function (rustplus) {
-        let player = rustplus.team.getPlayerLongestAlive();
-        let time = player.getAliveTime();
-        rustplus.printCommandOutput(`${player.name} has been alive the longest (${time}).`);
+    commandAlive: function (rustplus, message) {
+        let command = message.broadcast.teamMessage.message.message;
+        if (command.toLowerCase() === `${rustplus.generalSettings.prefix}alive`) {
+            let player = rustplus.team.getPlayerLongestAlive();
+            let time = player.getAliveTime();
+            rustplus.printCommandOutput(`${player.name} has been alive the longest (${time}).`);
+        }
+        else if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}alive `)) {
+            nameSearch = command.slice(6).trim();
+
+            let found = false;
+            for (let player of rustplus.team.players) {
+                if (player.name.includes(nameSearch)) {
+                    let time = player.getAliveTime();
+                    rustplus.printCommandOutput(`${player.name} has been alive for ${time}.`);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                rustplus.printCommandOutput(`Could not find teammate: '${nameSearch}'`);
+            }
+        }
     },
 
     commandBradley: function (rustplus) {
@@ -908,10 +1028,6 @@ module.exports = {
     },
 
     commandTimer: function (rustplus, command) {
-        if (!command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}timer `)) {
-            return;
-        }
-
         command = command.slice(6).trim();
         let subcommand = command.replace(/ .*/, '');
         command = command.slice(subcommand.length + 1);
@@ -986,6 +1102,76 @@ module.exports = {
 
             default: {
             } break;
+        }
+    },
+
+    commandTranslateTo: async function (rustplus, command) {
+        if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}tr language `)) {
+            let lang = command.replace(`${rustplus.generalSettings.prefix}tr language `, '')
+            if (lang in Languages) {
+                rustplus.printCommandOutput(`Language code: '${Languages[lang]}'`)
+            }
+            else {
+                rustplus.printCommandOutput(`Could not find language: '${lang}'`)
+            }
+            return;
+        }
+
+        command = command.slice(3).trim();
+        let language = command.replace(/ .*/, '');
+        let text = command.slice(language.length).trim();
+
+        if (language === '' || text === '') {
+            rustplus.printCommandOutput('Too few arguments.');
+            return;
+        }
+
+        let translation = undefined;
+        try {
+            translation = await Translate(text, language);
+        }
+        catch (e) {
+            rustplus.printCommandOutput(`The language '${language}' is not available.`);
+            return;
+        }
+
+        if (translation !== undefined) {
+            rustplus.printCommandOutput(translation);
+        }
+    },
+
+    commandTranslateFromTo: async function (rustplus, command) {
+        command = command.slice(4).trim();
+        let languageFrom = command.replace(/ .*/, '');
+        command = command.slice(languageFrom.length).trim();
+        let languageTo = command.replace(/ .*/, '');
+        let text = command.slice(languageTo.length).trim();
+
+        if (languageFrom === '' || languageTo === '' || text === '') {
+            rustplus.printCommandOutput('Too few arguments.');
+            return;
+        }
+
+        let translation = undefined;
+        try {
+            translation = await Translate(text, { from: languageFrom, to: languageTo });
+        }
+        catch (e) {
+            let regex = new RegExp('The language "(.*?)"');
+            let invalidLanguage = regex.exec(e.message);
+
+            if (invalidLanguage.length === 2) {
+                invalidLanguage = invalidLanguage[1];
+                rustplus.printCommandOutput(`The language '${invalidLanguage}' is not available.`);
+                return;
+            }
+
+            rustplus.printCommandOutput(`The language is not available.`);
+            return;
+        }
+
+        if (translation !== undefined) {
+            rustplus.printCommandOutput(translation);
         }
     },
 

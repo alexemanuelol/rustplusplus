@@ -8,5 +8,9 @@
     "smartAlarmNotifyInGame": true,
     "leaderCommandEnabled": true,
     "trackerNotifyAllOffline": true,
-    "trackerNotifyAnyOnline": false
+    "trackerNotifyAnyOnline": false,
+    "commandDelay": 0,
+    "connectionNotify": false,
+    "afkNotify": false,
+    "deathNotify": false
 }

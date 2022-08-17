@@ -246,6 +246,23 @@ module.exports = {
                     .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
     },
 
+    getInGameTeammateNotificationsButtons: function (instance) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('inGameTeammateConnection')
+                    .setLabel('CONNECTIONS')
+                    .setStyle((instance.generalSettings.connectionNotify) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId('inGameTeammateAfk')
+                    .setLabel('AFK')
+                    .setStyle((instance.generalSettings.afkNotify) ? 'SUCCESS' : 'DANGER'),
+                new MessageButton()
+                    .setCustomId('inGameTeammateDeath')
+                    .setLabel('DEATH')
+                    .setStyle((instance.generalSettings.deathNotify) ? 'SUCCESS' : 'DANGER'))
+    },
+
     getFcmAlarmNotificationButtons: function (enabled, everyone) {
         return new MessageActionRow()
             .addComponents(
@@ -342,6 +359,62 @@ module.exports = {
             );
     },
 
+    getCommandDelaySelectMenu: function (currentDelay) {
+        return new MessageActionRow()
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('commandDelay')
+                    .setPlaceholder(`Current Command Delay: ${currentDelay} seconds`)
+                    .addOptions([
+                        {
+                            label: 'NO DELAY',
+                            description: 'No command delay.',
+                            value: '0',
+                        },
+                        {
+                            label: '1 second',
+                            description: 'One second command delay.',
+                            value: '1',
+                        },
+                        {
+                            label: '2 seconds',
+                            description: 'Two seconds command delay.',
+                            value: '2',
+                        },
+                        {
+                            label: '3 seconds',
+                            description: 'Three seconds command delay.',
+                            value: '3',
+                        },
+                        {
+                            label: '4 seconds',
+                            description: 'Four seconds command delay.',
+                            value: '4',
+                        },
+                        {
+                            label: '5 seconds',
+                            description: 'Five seconds command delay.',
+                            value: '5',
+                        },
+                        {
+                            label: '6 seconds',
+                            description: 'Six seconds command delay.',
+                            value: '6',
+                        },
+                        {
+                            label: '7 seconds',
+                            description: 'Seven seconds command delay.',
+                            value: '7',
+                        },
+                        {
+                            label: '8 seconds',
+                            description: 'Eight seconds command delay.',
+                            value: '8',
+                        }
+                    ])
+            );
+    },
+
     getServerEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
@@ -352,7 +425,11 @@ module.exports = {
             .setThumbnail(`${instance.serverList[id].img}`);
 
         if (instance.serverList[id].connect !== null) {
-            embed.addField('Connect', `\`${instance.serverList[id].connect}\``, true);
+            embed.addFields({
+                name: 'Connect',
+                value: `\`${instance.serverList[id].connect}\``,
+                inline: true
+            });
         }
 
         return embed;
@@ -481,7 +558,12 @@ module.exports = {
         let playerStatus = '';
         for (let player of instance.trackers[trackerName].players) {
             playerName += `${player.name}\n`;
-            playerSteamId += `${player.steamId}\n`;
+            if (instance.trackers[trackerName].players.length < 12) {
+                playerSteamId += `[${player.steamId}](${Constants.STEAM_PROFILES_URL}${player.steamId})\n`;
+            }
+            else {
+                playerSteamId += `${player.steamId}\n`;
+            }
             playerStatus += `${(player.status === true) ?
                 `${Constants.ONLINE_EMOJI} [${player.time}]` : `${Constants.OFFLINE_EMOJI}`}\n`;
         }

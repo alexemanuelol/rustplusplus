@@ -27,6 +27,7 @@ class RustPlus extends RP {
         this.refusedConnectionRetry = false;
         this.firstTime = true;
         this.ready = false;
+        this.currentSwitchTimeouts = new Object();
 
         this.storageMonitors = new Object();
 
@@ -126,7 +127,16 @@ class RustPlus extends RP {
     }
 
     async printCommandOutput(str, type = 'COMMAND') {
-        await this.sendTeamMessageAsync(str);
+        if (this.generalSettings.commandDelay === '0') {
+            await this.sendTeamMessageAsync(str);
+        }
+        else {
+            let self = this;
+            setTimeout(function () {
+                self.sendTeamMessageAsync(str);
+            }, parseInt(this.generalSettings.commandDelay) * 1000)
+
+        }
         this.log(type, str);
     }
 

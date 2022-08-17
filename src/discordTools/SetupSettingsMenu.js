@@ -57,6 +57,24 @@ async function setupGeneralSettings(client, instance, channel) {
     await client.messageSend(channel, {
         embeds: [new MessageEmbed()
             .setColor('#861c0c')
+            .setTitle('In-game teammate notifications.')
+            .setThumbnail(`attachment://settings_logo.png`)],
+        components: [DiscordTools.getInGameTeammateNotificationsButtons(instance)],
+        files: [new MessageAttachment('src/resources/images/settings_logo.png')]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [new MessageEmbed()
+            .setColor('#861c0c')
+            .setTitle('Should there be a command delay? How long?')
+            .setThumbnail(`attachment://settings_logo.png`)],
+        components: [DiscordTools.getCommandDelaySelectMenu(instance.generalSettings.commandDelay)],
+        files: [new MessageAttachment('src/resources/images/settings_logo.png')]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [new MessageEmbed()
+            .setColor('#861c0c')
             .setTitle('Should Smart Alarms notify even if they are not setup on the connected rust server?')
             .addFields(
                 { name: 'NOTE', value: '- These Alarm notifications will use the title and message given to the Smart Alarm in-game.\n- These Smart Alarms might not be available in the alarms text channel in discord.', inline: true }

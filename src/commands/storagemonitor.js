@@ -23,10 +23,24 @@ module.exports = {
 					option.setName('image')
 						.setDescription('Set the image that best represent the Storage Monitor.')
 						.setRequired(false)
-						.addChoice('Storage Monitor', 'storage_monitor')
-						.addChoice('Tool Cupboard', 'tool_cupboard')
-						.addChoice('Large Wood Box', 'large_wood_box')
-						.addChoice('Vending Machine', 'vending_machine')))
+						.addChoices(
+							{
+								name: 'Storage Monitor',
+								value: 'storage_monitor'
+							},
+							{
+								name: 'Tool Cupboard',
+								value: 'tool_cupboard'
+							},
+							{
+								name: 'Large Wood Box',
+								value: 'large_wood_box'
+							},
+							{
+								name: 'Vending Machine',
+								value: 'vending_machine'
+							}
+						)))
 		.addSubcommand(subcommand =>
 			subcommand
 				.setName('recycle')

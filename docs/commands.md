@@ -440,6 +440,27 @@ Subcommand | Description | Required
 ![In-Game Command timer Image](images/timer_ingame.png)
 
 
+## **tr**
+
+> **Translate a text from English to another language.**
+<br>Command: `!tr <language-code> <Text>`
+
+Subcommand | Description | Required
+---------- | ----------- | --------
+`language` | Get the language code (`!tr language <language>`). | `False`
+`<language-code>` | Translate the text to this language (`!tr <language> <text>`). | `False`
+
+![In-Game Command get language code Image](images/language_code_ingame.png)
+![In-Game Command translateTo Image](images/translateTo_ingame.png)
+
+
+## **trf**
+
+> **Translate a text from a language to another language.**
+<br>Command: `!trf <language-code-from> <language-code-to> <Text>`
+
+![In-Game Command translateFrom Image](images/translateFrom_ingame.png)
+
 ## **tts**
 
 > **Send a Text-To-Speech message to the Discord teamchat channel.** To execute a Text-To-Speech command run `!tts <text>`.
