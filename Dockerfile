@@ -1,12 +1,14 @@
 FROM node:latest
-WORKDIR /usr/app
+WORKDIR /app
 
-COPY package.json /usr/app/package.json
-COPY package-lock.json /usr/app/package-lock.json
+COPY package.json /app/package.json
+COPY package-lock.json /app/package-lock.json
 RUN npm install
-COPY . /usr/app/
+COPY . /app
 
-VOLUME [ "/usr/app/instances" ]
-VOLUME [ "/usr/app/logs" ]
+VOLUME [ "/app/credentials" ]
+VOLUME [ "/app/instances" ]
+VOLUME [ "/app/logs" ]
 
-CMD ["node", "."]
+CMD ["node", "/app/index.js"]
+

@@ -1,11 +1,17 @@
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
+const config = require('../../config');
 
 module.exports = {
     name: 'ready',
     once: true,
     async execute(client) {
-        client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
-        client.user.setUsername('rustPlusPlus');
+        client.log('INFO', `Logged in as: ${client.user.tag}`);
+        try {
+            await client.user.setUsername(config.discord.username);
+        }
+        catch (e) {
+            client.log('INFO', 'Failed to change username.');
+        }
 
         try {
             await client.user.setAvatar('./src/resources/images/rustplusplus_logo.png');
@@ -17,7 +23,6 @@ module.exports = {
         client.user.setActivity('/help', { type: 'LISTENING' });
 
         client.guilds.cache.forEach(async (guild) => {
-            guild.me.setNickname('rustPlusPlus');
             await client.setupGuild(guild);
         });
 

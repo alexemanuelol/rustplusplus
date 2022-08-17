@@ -101,11 +101,11 @@ class DiscordBot extends Client {
     }
 
     readCredentialsFile(guildId) {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../credentials/${guildId}.json`, 'utf8'));
+        return JSON.parse(fs.readFileSync(`${__dirname}/../../credentials/${guildId}.json`, 'utf8'));
     }
 
     writeCredentialsFile(guildId, credentials) {
-        fs.writeFileSync(`${__dirname}/../credentials/${guildId}.json`, JSON.stringify(credentials, null, 2));
+        fs.writeFileSync(`${__dirname}/../../credentials/${guildId}.json`, JSON.stringify(credentials, null, 2));
     }
 
     readNotificationSettingsTemplate() {
