@@ -114,8 +114,10 @@ module.exports = {
                 }
                 let itemName = rustplus.items.getName(itemId);
 
+                let full = false;
                 let foundLines = '';
                 for (let vendingMachine of rustplus.mapMarkers.vendingMachines) {
+                    if (full) break;
                     if (!vendingMachine.hasOwnProperty('sellOrders')) continue;
 
                     for (let order of vendingMachine.sellOrders) {
@@ -135,6 +137,8 @@ module.exports = {
                         let orderCurrencyName = (orderCurrencyId !== null) ?
                             rustplus.items.getName(orderCurrencyId) : 'Unknown';
 
+                        let prevFoundLines = foundLines;
+                        let prevFoundLinesLength = foundLines.length;
                         if (orderItemId === parseInt(itemId) || orderCurrencyId === parseInt(itemId)) {
                             if (foundLines === '') {
                                 foundLines += '```diff\n';
@@ -146,6 +150,13 @@ module.exports = {
                             foundLines += `${orderCostPerItem}x ${orderCurrencyName}`;
                             foundLines += `${(orderCurrencyIsBlueprint) ? ' (BP)' : ''} `;
                             foundLines += `(${orderAmountInStock} left)\n`;
+
+                            if (foundLines.length >= 4000) {
+                                foundLines = prevFoundLines;
+                                foundLines += `...\n`;
+                                full = true;
+                                break;
+                            }
                         }
                     }
                 }
