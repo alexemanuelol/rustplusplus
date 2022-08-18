@@ -18,9 +18,8 @@
     },
     "homepage": "https://github.com/alexemanuelol/rustPlusPlus#readme",
     "dependencies": {
-        "@discordjs/builders": "^1.1.0",
         "@discordjs/rest": "^1.0.1",
-        "discord.js": "^13.9.2",
+        "discord.js": "^14.2.0",
         "discord-api-types": "^0.37.1",
         "colors": "^1.4.0",
         "rustplus.js": "github:liamcottle/rustplus.js",

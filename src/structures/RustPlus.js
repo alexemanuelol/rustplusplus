@@ -1,7 +1,7 @@
 const fs = require('fs');
 const RP = require('rustplus.js');
 const Client = require('../../index.js');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const Logger = require('./Logger.js');
 const path = require('path');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -157,8 +157,8 @@ class RustPlus extends RP {
         let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
 
         if (channel !== undefined) {
-            let file = new MessageAttachment(`src/resources/images/events/${image}`);
-            let embed = new MessageEmbed()
+            let file = new AttachmentBuilder(`src/resources/images/events/${image}`);
+            let embed = new EmbedBuilder()
                 .setColor('#ce412b')
                 .setThumbnail(`attachment://${image}`)
                 .setTitle(text)

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ module.exports = {
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
@@ -37,7 +37,7 @@ module.exports = {
 		if (battlemetricsId === null) {
 			let str = 'This server is using streamer mode.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
@@ -49,7 +49,7 @@ module.exports = {
 		if (!Object.keys(client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
 			let str = 'Could not find players for this server.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
@@ -94,7 +94,7 @@ module.exports = {
 			title = `Online players '${name}'`;
 		}
 
-		let embed = new MessageEmbed()
+		let embed = new EmbedBuilder()
 			.setTitle(title)
 			.setColor('#ce412b');
 

@@ -17,7 +17,7 @@ module.exports = {
         client.user.setActivity('/help', { type: 'LISTENING' });
 
         client.guilds.cache.forEach(async (guild) => {
-            guild.me.setNickname('rustPlusPlus');
+            guild.members.me.setNickname('rustPlusPlus');
             await client.setupGuild(guild);
         });
 

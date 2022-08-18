@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageSelectMenu, Permissions, MessageEmbed, MessageAttachment } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilder, ChannelType, PermissionFlagsBits, AttachmentBuilder, ButtonStyle, Embed } = require('discord.js');
 const Client = require('../../index.js');
 const Timer = require('../util/timer');
 const Constants = require('../util/constants.js');
@@ -40,7 +40,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find channel: ${channelId}`, 'error');
             }
 
-            if (channel && channel.type === 'GUILD_TEXT') {
+            if (channel && channel.type === ChannelType.GuildText) {
                 return channel;
             }
         }
@@ -59,7 +59,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find channel: ${name}`, 'error');
             }
 
-            if (channel && channel.type === 'GUILD_TEXT') {
+            if (channel && channel.type === ChannelType.GuildText) {
                 return channel;
             }
         }
@@ -78,7 +78,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find category: ${categoryId}`, 'error');
             }
 
-            if (category && category.type === 'GUILD_CATEGORY') {
+            if (category && category.type === ChannelType.GuildCategory) {
                 return category;
             }
         }
@@ -97,7 +97,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find category: ${name}`, 'error');
             }
 
-            if (category && category.type === 'GUILD_CATEGORY') {
+            if (category && category.type === ChannelType.GuildCategory) {
                 return category;
             }
         }
@@ -146,11 +146,12 @@ module.exports = {
 
         if (guild) {
             try {
-                return await guild.channels.create(name, {
-                    type: 'GUILD_CATEGORY',
+                return await guild.channels.create({
+                    name: name,
+                    type: ChannelType.GuildCategory,
                     permissionOverwrites: [{
                         id: guild.roles.everyone.id,
-                        deny: [Permissions.FLAGS.SEND_MESSAGES]
+                        deny: [PermissionFlagsBits.SendMessages]
                     }]
                 });
             }
@@ -166,11 +167,12 @@ module.exports = {
 
         if (guild) {
             try {
-                return await guild.channels.create(name, {
-                    type: 'GUILD_TEXT',
+                return await guild.channels.create({
+                    name: name,
+                    type: ChannelType.GuildText,
                     permissionOverwrites: [{
                         id: guild.roles.everyone.id,
-                        deny: [Permissions.FLAGS.SEND_MESSAGES]
+                        deny: [PermissionFlagsBits.SendMessages]
                     }],
                 });
             }
@@ -208,6 +210,10 @@ module.exports = {
                 Client.client.log('ERROR', `Could not perform messages fetch on channel: ${channelId}`, 'error');
             }
 
+            if (Object.keys(messages).length === 0) {
+                return;
+            }
+
             for (let message of messages) {
                 message = message[1];
                 if (!message.author.bot) {
@@ -225,92 +231,92 @@ module.exports = {
     },
 
     getNotificationButtons: function (setting, discordActive, inGameActive) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId(`${setting}DiscordNotification`)
                     .setLabel('DISCORD')
-                    .setStyle((discordActive) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((discordActive) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`${setting}InGameNotification`)
                     .setLabel('IN-GAME')
-                    .setStyle((inGameActive) ? 'SUCCESS' : 'DANGER'))
+                    .setStyle((inGameActive) ? ButtonStyle.Success : ButtonStyle.Danger))
     },
 
     getInGameCommandsEnabledButton: function (enabled) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('allowInGameCommands')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
+                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger))
     },
 
     getInGameTeammateNotificationsButtons: function (instance) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('inGameTeammateConnection')
                     .setLabel('CONNECTIONS')
-                    .setStyle((instance.generalSettings.connectionNotify) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((instance.generalSettings.connectionNotify) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId('inGameTeammateAfk')
                     .setLabel('AFK')
-                    .setStyle((instance.generalSettings.afkNotify) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((instance.generalSettings.afkNotify) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId('inGameTeammateDeath')
                     .setLabel('DEATH')
-                    .setStyle((instance.generalSettings.deathNotify) ? 'SUCCESS' : 'DANGER'))
+                    .setStyle((instance.generalSettings.deathNotify) ? ButtonStyle.Success : ButtonStyle.Danger))
     },
 
     getFcmAlarmNotificationButtons: function (enabled, everyone) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('fcmAlarmNotification')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId('fcmAlarmNotificationEveryone')
                     .setLabel('@everyone')
-                    .setStyle((everyone) ? 'SUCCESS' : 'DANGER'));
+                    .setStyle((everyone) ? ButtonStyle.Success : ButtonStyle.Danger));
     },
 
     getSmartAlarmNotifyInGameButton: function (enabled) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('smartAlarmNotifyInGame')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
+                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger))
     },
 
     getLeaderCommandEnabledButton: function (enabled) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('leaderCommandEnabled')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? 'SUCCESS' : 'DANGER'))
+                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger))
     },
 
     getTrackerNotifyButtons: function (allOffline, anyOnline) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId('trackerNotifyAllOffline')
                     .setLabel('ALL OFFLINE')
-                    .setStyle((allOffline) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((allOffline) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId('trackerNotifyAnyOnline')
                     .setLabel('ANY ONLINE')
-                    .setStyle((anyOnline) ? 'SUCCESS' : 'DANGER'));
+                    .setStyle((anyOnline) ? ButtonStyle.Success : ButtonStyle.Danger));
     },
 
     getPrefixSelectMenu: function (currentPrefix) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageSelectMenu()
+                new SelectMenuBuilder()
                     .setCustomId('prefix')
                     .setPlaceholder(`Current Prefix: ${currentPrefix}`)
                     .addOptions([
@@ -334,9 +340,9 @@ module.exports = {
     },
 
     getTrademarkSelectMenu: function (currentTrademark) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageSelectMenu()
+                new SelectMenuBuilder()
                     .setCustomId('trademark')
                     .setPlaceholder(`${currentTrademark}`)
                     .addOptions([
@@ -360,9 +366,9 @@ module.exports = {
     },
 
     getCommandDelaySelectMenu: function (currentDelay) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageSelectMenu()
+                new SelectMenuBuilder()
                     .setCustomId('commandDelay')
                     .setPlaceholder(`Current Command Delay: ${currentDelay} seconds`)
                     .addOptions([
@@ -418,7 +424,7 @@ module.exports = {
     getServerEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        let embed = new MessageEmbed()
+        let embed = new EmbedBuilder()
             .setTitle(`${instance.serverList[id].title}`)
             .setColor('#ce412b')
             .setDescription(`${instance.serverList[id].description}`)
@@ -450,19 +456,19 @@ module.exports = {
             case 0: { /* CONNECT */
                 customId = `${id}ServerConnect`;
                 label = 'CONNECT';
-                style = 'PRIMARY';
+                style = ButtonStyle.Primary;
             } break;
 
             case 1: { /* DISCONNECT */
                 customId = `${id}ServerDisconnect`;
                 label = 'DISCONNECT';
-                style = 'DANGER';
+                style = ButtonStyle.Danger;
             } break;
 
             case 2: { /* RECONNECTING */
                 customId = `${id}ServerReconnecting`;
                 label = 'RECONNECTING...';
-                style = 'DANGER';
+                style = ButtonStyle.Danger;
             } break;
 
             default: {
@@ -471,25 +477,25 @@ module.exports = {
 
         let trackerAvailable = (instance.serverList[id].battlemetricsId !== null) ? true : false;
 
-        let connectionButton = new MessageButton()
+        let connectionButton = new ButtonBuilder()
             .setCustomId(customId)
             .setLabel(label)
             .setStyle(style);
-        let trackerButton = new MessageButton()
+        let trackerButton = new ButtonBuilder()
             .setCustomId(`${id}CreateTracker`)
             .setLabel('CREATE TRACKER')
-            .setStyle('PRIMARY');
-        let linkButton = new MessageButton()
-            .setStyle('LINK')
+            .setStyle(ButtonStyle.Primary);
+        let linkButton = new ButtonBuilder()
+            .setStyle(ButtonStyle.Link)
             .setLabel('WEBSITE')
             .setURL(instance.serverList[id].url);
-        let deleteButton = new MessageButton()
+        let deleteButton = new ButtonBuilder()
             .setCustomId(`${id}ServerDelete`)
             .setEmoji('🗑️')
-            .setStyle('SECONDARY');
+            .setStyle(ButtonStyle.Secondary);
 
         if (trackerAvailable) {
-            return new MessageActionRow()
+            return new ActionRowBuilder()
                 .addComponents(
                     connectionButton,
                     trackerButton,
@@ -497,7 +503,7 @@ module.exports = {
                     deleteButton);
         }
         else {
-            return new MessageActionRow()
+            return new ActionRowBuilder()
                 .addComponents(
                     connectionButton,
                     linkButton,
@@ -574,7 +580,7 @@ module.exports = {
             playerStatus = 'Empty';
         }
 
-        let embed = new MessageEmbed()
+        let embed = new EmbedBuilder()
             .setTitle(`${trackerName}`)
             .setColor('#ce412b')
             .setDescription(`**Battlemetrics ID:** \`${battlemetricsId}\`\n**Server Status:** ${serverStatus}`)
@@ -592,20 +598,20 @@ module.exports = {
     getTrackerButtons: function (guildId, trackerName) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId(`${trackerName}TrackerActive`)
                     .setLabel((instance.trackers[trackerName].active) ? 'ACTIVE' : 'INACTIVE')
-                    .setStyle((instance.trackers[trackerName].active) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((instance.trackers[trackerName].active) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`${trackerName}TrackerEveryone`)
                     .setLabel('@everyone')
-                    .setStyle((instance.trackers[trackerName].everyone) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((instance.trackers[trackerName].everyone) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`${trackerName}TrackerDelete`)
                     .setEmoji('🗑️')
-                    .setStyle('SECONDARY'))
+                    .setStyle(ButtonStyle.Secondary))
     },
 
     sendTrackerMessage: async function (guildId, trackerName, e = true, c = true, interaction = null) {
@@ -653,7 +659,7 @@ module.exports = {
     getSmartSwitchEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageEmbed()
+        return new EmbedBuilder()
             .setTitle(`${instance.switches[id].name}`)
             .setColor((instance.switches[id].active) ? '#00ff40' : '#ff0040')
             .setDescription(`**ID**: \`${id}\``)
@@ -689,9 +695,9 @@ module.exports = {
             } break;
         }
 
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageSelectMenu()
+                new SelectMenuBuilder()
                     .setCustomId(`${id}AutoDayNight`)
                     .setPlaceholder(`${autoDayNightString}`)
                     .addOptions([
@@ -717,16 +723,16 @@ module.exports = {
     getSmartSwitchButtons: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId(`${id}${(instance.switches[id].active) ? 'Off' : 'On'}SmartSwitch`)
                     .setLabel((instance.switches[id].active) ? 'TURN OFF' : 'TURN ON')
-                    .setStyle((instance.switches[id].active) ? 'DANGER' : 'SUCCESS'),
-                new MessageButton()
+                    .setStyle((instance.switches[id].active) ? ButtonStyle.Danger : ButtonStyle.Success),
+                new ButtonBuilder()
                     .setCustomId(`${id}SmartSwitchDelete`)
                     .setEmoji('🗑️')
-                    .setStyle('SECONDARY')
+                    .setStyle(ButtonStyle.Secondary)
             )
 
     },
@@ -734,7 +740,7 @@ module.exports = {
     sendSmartSwitchMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.switches[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
         let embed = module.exports.getSmartSwitchEmbed(guildId, id);
         let selectMenu = module.exports.getSmartSwitchSelectMenu(guildId, id);
         let buttons = module.exports.getSmartSwitchButtons(guildId, id);
@@ -777,7 +783,7 @@ module.exports = {
     getSmartAlarmEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageEmbed()
+        return new EmbedBuilder()
             .setTitle(`${instance.alarms[id].name}`)
             .setColor((instance.alarms[id].active) ? '#00ff40' : '#ce412b')
             .setDescription(`**ID**: \`${id}\``)
@@ -791,22 +797,22 @@ module.exports = {
     getSmartAlarmButtons: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId(`${id}SmartAlarmEveryone`)
                     .setLabel('@everyone')
-                    .setStyle((instance.alarms[id].everyone) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((instance.alarms[id].everyone) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`${id}SmartAlarmDelete`)
                     .setEmoji('🗑️')
-                    .setStyle('SECONDARY'))
+                    .setStyle(ButtonStyle.Secondary))
     },
 
     sendSmartAlarmMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.alarms[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`);
         let embed = module.exports.getSmartAlarmEmbed(guildId, id);
         let buttons = module.exports.getSmartAlarmButtons(guildId, id);
 
@@ -864,7 +870,7 @@ module.exports = {
         let description = `**ID** \`${id}\``;
 
         if (capacity === 0) {
-            return new MessageEmbed()
+            return new EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name}`)
                 .setColor('#ce412b')
                 .setDescription(`${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``)
@@ -916,7 +922,7 @@ module.exports = {
             itemQuantity = 'Empty';
         }
 
-        return new MessageEmbed()
+        return new EmbedBuilder()
             .setTitle(`${instance.storageMonitors[id].name}`)
             .setColor('#ce412b')
             .setDescription(description)
@@ -931,35 +937,35 @@ module.exports = {
     getStorageMonitorToolCupboardButtons: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorToolCupboardEveryone`)
                     .setLabel('@everyone')
-                    .setStyle((instance.storageMonitors[id].everyone) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((instance.storageMonitors[id].everyone) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorToolCupboardInGame`)
                     .setLabel('IN-GAME')
-                    .setStyle((instance.storageMonitors[id].inGame) ? 'SUCCESS' : 'DANGER'),
-                new MessageButton()
+                    .setStyle((instance.storageMonitors[id].inGame) ? ButtonStyle.Success : ButtonStyle.Danger),
+                new ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorToolCupboardDelete`)
                     .setEmoji('🗑️')
-                    .setStyle('SECONDARY'))
+                    .setStyle(ButtonStyle.Secondary))
     },
 
     getStorageMonitorContainerButton: function (guildId, id) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorContainerDelete`)
                     .setEmoji('🗑️')
-                    .setStyle('SECONDARY'))
+                    .setStyle(ButtonStyle.Secondary))
     },
 
     sendStorageMonitorMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         let instance = Client.client.readInstanceFile(guildId);
 
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
         let embed = null;
 
         if (instance.storageMonitors[id].reachable) {
@@ -1012,11 +1018,11 @@ module.exports = {
     sendDecayingNotification: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new MessageEmbed()
+            content.embeds = [new EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name} is decaying!`)
                 .setColor('#ff0040')
                 .setDescription(`**ID** \`${id}\``)
@@ -1037,11 +1043,11 @@ module.exports = {
     sendStorageMonitorDisconnectNotification: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new MessageEmbed()
+            content.embeds = [new EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name} is no longer electrically connected!`)
                 .setColor('#ff0040')
                 .setDescription(`**ID** \`${id}\``)
@@ -1062,11 +1068,11 @@ module.exports = {
     sendStorageMonitorNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new MessageEmbed()
+            content.embeds = [new EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name} could not be found!` +
                     ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
@@ -1088,11 +1094,11 @@ module.exports = {
     sendSmartSwitchNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.switches[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new MessageEmbed()
+            content.embeds = [new EmbedBuilder()
                 .setTitle(`${instance.switches[id].name} could not be found!` +
                     ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
@@ -1110,11 +1116,11 @@ module.exports = {
     sendSmartAlarmNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new MessageAttachment(`src/resources/images/electrics/${instance.alarms[id].image}`);
+        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new MessageEmbed()
+            content.embeds = [new EmbedBuilder()
                 .setTitle(`${instance.alarms[id].name} could not be found!` +
                     ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
@@ -1162,10 +1168,9 @@ module.exports = {
             switchActive = 'None';
         }
 
-        return new MessageEmbed()
+        return new EmbedBuilder()
             .setTitle(name)
             .setColor('#ce412b')
-            .setDescription(``)
             .setThumbnail('attachment://smart_switch.png')
             .addFields(
                 {
@@ -1181,26 +1186,26 @@ module.exports = {
     },
 
     getSmartSwitchGroupButtons: function (name) {
-        return new MessageActionRow()
+        return new ActionRowBuilder()
             .addComponents(
-                new MessageButton()
+                new ButtonBuilder()
                     .setCustomId(`${name}TurnOnGroup`)
                     .setLabel('TURN ON')
-                    .setStyle('PRIMARY'),
-                new MessageButton()
+                    .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
                     .setCustomId(`${name}TurnOffGroup`)
                     .setLabel('TURN OFF')
-                    .setStyle('PRIMARY'),
-                new MessageButton()
+                    .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
                     .setCustomId(`${name}DeleteGroup`)
                     .setEmoji('🗑️')
-                    .setStyle('SECONDARY'));
+                    .setStyle(ButtonStyle.Secondary));
     },
 
     sendSmartSwitchGroupMessage: async function (guildId, name, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        const file = new MessageAttachment('src/resources/images/electrics/smart_switch.png');
+        const file = new AttachmentBuilder('src/resources/images/electrics/smart_switch.png');
         const embed = module.exports.getSmartSwitchGroupEmbed(guildId, name);
         const buttons = module.exports.getSmartSwitchGroupButtons(name);
 
@@ -1242,7 +1247,7 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new MessageEmbed()
+            content.embeds = [new EmbedBuilder()
                 .setTitle(`Everyone from the tracker \`${trackerName}\` just went offline.`)
                 .setColor('#ff0040')
                 .setThumbnail(`${instance.serverList[serverId].img}`)
@@ -1264,7 +1269,7 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new MessageEmbed()
+            content.embeds = [new EmbedBuilder()
                 .setTitle(`Someone from tracker \`${trackerName}\` just went online.`)
                 .setColor('#00ff40')
                 .setThumbnail(`${instance.serverList[serverId].img}`)
@@ -1282,7 +1287,7 @@ module.exports = {
     getNotFoundSmartDeviceEmbed: function (guildId, id, type) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new MessageEmbed()
+        return new EmbedBuilder()
             .setTitle(`${instance[type][id].name}`)
             .setColor('#ff0040')
             .setDescription(`**ID**: \`${id}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`)

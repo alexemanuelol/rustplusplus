@@ -8,7 +8,7 @@ if (!fs.existsSync(`${__dirname}/src/logs`)) {
 }
 
 const client = new DiscordBot({
-    intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES],
+    intents: [Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.GuildMessages],
     retryLimit: 2,
     restRequestTimeout: 60000,
     disableEveryone: false

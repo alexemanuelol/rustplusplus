@@ -6,7 +6,7 @@ const Logger = require('./Logger.js');
 const path = require('path');
 const Items = require('./Items');
 const DiscordTools = require('../discordTools/discordTools');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 class DiscordBot extends Client {
     constructor(props) {
@@ -44,9 +44,14 @@ class DiscordBot extends Client {
         const discordEventFiles = fs.readdirSync(`${__dirname}/../discordEvents`).filter(file => file.endsWith('.js'));
         for (const file of discordEventFiles) {
             const event = require(`../discordEvents/${file}`);
-            if (event.once) {
+
+            if (event.name === 'rateLimited') {
+                this.rest.on(event.name, (...args) => event.execute(this, ...args));
+            }
+            else if (event.once) {
                 this.once(event.name, (...args) => event.execute(...args));
-            } else {
+            }
+            else {
                 this.on(event.name, (...args) => event.execute(this, ...args));
             }
         }
@@ -241,7 +246,7 @@ class DiscordBot extends Client {
             let role = DiscordTools.getRole(interaction.guildId, instance.role);
             let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
             await this.interactionReply(interaction, {
-                embeds: [new MessageEmbed()
+                embeds: [new EmbedBuilder()
                     .setColor('#ff0040')
                     .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                 ephemeral: true

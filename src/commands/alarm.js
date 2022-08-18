@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -113,7 +113,7 @@ module.exports = {
 				if (!Object.keys(instance.alarms).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, {
-						embeds: [new MessageEmbed()
+						embeds: [new EmbedBuilder()
 							.setColor('#ff0040')
 							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 						ephemeral: true
@@ -141,7 +141,7 @@ module.exports = {
 
 				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
 				await client.interactionEditReply(interaction, {
-					embeds: [new MessageEmbed()
+					embeds: [new EmbedBuilder()
 						.setColor('#ce412b')
 						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
 					ephemeral: true

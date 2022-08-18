@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const DiscordTools = require('../discordTools/discordTools');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -54,7 +54,7 @@ module.exports = {
 		if (interaction.options.getSubcommand() === 'set') {
 			let str = `rustPlusPlus role has been set to '${role.name}'.`;
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ce412b')
 					.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
 				ephemeral: true
@@ -64,7 +64,7 @@ module.exports = {
 		else {
 			let str = 'rustPlusPlus role has been cleared.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ce412b')
 					.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
 				ephemeral: true

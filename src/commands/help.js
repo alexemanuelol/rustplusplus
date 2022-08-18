@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageButton, MessageActionRow } = require('discord.js');
+const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -7,22 +7,22 @@ module.exports = {
 		.setDescription('Display help message'),
 	async execute(client, interaction) {
 		await client.interactionReply(interaction, {
-			components: [new MessageActionRow()
+			components: [new ActionRowBuilder()
 				.addComponents(
-					new MessageButton()
-						.setStyle('LINK')
+					new ButtonBuilder()
+						.setStyle(ButtonStyle.Link)
 						.setLabel('DEVELOPER')
 						.setURL('https://github.com/alexemanuelol'),
-					new MessageButton()
-						.setStyle('LINK')
+					new ButtonBuilder()
+						.setStyle(ButtonStyle.Link)
 						.setLabel('REPOSITORY')
 						.setURL('https://github.com/alexemanuelol/rustPlusPlus'),
-					new MessageButton()
-						.setStyle('LINK')
+					new ButtonBuilder()
+						.setStyle(ButtonStyle.Link)
 						.setLabel('DOCUMENTATION')
 						.setURL('https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md'),
-					new MessageButton()
-						.setStyle('LINK')
+					new ButtonBuilder()
+						.setStyle(ButtonStyle.Link)
 						.setLabel('CREDENTIALS')
 						.setURL('https://github.com/alexemanuelol/rustPlusPlus/releases/tag/v1.0.0')
 				)
