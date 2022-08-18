@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageAttachment, MessageEmbed } = require('discord.js');
+const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -33,7 +33,7 @@ module.exports = {
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
@@ -65,15 +65,15 @@ module.exports = {
 
 		let file = null;
 		if (interaction.options.getSubcommand() === 'clean') {
-			file = new MessageAttachment(`src/resources/images/maps/${interaction.guildId}_map_clean.png`);
+			file = new AttachmentBuilder(`src/resources/images/maps/${interaction.guildId}_map_clean.png`);
 		}
 		else {
-			file = new MessageAttachment(`src/resources/images/maps/${interaction.guildId}_map_full.png`);
+			file = new AttachmentBuilder(`src/resources/images/maps/${interaction.guildId}_map_full.png`);
 		}
 
 		let fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';
 		await client.interactionEditReply(interaction, {
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor('#ce412b')
 				.setImage(`attachment://${interaction.guildId}_map_${fileName}.png`)
 				.setFooter({ text: instance.serverList[rustplus.serverId].title })],

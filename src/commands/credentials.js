@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const _ = require('lodash');
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -105,7 +105,7 @@ async function setCredentials(client, interaction) {
         if (_.isEqual(credentials, instance.credentials)) {
             let str = 'FCM Credentials are already used for another discord server!';
             await client.interactionEditReply(interaction, {
-                embeds: [new MessageEmbed()
+                embeds: [new EmbedBuilder()
                     .setColor('#ff0040')
                     .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                 ephemeral: true
@@ -124,7 +124,7 @@ async function setCredentials(client, interaction) {
 
     let str = 'FCM Credentials were set successfully!';
     await client.interactionEditReply(interaction, {
-        embeds: [new MessageEmbed()
+        embeds: [new EmbedBuilder()
             .setColor('#ce412b')
             .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
         ephemeral: true
@@ -143,7 +143,7 @@ async function clearCredentials(client, interaction) {
 
     let str = 'FCM Credentials were cleared successfully!';
     await client.interactionEditReply(interaction, {
-        embeds: [new MessageEmbed()
+        embeds: [new EmbedBuilder()
             .setColor('#ce412b')
             .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
         ephemeral: true
@@ -154,7 +154,7 @@ async function clearCredentials(client, interaction) {
 async function isSetCredentials(client, interaction) {
     let instance = client.readCredentialsFile(interaction.guildId);
 
-    let embed = new MessageEmbed()
+    let embed = new EmbedBuilder()
         .setTitle('Is FCM Credentials set?')
         .setColor('#ce412b');
 

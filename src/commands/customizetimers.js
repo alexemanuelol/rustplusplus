@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const Timer = require('../util/timer');
 
 module.exports = {
@@ -68,7 +68,7 @@ module.exports = {
 		if (!rustplus) {
 			let str = 'Not currently connected to a rust server.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
@@ -127,7 +127,7 @@ module.exports = {
 						sec = parseInt(sec);
 						let warning = `Time can not be lower than despawn warning time (${sec}s).`;
 						await client.interactionEditReply(interaction, {
-							embeds: [new MessageEmbed()
+							embeds: [new EmbedBuilder()
 								.setColor('#ff0040')
 								.setDescription(`\`\`\`diff\n- ${warning}\n\`\`\``)],
 							ephemeral: true
@@ -157,7 +157,7 @@ module.exports = {
 						sec = parseInt(sec);
 						let warning = `Time can not be higher than despawn time (${sec}s).`;
 						await client.interactionEditReply(interaction, {
-							embeds: [new MessageEmbed()
+							embeds: [new EmbedBuilder()
 								.setColor('#ff0040')
 								.setDescription(`\`\`\`diff\n- ${warning}\n\`\`\``)],
 							ephemeral: true
@@ -194,7 +194,7 @@ module.exports = {
 		}
 
 		await client.interactionEditReply(interaction, {
-			embeds: [new MessageEmbed()
+			embeds: [new EmbedBuilder()
 				.setColor('#ce412b')
 				.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
 			ephemeral: true

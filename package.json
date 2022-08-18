@@ -1,6 +1,6 @@
 {
     "name": "rustPlusPlus",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "A NodeJS Discord Bot that uses the rustplus.js library to utilize the power of the Rust+ Companion App with additional Quality-of-Life features.",
     "main": "index.js",
     "scripts": {
@@ -18,9 +18,8 @@
     },
     "homepage": "https://github.com/alexemanuelol/rustPlusPlus#readme",
     "dependencies": {
-        "@discordjs/builders": "^1.1.0",
         "@discordjs/rest": "^1.0.1",
-        "discord.js": "^13.9.2",
+        "discord.js": "^14.2.0",
         "discord-api-types": "^0.37.1",
         "colors": "^1.4.0",
         "rustplus.js": "github:liamcottle/rustplus.js",
