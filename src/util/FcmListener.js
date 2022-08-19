@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton, MessageEmbed, MessageAttachment } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
 const { listen } = require('push-receiver');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
@@ -339,14 +339,14 @@ async function alarmAlarm(client, guild, full, data, body) {
 
             let content = {};
             content.embeds = [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setColor('#ce412b')
                     .setThumbnail('attachment://smart_alarm.png')
                     .setTitle(title)
                     .addFields({ name: 'Message', value: `\`${message}\``, inline: true })
                     .setFooter({ text: body.name })
                     .setTimestamp()];
-            content.files = [new MessageAttachment('src/resources/images/electrics/smart_alarm.png')];
+            content.files = [new AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')];
 
             if (instance.generalSettings.fcmAlarmNotificationEveryone) {
                 content.content = '@everyone';
@@ -377,7 +377,7 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
             png = (isValidUrl(body.img)) ? body.img : Constants.DEFAULT_SERVER_IMG;
         }
 
-        let embed = new MessageEmbed()
+        let embed = new EmbedBuilder()
             .setColor('#ff0040')
             .setThumbnail(png)
             .setTitle(data.title)
@@ -403,7 +403,7 @@ async function teamLogin(client, guild, full, data, body) {
             let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
             await client.messageSend(channel, {
                 embeds: [
-                    new MessageEmbed()
+                    new EmbedBuilder()
                         .setColor('#00ff40')
                         .setAuthor({
                             name: `${body.targetName} just connected.`,
@@ -426,7 +426,7 @@ async function newsNews(client, guild, full, data, body) {
     if (channel !== undefined) {
         await client.messageSend(channel, {
             embeds: [
-                new MessageEmbed()
+                new EmbedBuilder()
                     .setTitle(`NEWS: ${data.title}`)
                     .setColor('#ce412b')
                     .setDescription(`${data.message}`)
@@ -434,10 +434,10 @@ async function newsNews(client, guild, full, data, body) {
                     .setTimestamp()
             ],
             components: [
-                new MessageActionRow()
+                new ActionRowBuilder()
                     .addComponents(
-                        new MessageButton()
-                            .setStyle('LINK')
+                        new ButtonBuilder()
+                            .setStyle(ButtonStyle.Link)
                             .setLabel('LINK')
                             .setURL(isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL))
             ]

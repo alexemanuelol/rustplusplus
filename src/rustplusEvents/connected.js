@@ -1,6 +1,6 @@
 const PollingHandler = require('../handlers/pollingHandler.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 
 const Map = require('../structures/Map');
 const Info = require('../structures/Info');
@@ -22,7 +22,7 @@ module.exports = {
 
             if (channel !== undefined) {
                 await client.messageSend(channel, {
-                    embeds: [new MessageEmbed()
+                    embeds: [new EmbedBuilder()
                         .setColor('#ff0040')
                         .setTitle('The connection to the server seems to be invalid. Try to re-pair to the server.')
                         .setThumbnail(instance.serverList[rustplus.serverId].img)
@@ -63,7 +63,7 @@ module.exports = {
             message = await DiscordTools.getMessageById(rustplus.guildId, instance.channelId.information, messageId);
         }
 
-        let mapFile = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
+        let mapFile = new AttachmentBuilder(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
         if (message === undefined) {
             let infoChannel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
 
@@ -86,9 +86,9 @@ module.exports = {
 
         if (isWipe) {
             if (channel !== undefined) {
-                let file = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
+                let file = new AttachmentBuilder(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
                 await client.messageSend(channel, {
-                    embeds: [new MessageEmbed()
+                    embeds: [new EmbedBuilder()
                         .setColor('#ce412b')
                         .setTitle('Wipe detected!')
                         .setImage(`attachment://${rustplus.guildId}_map_full.png`)
@@ -106,7 +106,7 @@ module.exports = {
             if (rustplus.isReconnect) {
                 if (channel !== undefined) {
                     await client.messageSend(channel, {
-                        embeds: [new MessageEmbed()
+                        embeds: [new EmbedBuilder()
                             .setColor('#00ff40')
                             .setTitle('Server just went online.')
                             .setThumbnail(instance.serverList[rustplus.serverId].img)

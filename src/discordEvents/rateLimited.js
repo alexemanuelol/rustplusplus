@@ -1,12 +1,12 @@
 module.exports = {
-    name: 'rateLimit',
+    name: 'rateLimited',
     async execute(client, info) {
         client.log(
-            'RATELIMIT',
-            `Timeout: ${info.timeout}, ` +
+            'RATELIMITED',
+            `Timeout: ${info.timeToReset}, ` +
             `Limit: ${info.limit}, ` +
             `Method: ${info.method}, ` +
-            `Path: ${info.path}, ` +
+            `Path: ${info.url}, ` +
             `Route: ${info.route}, ` +
             `Global: ${info.global}`);
     },

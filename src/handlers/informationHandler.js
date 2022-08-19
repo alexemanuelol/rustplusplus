@@ -1,5 +1,5 @@
 const Timer = require('../util/timer');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
 
@@ -60,8 +60,8 @@ module.exports = {
         const mapSeed = `${rustplus.info.seed}`;
         const mapSalt = `${rustplus.info.salt}`;
 
-        let files = [new MessageAttachment('src/resources/images/server_info_logo.png')];
-        let embed = new MessageEmbed()
+        let files = [new AttachmentBuilder('src/resources/images/server_info_logo.png')];
+        let embed = new EmbedBuilder()
             .setTitle('Server Information')
             .setColor('#ce412b')
             .setThumbnail('attachment://server_info_logo.png')
@@ -283,8 +283,8 @@ module.exports = {
         }
 
 
-        let files = [new MessageAttachment('src/resources/images/event_info_logo.png')];
-        let embed = new MessageEmbed()
+        let files = [new AttachmentBuilder('src/resources/images/event_info_logo.png')];
+        let embed = new EmbedBuilder()
             .setTitle('Event Information')
             .setColor('#ce412b')
             .setThumbnail('attachment://event_info_logo.png')
@@ -331,8 +331,8 @@ module.exports = {
             }
         }
 
-        let files = [new MessageAttachment('src/resources/images/team_info_logo.png')];
-        let embed = new MessageEmbed()
+        let files = [new AttachmentBuilder('src/resources/images/team_info_logo.png')];
+        let embed = new EmbedBuilder()
             .setTitle('Team Member Information')
             .setColor('#ce412b')
             .setThumbnail('attachment://team_info_logo.png')

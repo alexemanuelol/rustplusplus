@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -23,7 +23,7 @@ module.exports = {
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
@@ -35,7 +35,7 @@ module.exports = {
 		if (!rustplus.generalSettings.leaderCommandEnabled) {
 			let str = 'Leader command is turned OFF in settings.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -49,7 +49,7 @@ module.exports = {
 			let player = rustplus.team.getPlayer(rustplus.playerId);
 			let str = `Leader command only works if the current leader is ${player.name}.`;
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -81,7 +81,7 @@ module.exports = {
 		if (matchedPlayer === null) {
 			let str = `Could not identify team member: ${member}.`;
 			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
+				embeds: [new EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -93,7 +93,7 @@ module.exports = {
 			if (rustplus.team.leaderSteamId === matchedPlayer.steamId) {
 				let str = `${matchedPlayer.name} is already team leader.`;
 				await client.interactionEditReply(interaction, {
-					embeds: [new MessageEmbed()
+					embeds: [new EmbedBuilder()
 						.setColor('#ff0040')
 						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -105,7 +105,7 @@ module.exports = {
 				await rustplus.team.changeLeadership(matchedPlayer.steamId);
 				let str = `Team leadership was transferred to ${matchedPlayer.name}.`;
 				await client.interactionEditReply(interaction, {
-					embeds: [new MessageEmbed()
+					embeds: [new EmbedBuilder()
 						.setColor('#ce412b')
 						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
 						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
