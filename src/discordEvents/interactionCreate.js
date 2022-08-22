@@ -38,12 +38,7 @@ module.exports = {
                 client.log('ERROR', error, 'error');
 
                 let str = 'There was an error while executing this command!';
-                await client.interactionEditReply(interaction, {
-                    embeds: [new Discord.EmbedBuilder()
-                        .setColor('#ff0040')
-                        .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
                 client.log('ERROR', str, 'error');
             }
         }

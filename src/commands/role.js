@@ -54,22 +54,12 @@ module.exports = {
 
 		if (interaction.options.getSubcommand() === 'set') {
 			let str = `rustPlusPlus role has been set to '${role.name}'.`;
-			await client.interactionEditReply(interaction, {
-				embeds: [new Discord.EmbedBuilder()
-					.setColor('#ce412b')
-					.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
 			client.log('INFO', str);
 		}
 		else {
 			let str = 'rustPlusPlus role has been cleared.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new Discord.EmbedBuilder()
-					.setColor('#ce412b')
-					.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
 			client.log('INFO', str);
 		}
 	},

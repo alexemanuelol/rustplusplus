@@ -61,12 +61,7 @@ module.exports = {
 				}
 
 				let str = 'Successfully reset Discord.';
-				await client.interactionEditReply(interaction, {
-					embeds: [new Discord.EmbedBuilder()
-						.setColor('#ce412b')
-						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-					ephemeral: true
-				});
+				await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
 				client.log('INFO', str);
 			} break;
 
