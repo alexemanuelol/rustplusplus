@@ -1,14 +1,13 @@
-const SmartSwitchHandler = require('../handlers/smartSwitchHandler.js');
-const TimeHandler = require('../handlers/timeHandler.js');
-const TeamHandler = require('../handlers/teamHandler.js');
-const InformationHandler = require('../handlers/informationHandler.js');
-const StorageMonitorHandler = require('../handlers/storageMonitorHandler.js');
-const SmartAlarmHandler = require('../handlers/smartAlarmHandler.js');
-
-const Time = require('../structures/Time');
-const Team = require('../structures/Team');
 const Info = require('../structures/Info');
+const InformationHandler = require('../handlers/informationHandler.js');
 const MapMarkers = require('../structures/MapMarkers.js');
+const SmartAlarmHandler = require('../handlers/smartAlarmHandler.js');
+const SmartSwitchHandler = require('../handlers/smartSwitchHandler.js');
+const StorageMonitorHandler = require('../handlers/storageMonitorHandler.js');
+const Team = require('../structures/Team');
+const TeamHandler = require('../handlers/teamHandler.js');
+const Time = require('../structures/Time');
+const TimeHandler = require('../handlers/timeHandler.js');
 
 module.exports = {
     pollingHandler: async function (rustplus, client) {

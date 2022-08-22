@@ -1,5 +1,5 @@
+const Fs = require("fs");
 const Jimp = require("jimp");
-const fs = require("fs");
 
 class Map {
     constructor(map, rustplus) {
@@ -249,7 +249,7 @@ class Map {
     }
 
     async writeMapClean() {
-        await fs.writeFileSync(this.mapMarkerImageMeta.map.image, this.jpgImage);
+        await Fs.writeFileSync(this.mapMarkerImageMeta.map.image, this.jpgImage);
     }
 
     async setupFont() {

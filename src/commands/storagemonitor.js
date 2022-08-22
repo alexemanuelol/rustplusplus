@@ -1,10 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const Recycler = require('../util/recycler.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('storagemonitor')
 		.setDescription('Operations on Storage Monitors.')
 		.addSubcommand(subcommand =>
@@ -63,7 +64,7 @@ module.exports = {
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new EmbedBuilder()
+				embeds: [new Discord.EmbedBuilder()
 					.setColor('#ff0040')
 					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 				ephemeral: true
@@ -83,7 +84,7 @@ module.exports = {
 				if (!Object.keys(instance.storageMonitors).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, {
-						embeds: [new EmbedBuilder()
+						embeds: [new Discord.EmbedBuilder()
 							.setColor('#ff0040')
 							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 							.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -96,7 +97,7 @@ module.exports = {
 				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
 					let str = 'That Storage Monitor is not part of this Rust Server.';
 					await client.interactionEditReply(interaction, {
-						embeds: [new EmbedBuilder()
+						embeds: [new Discord.EmbedBuilder()
 							.setColor('#ff0040')
 							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 							.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -122,7 +123,7 @@ module.exports = {
 
 				let str = `Successfully edited Storage Monitor '${instance.storageMonitors[id].name}'.`;
 				await client.interactionEditReply(interaction, {
-					embeds: [new EmbedBuilder()
+					embeds: [new Discord.EmbedBuilder()
 						.setColor('#ce412b')
 						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
 						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -135,7 +136,7 @@ module.exports = {
 				if (!Object.keys(instance.storageMonitors).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, {
-						embeds: [new EmbedBuilder()
+						embeds: [new Discord.EmbedBuilder()
 							.setColor('#ff0040')
 							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 							.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -148,7 +149,7 @@ module.exports = {
 				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
 					let str = 'That Storage Monitor is not part of this Rust Server.';
 					await client.interactionEditReply(interaction, {
-						embeds: [new EmbedBuilder()
+						embeds: [new Discord.EmbedBuilder()
 							.setColor('#ff0040')
 							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 							.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -165,7 +166,7 @@ module.exports = {
 
 					let str = `Could not get items from Storage Monitor: ${id}`;
 					await client.interactionEditReply(interaction, {
-						embeds: [new EmbedBuilder()
+						embeds: [new Discord.EmbedBuilder()
 							.setColor('#ff0040')
 							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
 							.setFooter({ text: instance.serverList[rustplus.serverId].title })],
@@ -188,8 +189,8 @@ module.exports = {
 					itemQuantity += `\`${item.quantity}\`\n`;
 				}
 
-				let file = new AttachmentBuilder('src/resources/images/electrics/recycler.png');
-				let embed = new EmbedBuilder()
+				let file = new Discord.AttachmentBuilder('src/resources/images/electrics/recycler.png');
+				let embed = new Discord.EmbedBuilder()
 					.setTitle('Result of recycling:')
 					.setColor('#ce412b')
 					.setThumbnail('attachment://recycler.png')

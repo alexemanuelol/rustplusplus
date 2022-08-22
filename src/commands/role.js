@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools');
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('role')
 		.setDescription('Set/Clear a specific role that will be able to see the rustPlusPlus category content.')
 		.addSubcommand(subcommand =>
@@ -54,7 +55,7 @@ module.exports = {
 		if (interaction.options.getSubcommand() === 'set') {
 			let str = `rustPlusPlus role has been set to '${role.name}'.`;
 			await client.interactionEditReply(interaction, {
-				embeds: [new EmbedBuilder()
+				embeds: [new Discord.EmbedBuilder()
 					.setColor('#ce412b')
 					.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
 				ephemeral: true
@@ -64,7 +65,7 @@ module.exports = {
 		else {
 			let str = 'rustPlusPlus role has been cleared.';
 			await client.interactionEditReply(interaction, {
-				embeds: [new EmbedBuilder()
+				embeds: [new Discord.EmbedBuilder()
 					.setColor('#ce412b')
 					.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
 				ephemeral: true

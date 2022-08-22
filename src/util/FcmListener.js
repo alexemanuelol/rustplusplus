@@ -1,9 +1,10 @@
-const { ActionRowBuilder, ButtonBuilder, EmbedBuilder, AttachmentBuilder, ButtonStyle } = require('discord.js');
-const { listen } = require('push-receiver');
-const DiscordTools = require('../discordTools/discordTools.js');
-const Constants = require('../util/constants.js');
-const Scrape = require('../util/scrape.js');
+const Discord = require('discord.js');
+const PushReceiver = require('push-receiver');
+
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
+const Constants = require('../util/constants.js');
+const DiscordTools = require('../discordTools/discordTools.js');
+const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild) => {
     let credentials = client.readCredentialsFile(guild.id);
@@ -24,7 +25,7 @@ module.exports = async (client, guild) => {
 
     let startTime = new Date();
     client.currentFcmListeners[guild.id] =
-        await listen(credentials.credentials.fcm_credentials, async ({ notification, persistentId }) => {
+        await PushReceiver.listen(credentials.credentials.fcm_credentials, async ({ notification, persistentId }) => {
             /* Create a delay so that buffered notifications are ignored. */
             if ((new Date() - startTime) < 5000) return;
 
@@ -339,14 +340,14 @@ async function alarmAlarm(client, guild, full, data, body) {
 
             let content = {};
             content.embeds = [
-                new EmbedBuilder()
+                new Discord.EmbedBuilder()
                     .setColor('#ce412b')
                     .setThumbnail('attachment://smart_alarm.png')
                     .setTitle(title)
                     .addFields({ name: 'Message', value: `\`${message}\``, inline: true })
                     .setFooter({ text: body.name })
                     .setTimestamp()];
-            content.files = [new AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')];
+            content.files = [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')];
 
             if (instance.generalSettings.fcmAlarmNotificationEveryone) {
                 content.content = '@everyone';
@@ -377,7 +378,7 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
             png = (isValidUrl(body.img)) ? body.img : Constants.DEFAULT_SERVER_IMG;
         }
 
-        let embed = new EmbedBuilder()
+        let embed = new Discord.EmbedBuilder()
             .setColor('#ff0040')
             .setThumbnail(png)
             .setTitle(data.title)
@@ -403,7 +404,7 @@ async function teamLogin(client, guild, full, data, body) {
             let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
             await client.messageSend(channel, {
                 embeds: [
-                    new EmbedBuilder()
+                    new Discord.EmbedBuilder()
                         .setColor('#00ff40')
                         .setAuthor({
                             name: `${body.targetName} just connected.`,
@@ -426,7 +427,7 @@ async function newsNews(client, guild, full, data, body) {
     if (channel !== undefined) {
         await client.messageSend(channel, {
             embeds: [
-                new EmbedBuilder()
+                new Discord.EmbedBuilder()
                     .setTitle(`NEWS: ${data.title}`)
                     .setColor('#ce412b')
                     .setDescription(`${data.message}`)
@@ -434,10 +435,10 @@ async function newsNews(client, guild, full, data, body) {
                     .setTimestamp()
             ],
             components: [
-                new ActionRowBuilder()
+                new Discord.ActionRowBuilder()
                     .addComponents(
-                        new ButtonBuilder()
-                            .setStyle(ButtonStyle.Link)
+                        new Discord.ButtonBuilder()
+                            .setStyle(Discord.ButtonStyle.Link)
                             .setLabel('LINK')
                             .setURL(isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL))
             ]

@@ -1,5 +1,5 @@
-const DiscordTools = require('../discordTools/discordTools.js');
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = {

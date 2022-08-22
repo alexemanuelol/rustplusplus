@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('alarm')
 		.setDescription('Operations on Smart Alarms.')
 		.addSubcommand(subcommand =>
@@ -113,7 +114,7 @@ module.exports = {
 				if (!Object.keys(instance.alarms).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, {
-						embeds: [new EmbedBuilder()
+						embeds: [new Discord.EmbedBuilder()
 							.setColor('#ff0040')
 							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
 						ephemeral: true
@@ -141,7 +142,7 @@ module.exports = {
 
 				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
 				await client.interactionEditReply(interaction, {
-					embeds: [new EmbedBuilder()
+					embeds: [new Discord.EmbedBuilder()
 						.setColor('#ce412b')
 						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
 					ephemeral: true

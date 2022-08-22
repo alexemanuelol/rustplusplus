@@ -1,4 +1,4 @@
-const { EmbedBuilder, InteractionType } = require('discord.js');
+const Discord = require('discord.js');
 
 module.exports = {
     name: 'interactionCreate',
@@ -24,7 +24,7 @@ module.exports = {
         else if (interaction.isSelectMenu()) {
             require('../handlers/selectMenuHandler')(client, interaction);
         }
-        else if (interaction.type === InteractionType.ApplicationCommand) {
+        else if (interaction.type === Discord.InteractionType.ApplicationCommand) {
             const command = interaction.client.commands.get(interaction.commandName);
 
             /* If the command doesn't exist, return */
@@ -39,7 +39,7 @@ module.exports = {
 
                 let str = 'There was an error while executing this command!';
                 await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
+                    embeds: [new Discord.EmbedBuilder()
                         .setColor('#ff0040')
                         .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                     ephemeral: true

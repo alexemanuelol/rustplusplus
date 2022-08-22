@@ -1,20 +1,20 @@
-const fs = require('fs');
-const { Collection, Client } = require('discord.js');
-const Config = require('../../config.json');
-const RustPlus = require('../structures/RustPlus');
-const Logger = require('./Logger.js');
-const path = require('path');
-const Items = require('./Items');
-const DiscordTools = require('../discordTools/discordTools');
-const { EmbedBuilder } = require('discord.js');
+const Fs = require('fs');
+const Discord = require('discord.js');
+const Path = require('path');
 
-class DiscordBot extends Client {
+const Config = require('../../config.json');
+const DiscordTools = require('../discordTools/discordTools');
+const Items = require('./Items');
+const Logger = require('./Logger.js');
+const RustPlus = require('../structures/RustPlus');
+
+class DiscordBot extends Discord.Client {
     constructor(props) {
         super(props);
 
-        this.logger = new Logger(path.join(__dirname, '..', 'logs/discordBot.log'), 'default');
+        this.logger = new Logger(Path.join(__dirname, '..', 'logs/discordBot.log'), 'default');
 
-        this.commands = new Collection();
+        this.commands = new Discord.Collection();
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
         this.switchesMessages = new Object();
@@ -33,7 +33,7 @@ class DiscordBot extends Client {
     }
 
     loadCommands() {
-        const commandFiles = fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
+        const commandFiles = Fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             const command = require(`../commands/${file}`);
             this.commands.set(command.data.name, command);
@@ -41,7 +41,7 @@ class DiscordBot extends Client {
     }
 
     loadEvents() {
-        const discordEventFiles = fs.readdirSync(`${__dirname}/../discordEvents`).filter(file => file.endsWith('.js'));
+        const discordEventFiles = Fs.readdirSync(`${__dirname}/../discordEvents`).filter(file => file.endsWith('.js'));
         for (const file of discordEventFiles) {
             const event = require(`../discordEvents/${file}`);
 
@@ -84,8 +84,8 @@ class DiscordBot extends Client {
         require('../util/CreateCredentialsFile')(this, guild);
 
         /* If maps/ directory does not exist, create it */
-        if (!fs.existsSync(`${__dirname}/../resources/images/maps`)) {
-            fs.mkdirSync(`${__dirname}/../resources/images/maps`);
+        if (!Fs.existsSync(`${__dirname}/../resources/images/maps`)) {
+            Fs.mkdirSync(`${__dirname}/../resources/images/maps`);
         }
 
         await require('../discordTools/RegisterSlashCommands')(this, guild);
@@ -98,27 +98,27 @@ class DiscordBot extends Client {
     }
 
     readInstanceFile(guildId) {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../instances/${guildId}.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(`${__dirname}/../instances/${guildId}.json`, 'utf8'));
     }
 
     writeInstanceFile(guildId, instance) {
-        fs.writeFileSync(`${__dirname}/../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
+        Fs.writeFileSync(`${__dirname}/../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
     }
 
     readCredentialsFile(guildId) {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../credentials/${guildId}.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(`${__dirname}/../credentials/${guildId}.json`, 'utf8'));
     }
 
     writeCredentialsFile(guildId, credentials) {
-        fs.writeFileSync(`${__dirname}/../credentials/${guildId}.json`, JSON.stringify(credentials, null, 2));
+        Fs.writeFileSync(`${__dirname}/../credentials/${guildId}.json`, JSON.stringify(credentials, null, 2));
     }
 
     readNotificationSettingsTemplate() {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../templates/notificationSettingsTemplate.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(`${__dirname}/../templates/notificationSettingsTemplate.json`, 'utf8'));
     }
 
     readGeneralSettingsTemplate() {
-        return JSON.parse(fs.readFileSync(`${__dirname}/../templates/generalSettingsTemplate.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(`${__dirname}/../templates/generalSettingsTemplate.json`, 'utf8'));
     }
 
     createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken) {
@@ -134,11 +134,11 @@ class DiscordBot extends Client {
 
     createRustplusInstancesFromConfig() {
         /* If instances/ directory does not exist, create it */
-        if (!fs.existsSync(`${__dirname}/../instances`)) {
-            fs.mkdirSync(`${__dirname}/../instances`);
+        if (!Fs.existsSync(`${__dirname}/../instances`)) {
+            Fs.mkdirSync(`${__dirname}/../instances`);
         }
 
-        let files = fs.readdirSync(`${__dirname}/../instances`);
+        let files = Fs.readdirSync(`${__dirname}/../instances`);
 
         files.forEach(file => {
             if (file.endsWith('.json')) {
@@ -246,7 +246,7 @@ class DiscordBot extends Client {
             let role = DiscordTools.getRole(interaction.guildId, instance.role);
             let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
             await this.interactionReply(interaction, {
-                embeds: [new EmbedBuilder()
+                embeds: [new Discord.EmbedBuilder()
                     .setColor('#ff0040')
                     .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                 ephemeral: true

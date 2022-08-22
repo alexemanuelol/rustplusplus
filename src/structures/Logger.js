@@ -1,11 +1,12 @@
-const winston = require("winston");
-const colors = require("colors");
+const Colors = require("colors");
+const Winston = require("winston");
+
 const Config = require('../../config.json');
 
 class Logger {
     constructor(logFilePath, type) {
-        this.logger = winston.createLogger({
-            transports: [new winston.transports.File({
+        this.logger = Winston.createLogger({
+            transports: [new Winston.transports.File({
                 filename: logFilePath,
                 maxsize: 10000000,
                 maxFiles: 2,
@@ -47,14 +48,14 @@ class Logger {
                 });
 
                 console.log(
-                    colors.green(`${time} `) +
-                    ((level === 'error') ? colors.red(text) : colors.yellow(text))
+                    Colors.green(`${time} `) +
+                    ((level === 'error') ? Colors.red(text) : Colors.yellow(text))
                 );
 
                 if (level === 'error' && Config.general.showCallStackError) {
                     for (let line of (new Error().stack.split(/\r?\n/))) {
                         this.logger.log({ level: level, message: `${time} | ${line}` });
-                        console.log(colors.green(`${time} `) + colors.red(line));
+                        console.log(Colors.green(`${time} `) + Colors.red(line));
                     }
                 }
             } break;
@@ -68,10 +69,10 @@ class Logger {
                 });
 
                 console.log(
-                    colors.green(`${time} `) +
-                    colors.cyan(`${this.guildId} `) +
-                    colors.white(`${this.serverName} `) +
-                    ((level === 'error') ? colors.red(text) : colors.yellow(text))
+                    Colors.green(`${time} `) +
+                    Colors.cyan(`${this.guildId} `) +
+                    Colors.white(`${this.serverName} `) +
+                    ((level === 'error') ? Colors.red(text) : Colors.yellow(text))
                 );
 
                 if (level === 'error' && Config.general.showCallStackError) {
@@ -81,10 +82,10 @@ class Logger {
                             message: `${time} | ${this.guildId} | ${this.serverName} | ${line}`
                         });
                         console.log(
-                            colors.green(`${time} `) +
-                            colors.cyan(`${this.guildId} `) +
-                            colors.white(`${this.serverName} `) +
-                            colors.red(line));
+                            Colors.green(`${time} `) +
+                            Colors.cyan(`${this.guildId} `) +
+                            Colors.white(`${this.serverName} `) +
+                            Colors.red(line));
                     }
                 }
             } break;

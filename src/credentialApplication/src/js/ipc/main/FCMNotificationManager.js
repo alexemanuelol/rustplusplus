@@ -1,4 +1,4 @@
-const { register } = require('push-receiver');
+const PushReceiver = require('push-receiver');
 
 /**
  * This class is responsible for registering a new android device with fcm
@@ -36,7 +36,7 @@ class FCMNotificationManager {
     async onRegister(event, data) {
         try {
             /* Register with gcm/fcm */
-            const credentials = await register(data.senderId);
+            const credentials = await PushReceiver.register(data.senderId);
 
             /* Registering was successful */
             this.onRegisterSuccess(event, credentials);

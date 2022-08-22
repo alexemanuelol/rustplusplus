@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new Builder.SlashCommandBuilder()
         .setName('tracker')
         .setDescription('Operations for Battlemetrics Player Tracker.')
         .addSubcommand(subcommand =>
@@ -57,7 +58,7 @@ module.exports = {
                 if (!Object.keys(instance.trackers).includes(trackerName)) {
                     let str = `Battlemetrics Player Tracker '${trackerName}' does not exist.`;
                     await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#ff0040')
                             .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                         ephemeral: true
@@ -71,7 +72,7 @@ module.exports = {
                 if (trackerName === newTrackerName) {
                     let str = 'No changes were made.';
                     await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#ff0040')
                             .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                         ephemeral: true
@@ -88,7 +89,7 @@ module.exports = {
 
                 let str = `Successfully edited Battlemetrics Player Tracker '${trackerName}'.`;
                 await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
+                    embeds: [new Discord.EmbedBuilder()
                         .setColor('#ce412b')
                         .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
                     ephemeral: true
@@ -100,7 +101,7 @@ module.exports = {
                 if (!Object.keys(instance.trackers).includes(trackerName)) {
                     let str = `Battlemetrics Player Tracker '${trackerName}' does not exist.`;
                     await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#ff0040')
                             .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                         ephemeral: true
@@ -114,7 +115,7 @@ module.exports = {
                 if (instance.trackers[trackerName].players.some(e => e.id === steamId)) {
                     let str = `The player '${steamId}' already exist in '${trackerName}' tracker.`;
                     await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#ff0040')
                             .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                         ephemeral: true
@@ -135,7 +136,7 @@ module.exports = {
 
                 let str = `Successfully added '${steamId}' to the tracker '${trackerName}'.`;
                 await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
+                    embeds: [new Discord.EmbedBuilder()
                         .setColor('#ce412b')
                         .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
                     ephemeral: true
@@ -147,7 +148,7 @@ module.exports = {
                 if (!Object.keys(instance.trackers).includes(trackerName)) {
                     let str = `Battlemetrics Player Tracker '${trackerName}' does not exist.`;
                     await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#ff0040')
                             .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                         ephemeral: true
@@ -161,7 +162,7 @@ module.exports = {
                 if (!instance.trackers[trackerName].players.some(e => e.steamId === steamId)) {
                     let str = `The player '${steamId}' already exist in '${trackerName}' tracker.`;
                     await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#ff0040')
                             .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
                         ephemeral: true
@@ -178,7 +179,7 @@ module.exports = {
 
                 let str = `Successfully removed '${steamId}' from the tracker '${trackerName}'.`;
                 await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
+                    embeds: [new Discord.EmbedBuilder()
                         .setColor('#ce412b')
                         .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
                     ephemeral: true

@@ -4,17 +4,17 @@
  * into a single items.json file to be used in this project.
  */
 
-const fs = require('fs');
+const Fs = require('fs');
 
 var items = {};
 
 /* Iterate each file in current directory. */
-fs.readdirSync('.').forEach(file => {
+Fs.readdirSync('.').forEach(file => {
     /* Check if file is item meta file. */
     if (file.endsWith('.json')) {
 
         /* Read item meta. */
-        var item = JSON.parse(fs.readFileSync(file));
+        var item = JSON.parse(Fs.readFileSync(file));
 
         /* Push item meta we want to keep. */
         items[item.itemid] = {
@@ -26,4 +26,4 @@ fs.readdirSync('.').forEach(file => {
 });
 
 /* Write formatted json to items.json. */
-fs.writeFileSync('items.json', JSON.stringify(items, null, 4));
+Fs.writeFileSync('items.json', JSON.stringify(items, null, 4));
