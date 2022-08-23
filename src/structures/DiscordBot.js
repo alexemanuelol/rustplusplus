@@ -260,13 +260,7 @@ class DiscordBot extends Discord.Client {
             !interaction.member.roles.cache.has(instance.role)) {
             let role = DiscordTools.getRole(interaction.guildId, instance.role);
             let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
-            await this.interactionReply(interaction, {
-                embeds: [new Discord.EmbedBuilder()
-                    .setColor('#ff0040')
-                    .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                ephemeral: true
-            });
-
+            await this.interactionReply(interaction, this.getEmbedActionInfo(1, str));
             this.log('WARNING', str);
             return false;
         }
