@@ -28,11 +28,11 @@ class DiscordBot extends Discord.Client {
         this.battlemetricsIntervalId = null;
         this.battlemetricsIntervalCounter = 0;
 
-        this.loadCommands();
-        this.loadEvents();
+        this.loadDiscordCommands();
+        this.loadDiscordEvents();
     }
 
-    loadCommands() {
+    loadDiscordCommands() {
         const commandFiles = Fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             const command = require(`../commands/${file}`);
@@ -40,16 +40,16 @@ class DiscordBot extends Discord.Client {
         }
     }
 
-    loadEvents() {
-        const discordEventFiles = Fs.readdirSync(`${__dirname}/../discordEvents`).filter(file => file.endsWith('.js'));
-        for (const file of discordEventFiles) {
+    loadDiscordEvents() {
+        const eventFiles = Fs.readdirSync(`${__dirname}/../discordEvents`).filter(file => file.endsWith('.js'));
+        for (const file of eventFiles) {
             const event = require(`../discordEvents/${file}`);
 
             if (event.name === 'rateLimited') {
                 this.rest.on(event.name, (...args) => event.execute(this, ...args));
             }
             else if (event.once) {
-                this.once(event.name, (...args) => event.execute(...args));
+                this.once(event.name, (...args) => event.execute(this, ...args));
             }
             else {
                 this.on(event.name, (...args) => event.execute(this, ...args));
@@ -82,11 +82,6 @@ class DiscordBot extends Discord.Client {
     async setupGuild(guild) {
         require('../util/CreateInstanceFile')(this, guild);
         require('../util/CreateCredentialsFile')(this, guild);
-
-        /* If maps/ directory does not exist, create it */
-        if (!Fs.existsSync(`${__dirname}/../resources/images/maps`)) {
-            Fs.mkdirSync(`${__dirname}/../resources/images/maps`);
-        }
 
         await require('../discordTools/RegisterSlashCommands')(this, guild);
 
@@ -133,11 +128,6 @@ class DiscordBot extends Discord.Client {
     }
 
     createRustplusInstancesFromConfig() {
-        /* If instances/ directory does not exist, create it */
-        if (!Fs.existsSync(`${__dirname}/../instances`)) {
-            Fs.mkdirSync(`${__dirname}/../instances`);
-        }
-
         let files = Fs.readdirSync(`${__dirname}/../instances`);
 
         files.forEach(file => {

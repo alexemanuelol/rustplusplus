@@ -77,7 +77,7 @@ class RustPlus extends RustPlusLib {
         this.interactionSwitches = [];
 
         /* Load rustplus events */
-        this.loadEvents();
+        this.loadRustPlusEvents();
 
         this.tokens = 24;
         this.tokens_limit = 24;     /* Per player */
@@ -85,7 +85,7 @@ class RustPlus extends RustPlusLib {
         this.tokens_replenish_task = 0;
     }
 
-    loadEvents() {
+    loadRustPlusEvents() {
         /* Dynamically retrieve the rustplus event files */
         const eventFiles = Fs.readdirSync(`${__dirname}/../rustplusEvents`).filter(file => file.endsWith('.js'));
         for (const file of eventFiles) {
