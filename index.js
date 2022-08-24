@@ -1,6 +1,6 @@
-const fs = require('fs');
-const Discord = require('discord.js');
-const DiscordBot = require('./src/structures/DiscordBot');
+import Discord from 'discord.js';
+import fs from 'fs';
+import DiscordBot from './src/structures/DiscordBot';
 
 /* If Logs directory does not exist, create it */
 if (!fs.existsSync(`${__dirname}/logs`)) {

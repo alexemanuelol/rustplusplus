@@ -10,5 +10,4 @@ VOLUME [ "/app/credentials" ]
 VOLUME [ "/app/instances" ]
 VOLUME [ "/app/logs" ]
 
-CMD ["node", "/app/index.js"]
-
+CMD ["npm", "start"]
