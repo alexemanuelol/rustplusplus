@@ -17,16 +17,16 @@ const client = new DiscordBot({
 client.build();
 
 function createMissingDirectories() {
-    if (!Fs.existsSync(`${__dirname}/src/logs`)) {
-        Fs.mkdirSync(`${__dirname}/src/logs`);
+    if (!Fs.existsSync(`${__dirname}/logs`)) {
+        Fs.mkdirSync(`${__dirname}/logs`);
     }
 
-    if (!Fs.existsSync(`${__dirname}/src/instances`)) {
-        Fs.mkdirSync(`${__dirname}/src/instances`);
+    if (!Fs.existsSync(`${__dirname}/instances`)) {
+        Fs.mkdirSync(`${__dirname}/instances`);
     }
 
-    if (!Fs.existsSync(`${__dirname}/src/credentials`)) {
-        Fs.mkdirSync(`${__dirname}/src/credentials`);
+    if (!Fs.existsSync(`${__dirname}/credentials`)) {
+        Fs.mkdirSync(`${__dirname}/credentials`);
     }
 
     if (!Fs.existsSync(`${__dirname}/src/resources/images/maps`)) {
