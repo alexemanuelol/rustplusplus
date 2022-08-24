@@ -5,8 +5,8 @@
  * run this code that often. ¯\_(ツ)_/¯
  */
 
-const fs = require('fs');
 const Axios = require('axios');
+const Fs = require('fs');
 
 const RUSTLABS_ITEMS_URL = 'https://rustlabs.com/group=itemlist';
 const RUSTLABS_ITEM_SEARCH_URL = 'https://rustlabs.com/item/';
@@ -145,7 +145,7 @@ function convertToIdBased(itemsRecycleData) {
 }
 
 async function main() {
-    if (!fs.existsSync(`${__dirname}/itemsRecycleDataScrape.json`)) {
+    if (!Fs.existsSync(`${__dirname}/itemsRecycleDataScrape.json`)) {
         let items = await getArrayOfItemNames();
         if (items === null) {
             console.error('Failed to get array of item names.');
@@ -158,13 +158,13 @@ async function main() {
             return;
         }
 
-        fs.writeFileSync(`${__dirname}/itemsRecycleDataScrape.json`, JSON.stringify(data, null, 2));
+        Fs.writeFileSync(`${__dirname}/itemsRecycleDataScrape.json`, JSON.stringify(data, null, 2));
     }
 
-    let itemsRecycleData = JSON.parse(fs.readFileSync(`${__dirname}/itemsRecycleDataScrape.json`, 'utf8'));
+    let itemsRecycleData = JSON.parse(Fs.readFileSync(`${__dirname}/itemsRecycleDataScrape.json`, 'utf8'));
     itemsRecycleData = convertToIdBased(itemsRecycleData);
 
-    fs.writeFileSync(`${__dirname}/itemsRecycleData.json`, JSON.stringify(itemsRecycleData, null, 2));
+    Fs.writeFileSync(`${__dirname}/itemsRecycleData.json`, JSON.stringify(itemsRecycleData, null, 2));
 }
 
 main()

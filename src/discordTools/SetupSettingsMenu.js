@@ -1,4 +1,5 @@
-const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
+const Discord = require('discord.js');
+
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, guild) => {
@@ -24,56 +25,56 @@ module.exports = async (client, guild) => {
 
 async function setupGeneralSettings(client, instance, channel) {
     await client.messageSend(channel, {
-        files: [new AttachmentBuilder('src/resources/images/general_settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/general_settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('Select what in-game command prefix that should be used:')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getPrefixSelectMenu(instance.generalSettings.prefix)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle(`Select which trademark that should be shown in every in-game message.`)
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getTrademarkSelectMenu(instance.generalSettings.trademark)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('Should in-game commands be enabled?')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('In-game teammate notifications.')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getInGameTeammateNotificationsButtons(instance)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('Should there be a command delay? How long?')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getCommandDelaySelectMenu(instance.generalSettings.commandDelay)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('Should Smart Alarms notify even if they are not setup on the connected rust server?')
             .addFields(
@@ -84,47 +85,47 @@ async function setupGeneralSettings(client, instance, channel) {
             DiscordTools.getFcmAlarmNotificationButtons(
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('Should Smart Alarms notify In-Game?')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('Should the leader command be enabled?')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
     await client.messageSend(channel, {
-        embeds: [new EmbedBuilder()
+        embeds: [new Discord.EmbedBuilder()
             .setColor('#861c0c')
             .setTitle('When should the Battlemetrics trackers notify?')
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [DiscordTools.getTrackerNotifyButtons(
             instance.generalSettings.trackerNotifyAllOffline,
             instance.generalSettings.trackerNotifyAnyOnline)],
-        files: [new AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 }
 
 async function setupNotificationSettings(client, instance, channel) {
     await client.messageSend(channel, {
-        files: [new AttachmentBuilder('src/resources/images/notification_settings_logo.png')]
+        files: [new Discord.AttachmentBuilder('src/resources/images/notification_settings_logo.png')]
     });
 
     for (let setting in instance.notificationSettings) {
         await client.messageSend(channel, {
-            embeds: [new EmbedBuilder()
+            embeds: [new Discord.EmbedBuilder()
                 .setColor('#861c0c')
                 .setTitle(instance.notificationSettings[setting].description)
                 .setThumbnail(`attachment://${instance.notificationSettings[setting].image}`)],
@@ -134,7 +135,7 @@ async function setupNotificationSettings(client, instance, channel) {
                     instance.notificationSettings[setting].discord,
                     instance.notificationSettings[setting].inGame)],
             files: [
-                new AttachmentBuilder(`src/resources/images/events/${instance.notificationSettings[setting].image}`)]
+                new Discord.AttachmentBuilder(`src/resources/images/events/${instance.notificationSettings[setting].image}`)]
         });
     }
 }

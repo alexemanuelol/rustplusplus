@@ -1,13 +1,8 @@
-const fs = require('fs');
+const Fs = require('fs');
 
 module.exports = (client, guild) => {
-    /* If instances/ directory does not exist, create it */
-    if (!fs.existsSync(`${__dirname}/../../instances`)) {
-        fs.mkdirSync(`${__dirname}/../../instances`);
-    }
-
-    if (!fs.existsSync(`${__dirname}/../../instances/${guild.id}.json`)) {
-        fs.writeFileSync(`${__dirname}/../../instances/${guild.id}.json`, JSON.stringify({
+    if (!Fs.existsSync(`${__dirname}/../../instances/${guild.id}.json`)) {
+        Fs.writeFileSync(`${__dirname}/../../instances/${guild.id}.json`, JSON.stringify({
             firstTime: true,
             role: null,
             generalSettings: client.readGeneralSettingsTemplate(),

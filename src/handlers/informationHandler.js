@@ -1,7 +1,8 @@
-const Timer = require('../util/timer');
-const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const DiscordTools = require('../discordTools/discordTools.js');
+const Discord = require('discord.js');
+
 const Constants = require('../util/constants.js');
+const DiscordTools = require('../discordTools/discordTools.js');
+const Timer = require('../util/timer');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -60,8 +61,8 @@ module.exports = {
         const mapSeed = `${rustplus.info.seed}`;
         const mapSalt = `${rustplus.info.salt}`;
 
-        let files = [new AttachmentBuilder('src/resources/images/server_info_logo.png')];
-        let embed = new EmbedBuilder()
+        let files = [new Discord.AttachmentBuilder('src/resources/images/server_info_logo.png')];
+        let embed = new Discord.EmbedBuilder()
             .setTitle('Server Information')
             .setColor('#ce412b')
             .setThumbnail('attachment://server_info_logo.png')
@@ -283,8 +284,8 @@ module.exports = {
         }
 
 
-        let files = [new AttachmentBuilder('src/resources/images/event_info_logo.png')];
-        let embed = new EmbedBuilder()
+        let files = [new Discord.AttachmentBuilder('src/resources/images/event_info_logo.png')];
+        let embed = new Discord.EmbedBuilder()
             .setTitle('Event Information')
             .setColor('#ce412b')
             .setThumbnail('attachment://event_info_logo.png')
@@ -331,8 +332,8 @@ module.exports = {
             }
         }
 
-        let files = [new AttachmentBuilder('src/resources/images/team_info_logo.png')];
-        let embed = new EmbedBuilder()
+        let files = [new Discord.AttachmentBuilder('src/resources/images/team_info_logo.png')];
+        let embed = new Discord.EmbedBuilder()
             .setTitle('Team Member Information')
             .setColor('#ce412b')
             .setThumbnail('attachment://team_info_logo.png')

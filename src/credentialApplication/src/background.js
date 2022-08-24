@@ -1,13 +1,15 @@
-const electron = require('electron');
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-const app = electron.app;
-const ipcMain = electron.ipcMain;
-const protocol = electron.protocol;
-const BrowserWindow = electron.BrowserWindow;
+const Electron = require('electron');
 const ElectronStore = require('electron-store');
+
 const ExpoPushTokenManager = require('@/js/ipc/main/ExpoPushTokenManager');
 const FCMNotificationManager = require('@/js/ipc/main/FCMNotificationManager');
 const RustCompanionManager = require('@/js/ipc/main/RustCompanionManager');
+
+const app = Electron.app;
+const ipcMain = Electron.ipcMain;
+const protocol = Electron.protocol;
+const BrowserWindow = Electron.BrowserWindow;
 
 /* Scheme must be registered before the app is ready */
 protocol.registerSchemesAsPrivileged([{
@@ -71,7 +73,7 @@ app.on('ready', () => {
     /* Open links clicked in main window in external OS browser */
     window.webContents.on('new-window', async function (event, url) {
         event.preventDefault();
-        await electron.shell.openExternal(url);
+        await Electron.shell.openExternal(url);
     });
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {

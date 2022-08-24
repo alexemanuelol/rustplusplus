@@ -1,9 +1,9 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const Builder = require('@discordjs/builders');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('alarm')
 		.setDescription('Operations on Smart Alarms.')
 		.addSubcommand(subcommand =>
@@ -112,12 +112,7 @@ module.exports = {
 			case 'edit': {
 				if (!Object.keys(instance.alarms).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
-					await client.interactionEditReply(interaction, {
-						embeds: [new EmbedBuilder()
-							.setColor('#ff0040')
-							.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-						ephemeral: true
-					});
+					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
 					client.log('WARNING', str);
 					return;
 				}
@@ -140,12 +135,7 @@ module.exports = {
 				await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id, embedChanged, false, filesChanged);
 
 				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
-				await client.interactionEditReply(interaction, {
-					embeds: [new EmbedBuilder()
-						.setColor('#ce412b')
-						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-					ephemeral: true
-				});
+				await client, interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
 				client.log('INFO', str);
 			} break;
 

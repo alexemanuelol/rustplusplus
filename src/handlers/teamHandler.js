@@ -1,7 +1,8 @@
-const DiscordTools = require('../discordTools/discordTools.js');
-const { EmbedBuilder } = require('discord.js');
-const Scrape = require('../util/scrape.js');
+const Discord = require('discord.js');
+
 const Constants = require('../util/constants.js');
+const DiscordTools = require('../discordTools/discordTools.js');
+const Scrape = require('../util/scrape.js');
 
 module.exports = {
     handler: async function (rustplus, client, teamInfo) {
@@ -27,7 +28,7 @@ module.exports = {
             let player = rustplus.team.getPlayer(steamId);
             let png = await Scrape.scrapeSteamProfilePicture(client, steamId);
             await client.messageSend(channel, {
-                embeds: [new EmbedBuilder()
+                embeds: [new Discord.EmbedBuilder()
                     .setColor('#606060')
                     .setAuthor({
                         name: `${player.name} left the team.`,
@@ -51,7 +52,7 @@ module.exports = {
                 if (player.steamId.toString() === steamId) {
                     let png = await Scrape.scrapeSteamProfilePicture(client, steamId);
                     await client.messageSend(channel, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#00ff40')
                             .setAuthor({
                                 name: `${player.name} joined the team.`,
@@ -83,7 +84,7 @@ module.exports = {
                         let pos = player.pos;
                         let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
                         await client.messageSend(channel, {
-                            embeds: [new EmbedBuilder()
+                            embeds: [new Discord.EmbedBuilder()
                                 .setColor('#ff0040')
                                 .setAuthor({
                                     name: `${player.name} just died at ${pos}.`,
@@ -120,7 +121,7 @@ module.exports = {
                     if (player.isGoneOnline(playerUpdated)) {
                         let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
                         await client.messageSend(channel, {
-                            embeds: [new EmbedBuilder()
+                            embeds: [new Discord.EmbedBuilder()
                                 .setColor('#00ff40')
                                 .setAuthor({
                                     name: `${player.name} just connected.`,
@@ -143,7 +144,7 @@ module.exports = {
                     if (player.isGoneOffline(playerUpdated)) {
                         let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
                         await client.messageSend(channel, {
-                            embeds: [new EmbedBuilder()
+                            embeds: [new Discord.EmbedBuilder()
                                 .setColor('#ff0040')
                                 .setAuthor({
                                     name: `${player.name} just disconnected.`,

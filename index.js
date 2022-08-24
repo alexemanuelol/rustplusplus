@@ -1,19 +1,37 @@
-import Discord from 'discord.js';
-import fs from 'fs';
-import DiscordBot from './src/structures/DiscordBot';
+const Discord = require('discord.js');
+const Fs = require('fs');
 
-/* If Logs directory does not exist, create it */
-if (!fs.existsSync(`${__dirname}/logs`)) {
-    fs.mkdirSync(`${__dirname}/logs`);
-}
+const DiscordBot = require('./src/structures/DiscordBot');
+
+createMissingDirectories();
 
 const client = new DiscordBot({
-    intents: [Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.GuildMessages],
+    intents: [
+        Discord.GatewayIntentBits.Guilds,
+        Discord.GatewayIntentBits.GuildMessages],
     retryLimit: 2,
     restRequestTimeout: 60000,
     disableEveryone: false
 });
 
 client.build();
+
+function createMissingDirectories() {
+    if (!Fs.existsSync(`${__dirname}/src/logs`)) {
+        Fs.mkdirSync(`${__dirname}/src/logs`);
+    }
+
+    if (!Fs.existsSync(`${__dirname}/src/instances`)) {
+        Fs.mkdirSync(`${__dirname}/src/instances`);
+    }
+
+    if (!Fs.existsSync(`${__dirname}/src/credentials`)) {
+        Fs.mkdirSync(`${__dirname}/src/credentials`);
+    }
+
+    if (!Fs.existsSync(`${__dirname}/src/resources/images/maps`)) {
+        Fs.mkdirSync(`${__dirname}/src/resources/images/maps`);
+    }
+}
 
 exports.client = client;

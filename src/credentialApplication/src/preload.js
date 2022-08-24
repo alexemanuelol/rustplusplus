@@ -1,7 +1,7 @@
 /* Allow browser to use ipc */
-let electron = require('electron');
-window.appversion = electron.remote.app.getVersion();
-window.ipcRenderer = electron.ipcRenderer;
+let Electron = require('electron');
+window.appversion = Electron.remote.app.getVersion();
+window.ipcRenderer = Electron.ipcRenderer;
 
 /* Add utils */
 window.uuidv4 = require('uuid').v4;

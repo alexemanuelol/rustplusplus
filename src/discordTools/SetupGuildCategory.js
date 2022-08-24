@@ -1,5 +1,6 @@
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { PermissionFlagsBits } = require('discord.js');
 
 module.exports = async (client, guild) => {
     let instance = client.readInstanceFile(guild.id);
@@ -20,17 +21,17 @@ module.exports = async (client, guild) => {
     let roleAllow = [];
     let roleDeny = [];
     if (instance.role !== null) {
-        everyoneDeny.push(PermissionFlagsBits.ViewChannel);
-        everyoneDeny.push(PermissionFlagsBits.SendMessages);
-        roleAllow.push(PermissionFlagsBits.ViewChannel);
-        roleDeny.push(PermissionFlagsBits.SendMessages);
+        everyoneDeny.push(Discord.PermissionFlagsBits.ViewChannel);
+        everyoneDeny.push(Discord.PermissionFlagsBits.SendMessages);
+        roleAllow.push(Discord.PermissionFlagsBits.ViewChannel);
+        roleDeny.push(Discord.PermissionFlagsBits.SendMessages);
 
         perms.push({ id: guild.roles.everyone.id, deny: everyoneDeny });
         perms.push({ id: instance.role, allow: roleAllow, deny: roleDeny });
     }
     else {
-        everyoneAllow.push(PermissionFlagsBits.ViewChannel);
-        everyoneDeny.push(PermissionFlagsBits.SendMessages);
+        everyoneAllow.push(Discord.PermissionFlagsBits.ViewChannel);
+        everyoneDeny.push(Discord.PermissionFlagsBits.SendMessages);
 
         perms.push({ id: guild.roles.everyone.id, allow: everyoneAllow, deny: everyoneDeny });
     }
