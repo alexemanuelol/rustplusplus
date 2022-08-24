@@ -1,10 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
 const _ = require('lodash');
+const Builder = require('@discordjs/builders');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new Builder.SlashCommandBuilder()
         .setName('credentials')
         .setDescription('Set/Clear the FCM Credentials for the user account.')
         .addSubcommand(subcommand =>
@@ -104,12 +104,7 @@ async function setCredentials(client, interaction) {
         let instance = client.readCredentialsFile(guild[0]);
         if (_.isEqual(credentials, instance.credentials)) {
             let str = 'FCM Credentials are already used for another discord server!';
-            await client.interactionEditReply(interaction, {
-                embeds: [new EmbedBuilder()
-                    .setColor('#ff0040')
-                    .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                ephemeral: true
-            });
+            await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
             client.log('WARNING', str);
             return;
         }
@@ -123,12 +118,7 @@ async function setCredentials(client, interaction) {
     require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
 
     let str = 'FCM Credentials were set successfully!';
-    await client.interactionEditReply(interaction, {
-        embeds: [new EmbedBuilder()
-            .setColor('#ce412b')
-            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-        ephemeral: true
-    });
+    await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
     client.log('INFO', str);
 }
 
@@ -142,35 +132,15 @@ async function clearCredentials(client, interaction) {
     client.writeCredentialsFile(interaction.guildId, instance);
 
     let str = 'FCM Credentials were cleared successfully!';
-    await client.interactionEditReply(interaction, {
-        embeds: [new EmbedBuilder()
-            .setColor('#ce412b')
-            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-        ephemeral: true
-    });
+    await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
     client.log('INFO', str);
 }
 
 async function isSetCredentials(client, interaction) {
     let instance = client.readCredentialsFile(interaction.guildId);
 
-    let embed = new EmbedBuilder()
-        .setTitle('Is FCM Credentials set?')
-        .setColor('#ce412b');
-
-    let str = '';
-    if (instance.credentials === null) {
-        str = 'FCM Credentials are not currently set.';
-        embed.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``);
-    }
-    else {
-        str = 'FCM Credentials are set.';
-        embed.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``);
-    }
-
-    await client.interactionEditReply(interaction, {
-        embeds: [embed],
-        ephemeral: true
-    });
+    let str = 'FCM Credentials are ' + ((instance.credentials === null) ? 'not currently ' : '') + 'set.';
+    let isSet = (instance.credentials === null) ? 1 : 0;
+    await client.interactionEditReply(interaction, client.getEmbedActionInfo(isSet, str));
     client.log('INFO', str);
 }

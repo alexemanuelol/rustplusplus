@@ -1,5 +1,5 @@
-const axios = require('axios');
-const https = require('https');
+const Axios = require('axios');
+const Https = require('https');
 const { v4: uuidv4 } = require('uuid');
 
 /**
@@ -36,7 +36,7 @@ class ExpoPushTokenManager {
      */
     async onRegister(event, data) {
         /* Register with expo */
-        axios.post('https://exp.host/--/api/v2/push/getExpoPushToken', {
+        Axios.post('https://exp.host/--/api/v2/push/getExpoPushToken', {
             deviceId: uuidv4(),
             experienceId: data.experienceId,
             appId: data.appId,
@@ -49,7 +49,7 @@ class ExpoPushTokenManager {
              * ignores invalid ssl certificates when registering for expo push token
              * temporary fix for: https://github.com/liamcottle/atlas-for-rust/issues/5
              */
-            httpsAgent: new https.Agent({
+            httpsAgent: new Https.Agent({
                 rejectUnauthorized: false
             })
         }).then((response) => {

@@ -1,7 +1,8 @@
-const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilder, ChannelType, PermissionFlagsBits, AttachmentBuilder, ButtonStyle, Embed } = require('discord.js');
+const Discord = require('discord.js');
+
 const Client = require('../../index.ts');
-const Timer = require('../util/timer');
 const Constants = require('../util/constants.js');
+const Timer = require('../util/timer');
 
 module.exports = {
     getGuild: function (guildId) {
@@ -40,7 +41,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find channel: ${channelId}`, 'error');
             }
 
-            if (channel && channel.type === ChannelType.GuildText) {
+            if (channel && channel.type === Discord.ChannelType.GuildText) {
                 return channel;
             }
         }
@@ -59,7 +60,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find channel: ${name}`, 'error');
             }
 
-            if (channel && channel.type === ChannelType.GuildText) {
+            if (channel && channel.type === Discord.ChannelType.GuildText) {
                 return channel;
             }
         }
@@ -78,7 +79,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find category: ${categoryId}`, 'error');
             }
 
-            if (category && category.type === ChannelType.GuildCategory) {
+            if (category && category.type === Discord.ChannelType.GuildCategory) {
                 return category;
             }
         }
@@ -97,7 +98,7 @@ module.exports = {
                 Client.client.log('ERROR', `Could not find category: ${name}`, 'error');
             }
 
-            if (category && category.type === ChannelType.GuildCategory) {
+            if (category && category.type === Discord.ChannelType.GuildCategory) {
                 return category;
             }
         }
@@ -148,10 +149,10 @@ module.exports = {
             try {
                 return await guild.channels.create({
                     name: name,
-                    type: ChannelType.GuildCategory,
+                    type: Discord.ChannelType.GuildCategory,
                     permissionOverwrites: [{
                         id: guild.roles.everyone.id,
-                        deny: [PermissionFlagsBits.SendMessages]
+                        deny: [Discord.PermissionFlagsBits.SendMessages]
                     }]
                 });
             }
@@ -169,10 +170,10 @@ module.exports = {
             try {
                 return await guild.channels.create({
                     name: name,
-                    type: ChannelType.GuildText,
+                    type: Discord.ChannelType.GuildText,
                     permissionOverwrites: [{
                         id: guild.roles.everyone.id,
-                        deny: [PermissionFlagsBits.SendMessages]
+                        deny: [Discord.PermissionFlagsBits.SendMessages]
                     }],
                 });
             }
@@ -231,92 +232,92 @@ module.exports = {
     },
 
     getNotificationButtons: function (setting, discordActive, inGameActive) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId(`${setting}DiscordNotification`)
                     .setLabel('DISCORD')
-                    .setStyle((discordActive) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((discordActive) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${setting}InGameNotification`)
                     .setLabel('IN-GAME')
-                    .setStyle((inGameActive) ? ButtonStyle.Success : ButtonStyle.Danger))
+                    .setStyle((inGameActive) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger))
     },
 
     getInGameCommandsEnabledButton: function (enabled) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId('allowInGameCommands')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger))
+                    .setStyle((enabled) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger))
     },
 
     getInGameTeammateNotificationsButtons: function (instance) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId('inGameTeammateConnection')
                     .setLabel('CONNECTIONS')
-                    .setStyle((instance.generalSettings.connectionNotify) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((instance.generalSettings.connectionNotify) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId('inGameTeammateAfk')
                     .setLabel('AFK')
-                    .setStyle((instance.generalSettings.afkNotify) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((instance.generalSettings.afkNotify) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId('inGameTeammateDeath')
                     .setLabel('DEATH')
-                    .setStyle((instance.generalSettings.deathNotify) ? ButtonStyle.Success : ButtonStyle.Danger))
+                    .setStyle((instance.generalSettings.deathNotify) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger))
     },
 
     getFcmAlarmNotificationButtons: function (enabled, everyone) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId('fcmAlarmNotification')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((enabled) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId('fcmAlarmNotificationEveryone')
                     .setLabel('@everyone')
-                    .setStyle((everyone) ? ButtonStyle.Success : ButtonStyle.Danger));
+                    .setStyle((everyone) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger));
     },
 
     getSmartAlarmNotifyInGameButton: function (enabled) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId('smartAlarmNotifyInGame')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger))
+                    .setStyle((enabled) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger))
     },
 
     getLeaderCommandEnabledButton: function (enabled) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId('leaderCommandEnabled')
                     .setLabel((enabled) ? 'ENABLED' : 'DISABLED')
-                    .setStyle((enabled) ? ButtonStyle.Success : ButtonStyle.Danger))
+                    .setStyle((enabled) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger))
     },
 
     getTrackerNotifyButtons: function (allOffline, anyOnline) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId('trackerNotifyAllOffline')
                     .setLabel('ALL OFFLINE')
-                    .setStyle((allOffline) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((allOffline) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId('trackerNotifyAnyOnline')
                     .setLabel('ANY ONLINE')
-                    .setStyle((anyOnline) ? ButtonStyle.Success : ButtonStyle.Danger));
+                    .setStyle((anyOnline) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger));
     },
 
     getPrefixSelectMenu: function (currentPrefix) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new SelectMenuBuilder()
+                new Discord.SelectMenuBuilder()
                     .setCustomId('prefix')
                     .setPlaceholder(`Current Prefix: ${currentPrefix}`)
                     .addOptions([
@@ -340,9 +341,9 @@ module.exports = {
     },
 
     getTrademarkSelectMenu: function (currentTrademark) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new SelectMenuBuilder()
+                new Discord.SelectMenuBuilder()
                     .setCustomId('trademark')
                     .setPlaceholder(`${currentTrademark}`)
                     .addOptions([
@@ -366,9 +367,9 @@ module.exports = {
     },
 
     getCommandDelaySelectMenu: function (currentDelay) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new SelectMenuBuilder()
+                new Discord.SelectMenuBuilder()
                     .setCustomId('commandDelay')
                     .setPlaceholder(`Current Command Delay: ${currentDelay} seconds`)
                     .addOptions([
@@ -424,7 +425,7 @@ module.exports = {
     getServerEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        let embed = new EmbedBuilder()
+        let embed = new Discord.EmbedBuilder()
             .setTitle(`${instance.serverList[id].title}`)
             .setColor('#ce412b')
             .setDescription(`${instance.serverList[id].description}`)
@@ -456,19 +457,19 @@ module.exports = {
             case 0: { /* CONNECT */
                 customId = `${id}ServerConnect`;
                 label = 'CONNECT';
-                style = ButtonStyle.Primary;
+                style = Discord.ButtonStyle.Primary;
             } break;
 
             case 1: { /* DISCONNECT */
                 customId = `${id}ServerDisconnect`;
                 label = 'DISCONNECT';
-                style = ButtonStyle.Danger;
+                style = Discord.ButtonStyle.Danger;
             } break;
 
             case 2: { /* RECONNECTING */
                 customId = `${id}ServerReconnecting`;
                 label = 'RECONNECTING...';
-                style = ButtonStyle.Danger;
+                style = Discord.ButtonStyle.Danger;
             } break;
 
             default: {
@@ -477,25 +478,25 @@ module.exports = {
 
         let trackerAvailable = (instance.serverList[id].battlemetricsId !== null) ? true : false;
 
-        let connectionButton = new ButtonBuilder()
+        let connectionButton = new Discord.ButtonBuilder()
             .setCustomId(customId)
             .setLabel(label)
             .setStyle(style);
-        let trackerButton = new ButtonBuilder()
+        let trackerButton = new Discord.ButtonBuilder()
             .setCustomId(`${id}CreateTracker`)
             .setLabel('CREATE TRACKER')
-            .setStyle(ButtonStyle.Primary);
-        let linkButton = new ButtonBuilder()
-            .setStyle(ButtonStyle.Link)
+            .setStyle(Discord.ButtonStyle.Primary);
+        let linkButton = new Discord.ButtonBuilder()
+            .setStyle(Discord.ButtonStyle.Link)
             .setLabel('WEBSITE')
             .setURL(instance.serverList[id].url);
-        let deleteButton = new ButtonBuilder()
+        let deleteButton = new Discord.ButtonBuilder()
             .setCustomId(`${id}ServerDelete`)
             .setEmoji('🗑️')
-            .setStyle(ButtonStyle.Secondary);
+            .setStyle(Discord.ButtonStyle.Secondary);
 
         if (trackerAvailable) {
-            return new ActionRowBuilder()
+            return new Discord.ActionRowBuilder()
                 .addComponents(
                     connectionButton,
                     trackerButton,
@@ -503,7 +504,7 @@ module.exports = {
                     deleteButton);
         }
         else {
-            return new ActionRowBuilder()
+            return new Discord.ActionRowBuilder()
                 .addComponents(
                     connectionButton,
                     linkButton,
@@ -580,7 +581,7 @@ module.exports = {
             playerStatus = 'Empty';
         }
 
-        let embed = new EmbedBuilder()
+        let embed = new Discord.EmbedBuilder()
             .setTitle(`${trackerName}`)
             .setColor('#ce412b')
             .setDescription(`**Battlemetrics ID:** \`${battlemetricsId}\`\n**Server Status:** ${serverStatus}`)
@@ -598,20 +599,20 @@ module.exports = {
     getTrackerButtons: function (guildId, trackerName) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId(`${trackerName}TrackerActive`)
                     .setLabel((instance.trackers[trackerName].active) ? 'ACTIVE' : 'INACTIVE')
-                    .setStyle((instance.trackers[trackerName].active) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((instance.trackers[trackerName].active) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${trackerName}TrackerEveryone`)
                     .setLabel('@everyone')
-                    .setStyle((instance.trackers[trackerName].everyone) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((instance.trackers[trackerName].everyone) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${trackerName}TrackerDelete`)
                     .setEmoji('🗑️')
-                    .setStyle(ButtonStyle.Secondary))
+                    .setStyle(Discord.ButtonStyle.Secondary))
     },
 
     sendTrackerMessage: async function (guildId, trackerName, e = true, c = true, interaction = null) {
@@ -659,7 +660,7 @@ module.exports = {
     getSmartSwitchEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new EmbedBuilder()
+        return new Discord.EmbedBuilder()
             .setTitle(`${instance.switches[id].name}`)
             .setColor((instance.switches[id].active) ? '#00ff40' : '#ff0040')
             .setDescription(`**ID**: \`${id}\``)
@@ -695,9 +696,9 @@ module.exports = {
             } break;
         }
 
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new SelectMenuBuilder()
+                new Discord.SelectMenuBuilder()
                     .setCustomId(`${id}AutoDayNight`)
                     .setPlaceholder(`${autoDayNightString}`)
                     .addOptions([
@@ -723,16 +724,16 @@ module.exports = {
     getSmartSwitchButtons: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}${(instance.switches[id].active) ? 'Off' : 'On'}SmartSwitch`)
                     .setLabel((instance.switches[id].active) ? 'TURN OFF' : 'TURN ON')
-                    .setStyle((instance.switches[id].active) ? ButtonStyle.Danger : ButtonStyle.Success),
-                new ButtonBuilder()
+                    .setStyle((instance.switches[id].active) ? Discord.ButtonStyle.Danger : Discord.ButtonStyle.Success),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}SmartSwitchDelete`)
                     .setEmoji('🗑️')
-                    .setStyle(ButtonStyle.Secondary)
+                    .setStyle(Discord.ButtonStyle.Secondary)
             )
 
     },
@@ -740,7 +741,7 @@ module.exports = {
     sendSmartSwitchMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
         let embed = module.exports.getSmartSwitchEmbed(guildId, id);
         let selectMenu = module.exports.getSmartSwitchSelectMenu(guildId, id);
         let buttons = module.exports.getSmartSwitchButtons(guildId, id);
@@ -783,7 +784,7 @@ module.exports = {
     getSmartAlarmEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new EmbedBuilder()
+        return new Discord.EmbedBuilder()
             .setTitle(`${instance.alarms[id].name}`)
             .setColor((instance.alarms[id].active) ? '#00ff40' : '#ce412b')
             .setDescription(`**ID**: \`${id}\``)
@@ -797,22 +798,22 @@ module.exports = {
     getSmartAlarmButtons: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}SmartAlarmEveryone`)
                     .setLabel('@everyone')
-                    .setStyle((instance.alarms[id].everyone) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((instance.alarms[id].everyone) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}SmartAlarmDelete`)
                     .setEmoji('🗑️')
-                    .setStyle(ButtonStyle.Secondary))
+                    .setStyle(Discord.ButtonStyle.Secondary))
     },
 
     sendSmartAlarmMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`);
         let embed = module.exports.getSmartAlarmEmbed(guildId, id);
         let buttons = module.exports.getSmartAlarmButtons(guildId, id);
 
@@ -870,7 +871,7 @@ module.exports = {
         let description = `**ID** \`${id}\``;
 
         if (capacity === 0) {
-            return new EmbedBuilder()
+            return new Discord.EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name}`)
                 .setColor('#ce412b')
                 .setDescription(`${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``)
@@ -922,7 +923,7 @@ module.exports = {
             itemQuantity = 'Empty';
         }
 
-        return new EmbedBuilder()
+        return new Discord.EmbedBuilder()
             .setTitle(`${instance.storageMonitors[id].name}`)
             .setColor('#ce412b')
             .setDescription(description)
@@ -937,35 +938,35 @@ module.exports = {
     getStorageMonitorToolCupboardButtons: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorToolCupboardEveryone`)
                     .setLabel('@everyone')
-                    .setStyle((instance.storageMonitors[id].everyone) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((instance.storageMonitors[id].everyone) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorToolCupboardInGame`)
                     .setLabel('IN-GAME')
-                    .setStyle((instance.storageMonitors[id].inGame) ? ButtonStyle.Success : ButtonStyle.Danger),
-                new ButtonBuilder()
+                    .setStyle((instance.storageMonitors[id].inGame) ? Discord.ButtonStyle.Success : Discord.ButtonStyle.Danger),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorToolCupboardDelete`)
                     .setEmoji('🗑️')
-                    .setStyle(ButtonStyle.Secondary))
+                    .setStyle(Discord.ButtonStyle.Secondary))
     },
 
     getStorageMonitorContainerButton: function (guildId, id) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId(`${id}StorageMonitorContainerDelete`)
                     .setEmoji('🗑️')
-                    .setStyle(ButtonStyle.Secondary))
+                    .setStyle(Discord.ButtonStyle.Secondary))
     },
 
     sendStorageMonitorMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         let instance = Client.client.readInstanceFile(guildId);
 
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
         let embed = null;
 
         if (instance.storageMonitors[id].reachable) {
@@ -1018,11 +1019,11 @@ module.exports = {
     sendDecayingNotification: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new EmbedBuilder()
+            content.embeds = [new Discord.EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name} is decaying!`)
                 .setColor('#ff0040')
                 .setDescription(`**ID** \`${id}\``)
@@ -1043,11 +1044,11 @@ module.exports = {
     sendStorageMonitorDisconnectNotification: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new EmbedBuilder()
+            content.embeds = [new Discord.EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name} is no longer electrically connected!`)
                 .setColor('#ff0040')
                 .setDescription(`**ID** \`${id}\``)
@@ -1068,11 +1069,11 @@ module.exports = {
     sendStorageMonitorNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new EmbedBuilder()
+            content.embeds = [new Discord.EmbedBuilder()
                 .setTitle(`${instance.storageMonitors[id].name} could not be found!` +
                     ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
@@ -1094,11 +1095,11 @@ module.exports = {
     sendSmartSwitchNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new EmbedBuilder()
+            content.embeds = [new Discord.EmbedBuilder()
                 .setTitle(`${instance.switches[id].name} could not be found!` +
                     ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
@@ -1116,11 +1117,11 @@ module.exports = {
     sendSmartAlarmNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`);
+        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`);
 
         if (channel) {
             let content = {};
-            content.embeds = [new EmbedBuilder()
+            content.embeds = [new Discord.EmbedBuilder()
                 .setTitle(`${instance.alarms[id].name} could not be found!` +
                     ` Either it have been destroyed or Admin have lost tool cupboard access.`)
                 .setColor('#ff0040')
@@ -1168,7 +1169,7 @@ module.exports = {
             switchActive = 'None';
         }
 
-        return new EmbedBuilder()
+        return new Discord.EmbedBuilder()
             .setTitle(name)
             .setColor('#ce412b')
             .setThumbnail('attachment://smart_switch.png')
@@ -1186,26 +1187,26 @@ module.exports = {
     },
 
     getSmartSwitchGroupButtons: function (name) {
-        return new ActionRowBuilder()
+        return new Discord.ActionRowBuilder()
             .addComponents(
-                new ButtonBuilder()
+                new Discord.ButtonBuilder()
                     .setCustomId(`${name}TurnOnGroup`)
                     .setLabel('TURN ON')
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${name}TurnOffGroup`)
                     .setLabel('TURN OFF')
-                    .setStyle(ButtonStyle.Primary),
-                new ButtonBuilder()
+                    .setStyle(Discord.ButtonStyle.Primary),
+                new Discord.ButtonBuilder()
                     .setCustomId(`${name}DeleteGroup`)
                     .setEmoji('🗑️')
-                    .setStyle(ButtonStyle.Secondary));
+                    .setStyle(Discord.ButtonStyle.Secondary));
     },
 
     sendSmartSwitchGroupMessage: async function (guildId, name, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        const file = new AttachmentBuilder('src/resources/images/electrics/smart_switch.png');
+        const file = new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png');
         const embed = module.exports.getSmartSwitchGroupEmbed(guildId, name);
         const buttons = module.exports.getSmartSwitchGroupButtons(name);
 
@@ -1247,7 +1248,7 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new EmbedBuilder()
+            content.embeds = [new Discord.EmbedBuilder()
                 .setTitle(`Everyone from the tracker \`${trackerName}\` just went offline.`)
                 .setColor('#ff0040')
                 .setThumbnail(`${instance.serverList[serverId].img}`)
@@ -1269,7 +1270,7 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new EmbedBuilder()
+            content.embeds = [new Discord.EmbedBuilder()
                 .setTitle(`Someone from tracker \`${trackerName}\` just went online.`)
                 .setColor('#00ff40')
                 .setThumbnail(`${instance.serverList[serverId].img}`)
@@ -1287,7 +1288,7 @@ module.exports = {
     getNotFoundSmartDeviceEmbed: function (guildId, id, type) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        return new EmbedBuilder()
+        return new Discord.EmbedBuilder()
             .setTitle(`${instance[type][id].name}`)
             .setColor('#ff0040')
             .setDescription(`**ID**: \`${id}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`)

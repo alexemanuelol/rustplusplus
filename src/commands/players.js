@@ -1,8 +1,8 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { EmbedBuilder } = require('discord.js');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('players')
 		.setDescription('Get player/players information based on Battlemetrics.')
 		.addStringOption(option =>
@@ -22,12 +22,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new EmbedBuilder()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -36,24 +31,14 @@ module.exports = {
 
 		if (battlemetricsId === null) {
 			let str = 'This server is using streamer mode.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new EmbedBuilder()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
 			client.log('WARNING', str);
 			return;
 		}
 
 		if (!Object.keys(client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
 			let str = 'Could not find players for this server.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new EmbedBuilder()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -94,7 +79,7 @@ module.exports = {
 			title = `Online players '${name}'`;
 		}
 
-		let embed = new EmbedBuilder()
+		let embed = new Discord.EmbedBuilder()
 			.setTitle(title)
 			.setColor('#ce412b');
 

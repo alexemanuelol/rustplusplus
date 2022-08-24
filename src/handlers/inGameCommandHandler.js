@@ -1,12 +1,13 @@
-const Timer = require('../util/timer');
-const Str = require('../util/string.js');
-const DiscordTools = require('../discordTools/discordTools.js');
-const Map = require('../util/map.js');
-const Constants = require('../util/constants.js');
-const TeamHandler = require('../handlers/teamHandler.js');
-const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const Translate = require('translate');
+
+const Constants = require('../util/constants.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 const Languages = require('../util/languages.js');
+const Map = require('../util/map.js');
+const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
+const Str = require('../util/string.js');
+const TeamHandler = require('../handlers/teamHandler.js');
+const Timer = require('../util/timer');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {

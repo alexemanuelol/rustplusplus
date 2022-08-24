@@ -1,9 +1,10 @@
+const Discord = require('discord.js');
+
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
-const TeamChatHandler = require("../handlers/teamChatHandler.js");
 const DiscordTools = require('../discordTools/discordTools.js');
-const TeamHandler = require('../handlers/teamHandler.js');
-const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
+const TeamChatHandler = require("../handlers/teamChatHandler.js");
+const TeamHandler = require('../handlers/teamHandler.js');
 
 module.exports = {
     name: 'message',
@@ -66,7 +67,7 @@ module.exports = {
 
                         let content = {};
                         content.embeds = [
-                            new EmbedBuilder()
+                            new Discord.EmbedBuilder()
                                 .setColor('#ce412b')
                                 .setThumbnail(`attachment://${instance.alarms[entityId].image}`)
                                 .setTitle(title)
@@ -78,7 +79,7 @@ module.exports = {
                                 .setTimestamp()];
 
                         content.files = [
-                            new AttachmentBuilder(
+                            new Discord.AttachmentBuilder(
                                 `src/resources/images/electrics/${instance.alarms[entityId].image}`)];
 
                         if (instance.alarms[entityId].everyone) {

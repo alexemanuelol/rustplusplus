@@ -1,11 +1,12 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools.js');
 const Keywords = require('../util/keywords.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new Builder.SlashCommandBuilder()
         .setName('switch')
         .setDescription('Operations on Smart Switches.')
         .addSubcommand(subcommand =>
@@ -163,12 +164,7 @@ module.exports = {
         let rustplus = client.rustplusInstances[interaction.guildId];
         if (!rustplus || (rustplus && !rustplus.ready)) {
             let str = 'Not currently connected to a rust server.';
-            await client.interactionEditReply(interaction, {
-                embeds: [new EmbedBuilder()
-                    .setColor('#ff0040')
-                    .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                ephemeral: true
-            });
+            await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
             client.log('WARNING', str);
             return;
         }
@@ -182,39 +178,24 @@ module.exports = {
 
                 if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
                     let str = `The command '${command}' is already in use, please choose another command.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (!Object.keys(instance.switches).includes(id)) {
                     let str = `Invalid ID: '${id}'.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (instance.switches[id].serverId !== rustplus.serverId) {
                     let str = 'The Smart Switch is not part of this Rust Server.';
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -239,13 +220,8 @@ module.exports = {
                     client, interaction.guildId, rustplus.serverId, id);
 
                 let str = `Successfully edited Smart Switch '${instance.switches[id].name}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+                    instance.serverList[rustplus.serverId].title));
                 rustplus.log('INFO', str);
             } break;
 
@@ -260,26 +236,16 @@ module.exports = {
 
                 if (Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     let str = `The Group name '${groupName}' is already in use.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
                     let str = `The command '${command}' is already in use, please choose another command.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -294,13 +260,8 @@ module.exports = {
                 await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
 
                 let str = `Successfully created the Group '${groupName}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+                    instance.serverList[rustplus.serverId].title));
                 rustplus.log('INFO', str);
             } break;
 
@@ -310,39 +271,24 @@ module.exports = {
 
                 if (!Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     let str = `The Group name '${groupName}' does not exist.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (command === null) {
                     let str = 'No changes were made.';
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
                     let str = `The command '${command}' is already in use, please choose another command.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -356,13 +302,8 @@ module.exports = {
                 await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);
 
                 let str = `Successfully edited the Group '${groupName}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+                    instance.serverList[rustplus.serverId].title));
                 rustplus.log('INFO', str);
             } break;
 
@@ -372,39 +313,24 @@ module.exports = {
 
                 if (!Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     let str = `The Group name '${groupName}' does not exist.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (!Object.keys(instance.switches).includes(switchId)) {
                     let str = `The Switch ID '${switchId}' does not exist.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (instance.serverList[rustplus.serverId].switchGroups[groupName].switches.includes(switchId)) {
                     let str = `The Switch ID '${switchId}' is already part of the Group '${groupName}'.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -413,13 +339,8 @@ module.exports = {
 
                 if (sw.serverId !== rustplus.serverId) {
                     let str = `The Switch '${switchId}' is not part of this server.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -430,13 +351,8 @@ module.exports = {
                 await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);
 
                 let str = `Successfully added '${switchId}' to the Group '${groupName}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+                    instance.serverList[rustplus.serverId].title));
                 rustplus.log('INFO', str);
             } break;
 
@@ -446,26 +362,16 @@ module.exports = {
 
                 if (!Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     let str = `The Group name '${groupName}' does not exist.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
 
                 if (!instance.serverList[rustplus.serverId].switchGroups[groupName].switches.includes(switchId)) {
                     let str = `The Switch '${switchId}' does not exist in the Group '${groupName}'`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new EmbedBuilder()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -477,13 +383,8 @@ module.exports = {
                 await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);
 
                 let str = `Successfully removed '${switchId}' to the Group '${groupName}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new EmbedBuilder()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+                    instance.serverList[rustplus.serverId].title));
                 rustplus.log('INFO', str);
             } break;
 

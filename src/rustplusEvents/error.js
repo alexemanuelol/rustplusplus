@@ -1,5 +1,6 @@
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
     name: 'error',
@@ -21,7 +22,7 @@ module.exports = {
                 let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
                 if (channel !== undefined) {
                     await client.messageSend(channel, {
-                        embeds: [new EmbedBuilder()
+                        embeds: [new Discord.EmbedBuilder()
                             .setColor('#ff0040')
                             .setTitle('Server just went offline.')
                             .setThumbnail(instance.serverList[rustplus.serverId].img)

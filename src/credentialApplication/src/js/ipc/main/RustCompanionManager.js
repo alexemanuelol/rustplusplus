@@ -1,4 +1,4 @@
-const axios = require('axios');
+const Axios = require('axios');
 
 /**
  * This class is responsible for registering with the Rust Companion API.
@@ -33,7 +33,7 @@ class RustCompanionManager {
      */
     async onRegister(event, data) {
         /* Register with rust companion api */
-        axios.post('https://companion-rust.facepunch.com:443/api/push/register', {
+        Axios.post('https://companion-rust.facepunch.com:443/api/push/register', {
             AuthToken: data.token,
             DeviceId: data.deviceId,
             PushKind: 0,

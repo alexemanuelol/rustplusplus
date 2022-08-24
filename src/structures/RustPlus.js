@@ -1,15 +1,16 @@
-const fs = require('fs');
-const RP = require('rustplus.js');
+const Discord = require('discord.js');
+const Fs = require('fs');
+const Path = require('path');
+
 const Client = require('../../index.ts');
-const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
-const Logger = require('./Logger.js');
-const path = require('path');
-const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 const Items = require('./Items');
+const Logger = require('./Logger.js');
+const RustPlusLib = require('rustplus.js');
 const Timer = require('../util/timer.js');
 
-class RustPlus extends RP {
+class RustPlus extends RustPlusLib {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
 
@@ -76,7 +77,7 @@ class RustPlus extends RP {
         this.interactionSwitches = [];
 
         /* Load rustplus events */
-        this.loadEvents();
+        this.loadRustPlusEvents();
 
         this.tokens = 24;
         this.tokens_limit = 24;     /* Per player */
@@ -84,9 +85,9 @@ class RustPlus extends RP {
         this.tokens_replenish_task = 0;
     }
 
-    loadEvents() {
+    loadRustPlusEvents() {
         /* Dynamically retrieve the rustplus event files */
-        const eventFiles = fs.readdirSync(`${__dirname}/../rustplusEvents`).filter(file => file.endsWith('.js'));
+        const eventFiles = Fs.readdirSync(`${__dirname}/../rustplusEvents`).filter(file => file.endsWith('.js'));
         for (const file of eventFiles) {
             const event = require(`../rustplusEvents/${file}`);
             this.on(event.name, (...args) => event.execute(this, Client.client, ...args));
@@ -111,7 +112,7 @@ class RustPlus extends RP {
         let instance = Client.client.readInstanceFile(this.guildId);
 
         /* Setup the logger */
-        this.logger = new Logger(path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
+        this.logger = new Logger(Path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
         this.logger.setGuildId(this.guildId);
         this.logger.serverName = instance.serverList[`${this.server}-${this.port}`].title;
 
@@ -157,8 +158,8 @@ class RustPlus extends RP {
         let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
 
         if (channel !== undefined) {
-            let file = new AttachmentBuilder(`src/resources/images/events/${image}`);
-            let embed = new EmbedBuilder()
+            let file = new Discord.AttachmentBuilder(`src/resources/images/events/${image}`);
+            let embed = new Discord.EmbedBuilder()
                 .setColor('#ce412b')
                 .setThumbnail(`attachment://${image}`)
                 .setTitle(text)

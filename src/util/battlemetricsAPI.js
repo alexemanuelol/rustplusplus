@@ -1,5 +1,5 @@
-const Scrape = require('./scrape.js');
 const RandomUsernames = require('./RandomUsernames.json');
+const Scrape = require('./scrape.js');
 
 module.exports = {
     getBattlemetricsServerId: async function (client, serverName) {
