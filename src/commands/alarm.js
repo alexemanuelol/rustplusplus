@@ -135,7 +135,7 @@ module.exports = {
 				await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id, embedChanged, false, filesChanged);
 
 				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
-				await client, interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+				await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
 				client.log('INFO', str);
 			} break;
 
