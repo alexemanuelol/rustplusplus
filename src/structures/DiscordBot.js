@@ -97,11 +97,11 @@ class DiscordBot extends Discord.Client {
     }
 
     writeInstanceFile(guildId, instance) {
-        Fs.writeFileSync(`${__dirname}/../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
+        Fs.writeFileSync(`${__dirname}/../../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
     }
 
     readCredentialsFile(guildId) {
-        return JSON.parse(Fs.readFileSync(`${__dirname}/../credentials/${guildId}.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(`${__dirname}/../../credentials/${guildId}.json`, 'utf8'));
     }
 
     writeCredentialsFile(guildId, credentials) {
