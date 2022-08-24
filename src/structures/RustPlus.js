@@ -1,6 +1,6 @@
 const fs = require('fs');
 const RP = require('rustplus.js');
-const Client = require('../../index.js');
+const Client = require('../../index.ts');
 const { EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const Logger = require('./Logger.js');
 const path = require('path');

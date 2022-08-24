@@ -1,5 +1,5 @@
 const { ActionRowBuilder, ButtonBuilder, SelectMenuBuilder, EmbedBuilder, ChannelType, PermissionFlagsBits, AttachmentBuilder, ButtonStyle, Embed } = require('discord.js');
-const Client = require('../../index.js');
+const Client = require('../../index.ts');
 const Timer = require('../util/timer');
 const Constants = require('../util/constants.js');
 
