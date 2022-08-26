@@ -8,7 +8,8 @@ createMissingDirectories();
 const client = new DiscordBot({
     intents: [
         Discord.GatewayIntentBits.Guilds,
-        Discord.GatewayIntentBits.GuildMessages],
+        Discord.GatewayIntentBits.GuildMessages,
+        Discord.GatewayIntentBits.MessageContent],
     retryLimit: 2,
     restRequestTimeout: 60000,
     disableEveryone: false
