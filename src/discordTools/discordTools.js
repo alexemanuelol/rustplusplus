@@ -475,13 +475,14 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new Discord.EmbedBuilder()
-                .setTitle(`${instance.storageMonitors[id].name} is decaying!`)
-                .setColor('#ff0040')
-                .setDescription(`**ID** \`${id}\``)
-                .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
-                .setFooter({ text: `${instance.storageMonitors[id].server}` })
-                .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                title: `${instance.storageMonitors[id].name} is decaying!`,
+                color: '#ff0040',
+                description: `**ID** \`${id}\``,
+                thumbnail: `attachment://${instance.storageMonitors[id].image}`,
+                footer: { text: `${instance.storageMonitors[id].server}` },
+                timestamp: true
+            })];
 
             content.files = [file];
 
@@ -500,13 +501,14 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new Discord.EmbedBuilder()
-                .setTitle(`${instance.storageMonitors[id].name} is no longer electrically connected!`)
-                .setColor('#ff0040')
-                .setDescription(`**ID** \`${id}\``)
-                .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
-                .setFooter({ text: `${instance.storageMonitors[id].server}` })
-                .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                title: `${instance.storageMonitors[id].name} is no longer electrically connected!`,
+                color: '#ff0040',
+                description: `**ID** \`${id}\``,
+                thumbnail: `attachment://${instance.storageMonitors[id].image}`,
+                footer: { text: `${instance.storageMonitors[id].server}` },
+                timestamp: true
+            })];
 
             content.files = [file];
 
@@ -525,14 +527,15 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new Discord.EmbedBuilder()
-                .setTitle(`${instance.storageMonitors[id].name} could not be found!` +
-                    ` Either it have been destroyed or Admin have lost tool cupboard access.`)
-                .setColor('#ff0040')
-                .setDescription(`**ID** \`${id}\``)
-                .setThumbnail(`attachment://${instance.storageMonitors[id].image}`)
-                .setFooter({ text: `${instance.storageMonitors[id].server}` })
-                .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                title: `${instance.storageMonitors[id].name} could not be found!` +
+                    ` Either it have been destroyed or Admin have lost tool cupboard access.`,
+                color: '#ff0040',
+                description: `**ID** \`${id}\``,
+                thumbnail: `attachment://${instance.storageMonitors[id].image}`,
+                footer: { text: `${instance.storageMonitors[id].server}` },
+                timestamp: true
+            })];
 
             content.files = [file];
 
@@ -551,14 +554,15 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new Discord.EmbedBuilder()
-                .setTitle(`${instance.switches[id].name} could not be found!` +
-                    ` Either it have been destroyed or Admin have lost tool cupboard access.`)
-                .setColor('#ff0040')
-                .setDescription(`**ID** \`${id}\``)
-                .setThumbnail(`attachment://${instance.switches[id].image}`)
-                .setFooter({ text: `${instance.switches[id].server}` })
-                .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                title: `${instance.switches[id].name} could not be found!` +
+                    ` Either it have been destroyed or Admin have lost tool cupboard access.`,
+                color: '#ff0040',
+                description: `**ID** \`${id}\``,
+                thumbnail: `attachment://${instance.switches[id].image}`,
+                footer: { text: `${instance.switches[id].server}` },
+                timestamp: true
+            })];
 
             content.files = [file];
 
@@ -573,14 +577,15 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new Discord.EmbedBuilder()
-                .setTitle(`${instance.alarms[id].name} could not be found!` +
-                    ` Either it have been destroyed or Admin have lost tool cupboard access.`)
-                .setColor('#ff0040')
-                .setDescription(`**ID** \`${id}\``)
-                .setThumbnail(`attachment://${instance.alarms[id].image}`)
-                .setFooter({ text: `${instance.alarms[id].server}` })
-                .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                title: `${instance.alarms[id].name} could not be found!` +
+                    ` Either it have been destroyed or Admin have lost tool cupboard access.`,
+                color: '#ff0040',
+                description: `**ID** \`${id}\``,
+                thumbnail: `attachment://${instance.alarms[id].image}`,
+                footer: { text: `${instance.alarms[id].server}` },
+                timestamp: true
+            })];
 
             content.files = [file];
 
@@ -633,12 +638,13 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new Discord.EmbedBuilder()
-                .setTitle(`Everyone from the tracker \`${trackerName}\` just went offline.`)
-                .setColor('#ff0040')
-                .setThumbnail(`${instance.serverList[serverId].img}`)
-                .setFooter({ text: `${instance.serverList[serverId].title}` })
-                .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                title: `Everyone from the tracker \`${trackerName}\` just went offline.`,
+                color: '#ff0040',
+                thumbnail: `${instance.serverList[serverId].img}`,
+                footer: { text: `${instance.serverList[serverId].title}` },
+                timestamp: true
+            })];
 
             if (instance.trackers[trackerName].everyone) {
                 content.content = '@everyone';
@@ -655,12 +661,13 @@ module.exports = {
 
         if (channel) {
             let content = {};
-            content.embeds = [new Discord.EmbedBuilder()
-                .setTitle(`Someone from tracker \`${trackerName}\` just went online.`)
-                .setColor('#00ff40')
-                .setThumbnail(`${instance.serverList[serverId].img}`)
-                .setFooter({ text: `${instance.serverList[serverId].title}` })
-                .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                title: `Someone from tracker \`${trackerName}\` just went online.`,
+                color: '#00ff40',
+                thumbnail: `${instance.serverList[serverId].img}`,
+                footer: { text: `${instance.serverList[serverId].title}` },
+                timestamp: true
+            })];
 
             if (instance.trackers[trackerName].everyone) {
                 content.content = '@everyone';

@@ -3,6 +3,8 @@ const PushReceiver = require('push-receiver');
 
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
 const Constants = require('../util/constants.js');
+const DiscordButtons = require('../discordTools/discordButtons.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Scrape = require('../util/scrape.js');
 
@@ -339,14 +341,15 @@ async function alarmAlarm(client, guild, full, data, body) {
             let message = (data.message !== '') ? data.message : 'Your base is under attack!';
 
             let content = {};
-            content.embeds = [
-                new Discord.EmbedBuilder()
-                    .setColor('#ce412b')
-                    .setThumbnail('attachment://smart_alarm.png')
-                    .setTitle(title)
-                    .addFields({ name: 'Message', value: `\`${message}\``, inline: true })
-                    .setFooter({ text: body.name })
-                    .setTimestamp()];
+            content.embeds = [DiscordEmbeds.getEmbed({
+                color: '#ce412b',
+                thumbnail: 'attachment://smart_alarm.png',
+                title: title,
+                footer: { text: body.name },
+                timestamp: true,
+                fields: [{ name: 'Message', value: `\`${message}\``, inline: true }]
+            })];
+
             content.files = [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')];
 
             if (instance.generalSettings.fcmAlarmNotificationEveryone) {
@@ -378,12 +381,13 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
             png = (isValidUrl(body.img)) ? body.img : Constants.DEFAULT_SERVER_IMG;
         }
 
-        let embed = new Discord.EmbedBuilder()
-            .setColor('#ff0040')
-            .setThumbnail(png)
-            .setTitle(data.title)
-            .setTimestamp()
-            .setFooter({ text: body.name });
+        const embed = DiscordEmbeds.getEmbed({
+            color: '#ff0040',
+            thumbnail: png,
+            title: data.title,
+            timestamp: true,
+            footer: { text: body.name }
+        });
 
         if (body.targetId !== '') {
             embed.setURL(`${Constants.STEAM_PROFILES_URL}${body.targetId}`)
@@ -403,17 +407,16 @@ async function teamLogin(client, guild, full, data, body) {
         if (channel !== undefined) {
             let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
             await client.messageSend(channel, {
-                embeds: [
-                    new Discord.EmbedBuilder()
-                        .setColor('#00ff40')
-                        .setAuthor({
-                            name: `${body.targetName} just connected.`,
-                            iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
-                            url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
-                        })
-                        .setTimestamp()
-                        .setFooter({ text: body.name })
-                ]
+                embeds: [DiscordEmbeds.getEmbed({
+                    color: '#00ff40',
+                    timestamp: true,
+                    footer: { text: body.name },
+                    author: {
+                        name: `${body.targetName} just connected.`,
+                        iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
+                        url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
+                    }
+                })]
             });
             client.log('INFO', `${body.targetName} just connected to ${body.name}.`);
         }
@@ -426,21 +429,21 @@ async function newsNews(client, guild, full, data, body) {
 
     if (channel !== undefined) {
         await client.messageSend(channel, {
-            embeds: [
-                new Discord.EmbedBuilder()
-                    .setTitle(`NEWS: ${data.title}`)
-                    .setColor('#ce412b')
-                    .setDescription(`${data.message}`)
-                    .setThumbnail(Constants.DEFAULT_SERVER_IMG)
-                    .setTimestamp()
-            ],
+            embeds: [DiscordEmbeds.getEmbed({
+                title: `NEWS: ${data.title}`,
+                color: '#ce412b',
+                description: `${data.message}`,
+                thumbnail: Constants.DEFAULT_SERVER_IMG,
+                timestamp: true
+            })],
             components: [
                 new Discord.ActionRowBuilder()
                     .addComponents(
-                        new Discord.ButtonBuilder()
-                            .setStyle(Discord.ButtonStyle.Link)
-                            .setLabel('LINK')
-                            .setURL(isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL))
+                        DiscordButtons.getButton({
+                            style: Discord.ButtonStyle.Link,
+                            label: 'LINK',
+                            url: isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL
+                        }))
             ]
         });
     }

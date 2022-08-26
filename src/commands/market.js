@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
-const Discord = require('discord.js');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
     data: new Builder.SlashCommandBuilder()
@@ -147,11 +148,12 @@ module.exports = {
                     foundLines += '```'
                 }
 
-                let embed = new Discord.EmbedBuilder()
-                    .setColor('#ce412b')
-                    .setTitle(`Search result for item: **${itemName}**`)
-                    .setDescription(foundLines)
-                    .setFooter({ text: `${instance.serverList[rustplus.serverId].title}` });
+                const embed = DiscordEmbeds.getEmbed({
+                    color: '#ce412b',
+                    title: `Search result for item: **${itemName}**`,
+                    description: foundLines,
+                    footer: { text: `${instance.serverList[rustplus.serverId].title}` }
+                });
 
                 await client.interactionEditReply(interaction, { embeds: [embed] });
                 rustplus.log('INFO', `Showing the result for item: ${itemName}`);
@@ -287,13 +289,14 @@ module.exports = {
                 }
                 else {
                     await client.interactionEditReply(interaction, {
-                        embeds: [new Discord.EmbedBuilder()
-                            .setColor('#ce412b')
-                            .setTitle('Subscription list')
-                            .addFields(
+                        embeds: [DiscordEmbeds.getEmbed({
+                            color: '#ce412b',
+                            title: 'Subscription list',
+                            footer: { text: instance.serverList[rustplus.serverId].title },
+                            fields: [
                                 { name: 'Name', value: names, inline: true },
-                                { name: 'ID', value: ids, inline: true })
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
+                                { name: 'ID', value: ids, inline: true }]
+                        })],
                         ephemeral: true
                     });
                 }

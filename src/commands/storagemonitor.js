@@ -1,6 +1,7 @@
 const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Recycler = require('../util/recycler.js');
 
@@ -155,12 +156,13 @@ module.exports = {
 				}
 
 				let file = new Discord.AttachmentBuilder('src/resources/images/electrics/recycler.png');
-				let embed = new Discord.EmbedBuilder()
-					.setTitle('Result of recycling:')
-					.setColor('#ce412b')
-					.setThumbnail('attachment://recycler.png')
-					.setFooter({ text: `${instance.storageMonitors[id].server}` })
-					.setDescription(`**Name** \`${instance.storageMonitors[id].name}\`\n**ID** \`${id}\``);
+				const embed = DiscordEmbeds.getEmbed({
+					title: 'Result of recycling:',
+					color: '#ce412b',
+					thumbnail: 'attachment://recycler.png',
+					footer: { text: `${instance.storageMonitors[id].server}` },
+					description: `**Name** \`${instance.storageMonitors[id].name}\`\n**ID** \`${id}\``
+				});
 
 				if (itemName === '' || itemQuantity === '') {
 					itemName = 'Empty';

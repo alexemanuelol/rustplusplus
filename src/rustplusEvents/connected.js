@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
@@ -22,13 +23,13 @@ module.exports = {
 
             if (channel !== undefined) {
                 await client.messageSend(channel, {
-                    embeds: [new Discord.EmbedBuilder()
-                        .setColor('#ff0040')
-                        .setTitle('The connection to the server seems to be invalid. Try to re-pair to the server.')
-                        .setThumbnail(instance.serverList[rustplus.serverId].img)
-                        .setTimestamp()
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                    ]
+                    embeds: [DiscordEmbeds.getEmbed({
+                        color: '#ff0040',
+                        title: 'The connection to the server seems to be invalid. Try to re-pair to the server.',
+                        thumbnail: instance.serverList[rustplus.serverId].img,
+                        timestamp: true,
+                        footer: { text: instance.serverList[rustplus.serverId].title }
+                    })]
                 });
             }
 
@@ -88,13 +89,13 @@ module.exports = {
             if (channel !== undefined) {
                 let file = new Discord.AttachmentBuilder(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
                 await client.messageSend(channel, {
-                    embeds: [new Discord.EmbedBuilder()
-                        .setColor('#ce412b')
-                        .setTitle('Wipe detected!')
-                        .setImage(`attachment://${rustplus.guildId}_map_full.png`)
-                        .setTimestamp()
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                    ],
+                    embeds: [DiscordEmbeds.getEmbed({
+                        color: '#ce412b',
+                        title: 'Wipe detected!',
+                        image: `attachment://${rustplus.guildId}_map_full.png`,
+                        timestamp: true,
+                        footer: { text: instance.serverList[rustplus.serverId].title }
+                    })],
                     files: [file]
                 });
             }
@@ -106,13 +107,13 @@ module.exports = {
             if (rustplus.isReconnect) {
                 if (channel !== undefined) {
                     await client.messageSend(channel, {
-                        embeds: [new Discord.EmbedBuilder()
-                            .setColor('#00ff40')
-                            .setTitle('Server just went online.')
-                            .setThumbnail(instance.serverList[rustplus.serverId].img)
-                            .setTimestamp()
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                        ]
+                        embeds: [DiscordEmbeds.getEmbed({
+                            color: '#00ff40',
+                            title: 'Server just went online.',
+                            thumbnail: instance.serverList[rustplus.serverId].img,
+                            timestamp: true,
+                            footer: { text: instance.serverList[rustplus.serverId].title }
+                        })]
                     });
                 }
             }

@@ -4,28 +4,28 @@ const Client = require('../../index.js');
 const Constants = require('../util/constants.js');
 const Timer = require('../util/timer');
 
-function getEmbed(options) {
-    const embed = new Discord.EmbedBuilder();
-
-    if (options.title) embed.setTitle(options.title);
-    if (options.color) embed.setColor(options.color);
-    if (options.description) embed.setDescription(options.description);
-    if (options.thumbnail) embed.setThumbnail(options.thumbnail);
-    if (options.image) embed.setImage(options.image);
-    if (options.url) embed.setURL(options.url);
-    if (options.author) embed.setAuthor(options.author);
-    if (options.footer) embed.setFooter(options.footer);
-    if (options.timestamp) embed.setTimestamp();
-    if (options.fields) embed.setFields(...options.fields);
-
-    return embed;
-}
-
 module.exports = {
+    getEmbed: function (options = {}) {
+        const embed = new Discord.EmbedBuilder();
+
+        if (options.title) embed.setTitle(options.title);
+        if (options.color) embed.setColor(options.color);
+        if (options.description) embed.setDescription(options.description);
+        if (options.thumbnail) embed.setThumbnail(options.thumbnail);
+        if (options.image) embed.setImage(options.image);
+        if (options.url) embed.setURL(options.url);
+        if (options.author) embed.setAuthor(options.author);
+        if (options.footer) embed.setFooter(options.footer);
+        if (options.timestamp) embed.setTimestamp();
+        if (options.fields) embed.setFields(...options.fields);
+
+        return embed;
+    },
+
     getSmartSwitchEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         const sw = instance.switches[id];
-        return getEmbed({
+        return module.exports.getEmbed({
             title: `${sw.name}`,
             color: sw.active ? '#00ff40' : '#ff0040',
             description: `**ID**: \`${id}\``,
@@ -39,7 +39,7 @@ module.exports = {
     getServerEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         const server = instance.serverList[id];
-        return getEmbed({
+        return module.exports.getEmbed({
             title: `${server.title}`,
             color: '#ce412b',
             description: `${server.description}`,
@@ -77,7 +77,7 @@ module.exports = {
         if (playerSteamId === '') playerSteamId = 'Empty';
         if (playerStatus === '') playerStatus = 'Empty';
 
-        return getEmbed({
+        return module.exports.getEmbed({
             title: `${trackerName}`,
             color: '#ce412b',
             description: `**Battlemetrics ID:** \`${battlemetricsId}\`\n**Server Status:** ${serverStatus}`,
@@ -91,7 +91,7 @@ module.exports = {
 
     getSmartAlarmEmbed: function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
-        return getEmbed({
+        return module.exports.getEmbed({
             title: `${instance.alarms[id].name}`,
             color: instance.alarms[id].active ? '#00ff40' : '#ce412b',
             description: `**ID**: \`${id}\``,
@@ -114,7 +114,7 @@ module.exports = {
         let description = `**ID** \`${id}\``;
 
         if (capacity === 0) {
-            return getEmbed({
+            return module.exports.getEmbed({
                 title: `${instance.storageMonitors[id].name}`,
                 color: '#ce412b',
                 description: `${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``,
@@ -165,7 +165,7 @@ module.exports = {
         if (itemName === '') itemName = 'Empty';
         if (itemQuantity === '') itemQuantity = 'Empty';
 
-        return getEmbed({
+        return module.exports.getEmbed({
             title: `${instance.storageMonitors[id].name}`,
             color: '#ce412b',
             description: description,
@@ -209,7 +209,7 @@ module.exports = {
         if (switchId === '') switchId = 'None';
         if (switchActive === '') switchActive = 'None';
 
-        return getEmbed({
+        return module.exports.getEmbed({
             title: name,
             color: '#ce412b',
             thumbnail: 'attachment://smart_switch.png',
@@ -229,7 +229,7 @@ module.exports = {
 
     getNotFoundSmartDeviceEmbed: function (guildId, id, type) {
         const instance = Client.client.readInstanceFile(guildId);
-        return getEmbed({
+        return module.exports.getEmbed({
             title: `${instance[type][id].name}`,
             color: '#ff0040',
             description: `**ID**: \`${id}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`,

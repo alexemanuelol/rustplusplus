@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const Path = require('path');
 
 const Config = require('../../config.json');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
@@ -171,9 +172,10 @@ class DiscordBot extends Discord.Client {
     }
 
     getEmbedActionInfo(color, str, footer = null, ephemeral = true) {
-        let embed = new Discord.EmbedBuilder()
-            .setColor((color === 0) ? '#ce412b' : '#ff0040')
-            .setDescription(`\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``);
+        const embed = DiscordEmbeds.getEmbed({
+            color: color === 0 ? '#ce412b' : '#ff0040',
+            description: `\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``
+        });
 
         if (footer !== null) {
             embed.setFooter({ text: footer });

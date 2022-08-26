@@ -4,6 +4,7 @@ const Path = require('path');
 
 const Client = require('../../index.js');
 const Constants = require('../util/constants.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
@@ -159,14 +160,13 @@ class RustPlus extends RustPlusLib {
 
         if (channel !== undefined) {
             let file = new Discord.AttachmentBuilder(`src/resources/images/events/${image}`);
-            let embed = new Discord.EmbedBuilder()
-                .setColor('#ce412b')
-                .setThumbnail(`attachment://${image}`)
-                .setTitle(text)
-                .setFooter({
-                    text: instance.serverList[`${this.server}-${this.port}`].title
-                })
-                .setTimestamp();
+            const embed = DiscordEmbeds.getEmbed({
+                color: '#ce412b',
+                thumbnail: `attachment://${image}`,
+                title: text,
+                footer: { text: instance.serverList[`${this.server}-${this.port}`].title },
+                timestamp: true
+            });
 
             Client.client.messageSend(channel, { embeds: [embed], files: [file] });
         }

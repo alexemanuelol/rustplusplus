@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
-const Discord = require('discord.js');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
 	data: new Builder.SlashCommandBuilder()
@@ -79,9 +80,10 @@ module.exports = {
 			title = `Online players '${name}'`;
 		}
 
-		let embed = new Discord.EmbedBuilder()
-			.setTitle(title)
-			.setColor('#ce412b');
+		const embed = DiscordEmbeds.getEmbed({
+			title: title,
+			color: '#ce412b'
+		});
 
 		let description = '';
 		if (playerIndex === 0) {

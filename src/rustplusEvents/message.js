@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 const TeamChatHandler = require("../handlers/teamChatHandler.js");
@@ -66,17 +67,16 @@ module.exports = {
                         let message = instance.alarms[entityId].message;
 
                         let content = {};
-                        content.embeds = [
-                            new Discord.EmbedBuilder()
-                                .setColor('#ce412b')
-                                .setThumbnail(`attachment://${instance.alarms[entityId].image}`)
-                                .setTitle(title)
-                                .addFields(
-                                    { name: 'ID', value: `\`${entityId}\``, inline: true },
-                                    { name: 'Message', value: `\`${message}\``, inline: true }
-                                )
-                                .setFooter({ text: instance.alarms[entityId].server })
-                                .setTimestamp()];
+                        content.embeds = [DiscordEmbeds.getEmbed({
+                            color: '#ce412b',
+                            thumbnail: `attachment://${instance.alarms[entityId].image}`,
+                            title: title,
+                            footer: { text: instance.alarms[entityId].server },
+                            timestamp: true,
+                            fields: [
+                                { name: 'ID', value: `\`${entityId}\``, inline: true },
+                                { name: 'Message', value: `\`${message}\``, inline: true }]
+                        })];
 
                         content.files = [
                             new Discord.AttachmentBuilder(

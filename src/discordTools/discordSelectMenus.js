@@ -2,21 +2,21 @@ const Discord = require('discord.js');
 
 const Client = require('../../index.js');
 
-function getSelectMenu(options = {}) {
-    const selectMenu = new Discord.SelectMenuBuilder();
-
-    if (options.customId) selectMenu.setCustomId(options.customId);
-    if (options.placeholder) selectMenu.setPlaceholder(options.placeholder);
-    if (options.options) selectMenu.setOptions(options.options);
-    if (options.disabled) selectMenu.setDisabled(options.disabled);
-
-    return selectMenu;
-}
-
 module.exports = {
+    getSelectMenu: function (options = {}) {
+        const selectMenu = new Discord.SelectMenuBuilder();
+
+        if (options.customId) selectMenu.setCustomId(options.customId);
+        if (options.placeholder) selectMenu.setPlaceholder(options.placeholder);
+        if (options.options) selectMenu.setOptions(options.options);
+        if (options.disabled) selectMenu.setDisabled(options.disabled);
+
+        return selectMenu;
+    },
+
     getPrefixSelectMenu: function (currentPrefix) {
         return new Discord.ActionRowBuilder().addComponents(
-            getSelectMenu({
+            module.exports.getSelectMenu({
                 customId: 'Prefix',
                 placeholder: `Current Prefix: ${currentPrefix}`,
                 options: [
@@ -29,7 +29,7 @@ module.exports = {
     getTrademarkSelectMenu: function (currentTrademark) {
         const desc = ' will be shown before messages.';
         return new Discord.ActionRowBuilder().addComponents(
-            getSelectMenu({
+            module.exports.getSelectMenu({
                 customId: 'Trademark',
                 placeholder: `${currentTrademark}`,
                 options: [
@@ -41,7 +41,7 @@ module.exports = {
 
     getCommandDelaySelectMenu: function (currentDelay) {
         return new Discord.ActionRowBuilder().addComponents(
-            getSelectMenu({
+            module.exports.getSelectMenu({
                 customId: 'CommandDelay',
                 placeholder: `Current Command Delau: ${currentDelay} seconds.`,
                 options: [
@@ -67,7 +67,7 @@ module.exports = {
         else if (instance.switches[id].autoDayNight === 2) autoDayNightString += 'AUTO-NIGHT';
 
         return new Discord.ActionRowBuilder().addComponents(
-            getSelectMenu({
+            module.exports.getSelectMenu({
                 customId: `AutoDayNightId${id}`,
                 placeholder: `${autoDayNightString}`,
                 options: [
