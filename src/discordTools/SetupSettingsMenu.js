@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 
+const DiscordButtons = require('./discordButtons.js');
+const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, guild) => {
@@ -33,7 +35,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle('Select what in-game command prefix that should be used:')
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getPrefixSelectMenu(instance.generalSettings.prefix)],
+        components: [DiscordSelectMenus.getPrefixSelectMenu(instance.generalSettings.prefix)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
@@ -42,7 +44,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle(`Select which trademark that should be shown in every in-game message.`)
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getTrademarkSelectMenu(instance.generalSettings.trademark)],
+        components: [DiscordSelectMenus.getTrademarkSelectMenu(instance.generalSettings.trademark)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
@@ -51,7 +53,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle('Should in-game commands be enabled?')
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)],
+        components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
@@ -60,7 +62,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle('In-game teammate notifications.')
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getInGameTeammateNotificationsButtons(instance)],
+        components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
@@ -69,7 +71,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle('Should there be a command delay? How long?')
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getCommandDelaySelectMenu(instance.generalSettings.commandDelay)],
+        components: [DiscordSelectMenus.getCommandDelaySelectMenu(instance.generalSettings.commandDelay)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
@@ -82,7 +84,7 @@ async function setupGeneralSettings(client, instance, channel) {
             )
             .setThumbnail(`attachment://settings_logo.png`)],
         components: [
-            DiscordTools.getFcmAlarmNotificationButtons(
+            DiscordButtons.getFcmAlarmNotificationButtons(
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
@@ -93,7 +95,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle('Should Smart Alarms notify In-Game?')
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame)],
+        components: [DiscordButtons.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
@@ -102,7 +104,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle('Should the leader command be enabled?')
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled)],
+        components: [DiscordButtons.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 
@@ -111,7 +113,7 @@ async function setupGeneralSettings(client, instance, channel) {
             .setColor('#861c0c')
             .setTitle('When should the Battlemetrics trackers notify?')
             .setThumbnail(`attachment://settings_logo.png`)],
-        components: [DiscordTools.getTrackerNotifyButtons(
+        components: [DiscordButtons.getTrackerNotifyButtons(
             instance.generalSettings.trackerNotifyAllOffline,
             instance.generalSettings.trackerNotifyAnyOnline)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
@@ -130,7 +132,7 @@ async function setupNotificationSettings(client, instance, channel) {
                 .setTitle(instance.notificationSettings[setting].description)
                 .setThumbnail(`attachment://${instance.notificationSettings[setting].image}`)],
             components: [
-                DiscordTools.getNotificationButtons(
+                DiscordButtons.getNotificationButtons(
                     setting,
                     instance.notificationSettings[setting].discord,
                     instance.notificationSettings[setting].inGame)],

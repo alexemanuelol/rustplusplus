@@ -1,11 +1,12 @@
 const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
 
 module.exports = async (client, interaction) => {
     let guildId = interaction.guildId;
     let instance = client.readInstanceFile(guildId);
     let rustplus = client.rustplusInstances[guildId];
 
-    if (interaction.customId === 'prefix') {
+    if (interaction.customId === 'Prefix') {
         instance.generalSettings.prefix = interaction.values[0];
         client.writeInstanceFile(guildId, instance);
 
@@ -13,11 +14,11 @@ module.exports = async (client, interaction) => {
             rustplus.generalSettings.prefix = interaction.values[0];
         }
 
-        let row = DiscordTools.getPrefixSelectMenu(interaction.values[0]);
+        let row = DiscordSelectMenus.getPrefixSelectMenu(interaction.values[0]);
 
         await client.interactionUpdate(interaction, { components: [row] });
     }
-    else if (interaction.customId === 'trademark') {
+    else if (interaction.customId === 'Trademark') {
         instance.generalSettings.trademark = interaction.values[0];
         client.writeInstanceFile(guildId, instance);
 
@@ -27,11 +28,11 @@ module.exports = async (client, interaction) => {
                 '' : `${instance.generalSettings.trademark} | `;
         }
 
-        let row = DiscordTools.getTrademarkSelectMenu(interaction.values[0]);
+        let row = DiscordSelectMenus.getTrademarkSelectMenu(interaction.values[0]);
 
         await client.interactionUpdate(interaction, { components: [row] });
     }
-    else if (interaction.customId === 'commandDelay') {
+    else if (interaction.customId === 'CommandDelay') {
         instance.generalSettings.commandDelay = interaction.values[0];
         client.writeInstanceFile(guildId, instance);
 
@@ -39,12 +40,12 @@ module.exports = async (client, interaction) => {
             rustplus.generalSettings.commandDelay = interaction.values[0];
         }
 
-        let row = DiscordTools.getCommandDelaySelectMenu(interaction.values[0]);
+        let row = DiscordSelectMenus.getCommandDelaySelectMenu(interaction.values[0]);
 
         await client.interactionUpdate(interaction, { components: [row] });
     }
-    else if (interaction.customId.endsWith('AutoDayNight')) {
-        let id = interaction.customId.replace('AutoDayNight', '');
+    else if (interaction.customId.startsWith('AutoDayNight')) {
+        let id = interaction.customId.replace('AutoDayNightId', '');
 
         if (!instance.switches.hasOwnProperty(id)) {
             try {

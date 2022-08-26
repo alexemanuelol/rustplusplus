@@ -42,6 +42,9 @@ module.exports = {
                 client.log('ERROR', str, 'error');
             }
         }
+        else if (interaction.type === Discord.InteractionType.ModalSubmit) {
+            require('../handlers/modalHandler')(client, interaction);
+        }
         else {
             client.log('ERROR', 'Unknown Interaction...', 'error')
             if (interaction.isButton()) {
