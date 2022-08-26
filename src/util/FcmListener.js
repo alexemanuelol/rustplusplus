@@ -81,6 +81,12 @@ module.exports = async (client, guild) => {
                         } break;
 
                         default: {
+                            if (data.title === 'You\'re getting raided!') {
+                                /* Custom alarm from plugin: https://umod.org/plugins/raid-alarm */
+                                client.log('FCM', `${guild.id} alarm: raid-alarm plugin`);
+                                alarmRaidAlarm(client, guild, full, data, body);
+                                break;
+                            }
                             client.log('FCM', `${guild.id} alarm: other\n${JSON.stringify(full)}`);
                         } break;
                     }
@@ -366,6 +372,32 @@ async function alarmAlarm(client, guild, full, data, body) {
             }
         }
     }
+}
+
+async function alarmRaidAlarm(client, guild, full, data, body) {
+    let instance = client.readInstanceFile(guild.id);
+    let serverId = `${body.ip}-${body.port}`;
+    let rustplus = client.rustplusInstances[guild.id];
+    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.activity);
+
+    if (channel !== undefined) {
+        await client.messageSend(channel, {
+            embeds: [DiscordEmbeds.getEmbed({
+                color: '#00ff40',
+                timestamp: true,
+                footer: { text: body.name },
+                title: data.title,
+                description: data.message,
+                thumbnail: body.img
+            })],
+        });
+    }
+
+    if (rustplus && (serverId === rustplus.serverId)) {
+        rustplus.sendTeamMessageAsync(`${data.title}: ${data.message}`);
+    }
+
+    client.log('INFO', `${data.title} ${data.message}`);
 }
 
 async function playerDeath(client, guild, full, data, body, ownerId) {
