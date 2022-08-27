@@ -5,6 +5,7 @@ const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
 const Constants = require('../util/constants.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Scrape = require('../util/scrape.js');
 
@@ -191,7 +192,7 @@ async function pairingServer(client, guild, full, data, body) {
     };
     client.writeInstanceFile(guild.id, instance);
 
-    await DiscordTools.sendServerMessage(guild.id, serverId, null);
+    await DiscordMessages.sendServerMessage(guild.id, serverId, null);
 }
 
 async function pairingEntitySwitch(client, guild, full, data, body) {

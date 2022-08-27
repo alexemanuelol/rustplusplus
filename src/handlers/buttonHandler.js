@@ -1,3 +1,4 @@
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const DiscordButtons = require('..//discordTools/discordButtons.js');
@@ -199,7 +200,7 @@ module.exports = async (client, interaction) => {
             if (value.active) {
                 instance.serverList[key].active = false;
                 client.writeInstanceFile(guildId, instance);
-                await DiscordTools.sendServerMessage(guildId, key, null, false, true);
+                await DiscordMessages.sendServerMessage(guildId, key, null);
                 break;
             }
         }
@@ -208,7 +209,7 @@ module.exports = async (client, interaction) => {
         instance.serverList[serverId].active = true;
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordTools.sendServerMessage(guildId, serverId, null, false, true, interaction);
+        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
 
         /* Disconnect previous instance is any */
         if (rustplus) {
@@ -285,7 +286,7 @@ module.exports = async (client, interaction) => {
         instance.serverList[serverId].active = false;
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordTools.sendServerMessage(guildId, serverId, null, false, true, interaction);
+        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
 
         /* Disconnect previous instance if any */
         if (rustplus) {

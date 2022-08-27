@@ -114,7 +114,9 @@ module.exports = {
 
             if (channel) {
                 try {
-                    return await channel.messages.fetch(messageId);
+                    const messages = await channel.messages.fetch(messageId);
+                    if (messages instanceof Map) return messages.get(messageId);
+                    return messages;
                 }
                 catch (e) {
                     Client.client.log('ERROR', `Could not find message: ${messageId}`, 'error');
@@ -237,48 +239,6 @@ module.exports = {
 
 
 
-
-    sendServerMessage: async function (guildId, id, state = null, e = true, c = true, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const embed = DiscordEmbeds.getServerEmbed(guildId, id);
-        const buttons = DiscordButtons.getServerButtons(guildId, id, state);
-
-        let content = new Object();
-        if (e) {
-            content.embeds = [embed];
-        }
-        if (c) {
-            content.components = [buttons];
-        }
-
-        if (interaction) {
-            await Client.client.interactionUpdate(interaction, content);
-            return;
-        }
-
-        let messageId = instance.serverList[id].messageId;
-        let message = undefined;
-        if (messageId !== null) {
-            message = await module.exports.getMessageById(guildId, instance.channelId.servers, messageId);
-        }
-
-        if (message !== undefined) {
-            if (await Client.client.messageEdit(message, content) === undefined) return;
-        }
-        else {
-            const channel = module.exports.getTextChannelById(guildId, instance.channelId.servers);
-
-            if (!channel) {
-                Client.client.log('ERROR', 'sendServerMessage: Invalid guild or channel.', 'error');
-                return;
-            }
-
-            message = await Client.client.messageSend(channel, content);
-            instance.serverList[id].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
-        }
-    },
 
     sendTrackerMessage: async function (guildId, trackerName, e = true, c = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);

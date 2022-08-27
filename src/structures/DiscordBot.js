@@ -225,6 +225,7 @@ class DiscordBot extends Discord.Client {
             return await message.edit(content);
         }
         catch (e) {
+            console.log(message)
             this.log('ERROR', `Message edit failed: ${e}`, 'error');
         }
 

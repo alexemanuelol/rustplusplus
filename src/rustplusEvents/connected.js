@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
@@ -36,7 +37,7 @@ module.exports = {
             instance.serverList[rustplus.serverId].active = false;
             client.writeInstanceFile(rustplus.guildId, instance);
 
-            await DiscordTools.sendServerMessage(rustplus.guildId, rustplus.serverId, null, false, true);
+            await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, null);
 
             rustplus.disconnect();
             delete client.rustplusInstances[rustplus.guildId];
@@ -118,7 +119,7 @@ module.exports = {
                 }
             }
 
-            await DiscordTools.sendServerMessage(rustplus.guildId, rustplus.serverId, null, false, true);
+            await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, null);
 
             rustplus.connected = true;
             rustplus.isReconnect = false;

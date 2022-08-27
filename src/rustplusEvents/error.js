@@ -1,4 +1,5 @@
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
                     });
                 }
 
-                await DiscordTools.sendServerMessage(rustplus.guildId, rustplus.serverId, 2, false, true);
+                await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, 2);
 
                 rustplus.firstTime = false;
                 rustplus.connected = false;
