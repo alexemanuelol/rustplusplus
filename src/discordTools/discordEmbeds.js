@@ -237,4 +237,16 @@ module.exports = {
             footer: { text: `${instance[type][id].server}` }
         });
     },
+
+    getDecayingNotificationEmbed: function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        return module.exports.getEmbed({
+            title: `${instance.storageMonitors[id].name} is decaying!`,
+            color: '#ff0040',
+            description: `**ID** \`${id}\``,
+            thumbnail: `attachment://${instance.storageMonitors[id].image}`,
+            footer: { text: `${instance.storageMonitors[id].server}` },
+            timestamp: true
+        });
+    },
 }
