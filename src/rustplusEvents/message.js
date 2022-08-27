@@ -97,7 +97,7 @@ module.exports = {
                         }
                     }
 
-                    DiscordTools.sendSmartAlarmMessage(rustplus.guildId, entityId, true, false, false);
+                    DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, entityId);
                 }
                 else if (instance.storageMonitors.hasOwnProperty(entityId)) {
                     if (message.broadcast.entityChanged.payload.value === true) return;

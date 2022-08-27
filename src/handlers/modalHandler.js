@@ -1,5 +1,4 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, interaction) => {
     let guildId = interaction.guildId;
@@ -42,7 +41,7 @@ module.exports = async (client, interaction) => {
         client.writeInstanceFile(guildId, instance);
 
         if (changed) {
-            await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id);
+            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id);
         }
     }
 

@@ -501,7 +501,7 @@ module.exports = async (client, interaction) => {
             instance.alarms[id].everyone = !instance.alarms[id].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id, false, true, false, interaction);
+            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id, interaction);
         }
         else {
             try {

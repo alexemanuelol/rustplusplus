@@ -271,7 +271,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         }
     }
 
-    await DiscordTools.sendSmartAlarmMessage(guild.id, entityId);
+    await DiscordMessages.sendSmartAlarmMessage(guild.id, entityId);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {

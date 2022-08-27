@@ -1,3 +1,4 @@
+const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, rustplus) => {
@@ -26,6 +27,6 @@ module.exports = async (client, rustplus) => {
             }
         }
 
-        await DiscordTools.sendSmartAlarmMessage(rustplus.guildId, key);
+        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, key);
     }
 };

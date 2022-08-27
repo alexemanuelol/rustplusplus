@@ -89,4 +89,24 @@ module.exports = {
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
+
+    sendSmartAlarmMessage: async function (guildId, id, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [instance.alarms[id].reachable ?
+                DiscordEmbeds.getSmartAlarmEmbed(guildId, id) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'alarms')],
+            components: [DiscordButtons.getSmartAlarmButtons(guildId, id)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)]
+        }
+
+        const message = await module.exports.sendMessage(
+            guildId, content, instance.alarms[id].messageId, instance.channelId.alarms, interaction);
+
+        if (!interaction) {
+            instance.alarms[id].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
 }

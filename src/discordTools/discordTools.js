@@ -266,56 +266,6 @@ module.exports = {
 
 
 
-    sendSmartAlarmMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`);
-        let embed = DiscordEmbeds.getSmartAlarmEmbed(guildId, id);
-        let buttons = DiscordButtons.getSmartAlarmButtons(guildId, id);
-
-        if (!instance.alarms[id].reachable) {
-            embed = DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'alarms');
-        }
-
-        let content = new Object();
-        if (e) {
-            content.embeds = [embed];
-        }
-        if (c) {
-            content.components = [buttons];
-        }
-        if (f) {
-            content.files = [file];
-        }
-
-        if (interaction) {
-            await Client.client.interactionUpdate(interaction, content);
-            return;
-        }
-
-        let messageId = instance.alarms[id].messageId;
-        let message = undefined;
-        if (messageId !== null) {
-            message = await module.exports.getMessageById(guildId, instance.channelId.alarms, messageId);
-        }
-
-        if (message !== undefined) {
-            if (await Client.client.messageEdit(message, content) === undefined) return;
-        }
-        else {
-            const channel = module.exports.getTextChannelById(guildId, instance.channelId.alarms);
-
-            if (!channel) {
-                Client.client.log('ERROR', 'sendSmartAlarmMessage: Invalid guild or channel.', 'error');
-                return;
-            }
-
-            message = await Client.client.messageSend(channel, content);
-            instance.alarms[id].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
-        }
-    },
-
     sendStorageMonitorMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         let instance = Client.client.readInstanceFile(guildId);
 

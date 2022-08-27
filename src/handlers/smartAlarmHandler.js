@@ -1,3 +1,4 @@
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
                         instance.alarms[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordTools.sendSmartAlarmMessage(rustplus.guildId, key, true, false, false);
+                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, key);
                     }
                 }
                 else {
@@ -25,7 +26,7 @@ module.exports = {
                         instance.alarms[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordTools.sendSmartAlarmMessage(rustplus.guildId, key, true, false, false);
+                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, key);
                     }
                 }
             }

@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
 
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -105,9 +106,6 @@ module.exports = {
 		const message = interaction.options.getString('message');
 		const image = interaction.options.getString('image');
 
-		let embedChanged = false;
-		let filesChanged = false;
-
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
 				if (!Object.keys(instance.alarms).includes(id)) {
@@ -119,20 +117,16 @@ module.exports = {
 
 				if (name !== null) {
 					instance.alarms[id].name = name;
-					embedChanged = true;
 				}
 				if (message !== null) {
 					instance.alarms[id].message = message;
-					embedChanged = true;
 				}
 				if (image !== null) {
 					instance.alarms[id].image = `${image}.png`;
-					embedChanged = true;
-					filesChanged = true;
 				}
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id, embedChanged, false, filesChanged);
+				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id);
 
 				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
 				await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
