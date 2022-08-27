@@ -109,4 +109,29 @@ module.exports = {
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
+
+    sendStorageMonitorMessage: async function (guildId, id, interaction = null) {
+        let instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [instance.storageMonitors[id].reachable ?
+                DiscordEmbeds.getStorageMonitorEmbed(guildId, id) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'storageMonitors')],
+            components: [instance.storageMonitors[id].type === 'toolcupboard' ?
+                DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, id) :
+                DiscordButtons.getStorageMonitorContainerButton(id)],
+            files: [
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)]
+        }
+
+        instance = Client.client.readInstanceFile(guildId);
+
+        const message = await module.exports.sendMessage(
+            guildId, content, instance.storageMonitors[id].messageId, instance.channelId.storageMonitors, interaction);
+
+        if (!interaction) {
+            instance.storageMonitors[id].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
 }

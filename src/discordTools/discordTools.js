@@ -266,59 +266,6 @@ module.exports = {
 
 
 
-    sendStorageMonitorMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
-        let instance = Client.client.readInstanceFile(guildId);
-
-        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
-        let embed = null;
-
-        if (instance.storageMonitors[id].reachable) {
-            embed = DiscordEmbeds.getStorageMonitorEmbed(guildId, id);
-            instance = Client.client.readInstanceFile(guildId);
-        }
-        else {
-            embed = DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'storageMonitors');
-        }
-
-        let buttons = null;
-        if (instance.storageMonitors[id].type === 'toolcupboard') {
-            buttons = DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, id);
-        }
-        else {
-            buttons = DiscordButtons.getStorageMonitorContainerButton(id);
-        }
-
-        let content = new Object();
-        if (e) {
-            content.embeds = [embed];
-        }
-        if (c) {
-            content.components = [buttons];
-        }
-        if (f) {
-            content.files = [file];
-        }
-
-        if (interaction) {
-            await Client.client.interactionUpdate(interaction, content);
-            return;
-        }
-
-        if (Client.client.storageMonitorsMessages[guildId][id]) {
-            let message = Client.client.storageMonitorsMessages[guildId][id];
-            if (await Client.client.messageEdit(message, content) === undefined) return;
-        }
-        else {
-            const channel = module.exports.getTextChannelById(guildId, instance.channelId.storageMonitors);
-
-            if (!channel) {
-                Client.client.log('ERROR', 'sendStorageMonitorMessage: Invalid guild or channel.', 'error');
-                return;
-            }
-            Client.client.storageMonitorsMessages[guildId][id] = await Client.client.messageSend(channel, content);
-        }
-    },
-
     sendDecayingNotification: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);

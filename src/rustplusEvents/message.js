@@ -146,9 +146,7 @@ module.exports = {
                                 client.writeInstanceFile(rustplus.guildId, instance);
                             }
 
-                            await DiscordTools.sendStorageMonitorMessage(
-                                rustplus.guildId, entityId, true, true, false);
-
+                            await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, entityId);
                         }, 2000);
                     }
                     else {
@@ -169,7 +167,7 @@ module.exports = {
                             client.writeInstanceFile(rustplus.guildId, instance);
                         }
 
-                        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, entityId, true, true, false);
+                        await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, entityId);
                     }
                 }
             }

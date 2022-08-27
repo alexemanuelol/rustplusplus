@@ -292,7 +292,8 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         inGame: true,
         image: 'storage_monitor.png',
         server: body.name,
-        serverId: serverId
+        serverId: serverId,
+        messageId: null
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -324,7 +325,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
             }
         }
 
-        await DiscordTools.sendStorageMonitorMessage(guild.id, entityId);
+        await DiscordMessages.sendStorageMonitorMessage(guild.id, entityId);
     }
 }
 

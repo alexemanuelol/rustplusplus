@@ -2,6 +2,7 @@ const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Recycler = require('../util/recycler.js');
 
@@ -74,9 +75,6 @@ module.exports = {
 				const name = interaction.options.getString('name');
 				const image = interaction.options.getString('image');
 
-				let embedChanged = false;
-				let filesChanged = false;
-
 				if (!Object.keys(instance.storageMonitors).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
@@ -95,17 +93,13 @@ module.exports = {
 
 				if (name !== null) {
 					instance.storageMonitors[id].name = name;
-					embedChanged = true;
 				}
 				if (image !== null) {
 					instance.storageMonitors[id].image = `${image}.png`;
-					embedChanged = true;
-					filesChanged = true;
 				}
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				await DiscordTools.sendStorageMonitorMessage(
-					interaction.guildId, id, embedChanged, false, filesChanged);
+				await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id);
 
 				let str = `Successfully edited Storage Monitor '${instance.storageMonitors[id].name}'.`;
 				await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
@@ -140,7 +134,7 @@ module.exports = {
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);
 
-					await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id);
+					await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, id);
 					return;
 				}
 				instance.storageMonitors[id].reachable = true;

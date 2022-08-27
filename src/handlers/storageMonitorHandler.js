@@ -1,3 +1,4 @@
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -65,7 +66,7 @@ module.exports = {
                 }
             }
 
-            await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, id, true, false, false);
+            await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, id);
         }
     },
 }

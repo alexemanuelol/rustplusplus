@@ -1,9 +1,8 @@
+const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
-
-    client.storageMonitorsMessages[rustplus.guildId] = {};
 
     await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
 
@@ -48,6 +47,6 @@ module.exports = async (client, rustplus) => {
             }
         }
 
-        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, key);
+        await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, key);
     }
 };
