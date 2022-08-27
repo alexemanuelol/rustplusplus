@@ -1,6 +1,6 @@
 const Builder = require('@discordjs/builders');
-const Discord = require('discord.js');
 
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -75,7 +75,7 @@ module.exports = {
                 delete instance.trackers[trackerName];
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendTrackerMessage(interaction.guildId, newTrackerName);
+                await DiscordMessages.sendTrackerMessage(interaction.guildId, newTrackerName);
 
                 let str = `Successfully edited Battlemetrics Player Tracker '${trackerName}'.`;
                 await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
@@ -104,7 +104,7 @@ module.exports = {
                 });
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName);
+                await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName);
 
                 /* To force search of player name via scrape */
                 client.battlemetricsIntervalCounter = 0;
@@ -135,7 +135,7 @@ module.exports = {
                     instance.trackers[trackerName].players.filter(e => e.steamId !== steamId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName);
+                await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName);
 
                 let str = `Successfully removed '${steamId}' from the tracker '${trackerName}'.`;
                 await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));

@@ -240,48 +240,6 @@ module.exports = {
 
 
 
-    sendTrackerMessage: async function (guildId, trackerName, e = true, c = true, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const embed = DiscordEmbeds.getTrackerEmbed(guildId, trackerName);
-        const buttons = DiscordButtons.getTrackerButtons(guildId, trackerName);
-
-        let content = new Object();
-        if (e) {
-            content.embeds = [embed];
-        }
-        if (c) {
-            content.components = [buttons];
-        }
-
-        if (interaction) {
-            await Client.client.interactionUpdate(interaction, content);
-            return;
-        }
-
-        let messageId = instance.trackers[trackerName].messageId;
-        let message = undefined;
-        if (messageId !== null) {
-            message = await module.exports.getMessageById(guildId, instance.channelId.trackers, messageId);
-        }
-
-        if (message !== undefined) {
-            if (await Client.client.messageEdit(message, content) === undefined) return;
-        }
-        else {
-            const channel = module.exports.getTextChannelById(guildId, instance.channelId.trackers);
-
-            if (!channel) {
-                Client.client.log('ERROR', 'sendTrackerMessage: Invalid guild or channel.', 'error');
-                return;
-            }
-
-            message = await Client.client.messageSend(channel, content);
-            instance.trackers[trackerName].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
-        }
-    },
-
     sendSmartSwitchMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 

@@ -46,4 +46,21 @@ module.exports = {
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
+
+    sendTrackerMessage: async function (guildId, trackerName, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getTrackerEmbed(guildId, trackerName)],
+            components: [DiscordButtons.getTrackerButtons(guildId, trackerName)]
+        }
+
+        const message = await module.exports.sendMessage(
+            guildId, content, instance.trackers[trackerName].messageId, instance.channelId.trackers, interaction);
+
+        if (!interaction) {
+            instance.trackers[trackerName].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
 }

@@ -265,7 +265,7 @@ module.exports = async (client, interaction) => {
         }
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordTools.sendTrackerMessage(guildId, name);
+        await DiscordMessages.sendTrackerMessage(guildId, name);
     }
     else if (interaction.customId.startsWith('ServerDisconnect') ||
         interaction.customId.startsWith('ServerReconnecting')) {
@@ -692,7 +692,7 @@ module.exports = async (client, interaction) => {
             instance.trackers[trackerName].active = !instance.trackers[trackerName].active;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName, false, true, interaction);
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
         }
     }
     else if (interaction.customId.startsWith('TrackerEveryone')) {
@@ -702,7 +702,7 @@ module.exports = async (client, interaction) => {
             instance.trackers[trackerName].everyone = !instance.trackers[trackerName].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName, false, true, interaction);
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
         }
     }
     else if (interaction.customId.startsWith('TrackerDelete')) {

@@ -1,4 +1,5 @@
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Scrape = require('../util/scrape.js');
 
@@ -108,7 +109,7 @@ module.exports = {
 
                 instance.trackers[key].allOffline = allOffline;
                 client.writeInstanceFile(guild.id, instance);
-                await DiscordTools.sendTrackerMessage(guild.id, key, true, false);
+                await DiscordMessages.sendTrackerMessage(guild.id, key);
             }
         }
 

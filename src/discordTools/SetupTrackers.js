@@ -1,3 +1,4 @@
+const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, guild) => {
@@ -6,6 +7,6 @@ module.exports = async (client, guild) => {
     await DiscordTools.clearTextChannel(guild.id, instance.channelId.trackers, 100);
 
     for (const [key, value] of Object.entries(instance.trackers)) {
-        await DiscordTools.sendTrackerMessage(guild.id, key);
+        await DiscordMessages.sendTrackerMessage(guild.id, key);
     }
 }
