@@ -390,6 +390,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
                 description: data.message,
                 thumbnail: body.img
             })],
+            content: '@everyone'
         });
     }
 
