@@ -215,6 +215,11 @@ module.exports = {
                 style: everyone ? SUCCESS : DANGER
             }),
             module.exports.getButton({
+                customId: `SmartAlarmEditId${id}`,
+                label: 'EDIT',
+                style: PRIMARY
+            }),
+            module.exports.getButton({
                 customId: `SmartAlarmDeleteId${id}`,
                 style: SECONDARY,
                 emoji: '🗑️'

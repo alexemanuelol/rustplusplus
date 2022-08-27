@@ -474,7 +474,7 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('SmartSwitchEdit')) {
         let id = interaction.customId.replace('SmartSwitchEditId', '');
 
-        const modal = DiscordModals.getEditSmartSwitchModal(interaction.guildId, id);
+        const modal = DiscordModals.getSmartSwitchEditModal(interaction.guildId, id);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('SmartSwitchDelete')) {
@@ -549,6 +549,12 @@ module.exports = async (client, interaction) => {
             delete instance.alarms[id];
             client.writeInstanceFile(guildId, instance);
         }
+    }
+    else if (interaction.customId.startsWith('SmartAlarmEdit')) {
+        let id = interaction.customId.replace('SmartAlarmEditId', '');
+
+        const modal = DiscordModals.getSmartAlarmEditModal(interaction.guildId, id);
+        await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardEveryone')) {
         let id = interaction.customId.replace('StorageMonitorToolCupboardEveryoneId', '');

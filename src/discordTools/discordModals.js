@@ -13,7 +13,7 @@ module.exports = {
         return modal;
     },
 
-    getEditSmartSwitchModal(guildId, id) {
+    getSmartSwitchEditModal(guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const modal = module.exports.getModal({
@@ -38,6 +38,36 @@ module.exports = {
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(nameInput),
             new Discord.ActionRowBuilder().addComponents(commandInput)
+        );
+
+        return modal;
+    },
+
+    getSmartAlarmEditModal(guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const modal = module.exports.getModal({
+            customId: `SmartAlarmEditId${id}`,
+            title: `Editing of ${instance.alarms[id].name}`
+        });
+
+        const titleInput = TextInput.getTextInput({
+            customId: 'SmartAlarmName',
+            label: 'The name of the Smart Alarm:',
+            value: instance.alarms[id].name,
+            style: Discord.TextInputStyle.Short
+        });
+
+        const messageInput = TextInput.getTextInput({
+            customId: 'SmartAlarmMessage',
+            label: 'The message for the Smart Alarm:',
+            value: instance.alarms[id].message,
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(titleInput),
+            new Discord.ActionRowBuilder().addComponents(messageInput)
         );
 
         return modal;

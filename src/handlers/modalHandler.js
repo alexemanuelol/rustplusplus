@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, interaction) => {
     let guildId = interaction.guildId;
@@ -35,6 +36,26 @@ module.exports = async (client, interaction) => {
             }
 
             await client.messageEdit(client.switchesMessages[guildId][id], content);
+        }
+    }
+    else if (interaction.customId.startsWith('SmartAlarmEdit')) {
+        let id = interaction.customId.replace('SmartAlarmEditId', '');
+        let smartAlarmName = interaction.fields.getTextInputValue('SmartAlarmName');
+        let smartAlarmMessage = interaction.fields.getTextInputValue('SmartAlarmMessage');
+
+        let changed = false;
+        if (smartAlarmName !== instance.alarms[id].name) {
+            instance.alarms[id].name = smartAlarmName;
+            changed = true;
+        }
+        if (smartAlarmMessage !== instance.alarms[id].message) {
+            instance.alarms[id].message = smartAlarmMessage;
+            changed = true;
+        }
+        client.writeInstanceFile(guildId, instance);
+
+        if (changed) {
+            await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id);
         }
     }
 
