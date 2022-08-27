@@ -1,8 +1,4 @@
-const Discord = require('discord.js');
-
-const DiscordButtons = require('../discordTools/discordButtons.js');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
-const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, interaction) => {
@@ -26,16 +22,7 @@ module.exports = async (client, interaction) => {
         client.writeInstanceFile(guildId, instance);
 
         if (changed) {
-            const content = {
-                embeds: [DiscordEmbeds.getSmartSwitchEmbed(guildId, id)],
-                components: [
-                    DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, id),
-                    DiscordButtons.getSmartSwitchButtons(guildId, id)
-                ],
-                files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)]
-            }
-
-            await client.messageEdit(client.switchesMessages[guildId][id], content);
+            await DiscordMessages.sendSmartSwitchMessage(guildId, id);
         }
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {

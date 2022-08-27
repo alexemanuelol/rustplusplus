@@ -1,3 +1,4 @@
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -82,7 +83,7 @@ module.exports = {
                 client.writeInstanceFile(rustplus.guildId, instance);
             }
 
-            DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false);
+            DiscordMessages.sendSmartSwitchMessage(guildId, id);
         }
 
         if (actionSwitches.length !== 0) {

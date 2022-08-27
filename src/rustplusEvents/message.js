@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 const TeamChatHandler = require("../handlers/teamChatHandler.js");
@@ -51,7 +52,7 @@ module.exports = {
                         instance.switches[entityId].active = active;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        DiscordTools.sendSmartSwitchMessage(rustplus.guildId, entityId, true, true, false);
+                        DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, entityId);
                         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                             client, rustplus.guildId, rustplus.serverId, entityId);
                     }

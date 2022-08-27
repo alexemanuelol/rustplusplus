@@ -1,6 +1,6 @@
 const Builder = require('@discordjs/builders');
-const Discord = require('discord.js');
 
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Keywords = require('../util/keywords.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
@@ -202,20 +202,16 @@ module.exports = {
 
                 if (name !== null) {
                     instance.switches[id].name = name;
-                    embedChanged = true;
                 }
                 if (command !== null) {
                     instance.switches[id].command = command;
-                    embedChanged = true;
                 }
                 if (image !== null) {
                     instance.switches[id].image = `${image}.png`;
-                    embedChanged = true;
-                    filesChanged = true;
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                DiscordTools.sendSmartSwitchMessage(interaction.guildId, id, embedChanged, false, filesChanged);
+                DiscordMessages.sendSmartSwitchMessage(interaction.guildId, id);
                 SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                     client, interaction.guildId, rustplus.serverId, id);
 

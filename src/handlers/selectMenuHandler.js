@@ -1,4 +1,4 @@
-const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
 
 module.exports = async (client, interaction) => {
@@ -47,20 +47,9 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('AutoDayNight')) {
         let id = interaction.customId.replace('AutoDayNightId', '');
 
-        if (!instance.switches.hasOwnProperty(id)) {
-            try {
-                await client.switchesMessages[guildId][id].delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete switch message for entityId: ${id}.`, 'error');
-            }
-            delete client.switchesMessages[guildId][id];
-            return;
-        }
-
         instance.switches[id].autoDayNight = parseInt(interaction.values[0]);
         client.writeInstanceFile(guildId, instance);
 
-        DiscordTools.sendSmartSwitchMessage(guildId, id, false, true, false, interaction);
+        DiscordMessages.sendSmartSwitchMessage(guildId, id, interaction);
     }
 }

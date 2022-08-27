@@ -1,3 +1,4 @@
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
@@ -19,7 +20,7 @@ module.exports = {
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                         changedSwitches.push(key);
                     }
                 }
@@ -28,7 +29,7 @@ module.exports = {
                         instance.switches[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                         changedSwitches.push(key);
                     }
                 }
@@ -64,7 +65,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
@@ -88,7 +89,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
             }
@@ -119,7 +120,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
@@ -143,7 +144,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
             }

@@ -114,12 +114,40 @@ module.exports = {
 
             if (channel) {
                 try {
-                    const messages = await channel.messages.fetch(messageId);
-                    if (messages instanceof Map) return messages.get(messageId);
-                    return messages;
+                    const message = await channel.messages.fetch(messageId);
+                    if (message instanceof Map) return message.get(messageId);
+                    return message;
                 }
                 catch (e) {
                     Client.client.log('ERROR', `Could not find message: ${messageId}`, 'error');
+                }
+            }
+        }
+        return undefined;
+    },
+
+    deleteMessageById: async function (guildId, channelId, messageId) {
+        const guild = module.exports.getGuild(guildId);
+
+        if (guild) {
+            const channel = module.exports.getTextChannelById(guildId, channelId);
+
+            if (channel) {
+                let message = undefined;
+                try {
+                    message = await channel.messages.fetch(messageId);
+                    if (message instanceof Map) message = message.get(messageId);
+                }
+                catch (e) {
+                    Client.client.log('ERROR', `Could not find message: ${messageId}`, 'error');
+                    return undefined;
+                }
+
+                try {
+                    await message.delete();
+                }
+                catch (e) {
+                    Client.client.log('ERROR', `Could not delete message: ${messageId}`, 'error');
                 }
             }
         }
@@ -237,51 +265,6 @@ module.exports = {
 
 
 
-
-
-
-    sendSmartSwitchMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
-        let embed = DiscordEmbeds.getSmartSwitchEmbed(guildId, id);
-        let selectMenu = DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, id);
-        let buttons = DiscordButtons.getSmartSwitchButtons(guildId, id);
-
-        if (!instance.switches[id].reachable) {
-            embed = DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'switches');
-        }
-
-        let content = new Object();
-        if (e) {
-            content.embeds = [embed];
-        }
-        if (c) {
-            content.components = [selectMenu, buttons];
-        }
-        if (f) {
-            content.files = [file];
-        }
-
-        if (interaction) {
-            await Client.client.interactionUpdate(interaction, content);
-            return;
-        }
-
-        if (Client.client.switchesMessages[guildId][id]) {
-            let message = Client.client.switchesMessages[guildId][id];
-            if (await Client.client.messageEdit(message, content) === undefined) return;
-        }
-        else {
-            const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
-
-            if (!channel) {
-                Client.client.log('ERROR', 'sendSmartSwitchMessage: Invalid guild or channel.', 'error');
-                return;
-            }
-            Client.client.switchesMessages[guildId][id] = await Client.client.messageSend(channel, content);
-        }
-    },
 
     sendSmartAlarmMessage: async function (guildId, id, e = true, c = true, f = true, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);

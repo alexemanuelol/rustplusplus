@@ -1,3 +1,4 @@
+const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, rustplus) => {
@@ -28,6 +29,6 @@ module.exports = async (client, rustplus) => {
             client.writeInstanceFile(rustplus.guildId, instance);
         }
 
-        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
+        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
     }
 };

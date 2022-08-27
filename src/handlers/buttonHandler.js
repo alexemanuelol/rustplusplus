@@ -375,16 +375,6 @@ module.exports = async (client, interaction) => {
         let id = interaction.customId.replace('SmartSwitchOnId', '').replace('SmartSwitchOffId', '');
 
         if (!instance.switches.hasOwnProperty(id)) {
-            if (client.switchesMessages[guildId].hasOwnProperty(id)) {
-                try {
-                    await client.switchesMessages[guildId][id].delete();
-                }
-                catch (e) {
-                    client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
-                }
-                delete client.switchesMessages[guildId][id];
-            }
-
             try {
                 interaction.deferUpdate();
             }
@@ -394,8 +384,6 @@ module.exports = async (client, interaction) => {
             client.log('ERROR', `Switch with id '${id}' does not exist in the instance file.`, 'error')
             return;
         }
-
-
 
         if (!rustplus) {
             try {
@@ -468,7 +456,7 @@ module.exports = async (client, interaction) => {
             client.writeInstanceFile(rustplus.guildId, instance);
         }
 
-        DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false, interaction);
+        DiscordMessages.sendSmartSwitchMessage(guildId, id, interaction);
         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
             client, interaction.guildId, instance.switches[id].serverId, id);
     }
@@ -492,15 +480,8 @@ module.exports = async (client, interaction) => {
             delete rustplus.currentSwitchTimeouts[id];
         }
 
-        if (client.switchesMessages[guildId].hasOwnProperty(id)) {
-            try {
-                await client.switchesMessages[guildId][id].delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
-            }
-            delete client.switchesMessages[guildId][id];
-        }
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
+            instance.switches[id].messagedId);
 
         for (const [groupName, groupContent] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (groupContent.switches.includes(id)) {

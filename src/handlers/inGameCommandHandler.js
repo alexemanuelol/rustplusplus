@@ -1,6 +1,7 @@
 const Translate = require('translate');
 
 const Constants = require('../util/constants.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Languages = require('../util/languages.js');
 const Map = require('../util/map.js');
@@ -127,7 +128,7 @@ module.exports = {
                         if (!(await rustplus.isResponseValid(info))) {
                             instance.switches[id].reachable = false;
                             client.writeInstanceFile(rustplus.guildId, instance);
-                            DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                            DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, id);
                             SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                                 client, rustplus.guildId, rustplus.serverId, id);
 
@@ -185,7 +186,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, id);
                     SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                         client, rustplus.guildId, rustplus.serverId, id);
 
@@ -233,7 +234,7 @@ module.exports = {
                                     client.writeInstanceFile(rustplus.guildId, instance);
                                 }
 
-                                DiscordTools.sendSmartSwitchMessage(rustplus.guildId, id, true, true, false);
+                                DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, id);
                                 SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                                     client, rustplus.guildId, rustplus.serverId, id);
 

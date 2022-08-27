@@ -1,8 +1,10 @@
-const DiscordTools = require('./discordTools.js');
+const Discord = require('discord.js');
 
 const Client = require('../../index.js');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
+const DiscordSelectMenus = require('./discordSelectMenus.js');
+const DiscordTools = require('./discordTools.js');
 
 module.exports = {
     sendMessage: async function (guildId, content, messageId, channelId, interaction = null) {
@@ -27,7 +29,6 @@ module.exports = {
 
             return await Client.client.messageSend(channel, content);
         }
-
     },
 
     sendServerMessage: async function (guildId, id, state = null, interaction = null) {
@@ -60,6 +61,31 @@ module.exports = {
 
         if (!interaction) {
             instance.trackers[trackerName].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
+
+    sendSmartSwitchMessage: async function (guildId, id, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [instance.switches[id].reachable ?
+                DiscordEmbeds.getSmartSwitchEmbed(guildId, id) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'switches')],
+            components: [
+                DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, id),
+                DiscordButtons.getSmartSwitchButtons(guildId, id)
+            ],
+            files: [
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)
+            ]
+        }
+
+        const message = await module.exports.sendMessage(
+            guildId, content, instance.switches[id].messageId, instance.channelId.switches, interaction);
+
+        if (!interaction) {
+            instance.switches[id].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },

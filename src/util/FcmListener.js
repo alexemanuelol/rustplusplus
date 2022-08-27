@@ -210,7 +210,8 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         image: 'smart_switch.png',
         autoDayNight: 0,
         server: body.name,
-        serverId: serverId
+        serverId: serverId,
+        messageId: null
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -229,7 +230,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
             client.writeInstanceFile(guild.id, instance);
         }
 
-        await DiscordTools.sendSmartSwitchMessage(guild.id, entityId);
+        await DiscordMessages.sendSmartSwitchMessage(guild.id, entityId);
     }
 }
 
