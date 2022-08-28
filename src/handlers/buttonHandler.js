@@ -217,13 +217,15 @@ module.exports = async (client, interaction) => {
         }
 
         /* Create the rustplus instance */
-        client.createRustplusInstance(
+        const newRustplus = client.createRustplusInstance(
             guildId,
             instance.serverList[serverId].serverIp,
             instance.serverList[serverId].appPort,
             instance.serverList[serverId].steamId,
             instance.serverList[serverId].playerToken
         );
+
+        newRustplus.newConnection = true;
     }
     else if (interaction.customId.startsWith('CreateTracker')) {
         let serverId = interaction.customId.replace('CreateTrackerId', '');

@@ -18,6 +18,7 @@ class RustPlus extends RustPlusLib {
         this.serverId = `${this.server}-${this.port}`;
 
         this.guildId = guildId;
+        this.newConnection = false;
         this.intervalId = 0;
         this.logger = null;
         this.firstPoll = true;

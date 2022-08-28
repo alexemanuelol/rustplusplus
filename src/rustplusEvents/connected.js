@@ -126,10 +126,11 @@ module.exports = {
             rustplus.refusedConnectionRetry = false;
         }
 
-        await require('../discordTools/SetupSwitches')(client, rustplus);
+        await require('../discordTools/SetupSwitches')(client, rustplus, rustplus.newConnection);
         await require('../discordTools/SetupSwitchGroups')(client, rustplus);
         await require('../discordTools/SetupAlarms')(client, rustplus);
-        await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+        await require('../discordTools/SetupStorageMonitors')(client, rustplus, rustplus.newConnection);
+        rustplus.newConnection = false;
         rustplus.loadMarkers();
 
         /* Run the first time before starting the interval */
