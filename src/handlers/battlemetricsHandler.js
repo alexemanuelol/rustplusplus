@@ -98,7 +98,7 @@ module.exports = {
 
                 if (!instance.trackers[key].allOffline && allOffline) {
                     if (instance.generalSettings.trackerNotifyAllOffline) {
-                        await DiscordTools.sendTrackerAllOffline(guild.id, key);
+                        await DiscordMessages.sendTrackerAllOffline(guild.id, key);
                     }
                 }
                 else if (instance.trackers[key].allOffline && !allOffline) {

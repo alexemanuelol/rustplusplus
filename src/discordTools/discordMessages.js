@@ -196,4 +196,15 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
+
+    sendTrackerAllOffline: async function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerName)],
+            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
 }

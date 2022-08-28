@@ -307,4 +307,16 @@ module.exports = {
             timestamp: true
         });
     },
+
+    getTrackerAllOfflineEmbed: function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const serverId = instance.trackers[trackerName].serverId;
+        return module.exports.getEmbed({
+            title: `Everyone from the tracker \`${trackerName}\` just went offline.`,
+            color: '#ff0040',
+            thumbnail: `${instance.serverList[serverId].img}`,
+            footer: { text: `${instance.serverList[serverId].title}` },
+            timestamp: true
+        });
+    },
 }
