@@ -434,28 +434,18 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
 }
 
 async function teamLogin(client, guild, full, data, body) {
-    let instance = client.readInstanceFile(guild.id);
-    let serverId = `${body.ip}-${body.port}`;
-    let rustplus = client.rustplusInstances[guild.id];
-    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.activity);
+    const instance = client.readInstanceFile(guild.id);
+
+    const content = {
+        embeds: [DiscordEmbeds.getTeamLoginEmbed(body, await Scrape.scrapeSteamProfilePicture(client, body.targetId))]
+    }
+
+    const rustplus = client.rustplusInstances[guild.id];
+    const serverId = `${body.ip}-${body.port}`;
 
     if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
-        if (channel !== undefined) {
-            let png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
-            await client.messageSend(channel, {
-                embeds: [DiscordEmbeds.getEmbed({
-                    color: '#00ff40',
-                    timestamp: true,
-                    footer: { text: body.name },
-                    author: {
-                        name: `${body.targetName} just connected.`,
-                        iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
-                        url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
-                    }
-                })]
-            });
-            client.log('INFO', `${body.targetName} just connected to ${body.name}.`);
-        }
+        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
+        client.log('INFO', `${body.targetName} just connected to ${body.name}.`);
     }
 }
 
@@ -467,5 +457,5 @@ async function newsNews(client, guild, full, data, body) {
         components: [DiscordButtons.getNewsButton(body, isValidUrl(body.url))]
     }
 
-    await module.exports.sendMessage(guild.id, content, null, instance.channelId.activity);
+    await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
 }

@@ -341,4 +341,17 @@ module.exports = {
             timestamp: true
         });
     },
+
+    getTeamLoginEmbed: function (body, png) {
+        return module.exports.getEmbed({
+            color: '#00ff40',
+            timestamp: true,
+            footer: { text: body.name },
+            author: {
+                name: `${body.targetName} just connected.`,
+                iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
+                url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
+            }
+        });
+    }
 }
