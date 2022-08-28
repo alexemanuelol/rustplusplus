@@ -173,7 +173,7 @@ module.exports = {
                     if (!(await rustplus.isResponseValid(response))) {
                         rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
                         if (instance.switches[id].reachable) {
-                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                            await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, id);
                         }
                         instance.switches[id].reachable = false;
                         instance.switches[id].active = prevActive;
@@ -221,7 +221,7 @@ module.exports = {
                                 if (!(await rustplus.isResponseValid(response))) {
                                     rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
                                     if (instance.switches[id].reachable) {
-                                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                                        await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, id);
                                     }
                                     instance.switches[id].reachable = false;
                                     instance.switches[id].active = prevActive;

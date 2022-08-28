@@ -281,29 +281,6 @@ module.exports = {
 
 
 
-    sendSmartSwitchNotFound: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`);
-
-        if (channel) {
-            let content = {};
-            content.embeds = [DiscordEmbeds.getEmbed({
-                title: `${instance.switches[id].name} could not be found!` +
-                    ` Either it have been destroyed or Admin have lost tool cupboard access.`,
-                color: '#ff0040',
-                description: `**ID** \`${id}\``,
-                thumbnail: `attachment://${instance.switches[id].image}`,
-                footer: { text: `${instance.switches[id].server}` },
-                timestamp: true
-            })];
-
-            content.files = [file];
-
-            await Client.client.messageSend(channel, content);
-        }
-    },
-
     sendSmartAlarmNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);

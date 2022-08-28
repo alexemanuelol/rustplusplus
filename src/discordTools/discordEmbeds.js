@@ -277,4 +277,19 @@ module.exports = {
             timestamp: true
         });
     },
+
+    getSmartSwitchNotFoundEmbed: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const credentials = Client.client.readCredentialsFile(guildId);
+        const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+        return module.exports.getEmbed({
+            title: `${instance.switches[id].name} could not be found!` +
+                ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
+            color: '#ff0040',
+            description: `**ID** \`${id}\``,
+            thumbnail: `attachment://${instance.switches[id].image}`,
+            footer: { text: `${instance.switches[id].server}` },
+            timestamp: true
+        });
+    },
 }

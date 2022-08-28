@@ -443,7 +443,7 @@ module.exports = async (client, interaction) => {
 
         if (!(await rustplus.isResponseValid(response))) {
             if (instance.switches[id].reachable) {
-                await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, id);
             }
             instance.switches[id].reachable = false;
             instance.switches[id].active = prevActive;

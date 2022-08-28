@@ -173,4 +173,15 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
+
+    sendSmartSwitchNotFound: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, id)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
 }
