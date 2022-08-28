@@ -340,40 +340,26 @@ async function alarmAlarm(client, guild, full, data, body) {
     to the credential owner and which is not part of the currently connected rust server can notify IF the general
     setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
 
-    let instance = client.readInstanceFile(guild.id);
-    let serverId = `${body.ip}-${body.port}`;
-    let rustplus = client.rustplusInstances[guild.id];
+    const instance = client.readInstanceFile(guild.id);
 
-    if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
-        if (instance.generalSettings.fcmAlarmNotificationEnabled) {
-            let title = (data.title !== '') ? data.title : 'Smart Alarm';
-            let message = (data.message !== '') ? data.message : 'Your base is under attack!';
+    const content = {
+        embeds: [DiscordEmbeds.getAlarmEmbed(data, body)],
+        files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')],
+        content: instance.generalSettings.fcmAlarmNotificationEveryone ? '@everyone' : ''
+    }
 
-            let content = {};
-            content.embeds = [DiscordEmbeds.getEmbed({
-                color: '#ce412b',
-                thumbnail: 'attachment://smart_alarm.png',
-                title: title,
-                footer: { text: body.name },
-                timestamp: true,
-                fields: [{ name: 'Message', value: `\`${message}\``, inline: true }]
-            })];
+    const rustplus = client.rustplusInstances[guild.id];
+    const serverId = `${body.ip}-${body.port}`;
 
-            content.files = [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')];
+    if (!rustplus || (rustplus && (serverId !== rustplus.serverId)) &&
+        instance.generalSettings.fcmAlarmNotificationEnabled) {
+        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
 
-            if (instance.generalSettings.fcmAlarmNotificationEveryone) {
-                content.content = '@everyone';
-            }
-
-            let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
-            if (channel) {
-                await client.messageSend(channel, content);
-            }
-
-            if (instance.generalSettings.smartAlarmNotifyInGame && rustplus) {
-                rustplus.sendTeamMessageAsync(`${title}: ${message}`);
-            }
+        if (rustplus && instance.generalSettings.smartAlarmNotifyInGame) {
+            rustplus.sendTeamMessageAsync(`${data.title}: ${data.message}`);
         }
+
+        client.log('INFO', `${data.title}: ${data.message}`);
     }
 }
 

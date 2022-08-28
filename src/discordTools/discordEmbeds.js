@@ -376,4 +376,15 @@ module.exports = {
             thumbnail: body.img
         });
     },
+
+    getAlarmEmbed: function (data, body) {
+        return module.exports.getEmbed({
+            color: '#ce412b',
+            thumbnail: 'attachment://smart_alarm.png',
+            title: data.title,
+            footer: { text: body.name },
+            timestamp: true,
+            fields: [{ name: 'Message', value: `\`${data.message}\``, inline: true }]
+        });
+    },
 }
