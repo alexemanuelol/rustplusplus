@@ -10,7 +10,7 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild) => {
-    let credentials = client.readCredentialsFile(guild.id);
+    const credentials = client.readCredentialsFile(guild.id);
 
     if (credentials.credentials === null) {
         client.log('WARNING', `Credentials is not set for guild: ${guild.id}, cannot start FCM-listener.`);
@@ -20,9 +20,7 @@ module.exports = async (client, guild) => {
     const ownerId = credentials.credentials.owner;
 
     /* Destroy previous instance of fcm listener */
-    if (client.currentFcmListeners[guild.id]) {
-        client.currentFcmListeners[guild.id].destroy();
-    }
+    if (client.currentFcmListeners[guild.id]) client.currentFcmListeners[guild.id].destroy();
 
     client.log('INFO', `FCM-listener will start in 5 seconds for guild: ${guild.id}`);
 
@@ -140,21 +138,18 @@ module.exports = async (client, guild) => {
 };
 
 function isValidUrl(url) {
-    if (url.startsWith('https') || url.startsWith('http')) {
-        return true;
-    }
+    if (url.startsWith('https') || url.startsWith('http')) return true;
     return false;
 }
 
 async function pairingServer(client, guild, full, data, body) {
-    let instance = client.readInstanceFile(guild.id);
-    let serverId = `${body.ip}-${body.port}`;
-    let serversId = instance.channelId.servers;
-    let message = undefined;
+    const instance = client.readInstanceFile(guild.id);
+    const serverId = `${body.ip}-${body.port}`;
 
-    let serverExist = instance.serverList.hasOwnProperty(serverId);
-    if (serverExist) {
-        message = await DiscordTools.getMessageById(guild.id, serversId, instance.serverList[serverId].messageId);
+    let message = undefined;
+    if (instance.serverList.hasOwnProperty(serverId)) {
+        message = await DiscordTools.getMessageById(
+            guild.id, instance.channelId.servers, instance.serverList[serverId].messageId);
     }
 
     let info = null;
@@ -168,7 +163,7 @@ async function pairingServer(client, guild, full, data, body) {
     }
 
     instance.serverList[serverId] = {
-        active: (serverExist) ? instance.serverList[serverId].active : false,
+        active: (instance.serverList.hasOwnProperty(serverId)) ? instance.serverList[serverId].active : false,
         title: data.title,
         serverIp: body.ip,
         appPort: body.port,
@@ -183,7 +178,7 @@ async function pairingServer(client, guild, full, data, body) {
         switchGroups: {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
-        connect: (info === null) ? info : `connect ${info.ip}:${info.port}`,
+        connect: (info === null) ? 'Unavailable' : `connect ${info.ip}:${info.port}`,
         cargoShipEgressTimeMs: Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
         bradleyApcRespawnTimeMs: Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
         lockedCrateDespawnTimeMs: Constants.DEFAULT_LOCKED_CRATE_DESPAWN_TIME_MS,
