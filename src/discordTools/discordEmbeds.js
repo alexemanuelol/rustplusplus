@@ -387,4 +387,27 @@ module.exports = {
             fields: [{ name: 'Message', value: `\`${data.message}\``, inline: true }]
         });
     },
+
+    getEventEmbed: function (guildId, rustplus, text, image) {
+        const instance = Client.client.readInstanceFile(guildId);
+        return module.exports.getEmbed({
+            color: '#ce412b',
+            thumbnail: `attachment://${image}`,
+            title: text,
+            footer: { text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title },
+            timestamp: true
+        });
+    },
+
+    getActionInfoEmbed: function (color, str, footer = null, ephemeral = true) {
+        return {
+            embeds: [module.exports.getEmbed({
+                color: color === 0 ? '#ce412b' : '#ff0040',
+                description: `\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``,
+                footer: footer !== null ? { text: footer } : null,
+                ephemeral: ephemeral
+            })]
+        };
+
+    },
 }

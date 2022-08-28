@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const Builder = require('@discordjs/builders');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -104,7 +105,7 @@ async function setCredentials(client, interaction) {
         let instance = client.readCredentialsFile(guild[0]);
         if (_.isEqual(credentials, instance.credentials)) {
             let str = 'FCM Credentials are already used for another discord server!';
-            await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+            await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             client.log('WARNING', str);
             return;
         }
@@ -118,7 +119,7 @@ async function setCredentials(client, interaction) {
     require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
 
     let str = 'FCM Credentials were set successfully!';
-    await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log('INFO', str);
 }
 
@@ -132,7 +133,7 @@ async function clearCredentials(client, interaction) {
     client.writeCredentialsFile(interaction.guildId, instance);
 
     let str = 'FCM Credentials were cleared successfully!';
-    await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log('INFO', str);
 }
 
@@ -141,6 +142,6 @@ async function isSetCredentials(client, interaction) {
 
     let str = 'FCM Credentials are ' + ((instance.credentials === null) ? 'not currently ' : '') + 'set.';
     let isSet = (instance.credentials === null) ? 1 : 0;
-    await client.interactionEditReply(interaction, client.getEmbedActionInfo(isSet, str));
+    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(isSet, str));
     client.log('INFO', str);
 }

@@ -5,7 +5,7 @@ const Path = require('path');
 const Client = require('../../index.js');
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
-const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
 const RustPlusLib = require('rustplus.js');
@@ -97,21 +97,21 @@ class RustPlus extends RustPlusLib {
     }
 
     loadMarkers() {
-        let instance = Client.client.readInstanceFile(this.guildId);
-        let server = `${this.server}-${this.port}`;
+        const instance = Client.client.readInstanceFile(this.guildId);
+        const serverId = `${this.server}-${this.port}`;
 
-        if (!instance.markers.hasOwnProperty(server)) {
-            instance.markers[server] = {};
+        if (!instance.markers.hasOwnProperty(serverId)) {
+            instance.markers[serverId] = {};
             Client.client.writeInstanceFile(this.guildId, instance);
         }
 
-        for (const [name, location] of Object.entries(instance.markers[server])) {
+        for (const [name, location] of Object.entries(instance.markers[serverId])) {
             this.markers[name] = { x: location.x, y: location.y };
         }
     }
 
     build() {
-        let instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.readInstanceFile(this.guildId);
 
         /* Setup the logger */
         this.logger = new Logger(Path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
@@ -144,7 +144,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async sendEvent(setting, text, firstPoll = false, image = null) {
-        let img = (image !== null) ? image : setting.image;
+        const img = (image !== null) ? image : setting.image;
 
         if (!firstPoll && setting.discord) {
             this.sendDiscordEvent(text, img)
@@ -156,21 +156,14 @@ class RustPlus extends RustPlusLib {
     }
 
     sendDiscordEvent(text, image) {
-        let instance = Client.client.readInstanceFile(this.guildId);
-        let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
+        const instance = Client.client.readInstanceFile(this.guildId);
 
-        if (channel !== undefined) {
-            let file = new Discord.AttachmentBuilder(`src/resources/images/events/${image}`);
-            const embed = DiscordEmbeds.getEmbed({
-                color: '#ce412b',
-                thumbnail: `attachment://${image}`,
-                title: text,
-                footer: { text: instance.serverList[`${this.server}-${this.port}`].title },
-                timestamp: true
-            });
-
-            Client.client.messageSend(channel, { embeds: [embed], files: [file] });
+        const content = {
+            embeds: [DiscordEmbeds.getEventEmbed(this.guildId, this, text, image)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/events/${image}`)]
         }
+
+        DiscordMessages.sendMessage(this.guildId, content, null, instance.channelId.events);
     }
 
     replenish_tokens() {
@@ -185,7 +178,7 @@ class RustPlus extends RustPlusLib {
         while (this.tokens < cost) {
             if (timeoutCounter === 90) return false;
 
-            await Timer.sleep(333);
+            await Timer.sleep(1000 / 3);
             timeoutCounter += 1;
         }
         this.tokens -= cost;

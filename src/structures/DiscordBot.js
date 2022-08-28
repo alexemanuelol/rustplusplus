@@ -169,22 +169,6 @@ class DiscordBot extends Discord.Client {
         }
     }
 
-    getEmbedActionInfo(color, str, footer = null, ephemeral = true) {
-        const embed = DiscordEmbeds.getEmbed({
-            color: color === 0 ? '#ce412b' : '#ff0040',
-            description: `\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``
-        });
-
-        if (footer !== null) {
-            embed.setFooter({ text: footer });
-        }
-
-        return {
-            embeds: [embed],
-            ephemeral: ephemeral
-        }
-    }
-
     async interactionReply(interaction, content) {
         try {
             return await interaction.reply(content);
@@ -242,7 +226,7 @@ class DiscordBot extends Discord.Client {
     }
 
     async validatePermissions(interaction) {
-        let instance = this.readInstanceFile(interaction.guildId);
+        const instance = this.readInstanceFile(interaction.guildId);
 
         /* If role isn't setup yet, validate as true */
         if (instance.role === null) return true;
@@ -251,7 +235,7 @@ class DiscordBot extends Discord.Client {
             !interaction.member.roles.cache.has(instance.role)) {
             let role = DiscordTools.getRole(interaction.guildId, instance.role);
             let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
-            await this.interactionReply(interaction, this.getEmbedActionInfo(1, str));
+            await this.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             this.log('WARNING', str);
             return false;
         }

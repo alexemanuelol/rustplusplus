@@ -64,7 +64,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -76,7 +76,7 @@ module.exports = {
 
 				if (!Object.keys(instance.storageMonitors).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
-					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);
 					return;
@@ -84,7 +84,7 @@ module.exports = {
 
 				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
 					let str = 'That Storage Monitor is not part of this Rust Server.';
-					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);
 					return;
@@ -101,7 +101,7 @@ module.exports = {
 				await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id);
 
 				let str = `Successfully edited Storage Monitor '${instance.storageMonitors[id].name}'.`;
-				await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
 					instance.serverList[rustplus.serverId].title));
 				rustplus.log('INFO', str);
 			} break;
@@ -109,7 +109,7 @@ module.exports = {
 			case 'recycle': {
 				if (!Object.keys(instance.storageMonitors).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
-					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);
 					return;
@@ -117,7 +117,7 @@ module.exports = {
 
 				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
 					let str = 'That Storage Monitor is not part of this Rust Server.';
-					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);
 					return;
@@ -129,7 +129,7 @@ module.exports = {
 					client.writeInstanceFile(interaction.guildId, instance);
 
 					let str = `Could not get items from Storage Monitor: ${id}`;
-					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);
 

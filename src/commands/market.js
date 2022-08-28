@@ -53,7 +53,7 @@ module.exports = {
         let rustplus = client.rustplusInstances[interaction.guildId];
         if (!rustplus || (rustplus && !rustplus.ready)) {
             let str = 'Not currently connected to a rust server.';
-            await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+            await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             client.log('WARNING', str);
             return;
         }
@@ -68,7 +68,7 @@ module.exports = {
                     let item = rustplus.items.getClosestItemIdByName(searchItemName)
                     if (item === undefined) {
                         let str = `No item with name '${searchItemName}' could be found.`;
-                        await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
@@ -82,14 +82,14 @@ module.exports = {
                     }
                     else {
                         let str = `No item with id '${searchItemId}' could be found.`;
-                        await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
                 }
                 else if (searchItemName === null && searchItemId === null) {
                     let str = `No 'name' or 'id' was given.`;
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -168,7 +168,7 @@ module.exports = {
                     let item = rustplus.items.getClosestItemIdByName(subscribeItemName)
                     if (item === undefined) {
                         let str = `No item with name '${subscribeItemName}' could be found.`;
-                        await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
@@ -182,14 +182,14 @@ module.exports = {
                     }
                     else {
                         let str = `No item with id '${subscribeItemId}' could be found.`;
-                        await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     let str = `No 'name' or 'id' was given.`;
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -204,7 +204,7 @@ module.exports = {
 
                 if (instance.marketSubscribeItemIds.includes(itemId)) {
                     let str = `Already subscribed to item '${itemName}'.`;
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                 }
@@ -213,7 +213,7 @@ module.exports = {
                     client.writeInstanceFile(interaction.guildId, instance);
 
                     let str = `Just subscribed to item '${itemName}'.`;
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.log('INFO', str);
                 }
@@ -228,7 +228,7 @@ module.exports = {
                     let item = rustplus.items.getClosestItemIdByName(subscribeItemName)
                     if (item === undefined) {
                         let str = `No item with name '${subscribeItemName}' could be found.`;
-                        await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
@@ -242,14 +242,14 @@ module.exports = {
                     }
                     else {
                         let str = `No item with id '${subscribeItemId}' could be found.`;
-                        await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     let str = `No 'name' or 'id' was given.`;
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -262,13 +262,13 @@ module.exports = {
                     client.writeInstanceFile(interaction.guildId, instance);
 
                     let str = `Item '${itemName}' have been removed from subscription.`;
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.log('INFO', str);
                 }
                 else {
                     let str = `Item '${itemName}' does not exist in subscription list.`;
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                 }
@@ -284,7 +284,7 @@ module.exports = {
 
                 if (names === '' || ids === '') {
                     let str = 'Item subscription list is empty.';
-                    await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str,
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
                 }
                 else {

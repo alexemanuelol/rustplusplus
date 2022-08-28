@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -109,7 +110,7 @@ module.exports = {
 			case 'edit': {
 				if (!Object.keys(instance.alarms).includes(id)) {
 					let str = `Invalid ID: '${id}'.`;
-					await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 					client.log('WARNING', str);
 					return;
 				}
@@ -128,7 +129,7 @@ module.exports = {
 				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id);
 
 				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
-				await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 				client.log('INFO', str);
 			} break;
 

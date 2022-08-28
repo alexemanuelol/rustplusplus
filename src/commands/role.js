@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordTools = require('../discordTools/discordTools');
 
 module.exports = {
@@ -53,12 +54,12 @@ module.exports = {
 
 		if (interaction.options.getSubcommand() === 'set') {
 			let str = `rustPlusPlus role has been set to '${role.name}'.`;
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 			client.log('INFO', str);
 		}
 		else {
 			let str = 'rustPlusPlus role has been cleared.';
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 			client.log('INFO', str);
 		}
 	},

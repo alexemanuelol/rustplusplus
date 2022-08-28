@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds');
+
 module.exports = {
     name: 'interactionCreate',
     async execute(client, interaction) {
@@ -38,7 +40,7 @@ module.exports = {
                 client.log('ERROR', error, 'error');
 
                 let str = 'There was an error while executing this command!';
-                await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+                await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                 client.log('ERROR', str, 'error');
             }
         }
