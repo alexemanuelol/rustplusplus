@@ -260,57 +260,52 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
-    let instance = client.readInstanceFile(guild.id);
-    let serverId = `${body.ip}-${body.port}`;
-    let entityId = body.entityId;
+    const instance = client.readInstanceFile(guild.id);
+    const serverId = `${body.ip}-${body.port}`;
 
-    if (instance.storageMonitors.hasOwnProperty(entityId)) return;
-
-    instance.storageMonitors[entityId] = {
-        name: 'Storage Monitor',
-        reachable: true,
-        id: entityId,
-        type: 'container',
-        decaying: false,
-        upkeep: null,
-        everyone: false,
-        inGame: true,
-        image: 'storage_monitor.png',
-        server: body.name,
-        serverId: serverId,
-        messageId: null
+    const entityExist = instance.storageMonitors.hasOwnProperty(body.entityId);
+    instance.storageMonitors[body.entityId] = {
+        name: entityExist ? instance.storageMonitors[body.entityId].name : 'Storage Monitor',
+        reachable: entityExist ? instance.storageMonitors[body.entityId].reachable : true,
+        id: entityExist ? instance.storageMonitors[body.entityId].id : body.entityId,
+        type: entityExist ? instance.storageMonitors[body.entityId].type : 'container',
+        decaying: entityExist ? instance.storageMonitors[body.entityId].decaying : false,
+        upkeep: entityExist ? instance.storageMonitors[body.entityId].upkeep : null,
+        everyone: entityExist ? instance.storageMonitors[body.entityId].everyone : false,
+        inGame: entityExist ? instance.storageMonitors[body.entityId].inGame : true,
+        image: entityExist ? instance.storageMonitors[body.entityId].image : 'storage_monitor.png',
+        server: entityExist ? instance.storageMonitors[body.entityId].server : body.name,
+        serverId: entityExist ? instance.storageMonitors[body.entityId].serverId : serverId,
+        messageId: entityExist ? instance.storageMonitors[body.entityId].messageId : null
     };
     client.writeInstanceFile(guild.id, instance);
 
-    let rustplus = client.rustplusInstances[guild.id];
-    if (!rustplus) return;
-
-    if (serverId === rustplus.serverId) {
-        let info = await rustplus.getEntityInfoAsync(entityId);
+    const rustplus = client.rustplusInstances[guild.id];
+    if (rustplus && serverId === rustplus.serverId) {
+        const info = await rustplus.getEntityInfoAsync(body.entityId);
         if (!(await rustplus.isResponseValid(info))) {
-            instance.storageMonitors[entityId].reachable = false;
-            client.writeInstanceFile(guild.id, instance);
+            instance.storageMonitors[body.entityId].reachable = false;
         }
 
-        if (instance.storageMonitors[entityId].reachable) {
+        if (instance.storageMonitors[body.entityId].reachable) {
             if (info.entityInfo.payload.capacity === 28) {
-                instance.storageMonitors[entityId].type = 'toolcupboard';
-                instance.storageMonitors[entityId].image = 'tool_cupboard.png';
+                instance.storageMonitors[body.entityId].type = 'toolcupboard';
+                instance.storageMonitors[body.entityId].image = 'tool_cupboard.png';
                 if (info.entityInfo.payload.protectionExpiry === 0) {
-                    instance.storageMonitors[entityId].decaying = true;
+                    instance.storageMonitors[body.entityId].decaying = true;
                 }
             }
-            client.writeInstanceFile(guild.id, instance);
 
-            rustplus.storageMonitors[entityId] = {
+            rustplus.storageMonitors[body.entityId] = {
                 items: info.entityInfo.payload.items,
                 expiry: info.entityInfo.payload.protectionExpiry,
                 capacity: info.entityInfo.payload.capacity,
                 hasProtection: info.entityInfo.payload.hasProtection
             }
         }
+        client.writeInstanceFile(guild.id, instance);
 
-        await DiscordMessages.sendStorageMonitorMessage(guild.id, entityId);
+        await DiscordMessages.sendStorageMonitorMessage(guild.id, body.entityId);
     }
 }
 
