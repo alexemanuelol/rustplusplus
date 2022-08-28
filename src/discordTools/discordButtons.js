@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 
+const Constants = require('../util/constants.js');
 const Client = require('../../index.js');
 
 const SUCCESS = Discord.ButtonStyle.Success;
@@ -273,6 +274,15 @@ module.exports = {
                 customId: `DeleteGroupId${name}`,
                 style: SECONDARY,
                 emoji: '🗑️'
+            }));
+    },
+
+    getNewsButton: function (body, validURL) {
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                style: LINK,
+                label: 'LINK',
+                url: validURL ? body.url : Constants.DEFAULT_SERVER_URL
             }));
     },
 }

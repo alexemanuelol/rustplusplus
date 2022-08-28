@@ -331,4 +331,14 @@ module.exports = {
             timestamp: true
         });
     },
+
+    getNewsEmbed: function (data) {
+        return module.exports.getEmbed({
+            title: `NEWS: ${data.title}`,
+            color: '#ce412b',
+            description: `${data.message}`,
+            thumbnail: Constants.DEFAULT_SERVER_IMG,
+            timestamp: true
+        });
+    },
 }

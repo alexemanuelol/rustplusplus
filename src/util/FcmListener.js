@@ -460,27 +460,12 @@ async function teamLogin(client, guild, full, data, body) {
 }
 
 async function newsNews(client, guild, full, data, body) {
-    let instance = client.readInstanceFile(guild.id);
-    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.activity);
+    const instance = client.readInstanceFile(guild.id);
 
-    if (channel !== undefined) {
-        await client.messageSend(channel, {
-            embeds: [DiscordEmbeds.getEmbed({
-                title: `NEWS: ${data.title}`,
-                color: '#ce412b',
-                description: `${data.message}`,
-                thumbnail: Constants.DEFAULT_SERVER_IMG,
-                timestamp: true
-            })],
-            components: [
-                new Discord.ActionRowBuilder()
-                    .addComponents(
-                        DiscordButtons.getButton({
-                            style: Discord.ButtonStyle.Link,
-                            label: 'LINK',
-                            url: isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL
-                        }))
-            ]
-        });
+    const content = {
+        embeds: [DiscordEmbeds.getNewsEmbed(data)],
+        components: [DiscordButtons.getNewsButton(body, isValidUrl(body.url))]
     }
+
+    await module.exports.sendMessage(guild.id, content, null, instance.channelId.activity);
 }
