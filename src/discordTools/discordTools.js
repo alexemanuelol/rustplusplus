@@ -318,27 +318,4 @@ module.exports = {
             Client.client.switchesMessages[guildId][name] = await Client.client.messageSend(channel, content);
         }
     },
-
-    sendTrackerAnyOnline: async function (guildId, trackerName) {
-        const instance = Client.client.readInstanceFile(guildId);
-        const serverId = instance.trackers[trackerName].serverId;
-        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-
-        if (channel) {
-            let content = {};
-            content.embeds = [DiscordEmbeds.getEmbed({
-                title: `Someone from tracker \`${trackerName}\` just went online.`,
-                color: '#00ff40',
-                thumbnail: `${instance.serverList[serverId].img}`,
-                footer: { text: `${instance.serverList[serverId].title}` },
-                timestamp: true
-            })];
-
-            if (instance.trackers[trackerName].everyone) {
-                content.content = '@everyone';
-            }
-
-            await Client.client.messageSend(channel, content);
-        }
-    },
 }

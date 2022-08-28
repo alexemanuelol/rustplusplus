@@ -319,4 +319,16 @@ module.exports = {
             timestamp: true
         });
     },
+
+    getTrackerAnyOnlineEmbed: function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const serverId = instance.trackers[trackerName].serverId;
+        return module.exports.getEmbed({
+            title: `Someone from the tracker \`${trackerName}\` just went online.`,
+            color: '#00ff40',
+            thumbnail: `${instance.serverList[serverId].img}`,
+            footer: { text: `${instance.serverList[serverId].title}` },
+            timestamp: true
+        });
+    },
 }

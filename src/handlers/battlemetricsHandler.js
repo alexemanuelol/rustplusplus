@@ -103,7 +103,7 @@ module.exports = {
                 }
                 else if (instance.trackers[key].allOffline && !allOffline) {
                     if (instance.generalSettings.trackerNotifyAnyOnline) {
-                        await DiscordTools.sendTrackerAnyOnline(guild.id, key);
+                        await DiscordMessages.sendTrackerAnyOnline(guild.id, key);
                     }
                 }
 
