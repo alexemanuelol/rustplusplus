@@ -19,7 +19,7 @@ module.exports = {
             let info = await rustplus.getEntityInfoAsync(id);
             if (!(await rustplus.isResponseValid(info))) {
                 if (instance.storageMonitors[id].reachable) {
-                    await DiscordTools.sendStorageMonitorNotFound(rustplus.guildId, id);
+                    await DiscordMessages.sendStorageMonitorNotFound(rustplus.guildId, id);
                 }
                 instance.storageMonitors[id].reachable = false;
                 client.writeInstanceFile(rustplus.guildId, instance);

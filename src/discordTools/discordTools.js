@@ -30,6 +30,22 @@ module.exports = {
         return undefined;
     },
 
+    getUserById: async function (guildId, userId) {
+        let guild = module.exports.getGuild(guildId);
+
+        if (guild) {
+            try {
+                const user = await guild.members.fetch(userId);
+                if (user instanceof Map) return await user.get(userId);
+                return user;
+            }
+            catch (e) {
+                Client.client.log('ERROR', `Could not find user: ${userId}`, 'error');
+            }
+        }
+        return undefined;
+    },
+
     getTextChannelById: function (guildId, channelId) {
         const guild = module.exports.getGuild(guildId);
 
@@ -115,7 +131,7 @@ module.exports = {
             if (channel) {
                 try {
                     const message = await channel.messages.fetch(messageId);
-                    if (message instanceof Map) return message.get(messageId);
+                    if (message instanceof Map) return await message.get(messageId);
                     return message;
                 }
                 catch (e) {
@@ -264,33 +280,6 @@ module.exports = {
 
 
 
-
-    sendStorageMonitorNotFound: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
-
-        if (channel) {
-            let content = {};
-            content.embeds = [DiscordEmbeds.getEmbed({
-                title: `${instance.storageMonitors[id].name} could not be found!` +
-                    ` Either it have been destroyed or Admin have lost tool cupboard access.`,
-                color: '#ff0040',
-                description: `**ID** \`${id}\``,
-                thumbnail: `attachment://${instance.storageMonitors[id].image}`,
-                footer: { text: `${instance.storageMonitors[id].server}` },
-                timestamp: true
-            })];
-
-            content.files = [file];
-
-            if (instance.storageMonitors[id].everyone) {
-                content.content = '@everyone';
-            }
-
-            await Client.client.messageSend(channel, content);
-        }
-    },
 
     sendSmartSwitchNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);

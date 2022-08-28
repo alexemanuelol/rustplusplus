@@ -31,9 +31,9 @@
 
 ![Setup Discord Bot bot token Image](images/bot_token_bot_setup.png)
 
-9. Scroll down and enable `Message Content Intent`.
+9. Scroll down to `Privileged Gateway Intents` and enable them all.
 
-![Setup Discord Bot message content Image](images/message_content_bot_setup.png)
+![Setup Discord Bot Privileged Gateway Intents Image](images/privileged_gateway_intents_bot_setup.png)
 
 10. Click on `OAuth2` and then `URL Generator`.
 

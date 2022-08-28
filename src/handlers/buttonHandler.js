@@ -481,7 +481,7 @@ module.exports = async (client, interaction) => {
         }
 
         await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
-            instance.switches[id].messagedId);
+            instance.switches[id].messageId);
 
         for (const [groupName, groupContent] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (groupContent.switches.includes(id)) {

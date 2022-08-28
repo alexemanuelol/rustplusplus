@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const Client = require('../../index.js');
 const Constants = require('../util/constants.js');
 const Timer = require('../util/timer');
+const DiscordTools = require('./discordTools.js');
 
 module.exports = {
     getEmbed: function (options = {}) {
@@ -254,6 +255,21 @@ module.exports = {
         const instance = Client.client.readInstanceFile(guildId);
         return module.exports.getEmbed({
             title: `${instance.storageMonitors[id].name} is no longer electrically connected!`,
+            color: '#ff0040',
+            description: `**ID** \`${id}\``,
+            thumbnail: `attachment://${instance.storageMonitors[id].image}`,
+            footer: { text: `${instance.storageMonitors[id].server}` },
+            timestamp: true
+        });
+    },
+
+    getStorageMonitorNotFoundEmbed: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const credentials = Client.client.readCredentialsFile(guildId);
+        const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+        return module.exports.getEmbed({
+            title: `${instance.storageMonitors[id].name} could not be found!` +
+                ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
             description: `**ID** \`${id}\``,
             thumbnail: `attachment://${instance.storageMonitors[id].image}`,
