@@ -405,31 +405,18 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
 }
 
 async function playerDeath(client, guild, full, data, body, ownerId) {
-    let member = await DiscordTools.getMemberById(guild.id, ownerId);
+    const user = await DiscordTools.getUserById(guild.id, ownerId);
 
-    if (member !== undefined) {
-        let png = null;
-        if (body.targetId !== '') {
-            png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
-        }
+    let png = null;
+    if (body.targetId !== '') png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
+    if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMG;
 
-        if (png === null) {
-            png = (isValidUrl(body.img)) ? body.img : Constants.DEFAULT_SERVER_IMG;
-        }
+    const content = {
+        embeds: [DiscordEmbeds.getPlayerDeathEmbed(data, body, png)]
+    }
 
-        const embed = DiscordEmbeds.getEmbed({
-            color: '#ff0040',
-            thumbnail: png,
-            title: data.title,
-            timestamp: true,
-            footer: { text: body.name }
-        });
-
-        if (body.targetId !== '') {
-            embed.setURL(`${Constants.STEAM_PROFILES_URL}${body.targetId}`)
-        }
-
-        await client.messageSend(member, { embeds: [embed] });
+    if (user) {
+        await client.messageSend(user, content);
     }
 }
 

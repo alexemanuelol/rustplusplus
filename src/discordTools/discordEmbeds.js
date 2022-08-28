@@ -353,5 +353,16 @@ module.exports = {
                 url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
             }
         });
-    }
+    },
+
+    getPlayerDeathEmbed: function (data, body, png) {
+        return module.exports.getEmbed({
+            color: '#ff0040',
+            thumbnail: png,
+            title: data.title,
+            timestamp: true,
+            footer: { text: body.name },
+            url: body.targetId !== '' ? `${Constants.STEAM_PROFILES_URL}${body.targetId}` : ''
+        });
+    },
 }

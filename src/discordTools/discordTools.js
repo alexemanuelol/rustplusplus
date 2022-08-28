@@ -152,25 +152,6 @@ module.exports = {
         return undefined;
     },
 
-    getMemberById: async function (guildId, memberId) {
-        const guild = module.exports.getGuild(guildId);
-
-        if (guild) {
-            let member = undefined;
-            try {
-                member = await Client.client.users.fetch(memberId);
-            }
-            catch (e) {
-                Client.client.log('ERROR', `Could not find member: ${memberId}`, 'error');
-            }
-
-            if (member) {
-                return member;
-            }
-        }
-        return undefined;
-    },
-
     addCategory: async function (guildId, name) {
         const guild = module.exports.getGuild(guildId);
 
