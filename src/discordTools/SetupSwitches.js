@@ -14,7 +14,7 @@ module.exports = async (client, rustplus) => {
         instance = client.readInstanceFile(rustplus.guildId);
 
         if (!(await rustplus.isResponseValid(info))) {
-            await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, key);
+            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
             instance.switches[key].reachable = false;
         }
         else {

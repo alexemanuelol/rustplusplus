@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const Recycler = require('../util/recycler.js');
 
 module.exports = {

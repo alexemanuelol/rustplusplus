@@ -1,5 +1,4 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -19,7 +18,7 @@ module.exports = {
             let info = await rustplus.getEntityInfoAsync(id);
             if (!(await rustplus.isResponseValid(info))) {
                 if (instance.storageMonitors[id].reachable) {
-                    await DiscordMessages.sendStorageMonitorNotFound(rustplus.guildId, id);
+                    await DiscordMessages.sendStorageMonitorNotFoundMessage(rustplus.guildId, id);
                 }
                 instance.storageMonitors[id].reachable = false;
                 client.writeInstanceFile(rustplus.guildId, instance);
@@ -32,7 +31,7 @@ module.exports = {
             if (instance.storageMonitors[id].reachable) {
                 if (rustplus.storageMonitors.hasOwnProperty(id) && (rustplus.storageMonitors[id].capacity !== 0 &&
                     info.entityInfo.payload.capacity === 0)) {
-                    await DiscordMessages.sendStorageMonitorDisconnectNotification(rustplus.guildId, id);
+                    await DiscordMessages.sendStorageMonitorDisconnectNotificationMessage(rustplus.guildId, id);
                 }
 
                 rustplus.storageMonitors[id] = {
@@ -49,7 +48,7 @@ module.exports = {
                             instance.storageMonitors[id].decaying === false) {
                             instance.storageMonitors[id].decaying = true;
 
-                            await DiscordMessages.sendDecayingNotification(rustplus.guildId, id);
+                            await DiscordMessages.sendDecayingNotificationMessage(rustplus.guildId, id);
 
                             if (instance.storageMonitors[id].inGame) {
                                 rustplus.sendTeamMessageAsync(`${instance.storageMonitors[id].name} is decaying!`);

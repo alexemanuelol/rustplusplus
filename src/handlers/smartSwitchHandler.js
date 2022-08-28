@@ -1,5 +1,4 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = {
@@ -16,7 +15,7 @@ module.exports = {
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.switches[key].reachable) {
-                        await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
@@ -53,7 +52,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
@@ -77,7 +76,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
@@ -108,7 +107,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
@@ -132,7 +131,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);

@@ -133,7 +133,7 @@ module.exports = {
                                     instance.storageMonitors[entityId].decaying === false) {
                                     instance.storageMonitors[entityId].decaying = true;
 
-                                    await DiscordMessages.sendDecayingNotification(rustplus.guildId, entityId);
+                                    await DiscordMessages.sendDecayingNotificationMessage(rustplus.guildId, entityId);
 
                                     if (instance.storageMonitors[entityId].inGame) {
                                         rustplus.sendTeamMessageAsync(

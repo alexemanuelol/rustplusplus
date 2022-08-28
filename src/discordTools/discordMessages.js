@@ -135,90 +135,6 @@ module.exports = {
         }
     },
 
-    sendDecayingNotification: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const content = {
-            embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, id)],
-            files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
-    sendStorageMonitorDisconnectNotification: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const content = {
-            embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, id)],
-            files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
-    sendStorageMonitorNotFound: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const content = {
-            embeds: [await DiscordEmbeds.getStorageMonitorNotFoundEmbed(guildId, id)],
-            files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
-    sendSmartSwitchNotFound: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const content = {
-            embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)]
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
-    sendSmartAlarmNotFound: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const content = {
-            embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)],
-            content: instance.alarms[id].everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
-    sendTrackerAllOffline: async function (guildId, trackerName) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const content = {
-            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerName)],
-            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
-    sendTrackerAnyOnline: async function (guildId, trackerName) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const content = {
-            embeds: [DiscordEmbeds.getTrackerAnyOnlineEmbed(guildId, trackerName)],
-            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
     sendSmartSwitchGroupMessage: async function (guildId, name, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
@@ -237,5 +153,89 @@ module.exports = {
             instance.serverList[serverId].switchGroups[name].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
+    },
+
+    sendDecayingNotificationMessage: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, id)],
+            files: [
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
+            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendStorageMonitorDisconnectNotificationMessage: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, id)],
+            files: [
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
+            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendStorageMonitorNotFoundMessage: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [await DiscordEmbeds.getStorageMonitorNotFoundEmbed(guildId, id)],
+            files: [
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
+            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendSmartSwitchNotFoundMessage: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, id)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendSmartAlarmNotFoundMessage: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, id)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)],
+            content: instance.alarms[id].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendTrackerAllOfflineMessage: async function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerName)],
+            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendTrackerAnyOnlineMessage: async function (guildId, trackerName) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getTrackerAnyOnlineEmbed(guildId, trackerName)],
+            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 }

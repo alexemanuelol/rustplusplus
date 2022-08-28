@@ -1,5 +1,4 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -70,7 +69,7 @@ module.exports = {
 
             if (!(await rustplus.isResponseValid(response))) {
                 if (instance.switches[id].reachable) {
-                    await DiscordMessages.sendSmartSwitchNotFound(rustplus.guildId, id);
+                    await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, id);
                 }
                 instance.switches[id].reachable = false;
                 instance.switches[id].active = prevActive;

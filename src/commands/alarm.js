@@ -1,7 +1,6 @@
 const Builder = require('@discordjs/builders');
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
 	data: new Builder.SlashCommandBuilder()

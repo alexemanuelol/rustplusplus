@@ -12,7 +12,7 @@ module.exports = {
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.alarms[key].reachable) {
-                        await DiscordMessages.sendSmartAlarmNotFound(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartAlarmNotFoundMessage(rustplus.guildId, key);
 
                         instance.alarms[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
