@@ -249,4 +249,16 @@ module.exports = {
             timestamp: true
         });
     },
+
+    getStorageMonitorDisconnectNotificationEmbed: function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        return module.exports.getEmbed({
+            title: `${instance.storageMonitors[id].name} is no longer electrically connected!`,
+            color: '#ff0040',
+            description: `**ID** \`${id}\``,
+            thumbnail: `attachment://${instance.storageMonitors[id].image}`,
+            footer: { text: `${instance.storageMonitors[id].server}` },
+            timestamp: true
+        });
+    },
 }

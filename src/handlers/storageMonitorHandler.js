@@ -32,7 +32,7 @@ module.exports = {
             if (instance.storageMonitors[id].reachable) {
                 if (rustplus.storageMonitors.hasOwnProperty(id) && (rustplus.storageMonitors[id].capacity !== 0 &&
                     info.entityInfo.payload.capacity === 0)) {
-                    await DiscordTools.sendStorageMonitorDisconnectNotification(rustplus.guildId, id);
+                    await DiscordMessages.sendStorageMonitorDisconnectNotification(rustplus.guildId, id);
                 }
 
                 rustplus.storageMonitors[id] = {

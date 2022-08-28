@@ -147,4 +147,17 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
+
+    sendStorageMonitorDisconnectNotification: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, id)],
+            files: [
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
+            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
 }

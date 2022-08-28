@@ -265,33 +265,6 @@ module.exports = {
 
 
 
-
-    sendStorageMonitorDisconnectNotification: async function (guildId, id) {
-        const instance = Client.client.readInstanceFile(guildId);
-        let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
-        const file = new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`);
-
-        if (channel) {
-            let content = {};
-            content.embeds = [DiscordEmbeds.getEmbed({
-                title: `${instance.storageMonitors[id].name} is no longer electrically connected!`,
-                color: '#ff0040',
-                description: `**ID** \`${id}\``,
-                thumbnail: `attachment://${instance.storageMonitors[id].image}`,
-                footer: { text: `${instance.storageMonitors[id].server}` },
-                timestamp: true
-            })];
-
-            content.files = [file];
-
-            if (instance.storageMonitors[id].everyone) {
-                content.content = '@everyone';
-            }
-
-            await Client.client.messageSend(channel, content);
-        }
-    },
-
     sendStorageMonitorNotFound: async function (guildId, id) {
         const instance = Client.client.readInstanceFile(guildId);
         let channel = module.exports.getTextChannelById(guildId, instance.channelId.activity);
