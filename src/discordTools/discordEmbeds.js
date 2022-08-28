@@ -365,4 +365,15 @@ module.exports = {
             url: body.targetId !== '' ? `${Constants.STEAM_PROFILES_URL}${body.targetId}` : ''
         });
     },
+
+    getAlarmRaidAlarmEmbed: function (data, body) {
+        return module.exports.getEmbed({
+            color: '#00ff40',
+            timestamp: true,
+            footer: { text: body.name },
+            title: data.title,
+            description: data.message,
+            thumbnail: body.img
+        });
+    },
 }
