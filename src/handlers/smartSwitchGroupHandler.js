@@ -10,7 +10,7 @@ module.exports = {
 
         for (const [groupName, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (content.switches.includes(`${switchId}`)) {
-                await DiscordTools.sendSmartSwitchGroupMessage(guildId, groupName, true, false, false);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, groupName);
             }
         }
 
@@ -87,7 +87,7 @@ module.exports = {
         }
 
         if (actionSwitches.length !== 0) {
-            await DiscordTools.sendSmartSwitchGroupMessage(guildId, group, true, false, false);
+            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, group);
         }
     },
 }

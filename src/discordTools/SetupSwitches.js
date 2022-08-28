@@ -4,8 +4,6 @@ const DiscordTools = require('./discordTools.js');
 module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
 
-    client.switchesMessages[rustplus.guildId] = {};
-
     await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
 
     for (const [key, value] of Object.entries(instance.switches)) {

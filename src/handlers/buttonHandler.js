@@ -471,8 +471,12 @@ module.exports = async (client, interaction) => {
         let serverId = null;
 
         if (instance.switches.hasOwnProperty(id)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
+                instance.switches[id].messageId);
+
             serverId = instance.switches[id].serverId;
             delete instance.switches[id];
+            client.writeInstanceFile(guildId, instance);
         }
 
         if (rustplus) {
@@ -480,15 +484,12 @@ module.exports = async (client, interaction) => {
             delete rustplus.currentSwitchTimeouts[id];
         }
 
-        await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
-            instance.switches[id].messageId);
-
         for (const [groupName, groupContent] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (groupContent.switches.includes(id)) {
                 instance.serverList[serverId].switchGroups[groupName].switches =
                     groupContent.switches.filter(e => e !== id);
                 client.writeInstanceFile(guildId, instance);
-                await DiscordTools.sendSmartSwitchGroupMessage(guildId, groupName, true, false, false);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, groupName);
             }
         }
 
@@ -518,7 +519,7 @@ module.exports = async (client, interaction) => {
 
         if (instance.alarms.hasOwnProperty(id)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
-                instance.alarms[id].messagedId);
+                instance.alarms[id].messageId);
 
             delete instance.alarms[id];
             client.writeInstanceFile(guildId, instance);
@@ -555,7 +556,7 @@ module.exports = async (client, interaction) => {
 
         if (instance.storageMonitors.hasOwnProperty(id)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
-                instance.storageMonitors[id].messagedId);
+                instance.storageMonitors[id].messageId);
 
             delete instance.storageMonitors[id];
             client.writeInstanceFile(guildId, instance);
@@ -566,7 +567,7 @@ module.exports = async (client, interaction) => {
 
         if (instance.storageMonitors.hasOwnProperty(id)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
-                instance.storageMonitors[id].messagedId);
+                instance.storageMonitors[id].messageId);
 
             delete instance.storageMonitors[id];
             client.writeInstanceFile(guildId, instance);
@@ -627,20 +628,12 @@ module.exports = async (client, interaction) => {
         delete rustplus.currentSwitchTimeouts[id];
 
         if (instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(id)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
+                instance.serverList[rustplus.serverId].switchGroups[id].messageId);
+
             delete instance.serverList[rustplus.serverId].switchGroups[id];
+            client.writeInstanceFile(guildId, instance);
         }
-
-        if (client.switchesMessages[guildId].hasOwnProperty(id)) {
-            try {
-                await client.switchesMessages[guildId][id].delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
-            }
-            delete client.switchesMessages[guildId][id];
-        }
-
-        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('TrackerActive')) {
         let trackerName = interaction.customId.replace('TrackerActiveId', '');

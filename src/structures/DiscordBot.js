@@ -18,7 +18,6 @@ class DiscordBot extends Discord.Client {
         this.commands = new Discord.Collection();
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
-        this.switchesMessages = new Object();
 
         this.items = new Items();
 

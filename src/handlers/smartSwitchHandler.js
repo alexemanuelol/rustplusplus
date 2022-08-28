@@ -154,7 +154,7 @@ module.exports = {
             client, rustplus.guildId, rustplus.serverId, changedSwitches);
 
         for (let group of groups) {
-            await DiscordTools.sendSmartSwitchGroupMessage(rustplus.guildId, group);
+            await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, group);
         }
     },
 }

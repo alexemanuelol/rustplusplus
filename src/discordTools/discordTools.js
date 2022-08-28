@@ -1,9 +1,6 @@
 const Discord = require('discord.js');
 
 const Client = require('../../index.js');
-const DiscordButtons = require('./discordButtons.js');
-const DiscordEmbeds = require('./discordEmbeds.js');
-const DiscordSelectMenus = require('./discordSelectMenus.js');
 
 module.exports = {
     getGuild: function (guildId) {
@@ -143,29 +140,14 @@ module.exports = {
     },
 
     deleteMessageById: async function (guildId, channelId, messageId) {
-        const guild = module.exports.getGuild(guildId);
+        const message = await module.exports.getMessageById(guildId, channelId, messageId);
 
-        if (guild) {
-            const channel = module.exports.getTextChannelById(guildId, channelId);
+        try {
+            await message.delete();
+        }
+        catch (e) {
+            Client.client.log('ERROR', `Could not delete message: ${messageId}`, 'error');
 
-            if (channel) {
-                let message = undefined;
-                try {
-                    message = await channel.messages.fetch(messageId);
-                    if (message instanceof Map) message = message.get(messageId);
-                }
-                catch (e) {
-                    Client.client.log('ERROR', `Could not find message: ${messageId}`, 'error');
-                    return undefined;
-                }
-
-                try {
-                    await message.delete();
-                }
-                catch (e) {
-                    Client.client.log('ERROR', `Could not delete message: ${messageId}`, 'error');
-                }
-            }
         }
         return undefined;
     },
@@ -275,47 +257,6 @@ module.exports = {
                     Client.client.log('ERROR', 'Could not perform message delete', 'error');
                 }
             }
-        }
-    },
-
-
-
-
-    sendSmartSwitchGroupMessage: async function (guildId, name, e = true, c = true, f = true, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        const file = new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png');
-        const embed = DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, name);
-        const buttons = DiscordButtons.getSmartSwitchGroupButtons(name);
-
-        let content = new Object();
-        if (e) {
-            content.embeds = [embed];
-        }
-        if (c) {
-            content.components = [buttons];
-        }
-        if (f) {
-            content.files = [file];
-        }
-
-        if (interaction) {
-            await Client.client.interactionUpdate(interaction, content);
-            return;
-        }
-
-        if (Client.client.switchesMessages[guildId][name]) {
-            let message = Client.client.switchesMessages[guildId][name];
-            if (await Client.client.messageEdit(message, content) === undefined) return;
-        }
-        else {
-            const channel = module.exports.getTextChannelById(guildId, instance.channelId.switches);
-
-            if (!channel) {
-                Client.client.log('ERROR', 'sendSmartSwitchGroupMessage: Invalid guild or channel.', 'error');
-                return;
-            }
-            Client.client.switchesMessages[guildId][name] = await Client.client.messageSend(channel, content);
         }
     },
 }

@@ -249,11 +249,12 @@ module.exports = {
                 instance.serverList[rustplus.serverId].switchGroups[groupName] = {
                     serverId: rustplus.serverId,
                     command: command,
-                    switches: []
+                    switches: [],
+                    messageId: null
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
 
                 let str = `Successfully created the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
@@ -295,7 +296,7 @@ module.exports = {
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
 
                 let str = `Successfully edited the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
@@ -344,7 +345,7 @@ module.exports = {
                 instance.serverList[rustplus.serverId].switchGroups[groupName].switches.push(switchId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
 
                 let str = `Successfully added '${switchId}' to the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,
@@ -376,7 +377,7 @@ module.exports = {
                     instance.serverList[rustplus.serverId].switchGroups[groupName].switches.filter(e => e !== switchId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendSmartSwitchGroupMessage(interaction.guildId, groupName, true, false, false);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
 
                 let str = `Successfully removed '${switchId}' to the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str,

@@ -218,4 +218,24 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
+
+    sendSmartSwitchGroupMessage: async function (guildId, name, interaction = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, name)],
+            components: [DiscordButtons.getSmartSwitchGroupButtons(name)],
+            files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png')]
+        }
+
+        const rustplus = Client.client.rustplusInstances[guildId];
+        const serverId = rustplus.serverId;
+        const message = await module.exports.sendMessage(guildId, content,
+            instance.serverList[serverId].switchGroups[name].messageId, instance.channelId.switches, interaction);
+
+        if (!interaction) {
+            instance.serverList[serverId].switchGroups[name].messageId = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
 }
