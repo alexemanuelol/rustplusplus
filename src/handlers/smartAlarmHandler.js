@@ -1,5 +1,4 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -13,7 +12,7 @@ module.exports = {
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.alarms[key].reachable) {
-                        await DiscordTools.sendSmartAlarmNotFound(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartAlarmNotFound(rustplus.guildId, key);
 
                         instance.alarms[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);

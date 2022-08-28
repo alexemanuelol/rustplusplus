@@ -292,4 +292,19 @@ module.exports = {
             timestamp: true
         });
     },
+
+    getSmartAlarmNotFoundEmbed: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const credentials = Client.client.readCredentialsFile(guildId);
+        const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+        return module.exports.getEmbed({
+            title: `${instance.alarms[id].name} could not be found!` +
+                ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
+            color: '#ff0040',
+            description: `**ID** \`${id}\``,
+            thumbnail: `attachment://${instance.alarms[id].image}`,
+            footer: { text: `${instance.alarms[id].server}` },
+            timestamp: true
+        });
+    },
 }

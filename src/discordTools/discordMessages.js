@@ -184,4 +184,16 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
+
+    sendSmartAlarmNotFound: async function (guildId, id) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, id)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)],
+            content: instance.alarms[id].everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
 }
