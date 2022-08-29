@@ -6,7 +6,7 @@ module.exports = {
         searchServerName = encodeURI(serverName);
         serverName = module.exports.escapeRegExp(serverName);
         searchServerName = searchServerName.replace('\#', '\*');
-        const search = `https://www.battlemetrics.com/servers/search?q=${searchServerName}&sort=score`;
+        const search = `https://www.battlemetrics.com/servers/search?q=${searchServerName}&sort=score&game=rust`;
         const response = await Scrape.scrape(search);
 
         if (response.status !== 200) {
