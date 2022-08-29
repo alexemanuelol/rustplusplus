@@ -145,12 +145,10 @@ function isValidUrl(url) {
 async function pairingServer(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
+    const server = instance.serverList[serverId];
 
     let message = undefined;
-    if (instance.serverList.hasOwnProperty(serverId)) {
-        message = await DiscordTools.getMessageById(
-            guild.id, instance.channelId.servers, instance.serverList[serverId].messageId);
-    }
+    if (server) message = await DiscordTools.getMessageById(guild.id, instance.channelId.servers, server.messageId);
 
     let info = null;
     let battlemetricsId = await BattlemetricsAPI.getBattlemetricsServerId(client, data.title);
@@ -163,7 +161,7 @@ async function pairingServer(client, guild, full, data, body) {
     }
 
     instance.serverList[serverId] = {
-        active: (instance.serverList.hasOwnProperty(serverId)) ? instance.serverList[serverId].active : false,
+        active: server ? server.active : false,
         title: data.title,
         serverIp: body.ip,
         appPort: body.port,
@@ -172,18 +170,26 @@ async function pairingServer(client, guild, full, data, body) {
         description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
         img: isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMG,
         url: isValidUrl(body.url) ? body.url : Constants.DEFAULT_SERVER_URL,
-        timeTillDay: null,
-        timeTillNight: null,
-        notes: {},
-        switchGroups: {},
+        notes: server ? server.notes : {},
+        switches: server ? server.switches : {},
+        alarms: server ? server.alarms : {},
+        storageMonitors: server ? server.storageMonitors : {},
+        markers: server ? server.markers : {},
+        switchGroups: server ? server.switchGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
         connect: (info === null) ? 'Unavailable' : `connect ${info.ip}:${info.port}`,
-        cargoShipEgressTimeMs: Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
-        bradleyApcRespawnTimeMs: Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
-        lockedCrateDespawnTimeMs: Constants.DEFAULT_LOCKED_CRATE_DESPAWN_TIME_MS,
-        lockedCrateDespawnWarningTimeMs: Constants.DEFAULT_LOCKED_CRATE_DESPAWN_WARNING_TIME_MS,
-        oilRigLockedCrateUnlockTimeMs: Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS
+        cargoShipEgressTimeMs: server ? server.cargoShipEgressTimeMs : Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
+        bradleyApcRespawnTimeMs: server ? server.bradleyApcRespawnTimeMs :
+            Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
+        lockedCrateDespawnTimeMs: server ? server.lockedCrateDespawnTimeMs :
+            Constants.DEFAULT_LOCKED_CRATE_DESPAWN_TIME_MS,
+        lockedCrateDespawnWarningTimeMs: server ? server.lockedCrateDespawnWarningTimeMs :
+            Constants.DEFAULT_LOCKED_CRATE_DESPAWN_WARNING_TIME_MS,
+        oilRigLockedCrateUnlockTimeMs: server ? server.oilRigLockedCrateUnlockTimeMs :
+            Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+        timeTillDay: server ? server.timeTillDay : null,
+        timeTillNight: server ? server.timeTillNight : null
     };
     client.writeInstanceFile(guild.id, instance);
 
