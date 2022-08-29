@@ -1,6 +1,8 @@
 const Discord = require('discord.js');
 
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 const TeamChatHandler = require("../handlers/teamChatHandler.js");
@@ -50,7 +52,7 @@ module.exports = {
                         instance.switches[entityId].active = active;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        DiscordTools.sendSmartSwitchMessage(rustplus.guildId, entityId, true, true, false);
+                        DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, entityId);
                         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                             client, rustplus.guildId, rustplus.serverId, entityId);
                     }
@@ -66,17 +68,16 @@ module.exports = {
                         let message = instance.alarms[entityId].message;
 
                         let content = {};
-                        content.embeds = [
-                            new Discord.EmbedBuilder()
-                                .setColor('#ce412b')
-                                .setThumbnail(`attachment://${instance.alarms[entityId].image}`)
-                                .setTitle(title)
-                                .addFields(
-                                    { name: 'ID', value: `\`${entityId}\``, inline: true },
-                                    { name: 'Message', value: `\`${message}\``, inline: true }
-                                )
-                                .setFooter({ text: instance.alarms[entityId].server })
-                                .setTimestamp()];
+                        content.embeds = [DiscordEmbeds.getEmbed({
+                            color: '#ce412b',
+                            thumbnail: `attachment://${instance.alarms[entityId].image}`,
+                            title: title,
+                            footer: { text: instance.alarms[entityId].server },
+                            timestamp: true,
+                            fields: [
+                                { name: 'ID', value: `\`${entityId}\``, inline: true },
+                                { name: 'Message', value: `\`${message}\``, inline: true }]
+                        })];
 
                         content.files = [
                             new Discord.AttachmentBuilder(
@@ -96,7 +97,7 @@ module.exports = {
                         }
                     }
 
-                    DiscordTools.sendSmartAlarmMessage(rustplus.guildId, entityId, true, false, false);
+                    DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, entityId);
                 }
                 else if (instance.storageMonitors.hasOwnProperty(entityId)) {
                     if (message.broadcast.entityChanged.payload.value === true) return;
@@ -132,7 +133,7 @@ module.exports = {
                                     instance.storageMonitors[entityId].decaying === false) {
                                     instance.storageMonitors[entityId].decaying = true;
 
-                                    await DiscordTools.sendDecayingNotification(rustplus.guildId, entityId);
+                                    await DiscordMessages.sendDecayingNotificationMessage(rustplus.guildId, entityId);
 
                                     if (instance.storageMonitors[entityId].inGame) {
                                         rustplus.sendTeamMessageAsync(
@@ -145,9 +146,7 @@ module.exports = {
                                 client.writeInstanceFile(rustplus.guildId, instance);
                             }
 
-                            await DiscordTools.sendStorageMonitorMessage(
-                                rustplus.guildId, entityId, true, true, false);
-
+                            await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, entityId);
                         }, 2000);
                     }
                     else {
@@ -168,7 +167,7 @@ module.exports = {
                             client.writeInstanceFile(rustplus.guildId, instance);
                         }
 
-                        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, entityId, true, true, false);
+                        await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, entityId);
                     }
                 }
             }

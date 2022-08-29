@@ -1,6 +1,5 @@
-const Discord = require('discord.js');
-
 const Constants = require('../util/constants.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Scrape = require('../util/scrape.js');
 
@@ -28,16 +27,16 @@ module.exports = {
             let player = rustplus.team.getPlayer(steamId);
             let png = await Scrape.scrapeSteamProfilePicture(client, steamId);
             await client.messageSend(channel, {
-                embeds: [new Discord.EmbedBuilder()
-                    .setColor('#606060')
-                    .setAuthor({
+                embeds: [DiscordEmbeds.getEmbed({
+                    color: '#606060',
+                    timestamp: true,
+                    footer: { text: instance.serverList[rustplus.serverId].title },
+                    author: {
                         name: `${player.name} left the team.`,
                         iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                         url: `${Constants.STEAM_PROFILES_URL}${steamId}`
-                    })
-                    .setTimestamp()
-                    .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                ]
+                    }
+                })]
             });
 
             if (instance.generalSettings.connectionNotify) {
@@ -52,16 +51,16 @@ module.exports = {
                 if (player.steamId.toString() === steamId) {
                     let png = await Scrape.scrapeSteamProfilePicture(client, steamId);
                     await client.messageSend(channel, {
-                        embeds: [new Discord.EmbedBuilder()
-                            .setColor('#00ff40')
-                            .setAuthor({
+                        embeds: [DiscordEmbeds.getEmbed({
+                            color: '#00ff40',
+                            timestamp: true,
+                            footer: { text: instance.serverList[rustplus.serverId].title },
+                            author: {
                                 name: `${player.name} joined the team.`,
                                 iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                                 url: `${Constants.STEAM_PROFILES_URL}${steamId}`
-                            })
-                            .setTimestamp()
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                        ]
+                            }
+                        })]
                     });
 
                     if (instance.generalSettings.connectionNotify) {
@@ -84,16 +83,16 @@ module.exports = {
                         let pos = player.pos;
                         let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
                         await client.messageSend(channel, {
-                            embeds: [new Discord.EmbedBuilder()
-                                .setColor('#ff0040')
-                                .setAuthor({
+                            embeds: [DiscordEmbeds.getEmbed({
+                                color: '#ff0040',
+                                timestamp: true,
+                                footer: { text: instance.serverList[rustplus.serverId].title },
+                                author: {
                                     name: `${player.name} just died at ${pos}.`,
                                     iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                                     url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
-                                })
-                                .setTimestamp()
-                                .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                            ]
+                                }
+                            })]
                         });
 
                         if (instance.generalSettings.deathNotify) {
@@ -121,16 +120,16 @@ module.exports = {
                     if (player.isGoneOnline(playerUpdated)) {
                         let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
                         await client.messageSend(channel, {
-                            embeds: [new Discord.EmbedBuilder()
-                                .setColor('#00ff40')
-                                .setAuthor({
+                            embeds: [DiscordEmbeds.getEmbed({
+                                color: '#00ff40',
+                                timestamp: true,
+                                footer: { text: instance.serverList[rustplus.serverId].title },
+                                author: {
                                     name: `${player.name} just connected.`,
                                     iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                                     url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
-                                })
-                                .setTimestamp()
-                                .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                            ]
+                                }
+                            })]
                         });
 
                         if (instance.generalSettings.connectionNotify) {
@@ -144,16 +143,16 @@ module.exports = {
                     if (player.isGoneOffline(playerUpdated)) {
                         let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
                         await client.messageSend(channel, {
-                            embeds: [new Discord.EmbedBuilder()
-                                .setColor('#ff0040')
-                                .setAuthor({
+                            embeds: [DiscordEmbeds.getEmbed({
+                                color: '#ff0040',
+                                timestamp: true,
+                                footer: { text: instance.serverList[rustplus.serverId].title },
+                                author: {
                                     name: `${player.name} just disconnected.`,
                                     iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                                     url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
-                                })
-                                .setTimestamp()
-                                .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                            ]
+                                }
+                            })]
                         });
 
                         if (instance.generalSettings.connectionNotify) {

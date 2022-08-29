@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const Path = require('path');
 
 const Config = require('../../config.json');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
@@ -17,8 +18,6 @@ class DiscordBot extends Discord.Client {
         this.commands = new Discord.Collection();
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
-        this.switchesMessages = new Object();
-        this.storageMonitorsMessages = new Object();
 
         this.items = new Items();
 
@@ -170,21 +169,6 @@ class DiscordBot extends Discord.Client {
         }
     }
 
-    getEmbedActionInfo(color, str, footer = null, ephemeral = true) {
-        let embed = new Discord.EmbedBuilder()
-            .setColor((color === 0) ? '#ce412b' : '#ff0040')
-            .setDescription(`\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``);
-
-        if (footer !== null) {
-            embed.setFooter({ text: footer });
-        }
-
-        return {
-            embeds: [embed],
-            ephemeral: ephemeral
-        }
-    }
-
     async interactionReply(interaction, content) {
         try {
             return await interaction.reply(content);
@@ -223,6 +207,7 @@ class DiscordBot extends Discord.Client {
             return await message.edit(content);
         }
         catch (e) {
+            console.log(message)
             this.log('ERROR', `Message edit failed: ${e}`, 'error');
         }
 
@@ -241,7 +226,7 @@ class DiscordBot extends Discord.Client {
     }
 
     async validatePermissions(interaction) {
-        let instance = this.readInstanceFile(interaction.guildId);
+        const instance = this.readInstanceFile(interaction.guildId);
 
         /* If role isn't setup yet, validate as true */
         if (instance.role === null) return true;
@@ -250,7 +235,7 @@ class DiscordBot extends Discord.Client {
             !interaction.member.roles.cache.has(instance.role)) {
             let role = DiscordTools.getRole(interaction.guildId, instance.role);
             let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
-            await this.interactionReply(interaction, this.getEmbedActionInfo(1, str));
+            await this.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             this.log('WARNING', str);
             return false;
         }

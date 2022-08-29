@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const Timer = require('../util/timer');
 
 module.exports = {
@@ -67,7 +68,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -121,7 +122,7 @@ module.exports = {
 						let sec = instance.serverList[rustplus.serverId].lockedCrateDespawnWarningTimeMs / 1000;
 						sec = parseInt(sec);
 						let warning = `Time can not be lower than despawn warning time (${sec}s).`;
-						await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, warning));
+						await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, warning));
 						client.log('WARNING', warning);
 						return;
 					}
@@ -146,7 +147,7 @@ module.exports = {
 						let sec = instance.serverList[rustplus.serverId].lockedCrateDespawnTimeMs / 1000;
 						sec = parseInt(sec);
 						let warning = `Time can not be higher than despawn time (${sec}s).`;
-						await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, warning));
+						await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, warning));
 						client.log('WARNING', warning);
 						return;
 					}
@@ -178,7 +179,7 @@ module.exports = {
 			} break;
 		}
 
-		await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 		client.log('INFO', str);
 	},
 };

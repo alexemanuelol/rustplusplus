@@ -1,4 +1,4 @@
-const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = {
@@ -15,11 +15,11 @@ module.exports = {
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.switches[key].reachable) {
-                        await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                         changedSwitches.push(key);
                     }
                 }
@@ -28,7 +28,7 @@ module.exports = {
                         instance.switches[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                         changedSwitches.push(key);
                     }
                 }
@@ -52,7 +52,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
@@ -64,7 +64,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
@@ -76,7 +76,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
@@ -88,7 +88,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
             }
@@ -107,7 +107,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
@@ -119,7 +119,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
@@ -131,7 +131,7 @@ module.exports = {
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
                         if (instance.switches[key].reachable) {
-                            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
                         }
                         instance.switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
@@ -143,7 +143,7 @@ module.exports = {
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key, true, true, false);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
                     changedSwitches.push(key);
                 }
             }
@@ -153,7 +153,7 @@ module.exports = {
             client, rustplus.guildId, rustplus.serverId, changedSwitches);
 
         for (let group of groups) {
-            await DiscordTools.sendSmartSwitchGroupMessage(rustplus.guildId, group);
+            await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, group);
         }
     },
 }

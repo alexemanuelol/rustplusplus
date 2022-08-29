@@ -1,11 +1,12 @@
+const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = async (client, rustplus) => {
+module.exports = async (client, rustplus, newConnection = false) => {
     let instance = client.readInstanceFile(rustplus.guildId);
 
-    client.storageMonitorsMessages[rustplus.guildId] = {};
-
-    await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
+    if (newConnection) {
+        await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
+    }
 
     for (const [key, value] of Object.entries(instance.storageMonitors)) {
         if (rustplus.serverId !== `${value.serverId}`) continue;
@@ -15,7 +16,7 @@ module.exports = async (client, rustplus) => {
         instance = client.readInstanceFile(rustplus.guildId);
 
         if (!(await rustplus.isResponseValid(info))) {
-            await DiscordTools.sendStorageMonitorNotFound(rustplus.guildId, key);
+            await DiscordMessages.sendStorageMonitorNotFoundMessage(rustplus.guildId, key);
             instance.storageMonitors[key].reachable = false;
         }
         else {
@@ -48,6 +49,6 @@ module.exports = async (client, rustplus) => {
             }
         }
 
-        await DiscordTools.sendStorageMonitorMessage(rustplus.guildId, key);
+        await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, key);
     }
 };

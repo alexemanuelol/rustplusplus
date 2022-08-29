@@ -1,6 +1,7 @@
 const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
@@ -61,7 +62,7 @@ module.exports = {
 				}
 
 				let str = 'Successfully reset Discord.';
-				await client.interactionEditReply(interaction, client.getEmbedActionInfo(0, str));
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 				client.log('INFO', str);
 			} break;
 

@@ -1,6 +1,4 @@
-
-const Discord = require("discord.js");
-
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async function (rustplus, client, message) {
@@ -8,9 +6,10 @@ module.exports = async function (rustplus, client, message) {
     let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.teamchat);
 
     if (channel !== undefined) {
-        let embed = new Discord.EmbedBuilder()
-            .setColor(message.color)
-            .setDescription(`**${message.name}**: ${message.message}`)
+        const embed = DiscordEmbeds.getEmbed({
+            color: message.color,
+            description: `**${message.name}**: ${message.message}`
+        });
 
         await client.messageSend(channel, { embeds: [embed] });
     }

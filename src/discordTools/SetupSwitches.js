@@ -1,11 +1,12 @@
+const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = async (client, rustplus) => {
+module.exports = async (client, rustplus, newConnection = false) => {
     let instance = client.readInstanceFile(rustplus.guildId);
 
-    client.switchesMessages[rustplus.guildId] = {};
-
-    await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
+    if (newConnection) {
+        await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
+    }
 
     for (const [key, value] of Object.entries(instance.switches)) {
         if (rustplus.serverId !== `${value.serverId}`) continue;
@@ -15,7 +16,7 @@ module.exports = async (client, rustplus) => {
         instance = client.readInstanceFile(rustplus.guildId);
 
         if (!(await rustplus.isResponseValid(info))) {
-            await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, key);
+            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
             instance.switches[key].reachable = false;
         }
         else {
@@ -28,6 +29,6 @@ module.exports = async (client, rustplus) => {
             client.writeInstanceFile(rustplus.guildId, instance);
         }
 
-        await DiscordTools.sendSmartSwitchMessage(rustplus.guildId, key);
+        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
     }
 };
