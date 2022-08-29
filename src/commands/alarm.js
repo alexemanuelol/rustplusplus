@@ -16,83 +16,26 @@ module.exports = {
 						.setDescription('The ID of the Smart Alarm.')
 						.setRequired(true))
 				.addStringOption(option =>
-					option.setName('name')
-						.setDescription('Rename the Smart Alarm.')
-						.setRequired(false))
-				.addStringOption(option =>
-					option.setName('message')
-						.setDescription('Set the Smart Alarm notification message.')
-						.setRequired(false))
-				.addStringOption(option =>
 					option.setName('image')
 						.setDescription('Set the image that best represent the Smart Alarm.')
-						.setRequired(false)
+						.setRequired(true)
 						.addChoices(
-							{
-								name: 'Autoturret',
-								value: 'autoturret'
-							},
-							{
-								name: 'Boom Box',
-								value: 'boombox'
-							},
-							{
-								name: 'Broadcaster',
-								value: 'broadcaster'
-							},
-							{
-								name: 'Ceiling Light',
-								value: 'ceiling_light'
-							},
-							{
-								name: 'Discofloor',
-								value: 'discofloor'
-							},
-							{
-								name: 'Door Controller',
-								value: 'door_controller'
-							},
-							{
-								name: 'Elevator',
-								value: 'elevator'
-							},
-							{
-								name: 'HBHF Sensor',
-								value: 'hbhf_sensor'
-							},
-							{
-								name: 'Heater',
-								value: 'heater'
-							},
-							{
-								name: 'SAM site',
-								value: 'samsite'
-							},
-							{
-								name: 'Siren Light',
-								value: 'siren_light'
-							},
-							{
-								name: 'Smart Alarm',
-								value: 'smart_alarm'
-							},
-							{
-								name: 'Smart Switch',
-								value: 'smart_switch'
-							},
-							{
-								name: 'Sprinkler',
-								value: 'sprinkler'
-							},
-							{
-								name: 'Storage Monitor',
-								value: 'storage_monitor'
-							},
-							{
-								name: 'Christmas Lights',
-								value: 'xmas_light'
-							}
-						))),
+							{ name: 'Autoturret', value: 'autoturret' },
+							{ name: 'Boom Box', value: 'boombox' },
+							{ name: 'Broadcaster', value: 'broadcaster' },
+							{ name: 'Ceiling Light', value: 'ceiling_light' },
+							{ name: 'Discofloor', value: 'discofloor' },
+							{ name: 'Door Controller', value: 'door_controller' },
+							{ name: 'Elevator', value: 'elevator' },
+							{ name: 'HBHF Sensor', value: 'hbhf_sensor' },
+							{ name: 'Heater', value: 'heater' },
+							{ name: 'SAM site', value: 'samsite' },
+							{ name: 'Siren Light', value: 'siren_light' },
+							{ name: 'Smart Alarm', value: 'smart_alarm' },
+							{ name: 'Smart Switch', value: 'smart_switch' },
+							{ name: 'Sprinkler', value: 'sprinkler' },
+							{ name: 'Storage Monitor', value: 'storage_monitor' },
+							{ name: 'Christmas Lights', value: 'xmas_light' }))),
 
 	async execute(client, interaction) {
 		let instance = client.readInstanceFile(interaction.guildId);
@@ -102,8 +45,6 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		const id = interaction.options.getString('id');
-		const name = interaction.options.getString('name');
-		const message = interaction.options.getString('message');
 		const image = interaction.options.getString('image');
 
 		switch (interaction.options.getSubcommand()) {
@@ -115,15 +56,7 @@ module.exports = {
 					return;
 				}
 
-				if (name !== null) {
-					instance.alarms[id].name = name;
-				}
-				if (message !== null) {
-					instance.alarms[id].message = message;
-				}
-				if (image !== null) {
-					instance.alarms[id].image = `${image}.png`;
-				}
+				if (image !== null) instance.alarms[id].image = `${image}.png`;
 				client.writeInstanceFile(interaction.guildId, instance);
 
 				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id);

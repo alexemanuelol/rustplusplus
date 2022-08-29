@@ -32,9 +32,7 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `edit` | &nbsp; | Edit the properties of a Smart Alarm. | &nbsp;
 &nbsp; | `id` | The ID of the Smart Alarm. | `True`
-&nbsp; | `name` | Rename the Smart Alarm. | `False`
-&nbsp; | `message` | Set the Smart Alarm notification message. | `False`
-&nbsp; | `image` | Set the image that best represent the Smart Alarm. | `False`
+&nbsp; | `image` | Set the image that best represent the Smart Alarm. | `True`
 
 ![Discord Slash Command alarm Image](images/alarms_edit.png)
 
