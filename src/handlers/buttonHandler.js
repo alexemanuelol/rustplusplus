@@ -5,185 +5,154 @@ const DiscordButtons = require('..//discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
 
 module.exports = async (client, interaction) => {
-    let guildId = interaction.guildId;
-    let instance = client.readInstanceFile(guildId);
-    let rustplus = client.rustplusInstances[guildId];
+    const instance = client.readInstanceFile(interaction.guildId);
+    const guildId = interaction.guildId;
+    const rustplus = client.rustplusInstances[guildId];
 
     if (interaction.customId.startsWith('DiscordNotification')) {
         let setting = interaction.customId.replace('DiscordNotificationId', '');
         instance.notificationSettings[setting].discord = !instance.notificationSettings[setting].discord;
-
-        if (rustplus) {
-            rustplus.notificationSettings[setting].discord = instance.notificationSettings[setting].discord;
-        }
-
-        let row = DiscordButtons.getNotificationButtons(
-            setting,
-            instance.notificationSettings[setting].discord,
-            instance.notificationSettings[setting].inGame);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.notificationSettings[setting].discord = instance.notificationSettings[setting].discord;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getNotificationButtons(
+                setting, instance.notificationSettings[setting].discord,
+                instance.notificationSettings[setting].inGame)]
+        });
     }
     else if (interaction.customId.startsWith('InGameNotification')) {
         let setting = interaction.customId.replace('InGameNotificationId', '');
         instance.notificationSettings[setting].inGame = !instance.notificationSettings[setting].inGame;
-
-        if (rustplus) {
-            rustplus.notificationSettings[setting].inGame = instance.notificationSettings[setting].inGame;
-        }
-
-        let row = DiscordButtons.getNotificationButtons(
-            setting,
-            instance.notificationSettings[setting].discord,
-            instance.notificationSettings[setting].inGame);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.notificationSettings[setting].inGame = instance.notificationSettings[setting].inGame;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getNotificationButtons(
+                setting, instance.notificationSettings[setting].discord,
+                instance.notificationSettings[setting].inGame)]
+        });
     }
     else if (interaction.customId === 'AllowInGameCommands') {
         instance.generalSettings.inGameCommandsEnabled = !instance.generalSettings.inGameCommandsEnabled;
-
-        if (rustplus) {
-            rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
-        }
-
-        let row = DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)]
+        });
+
     }
     else if (interaction.customId === 'InGameTeammateConnection') {
         instance.generalSettings.connectionNotify = !instance.generalSettings.connectionNotify;
-
-        if (rustplus) {
-            rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
-        }
-
-        let row = DiscordButtons.getInGameTeammateNotificationsButtons(instance);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+        });
     }
     else if (interaction.customId === 'InGameTeammateAfk') {
         instance.generalSettings.afkNotify = !instance.generalSettings.afkNotify;
-
-        if (rustplus) {
-            rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
-        }
-
-        let row = DiscordButtons.getInGameTeammateNotificationsButtons(instance);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+        });
     }
     else if (interaction.customId === 'InGameTeammateDeath') {
         instance.generalSettings.deathNotify = !instance.generalSettings.deathNotify;
-
-        if (rustplus) {
-            rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
-        }
-
-        let row = DiscordButtons.getInGameTeammateNotificationsButtons(instance);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+        });
     }
     else if (interaction.customId === 'FcmAlarmNotification') {
         instance.generalSettings.fcmAlarmNotificationEnabled = !instance.generalSettings.fcmAlarmNotificationEnabled;
-
-        if (rustplus) {
-            rustplus.generalSettings.fcmAlarmNotificationEnabled = instance.generalSettings.fcmAlarmNotificationEnabled;
-        }
-
-        let row = DiscordButtons.getFcmAlarmNotificationButtons(
-            instance.generalSettings.fcmAlarmNotificationEnabled,
-            instance.generalSettings.fcmAlarmNotificationEveryone);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEnabled =
+            instance.generalSettings.fcmAlarmNotificationEnabled;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getFcmAlarmNotificationButtons(
+                instance.generalSettings.fcmAlarmNotificationEnabled,
+                instance.generalSettings.fcmAlarmNotificationEveryone)]
+        });
     }
     else if (interaction.customId === 'FcmAlarmNotificationEveryone') {
         instance.generalSettings.fcmAlarmNotificationEveryone = !instance.generalSettings.fcmAlarmNotificationEveryone;
-
-        if (rustplus) {
-            rustplus.generalSettings.fcmAlarmNotificationEveryone =
-                instance.generalSettings.fcmAlarmNotificationEveryone;
-        }
-
-        let row = DiscordButtons.getFcmAlarmNotificationButtons(
-            instance.generalSettings.fcmAlarmNotificationEnabled,
-            instance.generalSettings.fcmAlarmNotificationEveryone);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEveryone =
+            instance.generalSettings.fcmAlarmNotificationEveryone;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getFcmAlarmNotificationButtons(
+                instance.generalSettings.fcmAlarmNotificationEnabled,
+                instance.generalSettings.fcmAlarmNotificationEveryone)]
+        });
     }
     else if (interaction.customId === 'SmartAlarmNotifyInGame') {
         instance.generalSettings.smartAlarmNotifyInGame = !instance.generalSettings.smartAlarmNotifyInGame;
-
-        if (rustplus) {
-            rustplus.generalSettings.smartAlarmNotifyInGame = instance.generalSettings.smartAlarmNotifyInGame;
-        }
-
-        let row = DiscordButtons.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.smartAlarmNotifyInGame =
+            instance.generalSettings.smartAlarmNotifyInGame;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getSmartAlarmNotifyInGameButton(
+                instance.generalSettings.smartAlarmNotifyInGame)]
+        });
     }
     else if (interaction.customId === 'LeaderCommandEnabled') {
         instance.generalSettings.leaderCommandEnabled = !instance.generalSettings.leaderCommandEnabled;
-
-        if (rustplus) {
-            rustplus.generalSettings.leaderCommandEnabled = instance.generalSettings.leaderCommandEnabled;
-        }
-
-        let row = DiscordButtons.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.leaderCommandEnabled = instance.generalSettings.leaderCommandEnabled;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getLeaderCommandEnabledButton(
+                instance.generalSettings.leaderCommandEnabled)]
+        });
     }
     else if (interaction.customId === 'TrackerNotifyAllOffline') {
         instance.generalSettings.trackerNotifyAllOffline = !instance.generalSettings.trackerNotifyAllOffline;
-
-        if (rustplus) {
-            rustplus.generalSettings.trackerNotifyAllOffline = instance.generalSettings.trackerNotifyAllOffline;
-        }
-
-        let row = DiscordButtons.getTrackerNotifyButtons(
-            instance.generalSettings.trackerNotifyAllOffline,
-            instance.generalSettings.trackerNotifyAnyOnline);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.trackerNotifyAllOffline =
+            instance.generalSettings.trackerNotifyAllOffline;
+
+        await client.interactionUpdate(interaction, {
+            components: [getTrackerNotifyButtons(
+                instance.generalSettings.trackerNotifyAllOffline,
+                instance.generalSettings.trackerNotifyAnyOnline)]
+        });
     }
     else if (interaction.customId === 'TrackerNotifyAnyOnline') {
         instance.generalSettings.trackerNotifyAnyOnline = !instance.generalSettings.trackerNotifyAnyOnline;
-
-        if (rustplus) {
-            rustplus.generalSettings.trackerNotifyAnyOnline = instance.generalSettings.trackerNotifyAnyOnline;
-        }
-
-        let row = DiscordButtons.getTrackerNotifyButtons(
-            instance.generalSettings.trackerNotifyAllOffline,
-            instance.generalSettings.trackerNotifyAnyOnline);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.trackerNotifyAnyOnline =
+            instance.generalSettings.trackerNotifyAnyOnline;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getTrackerNotifyButtons(
+                instance.generalSettings.trackerNotifyAllOffline,
+                instance.generalSettings.trackerNotifyAnyOnline)]
+        });
     }
     else if (interaction.customId.startsWith('ServerConnect')) {
-        let serverId = interaction.customId.replace('ServerConnectId', '');
+        const serverId = interaction.customId.replace('ServerConnectId', '');
 
         if (!instance.serverList.hasOwnProperty(serverId)) {
             try {
@@ -199,13 +168,11 @@ module.exports = async (client, interaction) => {
         for (const [key, value] of Object.entries(instance.serverList)) {
             if (value.active) {
                 instance.serverList[key].active = false;
-                client.writeInstanceFile(guildId, instance);
                 await DiscordMessages.sendServerMessage(guildId, key, null);
                 break;
             }
         }
 
-        instance = client.readInstanceFile(guildId);
         instance.serverList[serverId].active = true;
         client.writeInstanceFile(guildId, instance);
 
