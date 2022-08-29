@@ -175,6 +175,7 @@ async function pairingServer(client, guild, full, data, body) {
         alarms: server ? server.alarms : {},
         storageMonitors: server ? server.storageMonitors : {},
         markers: server ? server.markers : {},
+        trackers: server ? server.trackers : {},
         switchGroups: server ? server.switchGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
