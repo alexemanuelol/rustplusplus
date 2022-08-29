@@ -1,3 +1,5 @@
+
+const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, guild) => {
@@ -6,6 +8,6 @@ module.exports = async (client, guild) => {
     await DiscordTools.clearTextChannel(guild.id, instance.channelId.servers, 100);
 
     for (const [key, value] of Object.entries(instance.serverList)) {
-        await DiscordTools.sendServerMessage(guild.id, key);
+        await DiscordMessages.sendServerMessage(guild.id, key);
     }
 };

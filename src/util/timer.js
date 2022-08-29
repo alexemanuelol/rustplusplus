@@ -1,6 +1,6 @@
 module.exports = {
     timer: function (callback, delay, ...args) {
-        var id, started, remaining = delay, running = false;
+        let id, started, remaining = delay, running = false;
 
         this.start = function () {
             started = new Date();
@@ -39,12 +39,8 @@ module.exports = {
                 this.start();
             }
 
-            if (remaining <= 0) {
-                return 0;
-            }
-            else {
-                return remaining;
-            }
+            if (remaining <= 0) return 0;
+            return remaining;
         }
 
         this.isFinished = function () {
@@ -64,9 +60,7 @@ module.exports = {
 
     getTimeLeftOfTimer: function (timer, ignore = '') {
         /* Returns the time left of a timer. If timer is not running, null will be returned. */
-        if (timer.getStateRunning()) {
-            return this.secondsToFullScale(timer.getTimeLeft() / 1000, ignore);
-        }
+        if (timer.getStateRunning()) return this.secondsToFullScale(timer.getTimeLeft() / 1000, ignore);
         return null;
     },
 

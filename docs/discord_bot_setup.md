@@ -31,31 +31,35 @@
 
 ![Setup Discord Bot bot token Image](images/bot_token_bot_setup.png)
 
-9. Click on `OAuth2` and then `URL Generator`.
+9. Scroll down to `Privileged Gateway Intents` and enable them all.
+
+![Setup Discord Bot Privileged Gateway Intents Image](images/privileged_gateway_intents_bot_setup.png)
+
+10. Click on `OAuth2` and then `URL Generator`.
 
 ![Setup Discord Bot oauth2 Image](images/oauth2_bot_setup.png)
 
-10. Under `SCOPES` select `bot` and `applications.commands`.
+11. Under `SCOPES` select `bot` and `applications.commands`.
 
 ![Setup Discord Bot scopes Image](images/scopes_bot_setup.png)
 
-11. Under `BOT PERMISSIONS` select `Administrator`.
+12. Under `BOT PERMISSIONS` select `Administrator`.
 
 ![Setup Discord Bot bot permissions Image](images/bot_permissions_bot_setup.png)
 
-12. Copy the `GENERATED URL` and paste it into your URL browser.
+13. Copy the `GENERATED URL` and paste it into your URL browser.
 
 ![Setup Discord Bot generated url Image](images/generated_url_bot_setup.png)
 
-13. Add the bot to desired Discord Server and click `Continue`.
+14. Add the bot to desired Discord Server and click `Continue`.
 
 ![Setup Discord Bot add bot to server Image](images/add_bot_to_server_bot_setup.png)
 
-14. Click on `Authorise`.
+15. Click on `Authorise`.
 
 ![Setup Discord Bot authorise Image](images/authorise_bot_setup.png)
 
-15. The Bot should now be visible in your Discord Server.
+16. The Bot should now be visible in your Discord Server.
 
 ![Setup Discord Bot bot in server Image](images/bot_in_server_bot_setup.png)
 

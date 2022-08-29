@@ -1,5 +1,5 @@
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
-const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = {
@@ -97,18 +97,18 @@ module.exports = {
 
                 if (!instance.trackers[key].allOffline && allOffline) {
                     if (instance.generalSettings.trackerNotifyAllOffline) {
-                        await DiscordTools.sendTrackerAllOffline(guild.id, key);
+                        await DiscordMessages.sendTrackerAllOfflineMessage(guild.id, key);
                     }
                 }
                 else if (instance.trackers[key].allOffline && !allOffline) {
                     if (instance.generalSettings.trackerNotifyAnyOnline) {
-                        await DiscordTools.sendTrackerAnyOnline(guild.id, key);
+                        await DiscordMessages.sendTrackerAnyOnlineMessage(guild.id, key);
                     }
                 }
 
                 instance.trackers[key].allOffline = allOffline;
                 client.writeInstanceFile(guild.id, instance);
-                await DiscordTools.sendTrackerMessage(guild.id, key, true, false);
+                await DiscordMessages.sendTrackerMessage(guild.id, key);
             }
         }
 

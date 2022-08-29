@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
-const Discord = require('discord.js');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
 	data: new Builder.SlashCommandBuilder()
@@ -22,7 +23,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -31,14 +32,14 @@ module.exports = {
 
 		if (battlemetricsId === null) {
 			let str = 'This server is using streamer mode.';
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
 
 		if (!Object.keys(client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
 			let str = 'Could not find players for this server.';
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -79,9 +80,10 @@ module.exports = {
 			title = `Online players '${name}'`;
 		}
 
-		let embed = new Discord.EmbedBuilder()
-			.setTitle(title)
-			.setColor('#ce412b');
+		const embed = DiscordEmbeds.getEmbed({
+			title: title,
+			color: '#ce412b'
+		});
 
 		let description = '';
 		if (playerIndex === 0) {

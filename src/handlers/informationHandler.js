@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 
 const Constants = require('../util/constants.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Timer = require('../util/timer');
 
@@ -62,15 +63,16 @@ module.exports = {
         const mapSalt = `${rustplus.info.salt}`;
 
         let files = [new Discord.AttachmentBuilder('src/resources/images/server_info_logo.png')];
-        let embed = new Discord.EmbedBuilder()
-            .setTitle('Server Information')
-            .setColor('#ce412b')
-            .setThumbnail('attachment://server_info_logo.png')
-            .setDescription(serverName)
-            .addFields(
+        const embed = DiscordEmbeds.getEmbed({
+            title: 'Server Information',
+            color: '#ce412b',
+            thumbnail: 'attachment://server_info_logo.png',
+            description: serverName,
+            fields: [
                 { name: 'Players', value: `\`${pop}\``, inline: true },
                 { name: 'Time', value: `\`${serverTime}\``, inline: true },
-                { name: 'Wipe', value: `\`${wipeDay}\``, inline: true });
+                { name: 'Wipe', value: `\`${wipeDay}\``, inline: true }]
+        });
 
         if (timeLeft !== null) {
             embed.addFields(
@@ -285,22 +287,21 @@ module.exports = {
 
 
         let files = [new Discord.AttachmentBuilder('src/resources/images/event_info_logo.png')];
-        let embed = new Discord.EmbedBuilder()
-            .setTitle('Event Information')
-            .setColor('#ce412b')
-            .setThumbnail('attachment://event_info_logo.png')
-            .setDescription('In-game event information')
-            .addFields(
+        const embed = DiscordEmbeds.getEmbed({
+            title: 'Event Information',
+            color: '#ce412b',
+            thumbnail: 'attachment://event_info_logo.png',
+            description: 'In-game event information',
+            footer: { text: instance.serverList[rustplus.serverId].title },
+            fields: [
                 { name: 'Cargoship', value: `\`${cargoShipMessage}\``, inline: true },
                 { name: 'Patrol Helicopter', value: `\`${patrolHelicopterMessage}\``, inline: true },
                 { name: 'Bradley APC', value: `\`${bradleyAPCMessage}\``, inline: true },
                 { name: 'Small Oil Rig', value: `\`${smallOilMessage}\``, inline: true },
                 { name: 'Large Oil Rig', value: `\`${largeOilMessage}\``, inline: true },
                 { name: 'Chinook 47', value: `\`${ch47Message}\``, inline: true },
-                { name: 'Crate', value: `\`${crateMessage}\``, inline: true })
-            .setFooter({
-                text: instance.serverList[rustplus.serverId].title
-            });
+                { name: 'Crate', value: `\`${crateMessage}\``, inline: true }]
+        });
 
         if (rustplus.informationIntervalCounter === 0) {
             await sendInformationEmbed(rustplus, client, instance, embed, files, message, 'event');
@@ -333,17 +334,16 @@ module.exports = {
         }
 
         let files = [new Discord.AttachmentBuilder('src/resources/images/team_info_logo.png')];
-        let embed = new Discord.EmbedBuilder()
-            .setTitle('Team Member Information')
-            .setColor('#ce412b')
-            .setThumbnail('attachment://team_info_logo.png')
-            .addFields(
+        const embed = DiscordEmbeds.getEmbed({
+            title: 'Team Member Information',
+            color: '#ce412b',
+            thumbnail: 'attachment://team_info_logo.png',
+            footer: { text: instance.serverList[rustplus.serverId].title },
+            fields: [
                 { name: 'Team Member', value: names, inline: true },
                 { name: 'Status', value: status, inline: true },
-                { name: 'Location', value: locations, inline: true })
-            .setFooter({
-                text: instance.serverList[rustplus.serverId].title
-            });
+                { name: 'Location', value: locations, inline: true }]
+        });
 
         if (rustplus.informationIntervalCounter === 0) {
             await sendInformationEmbed(rustplus, client, instance, embed, files, message, 'team');

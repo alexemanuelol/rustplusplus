@@ -1,6 +1,8 @@
 const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+
 module.exports = {
 	data: new Builder.SlashCommandBuilder()
 		.setName('map')
@@ -32,7 +34,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, client.getEmbedActionInfo(1, str));
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -68,10 +70,11 @@ module.exports = {
 
 		let fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';
 		await client.interactionEditReply(interaction, {
-			embeds: [new Discord.EmbedBuilder()
-				.setColor('#ce412b')
-				.setImage(`attachment://${interaction.guildId}_map_${fileName}.png`)
-				.setFooter({ text: instance.serverList[rustplus.serverId].title })],
+			embeds: [DiscordEmbeds.getEmbed({
+				color: '#ce412b',
+				image: `attachment://${interaction.guildId}_map_${fileName}.png`,
+				footer: { text: instance.serverList[rustplus.serverId].title }
+			})],
 			files: [file],
 			ephemeral: true
 		});
