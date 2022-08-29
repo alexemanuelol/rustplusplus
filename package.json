@@ -5,7 +5,9 @@
     "main": "index.ts",
     "scripts": {
         "run": "ts-node .",
-        "preinstall": "npx npm-force-resolutions"
+        "preinstall": "npx npm-force-resolutions",
+        "test": "tsc --noEmit -p ."
+
     },
     "repository": {
         "type": "git",
