@@ -7,35 +7,34 @@ module.exports = {
 	data: new Builder.SlashCommandBuilder()
 		.setName('alarm')
 		.setDescription('Operations on Smart Alarms.')
-		.addSubcommand(subcommand =>
-			subcommand
-				.setName('edit')
-				.setDescription('Edit the properties of a Smart Alarm.')
-				.addStringOption(option =>
-					option.setName('id')
-						.setDescription('The ID of the Smart Alarm.')
-						.setRequired(true))
-				.addStringOption(option =>
-					option.setName('image')
-						.setDescription('Set the image that best represent the Smart Alarm.')
-						.setRequired(true)
-						.addChoices(
-							{ name: 'Autoturret', value: 'autoturret' },
-							{ name: 'Boom Box', value: 'boombox' },
-							{ name: 'Broadcaster', value: 'broadcaster' },
-							{ name: 'Ceiling Light', value: 'ceiling_light' },
-							{ name: 'Discofloor', value: 'discofloor' },
-							{ name: 'Door Controller', value: 'door_controller' },
-							{ name: 'Elevator', value: 'elevator' },
-							{ name: 'HBHF Sensor', value: 'hbhf_sensor' },
-							{ name: 'Heater', value: 'heater' },
-							{ name: 'SAM site', value: 'samsite' },
-							{ name: 'Siren Light', value: 'siren_light' },
-							{ name: 'Smart Alarm', value: 'smart_alarm' },
-							{ name: 'Smart Switch', value: 'smart_switch' },
-							{ name: 'Sprinkler', value: 'sprinkler' },
-							{ name: 'Storage Monitor', value: 'storage_monitor' },
-							{ name: 'Christmas Lights', value: 'xmas_light' }))),
+		.addSubcommand(subcommand => subcommand
+			.setName('edit')
+			.setDescription('Edit the properties of a Smart Alarm.')
+			.addStringOption(option => option
+				.setName('id')
+				.setDescription('The ID of the Smart Alarm.')
+				.setRequired(true))
+			.addStringOption(option => option
+				.setName('image')
+				.setDescription('Set the image that best represent the Smart Alarm.')
+				.setRequired(true)
+				.addChoices(
+					{ name: 'Autoturret', value: 'autoturret' },
+					{ name: 'Boom Box', value: 'boombox' },
+					{ name: 'Broadcaster', value: 'broadcaster' },
+					{ name: 'Ceiling Light', value: 'ceiling_light' },
+					{ name: 'Discofloor', value: 'discofloor' },
+					{ name: 'Door Controller', value: 'door_controller' },
+					{ name: 'Elevator', value: 'elevator' },
+					{ name: 'HBHF Sensor', value: 'hbhf_sensor' },
+					{ name: 'Heater', value: 'heater' },
+					{ name: 'SAM site', value: 'samsite' },
+					{ name: 'Siren Light', value: 'siren_light' },
+					{ name: 'Smart Alarm', value: 'smart_alarm' },
+					{ name: 'Smart Switch', value: 'smart_switch' },
+					{ name: 'Sprinkler', value: 'sprinkler' },
+					{ name: 'Storage Monitor', value: 'storage_monitor' },
+					{ name: 'Christmas Lights', value: 'xmas_light' }))),
 
 	async execute(client, interaction) {
 		let instance = client.readInstanceFile(interaction.guildId);

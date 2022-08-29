@@ -190,8 +190,6 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `edit_switch` | &nbsp; | Edit the properties of a Smart Switch. | &nbsp;
 &nbsp; | `id` | The ID of the Smart Switch. | `True`
-&nbsp; | `name` | Rename the Smart Switch. | `False`
-&nbsp; | `command` | Set the custom command for the Smart Switch. | `False`
 &nbsp; | `image` | Set the image that best represent the Smart Switch. | `False`
 `create_group` | &nbsp; | Create a Smart Switch Group. | &nbsp;
 &nbsp; | `group_name` | The name of the Group to be created. | `True`
