@@ -1,9 +1,21 @@
 const fs = require('fs');
 const Str = require('../util/string.js');
+const Fuse = require('fuse.js')
 
 class Items {
     constructor() {
         this._items = JSON.parse(fs.readFileSync(`${__dirname}/../util/items.json`, 'utf8'));
+        const flattenedItems = Object.keys(this.items).map(id => ({ id, ...this.items[id] }));
+        this._fuse = new Fuse(flattenedItems, {
+            keys: [{
+                name: 'name',
+                weight: 0.7,
+            }, {
+                name: 'shortname',
+                weight: 0.3,
+            }]
+        })
+
     }
 
     /* Getters and Setters */
@@ -33,9 +45,8 @@ class Items {
         return Object.keys(this.items).find(id => this.items[id].name === name);
     }
 
-    getClosestItemIdByName(name, similarity = 0.9) {
-        return Object.keys(this.items).find(id =>
-            Str.similarity(this.items[id].name.toLowerCase(), name.toLowerCase()) >= similarity);
+    getClosestItemIdByName(name) {
+        return this._fuse.search(name)[0].id;
     }
 }
 
