@@ -1,4 +1,4 @@
-const { EventEmitter } = require('events');
+const Events = require('events');
 
 /**
  * This class is responsible for communicating with the FCMNotificationManager running
@@ -7,7 +7,7 @@ const { EventEmitter } = require('events');
  * Events are sent from here in the renderer process via ipc to the main process,
  * and results are then sent back to the renderer process via ipc.
  */
-class FCMNotificationReceiver extends EventEmitter {
+class FCMNotificationReceiver extends Events.EventEmitter {
     constructor(ipcRenderer) {
         super();
 

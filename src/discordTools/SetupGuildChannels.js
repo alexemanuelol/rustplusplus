@@ -1,5 +1,6 @@
+const Discord = require('discord.js');
+
 const DiscordTools = require('../discordTools/discordTools.js');
-const { Permissions } = require('discord.js');
 
 module.exports = async (client, guild, category) => {
     await addTextChannel('information', client, guild, category);
@@ -50,28 +51,28 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
     let roleDeny = [];
     if (instance.role !== null) {
         if (permissionWrite) {
-            roleAllow.push(Permissions.FLAGS.SEND_MESSAGES);
+            roleAllow.push(Discord.PermissionFlagsBits.SendMessages);
         }
         else {
-            roleDeny.push(Permissions.FLAGS.SEND_MESSAGES);
+            roleDeny.push(Discord.PermissionFlagsBits.SendMessages);
         }
 
-        everyoneDeny.push(Permissions.FLAGS.VIEW_CHANNEL);
-        everyoneDeny.push(Permissions.FLAGS.SEND_MESSAGES);
-        roleAllow.push(Permissions.FLAGS.VIEW_CHANNEL);
+        everyoneDeny.push(Discord.PermissionFlagsBits.ViewChannel);
+        everyoneDeny.push(Discord.PermissionFlagsBits.SendMessages);
+        roleAllow.push(Discord.PermissionFlagsBits.ViewChannel);
 
         perms.push({ id: guild.roles.everyone.id, deny: everyoneDeny });
         perms.push({ id: instance.role, allow: roleAllow, deny: roleDeny });
     }
     else {
         if (permissionWrite) {
-            everyoneAllow.push(Permissions.FLAGS.SEND_MESSAGES);
+            everyoneAllow.push(Discord.PermissionFlagsBits.SendMessages);
         }
         else {
-            everyoneDeny.push(Permissions.FLAGS.SEND_MESSAGES);
+            everyoneDeny.push(Discord.PermissionFlagsBits.SendMessages);
         }
 
-        everyoneAllow.push(Permissions.FLAGS.VIEW_CHANNEL);
+        everyoneAllow.push(Discord.PermissionFlagsBits.ViewChannel);
 
         perms.push({ id: guild.roles.everyone.id, allow: everyoneAllow, deny: everyoneDeny });
     }

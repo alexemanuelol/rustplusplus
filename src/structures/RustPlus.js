@@ -1,21 +1,24 @@
-const fs = require('fs');
-const RP = require('rustplus.js');
+const Discord = require('discord.js');
+const Fs = require('fs');
+const Path = require('path');
+
 const Client = require('../../index.js');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
-const Logger = require('./Logger.js');
-const path = require('path');
-const DiscordTools = require('../discordTools/discordTools.js');
 const Constants = require('../util/constants.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const Items = require('./Items');
+const Logger = require('./Logger.js');
+const RustPlusLib = require('rustplus.js');
 const Timer = require('../util/timer.js');
 
-class RustPlus extends RP {
+class RustPlus extends RustPlusLib {
     constructor(guildId, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
 
         this.serverId = `${this.server}-${this.port}`;
 
         this.guildId = guildId;
+        this.newConnection = false;
         this.intervalId = 0;
         this.logger = null;
         this.firstPoll = true;
@@ -27,6 +30,7 @@ class RustPlus extends RP {
         this.refusedConnectionRetry = false;
         this.firstTime = true;
         this.ready = false;
+        this.currentSwitchTimeouts = new Object();
 
         this.storageMonitors = new Object();
 
@@ -75,7 +79,7 @@ class RustPlus extends RP {
         this.interactionSwitches = [];
 
         /* Load rustplus events */
-        this.loadEvents();
+        this.loadRustPlusEvents();
 
         this.tokens = 24;
         this.tokens_limit = 24;     /* Per player */
@@ -83,9 +87,9 @@ class RustPlus extends RP {
         this.tokens_replenish_task = 0;
     }
 
-    loadEvents() {
+    loadRustPlusEvents() {
         /* Dynamically retrieve the rustplus event files */
-        const eventFiles = fs.readdirSync(`${__dirname}/../rustplusEvents`).filter(file => file.endsWith('.js'));
+        const eventFiles = Fs.readdirSync(`${__dirname}/../rustplusEvents`).filter(file => file.endsWith('.js'));
         for (const file of eventFiles) {
             const event = require(`../rustplusEvents/${file}`);
             this.on(event.name, (...args) => event.execute(this, Client.client, ...args));
@@ -93,24 +97,24 @@ class RustPlus extends RP {
     }
 
     loadMarkers() {
-        let instance = Client.client.readInstanceFile(this.guildId);
-        let server = `${this.server}-${this.port}`;
+        const instance = Client.client.readInstanceFile(this.guildId);
+        const serverId = `${this.server}-${this.port}`;
 
-        if (!instance.markers.hasOwnProperty(server)) {
-            instance.markers[server] = {};
+        if (!instance.markers.hasOwnProperty(serverId)) {
+            instance.markers[serverId] = {};
             Client.client.writeInstanceFile(this.guildId, instance);
         }
 
-        for (const [name, location] of Object.entries(instance.markers[server])) {
+        for (const [name, location] of Object.entries(instance.markers[serverId])) {
             this.markers[name] = { x: location.x, y: location.y };
         }
     }
 
     build() {
-        let instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.readInstanceFile(this.guildId);
 
         /* Setup the logger */
-        this.logger = new Logger(path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
+        this.logger = new Logger(Path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
         this.logger.setGuildId(this.guildId);
         this.logger.serverName = instance.serverList[`${this.server}-${this.port}`].title;
 
@@ -126,12 +130,21 @@ class RustPlus extends RP {
     }
 
     async printCommandOutput(str, type = 'COMMAND') {
-        await this.sendTeamMessageAsync(str);
+        if (this.generalSettings.commandDelay === '0') {
+            await this.sendTeamMessageAsync(str);
+        }
+        else {
+            let self = this;
+            setTimeout(function () {
+                self.sendTeamMessageAsync(str);
+            }, parseInt(this.generalSettings.commandDelay) * 1000)
+
+        }
         this.log(type, str);
     }
 
     async sendEvent(setting, text, firstPoll = false, image = null) {
-        let img = (image !== null) ? image : setting.image;
+        const img = (image !== null) ? image : setting.image;
 
         if (!firstPoll && setting.discord) {
             this.sendDiscordEvent(text, img)
@@ -143,22 +156,14 @@ class RustPlus extends RP {
     }
 
     sendDiscordEvent(text, image) {
-        let instance = Client.client.readInstanceFile(this.guildId);
-        let channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.events);
+        const instance = Client.client.readInstanceFile(this.guildId);
 
-        if (channel !== undefined) {
-            let file = new MessageAttachment(`src/resources/images/events/${image}`);
-            let embed = new MessageEmbed()
-                .setColor('#ce412b')
-                .setThumbnail(`attachment://${image}`)
-                .setTitle(text)
-                .setFooter({
-                    text: instance.serverList[`${this.server}-${this.port}`].title
-                })
-                .setTimestamp();
-
-            Client.client.messageSend(channel, { embeds: [embed], files: [file] });
+        const content = {
+            embeds: [DiscordEmbeds.getEventEmbed(this.guildId, this, text, image)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/events/${image}`)]
         }
+
+        DiscordMessages.sendMessage(this.guildId, content, null, instance.channelId.events);
     }
 
     replenish_tokens() {
@@ -173,7 +178,7 @@ class RustPlus extends RP {
         while (this.tokens < cost) {
             if (timeoutCounter === 90) return false;
 
-            await Timer.sleep(333);
+            await Timer.sleep(1000 / 3);
             timeoutCounter += 1;
         }
         this.tokens -= cost;

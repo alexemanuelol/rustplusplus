@@ -1,4 +1,4 @@
-const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -9,7 +9,7 @@ module.exports = {
 
         for (const [groupName, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (content.switches.includes(`${switchId}`)) {
-                await DiscordTools.sendSmartSwitchGroupMessage(guildId, groupName, true, false, false);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, groupName);
             }
         }
 
@@ -69,7 +69,7 @@ module.exports = {
 
             if (!(await rustplus.isResponseValid(response))) {
                 if (instance.switches[id].reachable) {
-                    await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                    await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, id);
                 }
                 instance.switches[id].reachable = false;
                 instance.switches[id].active = prevActive;
@@ -82,11 +82,11 @@ module.exports = {
                 client.writeInstanceFile(rustplus.guildId, instance);
             }
 
-            DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false);
+            DiscordMessages.sendSmartSwitchMessage(guildId, id);
         }
 
         if (actionSwitches.length !== 0) {
-            await DiscordTools.sendSmartSwitchGroupMessage(guildId, group, true, false, false);
+            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, group);
         }
     },
 }

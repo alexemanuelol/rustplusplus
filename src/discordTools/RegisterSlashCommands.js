@@ -1,21 +1,22 @@
-const fs = require("fs");
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const Fs = require("fs");
+const Rest = require('@discordjs/rest');
+const Types = require('discord-api-types/v9');
+
 const Config = require('../../config.json');
 
 module.exports = async (client, guild) => {
     const commands = [];
-    const commandFiles = fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
+    const commandFiles = Fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
 
     for (const file of commandFiles) {
         const command = require(`../commands/${file}`);
         commands.push(command.data.toJSON());
     }
 
-    const rest = new REST({ version: '9' }).setToken(Config.discord.token);
+    const rest = new Rest.REST({ version: '9' }).setToken(Config.discord.token);
 
     try {
-        await rest.put(Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
+        await rest.put(Types.Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
     }
     catch (e) {
         client.log('ERROR',

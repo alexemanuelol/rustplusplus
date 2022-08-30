@@ -1,3 +1,4 @@
+const Constants = require('../util/constants.js');
 const Map = require('../util/map.js');
 const Time = require('../util/timer.js');
 
@@ -17,6 +18,7 @@ class Player {
         this._pos = null;
         this._lastMovement = new Date();
         this._teamLeader = false;
+        this._afkSeconds = 0;
 
         this.updatePos();
     }
@@ -46,6 +48,8 @@ class Player {
     set lastMovement(lastMovement) { this._lastMovement = lastMovement; }
     get teamLeader() { return this._teamLeader; }
     set teamLeader(teamLeader) { this._teamLeader = teamLeader; }
+    get afkSeconds() { return this._afkSeconds; }
+    set afkSeconds(afkSeconds) { this._afkSeconds = afkSeconds; }
 
     /* Change checkers */
     isSteamIdChanged(player) { return (this.steamId !== player.steamId.toString()); }
@@ -61,11 +65,37 @@ class Player {
     isGoneOnline(player) { return ((this.isOnline === false) && (player.isOnline === true)); }
     isGoneOffline(player) { return ((this.isOnline === true) && (player.isOnline === false)); }
     isGoneAlive(player) { return ((this.isAlive === false) && (player.isAlive === true)); }
-    isGoneDead(player) { return ((this.isAlive === true) && (player.isAlive === false)); }
+    isGoneDead(player) {
+        return (((this.isAlive === true) && (player.isAlive === false))
+            || this.isDeathTimeChanged(player));
+    }
+    isMoved(player) { return (this.isXChanged(player) || this.isYChanged(player)); }
+    isAfk() { return (this.afkSeconds >= Constants.AFK_TIME_SECONDS) }
+    isGoneAfk(player) {
+        return (
+            !this.isAfk() &&
+            !this.isMoved(player) &&
+            this.isOnline &&
+            ((new Date() - this.lastMovement) / 1000) >= Constants.AFK_TIME_SECONDS);
+    }
 
     updatePlayer(player) {
-        if (this.isXChanged(player) || this.isYChanged(player)) {
+        if (this.isGoneOnline(player)) {
             this.lastMovement = new Date();
+            this.afkSeconds = 0;
+        }
+
+        if (this.isMoved(player)) {
+            this.lastMovement = new Date();
+            this.afkSeconds = 0;
+        }
+        else {
+            if (!this.isOnline && !this.isGoneOnline(player)) {
+                this.afkSeconds = 0;
+            }
+            else {
+                this.afkSeconds = (new Date() - this.lastMovement) / 1000;
+            }
         }
 
         this.steamId = player.steamId.toString();

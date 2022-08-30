@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const Builder = require('@discordjs/builders');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const Timer = require('../util/timer');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('customizetimers')
 		.setDescription('Operations to customize In-Game timers.')
 		.addSubcommand(subcommand =>
@@ -67,12 +68,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -126,12 +122,7 @@ module.exports = {
 						let sec = instance.serverList[rustplus.serverId].lockedCrateDespawnWarningTimeMs / 1000;
 						sec = parseInt(sec);
 						let warning = `Time can not be lower than despawn warning time (${sec}s).`;
-						await client.interactionEditReply(interaction, {
-							embeds: [new MessageEmbed()
-								.setColor('#ff0040')
-								.setDescription(`\`\`\`diff\n- ${warning}\n\`\`\``)],
-							ephemeral: true
-						});
+						await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, warning));
 						client.log('WARNING', warning);
 						return;
 					}
@@ -156,12 +147,7 @@ module.exports = {
 						let sec = instance.serverList[rustplus.serverId].lockedCrateDespawnTimeMs / 1000;
 						sec = parseInt(sec);
 						let warning = `Time can not be higher than despawn time (${sec}s).`;
-						await client.interactionEditReply(interaction, {
-							embeds: [new MessageEmbed()
-								.setColor('#ff0040')
-								.setDescription(`\`\`\`diff\n- ${warning}\n\`\`\``)],
-							ephemeral: true
-						});
+						await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, warning));
 						client.log('WARNING', warning);
 						return;
 					}
@@ -193,12 +179,7 @@ module.exports = {
 			} break;
 		}
 
-		await client.interactionEditReply(interaction, {
-			embeds: [new MessageEmbed()
-				.setColor('#ce412b')
-				.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-			ephemeral: true
-		});
+		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 		client.log('INFO', str);
 	},
 };

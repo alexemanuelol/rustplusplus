@@ -1,8 +1,9 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const Builder = require('@discordjs/builders');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('players')
 		.setDescription('Get player/players information based on Battlemetrics.')
 		.addStringOption(option =>
@@ -22,12 +23,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -36,24 +32,14 @@ module.exports = {
 
 		if (battlemetricsId === null) {
 			let str = 'This server is using streamer mode.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
 
 		if (!Object.keys(client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
 			let str = 'Could not find players for this server.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -94,9 +80,10 @@ module.exports = {
 			title = `Online players '${name}'`;
 		}
 
-		let embed = new MessageEmbed()
-			.setTitle(title)
-			.setColor('#ce412b');
+		const embed = DiscordEmbeds.getEmbed({
+			title: title,
+			color: '#ce412b'
+		});
 
 		let description = '';
 		if (playerIndex === 0) {
@@ -108,16 +95,22 @@ module.exports = {
 			}
 		}
 		else if (playerIndex === 1) {
-			embed.addField('Players', playerColumns[0], true);
+			embed.addFields({
+				name: 'Players', value: playerColumns[0], inline: true
+			});
 		}
 		else if (playerIndex === 2) {
-			embed.addField('Players', playerColumns[0], true);
-			embed.addField('\u200B', playerColumns[1], true);
+			embed.addFields(
+				{ name: 'Players', value: playerColumns[0], inline: true },
+				{ name: '\u200B', value: playerColumns[1], inline: true }
+			);
 		}
 		else if (playerIndex >= 3) {
-			embed.addField('Players', playerColumns[0], true);
-			embed.addField('\u200B', playerColumns[1], true);
-			embed.addField('\u200B', playerColumns[2], true);
+			embed.addFields(
+				{ name: 'Players', value: playerColumns[0], inline: true },
+				{ name: '\u200B', value: playerColumns[1], inline: true },
+				{ name: '\u200B', value: playerColumns[2], inline: true }
+			);
 		}
 
 		if (description === '' && isFull) {

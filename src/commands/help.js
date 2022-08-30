@@ -1,30 +1,36 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageButton, MessageActionRow } = require('discord.js');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
+const DiscordButtons = require('../discordTools/discordButtons.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('help')
 		.setDescription('Display help message'),
 	async execute(client, interaction) {
 		await client.interactionReply(interaction, {
-			components: [new MessageActionRow()
+			components: [new Discord.ActionRowBuilder()
 				.addComponents(
-					new MessageButton()
-						.setStyle('LINK')
-						.setLabel('DEVELOPER')
-						.setURL('https://github.com/alexemanuelol'),
-					new MessageButton()
-						.setStyle('LINK')
-						.setLabel('REPOSITORY')
-						.setURL('https://github.com/alexemanuelol/rustPlusPlus'),
-					new MessageButton()
-						.setStyle('LINK')
-						.setLabel('DOCUMENTATION')
-						.setURL('https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md'),
-					new MessageButton()
-						.setStyle('LINK')
-						.setLabel('CREDENTIALS')
-						.setURL('https://github.com/alexemanuelol/rustPlusPlus/releases/tag/v1.0.0')
+					DiscordButtons.getButton({
+						style: Discord.ButtonStyle.Link,
+						label: 'DEVELOPER',
+						url: 'https://github.com/alexemanuelol'
+					}),
+					DiscordButtons.getButton({
+						style: Discord.ButtonStyle.Link,
+						label: 'REPOSITORY',
+						url: 'https://github.com/alexemanuelol/rustPlusPlus'
+					}),
+					DiscordButtons.getButton({
+						style: Discord.ButtonStyle.Link,
+						label: 'DOCUMENTATION',
+						url: 'https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md'
+					}),
+					DiscordButtons.getButton({
+						style: Discord.ButtonStyle.Link,
+						label: 'CREDENTIALS',
+						url: 'https://github.com/alexemanuelol/rustPlusPlus/releases/tag/v1.0.0'
+					})
 				)
 			],
 			ephemeral: true

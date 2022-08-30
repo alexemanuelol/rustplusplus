@@ -1,8 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageAttachment, MessageEmbed } = require('discord.js');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('map')
 		.setDescription('Get the currently connected server map image.')
 		.addSubcommand(subcommand =>
@@ -32,12 +34,7 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
@@ -65,18 +62,19 @@ module.exports = {
 
 		let file = null;
 		if (interaction.options.getSubcommand() === 'clean') {
-			file = new MessageAttachment(`src/resources/images/maps/${interaction.guildId}_map_clean.png`);
+			file = new Discord.AttachmentBuilder(`src/resources/images/maps/${interaction.guildId}_map_clean.png`);
 		}
 		else {
-			file = new MessageAttachment(`src/resources/images/maps/${interaction.guildId}_map_full.png`);
+			file = new Discord.AttachmentBuilder(`src/resources/images/maps/${interaction.guildId}_map_full.png`);
 		}
 
 		let fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';
 		await client.interactionEditReply(interaction, {
-			embeds: [new MessageEmbed()
-				.setColor('#ce412b')
-				.setImage(`attachment://${interaction.guildId}_map_${fileName}.png`)
-				.setFooter({ text: instance.serverList[rustplus.serverId].title })],
+			embeds: [DiscordEmbeds.getEmbed({
+				color: '#ce412b',
+				image: `attachment://${interaction.guildId}_map_${fileName}.png`,
+				footer: { text: instance.serverList[rustplus.serverId].title }
+			})],
 			files: [file],
 			ephemeral: true
 		});

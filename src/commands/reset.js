@@ -1,9 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const Builder = require('@discordjs/builders');
+const Discord = require('discord.js');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageAttachment, MessageEmbed } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('reset')
 		.setDescription('Reset Discord channels.')
 		.addSubcommand(subcommand =>
@@ -52,7 +54,7 @@ module.exports = {
 					else {
 						instance = client.readInstanceFile(guild.id);
 
-						let file = new MessageAttachment(`src/resources/images/maps/${guild.id}_map_full.png`);
+						let file = new Discord.AttachmentBuilder(`src/resources/images/maps/${guild.id}_map_full.png`);
 						let msg = await client.messageSend(channel, { files: [file] });
 						instance.informationMessageId.map = msg.id;
 						client.writeInstanceFile(guild.id, instance);
@@ -60,12 +62,7 @@ module.exports = {
 				}
 
 				let str = 'Successfully reset Discord.';
-				await client.interactionEditReply(interaction, {
-					embeds: [new MessageEmbed()
-						.setColor('#ce412b')
-						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-					ephemeral: true
-				});
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 				client.log('INFO', str);
 			} break;
 

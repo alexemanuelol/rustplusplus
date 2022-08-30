@@ -764,6 +764,11 @@
         "name": "Skull Trophy",
         "description": "A decorative mount that can hold the skull of a friend or foe."
     },
+    "975983052": {
+        "shortname": "trophy",
+        "name": "Twitch Rivals Trophy",
+        "description": "A trophy dedicated to the survivors of Rust Twitch Rivals"
+    },
     "980333378": {
         "shortname": "attire.hide.poncho",
         "name": "Hide Poncho",
@@ -783,6 +788,11 @@
         "shortname": "skull.human",
         "name": "Human Skull",
         "description": "A human skull."
+    },
+    "996757362": {
+        "shortname": "wagon",
+        "name": "Wagon",
+        "description": "A train car."
     },
     "998894949": {
         "shortname": "seed.corn",
@@ -1334,6 +1344,11 @@
         "name": "Bleach",
         "description": "A powerful oxidizing agent. Can be used as a disinfectant."
     },
+    "1556365900": {
+        "shortname": "grenade.molotov",
+        "name": "Molotov Cocktail",
+        "description": "An incendiary device"
+    },
     "1557173737": {
         "shortname": "sunglasses02red",
         "name": "Sunglasses",
@@ -1789,6 +1804,11 @@
         "name": "Burlap Trousers",
         "description": "Trousers made out of burlap."
     },
+    "2005491391": {
+        "shortname": "weapon.mod.extendedmags",
+        "name": "Extended Magazine",
+        "description": "Larger magazine size"
+    },
     "2009734114": {
         "shortname": "xmasdoorwreath",
         "name": "Christmas Door Wreath",
@@ -1982,7 +2002,7 @@
     "-747743875": {
         "shortname": "attire.egg.suit",
         "name": "Egg Suit",
-        "description": "An eggsquisite egg costume, can be painted when unequipped."
+        "description": "An eggsquisite egg costume, can be painted when unequipped. Releasing publicly in 2023"
     },
     "-1773144852": {
         "shortname": "attire.hide.skirt",
@@ -2402,7 +2422,7 @@
     "-379734527": {
         "shortname": "firework.boomer.pattern",
         "name": "Pattern Boomer",
-        "description": "A very large mortar type firework with an massive champagne colored explosion followed by smaller orange starbursts"
+        "description": "A special boomer which allows you light up the night sky with a custom pattern that you draw. Multiple colors and altitude settings are available."
     },
     "-1553999294": {
         "shortname": "firework.boomer.red",
@@ -2629,6 +2649,11 @@
         "name": "Granola Bar",
         "description": "Granola Bar found as loot. Eating it provides a small boost to health, hunger."
     },
+    "-936921910": {
+        "shortname": "grenade.flashbang",
+        "name": "Flashbang",
+        "description": "A bright explosive device which blinds and disorients anyone near it upon detonation"
+    },
     "-568419968": {
         "shortname": "grub",
         "name": "Grub",
@@ -2733,6 +2758,11 @@
         "shortname": "heavy.plate.pants",
         "name": "Heavy Plate Pants",
         "description": "Offers superior protection at the cost of reduced movement speed."
+    },
+    "-1214542497": {
+        "shortname": "hmlmg",
+        "name": "HMLMG",
+        "description": "A hand made belt-fed light machine gun with high damage, high rate of fire, low accuracy during short bursts."
     },
     "-1442559428": {
         "shortname": "hobobarrel",
@@ -2853,6 +2883,11 @@
         "shortname": "locker",
         "name": "Locker",
         "description": "A locker for keeping your clothes and armor safe!"
+    },
+    "-2027988285": {
+        "shortname": "locomotive",
+        "name": "Locomotive",
+        "description": "A powerful locomotive."
     },
     "-1469578201": {
         "shortname": "longsword",
@@ -3254,11 +3289,6 @@
         "name": "Sickle",
         "description": "A very sharp curved cutting weapon. While its traditional role was to cut grass, this tool is also extremely versatile at cutting throats, perhaps trees, too."
     },
-    "-394470247": {
-        "shortname": "sign.egg.suit",
-        "name": "Egg Suit Sign Test",
-        "description": "A 1-meter by 0.5-meter wooden sign that you can write on."
-    },
     "-1647846966": {
         "shortname": "sign.hanging.ornate",
         "name": "Two Sided Ornate Hanging Sign",
@@ -3447,7 +3477,12 @@
     "-596876839": {
         "shortname": "spraycan",
         "name": "Spray Can",
-        "description": "Use the Spray Can to reskin your items. Press [attack2] while looking at an item to open the skin picker."
+        "description": "Use the Spray Can to leave Tags or reskin your items. Press [attack] to spray and [attack2] to reskin items. Insert spray attachments to spray in the world."
+    },
+    "-1366326648": {
+        "shortname": "spraycandecal",
+        "name": "Spray Can Decal",
+        "description": ""
     },
     "-369760990": {
         "shortname": "stash.small",

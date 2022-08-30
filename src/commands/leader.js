@@ -1,8 +1,9 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const Builder = require('@discordjs/builders');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds');
 
 module.exports = {
-	data: new SlashCommandBuilder()
+	data: new Builder.SlashCommandBuilder()
 		.setName('leader')
 		.setDescription('Give or take the leadership from/to a team member.')
 		.addStringOption(option =>
@@ -22,25 +23,15 @@ module.exports = {
 		let rustplus = client.rustplusInstances[interaction.guildId];
 		if (!rustplus || (rustplus && !rustplus.ready)) {
 			let str = 'Not currently connected to a rust server.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log('WARNING', str);
 			return;
 		}
 
 		if (!rustplus.generalSettings.leaderCommandEnabled) {
 			let str = 'Leader command is turned OFF in settings.';
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+				instance.serverList[rustplus.serverId].title));
 			rustplus.log('WARNING', str);
 			return;
 		}
@@ -48,13 +39,8 @@ module.exports = {
 		if (rustplus.team.leaderSteamId !== rustplus.playerId) {
 			let player = rustplus.team.getPlayer(rustplus.playerId);
 			let str = `Leader command only works if the current leader is ${player.name}.`;
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+				instance.serverList[rustplus.serverId].title));
 			rustplus.log('WARNING', str);
 			return;
 		}
@@ -80,37 +66,22 @@ module.exports = {
 
 		if (matchedPlayer === null) {
 			let str = `Could not identify team member: ${member}.`;
-			await client.interactionEditReply(interaction, {
-				embeds: [new MessageEmbed()
-					.setColor('#ff0040')
-					.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-					.setFooter({ text: instance.serverList[rustplus.serverId].title })],
-				ephemeral: true
-			});
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+				instance.serverList[rustplus.serverId].title));
 			rustplus.log('WARNING', str);
 		}
 		else {
 			if (rustplus.team.leaderSteamId === matchedPlayer.steamId) {
 				let str = `${matchedPlayer.name} is already team leader.`;
-				await client.interactionEditReply(interaction, {
-					embeds: [new MessageEmbed()
-						.setColor('#ff0040')
-						.setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
-					ephemeral: true
-				});
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+					instance.serverList[rustplus.serverId].title));
 				rustplus.log('WARNING', str);
 			}
 			else {
 				await rustplus.team.changeLeadership(matchedPlayer.steamId);
 				let str = `Team leadership was transferred to ${matchedPlayer.name}.`;
-				await client.interactionEditReply(interaction, {
-					embeds: [new MessageEmbed()
-						.setColor('#ce412b')
-						.setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-						.setFooter({ text: instance.serverList[rustplus.serverId].title })],
-					ephemeral: true
-				});
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
+					instance.serverList[rustplus.serverId].title));
 				rustplus.log('INFO', str);
 			}
 		}

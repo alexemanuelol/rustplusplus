@@ -49,6 +49,7 @@
 * Create notes to remind yourself or your teammates about things to do.
 * Get the three closest teammates with the `prox` command.
 * Set custom timers to keep track of when Locked Crate unlocks for instance.
+* Translate messages from different languages from teamchat.
 * Send a Text-To-Speech message from in-game to Discord teamchat channel.
 * Check the upkeep of all Tool Cupboard via the `upkeep` command.
 * Get Facepunch news in Discord.

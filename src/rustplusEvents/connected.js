@@ -1,9 +1,11 @@
-const PollingHandler = require('../handlers/pollingHandler.js');
-const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageEmbed, MessageAttachment } = require('discord.js');
+const Discord = require('discord.js');
 
-const Map = require('../structures/Map');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 const Info = require('../structures/Info');
+const Map = require('../structures/Map');
+const PollingHandler = require('../handlers/pollingHandler.js');
 
 module.exports = {
     name: 'connected',
@@ -22,20 +24,20 @@ module.exports = {
 
             if (channel !== undefined) {
                 await client.messageSend(channel, {
-                    embeds: [new MessageEmbed()
-                        .setColor('#ff0040')
-                        .setTitle('The connection to the server seems to be invalid. Try to re-pair to the server.')
-                        .setThumbnail(instance.serverList[rustplus.serverId].img)
-                        .setTimestamp()
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                    ]
+                    embeds: [DiscordEmbeds.getEmbed({
+                        color: '#ff0040',
+                        title: 'The connection to the server seems to be invalid. Try to re-pair to the server.',
+                        thumbnail: instance.serverList[rustplus.serverId].img,
+                        timestamp: true,
+                        footer: { text: instance.serverList[rustplus.serverId].title }
+                    })]
                 });
             }
 
             instance.serverList[rustplus.serverId].active = false;
             client.writeInstanceFile(rustplus.guildId, instance);
 
-            await DiscordTools.sendServerMessage(rustplus.guildId, rustplus.serverId, null, false, true);
+            await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, null);
 
             rustplus.disconnect();
             delete client.rustplusInstances[rustplus.guildId];
@@ -63,7 +65,7 @@ module.exports = {
             message = await DiscordTools.getMessageById(rustplus.guildId, instance.channelId.information, messageId);
         }
 
-        let mapFile = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
+        let mapFile = new Discord.AttachmentBuilder(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
         if (message === undefined) {
             let infoChannel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
 
@@ -86,15 +88,15 @@ module.exports = {
 
         if (isWipe) {
             if (channel !== undefined) {
-                let file = new MessageAttachment(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
+                let file = new Discord.AttachmentBuilder(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
                 await client.messageSend(channel, {
-                    embeds: [new MessageEmbed()
-                        .setColor('#ce412b')
-                        .setTitle('Wipe detected!')
-                        .setImage(`attachment://${rustplus.guildId}_map_full.png`)
-                        .setTimestamp()
-                        .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                    ],
+                    embeds: [DiscordEmbeds.getEmbed({
+                        color: '#ce412b',
+                        title: 'Wipe detected!',
+                        image: `attachment://${rustplus.guildId}_map_full.png`,
+                        timestamp: true,
+                        footer: { text: instance.serverList[rustplus.serverId].title }
+                    })],
                     files: [file]
                 });
             }
@@ -106,28 +108,29 @@ module.exports = {
             if (rustplus.isReconnect) {
                 if (channel !== undefined) {
                     await client.messageSend(channel, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#00ff40')
-                            .setTitle('Server just went online.')
-                            .setThumbnail(instance.serverList[rustplus.serverId].img)
-                            .setTimestamp()
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                        ]
+                        embeds: [DiscordEmbeds.getEmbed({
+                            color: '#00ff40',
+                            title: 'Server just went online.',
+                            thumbnail: instance.serverList[rustplus.serverId].img,
+                            timestamp: true,
+                            footer: { text: instance.serverList[rustplus.serverId].title }
+                        })]
                     });
                 }
             }
 
-            await DiscordTools.sendServerMessage(rustplus.guildId, rustplus.serverId, null, false, true);
+            await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, null);
 
             rustplus.connected = true;
             rustplus.isReconnect = false;
             rustplus.refusedConnectionRetry = false;
         }
 
-        await require('../discordTools/SetupSwitches')(client, rustplus);
+        await require('../discordTools/SetupSwitches')(client, rustplus, rustplus.newConnection);
         await require('../discordTools/SetupSwitchGroups')(client, rustplus);
         await require('../discordTools/SetupAlarms')(client, rustplus);
-        await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+        await require('../discordTools/SetupStorageMonitors')(client, rustplus, rustplus.newConnection);
+        rustplus.newConnection = false;
         rustplus.loadMarkers();
 
         /* Run the first time before starting the interval */

@@ -1,147 +1,158 @@
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
+const DiscordButtons = require('..//discordTools/discordButtons.js');
+const DiscordModals = require('../discordTools/discordModals.js');
 
 module.exports = async (client, interaction) => {
-    let guildId = interaction.guildId;
-    let instance = client.readInstanceFile(guildId);
-    let rustplus = client.rustplusInstances[guildId];
+    const instance = client.readInstanceFile(interaction.guildId);
+    const guildId = interaction.guildId;
+    const rustplus = client.rustplusInstances[guildId];
 
-    if (interaction.customId.endsWith('DiscordNotification')) {
-        let setting = interaction.customId.replace('DiscordNotification', '');
+    if (interaction.customId.startsWith('DiscordNotification')) {
+        let setting = interaction.customId.replace('DiscordNotificationId', '');
         instance.notificationSettings[setting].discord = !instance.notificationSettings[setting].discord;
-
-        if (rustplus) {
-            rustplus.notificationSettings[setting].discord = instance.notificationSettings[setting].discord;
-        }
-
-        let row = DiscordTools.getNotificationButtons(
-            setting,
-            instance.notificationSettings[setting].discord,
-            instance.notificationSettings[setting].inGame);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.notificationSettings[setting].discord = instance.notificationSettings[setting].discord;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getNotificationButtons(
+                setting, instance.notificationSettings[setting].discord,
+                instance.notificationSettings[setting].inGame)]
+        });
     }
-    else if (interaction.customId.endsWith('InGameNotification')) {
-        let setting = interaction.customId.replace('InGameNotification', '');
+    else if (interaction.customId.startsWith('InGameNotification')) {
+        let setting = interaction.customId.replace('InGameNotificationId', '');
         instance.notificationSettings[setting].inGame = !instance.notificationSettings[setting].inGame;
-
-        if (rustplus) {
-            rustplus.notificationSettings[setting].inGame = instance.notificationSettings[setting].inGame;
-        }
-
-        let row = DiscordTools.getNotificationButtons(
-            setting,
-            instance.notificationSettings[setting].discord,
-            instance.notificationSettings[setting].inGame);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.notificationSettings[setting].inGame = instance.notificationSettings[setting].inGame;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getNotificationButtons(
+                setting, instance.notificationSettings[setting].discord,
+                instance.notificationSettings[setting].inGame)]
+        });
     }
-    else if (interaction.customId === 'allowInGameCommands') {
+    else if (interaction.customId === 'AllowInGameCommands') {
         instance.generalSettings.inGameCommandsEnabled = !instance.generalSettings.inGameCommandsEnabled;
-
-        if (rustplus) {
-            rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
-        }
-
-        let row = DiscordTools.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)]
+        });
+
     }
-    else if (interaction.customId === 'fcmAlarmNotification') {
+    else if (interaction.customId === 'InGameTeammateConnection') {
+        instance.generalSettings.connectionNotify = !instance.generalSettings.connectionNotify;
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+        });
+    }
+    else if (interaction.customId === 'InGameTeammateAfk') {
+        instance.generalSettings.afkNotify = !instance.generalSettings.afkNotify;
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+        });
+    }
+    else if (interaction.customId === 'InGameTeammateDeath') {
+        instance.generalSettings.deathNotify = !instance.generalSettings.deathNotify;
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+        });
+    }
+    else if (interaction.customId === 'FcmAlarmNotification') {
         instance.generalSettings.fcmAlarmNotificationEnabled = !instance.generalSettings.fcmAlarmNotificationEnabled;
-
-        if (rustplus) {
-            rustplus.generalSettings.fcmAlarmNotificationEnabled = instance.generalSettings.fcmAlarmNotificationEnabled;
-        }
-
-        let row = DiscordTools.getFcmAlarmNotificationButtons(
-            instance.generalSettings.fcmAlarmNotificationEnabled,
-            instance.generalSettings.fcmAlarmNotificationEveryone);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEnabled =
+            instance.generalSettings.fcmAlarmNotificationEnabled;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getFcmAlarmNotificationButtons(
+                instance.generalSettings.fcmAlarmNotificationEnabled,
+                instance.generalSettings.fcmAlarmNotificationEveryone)]
+        });
     }
-    else if (interaction.customId === 'fcmAlarmNotificationEveryone') {
+    else if (interaction.customId === 'FcmAlarmNotificationEveryone') {
         instance.generalSettings.fcmAlarmNotificationEveryone = !instance.generalSettings.fcmAlarmNotificationEveryone;
-
-        if (rustplus) {
-            rustplus.generalSettings.fcmAlarmNotificationEveryone =
-                instance.generalSettings.fcmAlarmNotificationEveryone;
-        }
-
-        let row = DiscordTools.getFcmAlarmNotificationButtons(
-            instance.generalSettings.fcmAlarmNotificationEnabled,
-            instance.generalSettings.fcmAlarmNotificationEveryone);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEveryone =
+            instance.generalSettings.fcmAlarmNotificationEveryone;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getFcmAlarmNotificationButtons(
+                instance.generalSettings.fcmAlarmNotificationEnabled,
+                instance.generalSettings.fcmAlarmNotificationEveryone)]
+        });
     }
-    else if (interaction.customId === 'smartAlarmNotifyInGame') {
+    else if (interaction.customId === 'SmartAlarmNotifyInGame') {
         instance.generalSettings.smartAlarmNotifyInGame = !instance.generalSettings.smartAlarmNotifyInGame;
-
-        if (rustplus) {
-            rustplus.generalSettings.smartAlarmNotifyInGame = instance.generalSettings.smartAlarmNotifyInGame;
-        }
-
-        let row = DiscordTools.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.smartAlarmNotifyInGame =
+            instance.generalSettings.smartAlarmNotifyInGame;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getSmartAlarmNotifyInGameButton(
+                instance.generalSettings.smartAlarmNotifyInGame)]
+        });
     }
-    else if (interaction.customId === 'leaderCommandEnabled') {
+    else if (interaction.customId === 'LeaderCommandEnabled') {
         instance.generalSettings.leaderCommandEnabled = !instance.generalSettings.leaderCommandEnabled;
-
-        if (rustplus) {
-            rustplus.generalSettings.leaderCommandEnabled = instance.generalSettings.leaderCommandEnabled;
-        }
-
-        let row = DiscordTools.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.leaderCommandEnabled = instance.generalSettings.leaderCommandEnabled;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getLeaderCommandEnabledButton(
+                instance.generalSettings.leaderCommandEnabled)]
+        });
     }
-    else if (interaction.customId === 'trackerNotifyAllOffline') {
+    else if (interaction.customId === 'TrackerNotifyAllOffline') {
         instance.generalSettings.trackerNotifyAllOffline = !instance.generalSettings.trackerNotifyAllOffline;
-
-        if (rustplus) {
-            rustplus.generalSettings.trackerNotifyAllOffline = instance.generalSettings.trackerNotifyAllOffline;
-        }
-
-        let row = DiscordTools.getTrackerNotifyButtons(
-            instance.generalSettings.trackerNotifyAllOffline,
-            instance.generalSettings.trackerNotifyAnyOnline);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.trackerNotifyAllOffline =
+            instance.generalSettings.trackerNotifyAllOffline;
+
+        await client.interactionUpdate(interaction, {
+            components: [getTrackerNotifyButtons(
+                instance.generalSettings.trackerNotifyAllOffline,
+                instance.generalSettings.trackerNotifyAnyOnline)]
+        });
     }
-    else if (interaction.customId === 'trackerNotifyAnyOnline') {
+    else if (interaction.customId === 'TrackerNotifyAnyOnline') {
         instance.generalSettings.trackerNotifyAnyOnline = !instance.generalSettings.trackerNotifyAnyOnline;
-
-        if (rustplus) {
-            rustplus.generalSettings.trackerNotifyAnyOnline = instance.generalSettings.trackerNotifyAnyOnline;
-        }
-
-        let row = DiscordTools.getTrackerNotifyButtons(
-            instance.generalSettings.trackerNotifyAllOffline,
-            instance.generalSettings.trackerNotifyAnyOnline);
-
-        await client.interactionUpdate(interaction, { components: [row] });
-
         client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.trackerNotifyAnyOnline =
+            instance.generalSettings.trackerNotifyAnyOnline;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getTrackerNotifyButtons(
+                instance.generalSettings.trackerNotifyAllOffline,
+                instance.generalSettings.trackerNotifyAnyOnline)]
+        });
     }
-    else if (interaction.customId.endsWith('ServerConnect')) {
-        let serverId = interaction.customId.replace('ServerConnect', '');
+    else if (interaction.customId.startsWith('ServerConnect')) {
+        const serverId = interaction.customId.replace('ServerConnectId', '');
 
         if (!instance.serverList.hasOwnProperty(serverId)) {
             try {
@@ -157,17 +168,15 @@ module.exports = async (client, interaction) => {
         for (const [key, value] of Object.entries(instance.serverList)) {
             if (value.active) {
                 instance.serverList[key].active = false;
-                client.writeInstanceFile(guildId, instance);
-                await DiscordTools.sendServerMessage(guildId, key, null, false, true);
+                await DiscordMessages.sendServerMessage(guildId, key, null);
                 break;
             }
         }
 
-        instance = client.readInstanceFile(guildId);
         instance.serverList[serverId].active = true;
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordTools.sendServerMessage(guildId, serverId, null, false, true, interaction);
+        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
 
         /* Disconnect previous instance is any */
         if (rustplus) {
@@ -175,16 +184,18 @@ module.exports = async (client, interaction) => {
         }
 
         /* Create the rustplus instance */
-        client.createRustplusInstance(
+        const newRustplus = client.createRustplusInstance(
             guildId,
             instance.serverList[serverId].serverIp,
             instance.serverList[serverId].appPort,
             instance.serverList[serverId].steamId,
             instance.serverList[serverId].playerToken
         );
+
+        newRustplus.newConnection = true;
     }
-    else if (interaction.customId.endsWith('CreateTracker')) {
-        let serverId = interaction.customId.replace('CreateTracker', '');
+    else if (interaction.customId.startsWith('CreateTracker')) {
+        let serverId = interaction.customId.replace('CreateTrackerId', '');
 
         if (!instance.serverList.hasOwnProperty(serverId)) {
             try {
@@ -223,12 +234,12 @@ module.exports = async (client, interaction) => {
         }
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordTools.sendTrackerMessage(guildId, name);
+        await DiscordMessages.sendTrackerMessage(guildId, name);
     }
-    else if (interaction.customId.endsWith('ServerDisconnect') ||
-        interaction.customId.endsWith('ServerReconnecting')) {
-        let serverId = interaction.customId.replace('ServerDisconnect', '');
-        serverId = serverId.replace('ServerReconnecting', '');
+    else if (interaction.customId.startsWith('ServerDisconnect') ||
+        interaction.customId.startsWith('ServerReconnecting')) {
+        let serverId = interaction.customId.replace('ServerDisconnectId', '');
+        serverId = serverId.replace('ServerReconnectingId', '');
 
         if (!instance.serverList.hasOwnProperty(serverId)) {
             try {
@@ -244,7 +255,7 @@ module.exports = async (client, interaction) => {
         instance.serverList[serverId].active = false;
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordTools.sendServerMessage(guildId, serverId, null, false, true, interaction);
+        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
 
         /* Disconnect previous instance if any */
         if (rustplus) {
@@ -252,8 +263,8 @@ module.exports = async (client, interaction) => {
             delete client.rustplusInstances[guildId];
         }
     }
-    else if (interaction.customId.endsWith('ServerDelete')) {
-        let serverId = interaction.customId.replace('ServerDelete', '');
+    else if (interaction.customId.startsWith('ServerDelete')) {
+        let serverId = interaction.customId.replace('ServerDeleteId', '');
 
         if (!instance.serverList.hasOwnProperty(serverId)) {
             try {
@@ -328,20 +339,11 @@ module.exports = async (client, interaction) => {
 
         client.writeInstanceFile(guildId, instance);
     }
-    else if (interaction.customId.endsWith('SmartSwitch')) {
-        let id = interaction.customId.replace('OnSmartSwitch', '').replace('OffSmartSwitch', '');
+    else if (interaction.customId.startsWith('SmartSwitchOn') ||
+        interaction.customId.startsWith('SmartSwitchOff')) {
+        let id = interaction.customId.replace('SmartSwitchOnId', '').replace('SmartSwitchOffId', '');
 
         if (!instance.switches.hasOwnProperty(id)) {
-            if (client.switchesMessages[guildId].hasOwnProperty(id)) {
-                try {
-                    await client.switchesMessages[guildId][id].delete();
-                }
-                catch (e) {
-                    client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
-                }
-                delete client.switchesMessages[guildId][id];
-            }
-
             try {
                 interaction.deferUpdate();
             }
@@ -387,7 +389,12 @@ module.exports = async (client, interaction) => {
             }
         }
 
-        let active = (interaction.customId.endsWith('OnSmartSwitch')) ? true : false;
+        if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
+            clearTimeout(rustplus.currentSwitchTimeouts[id]);
+            delete rustplus.currentSwitchTimeouts[id];
+        }
+
+        let active = (interaction.customId.startsWith('SmartSwitchOn')) ? true : false;
 
         let prevActive = instance.switches[id].active;
         instance.switches[id].active = active;
@@ -405,7 +412,7 @@ module.exports = async (client, interaction) => {
 
         if (!(await rustplus.isResponseValid(response))) {
             if (instance.switches[id].reachable) {
-                await DiscordTools.sendSmartSwitchNotFound(rustplus.guildId, id);
+                await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, id);
             }
             instance.switches[id].reachable = false;
             instance.switches[id].active = prevActive;
@@ -418,27 +425,32 @@ module.exports = async (client, interaction) => {
             client.writeInstanceFile(rustplus.guildId, instance);
         }
 
-        DiscordTools.sendSmartSwitchMessage(guildId, id, true, true, false, interaction);
+        DiscordMessages.sendSmartSwitchMessage(guildId, id, interaction);
         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
             client, interaction.guildId, instance.switches[id].serverId, id);
     }
-    else if (interaction.customId.endsWith('SmartSwitchDelete')) {
-        let id = interaction.customId.replace('SmartSwitchDelete', '');
+    else if (interaction.customId.startsWith('SmartSwitchEdit')) {
+        let id = interaction.customId.replace('SmartSwitchEditId', '');
+
+        const modal = DiscordModals.getSmartSwitchEditModal(interaction.guildId, id);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('SmartSwitchDelete')) {
+        let id = interaction.customId.replace('SmartSwitchDeleteId', '');
         let serverId = null;
 
         if (instance.switches.hasOwnProperty(id)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
+                instance.switches[id].messageId);
+
             serverId = instance.switches[id].serverId;
             delete instance.switches[id];
+            client.writeInstanceFile(guildId, instance);
         }
 
-        if (client.switchesMessages[guildId].hasOwnProperty(id)) {
-            try {
-                await client.switchesMessages[guildId][id].delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
-            }
-            delete client.switchesMessages[guildId][id];
+        if (rustplus) {
+            clearTimeout(rustplus.currentSwitchTimeouts[id]);
+            delete rustplus.currentSwitchTimeouts[id];
         }
 
         for (const [groupName, groupContent] of Object.entries(instance.serverList[serverId].switchGroups)) {
@@ -446,20 +458,20 @@ module.exports = async (client, interaction) => {
                 instance.serverList[serverId].switchGroups[groupName].switches =
                     groupContent.switches.filter(e => e !== id);
                 client.writeInstanceFile(guildId, instance);
-                await DiscordTools.sendSmartSwitchGroupMessage(guildId, groupName, true, false, false);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, groupName);
             }
         }
 
         client.writeInstanceFile(guildId, instance);
     }
-    else if (interaction.customId.endsWith('SmartAlarmEveryone')) {
-        let id = interaction.customId.replace('SmartAlarmEveryone', '');
+    else if (interaction.customId.startsWith('SmartAlarmEveryone')) {
+        let id = interaction.customId.replace('SmartAlarmEveryoneId', '');
 
         if (instance.alarms.hasOwnProperty(id)) {
             instance.alarms[id].everyone = !instance.alarms[id].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendSmartAlarmMessage(interaction.guildId, id, false, true, false, interaction);
+            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id, interaction);
         }
         else {
             try {
@@ -471,87 +483,74 @@ module.exports = async (client, interaction) => {
             client.log('ERROR', `Smart Alarm with id '${id}' does not exist in the instance file.`, 'error');
         }
     }
-    else if (interaction.customId.endsWith('SmartAlarmDelete')) {
-        let id = interaction.customId.replace('SmartAlarmDelete', '');
+    else if (interaction.customId.startsWith('SmartAlarmDelete')) {
+        let id = interaction.customId.replace('SmartAlarmDeleteId', '');
 
         if (instance.alarms.hasOwnProperty(id)) {
-            let messageId = instance.alarms[id].messageId;
-            let message = await DiscordTools.getMessageById(guildId, instance.channelId.alarms, messageId);
-            if (message !== undefined) {
-                try {
-                    await message.delete();
-                }
-                catch (e) {
-                    client.log('ERROR', `Could not delete alarm message with id: ${messageId}.`, 'error');
-                }
-            }
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
+                instance.alarms[id].messageId);
 
             delete instance.alarms[id];
             client.writeInstanceFile(guildId, instance);
         }
     }
-    else if (interaction.customId.endsWith('StorageMonitorToolCupboardEveryone')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardEveryone', '');
+    else if (interaction.customId.startsWith('SmartAlarmEdit')) {
+        let id = interaction.customId.replace('SmartAlarmEditId', '');
+
+        const modal = DiscordModals.getSmartAlarmEditModal(interaction.guildId, id);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('StorageMonitorToolCupboardEveryone')) {
+        let id = interaction.customId.replace('StorageMonitorToolCupboardEveryoneId', '');
 
         if (instance.storageMonitors.hasOwnProperty(id)) {
             instance.storageMonitors[id].everyone = !instance.storageMonitors[id].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendStorageMonitorMessage(interaction.guildId, id, false, true, false, interaction);
+            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id, interaction);
         }
     }
-    else if (interaction.customId.endsWith('StorageMonitorToolCupboardInGame')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardInGame', '');
+    else if (interaction.customId.startsWith('StorageMonitorToolCupboardInGame')) {
+        let id = interaction.customId.replace('StorageMonitorToolCupboardInGameId', '');
 
         if (instance.storageMonitors.hasOwnProperty(id)) {
             instance.storageMonitors[id].inGame = !instance.storageMonitors[id].inGame;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendStorageMonitorMessage(interaction.guildId, id, false, true, false, interaction);
+            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id, interaction);
         }
     }
-    else if (interaction.customId.endsWith('StorageMonitorToolCupboardDelete')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardDelete', '');
+    else if (interaction.customId.startsWith('StorageMonitorToolCupboardDelete')) {
+        let id = interaction.customId.replace('StorageMonitorToolCupboardDeleteId', '');
 
         if (instance.storageMonitors.hasOwnProperty(id)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
+                instance.storageMonitors[id].messageId);
+
             delete instance.storageMonitors[id];
+            client.writeInstanceFile(guildId, instance);
         }
-
-        if (client.storageMonitorsMessages[guildId].hasOwnProperty(id)) {
-            try {
-                await client.storageMonitorsMessages[guildId][id].delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete storage monitor message with id: ${id}.`, 'error');
-            }
-            delete client.storageMonitorsMessages[guildId][id];
-        }
-
-        client.writeInstanceFile(guildId, instance);
     }
-    else if (interaction.customId.endsWith('StorageMonitorContainerDelete')) {
-        let id = interaction.customId.replace('StorageMonitorContainerDelete', '');
+    else if (interaction.customId.startsWith('StorageMonitorContainerDelete')) {
+        let id = interaction.customId.replace('StorageMonitorContainerDeleteId', '');
 
         if (instance.storageMonitors.hasOwnProperty(id)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
+                instance.storageMonitors[id].messageId);
+
             delete instance.storageMonitors[id];
+            client.writeInstanceFile(guildId, instance);
         }
-
-        if (client.storageMonitorsMessages[guildId].hasOwnProperty(id)) {
-            try {
-                await client.storageMonitorsMessages[guildId][id].delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete storage monitor message with id: ${id}.`, 'error');
-            }
-            delete client.storageMonitorsMessages[guildId][id];
-        }
-
-        client.writeInstanceFile(guildId, instance);
     }
-    else if (interaction.customId.endsWith('TurnOnGroup') ||
-        interaction.customId.endsWith('TurnOffGroup')) {
-        let id = interaction.customId.replace('TurnOnGroup', '');
-        id = id.replace('TurnOffGroup', '');
+    else if (interaction.customId.startsWith('TurnOnGroup') ||
+        interaction.customId.startsWith('TurnOffGroup')) {
+        let id = interaction.customId.replace('TurnOnGroupId', '');
+        id = id.replace('TurnOffGroupId', '');
+
+        if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
+            clearTimeout(rustplus.currentSwitchTimeouts[id]);
+            delete rustplus.currentSwitchTimeouts[id];
+        }
 
         try {
             interaction.deferUpdate();
@@ -581,57 +580,52 @@ module.exports = async (client, interaction) => {
             }
         }
 
-        let active = (interaction.customId.endsWith('TurnOnGroup') ? true : false);
+        let active = (interaction.customId.startsWith('TurnOnGroup') ? true : false);
 
         await SmartSwitchGroupHandler.TurnOnOffGroup(
             client, rustplus, interaction.guildId, rustplus.serverId, id, active);
     }
-    else if (interaction.customId.endsWith('DeleteGroup')) {
-        let id = interaction.customId.replace('DeleteGroup', '');
+    else if (interaction.customId.startsWith('DeleteGroup')) {
+        let id = interaction.customId.replace('DeleteGroupId', '');
 
         if (!rustplus) {
             client.log('ERROR', 'Rustplus is not connected, cannot delete the Smart Switch Group...', 'error');
             return;
         }
 
+        clearTimeout(rustplus.currentSwitchTimeouts[id]);
+        delete rustplus.currentSwitchTimeouts[id];
+
         if (instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(id)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
+                instance.serverList[rustplus.serverId].switchGroups[id].messageId);
+
             delete instance.serverList[rustplus.serverId].switchGroups[id];
+            client.writeInstanceFile(guildId, instance);
         }
-
-        if (client.switchesMessages[guildId].hasOwnProperty(id)) {
-            try {
-                await client.switchesMessages[guildId][id].delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete switch message with id: ${id}.`, 'error');
-            }
-            delete client.switchesMessages[guildId][id];
-        }
-
-        client.writeInstanceFile(guildId, instance);
     }
-    else if (interaction.customId.endsWith('TrackerActive')) {
-        let trackerName = interaction.customId.replace('TrackerActive', '');
+    else if (interaction.customId.startsWith('TrackerActive')) {
+        let trackerName = interaction.customId.replace('TrackerActiveId', '');
 
         if (instance.trackers.hasOwnProperty(trackerName)) {
             instance.trackers[trackerName].active = !instance.trackers[trackerName].active;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName, false, true, interaction);
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
         }
     }
-    else if (interaction.customId.endsWith('TrackerEveryone')) {
-        let trackerName = interaction.customId.replace('TrackerEveryone', '');
+    else if (interaction.customId.startsWith('TrackerEveryone')) {
+        let trackerName = interaction.customId.replace('TrackerEveryoneId', '');
 
         if (instance.trackers.hasOwnProperty(trackerName)) {
             instance.trackers[trackerName].everyone = !instance.trackers[trackerName].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName, false, true, interaction);
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
         }
     }
-    else if (interaction.customId.endsWith('TrackerDelete')) {
-        let trackerName = interaction.customId.replace('TrackerDelete', '');
+    else if (interaction.customId.startsWith('TrackerDelete')) {
+        let trackerName = interaction.customId.replace('TrackerDeleteId', '');
 
         if (instance.trackers.hasOwnProperty(trackerName)) {
             let messageId = instance.trackers[trackerName].messageId;

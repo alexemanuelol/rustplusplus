@@ -1,5 +1,6 @@
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: 'error',
@@ -21,17 +22,17 @@ module.exports = {
                 let channel = DiscordTools.getTextChannelById(rustplus.guildId, channelIdActivity);
                 if (channel !== undefined) {
                     await client.messageSend(channel, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setTitle('Server just went offline.')
-                            .setThumbnail(instance.serverList[rustplus.serverId].img)
-                            .setTimestamp()
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })
-                        ]
+                        embeds: [DiscordEmbeds.getEmbed({
+                            color: '#ff0040',
+                            title: 'Server just went offline.',
+                            thumbnail: instance.serverList[rustplus.serverId].img,
+                            timestamp: true,
+                            footer: { text: instance.serverList[rustplus.serverId].title }
+                        })]
                     });
                 }
 
-                await DiscordTools.sendServerMessage(rustplus.guildId, rustplus.serverId, 2, false, true);
+                await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, 2);
 
                 rustplus.firstTime = false;
                 rustplus.connected = false;

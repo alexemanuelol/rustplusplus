@@ -32,9 +32,7 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `edit` | &nbsp; | Edit the properties of a Smart Alarm. | &nbsp;
 &nbsp; | `id` | The ID of the Smart Alarm. | `True`
-&nbsp; | `name` | Rename the Smart Alarm. | `False`
-&nbsp; | `message` | Set the Smart Alarm notification message. | `False`
-&nbsp; | `image` | Set the image that best represent the Smart Alarm. | `False`
+&nbsp; | `image` | Set the image that best represent the Smart Alarm. | `True`
 
 ![Discord Slash Command alarm Image](images/alarms_edit.png)
 
@@ -192,8 +190,6 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `edit_switch` | &nbsp; | Edit the properties of a Smart Switch. | &nbsp;
 &nbsp; | `id` | The ID of the Smart Switch. | `True`
-&nbsp; | `name` | Rename the Smart Switch. | `False`
-&nbsp; | `command` | Set the custom command for the Smart Switch. | `False`
 &nbsp; | `image` | Set the image that best represent the Smart Switch. | `False`
 `create_group` | &nbsp; | Create a Smart Switch Group. | &nbsp;
 &nbsp; | `group_name` | The name of the Group to be created. | `True`
@@ -439,6 +435,27 @@ Subcommand | Description | Required
 
 ![In-Game Command timer Image](images/timer_ingame.png)
 
+
+## **tr**
+
+> **Translate a text from English to another language.**
+<br>Command: `!tr <language-code> <Text>`
+
+Subcommand | Description | Required
+---------- | ----------- | --------
+`language` | Get the language code (`!tr language <language>`). | `False`
+`<language-code>` | Translate the text to this language (`!tr <language> <text>`). | `False`
+
+![In-Game Command get language code Image](images/language_code_ingame.png)
+![In-Game Command translateTo Image](images/translateTo_ingame.png)
+
+
+## **trf**
+
+> **Translate a text from a language to another language.**
+<br>Command: `!trf <language-code-from> <language-code-to> <Text>`
+
+![In-Game Command translateFrom Image](images/translateFrom_ingame.png)
 
 ## **tts**
 

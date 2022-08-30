@@ -1,10 +1,11 @@
-const fs = require('fs');
+const Fs = require('fs');
+
 const Str = require('../util/string.js');
 const Fuse = require('fuse.js')
 
 class Items {
     constructor() {
-        this._items = JSON.parse(fs.readFileSync(`${__dirname}/../util/items.json`, 'utf8'));
+        this._items = JSON.parse(Fs.readFileSync(`${__dirname}/../util/items.json`, 'utf8'));
         const flattenedItems = Object.keys(this.items).map(id => ({ id, ...this.items[id] }));
         this._fuse = new Fuse(flattenedItems, {
             keys: [{

@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const DiscordTools = require('../discordTools/discordTools.js');
-const { MessageEmbed } = require('discord.js');
+const Builder = require('@discordjs/builders');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new Builder.SlashCommandBuilder()
         .setName('tracker')
         .setDescription('Operations for Battlemetrics Player Tracker.')
         .addSubcommand(subcommand =>
@@ -56,12 +57,7 @@ module.exports = {
             case 'edit': {
                 if (!Object.keys(instance.trackers).includes(trackerName)) {
                     let str = `Battlemetrics Player Tracker '${trackerName}' does not exist.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     client.log('WARNING', str);
                     return;
                 }
@@ -70,12 +66,7 @@ module.exports = {
 
                 if (trackerName === newTrackerName) {
                     let str = 'No changes were made.';
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     client.log('WARNING', str);
                     return;
                 }
@@ -84,27 +75,17 @@ module.exports = {
                 delete instance.trackers[trackerName];
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendTrackerMessage(interaction.guildId, newTrackerName);
+                await DiscordMessages.sendTrackerMessage(interaction.guildId, newTrackerName);
 
                 let str = `Successfully edited Battlemetrics Player Tracker '${trackerName}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new MessageEmbed()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
                 client.log('INFO', str);
             } break;
 
             case 'add_player': {
                 if (!Object.keys(instance.trackers).includes(trackerName)) {
                     let str = `Battlemetrics Player Tracker '${trackerName}' does not exist.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     client.log('WARNING', str);
                     return;
                 }
@@ -113,12 +94,7 @@ module.exports = {
 
                 if (instance.trackers[trackerName].players.some(e => e.id === steamId)) {
                     let str = `The player '${steamId}' already exist in '${trackerName}' tracker.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     client.log('WARNING', str);
                     return;
                 }
@@ -128,30 +104,20 @@ module.exports = {
                 });
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName);
+                await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName);
 
                 /* To force search of player name via scrape */
                 client.battlemetricsIntervalCounter = 0;
 
                 let str = `Successfully added '${steamId}' to the tracker '${trackerName}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new MessageEmbed()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
                 client.log('INFO', str);
             } break;
 
             case 'remove_player': {
                 if (!Object.keys(instance.trackers).includes(trackerName)) {
                     let str = `Battlemetrics Player Tracker '${trackerName}' does not exist.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     client.log('WARNING', str);
                     return;
                 }
@@ -160,12 +126,7 @@ module.exports = {
 
                 if (!instance.trackers[trackerName].players.some(e => e.steamId === steamId)) {
                     let str = `The player '${steamId}' already exist in '${trackerName}' tracker.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     client.log('WARNING', str);
                     return;
                 }
@@ -174,15 +135,10 @@ module.exports = {
                     instance.trackers[trackerName].players.filter(e => e.steamId !== steamId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordTools.sendTrackerMessage(interaction.guildId, trackerName);
+                await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName);
 
                 let str = `Successfully removed '${steamId}' from the tracker '${trackerName}'.`;
-                await client.interactionEditReply(interaction, {
-                    embeds: [new MessageEmbed()
-                        .setColor('#ce412b')
-                        .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)],
-                    ephemeral: true
-                });
+                await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
                 client.log('INFO', str);
             } break;
 

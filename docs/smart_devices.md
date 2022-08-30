@@ -15,8 +15,11 @@ If you take a look at the Switch embed located in the `switches` channel, you ca
 From In-Game you can interact with Smart Switches by using the custom command for that switch. If your switchs custom command is `lights` and your prefix is `!`, you can run the following commands:
 
 * `!lights` - To toggle the switch.
+* `!lights 60s` - To toggle the switch and then toggle it back after 60 seconds.
 * `!lights on` - To turn the switch ON.
 * `!lights off` - To turn the switch OFF.
+* `!lights on 60s` - To turn the switch ON and automatically turn it OFF after 60 seconds.
+* `!lights off 60s` - To turn the switch OFF and automatically turn it ON after 60 seconds.
 * `!lights status` - To get the current status of the switch.
 
 ### Groups
@@ -28,6 +31,8 @@ From In-Game you can interact with the Smart Switch Group by using the custom co
 * `!group` - To get status of all Smart Switches in the group.
 * `!group on` - To turn all the switches in the group ON.
 * `!group off` - To turn all the switches in the group OFF.
+* `!group on 60s` - To turn all the switches in the group ON and automatically turn them OFF after 60 seconds.
+* `!group off 60s` - To turn all the switches in the group OFF and automatically turn them ON after 60 seconds.
 
 
 ## Smart Alarms

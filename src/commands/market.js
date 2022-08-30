@@ -1,8 +1,9 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed } = require('discord.js');
+const Builder = require('@discordjs/builders');
+
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
-    data: new SlashCommandBuilder()
+    data: new Builder.SlashCommandBuilder()
         .setName('market')
         .setDescription('Operations for In-Game Vending Machines.')
         .addSubcommand(subcommand =>
@@ -52,12 +53,7 @@ module.exports = {
         let rustplus = client.rustplusInstances[interaction.guildId];
         if (!rustplus || (rustplus && !rustplus.ready)) {
             let str = 'Not currently connected to a rust server.';
-            await client.interactionEditReply(interaction, {
-                embeds: [new MessageEmbed()
-                    .setColor('#ff0040')
-                    .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                ephemeral: true
-            });
+            await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             client.log('WARNING', str);
             return;
         }
@@ -72,12 +68,7 @@ module.exports = {
                     let item = rustplus.items.getClosestItemIdByName(searchItemName)
                     if (item === undefined) {
                         let str = `No item with name '${searchItemName}' could be found.`;
-                        await client.interactionEditReply(interaction, {
-                            embeds: [new MessageEmbed()
-                                .setColor('#ff0040')
-                                .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                            ephemeral: true
-                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
@@ -91,31 +82,23 @@ module.exports = {
                     }
                     else {
                         let str = `No item with id '${searchItemId}' could be found.`;
-                        await client.interactionEditReply(interaction, {
-                            embeds: [new MessageEmbed()
-                                .setColor('#ff0040')
-                                .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                            ephemeral: true
-                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
                 }
                 else if (searchItemName === null && searchItemId === null) {
                     let str = `No 'name' or 'id' was given.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.log('WARNING', str);
                     return;
                 }
                 let itemName = rustplus.items.getName(itemId);
 
+                let full = false;
                 let foundLines = '';
                 for (let vendingMachine of rustplus.mapMarkers.vendingMachines) {
+                    if (full) break;
                     if (!vendingMachine.hasOwnProperty('sellOrders')) continue;
 
                     for (let order of vendingMachine.sellOrders) {
@@ -135,6 +118,7 @@ module.exports = {
                         let orderCurrencyName = (orderCurrencyId !== null) ?
                             rustplus.items.getName(orderCurrencyId) : 'Unknown';
 
+                        let prevFoundLines = foundLines;
                         if (orderItemId === parseInt(itemId) || orderCurrencyId === parseInt(itemId)) {
                             if (foundLines === '') {
                                 foundLines += '```diff\n';
@@ -146,6 +130,13 @@ module.exports = {
                             foundLines += `${orderCostPerItem}x ${orderCurrencyName}`;
                             foundLines += `${(orderCurrencyIsBlueprint) ? ' (BP)' : ''} `;
                             foundLines += `(${orderAmountInStock} left)\n`;
+
+                            if (foundLines.length >= 4000) {
+                                foundLines = prevFoundLines;
+                                foundLines += `...\n`;
+                                full = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -157,11 +148,12 @@ module.exports = {
                     foundLines += '```'
                 }
 
-                let embed = new MessageEmbed()
-                    .setColor('#ce412b')
-                    .setTitle(`Search result for item: **${itemName}**`)
-                    .setDescription(foundLines)
-                    .setFooter({ text: `${instance.serverList[rustplus.serverId].title}` });
+                const embed = DiscordEmbeds.getEmbed({
+                    color: '#ce412b',
+                    title: `Search result for item: **${itemName}**`,
+                    description: foundLines,
+                    footer: { text: `${instance.serverList[rustplus.serverId].title}` }
+                });
 
                 await client.interactionEditReply(interaction, { embeds: [embed] });
                 rustplus.log('INFO', `Showing the result for item: ${itemName}`);
@@ -176,12 +168,7 @@ module.exports = {
                     let item = rustplus.items.getClosestItemIdByName(subscribeItemName)
                     if (item === undefined) {
                         let str = `No item with name '${subscribeItemName}' could be found.`;
-                        await client.interactionEditReply(interaction, {
-                            embeds: [new MessageEmbed()
-                                .setColor('#ff0040')
-                                .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                            ephemeral: true
-                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
@@ -195,24 +182,14 @@ module.exports = {
                     }
                     else {
                         let str = `No item with id '${subscribeItemId}' could be found.`;
-                        await client.interactionEditReply(interaction, {
-                            embeds: [new MessageEmbed()
-                                .setColor('#ff0040')
-                                .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                            ephemeral: true
-                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     let str = `No 'name' or 'id' was given.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -227,13 +204,8 @@ module.exports = {
 
                 if (instance.marketSubscribeItemIds.includes(itemId)) {
                     let str = `Already subscribed to item '${itemName}'.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: `${instance.serverList[rustplus.serverId].title}` })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                 }
                 else {
@@ -241,13 +213,8 @@ module.exports = {
                     client.writeInstanceFile(interaction.guildId, instance);
 
                     let str = `Just subscribed to item '${itemName}'.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ce412b')
-                            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('INFO', str);
                 }
             } break;
@@ -261,12 +228,7 @@ module.exports = {
                     let item = rustplus.items.getClosestItemIdByName(subscribeItemName)
                     if (item === undefined) {
                         let str = `No item with name '${subscribeItemName}' could be found.`;
-                        await client.interactionEditReply(interaction, {
-                            embeds: [new MessageEmbed()
-                                .setColor('#ff0040')
-                                .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                            ephemeral: true
-                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
@@ -280,24 +242,14 @@ module.exports = {
                     }
                     else {
                         let str = `No item with id '${subscribeItemId}' could be found.`;
-                        await client.interactionEditReply(interaction, {
-                            embeds: [new MessageEmbed()
-                                .setColor('#ff0040')
-                                .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                            ephemeral: true
-                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.log('WARNING', str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     let str = `No 'name' or 'id' was given.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.log('WARNING', str);
                     return;
                 }
@@ -310,24 +262,14 @@ module.exports = {
                     client.writeInstanceFile(interaction.guildId, instance);
 
                     let str = `Item '${itemName}' have been removed from subscription.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ce412b')
-                            .setDescription(`\`\`\`diff\n+ ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('INFO', str);
                 }
                 else {
                     let str = `Item '${itemName}' does not exist in subscription list.`;
-                    await client.interactionEditReply(interaction, {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription(`\`\`\`diff\n- ${str}\n\`\`\``)
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    });
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+                        instance.serverList[rustplus.serverId].title));
                     rustplus.log('WARNING', str);
                 }
             } break;
@@ -340,30 +282,25 @@ module.exports = {
                     ids += `\`${item}\`\n`;
                 }
 
-                let content = null;
                 if (names === '' || ids === '') {
-                    content = {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ff0040')
-                            .setDescription('```diff\n- Item subcription list is empty.\n```')
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
-                        ephemeral: true
-                    }
+                    let str = 'Item subscription list is empty.';
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+                        instance.serverList[rustplus.serverId].title));
                 }
                 else {
-                    content = {
-                        embeds: [new MessageEmbed()
-                            .setColor('#ce412b')
-                            .setTitle('Subscription list')
-                            .addFields(
+                    await client.interactionEditReply(interaction, {
+                        embeds: [DiscordEmbeds.getEmbed({
+                            color: '#ce412b',
+                            title: 'Subscription list',
+                            footer: { text: instance.serverList[rustplus.serverId].title },
+                            fields: [
                                 { name: 'Name', value: names, inline: true },
-                                { name: 'ID', value: ids, inline: true })
-                            .setFooter({ text: instance.serverList[rustplus.serverId].title })],
+                                { name: 'ID', value: ids, inline: true }]
+                        })],
                         ephemeral: true
-                    }
+                    });
                 }
 
-                await client.interactionEditReply(interaction, content);
                 rustplus.log('INFO', 'Showing the subscription list.');
             } break;
 
