@@ -37,10 +37,10 @@ module.exports = async (client, guild) => {
     }
 
     try {
-        category.permissionOverwrites.set(perms);
+        await category.permissionOverwrites.set(perms);
     }
     catch (e) {
-        /* Ignore */
+        client.log('ERROR', `Could not set permissions for category: ${category.id}`, 'error');
     }
 
     return category;
