@@ -29,7 +29,16 @@ module.exports = {
                     message.broadcast.teamMessage.message.message.replace(
                         /^<color.+?<\/color>/g, '');
 
-                let handled = await CommandHandler.inGameCommandHandler(rustplus, client, message);
+                const handled = await CommandHandler.inGameCommandHandler(rustplus, client, message);
+                if(handled) {
+                    return;
+                }
+
+                const msg = message.broadcast.teamMessage.message.message; // This is just obnoxious
+                if (message.broadcast.teamMessage.message.message.startsWith(instance.generalSettings.trademark)) {
+                    // Ignore bot messages
+                    return;
+                }
 
                 if (!handled) {
                     TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
