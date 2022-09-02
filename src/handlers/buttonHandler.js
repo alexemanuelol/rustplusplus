@@ -309,22 +309,20 @@ module.exports = async (client, interaction) => {
         }
 
         /* Remove all Smart Alarms associated with this server */
-        for (const [key, value] of Object.entries(instance.alarms)) {
-            if (`${value.serverId}` === serverId) {
-                let messageId = instance.alarms[key].messageId;
-                let message = await DiscordTools.getMessageById(
-                    rustplus.guildId, instance.channelId.alarms, messageId);
-                if (message !== undefined) {
-                    try {
-                        await message.delete();
-                    }
-                    catch (e) {
-                        client.log('ERROR', `Could not delete alarm message with id: ${messageId}.`, 'error');
-                    }
+        for (const [key, value] of Object.entries(instance.serverList[serverId].alarms)) {
+            let messageId = instance.serverList[serverId].alarms[key].messageId;
+            let message = await DiscordTools.getMessageById(
+                rustplus.guildId, instance.channelId.alarms, messageId);
+            if (message !== undefined) {
+                try {
+                    await message.delete();
                 }
-
-                delete instance.alarms[key];
+                catch (e) {
+                    client.log('ERROR', `Could not delete alarm message with id: ${messageId}.`, 'error');
+                }
             }
+
+            delete instance.serverList[serverId].alarms[key];
         }
 
         /* Remove all Storage Monitors associated with this server. */
@@ -465,13 +463,14 @@ module.exports = async (client, interaction) => {
         client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartAlarmEveryone')) {
-        let id = interaction.customId.replace('SmartAlarmEveryoneId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartAlarmEveryone', ''));
 
-        if (instance.alarms.hasOwnProperty(id)) {
-            instance.alarms[id].everyone = !instance.alarms[id].everyone;
+        if (instance.serverList[ids.serverId].alarms.hasOwnProperty(ids.entityId)) {
+            instance.serverList[ids.serverId].alarms[ids.entityId].everyone =
+                !instance.serverList[ids.serverId].alarms[ids.entityId].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id, interaction);
+            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId, interaction);
         }
         else {
             try {
@@ -480,24 +479,24 @@ module.exports = async (client, interaction) => {
             catch (e) {
                 client.log('ERROR', 'Could not defer interaction.', 'error');
             }
-            client.log('ERROR', `Smart Alarm with id '${id}' does not exist in the instance file.`, 'error');
+            client.log('ERROR', `Smart Alarm with id '${ids.entityId}' does not exist in the instance file.`, 'error');
         }
     }
     else if (interaction.customId.startsWith('SmartAlarmDelete')) {
-        let id = interaction.customId.replace('SmartAlarmDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartAlarmDelete', ''));
 
-        if (instance.alarms.hasOwnProperty(id)) {
+        if (instance.serverList[ids.serverId].alarms.hasOwnProperty(ids.entityId)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
-                instance.alarms[id].messageId);
+                instance.serverList[ids.serverId].alarms[ids.entityId].messageId);
 
-            delete instance.alarms[id];
+            delete instance.serverList[ids.serverId].alarms[ids.entityId];
             client.writeInstanceFile(guildId, instance);
         }
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
-        let id = interaction.customId.replace('SmartAlarmEditId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
 
-        const modal = DiscordModals.getSmartAlarmEditModal(interaction.guildId, id);
+        const modal = DiscordModals.getSmartAlarmEditModal(interaction.guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardEveryone')) {

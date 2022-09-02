@@ -2,6 +2,7 @@ const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const InstanceUtils = require('../util/instanceUtils.js');
 
 module.exports = {
 	data: new Builder.SlashCommandBuilder()
@@ -37,7 +38,7 @@ module.exports = {
 					{ name: 'Christmas Lights', value: 'xmas_light' }))),
 
 	async execute(client, interaction) {
-		let instance = client.readInstanceFile(interaction.guildId);
+		const instance = client.readInstanceFile(interaction.guildId);
 
 		if (!await client.validatePermissions(interaction)) return;
 
@@ -48,19 +49,20 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
-				if (!Object.keys(instance.alarms).includes(id)) {
+				const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
+				if (device === null) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 					client.log('WARNING', str);
 					return;
 				}
 
-				if (image !== null) instance.alarms[id].image = `${image}.png`;
+				if (image !== null) instance.serverList[device.serverId].alarms[id].image = `${image}.png`;
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id);
+				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, id);
 
-				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
+				let str = `Successfully edited Smart Alarm '${instance.serverList[device.serverId].alarms[id].name}'.`;
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
 				client.log('INFO', str);
 			} break;

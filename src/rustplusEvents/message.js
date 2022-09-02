@@ -57,22 +57,22 @@ module.exports = {
                             client, rustplus.guildId, rustplus.serverId, entityId);
                     }
                 }
-                else if (instance.alarms.hasOwnProperty(entityId)) {
+                else if (instance.serverList[rustplus.serverId].alarms.hasOwnProperty(entityId)) {
                     let active = message.broadcast.entityChanged.payload.value;
-                    instance.alarms[entityId].active = active;
-                    instance.alarms[entityId].reachable = true;
+                    instance.serverList[rustplus.serverId].alarms[entityId].active = active;
+                    instance.serverList[rustplus.serverId].alarms[entityId].reachable = true;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     if (active) {
-                        let title = instance.alarms[entityId].name;
-                        let message = instance.alarms[entityId].message;
+                        let title = instance.serverList[rustplus.serverId].alarms[entityId].name;
+                        let message = instance.serverList[rustplus.serverId].alarms[entityId].message;
 
                         let content = {};
                         content.embeds = [DiscordEmbeds.getEmbed({
                             color: '#ce412b',
-                            thumbnail: `attachment://${instance.alarms[entityId].image}`,
+                            thumbnail: `attachment://${instance.serverList[rustplus.serverId].alarms[entityId].image}`,
                             title: title,
-                            footer: { text: instance.alarms[entityId].server },
+                            footer: { text: instance.serverList[rustplus.serverId].alarms[entityId].server },
                             timestamp: true,
                             fields: [
                                 { name: 'ID', value: `\`${entityId}\``, inline: true },
@@ -81,9 +81,10 @@ module.exports = {
 
                         content.files = [
                             new Discord.AttachmentBuilder(
-                                `src/resources/images/electrics/${instance.alarms[entityId].image}`)];
+                                `src/resources/images/electrics/` +
+                                `${instance.serverList[rustplus.serverId].alarms[entityId].image}`)];
 
-                        if (instance.alarms[entityId].everyone) {
+                        if (instance.serverList[rustplus.serverId].alarms[entityId].everyone) {
                             content.content = '@everyone';
                         }
 
@@ -97,7 +98,7 @@ module.exports = {
                         }
                     }
 
-                    DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, entityId);
+                    DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, rustplus.serverId, entityId);
                 }
                 else if (instance.storageMonitors.hasOwnProperty(entityId)) {
                     if (message.broadcast.entityChanged.payload.value === true) return;

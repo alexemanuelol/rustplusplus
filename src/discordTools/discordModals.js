@@ -43,25 +43,25 @@ module.exports = {
         return modal;
     },
 
-    getSmartAlarmEditModal(guildId, id) {
+    getSmartAlarmEditModal(guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const modal = module.exports.getModal({
-            customId: `SmartAlarmEditId${id}`,
-            title: `Editing of ${instance.alarms[id].name}`
+            customId: `SmartAlarmEdit{"serverId":"${serverId}","entityId":${entityId}}`,
+            title: `Editing of ${instance.serverList[serverId].alarms[entityId].name}`
         });
 
         const titleInput = TextInput.getTextInput({
             customId: 'SmartAlarmName',
             label: 'The name of the Smart Alarm:',
-            value: instance.alarms[id].name,
+            value: instance.serverList[serverId].alarms[entityId].name,
             style: Discord.TextInputStyle.Short
         });
 
         const messageInput = TextInput.getTextInput({
             customId: 'SmartAlarmMessage',
             label: 'The message for the Smart Alarm:',
-            value: instance.alarms[id].message,
+            value: instance.serverList[serverId].alarms[entityId].message,
             style: Discord.TextInputStyle.Short
         });
 

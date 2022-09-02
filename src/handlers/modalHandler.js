@@ -31,23 +31,23 @@ module.exports = async (client, interaction) => {
         await DiscordMessages.sendSmartSwitchMessage(guildId, id);
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
-        let id = interaction.customId.replace('SmartAlarmEditId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
         let smartAlarmName = interaction.fields.getTextInputValue('SmartAlarmName');
         let smartAlarmMessage = interaction.fields.getTextInputValue('SmartAlarmMessage');
 
         let changed = false;
-        if (smartAlarmName !== instance.alarms[id].name) {
-            instance.alarms[id].name = smartAlarmName;
+        if (smartAlarmName !== instance.serverList[ids.serverId].alarms[ids.entityId].name) {
+            instance.serverList[ids.serverId].alarms[ids.entityId].name = smartAlarmName;
             changed = true;
         }
-        if (smartAlarmMessage !== instance.alarms[id].message) {
-            instance.alarms[id].message = smartAlarmMessage;
+        if (smartAlarmMessage !== instance.serverList[ids.serverId].alarms[ids.entityId].message) {
+            instance.serverList[ids.serverId].alarms[ids.entityId].message = smartAlarmMessage;
             changed = true;
         }
         client.writeInstanceFile(guildId, instance);
 
         if (changed) {
-            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id);
+            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
         }
     }
 

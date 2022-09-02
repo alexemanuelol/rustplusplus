@@ -90,17 +90,19 @@ module.exports = {
         });
     },
 
-    getSmartAlarmEmbed: function (guildId, id) {
+    getSmartAlarmEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         return module.exports.getEmbed({
-            title: `${instance.alarms[id].name}`,
-            color: instance.alarms[id].active ? '#00ff40' : '#ce412b',
-            description: `**ID**: \`${id}\``,
-            thumbnail: `attachment://${instance.alarms[id].image}`,
-            footer: { text: `${instance.alarms[id].server}` },
-            fields: [
-                { name: 'Message', value: `\`${instance.alarms[id].message}\``, inline: true }
-            ]
+            title: `${instance.serverList[serverId].alarms[entityId].name}`,
+            color: instance.serverList[serverId].alarms[entityId].active ? '#00ff40' : '#ce412b',
+            description: `**ID**: \`${entityId}\``,
+            thumbnail: `attachment://${instance.serverList[serverId].alarms[entityId].image}`,
+            footer: { text: `${instance.serverList[serverId].alarms[entityId].server}` },
+            fields: [{
+                name: 'Message',
+                value: `\`${instance.serverList[serverId].alarms[entityId].message}\``,
+                inline: true
+            }]
         });
     },
 
@@ -228,14 +230,14 @@ module.exports = {
         });
     },
 
-    getNotFoundSmartDeviceEmbed: function (guildId, id, type) {
+    getNotFoundSmartDeviceEmbed: function (guildId, serverId, entityId, type) {
         const instance = Client.client.readInstanceFile(guildId);
         return module.exports.getEmbed({
-            title: `${instance[type][id].name}`,
+            title: `${instance.serverList[serverId][type][entityId].name}`,
             color: '#ff0040',
-            description: `**ID**: \`${id}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`,
-            thumbnail: `attachment://${instance[type][id].image}`,
-            footer: { text: `${instance[type][id].server}` }
+            description: `**ID**: \`${entityId}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`,
+            thumbnail: `attachment://${instance.serverList[serverId][type][entityId].image}`,
+            footer: { text: `${instance.serverList[serverId][type][entityId].server}` }
         });
     },
 
@@ -293,17 +295,17 @@ module.exports = {
         });
     },
 
-    getSmartAlarmNotFoundEmbed: async function (guildId, id) {
+    getSmartAlarmNotFoundEmbed: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
         return module.exports.getEmbed({
-            title: `${instance.alarms[id].name} could not be found!` +
+            title: `${instance.serverList[serverId].alarms[entityId].name} could not be found!` +
                 ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
-            description: `**ID** \`${id}\``,
-            thumbnail: `attachment://${instance.alarms[id].image}`,
-            footer: { text: `${instance.alarms[id].server}` },
+            description: `**ID** \`${entityId}\``,
+            thumbnail: `attachment://${instance.serverList[serverId].alarms[entityId].image}`,
+            footer: { text: `${instance.serverList[serverId].alarms[entityId].server}` },
             timestamp: true
         });
     },

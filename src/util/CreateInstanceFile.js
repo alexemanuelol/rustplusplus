@@ -27,7 +27,6 @@ module.exports = (client, guild) => {
                 team: null
             },
             switches: {},
-            alarms: {},
             storageMonitors: {},
             markers: {},
             serverList: {},
@@ -117,7 +116,6 @@ module.exports = (client, guild) => {
         }
 
         if (!inst.hasOwnProperty('switches')) inst.switches = {};
-        if (!inst.hasOwnProperty('alarms')) inst.alarms = {};
         if (!inst.hasOwnProperty('storageMonitors')) inst.storageMonitors = {};
         if (!inst.hasOwnProperty('markers')) inst.markers = {};
         if (!inst.hasOwnProperty('serverList')) inst.serverList = {};

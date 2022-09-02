@@ -235,18 +235,18 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
 
-    const entityExist = instance.alarms.hasOwnProperty(body.entityId);
-    instance.alarms[body.entityId] = {
-        active: entityExist ? instance.alarms[body.entityId].active : false,
-        reachable: entityExist ? instance.alarms[body.entityId].reachable : true,
-        everyone: entityExist ? instance.alarms[body.entityId].everyone : false,
-        name: entityExist ? instance.alarms[body.entityId].name : 'Smart Alarm',
-        message: entityExist ? instance.alarms[body.entityId].message : 'Your base is under attack!',
-        id: entityExist ? instance.alarms[body.entityId].id : body.entityId,
-        image: entityExist ? instance.alarms[body.entityId].image : 'smart_alarm.png',
-        server: entityExist ? instance.alarms[body.entityId].server : body.name,
-        serverId: entityExist ? instance.alarms[body.entityId].serverId : serverId,
-        messageId: entityExist ? instance.alarms[body.entityId].messageId : null
+    const entityExist = instance.serverList[serverId].alarms.hasOwnProperty(body.entityId);
+    instance.serverList[serverId].alarms[body.entityId] = {
+        active: entityExist ? instance.serverList[serverId].alarms[body.entityId].active : false,
+        reachable: entityExist ? instance.serverList[serverId].alarms[body.entityId].reachable : true,
+        everyone: entityExist ? instance.serverList[serverId].alarms[body.entityId].everyone : false,
+        name: entityExist ? instance.serverList[serverId].alarms[body.entityId].name : 'Smart Alarm',
+        message: entityExist ? instance.serverList[serverId].alarms[body.entityId].message :
+            'Your base is under attack!',
+        id: entityExist ? instance.serverList[serverId].alarms[body.entityId].id : body.entityId,
+        image: entityExist ? instance.serverList[serverId].alarms[body.entityId].image : 'smart_alarm.png',
+        server: entityExist ? instance.serverList[serverId].alarms[body.entityId].server : body.name,
+        messageId: entityExist ? instance.serverList[serverId].alarms[body.entityId].messageId : null
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -254,16 +254,16 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     if (rustplus && serverId === rustplus.serverId) {
         const info = await rustplus.getEntityInfoAsync(body.entityId);
         if (!(await rustplus.isResponseValid(info))) {
-            instance.alarms[body.entityId].reachable = false;
+            instance.serverList[serverId].alarms[body.entityId].reachable = false;
         }
 
-        if (instance.alarms[body.entityId].reachable) {
-            instance.alarms[body.entityId].active = info.entityInfo.payload.value;
+        if (instance.serverList[serverId].alarms[body.entityId].reachable) {
+            instance.serverList[serverId].alarms[body.entityId].active = info.entityInfo.payload.value;
         }
         client.writeInstanceFile(guild.id, instance);
     }
 
-    await DiscordMessages.sendSmartAlarmMessage(guild.id, body.entityId);
+    await DiscordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {

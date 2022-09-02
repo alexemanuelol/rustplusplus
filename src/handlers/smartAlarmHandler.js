@@ -5,27 +5,26 @@ module.exports = {
         if (rustplus.smartAlarmIntervalCounter === 29) {
             rustplus.smartAlarmIntervalCounter = 0;
             let instance = client.readInstanceFile(rustplus.guildId);
-            for (const [key, value] of Object.entries(instance.alarms)) {
-                if (rustplus.serverId !== `${value.serverId}`) continue;
+            for (const [key, value] of Object.entries(instance.serverList[rustplus.serverId].alarms)) {
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
-                    if (instance.alarms[key].reachable) {
-                        await DiscordMessages.sendSmartAlarmNotFoundMessage(rustplus.guildId, key);
+                    if (instance.serverList[rustplus.serverId].alarms[key].reachable) {
+                        await DiscordMessages.sendSmartAlarmNotFoundMessage(rustplus.guildId, rustplus.serverId, key);
 
-                        instance.alarms[key].reachable = false;
+                        instance.serverList[rustplus.serverId].alarms[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, rustplus.serverId, key);
                     }
                 }
                 else {
-                    if (!instance.alarms[key].reachable) {
-                        instance.alarms[key].reachable = true;
+                    if (!instance.serverList[rustplus.serverId].alarms[key].reachable) {
+                        instance.serverList[rustplus.serverId].alarms[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, rustplus.serverId, key);
                     }
                 }
             }

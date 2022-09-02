@@ -90,22 +90,23 @@ module.exports = {
         }
     },
 
-    sendSmartAlarmMessage: async function (guildId, id, interaction = null) {
+    sendSmartAlarmMessage: async function (guildId, serverId, entityId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [instance.alarms[id].reachable ?
-                DiscordEmbeds.getSmartAlarmEmbed(guildId, id) :
-                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'alarms')],
-            components: [DiscordButtons.getSmartAlarmButtons(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)]
+            embeds: [instance.serverList[serverId].alarms[entityId].reachable ?
+                DiscordEmbeds.getSmartAlarmEmbed(guildId, serverId, entityId) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'alarms')],
+            components: [DiscordButtons.getSmartAlarmButtons(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                `${instance.serverList[serverId].alarms[entityId].image}`)]
         }
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.alarms[id].messageId, instance.channelId.alarms, interaction);
+        const message = await module.exports.sendMessage(guildId, content,
+            instance.serverList[serverId].alarms[entityId].messageId, instance.channelId.alarms, interaction);
 
         if (!interaction) {
-            instance.alarms[id].messageId = message.id;
+            instance.serverList[serverId].alarms[entityId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
@@ -205,13 +206,14 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendSmartAlarmNotFoundMessage: async function (guildId, id) {
+    sendSmartAlarmNotFoundMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)],
-            content: instance.alarms[id].everyone ? '@everyone' : ''
+            embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                `${instance.serverList[serverId].alarms[entityId].image}`)],
+            content: instance.serverList[serverId].alarms[entityId].everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);

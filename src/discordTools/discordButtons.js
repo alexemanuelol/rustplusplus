@@ -206,22 +206,22 @@ module.exports = {
             }));
     },
 
-    getSmartAlarmButtons: function (guildId, id) {
+    getSmartAlarmButtons: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const everyone = instance.alarms[id].everyone;
+        const everyone = instance.serverList[serverId].alarms[entityId].everyone;
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `SmartAlarmEveryoneId${id}`,
+                customId: `SmartAlarmEveryone{"serverId":"${serverId}","entityId":${entityId}}`,
                 label: '@everyone',
                 style: everyone ? SUCCESS : DANGER
             }),
             module.exports.getButton({
-                customId: `SmartAlarmEditId${id}`,
+                customId: `SmartAlarmEdit{"serverId":"${serverId}","entityId":${entityId}}`,
                 label: 'EDIT',
                 style: PRIMARY
             }),
             module.exports.getButton({
-                customId: `SmartAlarmDeleteId${id}`,
+                customId: `SmartAlarmDelete{"serverId":"${serverId}","entityId":${entityId}}`,
                 style: SECONDARY,
                 emoji: '🗑️'
             }));
