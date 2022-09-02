@@ -76,11 +76,10 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
 
         perms.push({ id: guild.roles.everyone.id, allow: everyoneAllow, deny: everyoneDeny });
     }
-
     try {
-        channel.permissionOverwrites.set(perms);
+        await channel.permissionOverwrites.set(perms);
     }
     catch (e) {
-        /* Ignore */
+         client.log('ERROR', `Could not set permissions for channel: ${channel.id}`, 'error');
     }
 }
