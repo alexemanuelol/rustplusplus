@@ -540,6 +540,12 @@ module.exports = async (client, interaction) => {
             await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId, interaction);
         }
     }
+    else if (interaction.customId.startsWith('TrackerEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
+
+        const modal = DiscordModals.getTrackerEditModal(interaction.guildId, ids.trackerId);
+        await interaction.showModal(modal);
+    }
     else if (interaction.customId.startsWith('TrackerDelete')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerDelete', ''));
 
@@ -550,5 +556,17 @@ module.exports = async (client, interaction) => {
             delete instance.trackers[ids.trackerId];
             client.writeInstanceFile(guildId, instance);
         }
+    }
+    else if (interaction.customId.startsWith('TrackerAddPlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
+
+        const modal = DiscordModals.getTrackerAddPlayerModal(interaction.guildId, ids.trackerId);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
+
+        const modal = DiscordModals.getTrackerRemovePlayerModal(interaction.guildId, ids.trackerId);
+        await interaction.showModal(modal);
     }
 }

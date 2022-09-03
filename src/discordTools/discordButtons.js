@@ -188,22 +188,40 @@ module.exports = {
         const instance = Client.client.readInstanceFile(guildId);
         const active = instance.trackers[trackerId].active;
         const everyone = instance.trackers[trackerId].everyone;
-        return new Discord.ActionRowBuilder().addComponents(
-            module.exports.getButton({
-                customId: `TrackerActive{"trackerId":${trackerId}}`,
-                label: active ? 'ACTIVE' : 'INACTIVE',
-                style: active ? SUCCESS : DANGER
-            }),
-            module.exports.getButton({
-                customId: `TrackerEveryone{"trackerId":${trackerId}}`,
-                label: '@everyone',
-                style: everyone ? SUCCESS : DANGER
-            }),
-            module.exports.getButton({
-                customId: `TrackerDelete{"trackerId":${trackerId}}`,
-                style: SECONDARY,
-                emoji: '🗑️'
-            }));
+        return [
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `TrackerActive{"trackerId":${trackerId}}`,
+                    label: active ? 'ACTIVE' : 'INACTIVE',
+                    style: active ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: `TrackerEveryone{"trackerId":${trackerId}}`,
+                    label: '@everyone',
+                    style: everyone ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: `TrackerEdit{"trackerId":"${trackerId}"}`,
+                    label: 'EDIT',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `TrackerDelete{"trackerId":${trackerId}}`,
+                    style: SECONDARY,
+                    emoji: '🗑️'
+                })),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `TrackerAddPlayer{"trackerId":"${trackerId}"}`,
+                    label: 'ADD PLAYER',
+                    style: SUCCESS
+                }),
+                module.exports.getButton({
+                    customId: `TrackerRemovePlayer{"trackerId":"${trackerId}"}`,
+                    label: 'REMOVE PLAYER',
+                    style: DANGER
+                }))
+        ];
     },
 
     getSmartAlarmButtons: function (guildId, serverId, entityId) {

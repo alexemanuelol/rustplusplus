@@ -50,6 +50,49 @@ module.exports = async (client, interaction) => {
             await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
         }
     }
+    else if (interaction.customId.startsWith('TrackerEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
+        const trackerName = interaction.fields.getTextInputValue('TrackerName');
+
+        instance.trackers[ids.trackerId].name = trackerName;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+    }
+    else if (interaction.customId.startsWith('TrackerAddPlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
+        const steamId = interaction.fields.getTextInputValue('TrackerAddPlayerSteamId');
+
+        if (instance.trackers[ids.trackerId].players.some(e => e.steamId === steamId)) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        instance.trackers[ids.trackerId].players.push({
+            name: '-', steamId: steamId, playerId: null, status: false, time: null
+        });
+        client.writeInstanceFile(interaction.guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+
+        /* To force search of player name via scrape */
+        client.battlemetricsIntervalCounter = 0;
+    }
+    else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
+        const steamId = interaction.fields.getTextInputValue('TrackerRemovePlayerSteamId');
+
+        if (!instance.trackers[ids.trackerId].players.some(e => e.steamId === steamId)) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        instance.trackers[ids.trackerId].players =
+            instance.trackers[ids.trackerId].players.filter(e => e.steamId !== steamId);
+        client.writeInstanceFile(interaction.guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+    }
 
     interaction.deferUpdate();
 }

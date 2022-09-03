@@ -51,7 +51,7 @@ module.exports = {
             title: `Editing of ${instance.serverList[serverId].alarms[entityId].name}`
         });
 
-        const titleInput = TextInput.getTextInput({
+        const nameInput = TextInput.getTextInput({
             customId: 'SmartAlarmName',
             label: 'The name of the Smart Alarm:',
             value: instance.serverList[serverId].alarms[entityId].name,
@@ -66,9 +66,69 @@ module.exports = {
         });
 
         modal.addComponents(
-            new Discord.ActionRowBuilder().addComponents(titleInput),
+            new Discord.ActionRowBuilder().addComponents(nameInput),
             new Discord.ActionRowBuilder().addComponents(messageInput)
         );
+
+        return modal;
+    },
+
+    getTrackerEditModal(guildId, trackerId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const modal = module.exports.getModal({
+            customId: `TrackerEdit{"trackerId":${trackerId}}`,
+            title: `Editing of ${instance.trackers[trackerId].name}`
+        });
+
+        const nameInput = TextInput.getTextInput({
+            customId: 'TrackerName',
+            label: 'The name of the Tracker:',
+            value: instance.trackers[trackerId].name,
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(new Discord.ActionRowBuilder().addComponents(nameInput));
+
+        return modal;
+    },
+
+    getTrackerAddPlayerModal(guildId, trackerId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const modal = module.exports.getModal({
+            customId: `TrackerAddPlayer{"trackerId":${trackerId}}`,
+            title: `Add Player to ${instance.trackers[trackerId].name}`
+        });
+
+        const steamIdInput = TextInput.getTextInput({
+            customId: 'TrackerAddPlayerSteamId',
+            label: 'The SteamID of the player to add:',
+            value: '',
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(new Discord.ActionRowBuilder().addComponents(steamIdInput));
+
+        return modal;
+    },
+
+    getTrackerRemovePlayerModal(guildId, trackerId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const modal = module.exports.getModal({
+            customId: `TrackerRemovePlayer{"trackerId":${trackerId}}`,
+            title: `Remove Player from ${instance.trackers[trackerId].name}`
+        });
+
+        const steamIdInput = TextInput.getTextInput({
+            customId: 'TrackerRemovePlayerSteamId',
+            label: 'The SteamID of the player to remove:',
+            value: '',
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(new Discord.ActionRowBuilder().addComponents(steamIdInput));
 
         return modal;
     },

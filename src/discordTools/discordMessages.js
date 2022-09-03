@@ -53,7 +53,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getTrackerEmbed(guildId, trackerId)],
-            components: [DiscordButtons.getTrackerButtons(guildId, trackerId)]
+            components: DiscordButtons.getTrackerButtons(guildId, trackerId)
         }
 
         const message = await module.exports.sendMessage(
