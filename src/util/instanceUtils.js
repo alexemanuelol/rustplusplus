@@ -12,9 +12,9 @@ module.exports = {
             for (const alarmId in instance.serverList[serverId].alarms) {
                 if (entityId === alarmId) return { type: 'alarm', serverId: serverId }
             }
-            //for (const storageMonitorId in instance.serverList[serverId].storageMonitors) {
-            //    if (entityId === storageMonitorId) return { type: 'storageMonitor', serverId: serverId }
-            //}
+            for (const storageMonitorId in instance.serverList[serverId].storageMonitors) {
+                if (entityId === storageMonitorId) return { type: 'storageMonitor', serverId: serverId }
+            }
         }
         return null;
     },

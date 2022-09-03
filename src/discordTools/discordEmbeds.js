@@ -106,23 +106,23 @@ module.exports = {
         });
     },
 
-    getStorageMonitorEmbed: function (guildId, id) {
+    getStorageMonitorEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
-        let rustplus = Client.client.rustplusInstances[guildId];
-        const isTc = (instance.storageMonitors[id].type === 'toolcupboard');
-        const items = rustplus.storageMonitors[id].items;
-        const expiry = rustplus.storageMonitors[id].expiry;
-        const capacity = rustplus.storageMonitors[id].capacity;
+        const rustplus = Client.client.rustplusInstances[guildId];
+        const isTc = (instance.serverList[serverId].storageMonitors[entityId].type === 'toolcupboard');
+        const items = rustplus.storageMonitors[entityId].items;
+        const expiry = rustplus.storageMonitors[entityId].expiry;
+        const capacity = rustplus.storageMonitors[entityId].capacity;
 
-        let description = `**ID** \`${id}\``;
+        let description = `**ID** \`${entityId}\``;
 
         if (capacity === 0) {
             return module.exports.getEmbed({
-                title: `${instance.storageMonitors[id].name}`,
+                title: `${instance.serverList[serverId].storageMonitors[entityId].name}`,
                 color: '#ce412b',
                 description: `${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``,
-                thumbnail: `attachment://${instance.storageMonitors[id].image}`,
-                footer: { text: `${instance.storageMonitors[id].server}` }
+                thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
+                footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` }
             });
         }
 
@@ -137,12 +137,12 @@ module.exports = {
             let upkeep = null;
             if (seconds === 0) {
                 upkeep = ':warning:\`DECAYING\`:warning:';
-                instance.storageMonitors[id].upkeep = 'DECAYING';
+                instance.serverList[serverId].storageMonitors[entityId].upkeep = 'DECAYING';
             }
             else {
                 let upkeepTime = Timer.secondsToFullScale(seconds);
                 upkeep = `\`${upkeepTime}\``;
-                instance.storageMonitors[id].upkeep = `${upkeepTime}`;
+                instance.serverList[serverId].storageMonitors[entityId].upkeep = `${upkeepTime}`;
             }
             description += `\n**Upkeep** ${upkeep}`;
             Client.client.writeInstanceFile(guildId, instance);
@@ -169,11 +169,11 @@ module.exports = {
         if (itemQuantity === '') itemQuantity = 'Empty';
 
         return module.exports.getEmbed({
-            title: `${instance.storageMonitors[id].name}`,
+            title: `${instance.serverList[serverId].storageMonitors[entityId].name}`,
             color: '#ce412b',
             description: description,
-            thumbnail: `attachment://${instance.storageMonitors[id].image}`,
-            footer: { text: `${instance.storageMonitors[id].server}` },
+            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
+            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
             fields: [
                 { name: 'Item', value: itemName, inline: true },
                 { name: 'Quantity', value: itemQuantity, inline: true }
@@ -241,41 +241,42 @@ module.exports = {
         });
     },
 
-    getDecayingNotificationEmbed: function (guildId, id) {
+    getDecayingNotificationEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         return module.exports.getEmbed({
-            title: `${instance.storageMonitors[id].name} is decaying!`,
+            title: `${instance.serverList[serverId].storageMonitors[entityId].name} is decaying!`,
             color: '#ff0040',
-            description: `**ID** \`${id}\``,
-            thumbnail: `attachment://${instance.storageMonitors[id].image}`,
-            footer: { text: `${instance.storageMonitors[id].server}` },
+            description: `**ID** \`${entityId}\``,
+            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
+            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
             timestamp: true
         });
     },
 
-    getStorageMonitorDisconnectNotificationEmbed: function (guildId, id) {
+    getStorageMonitorDisconnectNotificationEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         return module.exports.getEmbed({
-            title: `${instance.storageMonitors[id].name} is no longer electrically connected!`,
+            title: `${instance.serverList[serverId].storageMonitors[entityId].name}` +
+                ` is no longer electrically connected!`,
             color: '#ff0040',
-            description: `**ID** \`${id}\``,
-            thumbnail: `attachment://${instance.storageMonitors[id].image}`,
-            footer: { text: `${instance.storageMonitors[id].server}` },
+            description: `**ID** \`${entityId}\``,
+            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
+            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
             timestamp: true
         });
     },
 
-    getStorageMonitorNotFoundEmbed: async function (guildId, id) {
+    getStorageMonitorNotFoundEmbed: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
         return module.exports.getEmbed({
-            title: `${instance.storageMonitors[id].name} could not be found!` +
+            title: `${instance.serverList[serverId].storageMonitors[entityId].name} could not be found!` +
                 ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
-            description: `**ID** \`${id}\``,
-            thumbnail: `attachment://${instance.storageMonitors[id].image}`,
-            footer: { text: `${instance.storageMonitors[id].server}` },
+            description: `**ID** \`${entityId}\``,
+            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
+            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
             timestamp: true
         });
     },

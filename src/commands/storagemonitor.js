@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const InstanceUtils = require('../util/instanceUtils.js');
 const Recycler = require('../util/recycler.js');
 
 module.exports = {
@@ -74,7 +75,8 @@ module.exports = {
 				const name = interaction.options.getString('name');
 				const image = interaction.options.getString('image');
 
-				if (!Object.keys(instance.storageMonitors).includes(id)) {
+				const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
+				if (device === null) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
@@ -82,7 +84,7 @@ module.exports = {
 					return;
 				}
 
-				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
+				if (device.serverId !== rustplus.serverId) {
 					let str = 'That Storage Monitor is not part of this Rust Server.';
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
@@ -91,23 +93,25 @@ module.exports = {
 				}
 
 				if (name !== null) {
-					instance.storageMonitors[id].name = name;
+					instance.serverList[rustplus.serverId].storageMonitors[id].name = name;
 				}
 				if (image !== null) {
-					instance.storageMonitors[id].image = `${image}.png`;
+					instance.serverList[rustplus.serverId].storageMonitors[id].image = `${image}.png`;
 				}
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id);
+				await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, rustplus.serverId, id);
 
-				let str = `Successfully edited Storage Monitor '${instance.storageMonitors[id].name}'.`;
+				let str = `Successfully edited Storage Monitor ` +
+					`'${instance.serverList[rustplus.serverId].storageMonitors[id].name}'.`;
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
 					instance.serverList[rustplus.serverId].title));
 				rustplus.log('INFO', str);
 			} break;
 
 			case 'recycle': {
-				if (!Object.keys(instance.storageMonitors).includes(id)) {
+				const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
+				if (device === null) {
 					let str = `Invalid ID: '${id}'.`;
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
@@ -115,7 +119,7 @@ module.exports = {
 					return;
 				}
 
-				if (instance.storageMonitors[id].serverId !== rustplus.serverId) {
+				if (device.serverId !== rustplus.serverId) {
 					let str = 'That Storage Monitor is not part of this Rust Server.';
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
@@ -125,7 +129,7 @@ module.exports = {
 
 				let entityInfo = await rustplus.getEntityInfoAsync(id);
 				if (!(await rustplus.isResponseValid(entityInfo))) {
-					instance.storageMonitors[id].reachable = false;
+					instance.serverList[rustplus.serverId].storageMonitors[id].reachable = false;
 					client.writeInstanceFile(interaction.guildId, instance);
 
 					let str = `Could not get items from Storage Monitor: ${id}`;
@@ -133,10 +137,10 @@ module.exports = {
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);
 
-					await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, id);
+					await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, rustplus.serverId, id);
 					return;
 				}
-				instance.storageMonitors[id].reachable = true;
+				instance.serverList[rustplus.serverId].storageMonitors[id].reachable = true;
 				client.writeInstanceFile(interaction.guildId, instance);
 
 				let items = Recycler.calculate(entityInfo.entityInfo.payload.items);
@@ -153,8 +157,9 @@ module.exports = {
 					title: 'Result of recycling:',
 					color: '#ce412b',
 					thumbnail: 'attachment://recycler.png',
-					footer: { text: `${instance.storageMonitors[id].server}` },
-					description: `**Name** \`${instance.storageMonitors[id].name}\`\n**ID** \`${id}\``
+					footer: { text: `${instance.serverList[rustplus.serverId].storageMonitors[id].server}` },
+					description: `**Name** ` +
+						`\`${instance.serverList[rustplus.serverId].storageMonitors[id].name}\`\n**ID** \`${id}\``
 				});
 
 				if (itemName === '' || itemQuantity === '') {
@@ -172,7 +177,8 @@ module.exports = {
 					files: [file]
 				});
 				rustplus.log('INFO',
-					`Showing result of recycling content of storage monitor '${instance.storageMonitors[id].name}'`);
+					`Showing result of recycling content of storage monitor ` +
+					`'${instance.serverList[rustplus.serverId].storageMonitors[id].name}'`);
 			} break;
 
 			default: {

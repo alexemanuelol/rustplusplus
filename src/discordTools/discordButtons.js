@@ -227,32 +227,32 @@ module.exports = {
             }));
     },
 
-    getStorageMonitorToolCupboardButtons: function (guildId, id) {
+    getStorageMonitorToolCupboardButtons: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const everyone = instance.storageMonitors[id].everyone;
-        const inGame = instance.storageMonitors[id].inGame;
+        const everyone = instance.serverList[serverId].storageMonitors[entityId].everyone;
+        const inGame = instance.serverList[serverId].storageMonitors[entityId].inGame;
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `StorageMonitorToolCupboardEveryoneId${id}`,
+                customId: `StorageMonitorToolCupboardEveryone{"serverId":"${serverId}","entityId":${entityId}}`,
                 label: '@everyone',
                 style: everyone ? SUCCESS : DANGER
             }),
             module.exports.getButton({
-                customId: `StorageMonitorToolCupboardInGameId${id}`,
+                customId: `StorageMonitorToolCupboardInGame{"serverId":"${serverId}","entityId":${entityId}}`,
                 label: 'IN-GAME',
                 style: inGame ? SUCCESS : DANGER
             }),
             module.exports.getButton({
-                customId: `StorageMonitorToolCupboardDeleteId${id}`,
+                customId: `StorageMonitorToolCupboardDelete{"serverId":"${serverId}","entityId":${entityId}}`,
                 style: SECONDARY,
                 emoji: '🗑️'
             }));
     },
 
-    getStorageMonitorContainerButton: function (id) {
+    getStorageMonitorContainerButton: function (serverId, entityId) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `StorageMonitorContainerDeleteId${id}`,
+                customId: `StorageMonitorContainerDelete{"serverId":"${serverId}","entityId":${entityId}}`,
                 style: SECONDARY,
                 emoji: '🗑️'
             }));

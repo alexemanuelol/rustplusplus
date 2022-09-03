@@ -308,33 +308,6 @@ module.exports = async (client, interaction) => {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
         }
 
-        /* Remove all Smart Alarms associated with this server */
-        for (const [key, value] of Object.entries(instance.serverList[serverId].alarms)) {
-            let messageId = instance.serverList[serverId].alarms[key].messageId;
-            let message = await DiscordTools.getMessageById(
-                rustplus.guildId, instance.channelId.alarms, messageId);
-            if (message !== undefined) {
-                try {
-                    await message.delete();
-                }
-                catch (e) {
-                    client.log('ERROR', `Could not delete alarm message with id: ${messageId}.`, 'error');
-                }
-            }
-
-            delete instance.serverList[serverId].alarms[key];
-        }
-
-        /* Remove all Storage Monitors associated with this server. */
-        for (const [key, value] of Object.entries(instance.storageMonitors)) {
-            if (`${value.serverId}` === serverId) {
-                delete instance.storageMonitors[key];
-            }
-        }
-        if (rustplus && (serverId === rustplus.serverId)) {
-            await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
-        }
-
         client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartSwitchOn') ||
@@ -500,44 +473,48 @@ module.exports = async (client, interaction) => {
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardEveryone')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardEveryoneId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardEveryone', ''));
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
-            instance.storageMonitors[id].everyone = !instance.storageMonitors[id].everyone;
+        if (instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId)) {
+            instance.serverList[ids.serverId].storageMonitors[ids.entityId].everyone =
+                !instance.serverList[ids.serverId].storageMonitors[ids.entityId].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id, interaction);
+            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId,
+                ids.entityId, interaction);
         }
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardInGame')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardInGameId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardInGame', ''));
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
-            instance.storageMonitors[id].inGame = !instance.storageMonitors[id].inGame;
+        if (instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId)) {
+            instance.serverList[ids.serverId].storageMonitors[ids.entityId].inGame =
+                !instance.serverList[ids.serverId].storageMonitors[ids.entityId].inGame;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id, interaction);
+            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId,
+                ids.entityId, interaction);
         }
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardDelete')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardDelete', ''));
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
+        if (instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
-                instance.storageMonitors[id].messageId);
+                instance.serverList[ids.serverId].storageMonitors[ids.entityId].messageId);
 
-            delete instance.storageMonitors[id];
+            delete instance.serverList[ids.serverId].storageMonitors[ids.entityId];
             client.writeInstanceFile(guildId, instance);
         }
     }
     else if (interaction.customId.startsWith('StorageMonitorContainerDelete')) {
-        let id = interaction.customId.replace('StorageMonitorContainerDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorContainerDelete', ''));
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
+        if (instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
-                instance.storageMonitors[id].messageId);
+                instance.serverList[ids.serverId].storageMonitors[ids.entityId].messageId);
 
-            delete instance.storageMonitors[id];
+            delete instance.serverList[ids.serverId].storageMonitors[ids.entityId];
             client.writeInstanceFile(guildId, instance);
         }
     }

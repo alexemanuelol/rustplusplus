@@ -111,27 +111,29 @@ module.exports = {
         }
     },
 
-    sendStorageMonitorMessage: async function (guildId, id, interaction = null) {
+    sendStorageMonitorMessage: async function (guildId, serverId, entityId, interaction = null) {
         let instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [instance.storageMonitors[id].reachable ?
-                DiscordEmbeds.getStorageMonitorEmbed(guildId, id) :
-                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'storageMonitors')],
-            components: [instance.storageMonitors[id].type === 'toolcupboard' ?
-                DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, id) :
-                DiscordButtons.getStorageMonitorContainerButton(id)],
+            embeds: [instance.serverList[serverId].storageMonitors[entityId].reachable ?
+                DiscordEmbeds.getStorageMonitorEmbed(guildId, serverId, entityId) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'storageMonitors')],
+            components: [instance.serverList[serverId].storageMonitors[entityId].type === 'toolcupboard' ?
+                DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
+                DiscordButtons.getStorageMonitorContainerButton(serverId, entityId)],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)]
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                    `${instance.serverList[serverId].storageMonitors[entityId].image}`)]
         }
 
         instance = Client.client.readInstanceFile(guildId);
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.storageMonitors[id].messageId, instance.channelId.storageMonitors, interaction);
+        const message = await module.exports.sendMessage(guildId, content,
+            instance.serverList[serverId].storageMonitors[entityId].messageId,
+            instance.channelId.storageMonitors, interaction);
 
         if (!interaction) {
-            instance.storageMonitors[id].messageId = message.id;
+            instance.serverList[serverId].storageMonitors[entityId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
@@ -156,40 +158,43 @@ module.exports = {
         }
     },
 
-    sendDecayingNotificationMessage: async function (guildId, id) {
+    sendDecayingNotificationMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, id)],
+            embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, serverId, entityId)],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                    `${instance.serverList[serverId].storageMonitors[entityId].image}`)],
+            content: instance.serverList[serverId].storageMonitors[entityId].everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendStorageMonitorDisconnectNotificationMessage: async function (guildId, id) {
+    sendStorageMonitorDisconnectNotificationMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, id)],
+            embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, serverId, entityId)],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                    `${instance.serverList[serverId].storageMonitors[entityId].image}`)],
+            content: instance.serverList[serverId].storageMonitors[entityId].everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendStorageMonitorNotFoundMessage: async function (guildId, id) {
+    sendStorageMonitorNotFoundMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [await DiscordEmbeds.getStorageMonitorNotFoundEmbed(guildId, id)],
+            embeds: [await DiscordEmbeds.getStorageMonitorNotFoundEmbed(guildId, serverId, entityId)],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                    `${instance.serverList[serverId].storageMonitors[entityId].image}`)],
+            content: instance.serverList[serverId].storageMonitors[entityId].everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);

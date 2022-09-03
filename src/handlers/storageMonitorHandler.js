@@ -11,27 +11,27 @@ module.exports = {
         }
 
         let instance = client.readInstanceFile(rustplus.guildId);
-        for (const [id, content] of Object.entries(instance.storageMonitors)) {
-            if (rustplus.serverId !== content.serverId) continue;
+        for (const [id, content] of Object.entries(instance.serverList[rustplus.serverId].storageMonitors)) {
             instance = client.readInstanceFile(rustplus.guildId);
 
             let info = await rustplus.getEntityInfoAsync(id);
             if (!(await rustplus.isResponseValid(info))) {
-                if (instance.storageMonitors[id].reachable) {
-                    await DiscordMessages.sendStorageMonitorNotFoundMessage(rustplus.guildId, id);
+                if (instance.serverList[rustplus.serverId].storageMonitors[id].reachable) {
+                    await DiscordMessages.sendStorageMonitorNotFoundMessage(rustplus.guildId, rustplus.serverId, id);
                 }
-                instance.storageMonitors[id].reachable = false;
+                instance.serverList[rustplus.serverId].storageMonitors[id].reachable = false;
                 client.writeInstanceFile(rustplus.guildId, instance);
             }
             else {
-                instance.storageMonitors[id].reachable = true;
+                instance.serverList[rustplus.serverId].storageMonitors[id].reachable = true;
                 client.writeInstanceFile(rustplus.guildId, instance);
             }
 
-            if (instance.storageMonitors[id].reachable) {
+            if (instance.serverList[rustplus.serverId].storageMonitors[id].reachable) {
                 if (rustplus.storageMonitors.hasOwnProperty(id) && (rustplus.storageMonitors[id].capacity !== 0 &&
                     info.entityInfo.payload.capacity === 0)) {
-                    await DiscordMessages.sendStorageMonitorDisconnectNotificationMessage(rustplus.guildId, id);
+                    await DiscordMessages.sendStorageMonitorDisconnectNotificationMessage(
+                        rustplus.guildId, rustplus.serverId, id);
                 }
 
                 rustplus.storageMonitors[id] = {
@@ -43,29 +43,31 @@ module.exports = {
 
                 if (info.entityInfo.payload.capacity !== 0) {
                     if (info.entityInfo.payload.capacity === 28) {
-                        instance.storageMonitors[id].type = 'toolcupboard';
+                        instance.serverList[rustplus.serverId].storageMonitors[id].type = 'toolcupboard';
                         if (info.entityInfo.payload.protectionExpiry === 0 &&
-                            instance.storageMonitors[id].decaying === false) {
-                            instance.storageMonitors[id].decaying = true;
+                            instance.serverList[rustplus.serverId].storageMonitors[id].decaying === false) {
+                            instance.serverList[rustplus.serverId].storageMonitors[id].decaying = true;
 
-                            await DiscordMessages.sendDecayingNotificationMessage(rustplus.guildId, id);
+                            await DiscordMessages.sendDecayingNotificationMessage(
+                                rustplus.guildId, rustplus.serverId, id);
 
-                            if (instance.storageMonitors[id].inGame) {
-                                rustplus.sendTeamMessageAsync(`${instance.storageMonitors[id].name} is decaying!`);
+                            if (instance.serverList[rustplus.serverId].storageMonitors[id].inGame) {
+                                rustplus.sendTeamMessageAsync(
+                                    `${instance.serverList[rustplus.serverId].storageMonitors[id].name} is decaying!`);
                             }
                         }
                         else if (info.entityInfo.payload.protectionExpiry !== 0) {
-                            instance.storageMonitors[id].decaying = false;
+                            instance.serverList[rustplus.serverId].storageMonitors[id].decaying = false;
                         }
                     }
                     else {
-                        instance.storageMonitors[id].type = 'container';
+                        instance.serverList[rustplus.serverId].storageMonitors[id].type = 'container';
                     }
                     client.writeInstanceFile(rustplus.guildId, instance);
                 }
             }
 
-            await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, id);
+            await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, rustplus.serverId, id);
         }
     },
 }
