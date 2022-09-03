@@ -1,4 +1,4 @@
-const Client = require('../../index.js');
+const Client = require('../../index.ts');
 
 module.exports = {
     getSmartDevice: function (guildId, entityId) {
