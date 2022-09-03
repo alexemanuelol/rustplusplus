@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-const Client = require('../../index.js');
+const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
