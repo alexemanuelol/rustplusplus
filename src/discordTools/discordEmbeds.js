@@ -53,9 +53,9 @@ module.exports = {
         });
     },
 
-    getTrackerEmbed: function (guildId, trackerName) {
+    getTrackerEmbed: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const tracker = instance.trackers[trackerName];
+        const tracker = instance.trackers[trackerId];
         const battlemetricsId = tracker.battlemetricsId;
         const serverStatus = tracker.status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
 
@@ -79,7 +79,7 @@ module.exports = {
         if (playerStatus === '') playerStatus = 'Empty';
 
         return module.exports.getEmbed({
-            title: `${trackerName}`,
+            title: `${tracker.name}`,
             color: '#ce412b',
             description: `**Battlemetrics ID:** \`${battlemetricsId}\`\n**Server Status:** ${serverStatus}`,
             thumbnail: `${tracker.img}`,
@@ -311,11 +311,11 @@ module.exports = {
         });
     },
 
-    getTrackerAllOfflineEmbed: function (guildId, trackerName) {
+    getTrackerAllOfflineEmbed: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const serverId = instance.trackers[trackerName].serverId;
+        const serverId = instance.trackers[trackerId].serverId;
         return module.exports.getEmbed({
-            title: `Everyone from the tracker \`${trackerName}\` just went offline.`,
+            title: `Everyone from the tracker \`${instance.trackers[trackerId].name}\` just went offline.`,
             color: '#ff0040',
             thumbnail: `${instance.serverList[serverId].img}`,
             footer: { text: `${instance.serverList[serverId].title}` },
@@ -323,11 +323,11 @@ module.exports = {
         });
     },
 
-    getTrackerAnyOnlineEmbed: function (guildId, trackerName) {
+    getTrackerAnyOnlineEmbed: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const serverId = instance.trackers[trackerName].serverId;
+        const serverId = instance.trackers[trackerId].serverId;
         return module.exports.getEmbed({
-            title: `Someone from the tracker \`${trackerName}\` just went online.`,
+            title: `Someone from the tracker \`${instance.trackers[trackerId].name}\` just went online.`,
             color: '#00ff40',
             thumbnail: `${instance.serverList[serverId].img}`,
             footer: { text: `${instance.serverList[serverId].title}` },

@@ -149,23 +149,14 @@ class DiscordBot extends Discord.Client {
         });
     }
 
-    findAvailableTrackerName(guildId) {
-        let instance = this.readInstanceFile(guildId);
-        let baseName = 'Tracker';
+    findAvailableTrackerId(guildId) {
+        const instance = this.readInstanceFile(guildId);
 
-        let index = 0;
         while (true) {
-            let testName = `${baseName}${(index === 0) ? '' : index}`;
-            let exist = false;
-            if (Object.keys(instance.trackers).includes(testName)) {
-                exist = true;
+            const randomNumber = Math.floor(Math.random() * 1000);
+            if (!instance.trackers.hasOwnProperty(randomNumber)) {
+                return randomNumber;
             }
-
-            if (exist) {
-                index += 1;
-                continue;
-            }
-            return testName;
         }
     }
 

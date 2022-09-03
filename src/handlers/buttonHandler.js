@@ -186,10 +186,11 @@ module.exports = async (client, interaction) => {
 
         interaction.deferUpdate();
 
-        /* Find an available tracker name */
-        const group = client.findAvailableTrackerName(guildId);
+        /* Find an available tracker id */
+        const trackerId = client.findAvailableTrackerId(guildId);
 
-        instance.trackers[group] = {
+        instance.trackers[trackerId] = {
+            name: 'Tracker',
             serverId: ids.serverId,
             battlemetricsId: battlemetricsId,
             status: false,
@@ -203,7 +204,7 @@ module.exports = async (client, interaction) => {
         }
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordMessages.sendTrackerMessage(guildId, group);
+        await DiscordMessages.sendTrackerMessage(guildId, trackerId);
     }
     else if (interaction.customId.startsWith('ServerDisconnect') ||
         interaction.customId.startsWith('ServerReconnecting')) {
@@ -520,41 +521,33 @@ module.exports = async (client, interaction) => {
         }
     }
     else if (interaction.customId.startsWith('TrackerActive')) {
-        let trackerName = interaction.customId.replace('TrackerActiveId', '');
+        const ids = JSON.parse(interaction.customId.replace('TrackerActive', ''));
 
-        if (instance.trackers.hasOwnProperty(trackerName)) {
-            instance.trackers[trackerName].active = !instance.trackers[trackerName].active;
+        if (instance.trackers.hasOwnProperty(ids.trackerId)) {
+            instance.trackers[ids.trackerId].active = !instance.trackers[ids.trackerId].active;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId, interaction);
         }
     }
     else if (interaction.customId.startsWith('TrackerEveryone')) {
-        let trackerName = interaction.customId.replace('TrackerEveryoneId', '');
+        const ids = JSON.parse(interaction.customId.replace('TrackerEveryone', ''));
 
-        if (instance.trackers.hasOwnProperty(trackerName)) {
-            instance.trackers[trackerName].everyone = !instance.trackers[trackerName].everyone;
+        if (instance.trackers.hasOwnProperty(ids.trackerId)) {
+            instance.trackers[ids.trackerId].everyone = !instance.trackers[ids.trackerId].everyone;
             client.writeInstanceFile(guildId, instance);
 
-            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId, interaction);
         }
     }
     else if (interaction.customId.startsWith('TrackerDelete')) {
-        let trackerName = interaction.customId.replace('TrackerDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('TrackerDelete', ''));
 
-        if (instance.trackers.hasOwnProperty(trackerName)) {
-            let messageId = instance.trackers[trackerName].messageId;
-            let message = await DiscordTools.getMessageById(guildId, instance.channelId.trackers, messageId);
-            if (message !== undefined) {
-                try {
-                    await message.delete();
-                }
-                catch (e) {
-                    client.log('ERROR', `Could not delete tracker message with id: ${messageId}.`, 'error');
-                }
-            }
+        if (instance.trackers.hasOwnProperty(ids.trackerId)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.trackers,
+                instance.trackers[ids.trackerId].messageId);
 
-            delete instance.trackers[trackerName];
+            delete instance.trackers[ids.trackerId];
             client.writeInstanceFile(guildId, instance);
         }
     }

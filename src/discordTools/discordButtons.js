@@ -184,23 +184,23 @@ module.exports = {
         }
     },
 
-    getTrackerButtons: function (guildId, trackerName) {
+    getTrackerButtons: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const active = instance.trackers[trackerName].active;
-        const everyone = instance.trackers[trackerName].everyone;
+        const active = instance.trackers[trackerId].active;
+        const everyone = instance.trackers[trackerId].everyone;
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `TrackerActiveId${trackerName}`,
+                customId: `TrackerActive{"trackerId":${trackerId}}`,
                 label: active ? 'ACTIVE' : 'INACTIVE',
                 style: active ? SUCCESS : DANGER
             }),
             module.exports.getButton({
-                customId: `TrackerEveryoneId${trackerName}`,
+                customId: `TrackerEveryone{"trackerId":${trackerId}}`,
                 label: '@everyone',
                 style: everyone ? SUCCESS : DANGER
             }),
             module.exports.getButton({
-                customId: `TrackerDeleteId${trackerName}`,
+                customId: `TrackerDelete{"trackerId":${trackerId}}`,
                 style: SECONDARY,
                 emoji: '🗑️'
             }));

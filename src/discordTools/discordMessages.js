@@ -48,19 +48,19 @@ module.exports = {
         }
     },
 
-    sendTrackerMessage: async function (guildId, trackerName, interaction = null) {
+    sendTrackerMessage: async function (guildId, trackerId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getTrackerEmbed(guildId, trackerName)],
-            components: [DiscordButtons.getTrackerButtons(guildId, trackerName)]
+            embeds: [DiscordEmbeds.getTrackerEmbed(guildId, trackerId)],
+            components: [DiscordButtons.getTrackerButtons(guildId, trackerId)]
         }
 
         const message = await module.exports.sendMessage(
-            guildId, content, instance.trackers[trackerName].messageId, instance.channelId.trackers, interaction);
+            guildId, content, instance.trackers[trackerId].messageId, instance.channelId.trackers, interaction);
 
         if (!interaction) {
-            instance.trackers[trackerName].messageId = message.id;
+            instance.trackers[trackerId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
@@ -224,23 +224,23 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendTrackerAllOfflineMessage: async function (guildId, trackerName) {
+    sendTrackerAllOfflineMessage: async function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerName)],
-            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
+            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerId)],
+            content: instance.trackers[trackerId].everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendTrackerAnyOnlineMessage: async function (guildId, trackerName) {
+    sendTrackerAnyOnlineMessage: async function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getTrackerAnyOnlineEmbed(guildId, trackerName)],
-            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
+            embeds: [DiscordEmbeds.getTrackerAnyOnlineEmbed(guildId, trackerId)],
+            content: instance.trackers[trackerId].everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
