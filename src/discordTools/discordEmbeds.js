@@ -37,9 +37,9 @@ module.exports = {
         });
     },
 
-    getServerEmbed: function (guildId, id) {
+    getServerEmbed: function (guildId, serverId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const server = instance.serverList[id];
+        const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             title: `${server.title}`,
             color: '#ce412b',

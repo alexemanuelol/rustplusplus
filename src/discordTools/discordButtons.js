@@ -131,51 +131,51 @@ module.exports = {
             }));
     },
 
-    getServerButtons: function (guildId, id, state = null) {
+    getServerButtons: function (guildId, serverId, state = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
-        if (state === null) state = (instance.serverList[id].active) ? 1 : 0;
+        if (state === null) state = (instance.serverList[serverId].active) ? 1 : 0;
 
         let connectionButton = null;
         if (state === 0) {
             connectionButton = module.exports.getButton({
-                customId: `ServerConnectId${id}`,
+                customId: `ServerConnect{"serverId":"${serverId}"}`,
                 label: 'CONNECT',
                 style: PRIMARY
             });
         }
         else if (state === 1) {
             connectionButton = module.exports.getButton({
-                customId: `ServerDisconnectId${id}`,
+                customId: `ServerDisconnect{"serverId":"${serverId}"}`,
                 label: 'DISCONNECT',
                 style: DANGER
             });
         }
         else if (state === 2) {
             connectionButton = module.exports.getButton({
-                customId: `ServerReconnectingId${id}`,
+                customId: `ServerReconnecting{"serverId":"${serverId}"}`,
                 label: 'RECONNECTING...',
                 style: DANGER
             });
         }
 
         let trackerButton = module.exports.getButton({
-            customId: `CreateTrackerId${id}`,
+            customId: `CreateTracker{"serverId":"${serverId}"}`,
             label: 'CREATE TRACKER',
             style: PRIMARY
         });
         let linkButton = module.exports.getButton({
             label: 'WEBSITE',
             style: LINK,
-            url: instance.serverList[id].url
+            url: instance.serverList[serverId].url
         });
         let deleteButton = module.exports.getButton({
-            customId: `ServerDeleteId${id}`,
+            customId: `ServerDelete{"serverId":"${serverId}"}`,
             style: SECONDARY,
             emoji: '🗑️'
         });
 
-        if (instance.serverList[id].battlemetricsId !== null) {
+        if (instance.serverList[serverId].battlemetricsId !== null) {
             return new Discord.ActionRowBuilder()
                 .addComponents(connectionButton, trackerButton, linkButton, deleteButton);
         }

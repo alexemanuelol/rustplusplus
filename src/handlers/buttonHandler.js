@@ -152,18 +152,7 @@ module.exports = async (client, interaction) => {
         });
     }
     else if (interaction.customId.startsWith('ServerConnect')) {
-        const serverId = interaction.customId.replace('ServerConnectId', '');
-
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
-            return;
-        }
+        const ids = JSON.parse(interaction.customId.replace('ServerConnect', ''));
 
         for (const [key, value] of Object.entries(instance.serverList)) {
             if (value.active) {
@@ -173,55 +162,35 @@ module.exports = async (client, interaction) => {
             }
         }
 
-        instance.serverList[serverId].active = true;
+        instance.serverList[ids.serverId].active = true;
         client.writeInstanceFile(guildId, instance);
-
-        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
+        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
         /* Disconnect previous instance is any */
-        if (rustplus) {
-            rustplus.disconnect();
-        }
+        if (rustplus) rustplus.disconnect();
 
         /* Create the rustplus instance */
         const newRustplus = client.createRustplusInstance(
             guildId,
-            instance.serverList[serverId].serverIp,
-            instance.serverList[serverId].appPort,
-            instance.serverList[serverId].steamId,
-            instance.serverList[serverId].playerToken
+            instance.serverList[ids.serverId].serverIp,
+            instance.serverList[ids.serverId].appPort,
+            instance.serverList[ids.serverId].steamId,
+            instance.serverList[ids.serverId].playerToken
         );
 
         newRustplus.newConnection = true;
     }
     else if (interaction.customId.startsWith('CreateTracker')) {
-        let serverId = interaction.customId.replace('CreateTrackerId', '');
+        const ids = JSON.parse(interaction.customId.replace('CreateTracker', ''));
+        const battlemetricsId = instance.serverList[ids.serverId].battlemetricsId;
 
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
-            return;
-        }
-
-        let battlemetricsId = instance.serverList[serverId].battlemetricsId;
-
-        try {
-            interaction.deferUpdate();
-        }
-        catch (e) {
-            client.log('ERROR', 'Could not defer interaction.', 'error');
-        }
+        interaction.deferUpdate();
 
         /* Find an available tracker name */
-        let name = client.findAvailableTrackerName(interaction.guildId);
+        const group = client.findAvailableTrackerName(guildId);
 
-        instance.trackers[name] = {
-            serverId: serverId,
+        instance.trackers[group] = {
+            serverId: ids.serverId,
             battlemetricsId: battlemetricsId,
             status: false,
             allOffline: true,
@@ -229,85 +198,55 @@ module.exports = async (client, interaction) => {
             active: true,
             everyone: false,
             players: [],
-            img: instance.serverList[serverId].img,
-            title: instance.serverList[serverId].title
+            img: instance.serverList[ids.serverId].img,
+            title: instance.serverList[ids.serverId].title
         }
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordMessages.sendTrackerMessage(guildId, name);
+        await DiscordMessages.sendTrackerMessage(guildId, group);
     }
     else if (interaction.customId.startsWith('ServerDisconnect') ||
         interaction.customId.startsWith('ServerReconnecting')) {
-        let serverId = interaction.customId.replace('ServerDisconnectId', '');
-        serverId = serverId.replace('ServerReconnectingId', '');
+        const ids = JSON.parse(interaction.customId.replace('ServerDisconnect', '')
+            .replace('ServerReconnecting', ''));
 
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
-            return;
-        }
-
-        instance.serverList[serverId].active = false;
+        instance.serverList[ids.serverId].active = false;
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
+        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
-        /* Disconnect previous instance if any */
         if (rustplus) {
             rustplus.disconnect();
             delete client.rustplusInstances[guildId];
         }
     }
     else if (interaction.customId.startsWith('ServerDelete')) {
-        let serverId = interaction.customId.replace('ServerDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('ServerDelete', ''));
 
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
-            return;
-        }
-
-        if (instance.serverList[serverId].active) {
-            if (rustplus) {
-                rustplus.disconnect();
-                rustplus.deleted = true;
-                delete client.rustplusInstances[guildId];
-            }
-        }
-
-        let messageId = instance.serverList[serverId].messageId;
-        let message = await DiscordTools.getMessageById(guildId, instance.channelId.servers, messageId);
-        if (message !== undefined) {
-            try {
-                await message.delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete server message with id: ${messageId}.`, 'error');
-            }
-        }
-
-        delete instance.serverList[serverId];
-
-        /* Remove all Smart Switches associated with this server */
-        for (const [key, value] of Object.entries(instance.switches)) {
-            if (`${value.serverId}` === serverId) {
-                delete instance.switches[key];
-            }
-        }
-        if (rustplus && (serverId === rustplus.serverId)) {
+        if (rustplus && (rustplus.serverId === ids.serverId || instance.serverList[ids.serverId].active)) {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
+            await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
+
+            for (const [key, value] of Object.entries(instance.switches)) {
+                if (`${value.serverId}` === ids.serverId) {
+                    delete instance.switches[key];
+                }
+            }
+
+            for (const [key, value] of Object.entries(instance.serverList[ids.serverId].alarms)) {
+                await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
+                    instance.serverList[ids.serverId].alarms[key].messageId);
+            }
+
+            rustplus.disconnect();
+            rustplus.deleted = true;
+            delete client.rustplusInstances[guildId];
         }
 
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.servers,
+            instance.serverList[ids.serverId].messageId);
+
+        delete instance.serverList[ids.serverId];
         client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartSwitchOn') ||

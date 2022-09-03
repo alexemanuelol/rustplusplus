@@ -200,6 +200,7 @@ async function pairingServer(client, guild, full, data, body) {
 async function pairingEntitySwitch(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
 
     const entityExist = instance.switches.hasOwnProperty(body.entityId);
     instance.switches[body.entityId] = {
@@ -234,6 +235,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
 async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
     const alarms = instance.serverList[serverId].alarms;
 
     const entityExist = instance.serverList[serverId].alarms.hasOwnProperty(body.entityId);
@@ -269,6 +271,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
     const storageMonitors = instance.serverList[serverId].storageMonitors;
 
     const entityExist = instance.serverList[serverId].storageMonitors.hasOwnProperty(body.entityId);

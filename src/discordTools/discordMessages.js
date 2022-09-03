@@ -31,19 +31,19 @@ module.exports = {
         }
     },
 
-    sendServerMessage: async function (guildId, id, state = null, interaction = null) {
+    sendServerMessage: async function (guildId, serverId, state = null, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getServerEmbed(guildId, id)],
-            components: [DiscordButtons.getServerButtons(guildId, id, state)]
+            embeds: [DiscordEmbeds.getServerEmbed(guildId, serverId)],
+            components: [DiscordButtons.getServerButtons(guildId, serverId, state)]
         }
 
         const message = await module.exports.sendMessage(
-            guildId, content, instance.serverList[id].messageId, instance.channelId.servers, interaction);
+            guildId, content, instance.serverList[serverId].messageId, instance.channelId.servers, interaction);
 
         if (!interaction) {
-            instance.serverList[id].messageId = message.id;
+            instance.serverList[serverId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
