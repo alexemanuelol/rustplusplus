@@ -150,11 +150,11 @@ module.exports = {
             }
         }
 
-        let groups = SmartSwitchGroupHandler.getGroupsFromSwitchList(
+        let groupsId = SmartSwitchGroupHandler.getGroupsFromSwitchList(
             client, rustplus.guildId, rustplus.serverId, changedSwitches);
 
-        for (let group of groups) {
-            await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, rustplus.serverId, group);
+        for (let groupId of groupsId) {
+            await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, rustplus.serverId, groupId);
         }
     },
 }

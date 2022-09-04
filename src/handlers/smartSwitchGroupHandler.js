@@ -7,9 +7,9 @@ module.exports = {
     updateSwitchGroupIfContainSwitch: async function (client, guildId, serverId, switchId) {
         let instance = client.readInstanceFile(guildId);
 
-        for (const [groupName, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
+        for (const [groupId, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (content.switches.includes(`${switchId}`)) {
-                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
             }
         }
 
@@ -18,22 +18,22 @@ module.exports = {
     getGroupsFromSwitchList: function (client, guildId, serverId, switches) {
         let instance = client.readInstanceFile(guildId);
 
-        let groups = [];
+        let groupsId = [];
         for (let sw of switches) {
-            for (const [groupName, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
-                if (content.switches.includes(sw) && !groups.includes(groupName)) {
-                    groups.push(groupName);
+            for (const [groupId, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
+                if (content.switches.includes(sw) && !groups.includes(groupId)) {
+                    groupsId.push(groupId);
                 }
             }
         }
 
-        return groups;
+        return groupsId;
     },
 
-    TurnOnOffGroup: async function (client, rustplus, guildId, serverId, group, value) {
+    TurnOnOffGroup: async function (client, rustplus, guildId, serverId, groupId, value) {
         let instance = client.readInstanceFile(guildId);
 
-        let switches = instance.serverList[serverId].switchGroups[group].switches;
+        let switches = instance.serverList[serverId].switchGroups[groupId].switches;
 
         let actionSwitches = [];
         for (const [id, content] of Object.entries(instance.serverList[serverId].switches)) {
@@ -86,7 +86,7 @@ module.exports = {
         }
 
         if (actionSwitches.length !== 0) {
-            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, group);
+            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
         }
     },
 }

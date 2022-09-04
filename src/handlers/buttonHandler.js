@@ -350,12 +350,12 @@ module.exports = async (client, interaction) => {
             delete rustplus.currentSwitchTimeouts[ids.entityId];
         }
 
-        for (const [groupName, groupContent] of Object.entries(instance.serverList[ids.serverId].switchGroups)) {
+        for (const [groupId, groupContent] of Object.entries(instance.serverList[ids.serverId].switchGroups)) {
             if (groupContent.switches.includes(ids.entityId)) {
-                instance.serverList[ids.serverId].switchGroups[groupName].switches =
+                instance.serverList[ids.serverId].switchGroups[groupId].switches =
                     groupContent.switches.filter(e => e !== ids.entityId);
                 client.writeInstanceFile(guildId, instance);
-                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
             }
         }
 
@@ -448,9 +448,9 @@ module.exports = async (client, interaction) => {
         interaction.customId.startsWith('GroupTurnOff')) {
         const ids = JSON.parse(interaction.customId.replace('GroupTurnOn', '').replace('GroupTurnOff', ''));
 
-        if (rustplus.currentSwitchTimeouts.hasOwnProperty(ids.group)) {
-            clearTimeout(rustplus.currentSwitchTimeouts[ids.group]);
-            delete rustplus.currentSwitchTimeouts[ids.group];
+        if (rustplus.currentSwitchTimeouts.hasOwnProperty(ids.groupId)) {
+            clearTimeout(rustplus.currentSwitchTimeouts[ids.groupId]);
+            delete rustplus.currentSwitchTimeouts[ids.groupId];
         }
 
         try {
@@ -465,12 +465,12 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        if (!instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(ids.group)) {
+        if (!instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(ids.groupId)) {
             client.log('ERROR', 'Switch group does not exist.', 'error')
             return;
         }
 
-        if (instance.serverList[rustplus.serverId].switchGroups[ids.group].serverId !== rustplus.serverId) {
+        if (instance.serverList[rustplus.serverId].switchGroups[ids.groupId].serverId !== rustplus.serverId) {
             client.log('ERROR', 'Smart Switch Group is not part of the connected rustplus instance.', 'error');
             return;
         }
@@ -484,12 +484,12 @@ module.exports = async (client, interaction) => {
         let active = (interaction.customId.startsWith('GroupTurnOn') ? true : false);
 
         await SmartSwitchGroupHandler.TurnOnOffGroup(
-            client, rustplus, interaction.guildId, rustplus.serverId, ids.group, active);
+            client, rustplus, interaction.guildId, rustplus.serverId, ids.groupId, active);
     }
     else if (interaction.customId.startsWith('GroupEdit')) {
         const ids = JSON.parse(interaction.customId.replace('GroupEdit', ''));
 
-        const modal = DiscordModals.getGroupEditModal(interaction.guildId, ids.serverId, ids.group);
+        const modal = DiscordModals.getGroupEditModal(interaction.guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('GroupDelete')) {
@@ -500,27 +500,27 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        clearTimeout(rustplus.currentSwitchTimeouts[ids.group]);
-        delete rustplus.currentSwitchTimeouts[ids.group];
+        clearTimeout(rustplus.currentSwitchTimeouts[ids.groupId]);
+        delete rustplus.currentSwitchTimeouts[ids.groupId];
 
-        if (instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.group)) {
+        if (instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
-                instance.serverList[ids.serverId].switchGroups[ids.group].messageId);
+                instance.serverList[ids.serverId].switchGroups[ids.groupId].messageId);
 
-            delete instance.serverList[ids.serverId].switchGroups[ids.group];
+            delete instance.serverList[ids.serverId].switchGroups[ids.groupId];
             client.writeInstanceFile(guildId, instance);
         }
     }
     else if (interaction.customId.startsWith('GroupAddSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
 
-        const modal = DiscordModals.getGroupAddSwitchModal(ids.serverId, ids.group);
+        const modal = DiscordModals.getGroupAddSwitchModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
 
-        const modal = DiscordModals.getGroupRemoveSwitchModal(ids.serverId, ids.group);
+        const modal = DiscordModals.getGroupRemoveSwitchModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerActive')) {

@@ -184,9 +184,9 @@ module.exports = {
         });
     },
 
-    getSmartSwitchGroupEmbed: function (guildId, serverId, groupName) {
+    getSmartSwitchGroupEmbed: function (guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
-        let group = instance.serverList[serverId].switchGroups[groupName];
+        let group = instance.serverList[serverId].switchGroups[groupId];
 
         let switchName = '';
         let switchId = '';
@@ -204,8 +204,8 @@ module.exports = {
                 }
             }
             else {
-                instance.serverList[serverId].switchGroups[groupName].switches =
-                    instance.serverList[serverId].switchGroups[groupName].switches.filter(e => e !== groupSwitchId);
+                instance.serverList[serverId].switchGroups[groupId].switches =
+                    instance.serverList[serverId].switchGroups[groupId].switches.filter(e => e !== groupSwitchId);
             }
         }
         Client.client.writeInstanceFile(guildId, instance);
@@ -215,7 +215,7 @@ module.exports = {
         if (switchActive === '') switchActive = 'None';
 
         return module.exports.getEmbed({
-            title: groupName,
+            title: instance.serverList[serverId].switchGroups[groupId].name,
             color: '#ce412b',
             thumbnail: 'attachment://smart_switch.png',
             footer: { text: `${instance.serverList[serverId].title}` },

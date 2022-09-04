@@ -279,37 +279,37 @@ module.exports = {
             }));
     },
 
-    getSmartSwitchGroupButtons: function (serverId, groupName) {
+    getSmartSwitchGroupButtons: function (serverId, groupId) {
         return [
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
-                    customId: `GroupTurnOn{"serverId":"${serverId}","group":"${groupName}"}`,
+                    customId: `GroupTurnOn{"serverId":"${serverId}","groupId":${groupId}}`,
                     label: 'TURN ON',
                     style: PRIMARY
                 }),
                 module.exports.getButton({
-                    customId: `GroupTurnOff{"serverId":"${serverId}","group":"${groupName}"}`,
+                    customId: `GroupTurnOff{"serverId":"${serverId}","groupId":${groupId}}`,
                     label: 'TURN OFF',
                     style: PRIMARY
                 }),
                 module.exports.getButton({
-                    customId: `GroupEdit{"serverId":"${serverId}","group":"${groupName}"}`,
+                    customId: `GroupEdit{"serverId":"${serverId}","groupId":${groupId}}`,
                     label: 'EDIT',
                     style: PRIMARY
                 }),
                 module.exports.getButton({
-                    customId: `GroupDelete{"serverId":"${serverId}","group":"${groupName}"}`,
+                    customId: `GroupDelete{"serverId":"${serverId}","groupId":${groupId}}`,
                     style: SECONDARY,
                     emoji: '🗑️'
                 })),
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
-                    customId: `GroupAddSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
+                    customId: `GroupAddSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
                     label: 'ADD SWITCH',
                     style: SUCCESS
                 }),
                 module.exports.getButton({
-                    customId: `GroupRemoveSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
+                    customId: `GroupRemoveSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
                     label: 'REMOVE SWITCH',
                     style: DANGER
                 }))

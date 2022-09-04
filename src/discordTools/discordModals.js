@@ -43,30 +43,42 @@ module.exports = {
         return modal;
     },
 
-    getGroupEditModal(guildId, serverId, groupName) {
+    getGroupEditModal(guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const modal = module.exports.getModal({
-            customId: `GroupEdit{"serverId":"${serverId}","group":"${groupName}"}`,
-            title: `Editing of ${groupName}`
+            customId: `GroupEdit{"serverId":"${serverId}","groupId":${groupId}}`,
+            title: `Editing of ${instance.serverList[serverId].switchGroups[groupId].name}`
+        });
+
+        const nameInput = TextInput.getTextInput({
+            customId: 'GroupName',
+            label: 'The name of the Group:',
+            value: instance.serverList[serverId].switchGroups[groupId].name,
+            style: Discord.TextInputStyle.Short
         });
 
         const commandInput = TextInput.getTextInput({
             customId: 'GroupCommand',
             label: 'The custom command for the Group:',
-            value: instance.serverList[serverId].switchGroups[groupName].command,
+            value: instance.serverList[serverId].switchGroups[groupId].command,
             style: Discord.TextInputStyle.Short
         });
 
-        modal.addComponents(new Discord.ActionRowBuilder().addComponents(commandInput));
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(nameInput),
+            new Discord.ActionRowBuilder().addComponents(commandInput)
+        );
 
         return modal;
     },
 
-    getGroupAddSwitchModal(serverId, groupName) {
+    getGroupAddSwitchModal(guildId, serverId, groupId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
         const modal = module.exports.getModal({
-            customId: `GroupAddSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
-            title: `Add Switch to ${groupName}`
+            customId: `GroupAddSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
+            title: `Add Switch to ${instance.serverList[serverId].switchGroups[groupId].name}`
         });
 
         const switchIdInput = TextInput.getTextInput({
@@ -81,10 +93,12 @@ module.exports = {
         return modal;
     },
 
-    getGroupRemoveSwitchModal(serverId, groupName) {
+    getGroupRemoveSwitchModal(guildId, serverId, groupId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
         const modal = module.exports.getModal({
-            customId: `GroupRemoveSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
-            title: `Add Switch to ${groupName}`
+            customId: `GroupRemoveSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
+            title: `Add Switch to ${instance.serverList[serverId].switchGroups[groupId].name}`
         });
 
         const switchIdInput = TextInput.getTextInput({

@@ -160,6 +160,17 @@ class DiscordBot extends Discord.Client {
         }
     }
 
+    findAvailableGroupId(guildId, serverId) {
+        const instance = this.readInstanceFile(guildId);
+
+        while (true) {
+            const randomNumber = Math.floor(Math.random() * 1000);
+            if (!instance.serverList[serverId].switchGroups.hasOwnProperty(randomNumber)) {
+                return randomNumber;
+            }
+        }
+    }
+
     async interactionReply(interaction, content) {
         try {
             return await interaction.reply(content);

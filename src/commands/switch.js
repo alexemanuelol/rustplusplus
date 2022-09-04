@@ -98,13 +98,7 @@ module.exports = {
                 const groupName = interaction.options.getString('group_name');
                 const command = interaction.options.getString('command');
 
-                if (Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
-                    let str = `The Group name '${groupName}' is already in use.`;
-                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-                        instance.serverList[rustplus.serverId].title));
-                    rustplus.log('WARNING', str);
-                    return;
-                }
+                const groupId = client.findAvailableGroupId(interaction.guildId, rustplus.serverId);
 
                 if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
                     let str = `The command '${command}' is already in use, please choose another command.`;
@@ -114,7 +108,8 @@ module.exports = {
                     return;
                 }
 
-                instance.serverList[rustplus.serverId].switchGroups[groupName] = {
+                instance.serverList[rustplus.serverId].switchGroups[groupId] = {
+                    name: groupName,
                     serverId: rustplus.serverId,
                     command: command,
                     switches: [],
@@ -122,7 +117,7 @@ module.exports = {
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, rustplus.serverId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, rustplus.serverId, groupId);
 
                 let str = `Successfully created the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,

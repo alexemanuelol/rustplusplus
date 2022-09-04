@@ -257,7 +257,7 @@ module.exports = {
             }
 
             let groups = instance.serverList[rustplus.serverId].switchGroups;
-            for (const [groupName, content] of Object.entries(groups)) {
+            for (const [groupId, content] of Object.entries(groups)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
                 if (command.startsWith(cmd)) {
                     let rest = command;
@@ -287,30 +287,30 @@ module.exports = {
                         return false;
                     }
 
-                    if (rustplus.currentSwitchTimeouts.hasOwnProperty(groupName)) {
-                        clearTimeout(rustplus.currentSwitchTimeouts[groupName]);
-                        delete rustplus.currentSwitchTimeouts[groupName];
+                    if (rustplus.currentSwitchTimeouts.hasOwnProperty(groupId)) {
+                        clearTimeout(rustplus.currentSwitchTimeouts[groupId]);
+                        delete rustplus.currentSwitchTimeouts[groupId];
                     }
 
                     let timeSeconds = Timer.getSecondsFromStringTime(rest);
 
-                    let str = `Turning Group ${groupName} ${(active) ? 'ON' : 'OFF'}.`;
+                    let str = `Turning Group ${content.name} ${(active) ? 'ON' : 'OFF'}.`;
 
                     if (timeSeconds !== null) {
                         let time = Timer.secondsToFullScale(timeSeconds);
                         str += ` Automatically turned back ${(active) ? 'OFF' : 'ON'} in ${time}.`;
 
-                        rustplus.currentSwitchTimeouts[groupName] = setTimeout(async function () {
+                        rustplus.currentSwitchTimeouts[groupId] = setTimeout(async function () {
                             let instance = client.readInstanceFile(rustplus.guildId);
                             if (!instance.serverList.hasOwnProperty(rustplus.serverId) ||
-                                !instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(groupName)) {
+                                !instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(groupId)) {
                                 return false;
                             }
-                            let str = `Automatically turning ${groupName} back ${(!active) ? 'ON' : 'OFF'}.`;
+                            let str = `Automatically turning ${content.name} back ${(!active) ? 'ON' : 'OFF'}.`;
                             rustplus.printCommandOutput(str);
 
                             await SmartSwitchGroupHandler.TurnOnOffGroup(
-                                client, rustplus, rustplus.guildId, rustplus.serverId, groupName, !active);
+                                client, rustplus, rustplus.guildId, rustplus.serverId, groupId, !active);
 
                         }, timeSeconds * 1000);
                     }
@@ -318,7 +318,7 @@ module.exports = {
                     rustplus.printCommandOutput(str);
 
                     await SmartSwitchGroupHandler.TurnOnOffGroup(
-                        client, rustplus, rustplus.guildId, rustplus.serverId, groupName, active);
+                        client, rustplus, rustplus.guildId, rustplus.serverId, groupId, active);
 
                     return true;
                 }

@@ -139,21 +139,21 @@ module.exports = {
         }
     },
 
-    sendSmartSwitchGroupMessage: async function (guildId, serverId, groupName, interaction = null) {
+    sendSmartSwitchGroupMessage: async function (guildId, serverId, groupId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupName)],
-            components: DiscordButtons.getSmartSwitchGroupButtons(serverId, groupName),
+            embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupId)],
+            components: DiscordButtons.getSmartSwitchGroupButtons(serverId, groupId),
             files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png')]
         }
 
         const message = await module.exports.sendMessage(guildId, content,
-            instance.serverList[serverId].switchGroups[groupName].messageId,
+            instance.serverList[serverId].switchGroups[groupId].messageId,
             instance.channelId.switches, interaction);
 
         if (!interaction) {
-            instance.serverList[serverId].switchGroups[groupName].messageId = message.id;
+            instance.serverList[serverId].switchGroups[groupId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
