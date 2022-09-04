@@ -6,9 +6,9 @@ module.exports = {
         const instance = Client.client.readInstanceFile(guildId);
 
         for (const serverId in instance.serverList) {
-            //for (const switchId in instance.serverList[serverId].switches) {
-            //    if (entityId === switchId) return { type: 'switch', serverId: serverId }
-            //}
+            for (const switchId in instance.serverList[serverId].switches) {
+                if (entityId === switchId) return { type: 'switch', serverId: serverId }
+            }
             for (const alarmId in instance.serverList[serverId].alarms) {
                 if (entityId === alarmId) return { type: 'alarm', serverId: serverId }
             }

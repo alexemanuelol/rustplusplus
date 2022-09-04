@@ -200,18 +200,18 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
     if (!instance.serverList.hasOwnProperty(serverId)) return;
+    const switches = instance.serverList[serverId].switches;
 
-    const entityExist = instance.switches.hasOwnProperty(body.entityId);
-    instance.switches[body.entityId] = {
-        active: entityExist ? instance.switches[body.entityId].active : false,
-        reachable: entityExist ? instance.switches[body.entityId].reachable : true,
-        name: entityExist ? instance.switches[body.entityId].name : 'Smart Switch',
-        command: entityExist ? instance.switches[body.entityId].command : body.entityId,
-        image: entityExist ? instance.switches[body.entityId].image : 'smart_switch.png',
-        autoDayNight: entityExist ? instance.switches[body.entityId].autoDayNight : 0,
-        server: entityExist ? instance.switches[body.entityId].server : body.name,
-        serverId: entityExist ? instance.switches[body.entityId].serverId : serverId,
-        messageId: entityExist ? instance.switches[body.entityId].messageId : null
+    const entityExist = instance.serverList[serverId].switches.hasOwnProperty(body.entityId);
+    instance.serverList[serverId].switches[body.entityId] = {
+        active: entityExist ? switches[body.entityId].active : false,
+        reachable: entityExist ? switches[body.entityId].reachable : true,
+        name: entityExist ? switches[body.entityId].name : 'Smart Switch',
+        command: entityExist ? switches[body.entityId].command : body.entityId,
+        image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
+        autoDayNight: entityExist ? switches[body.entityId].autoDayNight : 0,
+        server: entityExist ? switches[body.entityId].server : body.name,
+        messageId: entityExist ? switches[body.entityId].messageId : null
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -219,15 +219,15 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
     if (rustplus && serverId === rustplus.serverId) {
         const info = await rustplus.getEntityInfoAsync(body.entityId);
         if (!(await rustplus.isResponseValid(info))) {
-            instance.switches[body.entityId].reachable = false;
+            instance.serverList[serverId].switches[body.entityId].reachable = false;
         }
 
-        if (instance.switches[body.entityId].reachable) {
-            instance.switches[body.entityId].active = info.entityInfo.payload.value;
+        if (instance.serverList[serverId].switches[body.entityId].reachable) {
+            instance.serverList[serverId].switches[body.entityId].active = info.entityInfo.payload.value;
         }
         client.writeInstanceFile(guild.id, instance);
 
-        await DiscordMessages.sendSmartSwitchMessage(guild.id, body.entityId);
+        await DiscordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
     }
 }
 

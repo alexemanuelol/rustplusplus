@@ -100,7 +100,7 @@ module.exports = {
             /* Maybe a custom command? */
             let instance = client.readInstanceFile(rustplus.guildId);
 
-            for (const [id, content] of Object.entries(instance.switches)) {
+            for (const [id, content] of Object.entries(instance.serverList[rustplus.serverId].switches)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
                 if (command.startsWith(cmd)) {
                     let rest = command;
@@ -126,19 +126,21 @@ module.exports = {
                     else if (command === `${cmd} status`) {
                         let info = await rustplus.getEntityInfoAsync(id);
                         if (!(await rustplus.isResponseValid(info))) {
-                            instance.switches[id].reachable = false;
+                            instance.serverList[rustplus.serverId].switches[id].reachable = false;
                             client.writeInstanceFile(rustplus.guildId, instance);
-                            DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, id);
+                            DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, id);
                             SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                                 client, rustplus.guildId, rustplus.serverId, id);
 
                             rustplus.printCommandOutput(
-                                `Could not communicate with Smart Switch: ${instance.switches[id].name}`);
+                                `Could not communicate with Smart Switch: ` +
+                                `${instance.serverList[rustplus.serverId].switches[id].name}`);
                             return false;
                         }
 
                         active = (info.entityInfo.payload.value) ? 'ON' : 'OFF';
-                        rustplus.printCommandOutput(`${instance.switches[id].name} is currently ${active}.`);
+                        rustplus.printCommandOutput(`${instance.serverList[rustplus.serverId].switches[id].name} ` +
+                            `is currently ${active}.`);
                         return true;
                     }
                     else if (command.startsWith(`${cmd}`)) {
@@ -156,8 +158,8 @@ module.exports = {
 
                     let timeSeconds = Timer.getSecondsFromStringTime(rest);
 
-                    let prevActive = instance.switches[id].active;
-                    instance.switches[id].active = active;
+                    let prevActive = instance.serverList[rustplus.serverId].switches[id].active;
+                    instance.serverList[rustplus.serverId].switches[id].active = active;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.interactionSwitches.push(id);
@@ -172,26 +174,27 @@ module.exports = {
 
                     if (!(await rustplus.isResponseValid(response))) {
                         rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
-                        if (instance.switches[id].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, id);
+                        if (instance.serverList[rustplus.serverId].switches[id].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
+                                rustplus.serverId, id);
                         }
-                        instance.switches[id].reachable = false;
-                        instance.switches[id].active = prevActive;
+                        instance.serverList[rustplus.serverId].switches[id].reachable = false;
+                        instance.serverList[rustplus.serverId].switches[id].active = prevActive;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
                     }
                     else {
-                        instance.switches[id].reachable = true;
+                        instance.serverList[rustplus.serverId].switches[id].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, id);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, id);
                     SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                         client, rustplus.guildId, rustplus.serverId, id);
 
-                    if (instance.switches[id].reachable) {
-                        let str = `${instance.switches[id].name} was turned `;
+                    if (instance.serverList[rustplus.serverId].switches[id].reachable) {
+                        let str = `${instance.serverList[rustplus.serverId].switches[id].name} was turned `;
                         str += (active) ? 'ON.' : 'OFF.';
 
                         if (timeSeconds !== null) {
@@ -200,12 +203,12 @@ module.exports = {
 
                             rustplus.currentSwitchTimeouts[id] = setTimeout(async function () {
                                 let instance = client.readInstanceFile(rustplus.guildId);
-                                if (!instance.switches.hasOwnProperty(id)) {
+                                if (!instance.serverList[rustplus.serverId].switches.hasOwnProperty(id)) {
                                     return false;
                                 }
 
-                                let prevActive = instance.switches[id].active;
-                                instance.switches[id].active = !active;
+                                let prevActive = instance.serverList[rustplus.serverId].switches[id].active;
+                                instance.serverList[rustplus.serverId].switches[id].active = !active;
                                 client.writeInstanceFile(rustplus.guildId, instance);
 
                                 rustplus.interactionSwitches.push(id);
@@ -220,25 +223,28 @@ module.exports = {
 
                                 if (!(await rustplus.isResponseValid(response))) {
                                     rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
-                                    if (instance.switches[id].reachable) {
-                                        await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, id);
+                                    if (instance.serverList[rustplus.serverId].switches[id].reachable) {
+                                        await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
+                                            rustplus.serverId, id);
                                     }
-                                    instance.switches[id].reachable = false;
-                                    instance.switches[id].active = prevActive;
+                                    instance.serverList[rustplus.serverId].switches[id].reachable = false;
+                                    instance.serverList[rustplus.serverId].switches[id].active = prevActive;
                                     client.writeInstanceFile(rustplus.guildId, instance);
 
                                     rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
                                 }
                                 else {
-                                    instance.switches[id].reachable = true;
+                                    instance.serverList[rustplus.serverId].switches[id].reachable = true;
                                     client.writeInstanceFile(rustplus.guildId, instance);
                                 }
 
-                                DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, id);
+                                DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, id);
                                 SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                                     client, rustplus.guildId, rustplus.serverId, id);
 
-                                let str = `Automatically turning ${instance.switches[id].name} back ${(!active) ? 'ON' : 'OFF'}.`;
+                                let str = `Automatically turning ` +
+                                    `${instance.serverList[rustplus.serverId].switches[id].name} back ` +
+                                    `${(!active) ? 'ON' : 'OFF'}.`;
                                 rustplus.printCommandOutput(str);
                             }, timeSeconds * 1000);
                         }
@@ -267,7 +273,8 @@ module.exports = {
                     else if (command === `${cmd}`) {
                         /* Get switch info, create message */
                         var switchStatus = content.switches.map(switchId => {
-                            const { active, name, reachable } = instance.switches[switchId];
+                            const { active, name, reachable } =
+                                instance.serverList[rustplus.serverId].switches[switchId];
                             return { active, name, reachable }
                         });
                         const statusMessage = switchStatus.map(status =>

@@ -57,18 +57,19 @@ module.exports = {
             }));
     },
 
-    getSmartSwitchSelectMenu: function (guildId, id) {
+    getSmartSwitchSelectMenu: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const sw = instance.serverList[serverId].switches[entityId];
         let desc = 'Smart Switch Will be active only during the ';
 
         let autoDayNightString = 'AUTO SETTING: ';
-        if (instance.switches[id].autoDayNight === 0) autoDayNightString += 'OFF';
-        else if (instance.switches[id].autoDayNight === 1) autoDayNightString += 'AUTO-DAY';
-        else if (instance.switches[id].autoDayNight === 2) autoDayNightString += 'AUTO-NIGHT';
+        if (sw.autoDayNight === 0) autoDayNightString += 'OFF';
+        else if (sw.autoDayNight === 1) autoDayNightString += 'AUTO-DAY';
+        else if (sw.autoDayNight === 2) autoDayNightString += 'AUTO-NIGHT';
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
-                customId: `AutoDayNightId${id}`,
+                customId: `AutoDayNightId${entityId}`,
                 placeholder: `${autoDayNightString}`,
                 options: [
                     { label: 'OFF', description: 'Smart Switch work as normal.', value: '0' },

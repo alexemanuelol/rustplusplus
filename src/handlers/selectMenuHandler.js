@@ -47,9 +47,9 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('AutoDayNight')) {
         let id = interaction.customId.replace('AutoDayNightId', '');
 
-        instance.switches[id].autoDayNight = parseInt(interaction.values[0]);
+        instance.serverList[rustplus.serverId].switches[id].autoDayNight = parseInt(interaction.values[0]);
         client.writeInstanceFile(guildId, instance);
 
-        DiscordMessages.sendSmartSwitchMessage(guildId, id, interaction);
+        DiscordMessages.sendSmartSwitchMessage(guildId, rustplus.serverId, id, interaction);
     }
 }

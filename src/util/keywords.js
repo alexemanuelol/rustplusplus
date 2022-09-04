@@ -30,26 +30,16 @@ module.exports = {
         'wipe'
     ],
 
-    getListOfUsedKeywords(client, guildId, serverId = null) {
-        let instance = client.readInstanceFile(guildId);
-        let list = [];
-        list = [...module.exports.commands];
+    getListOfUsedKeywords: function (client, guildId, serverId) {
+        const instance = client.readInstanceFile(guildId);
 
-        for (const [id, value] of Object.entries(instance.switches)) {
-            if (serverId === null) {
-                list.push(value.command);
-            }
-            else {
-                if (value.serverId === serverId) {
-                    list.push(value.command);
-                }
-            }
+        let list = module.exports.commands;
+        for (const [id, value] of Object.entries(instance.serverList[serverId].switches)) {
+            list.push(value.command);
         }
 
-        if (serverId) {
-            for (const [id, value] of Object.entries(instance.serverList[serverId].switchGroups)) {
-                list.push(value.command);
-            }
+        for (const [id, value] of Object.entries(instance.serverList[serverId].switchGroups)) {
+            list.push(value.command);
         }
 
         return list;

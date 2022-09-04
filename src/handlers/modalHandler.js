@@ -6,15 +6,16 @@ module.exports = async (client, interaction) => {
     const guildId = interaction.guildId;
 
     if (interaction.customId.startsWith('SmartSwitchEdit')) {
-        let id = interaction.customId.replace('SmartSwitchEditId', '');
-        let smartSwitchName = interaction.fields.getTextInputValue('SmartSwitchName');
-        let smartSwitchCommand = interaction.fields.getTextInputValue('SmartSwitchCommand');
+        const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
 
-        if (smartSwitchName !== instance.switches[id].name) {
-            instance.switches[id].name = smartSwitchName;
+        const smartSwitchName = interaction.fields.getTextInputValue('SmartSwitchName');
+        const smartSwitchCommand = interaction.fields.getTextInputValue('SmartSwitchCommand');
+
+        if (smartSwitchName !== instance.serverList[ids.serverId].switches[ids.entityId].name) {
+            instance.serverList[ids.serverId].switches[ids.entityId].name = smartSwitchName;
         }
 
-        if (smartSwitchCommand !== instance.switches[id].command) {
+        if (smartSwitchCommand !== instance.serverList[ids.serverId].switches[ids.entityId].command) {
             const rustplus = client.rustplusInstances[guildId];
             if (!rustplus || (rustplus && !rustplus.ready)) {
                 client.log('WARNING', 'Not currently connected to a rust server.');
@@ -23,12 +24,12 @@ module.exports = async (client, interaction) => {
                 rustplus.log('WARNING', `The command '${smartSwitchCommand}' is already in use.`);
             }
             else {
-                instance.switches[id].command = smartSwitchCommand;
+                instance.serverList[ids.serverId].switches[ids.entityId].command = smartSwitchCommand;
             }
         }
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordMessages.sendSmartSwitchMessage(guildId, id);
+        await DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));

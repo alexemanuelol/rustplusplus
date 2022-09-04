@@ -65,27 +65,28 @@ module.exports = {
         }
     },
 
-    sendSmartSwitchMessage: async function (guildId, id, interaction = null) {
+    sendSmartSwitchMessage: async function (guildId, serverId, entityId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [instance.switches[id].reachable ?
-                DiscordEmbeds.getSmartSwitchEmbed(guildId, id) :
-                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'switches')],
+            embeds: [instance.serverList[serverId].switches[entityId].reachable ?
+                DiscordEmbeds.getSmartSwitchEmbed(guildId, serverId, entityId) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'switches')],
             components: [
-                DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, id),
-                DiscordButtons.getSmartSwitchButtons(guildId, id)
+                DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, serverId, entityId),
+                DiscordButtons.getSmartSwitchButtons(guildId, serverId, entityId)
             ],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)
+                new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                    `${instance.serverList[serverId].switches[entityId].image}`)
             ]
         }
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.switches[id].messageId, instance.channelId.switches, interaction);
+        const message = await module.exports.sendMessage(guildId, content,
+            instance.serverList[serverId].switches[entityId].messageId, instance.channelId.switches, interaction);
 
         if (!interaction) {
-            instance.switches[id].messageId = message.id;
+            instance.serverList[serverId].switches[entityId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
@@ -138,22 +139,21 @@ module.exports = {
         }
     },
 
-    sendSmartSwitchGroupMessage: async function (guildId, name, interaction = null) {
+    sendSmartSwitchGroupMessage: async function (guildId, serverId, groupName, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, name)],
-            components: [DiscordButtons.getSmartSwitchGroupButtons(name)],
+            embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupName)],
+            components: [DiscordButtons.getSmartSwitchGroupButtons(serverId, groupName)],
             files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png')]
         }
 
-        const rustplus = Client.client.rustplusInstances[guildId];
-        const serverId = rustplus.serverId;
         const message = await module.exports.sendMessage(guildId, content,
-            instance.serverList[serverId].switchGroups[name].messageId, instance.channelId.switches, interaction);
+            instance.serverList[serverId].switchGroups[groupName].messageId,
+            instance.channelId.switches, interaction);
 
         if (!interaction) {
-            instance.serverList[serverId].switchGroups[name].messageId = message.id;
+            instance.serverList[serverId].switchGroups[groupName].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
@@ -200,12 +200,13 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendSmartSwitchNotFoundMessage: async function (guildId, id) {
+    sendSmartSwitchNotFoundMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)]
+            embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/` +
+                `${instance.serverList[serverId].switches[entityId].image}`)]
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);

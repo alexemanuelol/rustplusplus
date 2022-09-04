@@ -102,7 +102,8 @@ module.exports = {
                 const id = interaction.options.getString('id');
                 const image = interaction.options.getString('image');
 
-                if (!Object.keys(instance.switches).includes(id)) {
+                const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
+                if (device === null) {
                     let str = `Invalid ID: '${id}'.`;
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
@@ -110,24 +111,17 @@ module.exports = {
                     return;
                 }
 
-                if (instance.switches[id].serverId !== rustplus.serverId) {
-                    let str = 'The Smart Switch is not part of this Rust Server.';
-                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-                        instance.serverList[rustplus.serverId].title));
-                    rustplus.log('WARNING', str);
-                    return;
-                }
-
                 if (image !== null) {
-                    instance.switches[id].image = `${image}.png`;
+                    instance.serverList[rustplus.serverId].switches[id].image = `${image}.png`;
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                DiscordMessages.sendSmartSwitchMessage(interaction.guildId, id);
+                DiscordMessages.sendSmartSwitchMessage(interaction.guildId, rustplus.serverId, id);
                 SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                     client, interaction.guildId, rustplus.serverId, id);
 
-                let str = `Successfully edited Smart Switch '${instance.switches[id].name}'.`;
+                let str = `Successfully edited Smart Switch ` +
+                    `'${instance.serverList[rustplus.serverId].switches[id].name}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                     instance.serverList[rustplus.serverId].title));
                 rustplus.log('INFO', str);
@@ -136,11 +130,6 @@ module.exports = {
             case 'create_group': {
                 const groupName = interaction.options.getString('group_name');
                 const command = interaction.options.getString('command');
-
-                if (!instance.serverList[rustplus.serverId].hasOwnProperty('switchGroups')) {
-                    instance.serverList[rustplus.serverId].switchGroups = {};
-                    client.writeInstanceFile(interaction.guildId, instance);
-                }
 
                 if (Object.keys(instance.serverList[rustplus.serverId].switchGroups).includes(groupName)) {
                     let str = `The Group name '${groupName}' is already in use.`;
@@ -166,7 +155,7 @@ module.exports = {
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, rustplus.serverId, groupName);
 
                 let str = `Successfully created the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
@@ -204,11 +193,10 @@ module.exports = {
 
                 if (command !== null) {
                     instance.serverList[rustplus.serverId].switchGroups[groupName].command = command;
-                    embedChanged = true;
                 }
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, rustplus.serverId, groupName);
 
                 let str = `Successfully edited the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
@@ -228,7 +216,7 @@ module.exports = {
                     return;
                 }
 
-                if (!Object.keys(instance.switches).includes(switchId)) {
+                if (!Object.keys(instance.serverList[rustplus.serverId].switches).includes(switchId)) {
                     let str = `The Switch ID '${switchId}' does not exist.`;
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
@@ -244,20 +232,12 @@ module.exports = {
                     return;
                 }
 
-                let sw = instance.switches[switchId];
-
-                if (sw.serverId !== rustplus.serverId) {
-                    let str = `The Switch '${switchId}' is not part of this server.`;
-                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-                        instance.serverList[rustplus.serverId].title));
-                    rustplus.log('WARNING', str);
-                    return;
-                }
+                let sw = instance.serverList[rustplus.serverId].switches[switchId];
 
                 instance.serverList[rustplus.serverId].switchGroups[groupName].switches.push(switchId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, rustplus.serverId, groupName);
 
                 let str = `Successfully added '${switchId}' to the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
@@ -289,7 +269,7 @@ module.exports = {
                     instance.serverList[rustplus.serverId].switchGroups[groupName].switches.filter(e => e !== switchId);
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, rustplus.serverId, groupName);
 
                 let str = `Successfully removed '${switchId}' to the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,

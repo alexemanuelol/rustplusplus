@@ -38,7 +38,7 @@ module.exports = {
             else if (message.broadcast.hasOwnProperty('entityChanged')) {
                 let entityId = message.broadcast.entityChanged.entityId;
 
-                if (instance.switches.hasOwnProperty(entityId)) {
+                if (instance.serverList[rustplus.serverId].switches.hasOwnProperty(entityId)) {
                     if (rustplus.currentSwitchTimeouts.hasOwnProperty(entityId)) {
                         clearTimeout(rustplus.currentSwitchTimeouts[entityId]);
                         delete rustplus.currentSwitchTimeouts[entityId];
@@ -49,10 +49,10 @@ module.exports = {
                     }
                     else {
                         let active = message.broadcast.entityChanged.payload.value;
-                        instance.switches[entityId].active = active;
+                        instance.serverList[rustplus.serverId].switches[entityId].active = active;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, entityId);
+                        DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, entityId);
                         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                             client, rustplus.guildId, rustplus.serverId, entityId);
                     }

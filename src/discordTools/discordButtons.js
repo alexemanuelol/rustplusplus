@@ -23,21 +23,24 @@ module.exports = {
         return button;
     },
 
-    getSmartSwitchButtons: function (guildId, id) {
+    getSmartSwitchButtons: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const sw = instance.serverList[serverId].switches[entityId];
+
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `SmartSwitch${instance.switches[id].active ? 'Off' : 'On'}Id${id}`,
-                label: instance.switches[id].active ? 'TURN OFF' : 'TURN ON',
-                style: instance.switches[id].active ? DANGER : SUCCESS
+                customId: `SmartSwitch${sw.active ? 'Off' : 'On'}` +
+                    `{"serverId":"${serverId}","entityId":${entityId}}`,
+                label: sw.active ? 'TURN OFF' : 'TURN ON',
+                style: sw.active ? DANGER : SUCCESS
             }),
             module.exports.getButton({
-                customId: `SmartSwitchEditId${id}`,
+                customId: `SmartSwitchEdit{"serverId":"${serverId}","entityId":${entityId}}`,
                 label: 'EDIT',
                 style: PRIMARY
             }),
             module.exports.getButton({
-                customId: `SmartSwitchDeleteId${id}`,
+                customId: `SmartSwitchDelete{"serverId":"${serverId}","entityId":${entityId}}`,
                 style: SECONDARY,
                 emoji: '🗑️'
             }));
@@ -276,20 +279,20 @@ module.exports = {
             }));
     },
 
-    getSmartSwitchGroupButtons: function (name) {
+    getSmartSwitchGroupButtons: function (serverId, groupName) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `TurnOnGroupId${name}`,
+                customId: `TurnOnGroup{"serverId":"${serverId}","group":"${groupName}"}`,
                 label: 'TURN ON',
                 style: PRIMARY
             }),
             module.exports.getButton({
-                customId: `TurnOffGroupId${name}`,
+                customId: `TurnOffGroup{"serverId":"${serverId}","group":"${groupName}"}`,
                 label: 'TURN OFF',
                 style: PRIMARY
             }),
             module.exports.getButton({
-                customId: `DeleteGroupId${name}`,
+                customId: `DeleteGroup{"serverId":"${serverId}","group":"${groupName}"}`,
                 style: SECONDARY,
                 emoji: '🗑️'
             }));

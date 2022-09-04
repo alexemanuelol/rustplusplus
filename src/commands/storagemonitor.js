@@ -84,14 +84,6 @@ module.exports = {
 					return;
 				}
 
-				if (device.serverId !== rustplus.serverId) {
-					let str = 'That Storage Monitor is not part of this Rust Server.';
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-						instance.serverList[rustplus.serverId].title));
-					rustplus.log('WARNING', str);
-					return;
-				}
-
 				if (name !== null) {
 					instance.serverList[rustplus.serverId].storageMonitors[id].name = name;
 				}
@@ -113,14 +105,6 @@ module.exports = {
 				const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
 				if (device === null) {
 					let str = `Invalid ID: '${id}'.`;
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-						instance.serverList[rustplus.serverId].title));
-					rustplus.log('WARNING', str);
-					return;
-				}
-
-				if (device.serverId !== rustplus.serverId) {
-					let str = 'That Storage Monitor is not part of this Rust Server.';
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.log('WARNING', str);

@@ -8,27 +8,26 @@ module.exports = {
         let changedSwitches = [];
         if (rustplus.smartSwitchIntervalCounter === 29) {
             rustplus.smartSwitchIntervalCounter = 0;
-            for (const [key, value] of Object.entries(instance.switches)) {
-                if (rustplus.serverId !== `${value.serverId}`) continue;
+            for (const [key, value] of Object.entries(instance.serverList[rustplus.serverId].switches)) {
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 let info = await rustplus.getEntityInfoAsync(key);
                 if (!(await rustplus.isResponseValid(info))) {
-                    if (instance.switches[key].reachable) {
-                        await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
-                        instance.switches[key].reachable = false;
+                    if (instance.serverList[rustplus.serverId].switches[key].reachable) {
+                        await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, rustplus.serverId, key);
+                        instance.serverList[rustplus.serverId].switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, key);
                         changedSwitches.push(key);
                     }
                 }
                 else {
-                    if (!instance.switches[key].reachable) {
-                        instance.switches[key].reachable = true;
+                    if (!instance.serverList[rustplus.serverId].switches[key].reachable) {
+                        instance.serverList[rustplus.serverId].switches[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
-                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
+                        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, key);
                         changedSwitches.push(key);
                     }
                 }
@@ -39,111 +38,113 @@ module.exports = {
         }
 
         if (rustplus.time.isTurnedDay(time)) {
-            for (const [key, value] of Object.entries(instance.switches)) {
-                if (rustplus.serverId !== `${value.serverId}`) continue;
+            for (const [key, value] of Object.entries(instance.serverList[rustplus.serverId].switches)) {
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
-                    instance.switches[key].active = true;
+                    instance.serverList[rustplus.serverId].switches[key].active = true;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.interactionSwitches.push(key);
 
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
+                        if (instance.serverList[rustplus.serverId].switches[key].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
+                                rustplus.serverId, key);
                         }
-                        instance.switches[key].reachable = false;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
                     }
                     else {
-                        instance.switches[key].reachable = true;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, key);
                     changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
-                    instance.switches[key].active = false;
+                    instance.serverList[rustplus.serverId].switches[key].active = false;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.interactionSwitches.push(key);
 
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
+                        if (instance.serverList[rustplus.serverId].switches[key].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
+                                rustplus.serverId, key);
                         }
-                        instance.switches[key].reachable = false;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
                     }
                     else {
-                        instance.switches[key].reachable = true;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, key);
                     changedSwitches.push(key);
                 }
             }
         }
         else if (rustplus.time.isTurnedNight(time)) {
-            for (const [key, value] of Object.entries(instance.switches)) {
-                if (rustplus.serverId !== `${value.serverId}`) continue;
+            for (const [key, value] of Object.entries(instance.serverList[rustplus.serverId].switches)) {
                 instance = client.readInstanceFile(rustplus.guildId);
 
                 if (value.autoDayNight === 1) {
-                    instance.switches[key].active = false;
+                    instance.serverList[rustplus.serverId].switches[key].active = false;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.interactionSwitches.push(key);
 
                     let response = await rustplus.turnSmartSwitchOffAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
+                        if (instance.serverList[rustplus.serverId].switches[key].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
+                                rustplus.serverId, key);
                         }
-                        instance.switches[key].reachable = false;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
                     }
                     else {
-                        instance.switches[key].reachable = true;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, key);
                     changedSwitches.push(key);
                 }
                 else if (value.autoDayNight === 2) {
-                    instance.switches[key].active = true;
+                    instance.serverList[rustplus.serverId].switches[key].active = true;
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     rustplus.interactionSwitches.push(key);
 
                     let response = await rustplus.turnSmartSwitchOnAsync(key);
                     if (!(await rustplus.isResponseValid(response))) {
-                        if (instance.switches[key].reachable) {
-                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, key);
+                        if (instance.serverList[rustplus.serverId].switches[key].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
+                                rustplus.serverId, key);
                         }
-                        instance.switches[key].reachable = false;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = false;
                         client.writeInstanceFile(rustplus.guildId, instance);
 
                         rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== key);
                     }
                     else {
-                        instance.switches[key].reachable = true;
+                        instance.serverList[rustplus.serverId].switches[key].reachable = true;
                         client.writeInstanceFile(rustplus.guildId, instance);
                     }
 
-                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, key);
+                    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, key);
                     changedSwitches.push(key);
                 }
             }
@@ -153,7 +154,7 @@ module.exports = {
             client, rustplus.guildId, rustplus.serverId, changedSwitches);
 
         for (let group of groups) {
-            await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, group);
+            await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, rustplus.serverId, group);
         }
     },
 }

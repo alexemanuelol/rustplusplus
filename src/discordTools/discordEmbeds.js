@@ -23,17 +23,20 @@ module.exports = {
         return embed;
     },
 
-    getSmartSwitchEmbed: function (guildId, id) {
+    getSmartSwitchEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const sw = instance.switches[id];
+        const sw = instance.serverList[serverId].switches[entityId];
         return module.exports.getEmbed({
             title: `${sw.name}`,
             color: sw.active ? '#00ff40' : '#ff0040',
-            description: `**ID**: \`${id}\``,
+            description: `**ID**: \`${entityId}\``,
             thumbnail: `attachment://${sw.image}`,
             footer: { text: `${sw.server}` },
-            fields: [
-                { name: 'Custom Command', value: `\`${instance.generalSettings.prefix}${sw.command}\``, inline: true }]
+            fields: [{
+                name: 'Custom Command',
+                value: `\`${instance.generalSettings.prefix}${sw.command}\``,
+                inline: true
+            }]
         });
     },
 
@@ -181,20 +184,19 @@ module.exports = {
         });
     },
 
-    getSmartSwitchGroupEmbed: function (guildId, name) {
+    getSmartSwitchGroupEmbed: function (guildId, serverId, groupName) {
         const instance = Client.client.readInstanceFile(guildId);
-        let rustplus = Client.client.rustplusInstances[guildId];
-        let group = instance.serverList[rustplus.serverId].switchGroups[name];
+        let group = instance.serverList[serverId].switchGroups[groupName];
 
         let switchName = '';
         let switchId = '';
         let switchActive = '';
         for (let groupSwitchId of group.switches) {
-            if (instance.switches.hasOwnProperty(groupSwitchId)) {
-                let active = instance.switches[groupSwitchId].active;
-                switchName += `${instance.switches[groupSwitchId].name}\n`;
+            if (instance.serverList[serverId].switches.hasOwnProperty(groupSwitchId)) {
+                let active = instance.serverList[serverId].switches[groupSwitchId].active;
+                switchName += `${instance.serverList[serverId].switches[groupSwitchId].name}\n`;
                 switchId += `${groupSwitchId}\n`;
-                if (instance.switches[groupSwitchId].reachable) {
+                if (instance.serverList[serverId].switches[groupSwitchId].reachable) {
                     switchActive += `${(active) ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI}\n`;
                 }
                 else {
@@ -202,8 +204,8 @@ module.exports = {
                 }
             }
             else {
-                instance.serverList[rustplus.serverId].switchGroups[name].switches =
-                    instance.serverList[rustplus.serverId].switchGroups[name].switches.filter(e => e !== groupSwitchId);
+                instance.serverList[serverId].switchGroups[groupName].switches =
+                    instance.serverList[serverId].switchGroups[groupName].switches.filter(e => e !== groupSwitchId);
             }
         }
         Client.client.writeInstanceFile(guildId, instance);
@@ -213,10 +215,10 @@ module.exports = {
         if (switchActive === '') switchActive = 'None';
 
         return module.exports.getEmbed({
-            title: name,
+            title: groupName,
             color: '#ce412b',
             thumbnail: 'attachment://smart_switch.png',
-            footer: { text: `${instance.serverList[rustplus.serverId].title}` },
+            footer: { text: `${instance.serverList[serverId].title}` },
             fields: [
                 {
                     name: 'Custom Command',
@@ -281,17 +283,17 @@ module.exports = {
         });
     },
 
-    getSmartSwitchNotFoundEmbed: async function (guildId, id) {
+    getSmartSwitchNotFoundEmbed: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
         return module.exports.getEmbed({
-            title: `${instance.switches[id].name} could not be found!` +
+            title: `${instance.serverList[serverId].switches[entityId].name} could not be found!` +
                 ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
-            description: `**ID** \`${id}\``,
-            thumbnail: `attachment://${instance.switches[id].image}`,
-            footer: { text: `${instance.switches[id].server}` },
+            description: `**ID** \`${entityId}\``,
+            thumbnail: `attachment://${instance.serverList[serverId].switches[entityId].image}`,
+            footer: { text: `${instance.serverList[serverId].switches[entityId].server}` },
             timestamp: true
         });
     },

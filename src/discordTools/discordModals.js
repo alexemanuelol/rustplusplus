@@ -13,25 +13,25 @@ module.exports = {
         return modal;
     },
 
-    getSmartSwitchEditModal(guildId, id) {
+    getSmartSwitchEditModal(guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const modal = module.exports.getModal({
-            customId: `SmartSwitchEditId${id}`,
-            title: `Editing of ${instance.switches[id].name}`
+            customId: `SmartSwitchEdit{"serverId":"${serverId}","entityId":${entityId}}`,
+            title: `Editing of ${instance.serverList[serverId].switches[entityId].name}`
         });
 
         const nameInput = TextInput.getTextInput({
             customId: 'SmartSwitchName',
             label: 'The name of the Smart Switch:',
-            value: instance.switches[id].name,
+            value: instance.serverList[serverId].switches[entityId].name,
             style: Discord.TextInputStyle.Short
         });
 
         const commandInput = TextInput.getTextInput({
             customId: 'SmartSwitchCommand',
             label: 'The custom command for the Smart Switch:',
-            value: instance.switches[id].command,
+            value: instance.serverList[serverId].switches[entityId].command,
             style: Discord.TextInputStyle.Short
         });
 
