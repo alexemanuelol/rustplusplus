@@ -31,6 +31,60 @@ module.exports = async (client, interaction) => {
 
         await DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId);
     }
+    else if (interaction.customId.startsWith('GroupEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupEdit', ''));
+
+        const groupCommand = interaction.fields.getTextInputValue('GroupCommand');
+
+        if (groupCommand === instance.serverList[ids.serverId].switchGroups[ids.group].command) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        if (Keywords.getListOfUsedKeywords(client, interaction.guildId, ids.serverId).includes(groupCommand)) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        instance.serverList[ids.serverId].switchGroups[ids.group].command = groupCommand;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.group);
+    }
+    else if (interaction.customId.startsWith('GroupAddSwitch')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
+        const switchId = interaction.fields.getTextInputValue('GroupAddSwitchId');
+
+        if (!Object.keys(instance.serverList[ids.serverId].switches).includes(switchId)) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        if (instance.serverList[ids.serverId].switchGroups[ids.group].switches.includes(switchId)) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        instance.serverList[ids.serverId].switchGroups[ids.group].switches.push(switchId);
+        client.writeInstanceFile(interaction.guildId, instance);
+
+        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.group);
+    }
+    else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
+        const switchId = interaction.fields.getTextInputValue('GroupRemoveSwitchId');
+
+        if (!instance.serverList[ids.serverId].switchGroups[ids.group].switches.includes(switchId)) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        instance.serverList[ids.serverId].switchGroups[ids.group].switches =
+            instance.serverList[ids.serverId].switchGroups[ids.group].switches.filter(e => e !== switchId);
+        client.writeInstanceFile(interaction.guildId, instance);
+
+        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.group);
+    }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
         let smartAlarmName = interaction.fields.getTextInputValue('SmartAlarmName');

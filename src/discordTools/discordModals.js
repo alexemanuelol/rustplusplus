@@ -43,6 +43,62 @@ module.exports = {
         return modal;
     },
 
+    getGroupEditModal(guildId, serverId, groupName) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const modal = module.exports.getModal({
+            customId: `GroupEdit{"serverId":"${serverId}","group":"${groupName}"}`,
+            title: `Editing of ${groupName}`
+        });
+
+        const commandInput = TextInput.getTextInput({
+            customId: 'GroupCommand',
+            label: 'The custom command for the Group:',
+            value: instance.serverList[serverId].switchGroups[groupName].command,
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(new Discord.ActionRowBuilder().addComponents(commandInput));
+
+        return modal;
+    },
+
+    getGroupAddSwitchModal(serverId, groupName) {
+        const modal = module.exports.getModal({
+            customId: `GroupAddSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
+            title: `Add Switch to ${groupName}`
+        });
+
+        const switchIdInput = TextInput.getTextInput({
+            customId: 'GroupAddSwitchId',
+            label: 'The Entity ID of the switch to add:',
+            value: '',
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(new Discord.ActionRowBuilder().addComponents(switchIdInput));
+
+        return modal;
+    },
+
+    getGroupRemoveSwitchModal(serverId, groupName) {
+        const modal = module.exports.getModal({
+            customId: `GroupRemoveSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
+            title: `Add Switch to ${groupName}`
+        });
+
+        const switchIdInput = TextInput.getTextInput({
+            customId: 'GroupRemoveSwitchId',
+            label: 'The Entity ID of the switch to remove:',
+            value: '',
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(new Discord.ActionRowBuilder().addComponents(switchIdInput));
+
+        return modal;
+    },
+
     getSmartAlarmEditModal(guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
 

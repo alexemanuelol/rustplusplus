@@ -33,7 +33,8 @@ module.exports = {
     getListOfUsedKeywords: function (client, guildId, serverId) {
         const instance = client.readInstanceFile(guildId);
 
-        let list = module.exports.commands;
+        let list = [];
+        list = [...module.exports.commands];
         for (const [id, value] of Object.entries(instance.serverList[serverId].switches)) {
             list.push(value.command);
         }

@@ -444,9 +444,9 @@ module.exports = async (client, interaction) => {
             client.writeInstanceFile(guildId, instance);
         }
     }
-    else if (interaction.customId.startsWith('TurnOnGroup') ||
-        interaction.customId.startsWith('TurnOffGroup')) {
-        const ids = JSON.parse(interaction.customId.replace('TurnOnGroup', '').replace('TurnOffGroup', ''));
+    else if (interaction.customId.startsWith('GroupTurnOn') ||
+        interaction.customId.startsWith('GroupTurnOff')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupTurnOn', '').replace('GroupTurnOff', ''));
 
         if (rustplus.currentSwitchTimeouts.hasOwnProperty(ids.group)) {
             clearTimeout(rustplus.currentSwitchTimeouts[ids.group]);
@@ -481,13 +481,19 @@ module.exports = async (client, interaction) => {
             }
         }
 
-        let active = (interaction.customId.startsWith('TurnOnGroup') ? true : false);
+        let active = (interaction.customId.startsWith('GroupTurnOn') ? true : false);
 
         await SmartSwitchGroupHandler.TurnOnOffGroup(
             client, rustplus, interaction.guildId, rustplus.serverId, ids.group, active);
     }
-    else if (interaction.customId.startsWith('DeleteGroup')) {
-        const ids = JSON.parse(interaction.customId.replace('DeleteGroup', ''));
+    else if (interaction.customId.startsWith('GroupEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupEdit', ''));
+
+        const modal = DiscordModals.getGroupEditModal(interaction.guildId, ids.serverId, ids.group);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('GroupDelete')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupDelete', ''));
 
         if (!rustplus) {
             client.log('ERROR', 'Rustplus is not connected, cannot delete the Smart Switch Group...', 'error');
@@ -504,6 +510,18 @@ module.exports = async (client, interaction) => {
             delete instance.serverList[ids.serverId].switchGroups[ids.group];
             client.writeInstanceFile(guildId, instance);
         }
+    }
+    else if (interaction.customId.startsWith('GroupAddSwitch')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
+
+        const modal = DiscordModals.getGroupAddSwitchModal(ids.serverId, ids.group);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
+
+        const modal = DiscordModals.getGroupRemoveSwitchModal(ids.serverId, ids.group);
+        await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerActive')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerActive', ''));

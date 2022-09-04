@@ -280,22 +280,40 @@ module.exports = {
     },
 
     getSmartSwitchGroupButtons: function (serverId, groupName) {
-        return new Discord.ActionRowBuilder().addComponents(
-            module.exports.getButton({
-                customId: `TurnOnGroup{"serverId":"${serverId}","group":"${groupName}"}`,
-                label: 'TURN ON',
-                style: PRIMARY
-            }),
-            module.exports.getButton({
-                customId: `TurnOffGroup{"serverId":"${serverId}","group":"${groupName}"}`,
-                label: 'TURN OFF',
-                style: PRIMARY
-            }),
-            module.exports.getButton({
-                customId: `DeleteGroup{"serverId":"${serverId}","group":"${groupName}"}`,
-                style: SECONDARY,
-                emoji: '🗑️'
-            }));
+        return [
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `GroupTurnOn{"serverId":"${serverId}","group":"${groupName}"}`,
+                    label: 'TURN ON',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `GroupTurnOff{"serverId":"${serverId}","group":"${groupName}"}`,
+                    label: 'TURN OFF',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `GroupEdit{"serverId":"${serverId}","group":"${groupName}"}`,
+                    label: 'EDIT',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `GroupDelete{"serverId":"${serverId}","group":"${groupName}"}`,
+                    style: SECONDARY,
+                    emoji: '🗑️'
+                })),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `GroupAddSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
+                    label: 'ADD SWITCH',
+                    style: SUCCESS
+                }),
+                module.exports.getButton({
+                    customId: `GroupRemoveSwitch{"serverId":"${serverId}","group":"${groupName}"}`,
+                    label: 'REMOVE SWITCH',
+                    style: DANGER
+                }))
+        ];
     },
 
     getNewsButton: function (body, validURL) {

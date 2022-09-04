@@ -144,7 +144,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupName)],
-            components: [DiscordButtons.getSmartSwitchGroupButtons(serverId, groupName)],
+            components: DiscordButtons.getSmartSwitchGroupButtons(serverId, groupName),
             files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png')]
         }
 
