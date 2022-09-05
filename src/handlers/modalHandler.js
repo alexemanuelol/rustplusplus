@@ -7,25 +7,20 @@ module.exports = async (client, interaction) => {
 
     if (interaction.customId.startsWith('SmartSwitchEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
-
         const smartSwitchName = interaction.fields.getTextInputValue('SmartSwitchName');
         const smartSwitchCommand = interaction.fields.getTextInputValue('SmartSwitchCommand');
 
-        if (smartSwitchName !== instance.serverList[ids.serverId].switches[ids.entityId].name) {
-            instance.serverList[ids.serverId].switches[ids.entityId].name = smartSwitchName;
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switches.hasOwnProperty(ids.entityId))) {
+            interaction.deferUpdate();
+            return;
         }
 
-        if (smartSwitchCommand !== instance.serverList[ids.serverId].switches[ids.entityId].command) {
-            const rustplus = client.rustplusInstances[guildId];
-            if (!rustplus || (rustplus && !rustplus.ready)) {
-                client.log('WARNING', 'Not currently connected to a rust server.');
-            }
-            else if (Keywords.getListOfUsedKeywords(client, guildId, rustplus.serverId).includes(smartSwitchCommand)) {
-                rustplus.log('WARNING', `The command '${smartSwitchCommand}' is already in use.`);
-            }
-            else {
-                instance.serverList[ids.serverId].switches[ids.entityId].command = smartSwitchCommand;
-            }
+        instance.serverList[ids.serverId].switches[ids.entityId].name = smartSwitchName;
+
+        if (smartSwitchCommand !== instance.serverList[ids.serverId].switches[ids.entityId].command &&
+            !Keywords.getListOfUsedKeywords(client, guildId, ids.serverId).includes(smartSwitchCommand)) {
+            instance.serverList[ids.serverId].switches[ids.entityId].command = smartSwitchCommand;
         }
         client.writeInstanceFile(guildId, instance);
 
@@ -33,9 +28,14 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId.startsWith('GroupEdit')) {
         const ids = JSON.parse(interaction.customId.replace('GroupEdit', ''));
-
         const groupName = interaction.fields.getTextInputValue('GroupName');
         const groupCommand = interaction.fields.getTextInputValue('GroupCommand');
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
+            interaction.deferUpdate();
+            return;
+        }
 
         instance.serverList[ids.serverId].switchGroups[ids.groupId].name = groupName;
 
@@ -51,12 +51,14 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
         const switchId = interaction.fields.getTextInputValue('GroupAddSwitchId');
 
-        if (!Object.keys(instance.serverList[ids.serverId].switches).includes(switchId)) {
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
             interaction.deferUpdate();
             return;
         }
 
-        if (instance.serverList[ids.serverId].switchGroups[ids.groupId].switches.includes(switchId)) {
+        if (!Object.keys(instance.serverList[ids.serverId].switches).includes(switchId) ||
+            instance.serverList[ids.serverId].switchGroups[ids.groupId].switches.includes(switchId)) {
             interaction.deferUpdate();
             return;
         }
@@ -70,7 +72,8 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
         const switchId = interaction.fields.getTextInputValue('GroupRemoveSwitchId');
 
-        if (!instance.serverList[ids.serverId].switchGroups[ids.groupId].switches.includes(switchId)) {
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
             interaction.deferUpdate();
             return;
         }
@@ -86,24 +89,27 @@ module.exports = async (client, interaction) => {
         let smartAlarmName = interaction.fields.getTextInputValue('SmartAlarmName');
         let smartAlarmMessage = interaction.fields.getTextInputValue('SmartAlarmMessage');
 
-        let changed = false;
-        if (smartAlarmName !== instance.serverList[ids.serverId].alarms[ids.entityId].name) {
-            instance.serverList[ids.serverId].alarms[ids.entityId].name = smartAlarmName;
-            changed = true;
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].alarms.hasOwnProperty(ids.entityId))) {
+            interaction.deferUpdate();
+            return;
         }
-        if (smartAlarmMessage !== instance.serverList[ids.serverId].alarms[ids.entityId].message) {
-            instance.serverList[ids.serverId].alarms[ids.entityId].message = smartAlarmMessage;
-            changed = true;
-        }
+
+        instance.serverList[ids.serverId].alarms[ids.entityId].name = smartAlarmName;
+        instance.serverList[ids.serverId].alarms[ids.entityId].message = smartAlarmMessage;
         client.writeInstanceFile(guildId, instance);
 
-        if (changed) {
-            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
-        }
+        await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('StorageMonitorEdit')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
         const storageMonitorName = interaction.fields.getTextInputValue('StorageMonitorName');
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId))) {
+            interaction.deferUpdate();
+            return;
+        }
 
         instance.serverList[ids.serverId].storageMonitors[ids.entityId].name = storageMonitorName;
         client.writeInstanceFile(interaction.guildId, instance);
@@ -114,6 +120,11 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
         const trackerName = interaction.fields.getTextInputValue('TrackerName');
 
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            interaction.deferUpdate();
+            return;
+        }
+
         instance.trackers[ids.trackerId].name = trackerName;
         client.writeInstanceFile(guildId, instance);
 
@@ -122,6 +133,11 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
         const steamId = interaction.fields.getTextInputValue('TrackerAddPlayerSteamId');
+
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            interaction.deferUpdate();
+            return;
+        }
 
         if (instance.trackers[ids.trackerId].players.some(e => e.steamId === steamId)) {
             interaction.deferUpdate();
@@ -142,7 +158,7 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
         const steamId = interaction.fields.getTextInputValue('TrackerRemovePlayerSteamId');
 
-        if (!instance.trackers[ids.trackerId].players.some(e => e.steamId === steamId)) {
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
             interaction.deferUpdate();
             return;
         }

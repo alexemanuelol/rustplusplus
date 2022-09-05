@@ -269,13 +269,13 @@ module.exports = async (client, interaction) => {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
 
-            for (const [entityId, content] of Object.entries(instance.serverList[ids.serverId].alarms)) {
-                await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms, content.messageId);
-            }
-
             rustplus.disconnect();
             rustplus.deleted = true;
             delete client.rustplusInstances[guildId];
+        }
+
+        for (const [entityId, content] of Object.entries(instance.serverList[ids.serverId].alarms)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms, content.messageId);
         }
 
         await DiscordTools.deleteMessageById(guildId, instance.channelId.servers,
@@ -480,7 +480,7 @@ module.exports = async (client, interaction) => {
 
         interaction.deferUpdate();
 
-        if (!rustplus) return;
+        if (!rustplus || (rustplus && rustplus.serverId !== ids.serverId)) return;
 
         const entityInfo = await rustplus.getEntityInfoAsync(ids.entityId);
         if (!(await rustplus.isResponseValid(entityInfo))) return;
