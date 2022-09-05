@@ -3,6 +3,7 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const DiscordButtons = require('..//discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
+const Recycler = require('../util/recycler.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.readInstanceFile(interaction.guildId);
@@ -451,6 +452,28 @@ module.exports = async (client, interaction) => {
             delete instance.serverList[ids.serverId].storageMonitors[ids.entityId];
             client.writeInstanceFile(guildId, instance);
         }
+    }
+    else if (interaction.customId.startsWith('StorageMonitorRecycle')) {
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorRecycle', ''));
+
+        interaction.deferUpdate();
+
+        if (!rustplus) return;
+
+        const entityInfo = await rustplus.getEntityInfoAsync(ids.entityId);
+        if (!(await rustplus.isResponseValid(entityInfo))) return;
+
+        instance.serverList[ids.serverId].storageMonitors[ids.entityId].reachable = true;
+        client.writeInstanceFile(interaction.guildId, instance);
+
+        const items = Recycler.calculate(entityInfo.entityInfo.payload.items);
+
+        const message = await DiscordMessages.sendStorageMonitorRecycleMessage(
+            guildId, ids.serverId, ids.entityId, items);
+
+        setTimeout(async () => {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors, message.id);
+        }, 30000);
     }
     else if (interaction.customId.startsWith('StorageMonitorContainerDelete')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorContainerDelete', ''));

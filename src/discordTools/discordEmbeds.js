@@ -252,6 +252,36 @@ module.exports = {
         });
     },
 
+    getStorageMonitorRecycleEmbed: function (guildId, serverId, entityId, items) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
+        const rustplus = Client.client.rustplusInstances[guildId];
+
+        let itemName = '', itemQuantity = '';
+        for (const item of items) {
+            itemName += `\`${rustplus.items.getName(item.itemId)}\`\n`;
+            itemQuantity += `\`${item.quantity}\`\n`;
+        }
+
+        const embed = module.exports.getEmbed({
+            title: 'Result of recycling:',
+            color: '#ce412b',
+            thumbnail: 'attachment://recycler.png',
+            footer: { text: `${entity.server} | This message will be deleted in 30 seconds.` },
+            description: `**Name** \`${entity.name}\`\n**ID** \`${entityId}\``
+        });
+
+        if (itemName === '') itemName = 'Empty';
+        if (itemQuantity === '') itemQuantity = 'Empty';
+
+        embed.addFields(
+            { name: 'Item', value: itemName, inline: true },
+            { name: 'Quantity', value: itemQuantity, inline: true }
+        );
+
+        return embed;
+    },
+
     getDecayingNotificationEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];

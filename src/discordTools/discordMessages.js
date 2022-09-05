@@ -159,6 +159,17 @@ module.exports = {
         }
     },
 
+    sendStorageMonitorRecycleMessage: async function (guildId, serverId, entityId, items) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getStorageMonitorRecycleEmbed(guildId, serverId, entityId, items)],
+            files: [new Discord.AttachmentBuilder('src/resources/images/electrics/recycler.png')]
+        }
+
+        return await module.exports.sendMessage(guildId, content, null, instance.channelId.storageMonitors);
+    },
+
     sendDecayingNotificationMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];

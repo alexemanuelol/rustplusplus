@@ -207,6 +207,11 @@ module.exports = {
                 style: PRIMARY,
             }),
             module.exports.getButton({
+                customId: `StorageMonitorRecycle${identifier}`,
+                label: 'RECYCLE',
+                style: PRIMARY,
+            }),
+            module.exports.getButton({
                 customId: `StorageMonitorContainerDelete${identifier}`,
                 style: SECONDARY,
                 emoji: '🗑️'
