@@ -25,16 +25,17 @@ module.exports = {
 
     getSmartSwitchEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const sw = instance.serverList[serverId].switches[entityId];
+        const entity = instance.serverList[serverId].switches[entityId];
+
         return module.exports.getEmbed({
-            title: `${sw.name}`,
-            color: sw.active ? '#00ff40' : '#ff0040',
+            title: `${entity.name}`,
+            color: entity.active ? '#00ff40' : '#ff0040',
             description: `**ID**: \`${entityId}\``,
-            thumbnail: `attachment://${sw.image}`,
-            footer: { text: `${sw.server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             fields: [{
                 name: 'Custom Command',
-                value: `\`${instance.generalSettings.prefix}${sw.command}\``,
+                value: `\`${instance.generalSettings.prefix}${entity.command}\``,
                 inline: true
             }]
         });
@@ -43,6 +44,7 @@ module.exports = {
     getServerEmbed: function (guildId, serverId) {
         const instance = Client.client.readInstanceFile(guildId);
         const server = instance.serverList[serverId];
+
         return module.exports.getEmbed({
             title: `${server.title}`,
             color: '#ce412b',
@@ -59,13 +61,10 @@ module.exports = {
     getTrackerEmbed: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
         const tracker = instance.trackers[trackerId];
-        const battlemetricsId = tracker.battlemetricsId;
         const serverStatus = tracker.status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
 
-        let playerName = '';
-        let playerSteamId = '';
-        let playerStatus = '';
-        for (let player of tracker.players) {
+        let playerName = '', playerSteamId = '', playerStatus = '';
+        for (const player of tracker.players) {
             playerName += `${player.name}\n`;
             if (tracker.players.length < 12) {
                 playerSteamId += `[${player.steamId}](${Constants.STEAM_PROFILES_URL}${player.steamId})\n`;
@@ -84,7 +83,7 @@ module.exports = {
         return module.exports.getEmbed({
             title: `${tracker.name}`,
             color: '#ce412b',
-            description: `**Battlemetrics ID:** \`${battlemetricsId}\`\n**Server Status:** ${serverStatus}`,
+            description: `**Battlemetrics ID:** \`${tracker.battlemetricsId}\`\n**Server Status:** ${serverStatus}`,
             thumbnail: `${tracker.img}`,
             fields: [
                 { name: 'Name', value: playerName, inline: true },
@@ -95,15 +94,17 @@ module.exports = {
 
     getSmartAlarmEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
+
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId].alarms[entityId].name}`,
-            color: instance.serverList[serverId].alarms[entityId].active ? '#00ff40' : '#ce412b',
+            title: `${entity.name}`,
+            color: entity.active ? '#00ff40' : '#ce412b',
             description: `**ID**: \`${entityId}\``,
-            thumbnail: `attachment://${instance.serverList[serverId].alarms[entityId].image}`,
-            footer: { text: `${instance.serverList[serverId].alarms[entityId].server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             fields: [{
                 name: 'Message',
-                value: `\`${instance.serverList[serverId].alarms[entityId].message}\``,
+                value: `\`${entity.message}\``,
                 inline: true
             }]
         });
@@ -111,27 +112,37 @@ module.exports = {
 
     getStorageMonitorEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
         const rustplus = Client.client.rustplusInstances[guildId];
-        const isTc = (instance.serverList[serverId].storageMonitors[entityId].type === 'toolcupboard');
-        const items = rustplus.storageMonitors[entityId].items;
-        const expiry = rustplus.storageMonitors[entityId].expiry;
-        const capacity = rustplus.storageMonitors[entityId].capacity;
 
         let description = `**ID** \`${entityId}\``;
 
-        if (capacity === 0) {
+        if (!rustplus) {
             return module.exports.getEmbed({
-                title: `${instance.serverList[serverId].storageMonitors[entityId].name}`,
+                title: `${entity.name}`,
                 color: '#ce412b',
-                description: `${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``,
-                thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
-                footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` }
+                description: `${description}\n**STATUS** \`NOT CONNECTED TO SERVER!\``,
+                thumbnail: `attachment://${entity.image}`,
+                footer: { text: `${entity.server}` }
             });
         }
 
-        description += `\n**Type** \`${(isTc) ? 'Tool Cupboard' : 'Container'}\``;
+        if (rustplus && rustplus.storageMonitors[entityId].capacity === 0) {
+            return module.exports.getEmbed({
+                title: `${entity.name}`,
+                color: '#ce412b',
+                description: `${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``,
+                thumbnail: `attachment://${entity.image}`,
+                footer: { text: `${entity.server}` }
+            });
+        }
 
-        if (isTc) {
+        description += `\n**Type** \`${(entity.type === 'toolcupboard') ? 'Tool Cupboard' : 'Container'}\``;
+
+        const items = rustplus.storageMonitors[entityId].items;
+        const expiry = rustplus.storageMonitors[entityId].expiry;
+
+        if (entity.type === 'toolcupboard') {
             let seconds = 0;
             if (expiry !== 0) {
                 seconds = (new Date(expiry * 1000) - new Date()) / 1000;
@@ -151,10 +162,8 @@ module.exports = {
             Client.client.writeInstanceFile(guildId, instance);
         }
 
-        let itemName = '';
-        let itemQuantity = '';
-        let storageItems = new Object();
-        for (let item of items) {
+        let itemName = '', itemQuantity = '', storageItems = new Object();
+        for (const item of items) {
             if (storageItems.hasOwnProperty(item.itemId)) {
                 storageItems[item.itemId] += item.quantity;
             }
@@ -172,11 +181,11 @@ module.exports = {
         if (itemQuantity === '') itemQuantity = 'Empty';
 
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId].storageMonitors[entityId].name}`,
+            title: `${entity.name}`,
             color: '#ce412b',
             description: description,
-            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
-            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             fields: [
                 { name: 'Item', value: itemName, inline: true },
                 { name: 'Quantity', value: itemQuantity, inline: true }
@@ -186,14 +195,12 @@ module.exports = {
 
     getSmartSwitchGroupEmbed: function (guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
-        let group = instance.serverList[serverId].switchGroups[groupId];
+        const group = instance.serverList[serverId].switchGroups[groupId];
 
-        let switchName = '';
-        let switchId = '';
-        let switchActive = '';
-        for (let groupSwitchId of group.switches) {
+        let switchName = '', switchId = '', switchActive = '';
+        for (const groupSwitchId of group.switches) {
             if (instance.serverList[serverId].switches.hasOwnProperty(groupSwitchId)) {
-                let active = instance.serverList[serverId].switches[groupSwitchId].active;
+                const active = instance.serverList[serverId].switches[groupSwitchId].active;
                 switchName += `${instance.serverList[serverId].switches[groupSwitchId].name}\n`;
                 switchId += `${groupSwitchId}\n`;
                 if (instance.serverList[serverId].switches[groupSwitchId].reachable) {
@@ -215,7 +222,7 @@ module.exports = {
         if (switchActive === '') switchActive = 'None';
 
         return module.exports.getEmbed({
-            title: instance.serverList[serverId].switchGroups[groupId].name,
+            title: group.name,
             color: '#ce412b',
             thumbnail: 'attachment://smart_switch.png',
             footer: { text: `${instance.serverList[serverId].title}` },
@@ -234,105 +241,119 @@ module.exports = {
 
     getNotFoundSmartDeviceEmbed: function (guildId, serverId, entityId, type) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId][type][entityId];
+
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId][type][entityId].name}`,
+            title: `${entity.name}`,
             color: '#ff0040',
             description: `**ID**: \`${entityId}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`,
-            thumbnail: `attachment://${instance.serverList[serverId][type][entityId].image}`,
-            footer: { text: `${instance.serverList[serverId][type][entityId].server}` }
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` }
         });
     },
 
     getDecayingNotificationEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
+
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId].storageMonitors[entityId].name} is decaying!`,
+            title: `${entity.name} is decaying!`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
-            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
-            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             timestamp: true
         });
     },
 
     getStorageMonitorDisconnectNotificationEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
+
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId].storageMonitors[entityId].name}` +
+            title: `${entity.name}` +
                 ` is no longer electrically connected!`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
-            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
-            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             timestamp: true
         });
     },
 
     getStorageMonitorNotFoundEmbed: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId].storageMonitors[entityId].name} could not be found!` +
-                ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
+            title: `${entity.name} could not be found! Either it have been destroyed or ` +
+                `${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
-            thumbnail: `attachment://${instance.serverList[serverId].storageMonitors[entityId].image}`,
-            footer: { text: `${instance.serverList[serverId].storageMonitors[entityId].server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             timestamp: true
         });
     },
 
     getSmartSwitchNotFoundEmbed: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].switches[entityId];
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId].switches[entityId].name} could not be found!` +
-                ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
+            title: `${entity.name} could not be found! Either it have been destroyed or ` +
+                `${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
-            thumbnail: `attachment://${instance.serverList[serverId].switches[entityId].image}`,
-            footer: { text: `${instance.serverList[serverId].switches[entityId].server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             timestamp: true
         });
     },
 
     getSmartAlarmNotFoundEmbed: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+
         return module.exports.getEmbed({
-            title: `${instance.serverList[serverId].alarms[entityId].name} could not be found!` +
-                ` Either it have been destroyed or ${user.user.username} have lost tool cupboard access.`,
+            title: `${entity.name} could not be found! Either it have been destroyed or ` +
+                `${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
-            thumbnail: `attachment://${instance.serverList[serverId].alarms[entityId].image}`,
-            footer: { text: `${instance.serverList[serverId].alarms[entityId].server}` },
+            thumbnail: `attachment://${entity.image}`,
+            footer: { text: `${entity.server}` },
             timestamp: true
         });
     },
 
     getTrackerAllOfflineEmbed: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const serverId = instance.trackers[trackerId].serverId;
+        const tracker = instance.trackers[trackerId];
+
         return module.exports.getEmbed({
-            title: `Everyone from the tracker \`${instance.trackers[trackerId].name}\` just went offline.`,
+            title: `Everyone from the tracker \`${tracker.name}\` just went offline.`,
             color: '#ff0040',
-            thumbnail: `${instance.serverList[serverId].img}`,
-            footer: { text: `${instance.serverList[serverId].title}` },
+            thumbnail: `${instance.serverList[tracker.serverId].img}`,
+            footer: { text: `${instance.serverList[tracker.serverId].title}` },
             timestamp: true
         });
     },
 
     getTrackerAnyOnlineEmbed: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const serverId = instance.trackers[trackerId].serverId;
+        const tracker = instance.trackers[trackerId];
+
         return module.exports.getEmbed({
-            title: `Someone from the tracker \`${instance.trackers[trackerId].name}\` just went online.`,
+            title: `Someone from the tracker \`${tracker.name}\` just went online.`,
             color: '#00ff40',
-            thumbnail: `${instance.serverList[serverId].img}`,
-            footer: { text: `${instance.serverList[serverId].title}` },
+            thumbnail: `${instance.serverList[tracker.serverId].img}`,
+            footer: { text: `${instance.serverList[tracker.serverId].title}` },
             timestamp: true
         });
     },
@@ -395,11 +416,12 @@ module.exports = {
 
     getEventEmbed: function (guildId, rustplus, text, image) {
         const instance = Client.client.readInstanceFile(guildId);
+
         return module.exports.getEmbed({
             color: '#ce412b',
             thumbnail: `attachment://${image}`,
             title: text,
-            footer: { text: instance.serverList[`${rustplus.server}-${rustplus.port}`].title },
+            footer: { text: instance.serverList[rustplus.serverId].title },
             timestamp: true
         });
     },
@@ -413,6 +435,5 @@ module.exports = {
                 ephemeral: ephemeral
             })]
         };
-
     },
 }

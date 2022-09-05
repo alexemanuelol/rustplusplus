@@ -17,7 +17,7 @@ module.exports = async (client, guild) => {
     if (instance.firstTime) {
         await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
-        await setupGeneralSettings(client, instance, channel);
+        await setupGeneralSettings(client, guild.id, instance, channel);
         await setupNotificationSettings(client, instance, channel);
 
         instance.firstTime = false;
@@ -26,7 +26,7 @@ module.exports = async (client, guild) => {
 
 };
 
-async function setupGeneralSettings(client, instance, channel) {
+async function setupGeneralSettings(client, guildId, instance, channel) {
     await client.messageSend(channel, {
         files: [new Discord.AttachmentBuilder('src/resources/images/general_settings_logo.png')]
     });
@@ -67,7 +67,7 @@ async function setupGeneralSettings(client, instance, channel) {
             title: 'In-game teammate notifications.',
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)],
+        components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)],
         files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
     });
 

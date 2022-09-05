@@ -15,29 +15,27 @@ module.exports = {
 
     getSmartSwitchEditModal(guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].switches[entityId];
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
 
         const modal = module.exports.getModal({
-            customId: `SmartSwitchEdit{"serverId":"${serverId}","entityId":${entityId}}`,
-            title: `Editing of ${instance.serverList[serverId].switches[entityId].name}`
-        });
-
-        const nameInput = TextInput.getTextInput({
-            customId: 'SmartSwitchName',
-            label: 'The name of the Smart Switch:',
-            value: instance.serverList[serverId].switches[entityId].name,
-            style: Discord.TextInputStyle.Short
-        });
-
-        const commandInput = TextInput.getTextInput({
-            customId: 'SmartSwitchCommand',
-            label: 'The custom command for the Smart Switch:',
-            value: instance.serverList[serverId].switches[entityId].command,
-            style: Discord.TextInputStyle.Short
+            customId: `SmartSwitchEdit${identifier}`,
+            title: `Editing of ${entity.name}`
         });
 
         modal.addComponents(
-            new Discord.ActionRowBuilder().addComponents(nameInput),
-            new Discord.ActionRowBuilder().addComponents(commandInput)
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'SmartSwitchName',
+                label: 'The name of the Smart Switch:',
+                value: entity.name,
+                style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'SmartSwitchCommand',
+                label: 'The custom command for the Smart Switch:',
+                value: entity.command,
+                style: Discord.TextInputStyle.Short
+            }))
         );
 
         return modal;
@@ -45,29 +43,27 @@ module.exports = {
 
     getGroupEditModal(guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const group = instance.serverList[serverId].switchGroups[groupId];
+        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
 
         const modal = module.exports.getModal({
-            customId: `GroupEdit{"serverId":"${serverId}","groupId":${groupId}}`,
-            title: `Editing of ${instance.serverList[serverId].switchGroups[groupId].name}`
-        });
-
-        const nameInput = TextInput.getTextInput({
-            customId: 'GroupName',
-            label: 'The name of the Group:',
-            value: instance.serverList[serverId].switchGroups[groupId].name,
-            style: Discord.TextInputStyle.Short
-        });
-
-        const commandInput = TextInput.getTextInput({
-            customId: 'GroupCommand',
-            label: 'The custom command for the Group:',
-            value: instance.serverList[serverId].switchGroups[groupId].command,
-            style: Discord.TextInputStyle.Short
+            customId: `GroupEdit${identifier}`,
+            title: `Editing of ${group.name}`
         });
 
         modal.addComponents(
-            new Discord.ActionRowBuilder().addComponents(nameInput),
-            new Discord.ActionRowBuilder().addComponents(commandInput)
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'GroupName',
+                label: 'The name of the Group:',
+                value: group.name,
+                style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'GroupCommand',
+                label: 'The custom command for the Group:',
+                value: group.command,
+                style: Discord.TextInputStyle.Short
+            }))
         );
 
         return modal;
@@ -75,69 +71,71 @@ module.exports = {
 
     getGroupAddSwitchModal(guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const group = instance.serverList[serverId].switchGroups[groupId];
+        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
 
         const modal = module.exports.getModal({
-            customId: `GroupAddSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
-            title: `Add Switch to ${instance.serverList[serverId].switchGroups[groupId].name}`
+            customId: `GroupAddSwitch${identifier}`,
+            title: `Add Switch to ${group.name}`
         });
 
-        const switchIdInput = TextInput.getTextInput({
-            customId: 'GroupAddSwitchId',
-            label: 'The Entity ID of the switch to add:',
-            value: '',
-            style: Discord.TextInputStyle.Short
-        });
-
-        modal.addComponents(new Discord.ActionRowBuilder().addComponents(switchIdInput));
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'GroupAddSwitchId',
+                label: 'The Entity ID of the switch to add:',
+                value: '',
+                style: Discord.TextInputStyle.Short
+            }))
+        );
 
         return modal;
     },
 
     getGroupRemoveSwitchModal(guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const group = instance.serverList[serverId].switchGroups[groupId];
+        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
 
         const modal = module.exports.getModal({
-            customId: `GroupRemoveSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
-            title: `Add Switch to ${instance.serverList[serverId].switchGroups[groupId].name}`
+            customId: `GroupRemoveSwitch${identifier}`,
+            title: `Add Switch to ${group.name}`
         });
 
-        const switchIdInput = TextInput.getTextInput({
-            customId: 'GroupRemoveSwitchId',
-            label: 'The Entity ID of the switch to remove:',
-            value: '',
-            style: Discord.TextInputStyle.Short
-        });
-
-        modal.addComponents(new Discord.ActionRowBuilder().addComponents(switchIdInput));
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'GroupRemoveSwitchId',
+                label: 'The Entity ID of the switch to remove:',
+                value: '',
+                style: Discord.TextInputStyle.Short
+            }))
+        );
 
         return modal;
     },
 
     getSmartAlarmEditModal(guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
 
         const modal = module.exports.getModal({
-            customId: `SmartAlarmEdit{"serverId":"${serverId}","entityId":${entityId}}`,
-            title: `Editing of ${instance.serverList[serverId].alarms[entityId].name}`
-        });
-
-        const nameInput = TextInput.getTextInput({
-            customId: 'SmartAlarmName',
-            label: 'The name of the Smart Alarm:',
-            value: instance.serverList[serverId].alarms[entityId].name,
-            style: Discord.TextInputStyle.Short
-        });
-
-        const messageInput = TextInput.getTextInput({
-            customId: 'SmartAlarmMessage',
-            label: 'The message for the Smart Alarm:',
-            value: instance.serverList[serverId].alarms[entityId].message,
-            style: Discord.TextInputStyle.Short
+            customId: `SmartAlarmEdit${identifier}`,
+            title: `Editing of ${entity.name}`
         });
 
         modal.addComponents(
-            new Discord.ActionRowBuilder().addComponents(nameInput),
-            new Discord.ActionRowBuilder().addComponents(messageInput)
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'SmartAlarmName',
+                label: 'The name of the Smart Alarm:',
+                value: entity.name,
+                style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'SmartAlarmMessage',
+                label: 'The message for the Smart Alarm:',
+                value: entity.message,
+                style: Discord.TextInputStyle.Short
+            }))
         );
 
         return modal;
@@ -145,80 +143,89 @@ module.exports = {
 
     getStorageMonitorEditModal(guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
 
         const modal = module.exports.getModal({
-            customId: `StorageMonitorEdit{"serverId":"${serverId}","entityId":${entityId}}`,
-            title: `Editing of ${instance.serverList[serverId].storageMonitors[entityId].name}`
+            customId: `StorageMonitorEdit${identifier}`,
+            title: `Editing of ${entity.name}`
         });
 
-        const nameInput = TextInput.getTextInput({
-            customId: 'StorageMonitorName',
-            label: 'The name of the Storage Monitor:',
-            value: instance.serverList[serverId].storageMonitors[entityId].name,
-            style: Discord.TextInputStyle.Short
-        });
-
-        modal.addComponents(new Discord.ActionRowBuilder().addComponents(nameInput));
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'StorageMonitorName',
+                label: 'The name of the Storage Monitor:',
+                value: entity.name,
+                style: Discord.TextInputStyle.Short
+            }))
+        );
 
         return modal;
     },
 
     getTrackerEditModal(guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const tracker = instance.trackers[trackerId];
+        const identifier = `{"trackerId":${trackerId}}`;
 
         const modal = module.exports.getModal({
-            customId: `TrackerEdit{"trackerId":${trackerId}}`,
-            title: `Editing of ${instance.trackers[trackerId].name}`
+            customId: `TrackerEdit${identifier}`,
+            title: `Editing of ${tracker.name}`
         });
 
-        const nameInput = TextInput.getTextInput({
-            customId: 'TrackerName',
-            label: 'The name of the Tracker:',
-            value: instance.trackers[trackerId].name,
-            style: Discord.TextInputStyle.Short
-        });
-
-        modal.addComponents(new Discord.ActionRowBuilder().addComponents(nameInput));
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'TrackerName',
+                label: 'The name of the Tracker:',
+                value: tracker.name,
+                style: Discord.TextInputStyle.Short
+            }))
+        );
 
         return modal;
     },
 
     getTrackerAddPlayerModal(guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const tracker = instance.trackers[trackerId];
+        const identifier = `{"trackerId":${trackerId}}`;
 
         const modal = module.exports.getModal({
-            customId: `TrackerAddPlayer{"trackerId":${trackerId}}`,
-            title: `Add Player to ${instance.trackers[trackerId].name}`
+            customId: `TrackerAddPlayer${identifier}`,
+            title: `Add Player to ${tracker.name}`
         });
 
-        const steamIdInput = TextInput.getTextInput({
-            customId: 'TrackerAddPlayerSteamId',
-            label: 'The SteamID of the player to add:',
-            value: '',
-            style: Discord.TextInputStyle.Short
-        });
 
-        modal.addComponents(new Discord.ActionRowBuilder().addComponents(steamIdInput));
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'TrackerAddPlayerSteamId',
+                label: 'The SteamID of the player to add:',
+                value: '',
+                style: Discord.TextInputStyle.Short
+            }))
+        );
 
         return modal;
     },
 
     getTrackerRemovePlayerModal(guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const tracker = instance.trackers[trackerId];
+        const identifier = `{"trackerId":${trackerId}}`;
 
         const modal = module.exports.getModal({
-            customId: `TrackerRemovePlayer{"trackerId":${trackerId}}`,
-            title: `Remove Player from ${instance.trackers[trackerId].name}`
+            customId: `TrackerRemovePlayer${identifier}`,
+            title: `Remove Player from ${tracker.name}`
         });
 
-        const steamIdInput = TextInput.getTextInput({
-            customId: 'TrackerRemovePlayerSteamId',
-            label: 'The SteamID of the player to remove:',
-            value: '',
-            style: Discord.TextInputStyle.Short
-        });
-
-        modal.addComponents(new Discord.ActionRowBuilder().addComponents(steamIdInput));
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'TrackerRemovePlayerSteamId',
+                label: 'The SteamID of the player to remove:',
+                value: '',
+                style: Discord.TextInputStyle.Short
+            }))
+        );
 
         return modal;
     },

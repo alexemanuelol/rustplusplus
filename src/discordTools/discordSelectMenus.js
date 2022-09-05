@@ -14,11 +14,11 @@ module.exports = {
         return selectMenu;
     },
 
-    getPrefixSelectMenu: function (currentPrefix) {
+    getPrefixSelectMenu: function (prefix) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
                 customId: 'Prefix',
-                placeholder: `Current Prefix: ${currentPrefix}`,
+                placeholder: `Current Prefix: ${prefix}`,
                 options: [
                     { label: '!', description: 'Exlamation Mark', value: '!' },
                     { label: '/', description: 'Slash', value: '/' },
@@ -26,24 +26,35 @@ module.exports = {
             }));
     },
 
-    getTrademarkSelectMenu: function (currentTrademark) {
-        const desc = ' will be shown before messages.';
+    getTrademarkSelectMenu: function (trademark) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
                 customId: 'Trademark',
-                placeholder: `${currentTrademark}`,
+                placeholder: `${trademark}`,
                 options: [
-                    { label: 'rustPlusPlus', description: `rustPlusPlus${desc}`, value: 'rustPlusPlus' },
-                    { label: 'Rust++', description: `Rust++${desc}`, value: 'Rust++' },
-                    { label: 'NOT SHOWING', description: 'Hide trademark.', value: 'NOT SHOWING' }]
+                    {
+                        label: 'rustPlusPlus',
+                        description: `rustPlusPlus will be shown before messages.`,
+                        value: 'rustPlusPlus'
+                    },
+                    {
+                        label: 'Rust++',
+                        description: `Rust++ will be shown before messages.`,
+                        value: 'Rust++'
+                    },
+                    {
+                        label: 'NOT SHOWING',
+                        description: 'Hide trademark.',
+                        value: 'NOT SHOWING'
+                    }]
             }));
     },
 
-    getCommandDelaySelectMenu: function (currentDelay) {
+    getCommandDelaySelectMenu: function (delay) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
                 customId: 'CommandDelay',
-                placeholder: `Current Command Delau: ${currentDelay} seconds.`,
+                placeholder: `Current Command Delau: ${delay} seconds.`,
                 options: [
                     { label: 'NO DELAY', description: 'No command delay.', value: '0' },
                     { label: '1 second', description: 'One second command delay.', value: '1' },
@@ -59,22 +70,34 @@ module.exports = {
 
     getSmartSwitchSelectMenu: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const sw = instance.serverList[serverId].switches[entityId];
-        let desc = 'Smart Switch Will be active only during the ';
+        const entity = instance.serverList[serverId].switches[entityId];
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
 
         let autoDayNightString = 'AUTO SETTING: ';
-        if (sw.autoDayNight === 0) autoDayNightString += 'OFF';
-        else if (sw.autoDayNight === 1) autoDayNightString += 'AUTO-DAY';
-        else if (sw.autoDayNight === 2) autoDayNightString += 'AUTO-NIGHT';
+        if (entity.autoDayNight === 0) autoDayNightString += 'OFF';
+        else if (entity.autoDayNight === 1) autoDayNightString += 'AUTO-DAY';
+        else if (entity.autoDayNight === 2) autoDayNightString += 'AUTO-NIGHT';
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
-                customId: `AutoDayNightId${entityId}`,
+                customId: `AutoDayNight${identifier}`,
                 placeholder: `${autoDayNightString}`,
                 options: [
-                    { label: 'OFF', description: 'Smart Switch work as normal.', value: '0' },
-                    { label: 'AUTO-DAY', description: `${desc}day.`, value: '1' },
-                    { label: 'AUTO-NIGHT', description: `${desc}night.`, value: '2' }]
+                    {
+                        label: 'OFF',
+                        description: 'Smart Switch work as normal.',
+                        value: '0'
+                    },
+                    {
+                        label: 'AUTO-DAY',
+                        description: `Smart Switch Will be active only during the day.`,
+                        value: '1'
+                    },
+                    {
+                        label: 'AUTO-NIGHT',
+                        description: `Smart Switch Will be active only during the night.`,
+                        value: '2'
+                    }]
             }));
     },
 }

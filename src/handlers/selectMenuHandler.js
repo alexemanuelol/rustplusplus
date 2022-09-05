@@ -45,11 +45,11 @@ module.exports = async (client, interaction) => {
         await client.interactionUpdate(interaction, { components: [row] });
     }
     else if (interaction.customId.startsWith('AutoDayNight')) {
-        let id = interaction.customId.replace('AutoDayNightId', '');
+        const ids = JSON.parse(interaction.customId.replace('AutoDayNight', ''));
 
-        instance.serverList[rustplus.serverId].switches[id].autoDayNight = parseInt(interaction.values[0]);
+        instance.serverList[ids.serverId].switches[ids.entityId].autoDayNight = parseInt(interaction.values[0]);
         client.writeInstanceFile(guildId, instance);
 
-        DiscordMessages.sendSmartSwitchMessage(guildId, rustplus.serverId, id, interaction);
+        DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
 }

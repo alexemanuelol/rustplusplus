@@ -23,38 +23,207 @@ module.exports = {
         return button;
     },
 
+    getServerButtons: function (guildId, serverId, state = null) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const server = instance.serverList[serverId];
+        const identifier = `{"serverId":"${serverId}"}`;
+
+        if (state === null) state = (instance.serverList[serverId].active) ? 1 : 0;
+
+        let connectionButton = null;
+        if (state === 0) {
+            connectionButton = module.exports.getButton({
+                customId: `ServerConnect${identifier}`,
+                label: 'CONNECT',
+                style: PRIMARY
+            });
+        }
+        else if (state === 1) {
+            connectionButton = module.exports.getButton({
+                customId: `ServerDisconnect${identifier}`,
+                label: 'DISCONNECT',
+                style: DANGER
+            });
+        }
+        else if (state === 2) {
+            connectionButton = module.exports.getButton({
+                customId: `ServerReconnecting${identifier}`,
+                label: 'RECONNECTING...',
+                style: DANGER
+            });
+        }
+
+        const trackerButton = module.exports.getButton({
+            customId: `CreateTracker${identifier}`,
+            label: 'CREATE TRACKER',
+            style: PRIMARY
+        });
+        const groupButton = module.exports.getButton({
+            customId: `CreateGroup${identifier}`,
+            label: 'CREATE GROUP',
+            style: PRIMARY
+        });
+        let linkButton = module.exports.getButton({
+            label: 'WEBSITE',
+            style: LINK,
+            url: server.url
+        });
+        let deleteButton = module.exports.getButton({
+            customId: `ServerDelete${identifier}`,
+            style: SECONDARY,
+            emoji: '🗑️'
+        });
+
+        if (server.battlemetricsId !== null) {
+            return new Discord.ActionRowBuilder()
+                .addComponents(connectionButton, trackerButton, groupButton, linkButton, deleteButton);
+        }
+        else {
+            return new Discord.ActionRowBuilder()
+                .addComponents(connectionButton, groupButton, linkButton, deleteButton);
+        }
+    },
+
     getSmartSwitchButtons: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
-        const sw = instance.serverList[serverId].switches[entityId];
+        const entity = instance.serverList[serverId].switches[entityId];
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `SmartSwitch${sw.active ? 'Off' : 'On'}` +
-                    `{"serverId":"${serverId}","entityId":${entityId}}`,
-                label: sw.active ? 'TURN OFF' : 'TURN ON',
-                style: sw.active ? DANGER : SUCCESS
+                customId: `SmartSwitch${entity.active ? 'Off' : 'On'}${identifier}`,
+                label: entity.active ? 'TURN OFF' : 'TURN ON',
+                style: entity.active ? DANGER : SUCCESS
             }),
             module.exports.getButton({
-                customId: `SmartSwitchEdit{"serverId":"${serverId}","entityId":${entityId}}`,
+                customId: `SmartSwitchEdit${identifier}`,
                 label: 'EDIT',
                 style: PRIMARY
             }),
             module.exports.getButton({
-                customId: `SmartSwitchDelete{"serverId":"${serverId}","entityId":${entityId}}`,
+                customId: `SmartSwitchDelete${identifier}`,
+                style: SECONDARY,
+                emoji: '🗑️'
+            }));
+    },
+
+    getSmartSwitchGroupButtons: function (serverId, groupId) {
+        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
+
+        return [
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `GroupTurnOn${identifier}`,
+                    label: 'TURN ON',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `GroupTurnOff${identifier}`,
+                    label: 'TURN OFF',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `GroupEdit${identifier}`,
+                    label: 'EDIT',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `GroupDelete${identifier}`,
+                    style: SECONDARY,
+                    emoji: '🗑️'
+                })),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `GroupAddSwitch${identifier}`,
+                    label: 'ADD SWITCH',
+                    style: SUCCESS
+                }),
+                module.exports.getButton({
+                    customId: `GroupRemoveSwitch${identifier}`,
+                    label: 'REMOVE SWITCH',
+                    style: DANGER
+                }))
+        ];
+    },
+
+    getSmartAlarmButtons: function (guildId, serverId, entityId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: `SmartAlarmEveryone${identifier}`,
+                label: '@everyone',
+                style: entity.everyone ? SUCCESS : DANGER
+            }),
+            module.exports.getButton({
+                customId: `SmartAlarmEdit${identifier}`,
+                label: 'EDIT',
+                style: PRIMARY
+            }),
+            module.exports.getButton({
+                customId: `SmartAlarmDelete${identifier}`,
+                style: SECONDARY,
+                emoji: '🗑️'
+            }));
+    },
+
+    getStorageMonitorToolCupboardButtons: function (guildId, serverId, entityId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: `StorageMonitorToolCupboardEveryone${identifier}`,
+                label: '@everyone',
+                style: entity.everyone ? SUCCESS : DANGER
+            }),
+            module.exports.getButton({
+                customId: `StorageMonitorToolCupboardInGame${identifier}`,
+                label: 'IN-GAME',
+                style: entity.inGame ? SUCCESS : DANGER
+            }),
+            module.exports.getButton({
+                customId: `StorageMonitorEdit${identifier}`,
+                label: 'EDIT',
+                style: PRIMARY,
+            }),
+            module.exports.getButton({
+                customId: `StorageMonitorToolCupboardDelete${identifier}`,
+                style: SECONDARY,
+                emoji: '🗑️'
+            }));
+    },
+
+    getStorageMonitorContainerButton: function (serverId, entityId) {
+        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: `StorageMonitorEdit${identifier}`,
+                label: 'EDIT',
+                style: PRIMARY,
+            }),
+            module.exports.getButton({
+                customId: `StorageMonitorContainerDelete${identifier}`,
                 style: SECONDARY,
                 emoji: '🗑️'
             }));
     },
 
     getNotificationButtons: function (setting, discordActive, inGameActive) {
+        const identifier = `{"setting":"${setting}"}`;
+
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
-                customId: `DiscordNotificationId${setting}`,
+                customId: `DiscordNotification${identifier}`,
                 label: 'DISCORD',
                 style: discordActive ? SUCCESS : DANGER
             }),
             module.exports.getButton({
-                customId: `InGameNotificationId${setting}`,
+                customId: `InGameNotification${identifier}`,
                 label: 'IN-GAME',
                 style: inGameActive ? SUCCESS : DANGER
             }));
@@ -69,7 +238,9 @@ module.exports = {
             }));
     },
 
-    getInGameTeammateNotificationsButtons: function (instance) {
+    getInGameTeammateNotificationsButtons: function (guildId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'InGameTeammateConnection',
@@ -120,6 +291,47 @@ module.exports = {
             }));
     },
 
+    getTrackerButtons: function (guildId, trackerId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const tracker = instance.trackers[trackerId];
+        const identifier = `{"trackerId":${trackerId}}`;
+
+        return [
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `TrackerActive${identifier}`,
+                    label: tracker.active ? 'ACTIVE' : 'INACTIVE',
+                    style: tracker.active ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: `TrackerEveryone${identifier}`,
+                    label: '@everyone',
+                    style: tracker.everyone ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: `TrackerEdit${identifier}`,
+                    label: 'EDIT',
+                    style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `TrackerDelete${identifier}`,
+                    style: SECONDARY,
+                    emoji: '🗑️'
+                })),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: `TrackerAddPlayer${identifier}`,
+                    label: 'ADD PLAYER',
+                    style: SUCCESS
+                }),
+                module.exports.getButton({
+                    customId: `TrackerRemovePlayer${identifier}`,
+                    label: 'REMOVE PLAYER',
+                    style: DANGER
+                }))
+        ];
+    },
+
     getTrackerNotifyButtons: function (allOffline, anyOnline) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
@@ -132,204 +344,6 @@ module.exports = {
                 label: 'ANY ONLINE',
                 style: anyOnline ? SUCCESS : DANGER
             }));
-    },
-
-    getServerButtons: function (guildId, serverId, state = null) {
-        const instance = Client.client.readInstanceFile(guildId);
-
-        if (state === null) state = (instance.serverList[serverId].active) ? 1 : 0;
-
-        let connectionButton = null;
-        if (state === 0) {
-            connectionButton = module.exports.getButton({
-                customId: `ServerConnect{"serverId":"${serverId}"}`,
-                label: 'CONNECT',
-                style: PRIMARY
-            });
-        }
-        else if (state === 1) {
-            connectionButton = module.exports.getButton({
-                customId: `ServerDisconnect{"serverId":"${serverId}"}`,
-                label: 'DISCONNECT',
-                style: DANGER
-            });
-        }
-        else if (state === 2) {
-            connectionButton = module.exports.getButton({
-                customId: `ServerReconnecting{"serverId":"${serverId}"}`,
-                label: 'RECONNECTING...',
-                style: DANGER
-            });
-        }
-
-        let trackerButton = module.exports.getButton({
-            customId: `CreateTracker{"serverId":"${serverId}"}`,
-            label: 'CREATE TRACKER',
-            style: PRIMARY
-        });
-        let groupButton = module.exports.getButton({
-            customId: `CreateGroup{"serverId":"${serverId}"}`,
-            label: 'CREATE GROUP',
-            style: PRIMARY
-        });
-        let linkButton = module.exports.getButton({
-            label: 'WEBSITE',
-            style: LINK,
-            url: instance.serverList[serverId].url
-        });
-        let deleteButton = module.exports.getButton({
-            customId: `ServerDelete{"serverId":"${serverId}"}`,
-            style: SECONDARY,
-            emoji: '🗑️'
-        });
-
-        if (instance.serverList[serverId].battlemetricsId !== null) {
-            return new Discord.ActionRowBuilder()
-                .addComponents(connectionButton, trackerButton, groupButton, linkButton, deleteButton);
-        }
-        else {
-            return new Discord.ActionRowBuilder()
-                .addComponents(connectionButton, groupButton, linkButton, deleteButton);
-        }
-    },
-
-    getTrackerButtons: function (guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
-        const active = instance.trackers[trackerId].active;
-        const everyone = instance.trackers[trackerId].everyone;
-        return [
-            new Discord.ActionRowBuilder().addComponents(
-                module.exports.getButton({
-                    customId: `TrackerActive{"trackerId":${trackerId}}`,
-                    label: active ? 'ACTIVE' : 'INACTIVE',
-                    style: active ? SUCCESS : DANGER
-                }),
-                module.exports.getButton({
-                    customId: `TrackerEveryone{"trackerId":${trackerId}}`,
-                    label: '@everyone',
-                    style: everyone ? SUCCESS : DANGER
-                }),
-                module.exports.getButton({
-                    customId: `TrackerEdit{"trackerId":"${trackerId}"}`,
-                    label: 'EDIT',
-                    style: PRIMARY
-                }),
-                module.exports.getButton({
-                    customId: `TrackerDelete{"trackerId":${trackerId}}`,
-                    style: SECONDARY,
-                    emoji: '🗑️'
-                })),
-            new Discord.ActionRowBuilder().addComponents(
-                module.exports.getButton({
-                    customId: `TrackerAddPlayer{"trackerId":"${trackerId}"}`,
-                    label: 'ADD PLAYER',
-                    style: SUCCESS
-                }),
-                module.exports.getButton({
-                    customId: `TrackerRemovePlayer{"trackerId":"${trackerId}"}`,
-                    label: 'REMOVE PLAYER',
-                    style: DANGER
-                }))
-        ];
-    },
-
-    getSmartAlarmButtons: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
-        const everyone = instance.serverList[serverId].alarms[entityId].everyone;
-        return new Discord.ActionRowBuilder().addComponents(
-            module.exports.getButton({
-                customId: `SmartAlarmEveryone{"serverId":"${serverId}","entityId":${entityId}}`,
-                label: '@everyone',
-                style: everyone ? SUCCESS : DANGER
-            }),
-            module.exports.getButton({
-                customId: `SmartAlarmEdit{"serverId":"${serverId}","entityId":${entityId}}`,
-                label: 'EDIT',
-                style: PRIMARY
-            }),
-            module.exports.getButton({
-                customId: `SmartAlarmDelete{"serverId":"${serverId}","entityId":${entityId}}`,
-                style: SECONDARY,
-                emoji: '🗑️'
-            }));
-    },
-
-    getStorageMonitorToolCupboardButtons: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
-        const everyone = instance.serverList[serverId].storageMonitors[entityId].everyone;
-        const inGame = instance.serverList[serverId].storageMonitors[entityId].inGame;
-        return new Discord.ActionRowBuilder().addComponents(
-            module.exports.getButton({
-                customId: `StorageMonitorToolCupboardEveryone{"serverId":"${serverId}","entityId":${entityId}}`,
-                label: '@everyone',
-                style: everyone ? SUCCESS : DANGER
-            }),
-            module.exports.getButton({
-                customId: `StorageMonitorToolCupboardInGame{"serverId":"${serverId}","entityId":${entityId}}`,
-                label: 'IN-GAME',
-                style: inGame ? SUCCESS : DANGER
-            }),
-            module.exports.getButton({
-                customId: `StorageMonitorEdit{"serverId":"${serverId}","entityId":${entityId}}`,
-                label: 'EDIT',
-                style: PRIMARY,
-            }),
-            module.exports.getButton({
-                customId: `StorageMonitorToolCupboardDelete{"serverId":"${serverId}","entityId":${entityId}}`,
-                style: SECONDARY,
-                emoji: '🗑️'
-            }));
-    },
-
-    getStorageMonitorContainerButton: function (serverId, entityId) {
-        return new Discord.ActionRowBuilder().addComponents(
-            module.exports.getButton({
-                customId: `StorageMonitorEdit{"serverId":"${serverId}","entityId":${entityId}}`,
-                label: 'EDIT',
-                style: PRIMARY,
-            }),
-            module.exports.getButton({
-                customId: `StorageMonitorContainerDelete{"serverId":"${serverId}","entityId":${entityId}}`,
-                style: SECONDARY,
-                emoji: '🗑️'
-            }));
-    },
-
-    getSmartSwitchGroupButtons: function (serverId, groupId) {
-        return [
-            new Discord.ActionRowBuilder().addComponents(
-                module.exports.getButton({
-                    customId: `GroupTurnOn{"serverId":"${serverId}","groupId":${groupId}}`,
-                    label: 'TURN ON',
-                    style: PRIMARY
-                }),
-                module.exports.getButton({
-                    customId: `GroupTurnOff{"serverId":"${serverId}","groupId":${groupId}}`,
-                    label: 'TURN OFF',
-                    style: PRIMARY
-                }),
-                module.exports.getButton({
-                    customId: `GroupEdit{"serverId":"${serverId}","groupId":${groupId}}`,
-                    label: 'EDIT',
-                    style: PRIMARY
-                }),
-                module.exports.getButton({
-                    customId: `GroupDelete{"serverId":"${serverId}","groupId":${groupId}}`,
-                    style: SECONDARY,
-                    emoji: '🗑️'
-                })),
-            new Discord.ActionRowBuilder().addComponents(
-                module.exports.getButton({
-                    customId: `GroupAddSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
-                    label: 'ADD SWITCH',
-                    style: SUCCESS
-                }),
-                module.exports.getButton({
-                    customId: `GroupRemoveSwitch{"serverId":"${serverId}","groupId":${groupId}}`,
-                    label: 'REMOVE SWITCH',
-                    style: DANGER
-                }))
-        ];
     },
 
     getNewsButton: function (body, validURL) {

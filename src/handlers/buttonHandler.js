@@ -10,16 +10,18 @@ module.exports = async (client, interaction) => {
     const rustplus = client.rustplusInstances[guildId];
 
     if (interaction.customId.startsWith('DiscordNotification')) {
-        let setting = interaction.customId.replace('DiscordNotificationId', '');
-        instance.notificationSettings[setting].discord = !instance.notificationSettings[setting].discord;
+        const ids = JSON.parse(interaction.customId.replace('DiscordNotification', ''));
+
+        instance.notificationSettings[ids.setting].discord = !instance.notificationSettings[ids.setting].discord;
         client.writeInstanceFile(guildId, instance);
 
-        if (rustplus) rustplus.notificationSettings[setting].discord = instance.notificationSettings[setting].discord;
+        if (rustplus) rustplus.notificationSettings[ids.setting].discord =
+            instance.notificationSettings[ids.setting].discord;
 
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getNotificationButtons(
-                setting, instance.notificationSettings[setting].discord,
-                instance.notificationSettings[setting].inGame)]
+                ids.setting, instance.notificationSettings[ids.setting].discord,
+                instance.notificationSettings[ids.setting].inGame)]
         });
     }
     else if (interaction.customId.startsWith('InGameNotification')) {
@@ -53,7 +55,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateAfk') {
@@ -63,7 +65,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateDeath') {
@@ -73,7 +75,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'FcmAlarmNotification') {
@@ -244,12 +246,6 @@ module.exports = async (client, interaction) => {
         if (rustplus && (rustplus.serverId === ids.serverId || instance.serverList[ids.serverId].active)) {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
-
-            for (const [key, value] of Object.entries(instance.switches)) {
-                if (`${value.serverId}` === ids.serverId) {
-                    delete instance.switches[key];
-                }
-            }
 
             for (const [key, value] of Object.entries(instance.serverList[ids.serverId].alarms)) {
                 await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
