@@ -54,7 +54,7 @@ module.exports = {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
                 customId: 'CommandDelay',
-                placeholder: `Current Command Delau: ${delay} seconds.`,
+                placeholder: `Current Command Delay: ${delay} seconds.`,
                 options: [
                     { label: 'NO DELAY', description: 'No command delay.', value: '0' },
                     { label: '1 second', description: 'One second command delay.', value: '1' },
