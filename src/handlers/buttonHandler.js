@@ -361,9 +361,9 @@ module.exports = async (client, interaction) => {
         }
 
         for (const [groupId, content] of Object.entries(instance.serverList[ids.serverId].switchGroups)) {
-            if (content.switches.includes(ids.entityId)) {
+            if (content.switches.includes(ids.entityId.toString())) {
                 instance.serverList[ids.serverId].switchGroups[groupId].switches =
-                    content.switches.filter(e => e !== ids.entityId);
+                    content.switches.filter(e => e !== ids.entityId.toString());
                 client.writeInstanceFile(guildId, instance);
                 await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
             }
@@ -529,10 +529,10 @@ module.exports = async (client, interaction) => {
             delete rustplus.currentSwitchTimeouts[ids.group];
 
             if (rustplus.serverId === ids.serverId) {
-                const active = (interaction.customId.startsWith('TurnOnGroup') ? true : false);
+                const active = (interaction.customId.startsWith('GroupTurnOn') ? true : false);
 
                 await SmartSwitchGroupHandler.TurnOnOffGroup(
-                    client, rustplus, guildId, ids.serverId, ids.group, active);
+                    client, rustplus, guildId, ids.serverId, ids.groupId, active);
             }
         }
     }
