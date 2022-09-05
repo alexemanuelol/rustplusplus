@@ -19,10 +19,6 @@ module.exports = {
 						.setDescription('The ID of the Storage Monitor.')
 						.setRequired(true))
 				.addStringOption(option =>
-					option.setName('name')
-						.setDescription('Rename the Storage Monitor.')
-						.setRequired(false))
-				.addStringOption(option =>
 					option.setName('image')
 						.setDescription('Set the image that best represent the Storage Monitor.')
 						.setRequired(false)
@@ -72,7 +68,6 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
-				const name = interaction.options.getString('name');
 				const image = interaction.options.getString('image');
 
 				const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
@@ -84,9 +79,6 @@ module.exports = {
 					return;
 				}
 
-				if (name !== null) {
-					instance.serverList[rustplus.serverId].storageMonitors[id].name = name;
-				}
 				if (image !== null) {
 					instance.serverList[rustplus.serverId].storageMonitors[id].image = `${image}.png`;
 				}

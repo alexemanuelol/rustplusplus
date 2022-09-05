@@ -270,6 +270,11 @@ module.exports = {
                 style: inGame ? SUCCESS : DANGER
             }),
             module.exports.getButton({
+                customId: `StorageMonitorEdit{"serverId":"${serverId}","entityId":${entityId}}`,
+                label: 'EDIT',
+                style: PRIMARY,
+            }),
+            module.exports.getButton({
                 customId: `StorageMonitorToolCupboardDelete{"serverId":"${serverId}","entityId":${entityId}}`,
                 style: SECONDARY,
                 emoji: '🗑️'
@@ -278,6 +283,11 @@ module.exports = {
 
     getStorageMonitorContainerButton: function (serverId, entityId) {
         return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: `StorageMonitorEdit{"serverId":"${serverId}","entityId":${entityId}}`,
+                label: 'EDIT',
+                style: PRIMARY,
+            }),
             module.exports.getButton({
                 customId: `StorageMonitorContainerDelete{"serverId":"${serverId}","entityId":${entityId}}`,
                 style: SECONDARY,

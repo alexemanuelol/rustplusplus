@@ -439,6 +439,12 @@ module.exports = async (client, interaction) => {
                 ids.entityId, interaction);
         }
     }
+    else if (interaction.customId.startsWith('StorageMonitorEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
+
+        const modal = DiscordModals.getStorageMonitorEditModal(interaction.guildId, ids.serverId, ids.entityId);
+        await interaction.showModal(modal);
+    }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardDelete')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardDelete', ''));
 

@@ -143,6 +143,26 @@ module.exports = {
         return modal;
     },
 
+    getStorageMonitorEditModal(guildId, serverId, entityId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const modal = module.exports.getModal({
+            customId: `StorageMonitorEdit{"serverId":"${serverId}","entityId":${entityId}}`,
+            title: `Editing of ${instance.serverList[serverId].storageMonitors[entityId].name}`
+        });
+
+        const nameInput = TextInput.getTextInput({
+            customId: 'StorageMonitorName',
+            label: 'The name of the Storage Monitor:',
+            value: instance.serverList[serverId].storageMonitors[entityId].name,
+            style: Discord.TextInputStyle.Short
+        });
+
+        modal.addComponents(new Discord.ActionRowBuilder().addComponents(nameInput));
+
+        return modal;
+    },
+
     getTrackerEditModal(guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
 

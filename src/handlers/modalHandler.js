@@ -101,6 +101,15 @@ module.exports = async (client, interaction) => {
             await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
         }
     }
+    else if (interaction.customId.startsWith('StorageMonitorEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
+        const storageMonitorName = interaction.fields.getTextInputValue('StorageMonitorName');
+
+        instance.serverList[ids.serverId].storageMonitors[ids.entityId].name = storageMonitorName;
+        client.writeInstanceFile(interaction.guildId, instance);
+
+        await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId, ids.entityId);
+    }
     else if (interaction.customId.startsWith('TrackerEdit')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
         const trackerName = interaction.fields.getTextInputValue('TrackerName');
