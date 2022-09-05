@@ -36,18 +36,7 @@ module.exports = {
                     { name: 'Smart Switch', value: 'smart_switch' },
                     { name: 'Sprinkler', value: 'sprinkler' },
                     { name: 'Storage Monitor', value: 'storage_monitor' },
-                    { name: 'Christmas Lights', value: 'xmas_light' })))
-        .addSubcommand(subcommand => subcommand
-            .setName('create_group')
-            .setDescription('Create a Smart Switch Group.')
-            .addStringOption(option => option
-                .setName('group_name')
-                .setDescription('The name of the Group to be created.')
-                .setRequired(true))
-            .addStringOption(option => option
-                .setName('command')
-                .setDescription('Set the custom command for the Group.')
-                .setRequired(true))),
+                    { name: 'Christmas Lights', value: 'xmas_light' }))),
 
     async execute(client, interaction) {
         let instance = client.readInstanceFile(interaction.guildId);
@@ -89,37 +78,6 @@ module.exports = {
 
                 let str = `Successfully edited Smart Switch ` +
                     `'${instance.serverList[rustplus.serverId].switches[id].name}'.`;
-                await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
-                    instance.serverList[rustplus.serverId].title));
-                rustplus.log('INFO', str);
-            } break;
-
-            case 'create_group': {
-                const groupName = interaction.options.getString('group_name');
-                const command = interaction.options.getString('command');
-
-                const groupId = client.findAvailableGroupId(interaction.guildId, rustplus.serverId);
-
-                if (Keywords.getListOfUsedKeywords(client, interaction.guildId, rustplus.serverId).includes(command)) {
-                    let str = `The command '${command}' is already in use, please choose another command.`;
-                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-                        instance.serverList[rustplus.serverId].title));
-                    rustplus.log('WARNING', str);
-                    return;
-                }
-
-                instance.serverList[rustplus.serverId].switchGroups[groupId] = {
-                    name: groupName,
-                    serverId: rustplus.serverId,
-                    command: command,
-                    switches: [],
-                    messageId: null
-                }
-                client.writeInstanceFile(interaction.guildId, instance);
-
-                await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, rustplus.serverId, groupId);
-
-                let str = `Successfully created the Group '${groupName}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                     instance.serverList[rustplus.serverId].title));
                 rustplus.log('INFO', str);

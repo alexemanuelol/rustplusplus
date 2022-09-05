@@ -206,6 +206,23 @@ module.exports = async (client, interaction) => {
 
         await DiscordMessages.sendTrackerMessage(guildId, trackerId);
     }
+    else if (interaction.customId.startsWith('CreateGroup')) {
+        const ids = JSON.parse(interaction.customId.replace('CreateGroup', ''));
+
+        interaction.deferUpdate();
+
+        const groupId = client.findAvailableGroupId(interaction.guildId, ids.serverId);
+
+        instance.serverList[ids.serverId].switchGroups[groupId] = {
+            name: 'Group',
+            command: `${groupId}`,
+            switches: [],
+            messageId: null
+        }
+        client.writeInstanceFile(interaction.guildId, instance);
+
+        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, groupId);
+    }
     else if (interaction.customId.startsWith('ServerDisconnect') ||
         interaction.customId.startsWith('ServerReconnecting')) {
         const ids = JSON.parse(interaction.customId.replace('ServerDisconnect', '')
@@ -470,15 +487,9 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        if (instance.serverList[rustplus.serverId].switchGroups[ids.groupId].serverId !== rustplus.serverId) {
-            client.log('ERROR', 'Smart Switch Group is not part of the connected rustplus instance.', 'error');
+        if (!rustplus.connected) {
+            client.log('ERROR', 'Rustplus is not connected, cannot use the Smart Switch Group...', 'error');
             return;
-        }
-        else {
-            if (!rustplus.connected) {
-                client.log('ERROR', 'Rustplus is not connected, cannot use  the Smart Switch Group...', 'error');
-                return;
-            }
         }
 
         let active = (interaction.customId.startsWith('GroupTurnOn') ? true : false);
@@ -495,13 +506,10 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('GroupDelete')) {
         const ids = JSON.parse(interaction.customId.replace('GroupDelete', ''));
 
-        if (!rustplus) {
-            client.log('ERROR', 'Rustplus is not connected, cannot delete the Smart Switch Group...', 'error');
-            return;
+        if (rustplus) {
+            clearTimeout(rustplus.currentSwitchTimeouts[ids.groupId]);
+            delete rustplus.currentSwitchTimeouts[ids.groupId];
         }
-
-        clearTimeout(rustplus.currentSwitchTimeouts[ids.groupId]);
-        delete rustplus.currentSwitchTimeouts[ids.groupId];
 
         if (instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,

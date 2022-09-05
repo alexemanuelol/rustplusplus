@@ -167,6 +167,11 @@ module.exports = {
             label: 'CREATE TRACKER',
             style: PRIMARY
         });
+        let groupButton = module.exports.getButton({
+            customId: `CreateGroup{"serverId":"${serverId}"}`,
+            label: 'CREATE GROUP',
+            style: PRIMARY
+        });
         let linkButton = module.exports.getButton({
             label: 'WEBSITE',
             style: LINK,
@@ -180,10 +185,11 @@ module.exports = {
 
         if (instance.serverList[serverId].battlemetricsId !== null) {
             return new Discord.ActionRowBuilder()
-                .addComponents(connectionButton, trackerButton, linkButton, deleteButton);
+                .addComponents(connectionButton, trackerButton, groupButton, linkButton, deleteButton);
         }
         else {
-            return new Discord.ActionRowBuilder().addComponents(connectionButton, linkButton, deleteButton);
+            return new Discord.ActionRowBuilder()
+                .addComponents(connectionButton, groupButton, linkButton, deleteButton);
         }
     },
 
