@@ -154,6 +154,11 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('ServerConnect')) {
         const ids = JSON.parse(interaction.customId.replace('ServerConnect', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId)) {
+            await interaction.message.delete();
+            return;
+        }
+
         for (const [serverId, content] of Object.entries(instance.serverList)) {
             if (content.active) {
                 instance.serverList[serverId].active = false;
@@ -183,6 +188,11 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('CreateTracker')) {
         const ids = JSON.parse(interaction.customId.replace('CreateTracker', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId)) {
+            await interaction.message.delete();
+            return;
+        }
+
         interaction.deferUpdate();
 
         /* Find an available tracker id */
@@ -208,9 +218,14 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('CreateGroup')) {
         const ids = JSON.parse(interaction.customId.replace('CreateGroup', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId)) {
+            await interaction.message.delete();
+            return;
+        }
+
         interaction.deferUpdate();
 
-        const groupId = client.findAvailableGroupId(interaction.guildId, ids.serverId);
+        const groupId = client.findAvailableGroupId(guildId, ids.serverId);
 
         instance.serverList[ids.serverId].switchGroups[groupId] = {
             name: 'Group',
@@ -218,35 +233,44 @@ module.exports = async (client, interaction) => {
             switches: [],
             messageId: null
         }
-        client.writeInstanceFile(interaction.guildId, instance);
+        client.writeInstanceFile(guildId, instance);
 
-        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, groupId);
+        await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
     }
     else if (interaction.customId.startsWith('ServerDisconnect') ||
         interaction.customId.startsWith('ServerReconnecting')) {
         const ids = JSON.parse(interaction.customId.replace('ServerDisconnect', '')
             .replace('ServerReconnecting', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId)) {
+            await interaction.message.delete();
+            return;
+        }
+
         instance.serverList[ids.serverId].active = false;
         client.writeInstanceFile(guildId, instance);
-
-        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
         if (rustplus) {
             rustplus.disconnect();
             delete client.rustplusInstances[guildId];
         }
+
+        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
     }
     else if (interaction.customId.startsWith('ServerDelete')) {
         const ids = JSON.parse(interaction.customId.replace('ServerDelete', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId)) {
+            await interaction.message.delete();
+            return;
+        }
 
         if (rustplus && (rustplus.serverId === ids.serverId || instance.serverList[ids.serverId].active)) {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
 
             for (const [entityId, content] of Object.entries(instance.serverList[ids.serverId].alarms)) {
-                await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
-                    instance.serverList[ids.serverId].alarms[entityId].messageId);
+                await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms, content.messageId);
             }
 
             rustplus.disconnect();
@@ -263,6 +287,12 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('SmartSwitchOn') ||
         interaction.customId.startsWith('SmartSwitchOff')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchOn', '').replace('SmartSwitchOff', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switches.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         if (!rustplus || (rustplus && (rustplus.serverId !== ids.serverId))) {
             interaction.deferUpdate();
@@ -301,11 +331,23 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('SmartSwitchEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
 
-        const modal = DiscordModals.getSmartSwitchEditModal(interaction.guildId, ids.serverId, ids.entityId);
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switches.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getSmartSwitchEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('SmartSwitchDelete')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchDelete', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switches.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
             instance.serverList[ids.serverId].switches[ids.entityId].messageId);
@@ -331,6 +373,12 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('SmartAlarmEveryone')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEveryone', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].alarms.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
         instance.serverList[ids.serverId].alarms[ids.entityId].everyone =
             !instance.serverList[ids.serverId].alarms[ids.entityId].everyone;
         client.writeInstanceFile(guildId, instance);
@@ -339,6 +387,12 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId.startsWith('SmartAlarmDelete')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmDelete', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].alarms.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
             instance.serverList[ids.serverId].alarms[ids.entityId].messageId);
@@ -349,11 +403,23 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
 
-        const modal = DiscordModals.getSmartAlarmEditModal(interaction.guildId, ids.serverId, ids.entityId);
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].alarms.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getSmartAlarmEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardEveryone')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardEveryone', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         instance.serverList[ids.serverId].storageMonitors[ids.entityId].everyone =
             !instance.serverList[ids.serverId].storageMonitors[ids.entityId].everyone;
@@ -364,6 +430,12 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardInGame')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardInGame', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
         instance.serverList[ids.serverId].storageMonitors[ids.entityId].inGame =
             !instance.serverList[ids.serverId].storageMonitors[ids.entityId].inGame;
         client.writeInstanceFile(guildId, instance);
@@ -373,11 +445,23 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('StorageMonitorEdit')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
 
-        const modal = DiscordModals.getStorageMonitorEditModal(interaction.guildId, ids.serverId, ids.entityId);
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getStorageMonitorEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardDelete')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardDelete', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
             instance.serverList[ids.serverId].storageMonitors[ids.entityId].messageId);
@@ -388,6 +472,12 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('StorageMonitorRecycle')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorRecycle', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
         interaction.deferUpdate();
 
         if (!rustplus) return;
@@ -396,7 +486,7 @@ module.exports = async (client, interaction) => {
         if (!(await rustplus.isResponseValid(entityInfo))) return;
 
         instance.serverList[ids.serverId].storageMonitors[ids.entityId].reachable = true;
-        client.writeInstanceFile(interaction.guildId, instance);
+        client.writeInstanceFile(guildId, instance);
 
         const items = Recycler.calculate(entityInfo.entityInfo.payload.items);
 
@@ -410,6 +500,12 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('StorageMonitorContainerDelete')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorContainerDelete', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
         await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
             instance.serverList[ids.serverId].storageMonitors[ids.entityId].messageId);
 
@@ -419,6 +515,12 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('GroupTurnOn') ||
         interaction.customId.startsWith('GroupTurnOff')) {
         const ids = JSON.parse(interaction.customId.replace('GroupTurnOn', '').replace('GroupTurnOff', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         interaction.deferUpdate();
 
@@ -437,11 +539,23 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('GroupEdit')) {
         const ids = JSON.parse(interaction.customId.replace('GroupEdit', ''));
 
-        const modal = DiscordModals.getGroupEditModal(interaction.guildId, ids.serverId, ids.groupId);
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getGroupEditModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('GroupDelete')) {
         const ids = JSON.parse(interaction.customId.replace('GroupDelete', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         if (rustplus) {
             clearTimeout(rustplus.currentSwitchTimeouts[ids.groupId]);
@@ -459,11 +573,23 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('GroupAddSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
 
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
+
         const modal = DiscordModals.getGroupAddSwitchModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
+            !instance.serverList[ids.serverId].switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
 
         const modal = DiscordModals.getGroupRemoveSwitchModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
@@ -471,50 +597,74 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('TrackerActive')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerActive', ''));
 
-        if (instance.trackers.hasOwnProperty(ids.trackerId)) {
-            instance.trackers[ids.trackerId].active = !instance.trackers[ids.trackerId].active;
-            client.writeInstanceFile(guildId, instance);
-
-            await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId, interaction);
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            await interaction.message.delete();
+            return;
         }
+
+        instance.trackers[ids.trackerId].active = !instance.trackers[ids.trackerId].active;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
     else if (interaction.customId.startsWith('TrackerEveryone')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEveryone', ''));
 
-        if (instance.trackers.hasOwnProperty(ids.trackerId)) {
-            instance.trackers[ids.trackerId].everyone = !instance.trackers[ids.trackerId].everyone;
-            client.writeInstanceFile(guildId, instance);
-
-            await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId, interaction);
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            await interaction.message.delete();
+            return;
         }
+
+        instance.trackers[ids.trackerId].everyone = !instance.trackers[ids.trackerId].everyone;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
     else if (interaction.customId.startsWith('TrackerEdit')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
 
-        const modal = DiscordModals.getTrackerEditModal(interaction.guildId, ids.trackerId);
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getTrackerEditModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerDelete')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerDelete', ''));
 
-        if (instance.trackers.hasOwnProperty(ids.trackerId)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelId.trackers,
-                instance.trackers[ids.trackerId].messageId);
-
-            delete instance.trackers[ids.trackerId];
-            client.writeInstanceFile(guildId, instance);
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            await interaction.message.delete();
+            return;
         }
+
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.trackers,
+            instance.trackers[ids.trackerId].messageId);
+
+        delete instance.trackers[ids.trackerId];
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
 
-        const modal = DiscordModals.getTrackerAddPlayerModal(interaction.guildId, ids.trackerId);
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getTrackerAddPlayerModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
 
-        const modal = DiscordModals.getTrackerRemovePlayerModal(interaction.guildId, ids.trackerId);
+        if (!instance.trackers.hasOwnProperty(ids.trackerId)) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getTrackerRemovePlayerModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
     }
 }
