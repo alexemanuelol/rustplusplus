@@ -39,31 +39,37 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const instance = client.readInstanceFile(interaction.guildId);
+		const rustplus = client.rustplsInstances[interaction.guildId];
 
 		if (!await client.validatePermissions(interaction)) return;
-
 		await interaction.deferReply({ ephemeral: true });
-
-		const id = interaction.options.getString('id');
-		const image = interaction.options.getString('image');
 
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
-				const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
+				const entityId = interaction.options.getString('id');
+				const image = interaction.options.getString('image');
+
+				const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
 				if (device === null) {
-					let str = `Invalid ID: '${id}'.`;
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+					let str = `Invalid ID: '${entityId}'.`;
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+						instance.serverList[device.serverId].title));
 					client.log('WARNING', str);
 					return;
 				}
 
-				if (image !== null) instance.serverList[device.serverId].alarms[id].image = `${image}.png`;
+				const entity = instance.serverList[device.serverId].alarms[entityId];
+
+				if (image !== null) instance.serverList[device.serverId].alarms[entityId].image = `${image}.png`;
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, id);
+				if (rustplus && rustplus.serverId === device.serverId) {
+					await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, entityId);
+				}
 
-				let str = `Successfully edited Smart Alarm '${instance.serverList[device.serverId].alarms[id].name}'.`;
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+				let str = `Successfully edited Smart Alarm '${entity.name}'.`;
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
+					instance.serverList[device.serverId].title));
 				client.log('INFO', str);
 			} break;
 

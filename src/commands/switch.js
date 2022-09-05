@@ -2,7 +2,7 @@ const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const Keywords = require('../util/keywords.js');
+const InstanceUtils = require('../util/instanceUtils.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
 module.exports = {
@@ -10,7 +10,7 @@ module.exports = {
         .setName('switch')
         .setDescription('Operations on Smart Switches.')
         .addSubcommand(subcommand => subcommand
-            .setName('edit_switch')
+            .setName('edit')
             .setDescription('Edit the properties of a Smart Switch.')
             .addStringOption(option => option
                 .setName('id')
@@ -39,48 +39,41 @@ module.exports = {
                     { name: 'Christmas Lights', value: 'xmas_light' }))),
 
     async execute(client, interaction) {
-        let instance = client.readInstanceFile(interaction.guildId);
+        const instance = client.readInstanceFile(interaction.guildId);
+        const rustplus = client.rustplsInstances[interaction.guildId];
 
         if (!await client.validatePermissions(interaction)) return;
-
         await interaction.deferReply({ ephemeral: true });
 
-        let rustplus = client.rustplusInstances[interaction.guildId];
-        if (!rustplus || (rustplus && !rustplus.ready)) {
-            let str = 'Not currently connected to a rust server.';
-            await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            client.log('WARNING', str);
-            return;
-        }
-
         switch (interaction.options.getSubcommand()) {
-            case 'edit_switch': {
-                const id = interaction.options.getString('id');
+            case 'edit': {
+                const entityId = interaction.options.getString('id');
                 const image = interaction.options.getString('image');
 
-                const device = InstanceUtils.getSmartDevice(interaction.guildId, id);
+                const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
                 if (device === null) {
-                    let str = `Invalid ID: '${id}'.`;
+                    let str = `Invalid ID: '${entityId}'.`;
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-                        instance.serverList[rustplus.serverId].title));
-                    rustplus.log('WARNING', str);
+                        instance.serverList[device.serverId].title));
+                    client.log('WARNING', str);
                     return;
                 }
 
-                if (image !== null) {
-                    instance.serverList[rustplus.serverId].switches[id].image = `${image}.png`;
-                }
+                const entity = instance.serverList[device.serverId].switches[entityId];
+
+                if (image !== null) instance.serverList[device.serverId].switches[entityId].image = `${image}.png`;
                 client.writeInstanceFile(interaction.guildId, instance);
 
-                DiscordMessages.sendSmartSwitchMessage(interaction.guildId, rustplus.serverId, id);
-                SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                    client, interaction.guildId, rustplus.serverId, id);
+                if (rustplus && rustplus.serverId === device.serverId) {
+                    DiscordMessages.sendSmartSwitchMessage(interaction.guildId, device.serverId, entityId);
+                    SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+                        client, interaction.guildId, device.serverId, entityId);
+                }
 
-                let str = `Successfully edited Smart Switch ` +
-                    `'${instance.serverList[rustplus.serverId].switches[id].name}'.`;
+                let str = `Successfully edited Smart Switch '${entity.name}'.`;
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
-                    instance.serverList[rustplus.serverId].title));
-                rustplus.log('INFO', str);
+                    instance.serverList[device.serverId].title));
+                client.log('INFO', str);
             } break;
 
             default: {
