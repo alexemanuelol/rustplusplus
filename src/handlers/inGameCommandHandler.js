@@ -668,7 +668,7 @@ module.exports = {
                     }
                 }
 
-                instance.markers[rustplus.serverId][command] = callerLocation;
+                instance.serverList[rustplus.serverId].markers[command] = callerLocation;
                 client.writeInstanceFile(rustplus.guildId, instance);
                 rustplus.markers[command] = callerLocation;
 
@@ -681,7 +681,7 @@ module.exports = {
 
                 if (command in rustplus.markers) {
                     delete rustplus.markers[command];
-                    delete instance.markers[rustplus.serverId][command];
+                    delete instance.serverList[rustplus.serverId].markers[command];
                     client.writeInstanceFile(rustplus.guildId, instance);
 
                     let str = `Marker '${command}' was removed.`;

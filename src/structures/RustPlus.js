@@ -98,14 +98,8 @@ class RustPlus extends RustPlusLib {
 
     loadMarkers() {
         const instance = Client.client.readInstanceFile(this.guildId);
-        const serverId = `${this.server}-${this.port}`;
 
-        if (!instance.markers.hasOwnProperty(serverId)) {
-            instance.markers[serverId] = {};
-            Client.client.writeInstanceFile(this.guildId, instance);
-        }
-
-        for (const [name, location] of Object.entries(instance.markers[serverId])) {
+        for (const [name, location] of Object.entries(instance.serverList[this.serverId].markers)) {
             this.markers[name] = { x: location.x, y: location.y };
         }
     }
