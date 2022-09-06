@@ -53,6 +53,11 @@ module.exports = {
             });
         }
 
+        const customTimersButton = module.exports.getButton({
+            customId: `CustomTimersEdit${identifier}`,
+            label: 'CUSTOM TIMERS',
+            style: PRIMARY
+        });
         const trackerButton = module.exports.getButton({
             customId: `CreateTracker${identifier}`,
             label: 'CREATE TRACKER',
@@ -75,12 +80,24 @@ module.exports = {
         });
 
         if (server.battlemetricsId !== null) {
-            return new Discord.ActionRowBuilder()
-                .addComponents(connectionButton, trackerButton, groupButton, linkButton, deleteButton);
+            return [
+                new Discord.ActionRowBuilder().addComponents(
+                    connectionButton, linkButton, deleteButton
+                ),
+                new Discord.ActionRowBuilder().addComponents(
+                    customTimersButton, trackerButton, groupButton
+                )
+            ];
         }
         else {
-            return new Discord.ActionRowBuilder()
-                .addComponents(connectionButton, groupButton, linkButton, deleteButton);
+            return [
+                new Discord.ActionRowBuilder().addComponents(
+                    connectionButton, linkButton, deleteButton
+                ),
+                new Discord.ActionRowBuilder().addComponents(
+                    customTimersButton, groupButton
+                )
+            ];
         }
     },
 

@@ -13,6 +13,53 @@ module.exports = {
         return modal;
     },
 
+    getCustomTimersEditModal(guildId, serverId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const server = instance.serverList[serverId];
+        const identifier = `{"serverId":"${serverId}"}`;
+
+        const modal = module.exports.getModal({
+            customId: `CustomTimersEdit${identifier}`,
+            title: 'Editing of Custom Timers'
+        });
+
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'CargoShipEgressTime',
+                label: 'Cargoship egress time (seconds):',
+                value: `${server.cargoShipEgressTimeMs / 1000}`,
+                style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'BradleyApcRespawnTime',
+                label: 'Bradley APC respawn time (seconds):',
+                value: `${server.bradleyApcRespawnTimeMs / 1000}`,
+                style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'CrateDespawnTime',
+                label: 'Locked Crate despawn time (seconds):',
+                value: `${server.lockedCrateDespawnTimeMs / 1000}`,
+                style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'CrateDespawnWarningTime',
+                label: 'Locked Crate despawn warning time (seconds):',
+                value: `${server.lockedCrateDespawnWarningTimeMs / 1000}`,
+                style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'OilRigCrateUnlockTime',
+                label: 'OilRig Locked Crate unlock time (seconds):',
+                value: `${server.oilRigLockedCrateUnlockTimeMs / 1000}`,
+                style: Discord.TextInputStyle.Short
+            }))
+        );
+
+        return modal;
+
+    },
+
     getSmartSwitchEditModal(guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].switches[entityId];

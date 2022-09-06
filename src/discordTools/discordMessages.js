@@ -37,7 +37,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getServerEmbed(guildId, serverId)],
-            components: [DiscordButtons.getServerButtons(guildId, serverId, state)]
+            components: DiscordButtons.getServerButtons(guildId, serverId, state)
         }
 
         const message = await module.exports.sendMessage(guildId, content, server.messageId,

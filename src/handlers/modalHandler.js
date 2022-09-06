@@ -5,7 +5,58 @@ module.exports = async (client, interaction) => {
     const instance = client.readInstanceFile(interaction.guildId);
     const guildId = interaction.guildId;
 
-    if (interaction.customId.startsWith('SmartSwitchEdit')) {
+    if (interaction.customId.startsWith('CustomTimersEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('CustomTimersEdit', ''));
+        const server = instance.serverList[ids.serverId];
+        const cargoShipEgressTime = parseInt(interaction.fields.getTextInputValue('CargoShipEgressTime'));
+        const bradleyApcRespawnTime = parseInt(interaction.fields.getTextInputValue('BradleyApcRespawnTime'));
+        const crateDespawnTime = parseInt(interaction.fields.getTextInputValue('CrateDespawnTime'));
+        const crateDespawnWarningTime = parseInt(interaction.fields.getTextInputValue('CrateDespawnWarningTime'));
+        const oilRigCrateUnlockTime = parseInt(interaction.fields.getTextInputValue('OilRigCrateUnlockTime'));
+
+        if (!server) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        if (cargoShipEgressTime && ((cargoShipEgressTime * 1000) !== server.cargoShipEgressTimeMs)) {
+            server.cargoShipEgressTimeMs = cargoShipEgressTime * 1000;
+        }
+        if (bradleyApcRespawnTime && ((bradleyApcRespawnTime * 1000) !== server.bradleyApcRespawnTimeMs)) {
+            server.bradleyApcRespawnTimeMs = bradleyApcRespawnTime * 1000;
+        }
+
+        if (crateDespawnTime && ((crateDespawnTime * 1000) !== server.lockedCrateDespawnTimeMs)) {
+            if (crateDespawnWarningTime && ((crateDespawnWarningTime * 1000) !==
+                server.lockedCrateDespawnWarningTimeMs)) {
+                if (crateDespawnTime > crateDespawnWarningTime) {
+                    server.lockedCrateDespawnTimeMs = crateDespawnTime * 1000;
+                }
+            }
+            else {
+                if ((crateDespawnTime * 1000) > server.lockedCrateDespawnWarningTimeMs) {
+                    server.lockedCrateDespawnTimeMs = crateDespawnTime * 1000;
+                }
+            }
+        }
+        if (crateDespawnWarningTime && ((crateDespawnWarningTime * 1000) !== server.lockedCrateDespawnWarningTimeMs)) {
+            if (crateDespawnTime && ((crateDespawnTime * 1000) !== server.lockedCrateDespawnTimeMs)) {
+                if (crateDespawnWarningTime < crateDespawnTime) {
+                    server.lockedCrateDespawnWarningTimeMs = crateDespawnWarningTime * 1000;
+                }
+            }
+            else {
+                if ((crateDespawnWarningTime * 1000) < server.lockedCrateDespawnTimeMs) {
+                    server.lockedCrateDespawnWarningTimeMs = crateDespawnWarningTime * 1000;
+                }
+            }
+        }
+        if (oilRigCrateUnlockTime && ((oilRigCrateUnlockTime * 1000) !== server.oilRigLockedCrateUnlockTimeMs)) {
+            server.oilRigLockedCrateUnlockTimeMs = oilRigCrateUnlockTime * 1000;
+        }
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId.startsWith('SmartSwitchEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
         const smartSwitchName = interaction.fields.getTextInputValue('SmartSwitchName');
         const smartSwitchCommand = interaction.fields.getTextInputValue('SmartSwitchCommand');

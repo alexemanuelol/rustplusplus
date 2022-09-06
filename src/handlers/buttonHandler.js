@@ -185,6 +185,17 @@ module.exports = async (client, interaction) => {
 
         newRustplus.newConnection = true;
     }
+    else if (interaction.customId.startsWith('CustomTimersEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('CustomTimersEdit', ''));
+
+        if (!instance.serverList.hasOwnProperty(ids.serverId)) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getCustomTimersEditModal(guildId, ids.serverId);
+        await interaction.showModal(modal);
+    }
     else if (interaction.customId.startsWith('CreateTracker')) {
         const ids = JSON.parse(interaction.customId.replace('CreateTracker', ''));
 
