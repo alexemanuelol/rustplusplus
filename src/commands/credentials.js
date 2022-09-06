@@ -8,57 +8,53 @@ module.exports = {
     data: new Builder.SlashCommandBuilder()
         .setName('credentials')
         .setDescription('Set/Clear the FCM Credentials for the user account.')
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('set')
-                .setDescription('Set the FCM Credentials.')
-                .addStringOption(option => option
-                    .setName('keys_private_key')
-                    .setDescription('Keys Private Key.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('keys_public_key')
-                    .setDescription('Keys Public Key.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('keys_auth_secret')
-                    .setDescription('Keys Auth Secret.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('fcm_token')
-                    .setDescription('FCM Token.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('fcm_push_set')
-                    .setDescription('FCM Push Set.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('gcm_token')
-                    .setDescription('GCM Token.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('gcm_android_id')
-                    .setDescription('GCM Android ID.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('gcm_security_token')
-                    .setDescription('GCM Security Token.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('gcm_app_id')
-                    .setDescription('GCM App ID.')
-                    .setRequired(true)))
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('clear')
-                .setDescription('Clear the FCM Credentials.'))
-        .addSubcommand(subcommand =>
-            subcommand
-                .setName('is_set')
-                .setDescription('Is the FCM Credentials already set for this Discord Server?')),
+        .addSubcommand(subcommand => subcommand
+            .setName('set')
+            .setDescription('Set the FCM Credentials.')
+            .addStringOption(option => option
+                .setName('keys_private_key')
+                .setDescription('Keys Private Key.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('keys_public_key')
+                .setDescription('Keys Public Key.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('keys_auth_secret')
+                .setDescription('Keys Auth Secret.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('fcm_token')
+                .setDescription('FCM Token.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('fcm_push_set')
+                .setDescription('FCM Push Set.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('gcm_token')
+                .setDescription('GCM Token.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('gcm_android_id')
+                .setDescription('GCM Android ID.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('gcm_security_token')
+                .setDescription('GCM Security Token.')
+                .setRequired(true))
+            .addStringOption(option => option
+                .setName('gcm_app_id')
+                .setDescription('GCM App ID.')
+                .setRequired(true)))
+        .addSubcommand(subcommand => subcommand
+            .setName('clear')
+            .setDescription('Clear the FCM Credentials.'))
+        .addSubcommand(subcommand => subcommand
+            .setName('is_set')
+            .setDescription('Is the FCM Credentials already set for this Discord Server?')),
     async execute(client, interaction) {
         if (!await client.validatePermissions(interaction)) return;
-
         await interaction.deferReply({ ephemeral: true });
 
         switch (interaction.options.getSubcommand()) {
@@ -81,44 +77,44 @@ module.exports = {
 };
 
 async function setCredentials(client, interaction) {
-    let credentials = new Object();
-    credentials.fcm_credentials = {};
+    const newCredentials = new Object();
+    newCredentials.fcm_credentials = {};
 
-    credentials.fcm_credentials.keys = {};
-    credentials.fcm_credentials.keys.privateKey = interaction.options.getString('keys_private_key');
-    credentials.fcm_credentials.keys.publicKey = interaction.options.getString('keys_public_key');
-    credentials.fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
+    newCredentials.fcm_credentials.keys = {};
+    newCredentials.fcm_credentials.keys.privateKey = interaction.options.getString('keys_private_key');
+    newCredentials.fcm_credentials.keys.publicKey = interaction.options.getString('keys_public_key');
+    newCredentials.fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
 
-    credentials.fcm_credentials.fcm = {};
-    credentials.fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
-    credentials.fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
+    newCredentials.fcm_credentials.fcm = {};
+    newCredentials.fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
+    newCredentials.fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
 
-    credentials.fcm_credentials.gcm = {};
-    credentials.fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
-    credentials.fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
-    credentials.fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
-    credentials.fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
+    newCredentials.fcm_credentials.gcm = {};
+    newCredentials.fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
+    newCredentials.fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
+    newCredentials.fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
+    newCredentials.fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
 
-    credentials.owner = interaction.member.user.id;
+    newCredentials.owner = interaction.member.user.id;
 
-    for (let guild of client.guilds.cache) {
-        let instance = client.readCredentialsFile(guild[0]);
-        if (_.isEqual(credentials, instance.credentials)) {
-            let str = 'FCM Credentials are already used for another discord server!';
+    for (const guild of client.guilds.cache) {
+        const credentials = client.readCredentialsFile(guild[0]);
+        if (_.isEqual(newCredentials, credentials.credentials)) {
+            const str = 'FCM Credentials are already used for another discord server!';
             await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             client.log('WARNING', str);
             return;
         }
     }
 
-    let instance = client.readCredentialsFile(interaction.guildId);
-    instance.credentials = credentials;
-    client.writeCredentialsFile(interaction.guildId, instance);
+    const credentials = client.readCredentialsFile(interaction.guildId);
+    credentials.credentials = newCredentials;
+    client.writeCredentialsFile(interaction.guildId, credentials);
 
     /* Start Fcm Listener */
     require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
 
-    let str = 'FCM Credentials were set successfully!';
+    const str = 'FCM Credentials were set successfully!';
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log('INFO', str);
 }
@@ -128,20 +124,20 @@ async function clearCredentials(client, interaction) {
         client.currentFcmListeners[interaction.guildId].destroy();
     }
 
-    let instance = client.readCredentialsFile(interaction.guildId);
-    instance.credentials = null;
-    client.writeCredentialsFile(interaction.guildId, instance);
+    const credentials = client.readCredentialsFile(interaction.guildId);
+    credentials.credentials = null;
+    client.writeCredentialsFile(interaction.guildId, credentials);
 
-    let str = 'FCM Credentials were cleared successfully!';
+    const str = 'FCM Credentials were cleared successfully!';
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log('INFO', str);
 }
 
 async function isSetCredentials(client, interaction) {
-    let instance = client.readCredentialsFile(interaction.guildId);
+    const credentials = client.readCredentialsFile(interaction.guildId);
 
-    let str = 'FCM Credentials are ' + ((instance.credentials === null) ? 'not currently ' : '') + 'set.';
-    let isSet = (instance.credentials === null) ? 1 : 0;
+    const str = 'FCM Credentials are ' + ((credentials.credentials === null) ? 'not currently ' : '') + 'set.';
+    const isSet = (credentials.credentials === null) ? 1 : 0;
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(isSet, str));
     client.log('INFO', str);
 }
