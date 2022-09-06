@@ -218,6 +218,15 @@ module.exports = {
             }));
     },
 
+    getRecycleDeleteButton: function () {
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: 'RecycleDelete',
+                style: SECONDARY,
+                emoji: '🗑️'
+            }));
+    },
+
     getNotificationButtons: function (setting, discordActive, inGameActive) {
         const identifier = `{"setting":"${setting}"}`;
 

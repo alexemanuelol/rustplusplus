@@ -512,6 +512,9 @@ module.exports = async (client, interaction) => {
         delete instance.serverList[ids.serverId].storageMonitors[ids.entityId];
         client.writeInstanceFile(guildId, instance);
     }
+    else if (interaction.customId === 'RecycleDelete') {
+        await interaction.message.delete();
+    }
     else if (interaction.customId.startsWith('GroupTurnOn') ||
         interaction.customId.startsWith('GroupTurnOff')) {
         const ids = JSON.parse(interaction.customId.replace('GroupTurnOn', '').replace('GroupTurnOff', ''));

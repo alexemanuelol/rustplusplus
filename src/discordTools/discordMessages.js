@@ -164,6 +164,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getStorageMonitorRecycleEmbed(guildId, serverId, entityId, items)],
+            components: [DiscordButtons.getRecycleDeleteButton()],
             files: [new Discord.AttachmentBuilder('src/resources/images/electrics/recycler.png')]
         }
 
