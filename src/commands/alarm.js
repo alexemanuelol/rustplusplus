@@ -39,7 +39,7 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const instance = client.readInstanceFile(interaction.guildId);
-		const rustplus = client.rustplsInstances[interaction.guildId];
+		const rustplus = client.rustplusInstances[interaction.guildId];
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
