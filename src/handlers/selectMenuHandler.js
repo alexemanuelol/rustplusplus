@@ -42,14 +42,14 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId.startsWith('AutoDayNight')) {
         const ids = JSON.parse(interaction.customId.replace('AutoDayNight', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (!instance.serverList.hasOwnProperty(ids.serverId) || (instance.serverList.hasOwnProperty(ids.serverId) &&
-            !instance.serverList[ids.serverId].switches.hasOwnProperty(ids.entityId))) {
+        if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
             await interaction.message.delete();
             return;
         }
 
-        instance.serverList[ids.serverId].switches[ids.entityId].autoDayNight = parseInt(interaction.values[0]);
+        server.switches[ids.entityId].autoDayNight = parseInt(interaction.values[0]);
         client.writeInstanceFile(guildId, instance);
 
         DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
