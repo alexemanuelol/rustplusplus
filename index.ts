@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Fs = require('fs');
+const Path = require('path');
 
 const DiscordBot = require('./src/structures/DiscordBot');
 
@@ -19,20 +20,20 @@ const client = new DiscordBot({
 client.build();
 
 function createMissingDirectories() {
-    if (!Fs.existsSync(`${__dirname}/src/logs`)) {
-        Fs.mkdirSync(`${__dirname}/src/logs`);
+    if (!Fs.existsSync(Path.join(__dirname, 'src/logs'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'src/logs'));
     }
 
-    if (!Fs.existsSync(`${__dirname}/src/instances`)) {
-        Fs.mkdirSync(`${__dirname}/src/instances`);
+    if (!Fs.existsSync(Path.join(__dirname, 'src/instances'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'src/instances'));
     }
 
-    if (!Fs.existsSync(`${__dirname}/src/credentials`)) {
-        Fs.mkdirSync(`${__dirname}/src/credentials`);
+    if (!Fs.existsSync(Path.join(__dirname, 'src/credentials'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'src/credentials'));
     }
 
-    if (!Fs.existsSync(`${__dirname}/src/resources/images/maps`)) {
-        Fs.mkdirSync(`${__dirname}/src/resources/images/maps`);
+    if (!Fs.existsSync(Path.join(__dirname, 'src/resources/images/maps'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'src/resources/images/maps'));
     }
 }
 

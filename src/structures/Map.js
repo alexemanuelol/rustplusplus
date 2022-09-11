@@ -1,5 +1,6 @@
-const Fs = require("fs");
-const Jimp = require("jimp");
+const Fs = require('fs');
+const Jimp = require('jimp');
+const Path = require('path');
 
 class Map {
     constructor(map, rustplus) {
@@ -16,18 +17,45 @@ class Map {
 
         this._mapMarkerImageMeta = {
             map: {
-                image: `./src/resources/images/maps/${this.rustplus.guildId}_map_clean.png`,
+                image: Path.join(__dirname, '..', `resources/images/maps/${this.rustplus.guildId}_map_clean.png`),
                 size: null, type: null, jimp: null
             },
-            player: { image: './src/resources/images/markers/player.png', size: 20, type: 1, jimp: null },
-            explosion: { image: './src/resources/images/markers/explosion.png', size: 30, type: 2, jimp: null },
-            shop: { image: './src/resources/images/markers/shop.png', size: 20, type: 3, jimp: null },
-            chinook: { image: './src/resources/images/markers/chinook.png', size: 50, type: 4, jimp: null },
-            cargo: { image: './src/resources/images/markers/cargo.png', size: 100, type: 5, jimp: null },
-            crate: { image: './src/resources/images/markers/crate.png', size: 25, type: 6, jimp: null },
-            blade: { image: './src/resources/images/markers/blade.png', size: 25, type: 7, jimp: null },
-            heli: { image: './src/resources/images/markers/heli.png', size: 20, type: 8, jimp: null },
-            tunnels: { image: './src/resources/images/markers/tunnels.png', size: 35, type: 9, jimp: null }
+            player: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/player.png'), size: 20, type: 1, jimp: null
+            },
+            explosion: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/explosion.png'), size: 30, type: 2, jimp: null
+            },
+            shop: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/shop.png'), size: 20, type: 3, jimp: null
+            },
+            chinook: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/chinook.png'), size: 50, type: 4, jimp: null
+            },
+            cargo: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/cargo.png'), size: 100, type: 5, jimp: null
+            },
+            crate: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/crate.png'), size: 25, type: 6, jimp: null
+            },
+            blade: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/blade.png'), size: 25, type: 7, jimp: null
+            },
+            heli: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/heli.png'), size: 20, type: 8, jimp: null
+            },
+            tunnels: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/tunnels.png'), size: 35, type: 9, jimp: null
+            }
         }
 
         this._monumentInfo = {
@@ -253,7 +281,8 @@ class Map {
     }
 
     async setupFont() {
-        this.font = await Jimp.loadFont("./src/resources/fonts/PermanentMarker.fnt");
+        this.font = await Jimp.loadFont(
+            Path.join(__dirname, '..', 'resources/fonts/PermanentMarker.fnt'));
     }
 
     async setupMapMarkerImages() {

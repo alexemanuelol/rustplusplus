@@ -1,10 +1,12 @@
 const Fs = require('fs');
+const Path = require('path');
 
 const Str = require('../util/string.js');
 
 class Items {
     constructor() {
-        this._items = JSON.parse(Fs.readFileSync(`${__dirname}/../util/items.json`, 'utf8'));
+        this._items = JSON.parse(Fs.readFileSync(
+            Path.join(__dirname, '..', 'util/items.json'), 'utf8'));
     }
 
     /* Getters and Setters */

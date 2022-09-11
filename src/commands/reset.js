@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
+const Path = require('path');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -53,7 +54,7 @@ module.exports = {
 						instance = client.readInstanceFile(guild.id);
 
 						const file = new Discord.AttachmentBuilder(
-							`src/resources/images/maps/${guild.id}_map_full.png`);
+							Path.join(__dirname, '..', `resources/images/maps/${guild.id}_map_full.png`));
 						const msg = await client.messageSend(channel, { files: [file] });
 						instance.informationMessageId.map = msg.id;
 						client.writeInstanceFile(guild.id, instance);

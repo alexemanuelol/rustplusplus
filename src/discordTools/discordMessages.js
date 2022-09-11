@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Path = require('path');
 
 const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
@@ -80,7 +81,7 @@ module.exports = {
                 DiscordButtons.getSmartSwitchButtons(guildId, serverId, entityId)
             ],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)
+                new Discord.AttachmentBuilder(Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))
             ]
         }
 
@@ -102,7 +103,8 @@ module.exports = {
                 DiscordEmbeds.getSmartAlarmEmbed(guildId, serverId, entityId) :
                 DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'alarms')],
             components: [DiscordButtons.getSmartAlarmButtons(guildId, serverId, entityId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)]
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
@@ -126,7 +128,8 @@ module.exports = {
                 DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
                 DiscordButtons.getStorageMonitorContainerButton(serverId, entityId)],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)]
+                new Discord.AttachmentBuilder(
+                    Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
         instance = Client.client.readInstanceFile(guildId);
@@ -147,7 +150,8 @@ module.exports = {
         const content = {
             embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupId)],
             components: DiscordButtons.getSmartSwitchGroupButtons(serverId, groupId),
-            files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png')]
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/electrics/smart_switch.png'))]
         }
 
         const message = await module.exports.sendMessage(guildId, content, group.messageId,
@@ -165,7 +169,8 @@ module.exports = {
         const content = {
             embeds: [DiscordEmbeds.getStorageMonitorRecycleEmbed(guildId, serverId, entityId, items)],
             components: [DiscordButtons.getRecycleDeleteButton()],
-            files: [new Discord.AttachmentBuilder('src/resources/images/electrics/recycler.png')]
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/electrics/recycler.png'))]
         }
 
         return await module.exports.sendMessage(guildId, content, null, instance.channelId.storageMonitors);
@@ -177,7 +182,8 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, serverId, entityId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
         }
 
@@ -190,7 +196,8 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, serverId, entityId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
         }
 
@@ -203,7 +210,8 @@ module.exports = {
 
         const content = {
             embeds: [await DiscordEmbeds.getStorageMonitorNotFoundEmbed(guildId, serverId, entityId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
         }
 
@@ -216,7 +224,8 @@ module.exports = {
 
         const content = {
             embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, serverId, entityId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)]
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
@@ -228,7 +237,8 @@ module.exports = {
 
         const content = {
             embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, serverId, entityId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
         }
 
@@ -265,7 +275,8 @@ module.exports = {
 
         const content = {
             embeds: [await DiscordEmbeds.getAlarmEmbedNew(guildId, serverId, entityId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
         }
 
@@ -287,7 +298,8 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getServerWipeDetectedEmbed(guildId, serverId)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/maps/${guildId}_map_full.png`)]
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))]
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
@@ -307,7 +319,8 @@ module.exports = {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            files: [new Discord.AttachmentBuilder(`src/resources/images/maps/${guildId}_map_full.png`)]
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))]
         }
 
         const message = await module.exports.sendMessage(guildId, content, instance.informationMessageId.map,
@@ -324,7 +337,8 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/events/${image}`)]
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/events/${image}`))]
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.events);

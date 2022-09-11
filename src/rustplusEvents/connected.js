@@ -2,7 +2,6 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
 const PollingHandler = require('../handlers/pollingHandler.js');
-const { sendServerWipeDetectedMessage, sendInformationMapMessage } = require('../discordTools/discordMessages.js');
 
 module.exports = {
     name: 'connected',
@@ -40,10 +39,12 @@ module.exports = {
         const info = await rustplus.getInfoAsync();
         if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
         if (!rustplus.map) rustplus.map = new Map(map.map, rustplus);
-        if (rustplus.map.isJpgImageChanged(map.map)) await sendServerWipeDetectedMessage(guildId, serverId);
+        if (rustplus.map.isJpgImageChanged(map.map)) {
+            await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
+        }
         await rustplus.map.updateMap(map.map);
         await rustplus.map.writeMap(false, true);
-        await sendInformationMapMessage(guildId);
+        await DiscordMessages.sendInformationMapMessage(guildId);
 
         if (rustplus.isReconnecting) {
             rustplus.isReconnecting = false;

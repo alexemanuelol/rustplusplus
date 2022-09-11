@@ -1,5 +1,6 @@
 const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
+const Path = require('path');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
@@ -57,10 +58,12 @@ module.exports = {
 
 		let file = null;
 		if (interaction.options.getSubcommand() === 'clean') {
-			file = new Discord.AttachmentBuilder(`src/resources/images/maps/${interaction.guildId}_map_clean.png`);
+			file = new Discord.AttachmentBuilder(
+				Path.join(__dirname, '..', `resources/images/maps/${interaction.guildId}_map_clean.png`));
 		}
 		else {
-			file = new Discord.AttachmentBuilder(`src/resources/images/maps/${interaction.guildId}_map_full.png`);
+			file = new Discord.AttachmentBuilder(
+				Path.join(__dirname, '..', `resources/images/maps/${interaction.guildId}_map_full.png`));
 		}
 
 		const fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';

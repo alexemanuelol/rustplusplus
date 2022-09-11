@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const PushReceiver = require('push-receiver');
 
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');

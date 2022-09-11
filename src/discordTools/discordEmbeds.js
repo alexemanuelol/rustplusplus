@@ -301,8 +301,7 @@ module.exports = {
         const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         return module.exports.getEmbed({
-            title: `${entity.name}` +
-                ` is no longer electrically connected!`,
+            title: `${entity.name} is no longer electrically connected!`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
