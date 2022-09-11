@@ -258,4 +258,75 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
+
+    sendSmartAlarmTriggerMessage: async function (guildId, serverId, entityId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
+
+        const content = {
+            embeds: [await DiscordEmbeds.getAlarmEmbedNew(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${entity.image}`)],
+            content: entity.everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendServerChangeStateMessage: async function (guildId, serverId, state) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getServerChangedStateEmbed(guildId, serverId, state)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendServerWipeDetectedMessage: async function (guildId, serverId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getServerWipeDetectedEmbed(guildId, serverId)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/maps/${guildId}_map_full.png`)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendServerConnectionInvalidMessage: async function (guildId, serverId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getServerConnectionInvalidEmbed(guildId, serverId)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendInformationMapMessage: async function (guildId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            files: [new Discord.AttachmentBuilder(`src/resources/images/maps/${guildId}_map_full.png`)]
+        }
+
+        const message = await module.exports.sendMessage(guildId, content, instance.informationMessageId.map,
+            instance.channelId.information);
+
+        if (message) {
+            instance.informationMessageId.map = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
+
+    sendDiscordEventMessage: async function (guildId, serverId, text, image) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image)],
+            files: [new Discord.AttachmentBuilder(`src/resources/images/events/${image}`)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.events);
+    },
 }

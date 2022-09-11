@@ -1,147 +1,67 @@
-const Discord = require('discord.js');
-
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
 const PollingHandler = require('../handlers/pollingHandler.js');
+const { sendServerWipeDetectedMessage, sendInformationMapMessage } = require('../discordTools/discordMessages.js');
 
 module.exports = {
     name: 'connected',
     async execute(rustplus, client) {
-        rustplus.log('CONNECTED', 'RUSTPLUS CONNECTED');
+        if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
 
-        rustplus.tokens_replenish_task = setInterval(rustplus.replenish_tokens.bind(rustplus), 1000);
+        rustplus.log('CONNECTED', 'CONNECTED TO SERVER.');
+        rustplus.isConnected = true;
+        rustplus.isConnectionRefused = false;
 
-        let instance = client.readInstanceFile(rustplus.guildId);
-        let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
+        const instance = client.readInstanceFile(rustplus.guildId);
+        const guildId = rustplus.guildId;
+        const serverId = rustplus.serverId;
 
-        /* Get some map parameters once when connected (to avoid calling getMap continuously) */
-        let map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
+        /* Start the token replenish task */
+        rustplus.tokensReplenishTaskId = setInterval(rustplus.replenishTokens.bind(rustplus), 1000);
+
+        /* Request the map. Act as a check to see if connection is truly operational. */
+        const map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
         if (!(await rustplus.isResponseValid(map))) {
             rustplus.log('ERROR', 'Something went wrong with connection.', 'error');
 
-            if (channel !== undefined) {
-                await client.messageSend(channel, {
-                    embeds: [DiscordEmbeds.getEmbed({
-                        color: '#ff0040',
-                        title: 'The connection to the server seems to be invalid. Try to re-pair to the server.',
-                        thumbnail: instance.serverList[rustplus.serverId].img,
-                        timestamp: true,
-                        footer: { text: instance.serverList[rustplus.serverId].title }
-                    })]
-                });
-            }
+            instance.serverList[serverId].active = false;
+            client.writeInstanceFile(guildId, instance);
 
-            instance.serverList[rustplus.serverId].active = false;
-            client.writeInstanceFile(rustplus.guildId, instance);
-
-            await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, null);
+            await DiscordMessages.sendServerConnectionInvalidMessage(guildId, serverId);
+            await DiscordMessages.sendServerMessage(guildId, serverId, null);
 
             rustplus.disconnect();
-            delete client.rustplusInstances[rustplus.guildId];
+            delete client.rustplusInstances[guildId]; // TODO: move to disconnected.js?
             return;
         }
+        rustplus.log('CONNECTED', 'RUSTPLUS OPERATIONAL.');
 
-        if (rustplus.map === null) {
-            rustplus.map = new Map(map.map, rustplus);
-            rustplus.info = new Info((await rustplus.getInfoAsync()).info);
-        }
-
-        let isWipe = false;
-        if (rustplus.map.isJpgImageChanged(map.map)) {
-            isWipe = true;
-        }
-
+        const info = await rustplus.getInfoAsync();
+        if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
+        if (!rustplus.map) rustplus.map = new Map(map.map, rustplus);
+        if (rustplus.map.isJpgImageChanged(map.map)) await sendServerWipeDetectedMessage(guildId, serverId);
         await rustplus.map.updateMap(map.map);
-        rustplus.info = new Info((await rustplus.getInfoAsync()).info);
-
         await rustplus.map.writeMap(false, true);
+        await sendInformationMapMessage(guildId);
 
-        let messageId = instance.informationMessageId.map;
-        let message = undefined;
-        if (messageId !== null) {
-            message = await DiscordTools.getMessageById(rustplus.guildId, instance.channelId.information, messageId);
+        if (rustplus.isReconnecting) {
+            rustplus.isReconnecting = false;
+            await DiscordMessages.sendServerChangeStateMessage(guildId, serverId, 0);
         }
 
-        let mapFile = new Discord.AttachmentBuilder(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
-        if (message === undefined) {
-            let infoChannel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.information);
+        await DiscordMessages.sendServerMessage(guildId, serverId, null);
 
-            if (!infoChannel) {
-                client.log('ERROR', 'Invalid guild or channel.', 'error');
-            }
-            else {
-                instance = client.readInstanceFile(rustplus.guildId);
-
-                let msg = await client.messageSend(infoChannel, { files: [mapFile] });
-                if (msg) {
-                    instance.informationMessageId.map = msg.id;
-                    client.writeInstanceFile(rustplus.guildId, instance);
-                }
-            }
-        }
-        else {
-            await client.messageEdit(message, { files: [mapFile] });
-        }
-
-        if (isWipe) {
-            if (channel !== undefined) {
-                let file = new Discord.AttachmentBuilder(`src/resources/images/maps/${rustplus.guildId}_map_full.png`);
-                await client.messageSend(channel, {
-                    embeds: [DiscordEmbeds.getEmbed({
-                        color: '#ce412b',
-                        title: 'Wipe detected!',
-                        image: `attachment://${rustplus.guildId}_map_full.png`,
-                        timestamp: true,
-                        footer: { text: instance.serverList[rustplus.serverId].title }
-                    })],
-                    files: [file]
-                });
-            }
-        }
-
-        rustplus.log('CONNECTED', 'SUCCESSFULLY CONNECTED!');
-
-        if (!rustplus.connected) {
-            if (rustplus.isReconnect) {
-                if (channel !== undefined) {
-                    await client.messageSend(channel, {
-                        embeds: [DiscordEmbeds.getEmbed({
-                            color: '#00ff40',
-                            title: 'Server just went online.',
-                            thumbnail: instance.serverList[rustplus.serverId].img,
-                            timestamp: true,
-                            footer: { text: instance.serverList[rustplus.serverId].title }
-                        })]
-                    });
-                }
-            }
-
-            await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, null);
-
-            rustplus.connected = true;
-            rustplus.isReconnect = false;
-            rustplus.refusedConnectionRetry = false;
-        }
-
-        await require('../discordTools/SetupSwitches')(client, rustplus, rustplus.newConnection);
+        /* Setup Smart Devices */
+        await require('../discordTools/SetupSwitches')(client, rustplus);
         await require('../discordTools/SetupSwitchGroups')(client, rustplus);
         await require('../discordTools/SetupAlarms')(client, rustplus);
-        await require('../discordTools/SetupStorageMonitors')(client, rustplus, rustplus.newConnection);
-        rustplus.newConnection = false;
+        await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+        rustplus.isNewConnection = false;
         rustplus.loadMarkers();
 
-        /* Run the first time before starting the interval */
         PollingHandler.pollingHandler(rustplus, client);
-
-        rustplus.ready = true;
-
-        /* Start a new instance of the inGameEventHandler interval function, save the interval ID */
-        rustplus.intervalId = setInterval(PollingHandler.pollingHandler,
-            client.pollingIntervalMs,
-            rustplus,
-            client);
+        rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
+        rustplus.isOperational = true;
     },
 };

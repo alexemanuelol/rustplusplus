@@ -1,10 +1,10 @@
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = async (client, rustplus, newConnection = false) => {
+module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
 
-    if (newConnection) {
+    if (rustplus.isNewConnection) {
         await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
     }
 

@@ -40,7 +40,7 @@ module.exports = {
         }
 
         if (showMonument) {
-            if (rustplus === null || (rustplus && !rustplus.ready)) return pos;
+            if (rustplus === null || (rustplus && !rustplus.isOperational)) return pos;
 
             let monumentObj = null;
             for (let monument of rustplus.map.monuments) {

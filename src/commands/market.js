@@ -50,7 +50,7 @@ module.exports = {
         if (!await client.validatePermissions(interaction)) return;
         await interaction.deferReply({ ephemeral: true });
 
-        if (!rustplus || (rustplus && !rustplus.ready)) {
+        if (!rustplus || (rustplus && !rustplus.isOperational)) {
             const str = 'Not currently connected to a rust server.';
             await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             client.log('WARNING', str);

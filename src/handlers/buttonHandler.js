@@ -179,7 +179,7 @@ module.exports = async (client, interaction) => {
         const newRustplus = client.createRustplusInstance(
             guildId, server.serverIp, server.appPort, server.steamId, server.playerToken);
 
-        newRustplus.newConnection = true;
+        newRustplus.isNewConnection = true;
     }
     else if (interaction.customId.startsWith('CustomTimersEdit')) {
         const ids = JSON.parse(interaction.customId.replace('CustomTimersEdit', ''));
@@ -282,7 +282,7 @@ module.exports = async (client, interaction) => {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
 
             rustplus.disconnect();
-            rustplus.deleted = true;
+            rustplus.isDeleted = true;
             delete client.rustplusInstances[guildId];
         }
 

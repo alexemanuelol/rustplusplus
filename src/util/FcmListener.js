@@ -330,24 +330,16 @@ async function alarmAlarm(client, guild, full, data, body) {
     setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
 
     const instance = client.readInstanceFile(guild.id);
-
-    const content = {
-        embeds: [DiscordEmbeds.getAlarmEmbed(data, body)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')],
-        content: instance.generalSettings.fcmAlarmNotificationEveryone ? '@everyone' : ''
-    }
-
-    const rustplus = client.rustplusInstances[guild.id];
     const serverId = `${body.ip}-${body.port}`;
+    const entityId = body.entityId;
+    const server = instance.serverList[serverId];
+    const rustplus = client.rustplusInstances[guild.id];
 
-    if (!rustplus || (rustplus && (serverId !== rustplus.serverId)) &&
+    if (!server || (server && !server.alarms[entityId])) return;
+
+    if ((!rustplus || (rustplus && (rustplus.serverId !== serverId))) &&
         instance.generalSettings.fcmAlarmNotificationEnabled) {
-        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
-
-        if (rustplus && instance.generalSettings.smartAlarmNotifyInGame) {
-            rustplus.sendTeamMessageAsync(`${data.title}: ${data.message}`);
-        }
-
+        await DiscordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
         client.log('INFO', `${data.title}: ${data.message}`);
     }
 }

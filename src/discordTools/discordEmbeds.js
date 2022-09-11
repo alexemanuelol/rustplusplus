@@ -433,25 +433,30 @@ module.exports = {
         });
     },
 
-    getAlarmEmbed: function (data, body) {
+    getAlarmEmbed: function (guildId, serverId, entityId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
         return module.exports.getEmbed({
             color: '#ce412b',
-            thumbnail: 'attachment://smart_alarm.png',
-            title: data.title,
-            footer: { text: body.name },
+            thumbnail: `attachment://${entity.image}`,
+            title: entity.name,
+            footer: { text: entity.server },
             timestamp: true,
-            fields: [{ name: 'Message', value: `\`${data.message}\``, inline: true }]
+            fields: [
+                { name: 'ID', value: `\`${entityId}\``, inline: true },
+                { name: 'Message', value: `\`${entity.message}\``, inline: true }]
         });
+
     },
 
-    getEventEmbed: function (guildId, rustplus, text, image) {
+    getEventEmbed: function (guildId, serverId, text, image) {
         const instance = Client.client.readInstanceFile(guildId);
-
+        const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: '#ce412b',
             thumbnail: `attachment://${image}`,
             title: text,
-            footer: { text: instance.serverList[rustplus.serverId].title },
+            footer: { text: server.title },
             timestamp: true
         });
     },
@@ -465,5 +470,41 @@ module.exports = {
                 ephemeral: ephemeral
             })]
         };
+    },
+
+    getServerChangedStateEmbed: function (guildId, serverId, state) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const server = instance.serverList[serverId];
+        return module.exports.getEmbed({
+            color: state ? '#ff0040' : '#00ff40',
+            title: `Server just went ${state ? 'offline' : 'online'}.`,
+            thumbnail: server.img,
+            timestamp: true,
+            footer: { text: server.title }
+        });
+    },
+
+    getServerWipeDetectedEmbed: function (guildId, serverId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const server = instance.serverList[serverId];
+        return module.exports.getEmbed({
+            color: '#ce412b',
+            title: 'Wipe detected!',
+            image: `attachment://${guildId}_map_full.png`,
+            timestamp: true,
+            footer: { text: server.title }
+        });
+    },
+
+    getServerConnectionInvalidEmbed: function (guildId, serverId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const server = instance.serverList[serverId];
+        return module.exports.getEmbed({
+            color: '#ff0040',
+            title: 'The connection to the server seems to be invalid. Try to re-pair to the server.',
+            thumbnail: server.img,
+            timestamp: true,
+            footer: { text: server.title }
+        });
     },
 }

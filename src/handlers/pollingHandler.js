@@ -21,7 +21,7 @@ module.exports = {
         let time = await rustplus.getTimeAsync();
         if (!(await rustplus.isResponseValid(time))) return;
 
-        if (rustplus.firstPoll) {
+        if (rustplus.isFirstPoll) {
             rustplus.info = new Info(info.info);
             rustplus.time = new Time(time.time, rustplus, client);
             rustplus.team = new Team(teamInfo.teamInfo, rustplus);
@@ -29,7 +29,7 @@ module.exports = {
         }
 
         module.exports.handlers(rustplus, client, info, mapMarkers, teamInfo, time);
-        rustplus.firstPoll = false;
+        rustplus.isFirstPoll = false;
     },
 
     handlers: function (rustplus, client, info, mapMarkers, teamInfo, time) {

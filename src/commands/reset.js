@@ -41,7 +41,7 @@ module.exports = {
 				await DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
 
 				const rustplus = client.rustplusInstances[guild.id];
-				if (rustplus && rustplus.ready) {
+				if (rustplus && rustplus.isOperational) {
 					await rustplus.map.writeMap(false, true);
 
 					const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.information);
