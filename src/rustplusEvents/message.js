@@ -42,11 +42,13 @@ async function messageBroadcastTeamChanged(rustplus, client, message) {
 }
 
 async function messageBroadcastTeamMessage(rustplus, client, message) {
-    /* Let command handler handle the potential command */
-    message.broadcast.teamMessage.message.message = message.broadcast.teamMessage.message.message
-        .replace(/^<color.+?<\/color>/g, '');
+    const instance = client.readInstanceFile(rustplus.guildId);
 
-    if (!(await CommandHandler.inGameCommandHandler(rustplus, client, message))) {
+    message.broadcast.teamMessage.message.message =
+        message.broadcast.teamMessage.message.message.replace(/^<color.+?<\/color>/g, '');
+
+    if (!(await CommandHandler.inGameCommandHandler(rustplus, client, message)) &&
+        !(message.broadcast.teamMessage.message.message.startsWith(instance.generalSettings.trademark))) {
         TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
     }
 }
