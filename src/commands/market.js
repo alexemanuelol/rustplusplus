@@ -64,7 +64,7 @@ module.exports = {
 
                 let itemId = null;
                 if (searchItemName !== null) {
-                    const item = rustplus.items.getClosestItemIdByName(searchItemName)
+                    const item = client.items.getClosestItemIdByName(searchItemName)
                     if (item === undefined) {
                         const str = `No item with name '${searchItemName}' could be found.`;
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -76,7 +76,7 @@ module.exports = {
                     }
                 }
                 else if (searchItemId !== null) {
-                    if (rustplus.items.itemExist(searchItemId)) {
+                    if (client.items.itemExist(searchItemId)) {
                         itemId = searchItemId;
                     }
                     else {
@@ -92,7 +92,7 @@ module.exports = {
                     rustplus.log('WARNING', str);
                     return;
                 }
-                const itemName = rustplus.items.getName(itemId);
+                const itemName = client.items.getName(itemId);
 
                 let full = false;
                 let foundLines = '';
@@ -103,19 +103,19 @@ module.exports = {
                     for (const order of vendingMachine.sellOrders) {
                         if (order.amountInStock === 0) continue;
 
-                        const orderItemId = (Object.keys(rustplus.items.items).includes(order.itemId.toString())) ?
+                        const orderItemId = (Object.keys(client.items.items).includes(order.itemId.toString())) ?
                             order.itemId : null;
                         const orderQuantity = order.quantity;
-                        const orderCurrencyId = (Object.keys(rustplus.items.items)
+                        const orderCurrencyId = (Object.keys(client.items.items)
                             .includes(order.currencyId.toString())) ? order.currencyId : null;
                         const orderCostPerItem = order.costPerItem;
                         const orderAmountInStock = order.amountInStock;
                         const orderItemIsBlueprint = order.itemIsBlueprint;
                         const orderCurrencyIsBlueprint = order.currencyIsBlueprint;
 
-                        const orderItemName = (orderItemId !== null) ? rustplus.items.getName(orderItemId) : 'Unknown';
+                        const orderItemName = (orderItemId !== null) ? client.items.getName(orderItemId) : 'Unknown';
                         const orderCurrencyName = (orderCurrencyId !== null) ?
-                            rustplus.items.getName(orderCurrencyId) : 'Unknown';
+                            client.items.getName(orderCurrencyId) : 'Unknown';
 
                         const prevFoundLines = foundLines;
                         if (orderItemId === parseInt(itemId) || orderCurrencyId === parseInt(itemId)) {
@@ -164,7 +164,7 @@ module.exports = {
 
                 let itemId = null;
                 if (subscribeItemName !== null) {
-                    const item = rustplus.items.getClosestItemIdByName(subscribeItemName)
+                    const item = client.items.getClosestItemIdByName(subscribeItemName)
                     if (item === undefined) {
                         const str = `No item with name '${subscribeItemName}' could be found.`;
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -176,7 +176,7 @@ module.exports = {
                     }
                 }
                 else if (subscribeItemId !== null) {
-                    if (rustplus.items.itemExist(subscribeItemId)) {
+                    if (client.items.itemExist(subscribeItemId)) {
                         itemId = subscribeItemId;
                     }
                     else {
@@ -192,7 +192,7 @@ module.exports = {
                     rustplus.log('WARNING', str);
                     return;
                 }
-                const itemName = rustplus.items.getName(itemId);
+                const itemName = client.items.getName(itemId);
 
                 /* TODO: Set a variable in rustplus to indicate first loop
                    Which means that we should NOT notify all found items at first loop,
@@ -224,7 +224,7 @@ module.exports = {
 
                 let itemId = null;
                 if (subscribeItemName !== null) {
-                    const item = rustplus.items.getClosestItemIdByName(subscribeItemName)
+                    const item = client.items.getClosestItemIdByName(subscribeItemName)
                     if (item === undefined) {
                         const str = `No item with name '${subscribeItemName}' could be found.`;
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -236,7 +236,7 @@ module.exports = {
                     }
                 }
                 else if (subscribeItemId !== null) {
-                    if (rustplus.items.itemExist(subscribeItemId)) {
+                    if (client.items.itemExist(subscribeItemId)) {
                         itemId = subscribeItemId;
                     }
                     else {
@@ -252,7 +252,7 @@ module.exports = {
                     rustplus.log('WARNING', str);
                     return;
                 }
-                const itemName = rustplus.items.getName(itemId);
+                const itemName = client.items.getName(itemId);
 
                 /* TODO: Remove item from object in rustplus */
 
@@ -277,7 +277,7 @@ module.exports = {
                 let names = '';
                 let ids = '';
                 for (let item of instance.marketSubscribeItemIds) {
-                    names += `\`${rustplus.items.getName(item)}\`\n`;
+                    names += `\`${client.items.getName(item)}\`\n`;
                     ids += `\`${item}\`\n`;
                 }
 

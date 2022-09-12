@@ -444,14 +444,14 @@ class MapMarkers {
                             let item = '';
                             if (this.subscribedItemsId.includes(order.itemId) &&
                                 this.subscribedItemsId.includes(order.currencyId)) {
-                                item = this.rustplus.items.getName(order.itemId) + ' and ';
-                                item += this.rustplus.items.getName(order.currencyId);
+                                item = this.client.items.getName(order.itemId) + ' and ';
+                                item += this.client.items.getName(order.currencyId);
                             }
                             else if (this.subscribedItemsId.includes(order.itemId)) {
-                                item = this.rustplus.items.getName(order.itemId);
+                                item = this.client.items.getName(order.itemId);
                             }
                             else if (this.subscribedItemsId.includes(order.currencyId)) {
-                                item = this.rustplus.items.getName(order.currencyId);
+                                item = this.client.items.getName(order.currencyId);
                             }
 
                             this.rustplus.sendEvent(

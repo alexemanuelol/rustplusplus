@@ -4,7 +4,6 @@ const Path = require('path');
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const Items = require('./Items');
 const Logger = require('./Logger.js');
 const RustPlusLib = require('rustplus.js');
 const Timer = require('../util/timer.js');
@@ -34,7 +33,6 @@ class RustPlus extends RustPlusLib {
 
         /* Other variable initializations */
         this.tokens = 24;                           /* The amount of tokens that is available at start. */
-        this.items = new Items();                   /* All items in the game by name and id. */
         this.timers = new Object();                 /* Stores all custom timers that are created. */
         this.markers = new Object();                /* Stores all custom markers that are created. */
         this.storageMonitors = new Object();        /* Contain content information of paired storage monitors. */

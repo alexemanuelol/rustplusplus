@@ -259,7 +259,7 @@ module.exports = {
 
         let itemName = '', itemQuantity = '';
         for (const item of items) {
-            itemName += `\`${rustplus.items.getName(item.itemId)}\`\n`;
+            itemName += `\`${Client.client.items.getName(item.itemId)}\`\n`;
             itemQuantity += `\`${item.quantity}\`\n`;
         }
 
