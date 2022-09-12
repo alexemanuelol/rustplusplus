@@ -785,7 +785,7 @@ module.exports = {
         if (command.toLowerCase().startsWith(`${rustplus.generalSettings.prefix}note `)) {
             let note = command.slice(5).trim();
 
-            index = 0;
+            let index = 0;
             while (Object.keys(instance.serverList[rustplus.serverId].notes).map(Number).includes(index)) {
                 index += 1;
             }
