@@ -102,7 +102,7 @@ module.exports = {
 
             for (const [id, content] of Object.entries(instance.serverList[rustplus.serverId].switches)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
-                if (command.startsWith(cmd)) {
+                if (command === cmd || command.startsWith(`${cmd} `)) {
                     let rest = command;
                     let active;
                     if (command.startsWith(`${cmd} on`)) {
@@ -259,7 +259,7 @@ module.exports = {
             let groups = instance.serverList[rustplus.serverId].switchGroups;
             for (const [groupId, content] of Object.entries(groups)) {
                 let cmd = `${rustplus.generalSettings.prefix}${content.command}`;
-                if (command.startsWith(cmd)) {
+                if (command === cmd || command.startsWith(`${cmd} `)) {
                     let rest = command;
                     let active;
                     if (command.startsWith(`${cmd} on`)) {
