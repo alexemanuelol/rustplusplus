@@ -52,6 +52,7 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
 }
 
 async function messageBroadcastEntityChanged(rustplus, client, message) {
+    const instance = client.readInstanceFile(rustplus.guildId);
     const entityId = message.broadcast.entityChanged.entityId;
 
     if (instance.serverList[rustplus.serverId].switches.hasOwnProperty(entityId)) {
