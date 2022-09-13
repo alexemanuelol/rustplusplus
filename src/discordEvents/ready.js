@@ -7,27 +7,35 @@ module.exports = {
     once: true,
     async execute(client) {
         client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
-        client.user.setUsername('rustPlusPlus');
+
+        try {
+            await client.user.setUsername('rustPlusPlus');
+        }
+        catch (e) {
+            client.log('WARNING', 'Ignored setUsername.');
+        }
 
         try {
             await client.user.setAvatar(Path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
         }
         catch (e) {
-            client.log('INFO', 'Ignored changing avatar.');
+            client.log('WARNING', 'Ignored setAvatar.');
         }
 
         client.user.setActivity('/help', { type: 'LISTENING' });
 
         client.guilds.cache.forEach(async (guild) => {
-            guild.members.me.setNickname('rustPlusPlus');
+            try {
+                await guild.members.me.setNickname('rustPlusPlus');
+            }
+            catch (e) {
+                client.log('WARNING', 'Ignored setNickname.');
+            }
             await client.setupGuild(guild);
         });
 
         BattlemetricsHandler.handler(client);
-        client.battlemetricsIntervalId = setInterval(
-            BattlemetricsHandler.handler,
-            60000,
-            client);
+        client.battlemetricsIntervalId = setInterval(BattlemetricsHandler.handler, 60000, client);
 
         client.createRustplusInstancesFromConfig();
     },
