@@ -355,4 +355,17 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
+
+    sendTeamChatMessage: async function (guildId, message) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getEmbed({
+                color: message.color,
+                description: `**${message.name}**: ${message.message}`
+            })]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
+    },
 }
