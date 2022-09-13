@@ -1,15 +1,30 @@
 const Fs = require('fs');
+const Path = require('path');
 
-const Str = require('../util/string.js');
+const Fuse = require('fuse.js')
 
 class Items {
     constructor() {
-        this._items = JSON.parse(Fs.readFileSync(`${__dirname}/../util/items.json`, 'utf8'));
+        this._items = JSON.parse(Fs.readFileSync(
+            Path.join(__dirname, '..', 'util/items.json'), 'utf8'));
+
+        const flattenedItems = Object.keys(this.items).map(id => ({ id, ...this.items[id] }));
+        this._fuse = new Fuse(flattenedItems, {
+            keys: [{
+                name: 'name',
+                weight: 0.7,
+            }, {
+                name: 'shortname',
+                weight: 0.3,
+            }]
+        });
     }
 
     /* Getters and Setters */
     get items() { return this._items; }
     set items(items) { this._items = items; }
+    get fuse() { return this._fuse; }
+    set fuse(fuse) { this._fuse = fuse; }
 
     addItem(id, content) { this.items[id] = content; }
     removeItem(id) { delete this.items[id]; }
@@ -34,9 +49,12 @@ class Items {
         return Object.keys(this.items).find(id => this.items[id].name === name);
     }
 
-    getClosestItemIdByName(name, similarity = 0.9) {
-        return Object.keys(this.items).find(id =>
-            Str.similarity(this.items[id].name.toLowerCase(), name.toLowerCase()) >= similarity);
+    getClosestItemIdByName(name) {
+        const result = this.fuse.search(name)[0];
+        if (result) {
+            return this.fuse.search(name)[0].item.id;
+        }
+        return undefined;
     }
 }
 

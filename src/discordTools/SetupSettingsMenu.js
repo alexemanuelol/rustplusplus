@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Path = require('path');
 
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
@@ -17,7 +18,7 @@ module.exports = async (client, guild) => {
     if (instance.firstTime) {
         await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
-        await setupGeneralSettings(client, instance, channel);
+        await setupGeneralSettings(client, guild.id, instance, channel);
         await setupNotificationSettings(client, instance, channel);
 
         instance.firstTime = false;
@@ -26,9 +27,10 @@ module.exports = async (client, guild) => {
 
 };
 
-async function setupGeneralSettings(client, instance, channel) {
+async function setupGeneralSettings(client, guildId, instance, channel) {
     await client.messageSend(channel, {
-        files: [new Discord.AttachmentBuilder('src/resources/images/general_settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/general_settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -38,7 +40,8 @@ async function setupGeneralSettings(client, instance, channel) {
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordSelectMenus.getPrefixSelectMenu(instance.generalSettings.prefix)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -48,7 +51,8 @@ async function setupGeneralSettings(client, instance, channel) {
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordSelectMenus.getTrademarkSelectMenu(instance.generalSettings.trademark)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -58,7 +62,8 @@ async function setupGeneralSettings(client, instance, channel) {
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -67,8 +72,9 @@ async function setupGeneralSettings(client, instance, channel) {
             title: 'In-game teammate notifications.',
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)],
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -78,7 +84,8 @@ async function setupGeneralSettings(client, instance, channel) {
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordSelectMenus.getCommandDelaySelectMenu(instance.generalSettings.commandDelay)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -98,7 +105,8 @@ async function setupGeneralSettings(client, instance, channel) {
             DiscordButtons.getFcmAlarmNotificationButtons(
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -108,7 +116,8 @@ async function setupGeneralSettings(client, instance, channel) {
             thumbnail: `attachment://settings_logo.png`,
         })],
         components: [DiscordButtons.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -118,7 +127,8 @@ async function setupGeneralSettings(client, instance, channel) {
             thumbnail: `attachment://settings_logo.png`,
         })],
         components: [DiscordButtons.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
     await client.messageSend(channel, {
@@ -130,13 +140,15 @@ async function setupGeneralSettings(client, instance, channel) {
         components: [DiscordButtons.getTrackerNotifyButtons(
             instance.generalSettings.trackerNotifyAllOffline,
             instance.generalSettings.trackerNotifyAnyOnline)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 }
 
 async function setupNotificationSettings(client, instance, channel) {
     await client.messageSend(channel, {
-        files: [new Discord.AttachmentBuilder('src/resources/images/notification_settings_logo.png')]
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/notification_settings_logo.png'))]
     });
 
     for (let setting in instance.notificationSettings) {
@@ -152,7 +164,9 @@ async function setupNotificationSettings(client, instance, channel) {
                     instance.notificationSettings[setting].discord,
                     instance.notificationSettings[setting].inGame)],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/events/${instance.notificationSettings[setting].image}`)]
+                new Discord.AttachmentBuilder(
+                    Path.join(__dirname, '..',
+                        `resources/images/events/${instance.notificationSettings[setting].image}`))]
         });
     }
 }

@@ -5,7 +5,8 @@ module.exports = {
         let channelId = instance.channelId.teamchat;
         let rustplus = client.rustplusInstances[message.guild.id];
 
-        if (message.channelId !== channelId || message.author.bot || !rustplus || (rustplus && !rustplus.ready)) {
+        if (message.channelId !== channelId || message.author.bot || !rustplus ||
+            (rustplus && !rustplus.isOperational)) {
             return;
         }
 

@@ -32,7 +32,8 @@ class DiscordBot extends Discord.Client {
     }
 
     loadDiscordCommands() {
-        const commandFiles = Fs.readdirSync(`${__dirname}/../commands`).filter(file => file.endsWith('.js'));
+        const commandFiles = Fs.readdirSync(Path.join(__dirname, '..', 'commands'))
+            .filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             const command = require(`../commands/${file}`);
             this.commands.set(command.data.name, command);
@@ -40,7 +41,8 @@ class DiscordBot extends Discord.Client {
     }
 
     loadDiscordEvents() {
-        const eventFiles = Fs.readdirSync(`${__dirname}/../discordEvents`).filter(file => file.endsWith('.js'));
+        const eventFiles = Fs.readdirSync(Path.join(__dirname, '..', 'discordEvents'))
+            .filter(file => file.endsWith('.js'));
         for (const file of eventFiles) {
             const event = require(`../discordEvents/${file}`);
 
@@ -92,27 +94,30 @@ class DiscordBot extends Discord.Client {
     }
 
     readInstanceFile(guildId) {
-        return JSON.parse(Fs.readFileSync(`${__dirname}/../../instances/${guildId}.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'instances', `${guildId}.json`), 'utf8'));
     }
 
     writeInstanceFile(guildId, instance) {
-        Fs.writeFileSync(`${__dirname}/../../instances/${guildId}.json`, JSON.stringify(instance, null, 2));
+        Fs.writeFileSync(Path.join(__dirname, '..', 'instances', `${guildId}.json`), JSON.stringify(instance, null, 2));
     }
 
     readCredentialsFile(guildId) {
-        return JSON.parse(Fs.readFileSync(`${__dirname}/../../credentials/${guildId}.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'credentials', `${guildId}.json`), 'utf8'));
     }
 
     writeCredentialsFile(guildId, credentials) {
-        Fs.writeFileSync(`${__dirname}/../../credentials/${guildId}.json`, JSON.stringify(credentials, null, 2));
+        Fs.writeFileSync(Path.join(__dirname, '..', 'credentials', `${guildId}.json`),
+            JSON.stringify(credentials, null, 2));
     }
 
     readNotificationSettingsTemplate() {
-        return JSON.parse(Fs.readFileSync(`${__dirname}/../templates/notificationSettingsTemplate.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(
+            Path.join(__dirname, '..', 'templates/notificationSettingsTemplate.json'), 'utf8'));
     }
 
     readGeneralSettingsTemplate() {
-        return JSON.parse(Fs.readFileSync(`${__dirname}/../templates/generalSettingsTemplate.json`, 'utf8'));
+        return JSON.parse(Fs.readFileSync(
+            Path.join(__dirname, '..', 'templates/generalSettingsTemplate.json'), 'utf8'));
     }
 
     createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken) {
@@ -127,7 +132,7 @@ class DiscordBot extends Discord.Client {
     }
 
     createRustplusInstancesFromConfig() {
-        let files = Fs.readdirSync(`${__dirname}/../../instances`);
+        let files = Fs.readdirSync(Path.join(__dirname, '..', 'instances'));
 
         files.forEach(file => {
             if (file.endsWith('.json')) {
@@ -149,23 +154,25 @@ class DiscordBot extends Discord.Client {
         });
     }
 
-    findAvailableTrackerName(guildId) {
-        let instance = this.readInstanceFile(guildId);
-        let baseName = 'Tracker';
+    findAvailableTrackerId(guildId) {
+        const instance = this.readInstanceFile(guildId);
 
-        let index = 0;
         while (true) {
-            let testName = `${baseName}${(index === 0) ? '' : index}`;
-            let exist = false;
-            if (Object.keys(instance.trackers).includes(testName)) {
-                exist = true;
+            const randomNumber = Math.floor(Math.random() * 1000);
+            if (!instance.trackers.hasOwnProperty(randomNumber)) {
+                return randomNumber;
             }
+        }
+    }
 
-            if (exist) {
-                index += 1;
-                continue;
+    findAvailableGroupId(guildId, serverId) {
+        const instance = this.readInstanceFile(guildId);
+
+        while (true) {
+            const randomNumber = Math.floor(Math.random() * 1000);
+            if (!instance.serverList[serverId].switchGroups.hasOwnProperty(randomNumber)) {
+                return randomNumber;
             }
-            return testName;
         }
     }
 

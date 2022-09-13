@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Path = require('path');
 
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -62,7 +63,8 @@ module.exports = {
         const mapSeed = `${rustplus.info.seed}`;
         const mapSalt = `${rustplus.info.salt}`;
 
-        let files = [new Discord.AttachmentBuilder('src/resources/images/server_info_logo.png')];
+        let files = [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/server_info_logo.png'))];
         const embed = DiscordEmbeds.getEmbed({
             title: 'Server Information',
             color: '#ce412b',
@@ -286,7 +288,8 @@ module.exports = {
         }
 
 
-        let files = [new Discord.AttachmentBuilder('src/resources/images/event_info_logo.png')];
+        let files = [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/event_info_logo.png'))];
         const embed = DiscordEmbeds.getEmbed({
             title: 'Event Information',
             color: '#ce412b',
@@ -333,7 +336,8 @@ module.exports = {
             }
         }
 
-        let files = [new Discord.AttachmentBuilder('src/resources/images/team_info_logo.png')];
+        let files = [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/team_info_logo.png'))];
         const embed = DiscordEmbeds.getEmbed({
             title: 'Team Member Information',
             color: '#ce412b',

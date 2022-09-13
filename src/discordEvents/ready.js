@@ -1,3 +1,5 @@
+const Path = require('path');
+
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
 const config = require('../../config');
 
@@ -14,7 +16,7 @@ module.exports = {
         }
 
         try {
-            await client.user.setAvatar('./src/resources/images/rustplusplus_logo.png');
+            await client.user.setAvatar(Path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
         }
         catch (e) {
             client.log('INFO', 'Ignored changing avatar.');

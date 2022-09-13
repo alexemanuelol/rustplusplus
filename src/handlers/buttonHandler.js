@@ -3,6 +3,7 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const DiscordButtons = require('..//discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
+const Recycler = require('../util/recycler.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.readInstanceFile(interaction.guildId);
@@ -10,29 +11,29 @@ module.exports = async (client, interaction) => {
     const rustplus = client.rustplusInstances[guildId];
 
     if (interaction.customId.startsWith('DiscordNotification')) {
-        let setting = interaction.customId.replace('DiscordNotificationId', '');
-        instance.notificationSettings[setting].discord = !instance.notificationSettings[setting].discord;
+        const ids = JSON.parse(interaction.customId.replace('DiscordNotification', ''));
+        const setting = instance.notificationSettings[ids.setting];
+
+        setting.discord = !setting.discord;
         client.writeInstanceFile(guildId, instance);
 
-        if (rustplus) rustplus.notificationSettings[setting].discord = instance.notificationSettings[setting].discord;
+        if (rustplus) rustplus.notificationSettings[ids.setting].discord = setting.discord;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getNotificationButtons(
-                setting, instance.notificationSettings[setting].discord,
-                instance.notificationSettings[setting].inGame)]
+            components: [DiscordButtons.getNotificationButtons(ids.setting, setting.discord, setting.inGame)]
         });
     }
     else if (interaction.customId.startsWith('InGameNotification')) {
-        let setting = interaction.customId.replace('InGameNotificationId', '');
-        instance.notificationSettings[setting].inGame = !instance.notificationSettings[setting].inGame;
+        const ids = JSON.parse(interaction.customId.replace('InGameNotification', ''));
+        const setting = instance.notificationSettings[ids.setting];
+
+        setting.inGame = !setting.inGame;
         client.writeInstanceFile(guildId, instance);
 
-        if (rustplus) rustplus.notificationSettings[setting].inGame = instance.notificationSettings[setting].inGame;
+        if (rustplus) rustplus.notificationSettings[ids.setting].inGame = setting.inGame;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getNotificationButtons(
-                setting, instance.notificationSettings[setting].discord,
-                instance.notificationSettings[setting].inGame)]
+            components: [DiscordButtons.getNotificationButtons(ids.setting, setting.discord, setting.inGame)]
         });
     }
     else if (interaction.customId === 'AllowInGameCommands') {
@@ -44,7 +45,6 @@ module.exports = async (client, interaction) => {
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)]
         });
-
     }
     else if (interaction.customId === 'InGameTeammateConnection') {
         instance.generalSettings.connectionNotify = !instance.generalSettings.connectionNotify;
@@ -53,7 +53,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateAfk') {
@@ -63,7 +63,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateDeath') {
@@ -73,7 +73,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(instance)]
+            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'FcmAlarmNotification') {
@@ -152,495 +152,535 @@ module.exports = async (client, interaction) => {
         });
     }
     else if (interaction.customId.startsWith('ServerConnect')) {
-        const serverId = interaction.customId.replace('ServerConnectId', '');
+        const ids = JSON.parse(interaction.customId.replace('ServerConnect', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
+        if (!server) {
+            await interaction.message.delete();
             return;
         }
 
-        for (const [key, value] of Object.entries(instance.serverList)) {
-            if (value.active) {
-                instance.serverList[key].active = false;
-                await DiscordMessages.sendServerMessage(guildId, key, null);
+        for (const [serverId, content] of Object.entries(instance.serverList)) {
+            if (content.active) {
+                instance.serverList[serverId].active = false;
+                await DiscordMessages.sendServerMessage(guildId, serverId, null);
                 break;
             }
         }
 
-        instance.serverList[serverId].active = true;
+        server.active = true;
         client.writeInstanceFile(guildId, instance);
-
-        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
+        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
         /* Disconnect previous instance is any */
-        if (rustplus) {
-            rustplus.disconnect();
-        }
+        if (rustplus) rustplus.disconnect();
 
         /* Create the rustplus instance */
         const newRustplus = client.createRustplusInstance(
-            guildId,
-            instance.serverList[serverId].serverIp,
-            instance.serverList[serverId].appPort,
-            instance.serverList[serverId].steamId,
-            instance.serverList[serverId].playerToken
-        );
+            guildId, server.serverIp, server.appPort, server.steamId, server.playerToken);
 
-        newRustplus.newConnection = true;
+        newRustplus.isNewConnection = true;
     }
-    else if (interaction.customId.startsWith('CreateTracker')) {
-        let serverId = interaction.customId.replace('CreateTrackerId', '');
+    else if (interaction.customId.startsWith('CustomTimersEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('CustomTimersEdit', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
+        if (!server) {
+            await interaction.message.delete();
             return;
         }
 
-        let battlemetricsId = instance.serverList[serverId].battlemetricsId;
+        const modal = DiscordModals.getCustomTimersEditModal(guildId, ids.serverId);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('CreateTracker')) {
+        const ids = JSON.parse(interaction.customId.replace('CreateTracker', ''));
+        const server = instance.serverList[ids.serverId];
 
-        try {
-            interaction.deferUpdate();
+        if (!server) {
+            await interaction.message.delete();
+            return;
         }
-        catch (e) {
-            client.log('ERROR', 'Could not defer interaction.', 'error');
-        }
 
-        /* Find an available tracker name */
-        let name = client.findAvailableTrackerName(interaction.guildId);
+        interaction.deferUpdate();
 
-        instance.trackers[name] = {
-            serverId: serverId,
-            battlemetricsId: battlemetricsId,
+        /* Find an available tracker id */
+        const trackerId = client.findAvailableTrackerId(guildId);
+
+        instance.trackers[trackerId] = {
+            name: 'Tracker',
+            serverId: ids.serverId,
+            battlemetricsId: server.battlemetricsId,
             status: false,
             allOffline: true,
             messageId: null,
             active: true,
             everyone: false,
             players: [],
-            img: instance.serverList[serverId].img,
-            title: instance.serverList[serverId].title
+            img: server.img,
+            title: server.title
         }
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordMessages.sendTrackerMessage(guildId, name);
+        await DiscordMessages.sendTrackerMessage(guildId, trackerId);
     }
-    else if (interaction.customId.startsWith('ServerDisconnect') ||
-        interaction.customId.startsWith('ServerReconnecting')) {
-        let serverId = interaction.customId.replace('ServerDisconnectId', '');
-        serverId = serverId.replace('ServerReconnectingId', '');
+    else if (interaction.customId.startsWith('CreateGroup')) {
+        const ids = JSON.parse(interaction.customId.replace('CreateGroup', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
+        if (!server) {
+            await interaction.message.delete();
             return;
         }
 
-        instance.serverList[serverId].active = false;
+        interaction.deferUpdate();
+
+        const groupId = client.findAvailableGroupId(guildId, ids.serverId);
+
+        server.switchGroups[groupId] = {
+            name: 'Group',
+            command: `${groupId}`,
+            switches: [],
+            messageId: null
+        }
         client.writeInstanceFile(guildId, instance);
 
-        await DiscordMessages.sendServerMessage(guildId, serverId, null, interaction);
+        await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
+    }
+    else if (interaction.customId.startsWith('ServerDisconnect') ||
+        interaction.customId.startsWith('ServerReconnecting')) {
+        const ids = JSON.parse(interaction.customId.replace('ServerDisconnect', '')
+            .replace('ServerReconnecting', ''));
+        const server = instance.serverList[ids.serverId];
 
-        /* Disconnect previous instance if any */
+        if (!server) {
+            await interaction.message.delete();
+            return;
+        }
+
+        server.active = false;
+        client.writeInstanceFile(guildId, instance);
+
         if (rustplus) {
             rustplus.disconnect();
             delete client.rustplusInstances[guildId];
         }
+
+        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
     }
     else if (interaction.customId.startsWith('ServerDelete')) {
-        let serverId = interaction.customId.replace('ServerDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('ServerDelete', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (!instance.serverList.hasOwnProperty(serverId)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Server with id '${serverId}' does not exist in the instance file.`, 'error');
+        if (!server) {
+            await interaction.message.delete();
             return;
         }
 
-        if (instance.serverList[serverId].active) {
-            if (rustplus) {
-                rustplus.disconnect();
-                rustplus.deleted = true;
-                delete client.rustplusInstances[guildId];
-            }
-        }
-
-        let messageId = instance.serverList[serverId].messageId;
-        let message = await DiscordTools.getMessageById(guildId, instance.channelId.servers, messageId);
-        if (message !== undefined) {
-            try {
-                await message.delete();
-            }
-            catch (e) {
-                client.log('ERROR', `Could not delete server message with id: ${messageId}.`, 'error');
-            }
-        }
-
-        delete instance.serverList[serverId];
-
-        /* Remove all Smart Switches associated with this server */
-        for (const [key, value] of Object.entries(instance.switches)) {
-            if (`${value.serverId}` === serverId) {
-                delete instance.switches[key];
-            }
-        }
-        if (rustplus && (serverId === rustplus.serverId)) {
+        if (rustplus && (rustplus.serverId === ids.serverId || server.active)) {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
-        }
-
-        /* Remove all Smart Alarms associated with this server */
-        for (const [key, value] of Object.entries(instance.alarms)) {
-            if (`${value.serverId}` === serverId) {
-                let messageId = instance.alarms[key].messageId;
-                let message = await DiscordTools.getMessageById(
-                    rustplus.guildId, instance.channelId.alarms, messageId);
-                if (message !== undefined) {
-                    try {
-                        await message.delete();
-                    }
-                    catch (e) {
-                        client.log('ERROR', `Could not delete alarm message with id: ${messageId}.`, 'error');
-                    }
-                }
-
-                delete instance.alarms[key];
-            }
-        }
-
-        /* Remove all Storage Monitors associated with this server. */
-        for (const [key, value] of Object.entries(instance.storageMonitors)) {
-            if (`${value.serverId}` === serverId) {
-                delete instance.storageMonitors[key];
-            }
-        }
-        if (rustplus && (serverId === rustplus.serverId)) {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
+
+            rustplus.disconnect();
+            rustplus.isDeleted = true;
+            delete client.rustplusInstances[guildId];
         }
 
+        for (const [entityId, content] of Object.entries(server.alarms)) {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms, content.messageId);
+        }
+
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.servers, server.messageId);
+
+        delete instance.serverList[ids.serverId];
         client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartSwitchOn') ||
         interaction.customId.startsWith('SmartSwitchOff')) {
-        let id = interaction.customId.replace('SmartSwitchOnId', '').replace('SmartSwitchOffId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartSwitchOn', '').replace('SmartSwitchOff', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (!instance.switches.hasOwnProperty(id)) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Switch with id '${id}' does not exist in the instance file.`, 'error')
+        if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
             return;
         }
 
-        if (!rustplus) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer the interaction.', 'error')
-            }
-            client.log('ERROR', 'Rustplus is not available, cannot use Smart Switches...', 'error')
+        if (!rustplus || (rustplus && (rustplus.serverId !== ids.serverId))) {
+            interaction.deferUpdate();
             return;
         }
-        else {
-            if (instance.switches[id].serverId !== rustplus.serverId) {
-                try {
-                    interaction.deferUpdate();
-                }
-                catch (e) {
-                    client.log('ERROR', 'Could not defer the interaction.', 'error')
-                }
-                client.log('ERROR', 'Smart Switch is not part of the connected rustplus instance.', 'error');
-                return;
-            }
-            else {
-                if (!rustplus.connected) {
-                    try {
-                        interaction.deferUpdate();
-                    }
-                    catch (e) {
-                        client.log('ERROR', 'Could not defer the interaction.', 'error')
-                    }
-                    client.log('ERROR', 'Rustplus is not connected, cannot use Smart Switches...', 'error');
-                    return;
-                }
-            }
-        }
 
-        if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
-            clearTimeout(rustplus.currentSwitchTimeouts[id]);
-            delete rustplus.currentSwitchTimeouts[id];
-        }
+        clearTimeout(rustplus.currentSwitchTimeouts[ids.entityId]);
+        delete rustplus.currentSwitchTimeouts[ids.entityId];
 
-        let active = (interaction.customId.startsWith('SmartSwitchOn')) ? true : false;
-
-        let prevActive = instance.switches[id].active;
-        instance.switches[id].active = active;
+        const active = (interaction.customId.startsWith('SmartSwitchOn')) ? true : false;
+        const prevActive = server.switches[ids.entityId].active;
+        server.switches[ids.entityId].active = active;
         client.writeInstanceFile(guildId, instance);
 
-        rustplus.interactionSwitches.push(id);
+        rustplus.interactionSwitches.push(ids.entityId);
 
-        let response = null;
-        if (active) {
-            response = await rustplus.turnSmartSwitchOnAsync(id);
-        }
-        else {
-            response = await rustplus.turnSmartSwitchOffAsync(id);
-        }
-
+        const response = await rustplus.turnSmartSwitchAsync(ids.entityId, active);
         if (!(await rustplus.isResponseValid(response))) {
-            if (instance.switches[id].reachable) {
-                await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, id);
+            if (server.switches[ids.entityId].reachable) {
+                await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, ids.serverId, ids.entityId);
             }
-            instance.switches[id].reachable = false;
-            instance.switches[id].active = prevActive;
-            client.writeInstanceFile(rustplus.guildId, instance);
+            server.switches[ids.entityId].reachable = false;
+            server.switches[ids.entityId].active = prevActive;
+            client.writeInstanceFile(guildId, instance);
 
-            rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
+            rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== ids.entityId);
         }
         else {
-            instance.switches[id].reachable = true;
-            client.writeInstanceFile(rustplus.guildId, instance);
+            server.switches[ids.entityId].reachable = true;
+            client.writeInstanceFile(guildId, instance);
         }
 
-        DiscordMessages.sendSmartSwitchMessage(guildId, id, interaction);
-        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-            client, interaction.guildId, instance.switches[id].serverId, id);
+        DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
+        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(client, guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('SmartSwitchEdit')) {
-        let id = interaction.customId.replace('SmartSwitchEditId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
+        const server = instance.serverList[ids.serverId];
 
-        const modal = DiscordModals.getSmartSwitchEditModal(interaction.guildId, id);
+        if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getSmartSwitchEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('SmartSwitchDelete')) {
-        let id = interaction.customId.replace('SmartSwitchDeleteId', '');
-        let serverId = null;
+        const ids = JSON.parse(interaction.customId.replace('SmartSwitchDelete', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.switches.hasOwnProperty(id)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
-                instance.switches[id].messageId);
-
-            serverId = instance.switches[id].serverId;
-            delete instance.switches[id];
-            client.writeInstanceFile(guildId, instance);
+        if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
         }
+
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
+            server.switches[ids.entityId].messageId);
+
+        delete server.switches[ids.entityId];
+        client.writeInstanceFile(guildId, instance);
 
         if (rustplus) {
-            clearTimeout(rustplus.currentSwitchTimeouts[id]);
-            delete rustplus.currentSwitchTimeouts[id];
+            clearTimeout(rustplus.currentSwitchTimeouts[ids.entityId]);
+            delete rustplus.currentSwitchTimeouts[ids.entityId];
         }
 
-        for (const [groupName, groupContent] of Object.entries(instance.serverList[serverId].switchGroups)) {
-            if (groupContent.switches.includes(id)) {
-                instance.serverList[serverId].switchGroups[groupName].switches =
-                    groupContent.switches.filter(e => e !== id);
+        for (const [groupId, content] of Object.entries(server.switchGroups)) {
+            if (content.switches.includes(ids.entityId.toString())) {
+                server.switchGroups[groupId].switches = content.switches.filter(e => e !== ids.entityId.toString());
                 client.writeInstanceFile(guildId, instance);
-                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
             }
         }
-
         client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartAlarmEveryone')) {
-        let id = interaction.customId.replace('SmartAlarmEveryoneId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartAlarmEveryone', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.alarms.hasOwnProperty(id)) {
-            instance.alarms[id].everyone = !instance.alarms[id].everyone;
-            client.writeInstanceFile(guildId, instance);
+        if (!server || (server && !server.alarms.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
 
-            await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id, interaction);
-        }
-        else {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                client.log('ERROR', 'Could not defer interaction.', 'error');
-            }
-            client.log('ERROR', `Smart Alarm with id '${id}' does not exist in the instance file.`, 'error');
-        }
+        server.alarms[ids.entityId].everyone = !server.alarms[ids.entityId].everyone;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendSmartAlarmMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
     else if (interaction.customId.startsWith('SmartAlarmDelete')) {
-        let id = interaction.customId.replace('SmartAlarmDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartAlarmDelete', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.alarms.hasOwnProperty(id)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
-                instance.alarms[id].messageId);
-
-            delete instance.alarms[id];
-            client.writeInstanceFile(guildId, instance);
+        if (!server || (server && !server.alarms.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
         }
+
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms,
+            server.alarms[ids.entityId].messageId);
+
+        delete server.alarms[ids.entityId];
+        client.writeInstanceFile(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
-        let id = interaction.customId.replace('SmartAlarmEditId', '');
+        const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
+        const server = instance.serverList[ids.serverId];
 
-        const modal = DiscordModals.getSmartAlarmEditModal(interaction.guildId, id);
+        if (!server || (server && !server.alarms.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getSmartAlarmEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardEveryone')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardEveryoneId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardEveryone', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
-            instance.storageMonitors[id].everyone = !instance.storageMonitors[id].everyone;
-            client.writeInstanceFile(guildId, instance);
-
-            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id, interaction);
+        if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
         }
+
+        server.storageMonitors[ids.entityId].everyone = !server.storageMonitors[ids.entityId].everyone;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardInGame')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardInGameId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardInGame', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
-            instance.storageMonitors[id].inGame = !instance.storageMonitors[id].inGame;
-            client.writeInstanceFile(guildId, instance);
-
-            await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, id, interaction);
+        if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
         }
+
+        server.storageMonitors[ids.entityId].inGame = !server.storageMonitors[ids.entityId].inGame;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
+    }
+    else if (interaction.customId.startsWith('StorageMonitorEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
+        const server = instance.serverList[ids.serverId];
+
+        if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getStorageMonitorEditModal(guildId, ids.serverId, ids.entityId);
+        await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardDelete')) {
-        let id = interaction.customId.replace('StorageMonitorToolCupboardDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardDelete', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
-                instance.storageMonitors[id].messageId);
-
-            delete instance.storageMonitors[id];
-            client.writeInstanceFile(guildId, instance);
+        if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
         }
+
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
+            server.storageMonitors[ids.entityId].messageId);
+
+        delete server.storageMonitors[ids.entityId];
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId.startsWith('StorageMonitorRecycle')) {
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorRecycle', ''));
+        const server = instance.serverList[ids.serverId];
+
+        if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        interaction.deferUpdate();
+
+        if (!rustplus || (rustplus && rustplus.serverId !== ids.serverId)) return;
+
+        const entityInfo = await rustplus.getEntityInfoAsync(ids.entityId);
+        if (!(await rustplus.isResponseValid(entityInfo))) return;
+
+        server.storageMonitors[ids.entityId].reachable = true;
+        client.writeInstanceFile(guildId, instance);
+
+        const items = Recycler.calculate(entityInfo.entityInfo.payload.items);
+
+        const message = await DiscordMessages.sendStorageMonitorRecycleMessage(
+            guildId, ids.serverId, ids.entityId, items);
+
+        setTimeout(async () => {
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors, message.id);
+        }, 30000);
     }
     else if (interaction.customId.startsWith('StorageMonitorContainerDelete')) {
-        let id = interaction.customId.replace('StorageMonitorContainerDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('StorageMonitorContainerDelete', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.storageMonitors.hasOwnProperty(id)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
-                instance.storageMonitors[id].messageId);
-
-            delete instance.storageMonitors[id];
-            client.writeInstanceFile(guildId, instance);
+        if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
+            await interaction.message.delete();
+            return;
         }
+
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors,
+            server.storageMonitors[ids.entityId].messageId);
+
+        delete server.storageMonitors[ids.entityId];
+        client.writeInstanceFile(guildId, instance);
     }
-    else if (interaction.customId.startsWith('TurnOnGroup') ||
-        interaction.customId.startsWith('TurnOffGroup')) {
-        let id = interaction.customId.replace('TurnOnGroupId', '');
-        id = id.replace('TurnOffGroupId', '');
+    else if (interaction.customId === 'RecycleDelete') {
+        await interaction.message.delete();
+    }
+    else if (interaction.customId.startsWith('GroupTurnOn') ||
+        interaction.customId.startsWith('GroupTurnOff')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupTurnOn', '').replace('GroupTurnOff', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (rustplus.currentSwitchTimeouts.hasOwnProperty(id)) {
-            clearTimeout(rustplus.currentSwitchTimeouts[id]);
-            delete rustplus.currentSwitchTimeouts[id];
-        }
-
-        try {
-            interaction.deferUpdate();
-        }
-        catch (e) {
-            client.log('ERROR', 'Could not defer the interaction.', 'error');
-        }
-
-        if (!rustplus) {
-            client.log('ERROR', 'Rustplus is not connected, cannot use Smart Switch Groups...', 'error');
+        if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
             return;
         }
 
-        if (!instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(id)) {
-            client.log('ERROR', 'Switch group does not exist.', 'error')
-            return;
-        }
+        interaction.deferUpdate();
 
-        if (instance.serverList[rustplus.serverId].switchGroups[id].serverId !== rustplus.serverId) {
-            client.log('ERROR', 'Smart Switch Group is not part of the connected rustplus instance.', 'error');
-            return;
-        }
-        else {
-            if (!rustplus.connected) {
-                client.log('ERROR', 'Rustplus is not connected, cannot use  the Smart Switch Group...', 'error');
-                return;
+        if (rustplus) {
+            clearTimeout(rustplus.currentSwitchTimeouts[ids.group]);
+            delete rustplus.currentSwitchTimeouts[ids.group];
+
+            if (rustplus.serverId === ids.serverId) {
+                const active = (interaction.customId.startsWith('GroupTurnOn') ? true : false);
+
+                await SmartSwitchGroupHandler.TurnOnOffGroup(
+                    client, rustplus, guildId, ids.serverId, ids.groupId, active);
             }
         }
-
-        let active = (interaction.customId.startsWith('TurnOnGroup') ? true : false);
-
-        await SmartSwitchGroupHandler.TurnOnOffGroup(
-            client, rustplus, interaction.guildId, rustplus.serverId, id, active);
     }
-    else if (interaction.customId.startsWith('DeleteGroup')) {
-        let id = interaction.customId.replace('DeleteGroupId', '');
+    else if (interaction.customId.startsWith('GroupEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupEdit', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (!rustplus) {
-            client.log('ERROR', 'Rustplus is not connected, cannot delete the Smart Switch Group...', 'error');
+        if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
             return;
         }
 
-        clearTimeout(rustplus.currentSwitchTimeouts[id]);
-        delete rustplus.currentSwitchTimeouts[id];
+        const modal = DiscordModals.getGroupEditModal(guildId, ids.serverId, ids.groupId);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('GroupDelete')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupDelete', ''));
+        const server = instance.serverList[ids.serverId];
 
-        if (instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(id)) {
+        if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        if (rustplus) {
+            clearTimeout(rustplus.currentSwitchTimeouts[ids.groupId]);
+            delete rustplus.currentSwitchTimeouts[ids.groupId];
+        }
+
+        if (server.switchGroups.hasOwnProperty(ids.groupId)) {
             await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
-                instance.serverList[rustplus.serverId].switchGroups[id].messageId);
+                server.switchGroups[ids.groupId].messageId);
 
-            delete instance.serverList[rustplus.serverId].switchGroups[id];
+            delete server.switchGroups[ids.groupId];
             client.writeInstanceFile(guildId, instance);
         }
+    }
+    else if (interaction.customId.startsWith('GroupAddSwitch')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
+        const server = instance.serverList[ids.serverId];
+
+        if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getGroupAddSwitchModal(guildId, ids.serverId, ids.groupId);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
+        const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
+        const server = instance.serverList[ids.serverId];
+
+        if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getGroupRemoveSwitchModal(guildId, ids.serverId, ids.groupId);
+        await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerActive')) {
-        let trackerName = interaction.customId.replace('TrackerActiveId', '');
+        const ids = JSON.parse(interaction.customId.replace('TrackerActive', ''));
+        const tracker = instance.trackers[ids.trackerId];
 
-        if (instance.trackers.hasOwnProperty(trackerName)) {
-            instance.trackers[trackerName].active = !instance.trackers[trackerName].active;
-            client.writeInstanceFile(guildId, instance);
-
-            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
         }
+
+        tracker.active = !tracker.active;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
     else if (interaction.customId.startsWith('TrackerEveryone')) {
-        let trackerName = interaction.customId.replace('TrackerEveryoneId', '');
+        const ids = JSON.parse(interaction.customId.replace('TrackerEveryone', ''));
+        const tracker = instance.trackers[ids.trackerId];
 
-        if (instance.trackers.hasOwnProperty(trackerName)) {
-            instance.trackers[trackerName].everyone = !instance.trackers[trackerName].everyone;
-            client.writeInstanceFile(guildId, instance);
-
-            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerName, interaction);
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
         }
+
+        tracker.everyone = !tracker.everyone;
+        client.writeInstanceFile(guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
+    }
+    else if (interaction.customId.startsWith('TrackerEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getTrackerEditModal(guildId, ids.trackerId);
+        await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerDelete')) {
-        let trackerName = interaction.customId.replace('TrackerDeleteId', '');
+        const ids = JSON.parse(interaction.customId.replace('TrackerDelete', ''));
+        const tracker = instance.trackers[ids.trackerId];
 
-        if (instance.trackers.hasOwnProperty(trackerName)) {
-            let messageId = instance.trackers[trackerName].messageId;
-            let message = await DiscordTools.getMessageById(guildId, instance.channelId.trackers, messageId);
-            if (message !== undefined) {
-                try {
-                    await message.delete();
-                }
-                catch (e) {
-                    client.log('ERROR', `Could not delete tracker message with id: ${messageId}.`, 'error');
-                }
-            }
-
-            delete instance.trackers[trackerName];
-            client.writeInstanceFile(guildId, instance);
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
         }
+
+        await DiscordTools.deleteMessageById(guildId, instance.channelId.trackers,
+            tracker.messageId);
+
+        delete instance.trackers[ids.trackerId];
+        client.writeInstanceFile(guildId, instance);
+    }
+    else if (interaction.customId.startsWith('TrackerAddPlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getTrackerAddPlayerModal(guildId, ids.trackerId);
+        await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getTrackerRemovePlayerModal(guildId, ids.trackerId);
+        await interaction.showModal(modal);
     }
 }

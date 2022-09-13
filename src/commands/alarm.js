@@ -2,6 +2,7 @@ const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const InstanceUtils = require('../util/instanceUtils.js');
 
 module.exports = {
 	data: new Builder.SlashCommandBuilder()
@@ -37,31 +38,38 @@ module.exports = {
 					{ name: 'Christmas Lights', value: 'xmas_light' }))),
 
 	async execute(client, interaction) {
-		let instance = client.readInstanceFile(interaction.guildId);
+		const instance = client.readInstanceFile(interaction.guildId);
+		const rustplus = client.rustplusInstances[interaction.guildId];
 
 		if (!await client.validatePermissions(interaction)) return;
-
 		await interaction.deferReply({ ephemeral: true });
-
-		const id = interaction.options.getString('id');
-		const image = interaction.options.getString('image');
 
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
-				if (!Object.keys(instance.alarms).includes(id)) {
-					let str = `Invalid ID: '${id}'.`;
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				const entityId = interaction.options.getString('id');
+				const image = interaction.options.getString('image');
+
+				const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
+				if (device === null) {
+					let str = `Invalid ID: '${entityId}'.`;
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+						instance.serverList[device.serverId].title));
 					client.log('WARNING', str);
 					return;
 				}
 
-				if (image !== null) instance.alarms[id].image = `${image}.png`;
+				const entity = instance.serverList[device.serverId].alarms[entityId];
+
+				if (image !== null) instance.serverList[device.serverId].alarms[entityId].image = `${image}.png`;
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, id);
+				if (rustplus && rustplus.serverId === device.serverId) {
+					await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, entityId);
+				}
 
-				let str = `Successfully edited Smart Alarm '${instance.alarms[id].name}'.`;
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+				let str = `Successfully edited Smart Alarm '${entity.name}'.`;
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
+					instance.serverList[device.serverId].title));
 				client.log('INFO', str);
 			} break;
 

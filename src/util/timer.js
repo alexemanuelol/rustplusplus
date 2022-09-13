@@ -82,7 +82,7 @@ module.exports = {
         let minutes = 0;
         let seconds = 0;
 
-        time = '';
+        let time = '';
 
         days += originalDays;
         if (days > 0 && !ignore.includes('d')) {

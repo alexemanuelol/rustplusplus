@@ -14,7 +14,7 @@ module.exports = {
         let prevTime = rustplus.time.time;
         let newTime = time.time;
 
-        if (rustplus.firstPoll) {
+        if (rustplus.isFirstPoll) {
             rustplus.time.startTime = newTime;
             rustplus.startTimeObject[newTime] = 0;
             return;

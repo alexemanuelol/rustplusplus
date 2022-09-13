@@ -5,88 +5,76 @@ module.exports = {
     },
 
     updateSwitchGroupIfContainSwitch: async function (client, guildId, serverId, switchId) {
-        let instance = client.readInstanceFile(guildId);
+        const instance = client.readInstanceFile(guildId);
 
-        for (const [groupName, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
+        for (const [groupId, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (content.switches.includes(`${switchId}`)) {
-                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, groupName);
+                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
             }
         }
 
     },
 
     getGroupsFromSwitchList: function (client, guildId, serverId, switches) {
-        let instance = client.readInstanceFile(guildId);
+        const instance = client.readInstanceFile(guildId);
 
-        let groups = [];
-        for (let sw of switches) {
-            for (const [groupName, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
-                if (content.switches.includes(sw) && !groups.includes(groupName)) {
-                    groups.push(groupName);
+        let groupsId = [];
+        for (let entity of switches) {
+            for (const [groupId, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
+                if (content.switches.includes(entity) && !groupsId.includes(groupId)) {
+                    groupsId.push(groupId);
                 }
             }
         }
 
-        return groups;
+        return groupsId;
     },
 
-    TurnOnOffGroup: async function (client, rustplus, guildId, serverId, group, value) {
-        let instance = client.readInstanceFile(guildId);
+    TurnOnOffGroup: async function (client, rustplus, guildId, serverId, groupId, value) {
+        const instance = client.readInstanceFile(guildId);
 
-        let switches = instance.serverList[serverId].switchGroups[group].switches;
+        const switches = instance.serverList[serverId].switchGroups[groupId].switches;
 
-        let actionSwitches = [];
-        for (const [id, content] of Object.entries(instance.switches)) {
-            if (switches.includes(id)) {
-                if (value) {
-                    if (!content.active) {
-                        actionSwitches.push(id);
-                    }
+        const actionSwitches = [];
+        for (const [entityId, content] of Object.entries(instance.serverList[serverId].switches)) {
+            if (switches.includes(entityId)) {
+                if (value && !content.active) {
+                    actionSwitches.push(entityId);
                 }
-                else {
-                    if (content.active) {
-                        actionSwitches.push(id);
-
-                    }
+                else if (!value && content.active) {
+                    actionSwitches.push(entityId);
                 }
             }
         }
 
-        for (let id of actionSwitches) {
-            let prevActive = instance.switches[id].active;
-            instance.switches[id].active = value;
+        for (const entityId of actionSwitches) {
+            const prevActive = instance.serverList[serverId].switches[entityId].active;
+            instance.serverList[serverId].switches[entityId].active = value;
             client.writeInstanceFile(guildId, instance);
 
-            rustplus.interactionSwitches.push(id);
+            rustplus.interactionSwitches.push(entityId);
 
-            let response = null;
-            if (value) {
-                response = await rustplus.turnSmartSwitchOnAsync(id);
-            }
-            else {
-                response = await rustplus.turnSmartSwitchOffAsync(id);
-            }
-
+            const response = await rustplus.turnSmartSwitchAsync(entityId, value);
             if (!(await rustplus.isResponseValid(response))) {
-                if (instance.switches[id].reachable) {
-                    await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, id);
+                if (instance.serverList[serverId].switches[entityId].reachable) {
+                    await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
                 }
-                instance.switches[id].reachable = false;
-                instance.switches[id].active = prevActive;
-                client.writeInstanceFile(rustplus.guildId, instance);
+                instance.serverList[serverId].switches[entityId].reachable = false;
+                instance.serverList[serverId].switches[entityId].active = prevActive;
+                client.writeInstanceFile(guildId, instance);
 
-                rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== id);
+                rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
             }
             else {
-                instance.switches[id].reachable = true;
-                client.writeInstanceFile(rustplus.guildId, instance);
+                instance.serverList[serverId].switches[entityId].reachable = true;
+                client.writeInstanceFile(guildId, instance);
             }
 
-            DiscordMessages.sendSmartSwitchMessage(guildId, id);
+            DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
         }
 
         if (actionSwitches.length !== 0) {
-            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, group);
+            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
         }
     },
 }

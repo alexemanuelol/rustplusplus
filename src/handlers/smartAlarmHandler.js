@@ -2,36 +2,43 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
+        let instance = client.readInstanceFile(rustplus.guildId);
+        const guildId = rustplus.guildId;
+        const serverId = rustplus.serverId;
+
+        if (!instance.serverList.hasOwnProperty(serverId)) return;
+
         if (rustplus.smartAlarmIntervalCounter === 29) {
             rustplus.smartAlarmIntervalCounter = 0;
-            let instance = client.readInstanceFile(rustplus.guildId);
-            for (const [key, value] of Object.entries(instance.alarms)) {
-                if (rustplus.serverId !== `${value.serverId}`) continue;
-                instance = client.readInstanceFile(rustplus.guildId);
-
-                let info = await rustplus.getEntityInfoAsync(key);
-                if (!(await rustplus.isResponseValid(info))) {
-                    if (instance.alarms[key].reachable) {
-                        await DiscordMessages.sendSmartAlarmNotFoundMessage(rustplus.guildId, key);
-
-                        instance.alarms[key].reachable = false;
-                        client.writeInstanceFile(rustplus.guildId, instance);
-
-                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, key);
-                    }
-                }
-                else {
-                    if (!instance.alarms[key].reachable) {
-                        instance.alarms[key].reachable = true;
-                        client.writeInstanceFile(rustplus.guildId, instance);
-
-                        await DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, key);
-                    }
-                }
-            }
         }
         else {
             rustplus.smartAlarmIntervalCounter += 1;
+        }
+
+        if (rustplus.smartAlarmIntervalCounter === 0) {
+            for (const entityId in instance.serverList[serverId].alarms) {
+                instance = client.readInstanceFile(guildId);
+
+                const info = await rustplus.getEntityInfoAsync(entityId);
+                if (!(await rustplus.isResponseValid(info))) {
+                    if (instance.serverList[serverId].alarms[entityId].reachable) {
+                        await DiscordMessages.sendSmartAlarmNotFoundMessage(guildId, serverId, entityId);
+
+                        instance.serverList[serverId].alarms[entityId].reachable = false;
+                        client.writeInstanceFile(guildId, instance);
+
+                        await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
+                    }
+                }
+                else {
+                    if (!instance.serverList[serverId].alarms[entityId].reachable) {
+                        instance.serverList[serverId].alarms[entityId].reachable = true;
+                        client.writeInstanceFile(guildId, instance);
+
+                        await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
+                    }
+                }
+            }
         }
     },
 }

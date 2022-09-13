@@ -3,7 +3,7 @@ const Scrape = require('./scrape.js');
 
 module.exports = {
     getBattlemetricsServerId: async function (client, serverName) {
-        searchServerName = encodeURI(serverName);
+        let searchServerName = encodeURI(serverName);
         serverName = module.exports.escapeRegExp(serverName);
         searchServerName = searchServerName.replace('\#', '\*');
         const search = `https://www.battlemetrics.com/servers/search?q=${searchServerName}&sort=score&game=rust`;

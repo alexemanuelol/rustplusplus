@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
+const Path = require('path');
 
-const Client = require('../../index.js');
+const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
@@ -31,211 +32,315 @@ module.exports = {
         }
     },
 
-    sendServerMessage: async function (guildId, id, state = null, interaction = null) {
+    sendServerMessage: async function (guildId, serverId, state = null, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
+        const server = instance.serverList[serverId];
 
         const content = {
-            embeds: [DiscordEmbeds.getServerEmbed(guildId, id)],
-            components: [DiscordButtons.getServerButtons(guildId, id, state)]
+            embeds: [DiscordEmbeds.getServerEmbed(guildId, serverId)],
+            components: DiscordButtons.getServerButtons(guildId, serverId, state)
         }
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.serverList[id].messageId, instance.channelId.servers, interaction);
+        const message = await module.exports.sendMessage(guildId, content, server.messageId,
+            instance.channelId.servers, interaction);
 
         if (!interaction) {
-            instance.serverList[id].messageId = message.id;
+            instance.serverList[serverId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
 
-    sendTrackerMessage: async function (guildId, trackerName, interaction = null) {
+    sendTrackerMessage: async function (guildId, trackerId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
+        const tracker = instance.trackers[trackerId];
 
         const content = {
-            embeds: [DiscordEmbeds.getTrackerEmbed(guildId, trackerName)],
-            components: [DiscordButtons.getTrackerButtons(guildId, trackerName)]
+            embeds: [DiscordEmbeds.getTrackerEmbed(guildId, trackerId)],
+            components: DiscordButtons.getTrackerButtons(guildId, trackerId)
         }
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.trackers[trackerName].messageId, instance.channelId.trackers, interaction);
+        const message = await module.exports.sendMessage(guildId, content, tracker.messageId,
+            instance.channelId.trackers, interaction);
 
         if (!interaction) {
-            instance.trackers[trackerName].messageId = message.id;
+            instance.trackers[trackerId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
 
-    sendSmartSwitchMessage: async function (guildId, id, interaction = null) {
+    sendSmartSwitchMessage: async function (guildId, serverId, entityId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].switches[entityId];
 
         const content = {
-            embeds: [instance.switches[id].reachable ?
-                DiscordEmbeds.getSmartSwitchEmbed(guildId, id) :
-                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'switches')],
+            embeds: [entity.reachable ?
+                DiscordEmbeds.getSmartSwitchEmbed(guildId, serverId, entityId) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'switches')],
             components: [
-                DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, id),
-                DiscordButtons.getSmartSwitchButtons(guildId, id)
+                DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, serverId, entityId),
+                DiscordButtons.getSmartSwitchButtons(guildId, serverId, entityId)
             ],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)
+                new Discord.AttachmentBuilder(Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))
             ]
         }
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.switches[id].messageId, instance.channelId.switches, interaction);
+        const message = await module.exports.sendMessage(guildId, content, entity.messageId,
+            instance.channelId.switches, interaction);
 
         if (!interaction) {
-            instance.switches[id].messageId = message.id;
+            instance.serverList[serverId].switches[entityId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
 
-    sendSmartAlarmMessage: async function (guildId, id, interaction = null) {
+    sendSmartAlarmMessage: async function (guildId, serverId, entityId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
-            embeds: [instance.alarms[id].reachable ?
-                DiscordEmbeds.getSmartAlarmEmbed(guildId, id) :
-                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'alarms')],
-            components: [DiscordButtons.getSmartAlarmButtons(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)]
+            embeds: [entity.reachable ?
+                DiscordEmbeds.getSmartAlarmEmbed(guildId, serverId, entityId) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'alarms')],
+            components: [DiscordButtons.getSmartAlarmButtons(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.alarms[id].messageId, instance.channelId.alarms, interaction);
+        const message = await module.exports.sendMessage(guildId, content, entity.messageId,
+            instance.channelId.alarms, interaction);
 
         if (!interaction) {
-            instance.alarms[id].messageId = message.id;
+            instance.serverList[serverId].alarms[entityId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
 
-    sendStorageMonitorMessage: async function (guildId, id, interaction = null) {
+    sendStorageMonitorMessage: async function (guildId, serverId, entityId, interaction = null) {
         let instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
-            embeds: [instance.storageMonitors[id].reachable ?
-                DiscordEmbeds.getStorageMonitorEmbed(guildId, id) :
-                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, id, 'storageMonitors')],
-            components: [instance.storageMonitors[id].type === 'toolcupboard' ?
-                DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, id) :
-                DiscordButtons.getStorageMonitorContainerButton(id)],
+            embeds: [entity.reachable ?
+                DiscordEmbeds.getStorageMonitorEmbed(guildId, serverId, entityId) :
+                DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'storageMonitors')],
+            components: [entity.type === 'toolcupboard' ?
+                DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
+                DiscordButtons.getStorageMonitorContainerButton(serverId, entityId)],
             files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)]
+                new Discord.AttachmentBuilder(
+                    Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
         instance = Client.client.readInstanceFile(guildId);
 
-        const message = await module.exports.sendMessage(
-            guildId, content, instance.storageMonitors[id].messageId, instance.channelId.storageMonitors, interaction);
+        const message = await module.exports.sendMessage(guildId, content, entity.messageId,
+            instance.channelId.storageMonitors, interaction);
 
         if (!interaction) {
-            instance.storageMonitors[id].messageId = message.id;
+            instance.serverList[serverId].storageMonitors[entityId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
 
-    sendSmartSwitchGroupMessage: async function (guildId, name, interaction = null) {
+    sendSmartSwitchGroupMessage: async function (guildId, serverId, groupId, interaction = null) {
         const instance = Client.client.readInstanceFile(guildId);
+        const group = instance.serverList[serverId].switchGroups[groupId];
 
         const content = {
-            embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, name)],
-            components: [DiscordButtons.getSmartSwitchGroupButtons(name)],
-            files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_switch.png')]
+            embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupId)],
+            components: DiscordButtons.getSmartSwitchGroupButtons(serverId, groupId),
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/electrics/smart_switch.png'))]
         }
 
-        const rustplus = Client.client.rustplusInstances[guildId];
-        const serverId = rustplus.serverId;
-        const message = await module.exports.sendMessage(guildId, content,
-            instance.serverList[serverId].switchGroups[name].messageId, instance.channelId.switches, interaction);
+        const message = await module.exports.sendMessage(guildId, content, group.messageId,
+            instance.channelId.switches, interaction);
 
         if (!interaction) {
-            instance.serverList[serverId].switchGroups[name].messageId = message.id;
+            instance.serverList[serverId].switchGroups[groupId].messageId = message.id;
             Client.client.writeInstanceFile(guildId, instance);
         }
     },
 
-    sendDecayingNotificationMessage: async function (guildId, id) {
+    sendStorageMonitorRecycleMessage: async function (guildId, serverId, entityId, items) {
         const instance = Client.client.readInstanceFile(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, id)],
-            files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+            embeds: [DiscordEmbeds.getStorageMonitorRecycleEmbed(guildId, serverId, entityId, items)],
+            components: [DiscordButtons.getRecycleDeleteButton()],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/electrics/recycler.png'))]
+        }
+
+        return await module.exports.sendMessage(guildId, content, null, instance.channelId.storageMonitors);
+    },
+
+    sendDecayingNotificationMessage: async function (guildId, serverId, entityId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
+
+        const content = {
+            embeds: [DiscordEmbeds.getDecayingNotificationEmbed(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
+            content: entity.everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendStorageMonitorDisconnectNotificationMessage: async function (guildId, id) {
+    sendStorageMonitorDisconnectNotificationMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
-            embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, id)],
-            files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+            embeds: [DiscordEmbeds.getStorageMonitorDisconnectNotificationEmbed(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
+            content: entity.everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendStorageMonitorNotFoundMessage: async function (guildId, id) {
+    sendStorageMonitorNotFoundMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
-            embeds: [await DiscordEmbeds.getStorageMonitorNotFoundEmbed(guildId, id)],
-            files: [
-                new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.storageMonitors[id].image}`)],
-            content: instance.storageMonitors[id].everyone ? '@everyone' : ''
+            embeds: [await DiscordEmbeds.getStorageMonitorNotFoundEmbed(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
+            content: entity.everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendSmartSwitchNotFoundMessage: async function (guildId, id) {
+    sendSmartSwitchNotFoundMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].switches[entityId];
 
         const content = {
-            embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.switches[id].image}`)]
+            embeds: [await DiscordEmbeds.getSmartSwitchNotFoundEmbed(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendSmartAlarmNotFoundMessage: async function (guildId, id) {
+    sendSmartAlarmNotFoundMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
-            embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, id)],
-            files: [new Discord.AttachmentBuilder(`src/resources/images/electrics/${instance.alarms[id].image}`)],
-            content: instance.alarms[id].everyone ? '@everyone' : ''
+            embeds: [await DiscordEmbeds.getSmartAlarmNotFoundEmbed(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
+            content: entity.everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendTrackerAllOfflineMessage: async function (guildId, trackerName) {
+    sendTrackerAllOfflineMessage: async function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const tracker = instance.trackers[trackerId];
 
         const content = {
-            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerName)],
-            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
+            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerId)],
+            content: tracker.everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendTrackerAnyOnlineMessage: async function (guildId, trackerName) {
+    sendTrackerAnyOnlineMessage: async function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
+        const tracker = instance.trackers[trackerId];
 
         const content = {
-            embeds: [DiscordEmbeds.getTrackerAnyOnlineEmbed(guildId, trackerName)],
-            content: instance.trackers[trackerName].everyone ? '@everyone' : ''
+            embeds: [DiscordEmbeds.getTrackerAnyOnlineEmbed(guildId, trackerId)],
+            content: tracker.everyone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendSmartAlarmTriggerMessage: async function (guildId, serverId, entityId) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].alarms[entityId];
+
+        const content = {
+            embeds: [await DiscordEmbeds.getAlarmEmbedNew(guildId, serverId, entityId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
+            content: entity.everyone ? '@everyone' : ''
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendServerChangeStateMessage: async function (guildId, serverId, state) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getServerChangedStateEmbed(guildId, serverId, state)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendServerWipeDetectedMessage: async function (guildId, serverId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getServerWipeDetectedEmbed(guildId, serverId)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendServerConnectionInvalidMessage: async function (guildId, serverId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getServerConnectionInvalidEmbed(guildId, serverId)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendInformationMapMessage: async function (guildId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))]
+        }
+
+        const message = await module.exports.sendMessage(guildId, content, instance.informationMessageId.map,
+            instance.channelId.information);
+
+        if (message) {
+            instance.informationMessageId.map = message.id;
+            Client.client.writeInstanceFile(guildId, instance);
+        }
+    },
+
+    sendDiscordEventMessage: async function (guildId, serverId, text, image) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/events/${image}`))]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.events);
     },
 }

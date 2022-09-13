@@ -1,6 +1,8 @@
 module.exports = {
     name: 'request',
     async execute(rustplus, client, request) {
-        /* rustplus.log('REQUEST', 'REQUEST SENT'); */
+        if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
+
+        /* Not used */
     },
 };

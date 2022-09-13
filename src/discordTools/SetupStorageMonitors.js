@@ -1,30 +1,28 @@
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = async (client, rustplus, newConnection = false) => {
+module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
 
-    if (newConnection) {
+    if (rustplus.isNewConnection) {
         await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
     }
 
-    for (const [key, value] of Object.entries(instance.storageMonitors)) {
-        if (rustplus.serverId !== `${value.serverId}`) continue;
-
+    for (const [key, value] of Object.entries(instance.serverList[rustplus.serverId].storageMonitors)) {
         let info = await rustplus.getEntityInfoAsync(key);
 
         instance = client.readInstanceFile(rustplus.guildId);
 
         if (!(await rustplus.isResponseValid(info))) {
-            await DiscordMessages.sendStorageMonitorNotFoundMessage(rustplus.guildId, key);
-            instance.storageMonitors[key].reachable = false;
+            await DiscordMessages.sendStorageMonitorNotFoundMessage(rustplus.guildId, rustplus.serverId, key);
+            instance.serverList[rustplus.serverId].storageMonitors[key].reachable = false;
         }
         else {
-            instance.storageMonitors[key].reachable = true;
+            instance.serverList[rustplus.serverId].storageMonitors[key].reachable = true;
         }
         client.writeInstanceFile(rustplus.guildId, instance);
 
-        if (instance.storageMonitors[key].reachable) {
+        if (instance.serverList[rustplus.serverId].storageMonitors[key].reachable) {
             rustplus.storageMonitors[key] = {
                 items: info.entityInfo.payload.items,
                 expiry: info.entityInfo.payload.protectionExpiry,
@@ -34,21 +32,21 @@ module.exports = async (client, rustplus, newConnection = false) => {
 
             if (info.entityInfo.payload.capacity !== 0) {
                 if (info.entityInfo.payload.capacity === 28) {
-                    instance.storageMonitors[key].type = 'toolcupboard';
+                    instance.serverList[rustplus.serverId].storageMonitors[key].type = 'toolcupboard';
                     if (info.entityInfo.payload.protectionExpiry === 0) {
-                        instance.storageMonitors[key].decaying = true;
+                        instance.serverList[rustplus.serverId].storageMonitors[key].decaying = true;
                     }
                     else {
-                        instance.storageMonitors[key].decaying = false;
+                        instance.serverList[rustplus.serverId].storageMonitors[key].decaying = false;
                     }
                 }
                 else {
-                    instance.storageMonitors[key].type = 'container';
+                    instance.serverList[rustplus.serverId].storageMonitors[key].type = 'container';
                 }
                 client.writeInstanceFile(rustplus.guildId, instance);
             }
         }
 
-        await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, key);
+        await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, rustplus.serverId, key);
     }
 };

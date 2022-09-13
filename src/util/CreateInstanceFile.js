@@ -1,8 +1,9 @@
 const Fs = require('fs');
+const Path = require('path');
 
 module.exports = (client, guild) => {
-    if (!Fs.existsSync(`${__dirname}/../../instances/${guild.id}.json`)) {
-        Fs.writeFileSync(`${__dirname}/../../instances/${guild.id}.json`, JSON.stringify({
+    if (!Fs.existsSync(Path.join(__dirname, '..', 'instances', `${guild.id}.json`))) {
+        Fs.writeFileSync(Path.join(__dirname, '..', 'instances', `${guild.id}.json`), JSON.stringify({
             firstTime: true,
             role: null,
             generalSettings: client.readGeneralSettingsTemplate(),
@@ -26,10 +27,6 @@ module.exports = (client, guild) => {
                 event: null,
                 team: null
             },
-            switches: {},
-            alarms: {},
-            storageMonitors: {},
-            markers: {},
             serverList: {},
             trackers: {},
             marketSubscribeItemIds: []
@@ -116,10 +113,6 @@ module.exports = (client, guild) => {
             if (!inst.informationMessageId.hasOwnProperty('team')) inst.informationMessageId.team = null;
         }
 
-        if (!inst.hasOwnProperty('switches')) inst.switches = {};
-        if (!inst.hasOwnProperty('alarms')) inst.alarms = {};
-        if (!inst.hasOwnProperty('storageMonitors')) inst.storageMonitors = {};
-        if (!inst.hasOwnProperty('markers')) inst.markers = {};
         if (!inst.hasOwnProperty('serverList')) inst.serverList = {};
         if (!inst.hasOwnProperty('trackers')) inst.trackers = {};
         if (!inst.hasOwnProperty('marketSubscribeItemIds')) inst.marketSubscribeItemIds = [];

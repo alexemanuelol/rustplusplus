@@ -1,4 +1,3 @@
-const Discord = require('discord.js');
 const PushReceiver = require('push-receiver');
 
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
@@ -175,7 +174,6 @@ async function pairingServer(client, guild, full, data, body) {
         alarms: server ? server.alarms : {},
         storageMonitors: server ? server.storageMonitors : {},
         markers: server ? server.markers : {},
-        trackers: server ? server.trackers : {},
         switchGroups: server ? server.switchGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
@@ -200,18 +198,19 @@ async function pairingServer(client, guild, full, data, body) {
 async function pairingEntitySwitch(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
+    const switches = instance.serverList[serverId].switches;
 
-    const entityExist = instance.switches.hasOwnProperty(body.entityId);
-    instance.switches[body.entityId] = {
-        active: entityExist ? instance.switches[body.entityId].active : false,
-        reachable: entityExist ? instance.switches[body.entityId].reachable : true,
-        name: entityExist ? instance.switches[body.entityId].name : 'Smart Switch',
-        command: entityExist ? instance.switches[body.entityId].command : body.entityId,
-        image: entityExist ? instance.switches[body.entityId].image : 'smart_switch.png',
-        autoDayNight: entityExist ? instance.switches[body.entityId].autoDayNight : 0,
-        server: entityExist ? instance.switches[body.entityId].server : body.name,
-        serverId: entityExist ? instance.switches[body.entityId].serverId : serverId,
-        messageId: entityExist ? instance.switches[body.entityId].messageId : null
+    const entityExist = instance.serverList[serverId].switches.hasOwnProperty(body.entityId);
+    instance.serverList[serverId].switches[body.entityId] = {
+        active: entityExist ? switches[body.entityId].active : false,
+        reachable: entityExist ? switches[body.entityId].reachable : true,
+        name: entityExist ? switches[body.entityId].name : 'Smart Switch',
+        command: entityExist ? switches[body.entityId].command : body.entityId,
+        image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
+        autoDayNight: entityExist ? switches[body.entityId].autoDayNight : 0,
+        server: entityExist ? switches[body.entityId].server : body.name,
+        messageId: entityExist ? switches[body.entityId].messageId : null
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -219,34 +218,35 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
     if (rustplus && serverId === rustplus.serverId) {
         const info = await rustplus.getEntityInfoAsync(body.entityId);
         if (!(await rustplus.isResponseValid(info))) {
-            instance.switches[body.entityId].reachable = false;
+            instance.serverList[serverId].switches[body.entityId].reachable = false;
         }
 
-        if (instance.switches[body.entityId].reachable) {
-            instance.switches[body.entityId].active = info.entityInfo.payload.value;
+        if (instance.serverList[serverId].switches[body.entityId].reachable) {
+            instance.serverList[serverId].switches[body.entityId].active = info.entityInfo.payload.value;
         }
         client.writeInstanceFile(guild.id, instance);
 
-        await DiscordMessages.sendSmartSwitchMessage(guild.id, body.entityId);
+        await DiscordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
     }
 }
 
 async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
+    const alarms = instance.serverList[serverId].alarms;
 
-    const entityExist = instance.alarms.hasOwnProperty(body.entityId);
-    instance.alarms[body.entityId] = {
-        active: entityExist ? instance.alarms[body.entityId].active : false,
-        reachable: entityExist ? instance.alarms[body.entityId].reachable : true,
-        everyone: entityExist ? instance.alarms[body.entityId].everyone : false,
-        name: entityExist ? instance.alarms[body.entityId].name : 'Smart Alarm',
-        message: entityExist ? instance.alarms[body.entityId].message : 'Your base is under attack!',
-        id: entityExist ? instance.alarms[body.entityId].id : body.entityId,
-        image: entityExist ? instance.alarms[body.entityId].image : 'smart_alarm.png',
-        server: entityExist ? instance.alarms[body.entityId].server : body.name,
-        serverId: entityExist ? instance.alarms[body.entityId].serverId : serverId,
-        messageId: entityExist ? instance.alarms[body.entityId].messageId : null
+    const entityExist = instance.serverList[serverId].alarms.hasOwnProperty(body.entityId);
+    instance.serverList[serverId].alarms[body.entityId] = {
+        active: entityExist ? alarms[body.entityId].active : false,
+        reachable: entityExist ? alarms[body.entityId].reachable : true,
+        everyone: entityExist ? alarms[body.entityId].everyone : false,
+        name: entityExist ? alarms[body.entityId].name : 'Smart Alarm',
+        message: entityExist ? alarms[body.entityId].message : 'Your base is under attack!',
+        id: entityExist ? alarms[body.entityId].id : body.entityId,
+        image: entityExist ? alarms[body.entityId].image : 'smart_alarm.png',
+        server: entityExist ? alarms[body.entityId].server : body.name,
+        messageId: entityExist ? alarms[body.entityId].messageId : null
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -254,36 +254,37 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
     if (rustplus && serverId === rustplus.serverId) {
         const info = await rustplus.getEntityInfoAsync(body.entityId);
         if (!(await rustplus.isResponseValid(info))) {
-            instance.alarms[body.entityId].reachable = false;
+            instance.serverList[serverId].alarms[body.entityId].reachable = false;
         }
 
-        if (instance.alarms[body.entityId].reachable) {
-            instance.alarms[body.entityId].active = info.entityInfo.payload.value;
+        if (instance.serverList[serverId].alarms[body.entityId].reachable) {
+            instance.serverList[serverId].alarms[body.entityId].active = info.entityInfo.payload.value;
         }
         client.writeInstanceFile(guild.id, instance);
     }
 
-    await DiscordMessages.sendSmartAlarmMessage(guild.id, body.entityId);
+    await DiscordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
     const serverId = `${body.ip}-${body.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
+    const storageMonitors = instance.serverList[serverId].storageMonitors;
 
-    const entityExist = instance.storageMonitors.hasOwnProperty(body.entityId);
-    instance.storageMonitors[body.entityId] = {
-        name: entityExist ? instance.storageMonitors[body.entityId].name : 'Storage Monitor',
-        reachable: entityExist ? instance.storageMonitors[body.entityId].reachable : true,
-        id: entityExist ? instance.storageMonitors[body.entityId].id : body.entityId,
-        type: entityExist ? instance.storageMonitors[body.entityId].type : 'container',
-        decaying: entityExist ? instance.storageMonitors[body.entityId].decaying : false,
-        upkeep: entityExist ? instance.storageMonitors[body.entityId].upkeep : null,
-        everyone: entityExist ? instance.storageMonitors[body.entityId].everyone : false,
-        inGame: entityExist ? instance.storageMonitors[body.entityId].inGame : true,
-        image: entityExist ? instance.storageMonitors[body.entityId].image : 'storage_monitor.png',
-        server: entityExist ? instance.storageMonitors[body.entityId].server : body.name,
-        serverId: entityExist ? instance.storageMonitors[body.entityId].serverId : serverId,
-        messageId: entityExist ? instance.storageMonitors[body.entityId].messageId : null
+    const entityExist = instance.serverList[serverId].storageMonitors.hasOwnProperty(body.entityId);
+    instance.serverList[serverId].storageMonitors[body.entityId] = {
+        name: entityExist ? storageMonitors[body.entityId].name : 'Storage Monitor',
+        reachable: entityExist ? storageMonitors[body.entityId].reachable : true,
+        id: entityExist ? storageMonitors[body.entityId].id : body.entityId,
+        type: entityExist ? storageMonitors[body.entityId].type : 'container',
+        decaying: entityExist ? storageMonitors[body.entityId].decaying : false,
+        upkeep: entityExist ? storageMonitors[body.entityId].upkeep : null,
+        everyone: entityExist ? storageMonitors[body.entityId].everyone : false,
+        inGame: entityExist ? storageMonitors[body.entityId].inGame : true,
+        image: entityExist ? storageMonitors[body.entityId].image : 'storage_monitor.png',
+        server: entityExist ? storageMonitors[body.entityId].server : body.name,
+        messageId: entityExist ? storageMonitors[body.entityId].messageId : null
     };
     client.writeInstanceFile(guild.id, instance);
 
@@ -291,15 +292,15 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
     if (rustplus && serverId === rustplus.serverId) {
         const info = await rustplus.getEntityInfoAsync(body.entityId);
         if (!(await rustplus.isResponseValid(info))) {
-            instance.storageMonitors[body.entityId].reachable = false;
+            instance.serverList[serverId].storageMonitors[body.entityId].reachable = false;
         }
 
-        if (instance.storageMonitors[body.entityId].reachable) {
+        if (instance.serverList[serverId].storageMonitors[body.entityId].reachable) {
             if (info.entityInfo.payload.capacity === 28) {
-                instance.storageMonitors[body.entityId].type = 'toolcupboard';
-                instance.storageMonitors[body.entityId].image = 'tool_cupboard.png';
+                instance.serverList[serverId].storageMonitors[body.entityId].type = 'toolcupboard';
+                instance.serverList[serverId].storageMonitors[body.entityId].image = 'tool_cupboard.png';
                 if (info.entityInfo.payload.protectionExpiry === 0) {
-                    instance.storageMonitors[body.entityId].decaying = true;
+                    instance.serverList[serverId].storageMonitors[body.entityId].decaying = true;
                 }
             }
 
@@ -312,7 +313,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         }
         client.writeInstanceFile(guild.id, instance);
 
-        await DiscordMessages.sendStorageMonitorMessage(guild.id, body.entityId);
+        await DiscordMessages.sendStorageMonitorMessage(guild.id, serverId, body.entityId);
     }
 }
 
@@ -328,24 +329,16 @@ async function alarmAlarm(client, guild, full, data, body) {
     setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
 
     const instance = client.readInstanceFile(guild.id);
-
-    const content = {
-        embeds: [DiscordEmbeds.getAlarmEmbed(data, body)],
-        files: [new Discord.AttachmentBuilder('src/resources/images/electrics/smart_alarm.png')],
-        content: instance.generalSettings.fcmAlarmNotificationEveryone ? '@everyone' : ''
-    }
-
-    const rustplus = client.rustplusInstances[guild.id];
     const serverId = `${body.ip}-${body.port}`;
+    const entityId = body.entityId;
+    const server = instance.serverList[serverId];
+    const rustplus = client.rustplusInstances[guild.id];
 
-    if (!rustplus || (rustplus && (serverId !== rustplus.serverId)) &&
+    if (!server || (server && !server.alarms[entityId])) return;
+
+    if ((!rustplus || (rustplus && (rustplus.serverId !== serverId))) &&
         instance.generalSettings.fcmAlarmNotificationEnabled) {
-        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
-
-        if (rustplus && instance.generalSettings.smartAlarmNotifyInGame) {
-            rustplus.sendTeamMessageAsync(`${data.title}: ${data.message}`);
-        }
-
+        await DiscordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
         client.log('INFO', `${data.title}: ${data.message}`);
     }
 }
