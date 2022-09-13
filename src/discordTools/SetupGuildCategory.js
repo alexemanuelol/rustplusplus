@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, guild) => {
-    let instance = client.readInstanceFile(guild.id);
+    const instance = client.readInstanceFile(guild.id);
 
     let category = undefined;
     if (instance.channelId.category !== null) {
@@ -15,11 +15,11 @@ module.exports = async (client, guild) => {
         client.writeInstanceFile(guild.id, instance);
     }
 
-    let perms = [];
-    let everyoneAllow = [];
-    let everyoneDeny = [];
-    let roleAllow = [];
-    let roleDeny = [];
+    const perms = [];
+    const everyoneAllow = [];
+    const everyoneDeny = [];
+    const roleAllow = [];
+    const roleDeny = [];
     if (instance.role !== null) {
         everyoneDeny.push(Discord.PermissionFlagsBits.ViewChannel);
         everyoneDeny.push(Discord.PermissionFlagsBits.SendMessages);

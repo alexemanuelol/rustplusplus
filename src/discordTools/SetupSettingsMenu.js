@@ -7,8 +7,8 @@ const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, guild) => {
-    let instance = client.readInstanceFile(guild.id);
-    let channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.settings);
+    const instance = client.readInstanceFile(guild.id);
+    const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.settings);
 
     if (!channel) {
         client.log('ERROR', 'SetupSettingsMenu: Invalid guild or channel.', 'error');
@@ -18,8 +18,8 @@ module.exports = async (client, guild) => {
     if (instance.firstTime) {
         await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
-        await setupGeneralSettings(client, guild.id, instance, channel);
-        await setupNotificationSettings(client, instance, channel);
+        await setupGeneralSettings(client, guild.id, channel);
+        await setupNotificationSettings(client, channel);
 
         instance.firstTime = false;
         client.writeInstanceFile(guild.id, instance);
@@ -27,7 +27,9 @@ module.exports = async (client, guild) => {
 
 };
 
-async function setupGeneralSettings(client, guildId, instance, channel) {
+async function setupGeneralSettings(client, guildId, channel) {
+    const instance = client.readInstanceFile(guildId);
+
     await client.messageSend(channel, {
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/general_settings_logo.png'))]
@@ -145,7 +147,9 @@ async function setupGeneralSettings(client, guildId, instance, channel) {
     });
 }
 
-async function setupNotificationSettings(client, instance, channel) {
+async function setupNotificationSettings(client, channel) {
+    const instance = client.readInstanceFile(guildId);
+
     await client.messageSend(channel, {
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/notification_settings_logo.png'))]
