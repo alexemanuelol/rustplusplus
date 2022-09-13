@@ -6,6 +6,7 @@ const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
+const Scrape = require('../util/scrape.js');
 
 module.exports = {
     sendMessage: async function (guildId, content, messageId, channelId, interaction = null) {
@@ -342,5 +343,16 @@ module.exports = {
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.events);
+    },
+
+    sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const png = await Scrape.scrapeSteamProfilePicture(Client.client, steamId);
+        const content = {
+            embeds: [DiscordEmbeds.getActivityNotificationEmbed(guildId, serverId, color, text, steamId, png)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 }
