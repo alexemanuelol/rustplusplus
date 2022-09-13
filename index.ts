@@ -20,20 +20,20 @@ const client = new DiscordBot({
 client.build();
 
 function createMissingDirectories() {
-    if (!Fs.existsSync(Path.join(__dirname, 'src/logs'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'src/logs'));
+    if (!Fs.existsSync(Path.join(__dirname, 'logs'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'logs'));
     }
 
-    if (!Fs.existsSync(Path.join(__dirname, 'src/instances'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'src/instances'));
+    if (!Fs.existsSync(Path.join(__dirname, 'instances'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'instances'));
     }
 
-    if (!Fs.existsSync(Path.join(__dirname, 'src/credentials'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'src/credentials'));
+    if (!Fs.existsSync(Path.join(__dirname, 'credentials'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'credentials'));
     }
 
-    if (!Fs.existsSync(Path.join(__dirname, 'src/resources/images/maps'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'src/resources/images/maps'));
+    if (!Fs.existsSync(Path.join(__dirname, 'resources', 'images', 'maps'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'resources', 'images', 'maps'));
     }
 }
 
