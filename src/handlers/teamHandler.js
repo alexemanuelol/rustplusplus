@@ -80,7 +80,6 @@ module.exports = {
             for (let playerUpdated of teamInfo.members) {
                 if (player.steamId === playerUpdated.steamId.toString()) {
                     if (player.isGoneDead(playerUpdated)) {
-                        let pos = player.pos;
                         let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
                         await client.messageSend(channel, {
                             embeds: [DiscordEmbeds.getEmbed({
@@ -88,7 +87,7 @@ module.exports = {
                                 timestamp: true,
                                 footer: { text: instance.serverList[rustplus.serverId].title },
                                 author: {
-                                    name: `${player.name} just died at ${pos}.`,
+                                    name: `${player.name} just died at ${player.pos.string}.`,
                                     iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                                     url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
                                 }
@@ -96,10 +95,10 @@ module.exports = {
                         });
 
                         if (instance.generalSettings.deathNotify) {
-                            rustplus.sendTeamMessageAsync(`${player.name} just died at ${pos}.`);
+                            rustplus.sendTeamMessageAsync(`${player.name} just died at ${player.pos.string}.`);
                         }
 
-                        rustplus.log('INFO', `${player.name} just died at ${pos}.`);
+                        rustplus.log('INFO', `${player.name} just died at ${player.pos.string}.`);
                     }
 
                     if (player.isGoneAfk(playerUpdated)) {
