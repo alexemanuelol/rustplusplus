@@ -1,11 +1,11 @@
 const Fs = require('fs');
+const RustPlusLib = require('@liamcottle/rustplus.js');
 const Path = require('path');
 
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Logger = require('./Logger.js');
-const RustPlusLib = require('rustplus.js');
 const Timer = require('../util/timer.js');
 
 const TOKENS_LIMIT = 24;        /* Per player */
