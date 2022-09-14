@@ -7,12 +7,10 @@ module.exports = {
     },
 
     checkChanges: function (rustplus, client, time) {
-        if (rustplus.time.timeTillActive) {
-            return;
-        }
+        if (rustplus.time.timeTillActive) return;
 
-        let prevTime = rustplus.time.time;
-        let newTime = time.time;
+        const prevTime = rustplus.time.time;
+        const newTime = time.time;
 
         if (rustplus.isFirstPoll) {
             rustplus.time.startTime = newTime;
@@ -20,13 +18,10 @@ module.exports = {
             return;
         }
 
-        let distance = (prevTime > newTime) ? (24 - prevTime) + newTime : newTime - prevTime;
+        const distance = (prevTime > newTime) ? (24 - prevTime) + newTime : newTime - prevTime;
         if (distance > 1) {
             /* Too big of a jump for a normal server, might have been a skip night server */
-            rustplus.log(
-                'ERROR',
-                `Invalid time: distance: ${distance}, previous: ${prevTime}, time: ${newTime}`,
-                'error');
+            rustplus.log('ERROR', `Invalid time distance: ${distance}, prev: ${prevTime}, new: ${newTime}`, 'error');
             rustplus.passedFirstSunriseOrSunset = false;
             rustplus.time.startTime = newTime;
             rustplus.time.timeTillDay = new Object();
@@ -37,14 +32,12 @@ module.exports = {
         }
 
         if (!rustplus.passedFirstSunriseOrSunset) {
-            let a = (rustplus.time.startTime >= time.sunrise &&
-                rustplus.time.startTime < time.sunset) &&
+            const a = (rustplus.time.startTime >= time.sunrise && rustplus.time.startTime < time.sunset) &&
                 (newTime >= time.sunset || newTime < time.sunrise);
-            let b = (rustplus.time.startTime >= time.sunset ||
-                rustplus.time.startTime < time.sunrise) &&
+            const b = (rustplus.time.startTime >= time.sunset || rustplus.time.startTime < time.sunrise) &&
                 (newTime >= time.sunrise && newTime < time.sunset);
 
-            for (let id of Object.keys(rustplus.startTimeObject)) {
+            for (const id in rustplus.startTimeObject) {
                 rustplus.startTimeObject[id] += (client.pollingIntervalMs / 1000);
             }
 
@@ -57,29 +50,29 @@ module.exports = {
             }
         }
 
-        let a = newTime > rustplus.time.startTime && prevTime < rustplus.time.startTime && newTime > prevTime;
-        let b = newTime < rustplus.time.startTime && prevTime < rustplus.time.startTime && newTime < prevTime;
-        let c = newTime > rustplus.time.startTime && prevTime > rustplus.time.startTime && newTime < prevTime;
+        const a = newTime > rustplus.time.startTime && prevTime < rustplus.time.startTime && newTime > prevTime;
+        const b = newTime < rustplus.time.startTime && prevTime < rustplus.time.startTime && newTime < prevTime;
+        const c = newTime > rustplus.time.startTime && prevTime > rustplus.time.startTime && newTime < prevTime;
 
         /* If 24 hours in-game time have passed */
         if (a || b || c) {
             /* Merge startTimeObject with correct object */
             let highestValue = 0;
-            for (let id of Object.keys(rustplus.startTimeObject)) {
+            for (const id in rustplus.startTimeObject) {
                 if (rustplus.startTimeObject[id] > highestValue) {
                     highestValue = rustplus.startTimeObject[id];
                 }
             }
 
             if (rustplus.time.startTime >= time.sunrise && rustplus.time.startTime < time.sunset) {
-                for (let id of Object.keys(rustplus.time.timeTillNight)) {
+                for (const id in rustplus.time.timeTillNight) {
                     rustplus.time.timeTillNight[id] += highestValue;
                 }
 
                 rustplus.time.timeTillNight = _.merge(rustplus.startTimeObject, rustplus.time.timeTillNight);
             }
             else {
-                for (let id of Object.keys(rustplus.time.timeTillDay)) {
+                for (const id in rustplus.time.timeTillDay) {
                     rustplus.time.timeTillDay[id] += highestValue;
                 }
 
@@ -88,7 +81,7 @@ module.exports = {
 
             rustplus.time.timeTillActive = true;
 
-            let instance = client.readInstanceFile(rustplus.guildId);
+            const instance = client.readInstanceFile(rustplus.guildId);
 
             instance.serverList[rustplus.serverId].timeTillDay = rustplus.time.timeTillDay;
             instance.serverList[rustplus.serverId].timeTillNight = rustplus.time.timeTillNight;
@@ -99,14 +92,14 @@ module.exports = {
         }
 
         if (newTime >= time.sunrise && newTime < time.sunset) { /* It's Day */
-            for (let id of Object.keys(rustplus.time.timeTillNight)) {
+            for (const id in rustplus.time.timeTillNight) {
                 rustplus.time.timeTillNight[id] += (client.pollingIntervalMs / 1000);
             }
 
             rustplus.time.timeTillNight[newTime] = 0;
         }
         else { /* It's Night */
-            for (let id of Object.keys(rustplus.time.timeTillDay)) {
+            for (const id in rustplus.time.timeTillDay) {
                 rustplus.time.timeTillDay[id] += (client.pollingIntervalMs / 1000);
             }
 
