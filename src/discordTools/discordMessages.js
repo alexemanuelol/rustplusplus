@@ -275,7 +275,7 @@ module.exports = {
         const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
-            embeds: [await DiscordEmbeds.getAlarmEmbedNew(guildId, serverId, entityId)],
+            embeds: [await DiscordEmbeds.getAlarmEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
