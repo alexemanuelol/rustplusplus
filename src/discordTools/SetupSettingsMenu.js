@@ -19,7 +19,7 @@ module.exports = async (client, guild) => {
         await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
         await setupGeneralSettings(client, guild.id, channel);
-        await setupNotificationSettings(client, channel);
+        await setupNotificationSettings(client, guild.id, channel);
 
         instance.firstTime = false;
         client.writeInstanceFile(guild.id, instance);
@@ -147,7 +147,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     });
 }
 
-async function setupNotificationSettings(client, channel) {
+async function setupNotificationSettings(client, guildId, channel) {
     const instance = client.readInstanceFile(guildId);
 
     await client.messageSend(channel, {
