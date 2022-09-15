@@ -1,7 +1,4 @@
-const Constants = require('../util/constants.js');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
-const DiscordTools = require('../discordTools/discordTools.js');
-const Scrape = require('../util/scrape.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
     handler: async function (rustplus, client, teamInfo) {
@@ -11,156 +8,77 @@ module.exports = {
 
     checkChanges: async function (rustplus, client, teamInfo) {
         let instance = client.readInstanceFile(rustplus.guildId);
-        let channel = DiscordTools.getTextChannelById(rustplus.guildId, instance.channelId.activity);
-
-        if (!channel) {
-            client.log('ERROR', 'Invalid guild or channel.', 'error');
-            return;
-        }
+        const guildId = rustplus.guildId;
+        const serverId = rustplus.serverId;
+        const server = instance.serverList[serverId];
 
         if (rustplus.team.isLeaderSteamIdChanged(teamInfo)) return;
 
-        let newPlayers = rustplus.team.getNewPlayers(teamInfo);
-        let leftPlayers = rustplus.team.getLeftPlayers(teamInfo);
+        const newPlayers = rustplus.team.getNewPlayers(teamInfo);
+        const leftPlayers = rustplus.team.getLeftPlayers(teamInfo);
 
-        for (let steamId of leftPlayers) {
-            let player = rustplus.team.getPlayer(steamId);
-            let png = await Scrape.scrapeSteamProfilePicture(client, steamId);
-            await client.messageSend(channel, {
-                embeds: [DiscordEmbeds.getEmbed({
-                    color: '#606060',
-                    timestamp: true,
-                    footer: { text: instance.serverList[rustplus.serverId].title },
-                    author: {
-                        name: `${player.name} left the team.`,
-                        iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
-                        url: `${Constants.STEAM_PROFILES_URL}${steamId}`
-                    }
-                })]
-            });
-
-            if (instance.generalSettings.connectionNotify) {
-                await rustplus.sendTeamMessageAsync(`${player.name} left the team.`);
-            }
-
-            rustplus.log('INFO', `${player.name} left the team.`);
+        for (const steamId of leftPlayers) {
+            const player = rustplus.team.getPlayer(steamId);
+            const str = `${player.name} left the team.`;
+            await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#606060', str, steamId);
+            if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
+            rustplus.log('INFO', str);
         }
 
-        for (let steamId of newPlayers) {
-            for (let player of teamInfo.members) {
+        for (const steamId of newPlayers) {
+            for (const player of teamInfo.members) {
                 if (player.steamId.toString() === steamId) {
-                    let png = await Scrape.scrapeSteamProfilePicture(client, steamId);
-                    await client.messageSend(channel, {
-                        embeds: [DiscordEmbeds.getEmbed({
-                            color: '#00ff40',
-                            timestamp: true,
-                            footer: { text: instance.serverList[rustplus.serverId].title },
-                            author: {
-                                name: `${player.name} joined the team.`,
-                                iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
-                                url: `${Constants.STEAM_PROFILES_URL}${steamId}`
-                            }
-                        })]
-                    });
-
-                    if (instance.generalSettings.connectionNotify) {
-                        await rustplus.sendTeamMessageAsync(`${player.name} joined the team.`);
-                    }
-
-                    rustplus.log('INFO', `${player.name} joined the team.`);
+                    const str = `${player.name} joined the team.`;
+                    await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#00ff40', str, steamId);
+                    if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
+                    rustplus.log('INFO', str);
                 }
             }
         }
 
-        for (let player of rustplus.team.players) {
-            if (leftPlayers.includes(player.steamId)) {
-                continue;
-            }
-
-            for (let playerUpdated of teamInfo.members) {
+        for (const player of rustplus.team.players) {
+            if (leftPlayers.includes(player.steamId)) continue;
+            for (const playerUpdated of teamInfo.members) {
                 if (player.steamId === playerUpdated.steamId.toString()) {
                     if (player.isGoneDead(playerUpdated)) {
-                        let pos = player.pos;
-                        let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
-                        await client.messageSend(channel, {
-                            embeds: [DiscordEmbeds.getEmbed({
-                                color: '#ff0040',
-                                timestamp: true,
-                                footer: { text: instance.serverList[rustplus.serverId].title },
-                                author: {
-                                    name: `${player.name} just died at ${pos}.`,
-                                    iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
-                                    url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
-                                }
-                            })]
-                        });
-
-                        if (instance.generalSettings.deathNotify) {
-                            rustplus.sendTeamMessageAsync(`${player.name} just died at ${pos}.`);
-                        }
-
-                        rustplus.log('INFO', `${player.name} just died at ${pos}.`);
+                        const str = `${player.name} just died at ${player.pos.string}.`;
+                        await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#ff0040', str,
+                            player.steamId);
+                        if (instance.generalSettings.deathNotify) rustplus.sendTeamMessageAsync(str);
+                        rustplus.log('INFO', str);
                     }
 
                     if (player.isGoneAfk(playerUpdated)) {
                         if (instance.generalSettings.afkNotify) {
-                            rustplus.sendTeamMessageAsync(`${player.name} just went AFK.`);
-                            rustplus.log('INFO', `${player.name} just went AFK.`);
+                            const str = `${player.name} just went AFK.`;
+                            rustplus.sendTeamMessageAsync(str);
+                            rustplus.log('INFO', str);
                         }
                     }
 
                     if (player.isAfk() && player.isMoved(playerUpdated)) {
                         if (instance.generalSettings.afkNotify) {
-                            let afkTime = player.getAfkTime('dhs');
-                            rustplus.sendTeamMessageAsync(`${player.name} just returned (${afkTime}).`);
-                            rustplus.log('INFO', `${player.name} just returned (${afkTime}).`);
+                            const afkTime = player.getAfkTime('dhs');
+                            const str = `${player.name} just returned (${afkTime}).`;
+                            rustplus.sendTeamMessageAsync(str);
+                            rustplus.log('INFO', str);
                         }
                     }
 
                     if (player.isGoneOnline(playerUpdated)) {
-                        let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
-                        await client.messageSend(channel, {
-                            embeds: [DiscordEmbeds.getEmbed({
-                                color: '#00ff40',
-                                timestamp: true,
-                                footer: { text: instance.serverList[rustplus.serverId].title },
-                                author: {
-                                    name: `${player.name} just connected.`,
-                                    iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
-                                    url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
-                                }
-                            })]
-                        });
-
-                        if (instance.generalSettings.connectionNotify) {
-                            await rustplus.sendTeamMessageAsync(
-                                `${player.name} just connected.`);
-                        }
-
-                        rustplus.log('INFO', `${player.name} just connected to ${instance.serverList[rustplus.serverId].title}.`);
+                        const str = `${player.name} just connected.`;
+                        await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#00ff40', str,
+                            player.steamId);
+                        if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
+                        rustplus.log('INFO', `${player.name} just connected to ${server.title}.`);
                     }
 
                     if (player.isGoneOffline(playerUpdated)) {
-                        let png = await Scrape.scrapeSteamProfilePicture(client, player.steamId);
-                        await client.messageSend(channel, {
-                            embeds: [DiscordEmbeds.getEmbed({
-                                color: '#ff0040',
-                                timestamp: true,
-                                footer: { text: instance.serverList[rustplus.serverId].title },
-                                author: {
-                                    name: `${player.name} just disconnected.`,
-                                    iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
-                                    url: `${Constants.STEAM_PROFILES_URL}${player.steamId}`
-                                }
-                            })]
-                        });
-
-                        if (instance.generalSettings.connectionNotify) {
-                            await rustplus.sendTeamMessageAsync(
-                                `${player.name} just disconnected.`);
-                        }
-
-                        rustplus.log('INFO', `${player.name} just disconnected from ${instance.serverList[rustplus.serverId].title}.`);
+                        const str = `${player.name} just disconnected.`;
+                        await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#ff0040', str,
+                            player.steamId);
+                        if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
+                        rustplus.log('INFO', `${player.name} just disconnected from ${server.title}.`);
                     }
                     break;
                 }

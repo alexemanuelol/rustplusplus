@@ -506,4 +506,19 @@ module.exports = {
             footer: { text: server.title }
         });
     },
+
+    getActivityNotificationEmbed: function (guildId, serverId, color, text, steamId, png) {
+        const instance = Client.client.readInstanceFile(guildId);
+        const server = instance.serverList[serverId];
+        return module.exports.getEmbed({
+            color: color,
+            timestamp: true,
+            footer: { text: server.title },
+            author: {
+                name: text,
+                iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
+                url: `${Constants.STEAM_PROFILES_URL}${steamId}`
+            }
+        });
+    }
 }

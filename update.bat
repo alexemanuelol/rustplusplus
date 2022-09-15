@@ -17,3 +17,9 @@ if not %errorlevel%==0 (
     echo "Could not successfully pop the stash"
     exit /b 1
 )
+
+npm install
+if not %errorlevel%==0 (
+    echo "Could not successfully install packages"
+    exit /b 1
+)

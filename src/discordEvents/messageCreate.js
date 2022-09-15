@@ -1,12 +1,12 @@
 module.exports = {
     name: 'messageCreate',
     async execute(client, message) {
-        let instance = client.readInstanceFile(message.guild.id);
-        let channelId = instance.channelId.teamchat;
-        let rustplus = client.rustplusInstances[message.guild.id];
+        const instance = client.readInstanceFile(message.guild.id);
+        const channelId = instance.channelId.teamchat;
+        const rustplus = client.rustplusInstances[message.guild.id];
 
-        if (message.channelId !== channelId || message.author.bot || !rustplus ||
-            (rustplus && !rustplus.isOperational)) {
+        if (message.channelId !== channelId || message.author.bot ||
+            !rustplus || (rustplus && !rustplus.isOperational)) {
             return;
         }
 

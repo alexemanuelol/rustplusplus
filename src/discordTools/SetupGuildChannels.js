@@ -16,7 +16,7 @@ module.exports = async (client, guild, category) => {
 };
 
 async function addTextChannel(name, client, guild, parent, permissionWrite = false) {
-    let instance = client.readInstanceFile(guild.id);
+    const instance = client.readInstanceFile(guild.id);
 
     let channel = undefined;
     if (instance.channelId[name] !== null) {
@@ -44,11 +44,11 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
         }
     }
 
-    let perms = [];
-    let everyoneAllow = [];
-    let everyoneDeny = [];
-    let roleAllow = [];
-    let roleDeny = [];
+    const perms = [];
+    const everyoneAllow = [];
+    const everyoneDeny = [];
+    const roleAllow = [];
+    const roleDeny = [];
     if (instance.role !== null) {
         if (permissionWrite) {
             roleAllow.push(Discord.PermissionFlagsBits.SendMessages);

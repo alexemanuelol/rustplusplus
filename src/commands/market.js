@@ -123,7 +123,7 @@ module.exports = {
                                 foundLines += '```diff\n';
                             }
 
-                            foundLines += `+ [${vendingMachine.location}] `;
+                            foundLines += `+ [${vendingMachine.location.string}] `;
                             foundLines += `${orderQuantity}x ${orderItemName}`;
                             foundLines += `${(orderItemIsBlueprint) ? ' (BP)' : ''} for `;
                             foundLines += `${orderCostPerItem}x ${orderCurrencyName}`;

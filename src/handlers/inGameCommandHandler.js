@@ -406,8 +406,8 @@ module.exports = {
             let time = Timer.getTimeLeftOfTimer(timer);
 
             if (time !== null) {
-                strings.push(`Approximately ${time} before Cargo Ship at ${cargoShip.location} enters egress stage.` +
-                    ` Active crates: (${cargoShip.crates.length}/3).`);
+                strings.push(`Approximately ${time} before Cargo Ship at ${cargoShip.location.string}` +
+                    ` enters egress stage. Active crates: (${cargoShip.crates.length}/3).`);
             }
             unhandled = unhandled.filter(e => e != parseInt(id));
         }
@@ -415,7 +415,7 @@ module.exports = {
         if (unhandled.length > 0) {
             for (let id of unhandled) {
                 let cargoShip = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.CargoShip, id);
-                strings.push(`Cargo Ship is located at ${cargoShip.location}.` +
+                strings.push(`Cargo Ship is located at ${cargoShip.location.string}.` +
                     ` Active crates: (${cargoShip.crates.length}/3).`);
             }
         }
@@ -441,7 +441,7 @@ module.exports = {
 
         for (let ch47 of rustplus.mapMarkers.ch47s) {
             if (ch47.ch47Type === 'crate') {
-                strings.push(`Chinook 47 is located at ${ch47.location}.`);
+                strings.push(`Chinook 47 is located at ${ch47.location.string}.`);
             }
         }
 
@@ -478,7 +478,7 @@ module.exports = {
                 for (let crate of rustplus.mapMarkers.crates) {
                     if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(crate.crateType)) {
                         if (crate.crateType === 'grid') {
-                            strings.push(`A Locked Crate is located at ${crate.location}.`);
+                            strings.push(`A Locked Crate is located at ${crate.location.string}.`);
                         }
                         else {
                             strings.push(`A Locked Crate is located at ${crate.crateType}.`);
@@ -506,7 +506,7 @@ module.exports = {
         let strings = [];
 
         for (let patrolHelicopter of rustplus.mapMarkers.patrolHelicopters) {
-            strings.push(`Patrol Helicopter is located at ${patrolHelicopter.location}.`);
+            strings.push(`Patrol Helicopter is located at ${patrolHelicopter.location.string}.`);
         }
 
         if (strings.length === 0) {
@@ -547,7 +547,7 @@ module.exports = {
 
             if (time !== null) {
                 strings.push(
-                    `Approximately ${time} before Locked Crate unlocks at Large Oil Rig at ${crate.location}.`);
+                    `Approximately ${time} before Locked Crate unlocks at Large Oil Rig at ${crate.location.location}.`);
             }
         }
 
@@ -999,7 +999,7 @@ module.exports = {
 
             if (time !== null) {
                 strings.push(
-                    `Approximately ${time} before Locked Crate unlocks at Small Oil Rig at ${crate.location}.`);
+                    `Approximately ${time} before Locked Crate unlocks at Small Oil Rig at ${crate.location.location}.`);
             }
         }
 
