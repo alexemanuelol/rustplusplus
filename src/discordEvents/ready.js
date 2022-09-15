@@ -10,7 +10,7 @@ module.exports = {
         client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
 
         try {
-            await client.user.setUsername('rustPlusPlus');
+            await client.user.setUsername(config.discord.username);
         }
         catch (e) {
             client.log('WARNING', 'Ignored setUsername.');
@@ -27,7 +27,7 @@ module.exports = {
 
         client.guilds.cache.forEach(async (guild) => {
             try {
-                await guild.members.me.setNickname('rustPlusPlus');
+                await guild.members.me.setNickname(config.discord.username);
             }
             catch (e) {
                 client.log('WARNING', 'Ignored setNickname.');
