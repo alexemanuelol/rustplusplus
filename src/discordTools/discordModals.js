@@ -91,7 +91,7 @@ module.exports = {
     getGroupEditModal(guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
-        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
+        const identifier = JSON.stringify({"serverId":serverId,"groupId":groupId});
 
         const modal = module.exports.getModal({
             customId: `GroupEdit${identifier}`,
@@ -119,7 +119,7 @@ module.exports = {
     getGroupAddSwitchModal(guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
-        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
+        const identifier = JSON.stringify({"serverId":serverId,"groupId":groupId});
 
         const modal = module.exports.getModal({
             customId: `GroupAddSwitch${identifier}`,
@@ -141,7 +141,7 @@ module.exports = {
     getGroupRemoveSwitchModal(guildId, serverId, groupId) {
         const instance = Client.client.readInstanceFile(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
-        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
+        const identifier = JSON.stringify({"serverId":serverId,"groupId":groupId});
 
         const modal = module.exports.getModal({
             customId: `GroupRemoveSwitch${identifier}`,

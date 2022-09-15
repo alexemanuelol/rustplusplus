@@ -20,8 +20,6 @@ module.exports = {
         const changedSwitches = [];
         if (rustplus.smartSwitchIntervalCounter === 0) {
             for (const entityId in instance.serverList[serverId].switches) {
-                instance = client.readInstanceFile(guildId);
-
                 const info = await rustplus.getEntityInfoAsync(entityId);
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.serverList[serverId].switches[entityId].reachable) {
@@ -48,8 +46,6 @@ module.exports = {
         /* Go through all Smart Switches and see if the auto day/night setting is on and if it just became day/night */
         if (rustplus.time.isTurnedDay(time)) {
             for (const [entityId, content] of Object.entries(instance.serverList[serverId].switches)) {
-                instance = client.readInstanceFile(guildId);
-
                 if (content.autoDayNight === 1) {
                     instance.serverList[serverId].switches[entityId].active = true;
                     client.writeInstanceFile(guildId, instance);
@@ -100,8 +96,6 @@ module.exports = {
         }
         else if (rustplus.time.isTurnedNight(time)) {
             for (const [entityId, content] of Object.entries(instance.serverList[serverId].switches)) {
-                instance = client.readInstanceFile(guildId);
-
                 if (content.autoDayNight === 1) {
                     instance.serverList[serverId].switches[entityId].active = false;
                     client.writeInstanceFile(guildId, instance);

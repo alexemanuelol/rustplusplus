@@ -2,8 +2,8 @@ const Fs = require('fs');
 const Path = require('path');
 
 module.exports = (client, guild) => {
-    if (!Fs.existsSync(Path.join(__dirname, '..', 'instances', `${guild.id}.json`))) {
-        Fs.writeFileSync(Path.join(__dirname, '..', 'instances', `${guild.id}.json`), JSON.stringify({
+    if (!Fs.existsSync(Path.join(__dirname, '..', '..', 'instances', `${guild.id}.json`))) {
+        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'instances', `${guild.id}.json`), JSON.stringify({
             firstTime: true,
             role: null,
             generalSettings: client.readGeneralSettingsTemplate(),

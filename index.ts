@@ -37,8 +37,8 @@ function createMissingDirectories() {
     }
 }
 
-process.on('unhandledRejection', error => {
-    client.log(`Unhandled Rejection: ${error}`);
+process.on('unhandledRejection', (error: any) => {
+    client.log(`Unhandled Rejection: ${error?.stack ?? error}`);
 });
 
 exports.client = client;
