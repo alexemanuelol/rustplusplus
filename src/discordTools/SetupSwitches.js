@@ -3,30 +3,33 @@ const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
+    const guildId = rustplus.guildId;
+    const serverId = rustplus.serverId;
 
     if (rustplus.isNewConnection) {
-        await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
+        await DiscordTools.clearTextChannel(guildId, instance.channelId.switches, 100);
     }
 
-    for (const [key, value] of Object.entries(instance.serverList[rustplus.serverId].switches)) {
-        let info = await rustplus.getEntityInfoAsync(key);
+    for (const entityId in instance.serverList[serverId].switches) {
+        instance = client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].switches[entityId];
+        const info = await rustplus.getEntityInfoAsync(entityId);
 
-        instance = client.readInstanceFile(rustplus.guildId);
 
         if (!(await rustplus.isResponseValid(info))) {
-            await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId, rustplus.serverId, key);
-            instance.serverList[rustplus.serverId].switches[key].reachable = false;
+            await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+            entity.reachable = false;
         }
         else {
-            instance.serverList[rustplus.serverId].switches[key].reachable = true;
+            entity.reachable = true;
         }
-        client.writeInstanceFile(rustplus.guildId, instance);
+        client.writeInstanceFile(guildId, instance);
 
-        if (instance.serverList[rustplus.serverId].switches[key].reachable) {
-            instance.serverList[rustplus.serverId].switches[key].active = info.entityInfo.payload.value;
-            client.writeInstanceFile(rustplus.guildId, instance);
+        if (entity.reachable) {
+            entity.active = info.entityInfo.payload.value;
+            client.writeInstanceFile(guildId, instance);
         }
 
-        await DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, rustplus.serverId, key);
+        await DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
     }
 };

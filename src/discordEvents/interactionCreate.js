@@ -5,7 +5,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds');
 module.exports = {
     name: 'interactionCreate',
     async execute(client, interaction) {
-        let instance = client.readInstanceFile(interaction.guildId);
+        const instance = client.readInstanceFile(interaction.guildId);
 
         /* Check so that the interaction comes from valid channels */
         if (!Object.values(instance.channelId).includes(interaction.channelId) && !interaction.isCommand) {
@@ -30,16 +30,15 @@ module.exports = {
             const command = interaction.client.commands.get(interaction.commandName);
 
             /* If the command doesn't exist, return */
-            if (!command) {
-                return;
-            }
+            if (!command) return;
 
             try {
                 await command.execute(client, interaction);
-            } catch (error) {
-                client.log('ERROR', error, 'error');
+            }
+            catch (e) {
+                client.log('ERROR', e, 'error');
 
-                let str = 'There was an error while executing this command!';
+                const str = 'There was an error while executing this command!';
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
                 client.log('ERROR', str, 'error');
             }
@@ -49,6 +48,7 @@ module.exports = {
         }
         else {
             client.log('ERROR', 'Unknown Interaction...', 'error')
+
             if (interaction.isButton()) {
                 try {
                     interaction.deferUpdate();

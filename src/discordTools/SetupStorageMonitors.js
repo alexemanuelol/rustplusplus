@@ -3,27 +3,30 @@ const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, rustplus) => {
     let instance = client.readInstanceFile(rustplus.guildId);
+    const guildId = rustplus.guildId;
+    const serverId = rustplus.serverId;
 
     if (rustplus.isNewConnection) {
-        await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
+        await DiscordTools.clearTextChannel(guildId, instance.channelId.storageMonitors, 100);
     }
 
-    for (const [key, value] of Object.entries(instance.serverList[rustplus.serverId].storageMonitors)) {
-        let info = await rustplus.getEntityInfoAsync(key);
+    for (const entityId in instance.serverList[serverId].storageMonitors) {
+        instance = client.readInstanceFile(guildId);
+        const entity = instance.serverList[serverId].storageMonitors[entityId];
+        const info = await rustplus.getEntityInfoAsync(entityId);
 
-        instance = client.readInstanceFile(rustplus.guildId);
 
         if (!(await rustplus.isResponseValid(info))) {
-            await DiscordMessages.sendStorageMonitorNotFoundMessage(rustplus.guildId, rustplus.serverId, key);
-            instance.serverList[rustplus.serverId].storageMonitors[key].reachable = false;
+            await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
+            entity.reachable = false;
         }
         else {
-            instance.serverList[rustplus.serverId].storageMonitors[key].reachable = true;
+            entity.reachable = true;
         }
-        client.writeInstanceFile(rustplus.guildId, instance);
+        client.writeInstanceFile(guildId, instance);
 
-        if (instance.serverList[rustplus.serverId].storageMonitors[key].reachable) {
-            rustplus.storageMonitors[key] = {
+        if (entity.reachable) {
+            rustplus.storageMonitors[entityId] = {
                 items: info.entityInfo.payload.items,
                 expiry: info.entityInfo.payload.protectionExpiry,
                 capacity: info.entityInfo.payload.capacity,
@@ -32,21 +35,21 @@ module.exports = async (client, rustplus) => {
 
             if (info.entityInfo.payload.capacity !== 0) {
                 if (info.entityInfo.payload.capacity === 28) {
-                    instance.serverList[rustplus.serverId].storageMonitors[key].type = 'toolcupboard';
+                    entity.type = 'toolcupboard';
                     if (info.entityInfo.payload.protectionExpiry === 0) {
-                        instance.serverList[rustplus.serverId].storageMonitors[key].decaying = true;
+                        entity.decaying = true;
                     }
                     else {
-                        instance.serverList[rustplus.serverId].storageMonitors[key].decaying = false;
+                        entity.decaying = false;
                     }
                 }
                 else {
-                    instance.serverList[rustplus.serverId].storageMonitors[key].type = 'container';
+                    entity.type = 'container';
                 }
-                client.writeInstanceFile(rustplus.guildId, instance);
+                client.writeInstanceFile(guildId, instance);
             }
         }
 
-        await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, rustplus.serverId, key);
+        await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, entityId);
     }
 };

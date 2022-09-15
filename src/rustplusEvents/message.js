@@ -129,9 +129,6 @@ async function messageBroadcastEntityChangedStorageMonitor(rustplus, client, mes
 
     if (message.broadcast.entityChanged.payload.value === true) return;
 
-    if (!server.storageMonitors[entityId].reachable &&
-        server.storageMonitors[entityId].type === 'st') return;
-
     if (server.storageMonitors[entityId].type === 'toolcupboard' ||
         message.broadcast.entityChanged.payload.capacity === 28) {
         setTimeout(updateToolCupboard.bind(null, rustplus, client, message), 2000);

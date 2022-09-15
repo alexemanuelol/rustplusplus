@@ -146,14 +146,14 @@ module.exports = {
     },
 
     getSecondsFromStringTime: function (str) {
-        let matches = str.match(/\d+[dhms]/g);
+        const matches = str.match(/\d+[dhms]/g);
         let totSeconds = 0;
 
         if (matches === null) {
             return null;
         }
 
-        for (let match of matches) {
+        for (const match of matches) {
             let value = parseInt(match.slice(0, -1));
             switch (match[match.length - 1]) {
                 case 'd': { /* Days */

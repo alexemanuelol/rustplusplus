@@ -1,25 +1,23 @@
 module.exports = {
     gridDiameter: 146.25,
 
-    getPos: function (x, y, mapSize, showMonument = true, rustplus = null) {
-        let correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
-        let pos = null;
+    getPos: function (x, y, mapSize, rustplus) {
+        const correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
+        const pos = { location: null, monument: null, string: null }
 
-        let isOutside = false;
         if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
-            isOutside = true;
             if (module.exports.isOutsideRowOrColumn(x, y, correctedMapSize)) {
                 if (x < 0 && y > correctedMapSize) {
-                    pos = 'North West';
+                    pos.location = 'North West';
                 }
                 else if (x < 0 && y < 0) {
-                    pos = 'South West';
+                    pos.location = 'South West';
                 }
                 else if (x > correctedMapSize && y > correctedMapSize) {
-                    pos = 'North East';
+                    pos.location = 'North East';
                 }
                 else {
-                    pos = 'South East';
+                    pos.location = 'South East';
                 }
             }
             else {
@@ -32,42 +30,29 @@ module.exports = {
                     str += (y < 0) ? 'South of grid ' : 'North of grid ';
                     str += `${module.exports.getGridPosLettersX(x, correctedMapSize)}`;
                 }
-                pos = str;
+                pos.location = str;
             }
         }
         else {
-            pos = module.exports.getGridPos(x, y, mapSize);
+            pos.location = module.exports.getGridPos(x, y, mapSize);
         }
 
-        if (showMonument) {
-            if (rustplus === null || (rustplus && !rustplus.isOperational)) return pos;
-
-            let monumentObj = null;
-            for (let monument of rustplus.map.monuments) {
-                if (monument.token === 'DungeonBase' || !(monument.token in rustplus.map.monumentInfo)) continue;
-                if (module.exports.getDistance(x, y, monument.x, monument.y) <=
-                    rustplus.map.monumentInfo[monument.token].radius) {
-                    monumentObj = rustplus.map.monumentInfo[monument.token];
-                    break;
-                }
-            }
-
-            if (monumentObj !== null && isOutside) {
-                return `${monumentObj.clean}`;
-            }
-            else if (monumentObj !== null) {
-                return `${pos} (${monumentObj.clean})`;
-            }
-            else {
-                return pos;
+        for (const monument of rustplus.map.monuments) {
+            if (monument.token === 'DungeonBase' || !(monument.token in rustplus.map.monumentInfo)) continue;
+            if (module.exports.getDistance(x, y, monument.x, monument.y) <=
+                rustplus.map.monumentInfo[monument.token].radius) {
+                pos.monument = rustplus.map.monumentInfo[monument.token].clean;
+                break;
             }
         }
+
+        pos.string = `${pos.location}${pos.monument !== null ? ` (${pos.monument})` : ''}`;
 
         return pos;
     },
 
     getGridPos: function (x, y, mapSize) {
-        let correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
+        const correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
 
         /* Outside the grid system */
         if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
@@ -81,19 +66,19 @@ module.exports = {
     },
 
     getGridPosLettersX: function (x, mapSize) {
-        let num = 1;
+        let counter = 1;
         for (let startGrid = 0; startGrid < mapSize; startGrid += module.exports.gridDiameter) {
             if (x >= startGrid && x <= (startGrid + module.exports.gridDiameter)) {
                 /* We're at the correct grid! */
-                return module.exports.numberToLetters(num);
+                return module.exports.numberToLetters(counter);
             }
-            num++;
+            counter++;
         }
     },
 
     getGridPosNumberY: function (y, mapSize) {
         let counter = 1;
-        let numberOfGrids = Math.floor(mapSize / module.exports.gridDiameter);
+        const numberOfGrids = Math.floor(mapSize / module.exports.gridDiameter);
         for (let startGrid = 0; startGrid < mapSize; startGrid += module.exports.gridDiameter) {
             if (y >= startGrid && y <= (startGrid + module.exports.gridDiameter)) {
                 /* We're at the correct grid! */
@@ -104,15 +89,15 @@ module.exports = {
     },
 
     numberToLetters: function (num) {
-        let mod = num % 26;
+        const mod = num % 26;
         let pow = num / 26 | 0;
-        var out = mod ? String.fromCharCode(64 + mod) : (pow--, 'Z');
+        const out = mod ? String.fromCharCode(64 + mod) : (pow--, 'Z');
         return pow ? module.exports.numberToLetters(pow) + out : out;
     },
 
     getCorrectedMapSize: function (mapSize) {
-        let remainder = mapSize % module.exports.gridDiameter;
-        let offset = module.exports.gridDiameter - remainder;
+        const remainder = mapSize % module.exports.gridDiameter;
+        const offset = module.exports.gridDiameter - remainder;
         return (remainder < 120) ? mapSize - remainder : mapSize + offset;
     },
 
@@ -134,16 +119,14 @@ module.exports = {
     },
 
     isOutsideGridSystem: function (x, y, mapSize, offset = 0) {
-        if (x < -offset || x > (mapSize + offset) ||
-            y < -offset || y > (mapSize + offset)) {
+        if (x < -offset || x > (mapSize + offset) || y < -offset || y > (mapSize + offset)) {
             return true;
         }
         return false;
     },
 
     isOutsideRowOrColumn: function (x, y, mapSize) {
-        if ((x < 0 && y > mapSize) || (x < 0 && y < 0) ||
-            (x > mapSize && y > mapSize) || (x > mapSize && y < 0)) {
+        if ((x < 0 && y > mapSize) || (x < 0 && y < 0) || (x > mapSize && y > mapSize) || (x > mapSize && y < 0)) {
             return true;
         }
         return false;

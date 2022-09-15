@@ -112,14 +112,14 @@ module.exports = {
         for (const [id, timer] of Object.entries(rustplus.mapMarkers.cargoShipEgressTimers)) {
             let cargoShip = rustplus.mapMarkers.getMarkerByTypeId(rustplus.mapMarkers.types.CargoShip, parseInt(id));
             let time = Timer.getTimeLeftOfTimer(timer, 's');
-            cargoShipMessage = `Egress in ${time} at ${cargoShip.location}.`;
+            cargoShipMessage = `Egress in ${time} at ${cargoShip.location.string}.`;
             cargoShipMessage += `\nCrates: (${cargoShip.crates.length}/3).`;
             break;
         }
 
         if (cargoShipMessage === '') {
             for (let cargoShip of rustplus.mapMarkers.cargoShips) {
-                cargoShipMessage = `At ${cargoShip.location}.`;
+                cargoShipMessage = `At ${cargoShip.location.string}.`;
                 cargoShipMessage += `\nCrates: (${cargoShip.crates.length}/3).`;
                 break;
             }
@@ -139,7 +139,7 @@ module.exports = {
         /* PatrolHelicopter */
         let patrolHelicopterMessage = '';
         for (let patrolHelicopter of rustplus.mapMarkers.patrolHelicopters) {
-            patrolHelicopterMessage = `At ${patrolHelicopter.location}.`
+            patrolHelicopterMessage = `At ${patrolHelicopter.location.string}.`
             break;
         }
 
@@ -192,7 +192,7 @@ module.exports = {
             let time = Timer.getTimeLeftOfTimer(timer, 's');
 
             if (time !== null) {
-                smallOilMessage = `${time} until unlocks at ${crate.location}.`;
+                smallOilMessage = `${time} until unlocks at ${crate.location.location}.`;
                 break;
             }
         }
@@ -216,7 +216,7 @@ module.exports = {
             let time = Timer.getTimeLeftOfTimer(timer, 's');
 
             if (time !== null) {
-                largeOilMessage = `${time} until unlocks at ${crate.location}.`;
+                largeOilMessage = `${time} until unlocks at ${crate.location.location}.`;
                 break;
             }
         }
@@ -235,7 +235,7 @@ module.exports = {
         /* CH47 */
         let ch47Message = '';
         for (let ch47 of rustplus.mapMarkers.ch47s) {
-            ch47Message = `At ${ch47.location}.`
+            ch47Message = `At ${ch47.location.string}.`
             break;
         }
 
@@ -267,7 +267,7 @@ module.exports = {
                 for (let crate of rustplus.mapMarkers.crates) {
                     if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(crate.crateType)) {
                         if (crate.crateType === 'grid') {
-                            crateMessage = `At ${crate.location}.`;
+                            crateMessage = `At ${crate.location.string}.`;
                         }
                         else {
                             crateMessage = `At ${crate.crateType}.`;
@@ -324,7 +324,7 @@ module.exports = {
             }
 
             names += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
-            locations += (player.isOnline || player.isAlive) ? `${player.pos}\n` : '-\n';
+            locations += (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
 
             if (player.isOnline) {
                 status += (player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS) ?

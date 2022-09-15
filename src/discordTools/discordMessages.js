@@ -6,6 +6,7 @@ const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
+const Scrape = require('../util/scrape.js');
 
 module.exports = {
     sendMessage: async function (guildId, content, messageId, channelId, interaction = null) {
@@ -274,7 +275,7 @@ module.exports = {
         const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
-            embeds: [await DiscordEmbeds.getAlarmEmbedNew(guildId, serverId, entityId)],
+            embeds: [await DiscordEmbeds.getAlarmEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
@@ -342,5 +343,29 @@ module.exports = {
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.events);
+    },
+
+    sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const png = await Scrape.scrapeSteamProfilePicture(Client.client, steamId);
+        const content = {
+            embeds: [DiscordEmbeds.getActivityNotificationEmbed(guildId, serverId, color, text, steamId, png)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
+
+    sendTeamChatMessage: async function (guildId, message) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getEmbed({
+                color: message.color,
+                description: `**${message.name}**: ${message.message}`
+            })]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
     },
 }
