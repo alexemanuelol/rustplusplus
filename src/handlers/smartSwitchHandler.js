@@ -3,7 +3,7 @@ const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = {
     handler: async function (rustplus, client, time) {
-        let instance = client.readInstanceFile(rustplus.guildId);
+        const instance = client.readInstanceFile(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
 

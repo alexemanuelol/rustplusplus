@@ -71,7 +71,7 @@ module.exports = {
     getSmartSwitchSelectMenu: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
-        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+        const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
         let autoDayNightString = 'AUTO SETTING: ';
         if (entity.autoDayNight === 0) autoDayNightString += 'OFF';
