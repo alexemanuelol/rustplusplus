@@ -5,6 +5,8 @@ const Timer = require('../util/timer');
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
         const command = message.broadcast.teamMessage.message.message;
+        const callerSteamId = message.broadcast.teamMessage.message.steamId.toString();
+        const callerName = message.broadcast.teamMessage.message.name;
         const commandLowerCase = message.broadcast.teamMessage.message.message.toLowerCase();
         const prefix = rustplus.generalSettings.prefix;
 
@@ -19,7 +21,7 @@ module.exports = {
             rustplus.printCommandOutput(rustplus.getCommandAfk());
         }
         else if (commandLowerCase.startsWith(`${prefix}alive`)) {
-            rustplus.printCommandOutput(rustplus.getCommandAlive(message));
+            rustplus.printCommandOutput(rustplus.getCommandAlive(command));
         }
         else if (commandLowerCase === `${prefix}bradley`) {
             rustplus.printCommandOutput(rustplus.getCommandBradley());
@@ -40,16 +42,16 @@ module.exports = {
             rustplus.printCommandOutput(rustplus.getCommandLarge());
         }
         else if (commandLowerCase.startsWith(`${prefix}leader`)) {
-            rustplus.printCommandOutput(await rustplus.getCommandLeader(message));
+            rustplus.printCommandOutput(await rustplus.getCommandLeader(command, callerSteamId));
         }
         else if (commandLowerCase.startsWith(`${prefix}marker `)) {
-            rustplus.printCommandOutput(await rustplus.getCommandMarker(message));
+            rustplus.printCommandOutput(await rustplus.getCommandMarker(command, callerSteamId));
         }
         else if (commandLowerCase === `${prefix}mute`) {
             rustplus.printCommandOutput(rustplus.getCommandMute());
         }
         else if (commandLowerCase.startsWith(`${prefix}note`)) {
-            rustplus.printCommandOutput(rustplus.getCommandNote(message));
+            rustplus.printCommandOutput(rustplus.getCommandNote(command));
         }
         else if (commandLowerCase === `${prefix}offline`) {
             rustplus.printCommandOutput(rustplus.getCommandOffline());
@@ -58,13 +60,13 @@ module.exports = {
             rustplus.printCommandOutput(rustplus.getCommandOnline());
         }
         else if (commandLowerCase.startsWith(`${prefix}player`)) {
-            rustplus.printCommandOutput(rustplus.getCommandPlayer(message));
+            rustplus.printCommandOutput(rustplus.getCommandPlayer(command));
         }
         else if (commandLowerCase === `${prefix}pop`) {
             rustplus.printCommandOutput(rustplus.getCommandPop());
         }
         else if (commandLowerCase.startsWith(`${prefix}prox`)) {
-            rustplus.printCommandOutput(await rustplus.getCommandProx(message));
+            rustplus.printCommandOutput(await rustplus.getCommandProx(command, callerSteamId));
         }
         else if (commandLowerCase === `${prefix}small`) {
             rustplus.printCommandOutput(rustplus.getCommandSmall());
@@ -82,7 +84,7 @@ module.exports = {
             rustplus.printCommandOutput(await rustplus.getCommandTranslateFromTo(command));
         }
         else if (commandLowerCase.startsWith(`${prefix}tts `)) {
-            rustplus.printCommandOutput(await rustplus.getCommandTTS(message));
+            rustplus.printCommandOutput(await rustplus.getCommandTTS(command, callerName));
         }
         else if (commandLowerCase === `${prefix}unmute`) {
             rustplus.printCommandOutput(rustplus.getCommandUnmute());

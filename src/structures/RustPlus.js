@@ -498,8 +498,7 @@ class RustPlus extends RustPlusLib {
         return string !== '' ? `${string.slice(0, -2)}.` : 'No one is AFK.';
     }
 
-    getCommandAlive(message) {
-        const command = message.broadcast.teamMessage.message.message;
+    getCommandAlive(command) {
         const prefix = this.generalSettings.prefix;
         if (command.toLowerCase() === `${prefix}alive`) {
             const player = this.team.getPlayerLongestAlive();
@@ -681,10 +680,8 @@ class RustPlus extends RustPlusLib {
         return strings;
     }
 
-    async getCommandLeader(message) {
-        const command = message.broadcast.teamMessage.message.message;
+    async getCommandLeader(command, callerSteamId) {
         const prefix = this.generalSettings.prefix;
-        const callerId = message.broadcast.teamMessage.message.steamId.toString();
 
         if (!this.generalSettings.leaderCommandEnabled) return 'Leader command is disabled in settings.';
 
@@ -694,9 +691,9 @@ class RustPlus extends RustPlusLib {
         }
 
         if (command.toLowerCase() === `${prefix}leader`) {
-            if (this.team.leaderSteamId !== callerId) {
-                await this.team.changeLeadership(callerId);
-                const player = this.team.getPlayer(callerId);
+            if (this.team.leaderSteamId !== callerSteamId) {
+                await this.team.changeLeadership(callerSteamId);
+                const player = this.team.getPlayer(callerSteamId);
                 return `Team leadership was transferred to ${player.name}.`;
             }
             else {
@@ -723,10 +720,8 @@ class RustPlus extends RustPlusLib {
         return null;
     }
 
-    async getCommandMarker(message) {
-        let command = message.broadcast.teamMessage.message.message;
+    async getCommandMarker(command, callerSteamId) {
         const prefix = this.generalSettings.prefix;
-        const callerId = message.broadcast.teamMessage.message.steamId.toString();
 
         command = command.slice(`${prefix}marker `.length).trim();
         const subcommand = command.replace(/ .*/, '');
@@ -741,7 +736,7 @@ class RustPlus extends RustPlusLib {
                 if (!(await this.isResponseValid(teamInfo))) return null;
 
                 for (const player of teamInfo.teamInfo.members) {
-                    if (player.steamId.toString() === callerId) {
+                    if (player.steamId.toString() === callerSteamId) {
                         const instance = Client.client.readInstanceFile(this.guildId);
                         instance.serverList[this.serverId].markers[name] = { x: player.x, y: player.y };
                         Client.client.writeInstanceFile(this.guildId, instance);
@@ -778,7 +773,7 @@ class RustPlus extends RustPlusLib {
                 if (!(await this.isResponseValid(teamInfo))) return null;
 
                 for (const player of teamInfo.teamInfo.members) {
-                    if (player.steamId.toString() === callerId) {
+                    if (player.steamId.toString() === callerSteamId) {
                         const direction = Map.getAngleBetweenPoints(player.x, player.y, this.markers[command].x,
                             this.markers[command].y);
                         const distance = Math.floor(Map.getDistance(player.x, player.y, this.markers[command].x,
@@ -802,8 +797,7 @@ class RustPlus extends RustPlusLib {
         return `In-Game bot messages muted.`;
     }
 
-    getCommandNote(message) {
-        const command = message.broadcast.teamMessage.message.message;
+    getCommandNote(command) {
         const prefix = this.generalSettings.prefix;
         const instance = Client.client.readInstanceFile(this.guildId);
         const strings = [];
@@ -867,10 +861,9 @@ class RustPlus extends RustPlusLib {
         return string !== '' ? `${string.slice(0, -2)}.` : 'No one is online.';
     }
 
-    getCommandPlayer(message) {
+    getCommandPlayer(command) {
         const instance = Client.client.readInstanceFile(this.guildId);
         const battlemetricsId = instance.serverList[this.serverId].battlemetricsId;
-        const command = message.broadcast.teamMessage.message.message;
         const prefix = this.generalSettings.prefix;
 
         if (!battlemetricsId) return 'This server is using streamer-mode.';
@@ -930,10 +923,8 @@ class RustPlus extends RustPlusLib {
         return `${string}${this.info.queuedPlayers !== 0 ? ` and ${this.info.queuedPlayers} players in queue.` : '.'}`;
     }
 
-    async getCommandProx(message) {
-        const callerId = message.broadcast.teamMessage.message.steamId.toString();
-        const caller = this.team.getPlayer(callerId);
-        const command = message.broadcast.teamMessage.message.message;
+    async getCommandProx(command, callerSteamId) {
+        const caller = this.team.getPlayer(callerSteamId);
         const prefix = this.generalSettings.prefix;
 
         if (command.toLowerCase() !== `${prefix}prox` && !command.toLowerCase().startsWith(`${prefix}prox `)) {
@@ -947,7 +938,7 @@ class RustPlus extends RustPlusLib {
 
         if (command.toLowerCase() === `${prefix}prox`) {
             const closestPlayers = [];
-            let players = [...this.team.players].filter(e => e.steamId !== callerId && e.isAlive === true);
+            let players = [...this.team.players].filter(e => e.steamId !== callerSteamId && e.isAlive === true);
             if (players.length === 0) return 'You are the only one in the team.';
 
             for (let i = 0; i < 3; i++) {
@@ -1146,11 +1137,11 @@ class RustPlus extends RustPlusLib {
         }
     }
 
-    async getCommandTTS(message) {
+    async getCommandTTS(command, callerName) {
         const prefix = this.generalSettings.prefix;
-        const text = message.broadcast.teamMessage.message.message.slice(`${prefix}tts `.length).trim();
+        const text = command.slice(`${prefix}tts `.length).trim();
 
-        await DiscordMessages.sendTTSMessage(this.guildId, message.broadcast.teamMessage.message.name, text);
+        await DiscordMessages.sendTTSMessage(this.guildId, callerName, text);
         return 'Sent the Text-To-Speech.';
     }
 
