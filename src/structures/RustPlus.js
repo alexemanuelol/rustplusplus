@@ -518,35 +518,58 @@ class RustPlus extends RustPlusLib {
         return null;
     }
 
-    getCommandBradley() {
+    getCommandBradley(isInfoChannel = false) {
         const strings = [];
         for (const timer of Object.values(this.mapMarkers.bradleyAPCRespawnTimers)) {
             const time = Timer.getTimeLeftOfTimer(timer);
-            if (time) strings.push(`${time} before Bradley APC respawns.`);
+            if (time) {
+                if (isInfoChannel) {
+                    return `${Timer.getTimeLeftOfTimer(timer, 's')} before respawn.`;
+                }
+                else {
+                    strings.push(`${time} before Bradley APC respawns.`);
+                }
+            }
         }
 
         if (strings.length === 0) {
             if (this.mapMarkers.timeSinceBradleyAPCWasDestroyed === null) {
-                return 'Bradley APC is probably roaming around at Launch Site.';
+                if (isInfoChannel) {
+                    return 'At Launchsite.';
+                }
+                else {
+                    return 'Bradley APC is probably roaming around at Launch Site.';
+                }
             }
             else {
                 const secondsSince = (new Date() - this.mapMarkers.timeSinceBradleyAPCWasDestroyed) / 1000;
-                return `${Timer.secondsToFullScale(secondsSince)} since Bradley APC got destroyed.`;
+                if (isInfoChannel) {
+                    return `${Timer.secondsToFullScale(secondsSince, 's')} since destroyed.`;
+                }
+                else {
+                    return `${Timer.secondsToFullScale(secondsSince)} since Bradley APC got destroyed.`;
+                }
             }
         }
 
         return strings;
     }
 
-    getCommandCargo() {
+    getCommandCargo(isInfoChannel = false) {
         const strings = [];
         let unhandled = this.mapMarkers.cargoShips.map(e => e.id);
         for (const [id, timer] of Object.entries(this.mapMarkers.cargoShipEgressTimers)) {
             const cargoShip = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.CargoShip, parseInt(id));
             const time = Timer.getTimeLeftOfTimer(timer);
             if (time) {
-                strings.push(`${time} before Cargo Ship at ${cargoShip.location.string}` +
-                    ` enters egress stage. Crates: (${cargoShip.crates.length}/3).`);
+                if (isInfoChannel) {
+                    return `Egress in ${Timer.getTimeLeftOfTimer(timer, 's')} at ${cargoShip.location.string}.\n` +
+                        `Crates: (${cargoShip.crates.length}/3).`;
+                }
+                else {
+                    strings.push(`${time} before Cargo Ship at ${cargoShip.location.string}` +
+                        ` enters egress stage. Crates: (${cargoShip.crates.length}/3).`);
+                }
             }
             unhandled = unhandled.filter(e => e != parseInt(id));
         }
@@ -555,72 +578,107 @@ class RustPlus extends RustPlusLib {
             for (const id of unhandled) {
                 const cargoShip = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.CargoShip, id);
                 if (cargoShip.onItsWayOut) {
-                    strings.push(
-                        `Cargo Ship is leaving the map at ${cargoShip.location.string}.` +
-                        ` Crates: (${cargoShip.crates.length}/3).`
-                    );
+                    if (isInfoChannel) {
+                        return `Leaving at ${cargoShip.location.string}.\nCrates: (${cargoShip.crates.length}/3).`;
+                    }
+                    else {
+                        strings.push(`Cargo Ship is leaving the map at ${cargoShip.location.string}.` +
+                            ` Crates: (${cargoShip.crates.length}/3).`);
+                    }
                 }
                 else {
-                    strings.push(
-                        `Cargo Ship is located at ${cargoShip.location.string}.` +
-                        ` Crates: (${cargoShip.crates.length}/3).`
-                    );
+                    if (isInfoChannel) {
+                        return `At ${cargoShip.location.string}.\nCrates: (${cargoShip.crates.length}/3).`;
+                    }
+                    else {
+                        strings.push(`Cargo Ship is located at ${cargoShip.location.string}.` +
+                            ` Crates: (${cargoShip.crates.length}/3).`);
+                    }
                 }
             }
         }
 
         if (strings.length === 0) {
             if (this.mapMarkers.timeSinceCargoShipWasOut === null) {
-                return 'Cargo Ship is not currently on the map.';
+                if (isInfoChannel) {
+                    return 'Not active.';
+                }
+                else {
+                    return 'Cargo Ship is not currently on the map.';
+                }
             }
             else {
                 const secondsSince = (new Date() - this.mapMarkers.timeSinceCargoShipWasOut) / 1000;
-                return `${Timer.secondsToFullScale(secondsSince)} since Cargo Ship left the map.`;
+                if (isInfoChannel) {
+                    return `${Timer.secondsToFullScale(secondsSince)} since last.`;
+                }
+                else {
+                    return `${Timer.secondsToFullScale(secondsSince)} since Cargo Ship left the map.`;
+                }
             }
         }
 
         return strings;
     }
 
-    getCommandChinook() {
+    getCommandChinook(isInfoChannel = false) {
         const strings = [];
         for (const ch47 of this.mapMarkers.ch47s) {
             if (ch47.ch47Type === 'crate') {
-                strings.push(`Chinook 47 is located at ${ch47.location.string}.`);
+                if (isInfoChannel) {
+                    return `At ${ch47.location.string}.`;
+                }
+                else {
+                    strings.push(`Chinook 47 is located at ${ch47.location.string}.`);
+                }
             }
         }
 
         if (strings.length === 0) {
             if (this.mapMarkers.timeSinceCH47WasOut === null) {
-                return 'Chinook 47 is not currently on the map.';
+                return isInfoChannel ? 'Not active.' : 'Chinook 47 is not currently on the map.';
             }
             else {
                 const secondsSince = (new Date() - this.mapMarkers.timeSinceCH47WasOut) / 1000;
-                strings.push(`${Timer.secondsToFullScale(secondsSince)} since the last Chinook 47 was on the map.`);
+                if (isInfoChannel) {
+                    return `${Timer.secondsToFullScale(secondsSince, 's')} since last.`;
+                }
+                else {
+                    strings.push(`${Timer.secondsToFullScale(secondsSince)} since the last Chinook 47 was on the map.`);
+                }
             }
         }
 
         return strings;
     }
 
-    getCommandCrate() {
+    getCommandCrate(isInfoChannel = false) {
         const strings = [];
         for (const [id, timer] of Object.entries(this.mapMarkers.crateDespawnTimers)) {
             const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
             const time = Timer.getTimeLeftOfTimer(timer);
 
-            if (time) strings.push(`${time} before Locked Crate at ${crate.crateType} despawns.`);
+            if (time) {
+                if (isInfoChannel) {
+                    return `${Timer.getTimeLeftOfTimer(timer, 's')} until despawns at ${crate.crateType}`;
+                }
+                else {
+                    strings.push(`${time} before Locked Crate at ${crate.crateType} despawns.`);
+                }
+            }
         }
 
         if (strings.length === 0) {
             if (this.mapMarkers.timeSinceCH47DroppedCrate === null) {
                 for (const crate of this.mapMarkers.crates) {
                     if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(crate.crateType)) {
-                        if (crate.crateType === 'grid') {
-                            strings.push(`Locked Crate is located at ${crate.location.string}.`);
+                        if (isInfoChannel) {
+                            return `At ` +
+                                `${crate.crateType === 'grid' ? `${crate.location.string}` : `${crate.crateType}`}.`;
                         }
                         else {
-                            strings.push(`Locked Crate is located at ${crate.crateType}.`);
+                            strings.push(`Locked Crate is located at ` +
+                                `${crate.crateType === 'grid' ? `${crate.location.string}` : `${crate.crateType}`}.`);
                         }
                     }
                 }
@@ -629,18 +687,29 @@ class RustPlus extends RustPlusLib {
             }
             else {
                 const secondsSince = (new Date() - this.mapMarkers.timeSinceCH47DroppedCrate) / 1000;
-                const timeSince = Timer.secondsToFullScale(secondsSince);
-                return `${timeSince} since Chinook 47 last dropped a Locked Crate.`;
+                if (isInfoChannel) {
+                    const timeSince = Timer.secondsToFullScale(secondsSince, 's');
+                    return `${timeSince} since last drop.`;
+                }
+                else {
+                    const timeSince = Timer.secondsToFullScale(secondsSince);
+                    return `${timeSince} since Chinook 47 last dropped a Locked Crate.`;
+                }
             }
         }
 
         return strings;
     }
 
-    getCommandHeli() {
+    getCommandHeli(isInfoChannel = false) {
         const strings = [];
         for (const patrolHelicopter of this.mapMarkers.patrolHelicopters) {
-            strings.push(`Patrol Helicopter is located at ${patrolHelicopter.location.string}.`);
+            if (isInfoChannel) {
+                return `At ${patrolHelicopter.location.string}`;
+            }
+            else {
+                strings.push(`Patrol Helicopter is located at ${patrolHelicopter.location.string}.`);
+            }
         }
 
         if (strings.length === 0) {
@@ -648,42 +717,65 @@ class RustPlus extends RustPlusLib {
             const wasDestroyed = this.mapMarkers.timeSincePatrolHelicopterWasDestroyed;
 
             if (wasOnMap == null && wasDestroyed === null) {
-                return 'Patrol Helicopter is not currently on the map.';
+                return isInfoChannel ? 'Not active.' : 'Patrol Helicopter is not currently on the map.';
             }
             else if (wasOnMap !== null && wasDestroyed === null) {
                 const secondsSince = (new Date() - wasOnMap) / 1000;
-                const timeSince = Timer.secondsToFullScale(secondsSince);
-                return `${timeSince} since the last Patrol Helicopter was on the map.`;
+                if (isInfoChannel) {
+                    const timeSince = Timer.secondsToFullScale(secondsSince, 's');
+                    return `${timeSince} since last.`;
+                }
+                else {
+                    const timeSince = Timer.secondsToFullScale(secondsSince);
+                    return `${timeSince} since the last Patrol Helicopter was on the map.`;
+                }
             }
             else if (wasOnMap !== null && wasDestroyed !== null) {
-                const timeSinceOnMap = Timer.secondsToFullScale((new Date() - wasOnMap) / 1000);
-                const timeSinceDestroyed = Timer.secondsToFullScale((new Date() - wasDestroyed) / 1000);
-                return `${timeSinceOnMap} since the last Patrol Helicopter was on the map, ` +
-                    `${timeSinceDestroyed} since it last got downed.`;
+                if (isInfoChannel) {
+                    const timeSinceOnMap = Timer.secondsToFullScale((new Date() - wasOnMap) / 1000, 's');
+                    const timeSinceDestroyed = Timer.secondsToFullScale((new Date() - wasDestroyed) / 1000, 's');
+                    return `${timeSinceOnMap} since last.\n${timeSinceDestroyed} since destroyed.`;
+                }
+                else {
+                    const timeSinceOnMap = Timer.secondsToFullScale((new Date() - wasOnMap) / 1000);
+                    const timeSinceDestroyed = Timer.secondsToFullScale((new Date() - wasDestroyed) / 1000);
+                    return `${timeSinceOnMap} since the last Patrol Helicopter was on the map, ` +
+                        `${timeSinceDestroyed} since it last got downed.`;
+                }
             }
         }
 
         return strings;
     }
 
-    getCommandLarge() {
+    getCommandLarge(isInfoChannel = false) {
         const strings = [];
         for (const [id, timer] of Object.entries(this.mapMarkers.crateLargeOilRigTimers)) {
             const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
             const time = Timer.getTimeLeftOfTimer(timer);
             if (time) {
-                strings.push(`${time} before Locked Crate at Large Oil Rig (${crate.location.location}) unlocks.`);
+                if (isInfoChannel) {
+                    return `${Timer.getTimeLeftOfTimer(timer, 's')} until unlocks at ${crate.location.location}.`;
+                }
+                else {
+                    strings.push(`${time} before Locked Crate at Large Oil Rig (${crate.location.location}) unlocks.`);
+                }
             }
         }
 
         if (strings.length === 0) {
             if (this.mapMarkers.timeSinceLargeOilRigWasTriggered === null) {
-                return 'No current data on Large Oil Rig.';
+                return isInfoChannel ? 'No data.' : 'No current data on Large Oil Rig.';
             }
             else {
                 const secondsSince = (new Date() - this.mapMarkers.timeSinceLargeOilRigWasTriggered) / 1000;
-                return `${Timer.secondsToFullScale(secondsSince)} ` +
-                    `since Heavy Scientists last got called to Large Oil Rig.`;
+                if (isInfoChannel) {
+                    return `${Timer.secondsToFullScale(secondsSince, 's')} since last event.`;
+                }
+                else {
+                    return `${Timer.secondsToFullScale(secondsSince)} ` +
+                        `since Heavy Scientists last got called to Large Oil Rig.`;
+                }
             }
         }
 
@@ -980,24 +1072,34 @@ class RustPlus extends RustPlusLib {
         return `Could not identify team member: ${memberName}.`;
     }
 
-    getCommandSmall() {
+    getCommandSmall(isInfoChannel = false) {
         const strings = [];
         for (const [id, timer] of Object.entries(this.mapMarkers.crateSmallOilRigTimers)) {
             const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
             const time = Timer.getTimeLeftOfTimer(timer);
             if (time) {
-                strings.push(`${time} before Locked Crate at Small Oil Rig (${crate.location.location}) unlocks.`);
+                if (isInfoChannel) {
+                    return `${Timer.getTimeLeftOfTimer(timer, 's')} until unlocks at ${crate.location.location}.`;
+                }
+                else {
+                    strings.push(`${time} before Locked Crate at Small Oil Rig (${crate.location.location}) unlocks.`);
+                }
             }
         }
 
         if (strings.length === 0) {
             if (this.mapMarkers.timeSinceSmallOilRigWasTriggered === null) {
-                return 'No current data on Small Oil Rig.';
+                return isInfoChannel ? 'No data.' : 'No current data on Small Oil Rig.';
             }
             else {
                 const secondsSince = (new Date() - this.mapMarkers.timeSinceSmallOilRigWasTriggered) / 1000;
-                return `${Timer.secondsToFullScale(secondsSince)} ` +
-                    `since Heavy Scientists last got called to Small Oil Rig.`;
+                if (isInfoChannel) {
+                    return `${Timer.secondsToFullScale(secondsSince, 's')} since last event.`;
+                }
+                else {
+                    return `${Timer.secondsToFullScale(secondsSince)} ` +
+                        `since Heavy Scientists last got called to Small Oil Rig.`;
+                }
             }
         }
 
