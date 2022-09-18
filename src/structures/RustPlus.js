@@ -554,8 +554,18 @@ class RustPlus extends RustPlusLib {
         if (unhandled.length > 0) {
             for (const id of unhandled) {
                 const cargoShip = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.CargoShip, id);
-                strings.push(`Cargo Ship is located at ${cargoShip.location.string}.` +
-                    ` Crates: (${cargoShip.crates.length}/3).`);
+                if (cargoShip.onItsWayOut) {
+                    strings.push(
+                        `Cargo Ship is leaving the map at ${cargoShip.location.string}.` +
+                        ` Crates: (${cargoShip.crates.length}/3).`
+                    );
+                }
+                else {
+                    strings.push(
+                        `Cargo Ship is located at ${cargoShip.location.string}.` +
+                        ` Crates: (${cargoShip.crates.length}/3).`
+                    );
+                }
             }
         }
 
