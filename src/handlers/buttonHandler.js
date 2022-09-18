@@ -1,7 +1,7 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
-const DiscordButtons = require('..//discordTools/discordButtons.js');
+const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
 const Recycler = require('../util/recycler.js');
 
