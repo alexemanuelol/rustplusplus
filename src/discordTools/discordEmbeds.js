@@ -520,5 +520,117 @@ module.exports = {
                 url: `${Constants.STEAM_PROFILES_URL}${steamId}`
             }
         });
-    }
+    },
+
+    getUpdateServerInformationEmbed: function (rustplus) {
+        const instance = Client.client.readInstanceFile(rustplus.guildId);
+
+        const time = rustplus.getCommandTime(true);
+        const timeLeftTitle = `Time till ` +
+            `${rustplus.time.isDay() ? `${Constants.NIGHT_EMOJI}` : `${Constants.DAY_EMOJI}`}`;
+
+        const embed = module.exports.getEmbed({
+            title: 'Server Information',
+            color: '#ce412b',
+            thumbnail: 'attachment://server_info_logo.png',
+            description: rustplus.info.name,
+            fields: [
+                { name: 'Players', value: `\`${rustplus.getCommandPop(true)}\``, inline: true },
+                { name: 'Time', value: `\`${time[0]}\``, inline: true },
+                { name: 'Wipe', value: `\`${rustplus.getCommandWipe(true)}\``, inline: true }]
+        });
+
+        if (time[1] !== null) {
+            embed.addFields(
+                { name: timeLeftTitle, value: `\`${time[1]}\``, inline: true },
+                { name: '\u200B', value: '\u200B', inline: true },
+                { name: '\u200B', value: '\u200B', inline: true });
+        }
+        else {
+            embed.addFields({ name: '\u200B', value: '\u200B', inline: false });
+        }
+
+        embed.addFields(
+            { name: 'Map Size', value: `\`${rustplus.info.mapSize}\``, inline: true },
+            { name: 'Map Seed', value: `\`${rustplus.info.seed}\``, inline: true },
+            { name: 'Map Salt', value: `\`${rustplus.info.salt}\``, inline: true },
+            { name: 'Map', value: `\`${rustplus.info.map}\``, inline: true });
+
+        if (instance.serverList[rustplus.serverId].connect !== null) {
+            embed.addFields({
+                name: 'Connect',
+                value: `\`${instance.serverList[rustplus.serverId].connect}\``,
+                inline: false
+            });
+        }
+
+        return embed;
+    },
+
+    getUpdateEventInformationEmbed: function (rustplus) {
+        const instance = Client.client.readInstanceFile(rustplus.guildId);
+
+        const cargoShipMessage = rustplus.getCommandCargo(true);
+        const patrolHelicopterMessage = rustplus.getCommandHeli(true);
+        const bradleyAPCMessage = rustplus.getCommandBradley(true);
+        const smallOilMessage = rustplus.getCommandSmall(true);
+        const largeOilMessage = rustplus.getCommandLarge(true);
+        const ch47Message = rustplus.getCommandChinook(true);
+        const crateMessage = rustplus.getCommandCrate(true);
+
+        return module.exports.getEmbed({
+            title: 'Event Information',
+            color: '#ce412b',
+            thumbnail: 'attachment://event_info_logo.png',
+            description: 'In-game event information',
+            footer: { text: instance.serverList[rustplus.serverId].title },
+            fields: [
+                { name: 'Cargoship', value: `\`${cargoShipMessage}\``, inline: true },
+                { name: 'Patrol Helicopter', value: `\`${patrolHelicopterMessage}\``, inline: true },
+                { name: 'Bradley APC', value: `\`${bradleyAPCMessage}\``, inline: true },
+                { name: 'Small Oil Rig', value: `\`${smallOilMessage}\``, inline: true },
+                { name: 'Large Oil Rig', value: `\`${largeOilMessage}\``, inline: true },
+                { name: 'Chinook 47', value: `\`${ch47Message}\``, inline: true },
+                { name: 'Crate', value: `\`${crateMessage}\``, inline: true }]
+        });
+    },
+
+    getUpdateTeamInformationEmbed: function (rustplus) {
+        const instance = Client.client.readInstanceFile(rustplus.guildId);
+
+        let names = '';
+        let status = '';
+        let locations = '';
+        for (const player of rustplus.team.players) {
+            if (rustplus.team.teamSize < 12) {
+                names += `[${player.name}](${Constants.STEAM_PROFILES_URL}${player.steamId})`;
+            }
+            else {
+                names += `${player.name}`;
+            }
+
+            names += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
+            locations += (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
+
+            if (player.isOnline) {
+                status += (player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS) ?
+                    `${Constants.AFK_EMOJI}${(player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI} ${player.getAfkTime('dhs')}\n` :
+                    `${Constants.ONLINE_EMOJI}${(player.isAlive) ? Constants.ALIVE_EMOJI : Constants.DEAD_EMOJI}\n`;
+            }
+            else {
+                status += `${Constants.OFFLINE_EMOJI}${(player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI}\n`;
+            }
+        }
+
+        return module.exports.getEmbed({
+            title: 'Team Member Information',
+            color: '#ce412b',
+            thumbnail: 'attachment://team_info_logo.png',
+            footer: { text: instance.serverList[rustplus.serverId].title },
+            fields: [
+                { name: 'Team Member', value: names, inline: true },
+                { name: 'Status', value: status, inline: true },
+                { name: 'Location', value: locations, inline: true }]
+        });
+    },
 }

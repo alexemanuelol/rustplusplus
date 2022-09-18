@@ -44,7 +44,7 @@ module.exports = {
         rustplus.info.updateInfo(info.info);
         rustplus.mapMarkers.updateMapMarkers(mapMarkers.mapMarkers);
 
-        InformationHandler.handler(rustplus, client);
+        InformationHandler.handler(rustplus);
         StorageMonitorHandler.handler(rustplus, client);
         SmartAlarmHandler.handler(rustplus, client);
     },

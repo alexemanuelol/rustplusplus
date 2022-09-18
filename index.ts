@@ -39,6 +39,7 @@ function createMissingDirectories() {
 
 process.on('unhandledRejection', error => {
     client.log(`Unhandled Rejection: ${error}`);
+    console.log(error);
 });
 
 exports.client = client;

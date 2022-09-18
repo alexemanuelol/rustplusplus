@@ -379,4 +379,46 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
     },
+
+    sendUpdateServerInformationMessage: async function (rustplus) {
+        const instance = Client.client.readInstanceFile(rustplus.guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getUpdateServerInformationEmbed(rustplus)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/server_info_logo.png')
+            )]
+        }
+
+        await module.exports.sendMessage(rustplus.guildId, content,
+            instance.informationMessageId.server, instance.channelId.information);
+    },
+
+    sendUpdateEventInformationMessage: async function (rustplus) {
+        const instance = Client.client.readInstanceFile(rustplus.guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getUpdateEventInformationEmbed(rustplus)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/event_info_logo.png')
+            )]
+        }
+
+        await module.exports.sendMessage(rustplus.guildId, content,
+            instance.informationMessageId.event, instance.channelId.information);
+    },
+
+    sendUpdateTeamInformationMessage: async function (rustplus) {
+        const instance = Client.client.readInstanceFile(rustplus.guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getUpdateTeamInformationEmbed(rustplus)],
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/team_info_logo.png')
+            )]
+        }
+
+        await module.exports.sendMessage(rustplus.guildId, content,
+            instance.informationMessageId.team, instance.channelId.information);
+    },
 }

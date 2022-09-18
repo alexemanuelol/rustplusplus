@@ -1011,9 +1011,15 @@ class RustPlus extends RustPlusLib {
         }
     }
 
-    getCommandPop() {
-        let string = `Population: (${this.info.players}/${this.info.maxPlayers}) players`;
-        return `${string}${this.info.queuedPlayers !== 0 ? ` and ${this.info.queuedPlayers} players in queue.` : '.'}`;
+    getCommandPop(isInfoChannel = false) {
+        if (isInfoChannel) {
+            return `${this.info.players}${this.info.isQueue() ? `(${this.info.queuedPlayers})` : ''}` +
+                `/${this.info.maxPlayers}`;
+        }
+        else {
+            const string = `Population: (${this.info.players}/${this.info.maxPlayers}) players`;
+            return `${string}${this.info.isQueue() ? ` and ${this.info.queuedPlayers} players in queue.` : '.'}`;
+        }
     }
 
     async getCommandProx(command, callerSteamId) {
@@ -1106,15 +1112,21 @@ class RustPlus extends RustPlusLib {
         return strings;
     }
 
-    getCommandTime() {
-        const string = `In-Game time: ${Timer.convertDecimalToHoursMinutes(this.time.time)}.`;
-        const timeLeft = this.time.getTimeTillDayOrNight();
-
-        if (timeLeft !== null) {
-            return `${string} ${timeLeft} before ${this.time.isDay() ? 'nightfall' : 'daylight'}.`;
+    getCommandTime(isInfoChannel = false) {
+        const time = Timer.convertDecimalToHoursMinutes(this.time.time);
+        if (isInfoChannel) {
+            return [time, this.time.getTimeTillDayOrNight('s')];
         }
+        else {
+            const string = `In-Game time: ${time}.`;
+            const timeLeft = this.time.getTimeTillDayOrNight();
 
-        return string;
+            if (timeLeft !== null) {
+                return `${string} ${timeLeft} before ${this.time.isDay() ? 'nightfall' : 'daylight'}.`;
+            }
+
+            return string;
+        }
     }
 
     getCommandTimer(command) {
@@ -1266,8 +1278,13 @@ class RustPlus extends RustPlusLib {
         return strings;
     }
 
-    getCommandWipe() {
-        return `${this.info.getTimeSinceWipe()} since wipe.`;
+    getCommandWipe(isInfoChannel = false) {
+        if (isInfoChannel) {
+            return `Day ${Math.ceil(this.info.getSecondsSinceWipe() / (60 * 60 * 24))}`;
+        }
+        else {
+            return `${this.info.getTimeSinceWipe()} since wipe.`;
+        }
     }
 }
 
