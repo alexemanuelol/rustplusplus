@@ -1,11 +1,15 @@
 const Fs = require('fs');
-const RustPlusLib = require('@liamcottle/rustplus.js');
 const Path = require('path');
+const RustPlusLib = require('@liamcottle/rustplus.js');
+const Translate = require('translate');
 
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const Languages = require('../util/languages.js');
 const Logger = require('./Logger.js');
+const Map = require('../util/map.js');
+const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
 
 const TOKENS_LIMIT = 24;        /* Per player */
@@ -130,17 +134,40 @@ class RustPlus extends RustPlusLib {
     }
 
     async printCommandOutput(str, type = 'COMMAND') {
+        if (str === null) return;
+
         if (this.generalSettings.commandDelay === '0') {
-            await this.sendTeamMessageAsync(str);
+            if (Array.isArray(str)) {
+                for (const string of str) {
+                    await this.sendTeamMessageAsync(string);
+                }
+            }
+            else {
+                await this.sendTeamMessageAsync(str);
+            }
         }
         else {
             const self = this;
             setTimeout(function () {
-                self.sendTeamMessageAsync(str);
+                if (Array.isArray(str)) {
+                    for (const string of str) {
+                        self.sendTeamMessageAsync(string);
+                    }
+                }
+                else {
+                    self.sendTeamMessageAsync(str);
+                }
             }, parseInt(this.generalSettings.commandDelay) * 1000)
 
         }
-        this.log(type, str);
+        if (Array.isArray(str)) {
+            for (const string of str) {
+                this.log(type, string);
+            }
+        }
+        else {
+            this.log(type, str);
+        }
     }
 
     async sendEvent(setting, text, firstPoll = false, image = null) {
@@ -454,6 +481,708 @@ class RustPlus extends RustPlusLib {
             return false;
         }
         return true;
+    }
+
+    /* Commands */
+
+    getCommandAfk() {
+        let string = '';
+        for (const player of this.team.players) {
+            if (player.isOnline) {
+                if (player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS) {
+                    string += `${player.name} [${player.getAfkTime('dhs')}], `;
+                }
+            }
+        }
+
+        return string !== '' ? `${string.slice(0, -2)}.` : 'No one is AFK.';
+    }
+
+    getCommandAlive(message) {
+        const command = message.broadcast.teamMessage.message.message;
+        const prefix = this.generalSettings.prefix;
+        if (command.toLowerCase() === `${prefix}alive`) {
+            const player = this.team.getPlayerLongestAlive();
+            return `${player.name} has been alive the longest (${player.getAliveTime()}).`;
+        }
+        else if (command.toLowerCase().startsWith(`${prefix}alive `)) {
+            const name = command.slice(`${prefix}alive `.length).trim();
+            for (const player of this.team.players) {
+                if (player.name.includes(name)) {
+                    return `${player.name} has been alive for ${player.getAliveTime()}.`;
+                }
+            }
+
+            return `Could not find teammate: '${name}'`;
+        }
+
+        return null;
+    }
+
+    getCommandBradley() {
+        const strings = [];
+        for (const timer of Object.values(this.mapMarkers.bradleyAPCRespawnTimers)) {
+            const time = Timer.getTimeLeftOfTimer(timer);
+            if (time) strings.push(`${time} before Bradley APC respawns.`);
+        }
+
+        if (strings.length === 0) {
+            if (this.mapMarkers.timeSinceBradleyAPCWasDestroyed === null) {
+                return 'Bradley APC is probably roaming around at Launch Site.';
+            }
+            else {
+                const secondsSince = (new Date() - this.mapMarkers.timeSinceBradleyAPCWasDestroyed) / 1000;
+                return `${Timer.secondsToFullScale(secondsSince)} since Bradley APC got destroyed.`;
+            }
+        }
+
+        return strings;
+    }
+
+    getCommandCargo() {
+        const strings = [];
+        let unhandled = this.mapMarkers.cargoShips.map(e => e.id);
+        for (const [id, timer] of Object.entries(this.mapMarkers.cargoShipEgressTimers)) {
+            const cargoShip = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.CargoShip, parseInt(id));
+            const time = Timer.getTimeLeftOfTimer(timer);
+            if (time) {
+                strings.push(`${time} before Cargo Ship at ${cargoShip.location.string}` +
+                    ` enters egress stage. Crates: (${cargoShip.crates.length}/3).`);
+            }
+            unhandled = unhandled.filter(e => e != parseInt(id));
+        }
+
+        if (unhandled.length > 0) {
+            for (const id of unhandled) {
+                const cargoShip = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.CargoShip, id);
+                strings.push(`Cargo Ship is located at ${cargoShip.location.string}.` +
+                    ` Crates: (${cargoShip.crates.length}/3).`);
+            }
+        }
+
+        if (strings.length === 0) {
+            if (this.mapMarkers.timeSinceCargoShipWasOut === null) {
+                return 'Cargo Ship is not currently on the map.';
+            }
+            else {
+                const secondsSince = (new Date() - this.mapMarkers.timeSinceCargoShipWasOut) / 1000;
+                return `${Timer.secondsToFullScale(secondsSince)} since Cargo Ship left the map.`;
+            }
+        }
+
+        return strings;
+    }
+
+    getCommandChinook() {
+        const strings = [];
+        for (const ch47 of this.mapMarkers.ch47s) {
+            if (ch47.ch47Type === 'crate') {
+                strings.push(`Chinook 47 is located at ${ch47.location.string}.`);
+            }
+        }
+
+        if (strings.length === 0) {
+            if (this.mapMarkers.timeSinceCH47WasOut === null) {
+                return 'Chinook 47 is not currently on the map.';
+            }
+            else {
+                const secondsSince = (new Date() - this.mapMarkers.timeSinceCH47WasOut) / 1000;
+                strings.push(`${Timer.secondsToFullScale(secondsSince)} since the last Chinook 47 was on the map.`);
+            }
+        }
+
+        return strings;
+    }
+
+    getCommandCrate() {
+        const strings = [];
+        for (const [id, timer] of Object.entries(this.mapMarkers.crateDespawnTimers)) {
+            const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
+            const time = Timer.getTimeLeftOfTimer(timer);
+
+            if (time) strings.push(`${time} before Locked Crate at ${crate.crateType} despawns.`);
+        }
+
+        if (strings.length === 0) {
+            if (this.mapMarkers.timeSinceCH47DroppedCrate === null) {
+                for (const crate of this.mapMarkers.crates) {
+                    if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(crate.crateType)) {
+                        if (crate.crateType === 'grid') {
+                            strings.push(`Locked Crate is located at ${crate.location.string}.`);
+                        }
+                        else {
+                            strings.push(`Locked Crate is located at ${crate.crateType}.`);
+                        }
+                    }
+                }
+
+                if (strings.length === 0) return 'No active Locked Crates.';
+            }
+            else {
+                const secondsSince = (new Date() - this.mapMarkers.timeSinceCH47DroppedCrate) / 1000;
+                const timeSince = Timer.secondsToFullScale(secondsSince);
+                return `${timeSince} since Chinook 47 last dropped a Locked Crate.`;
+            }
+        }
+
+        return strings;
+    }
+
+    getCommandHeli() {
+        const strings = [];
+        for (const patrolHelicopter of this.mapMarkers.patrolHelicopters) {
+            strings.push(`Patrol Helicopter is located at ${patrolHelicopter.location.string}.`);
+        }
+
+        if (strings.length === 0) {
+            const wasOnMap = this.mapMarkers.timeSincePatrolHelicopterWasOnMap;
+            const wasDestroyed = this.mapMarkers.timeSincePatrolHelicopterWasDestroyed;
+
+            if (wasOnMap == null && wasDestroyed === null) {
+                return 'Patrol Helicopter is not currently on the map.';
+            }
+            else if (wasOnMap !== null && wasDestroyed === null) {
+                const secondsSince = (new Date() - wasOnMap) / 1000;
+                const timeSince = Timer.secondsToFullScale(secondsSince);
+                return `${timeSince} since the last Patrol Helicopter was on the map.`;
+            }
+            else if (wasOnMap !== null && wasDestroyed !== null) {
+                const timeSinceOnMap = Timer.secondsToFullScale((new Date() - wasOnMap) / 1000);
+                const timeSinceDestroyed = Timer.secondsToFullScale((new Date() - wasDestroyed) / 1000);
+                return `${timeSinceOnMap} since the last Patrol Helicopter was on the map, ` +
+                    `${timeSinceDestroyed} since it last got downed.`;
+            }
+        }
+
+        return strings;
+    }
+
+    getCommandLarge() {
+        const strings = [];
+        for (const [id, timer] of Object.entries(this.mapMarkers.crateLargeOilRigTimers)) {
+            const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
+            const time = Timer.getTimeLeftOfTimer(timer);
+            if (time) {
+                strings.push(`${time} before Locked Crate at Large Oil Rig (${crate.location.location}) unlocks.`);
+            }
+        }
+
+        if (strings.length === 0) {
+            if (this.mapMarkers.timeSinceLargeOilRigWasTriggered === null) {
+                return 'No current data on Large Oil Rig.';
+            }
+            else {
+                const secondsSince = (new Date() - this.mapMarkers.timeSinceLargeOilRigWasTriggered) / 1000;
+                return `${Timer.secondsToFullScale(secondsSince)} ` +
+                    `since Heavy Scientists last got called to Large Oil Rig.`;
+            }
+        }
+
+        return strings;
+    }
+
+    async getCommandLeader(message) {
+        const command = message.broadcast.teamMessage.message.message;
+        const prefix = this.generalSettings.prefix;
+        const callerId = message.broadcast.teamMessage.message.steamId.toString();
+
+        if (!this.generalSettings.leaderCommandEnabled) return 'Leader command is disabled in settings.';
+
+        if (this.team.leaderSteamId !== this.playerId) {
+            const player = this.team.getPlayer(this.playerId);
+            return `Command only works if the current leader is: ${player.name}.`;
+        }
+
+        if (command.toLowerCase() === `${prefix}leader`) {
+            if (this.team.leaderSteamId !== callerId) {
+                await this.team.changeLeadership(callerId);
+                const player = this.team.getPlayer(callerId);
+                return `Team leadership was transferred to ${player.name}.`;
+            }
+            else {
+                return 'You are already leader.';
+            }
+        }
+        else if (command.toLowerCase().startsWith(`${prefix}leader `)) {
+            const name = command.slice(`${prefix}leader `.length).trim();
+            for (const player of this.team.players) {
+                if (player.name.includes(name)) {
+                    if (this.team.leaderSteamId === player.steamId) {
+                        return `${player.name} is already leader.`;
+                    }
+                    else {
+                        await this.team.changeLeadership(player.steamId);
+                        return `Team leadership was transferred to ${player.name}`;
+                    }
+                }
+            }
+
+            return `Could not identify team member: ${name}.`;
+        }
+
+        return null;
+    }
+
+    async getCommandMarker(message) {
+        let command = message.broadcast.teamMessage.message.message;
+        const prefix = this.generalSettings.prefix;
+        const callerId = message.broadcast.teamMessage.message.steamId.toString();
+
+        command = command.slice(`${prefix}marker `.length).trim();
+        const subcommand = command.replace(/ .*/, '');
+        const name = command.slice(subcommand.length + 1);
+
+        switch (subcommand.toLowerCase()) {
+            case 'add': {
+                if (name.startsWith('add') || name.startsWith('remove') || name.startsWith('list')) return null;
+                if (name === '') return null;
+
+                const teamInfo = await this.getTeamInfoAsync();
+                if (!(await this.isResponseValid(teamInfo))) return null;
+
+                for (const player of teamInfo.teamInfo.members) {
+                    if (player.steamId.toString() === callerId) {
+                        const instance = Client.client.readInstanceFile(this.guildId);
+                        instance.serverList[this.serverId].markers[name] = { x: player.x, y: player.y };
+                        Client.client.writeInstanceFile(this.guildId, instance);
+                        this.markers[name] = { x: player.x, y: player.y };
+
+                        return `Marker '${name}' was added.`;
+                    }
+                }
+            } break;
+
+            case 'remove': {
+                const instance = Client.client.readInstanceFile(this.guildId);
+
+                if (name in this.markers) {
+                    delete this.markers[name];
+                    delete instance.serverList[this.serverId].markers[name];
+                    Client.client.writeInstanceFile(this.guildId, instance);
+
+                    return `Marker '${name}' was removed.`;
+                }
+            } break;
+
+            case 'list': {
+                let str = '';
+                for (const name in this.markers) str += `${name}, `;
+
+                return str !== '' ? str.slice(0, -2) : 'No registered markers.';
+            } break;
+
+            default: {
+                if (!(command in this.markers)) return `Marker '${command}' does not exist.`;
+
+                const teamInfo = await this.getTeamInfoAsync();
+                if (!(await this.isResponseValid(teamInfo))) return null;
+
+                for (const player of teamInfo.teamInfo.members) {
+                    if (player.steamId.toString() === callerId) {
+                        const direction = Map.getAngleBetweenPoints(player.x, player.y, this.markers[command].x,
+                            this.markers[command].y);
+                        const distance = Math.floor(Map.getDistance(player.x, player.y, this.markers[command].x,
+                            this.markers[command].y));
+
+                        return `Marker '${command}' is ${distance}m from ${player.name} in direction ${direction}°.`;
+                    }
+                }
+            } break;
+        }
+
+        return null;
+    }
+
+    getCommandMute() {
+        const instance = Client.client.readInstanceFile(this.guildId);
+        instance.generalSettings.muteInGameBotMessages = true;
+        this.generalSettings.muteInGameBotMessages = true;
+        Client.client.writeInstanceFile(this.guildId, instance);
+
+        return `In-Game bot messages muted.`;
+    }
+
+    getCommandNote(message) {
+        const command = message.broadcast.teamMessage.message.message;
+        const prefix = this.generalSettings.prefix;
+        const instance = Client.client.readInstanceFile(this.guildId);
+        const strings = [];
+
+        if (command.toLowerCase() === `${prefix}notes`) {
+            if (Object.keys(instance.serverList[this.serverId].notes).length === 0) {
+                return 'There are no saved notes.';
+            }
+
+            for (const [id, note] of Object.entries(instance.serverList[this.serverId].notes)) {
+                strings.push(`${id}: ${note}`);
+            }
+        }
+        else if (command.toLowerCase().startsWith(`${prefix}note add `)) {
+            const note = command.slice(`${prefix}note add `.length).trim();
+
+            let index = 0;
+            while (Object.keys(instance.serverList[this.serverId].notes).map(Number).includes(index)) {
+                index += 1;
+            }
+
+            instance.serverList[this.serverId].notes[index] = `${note}`;
+            Client.client.writeInstanceFile(this.guildId, instance);
+            return 'Note saved.';
+        }
+        else if (command.toLowerCase().startsWith(`${prefix}note remove `)) {
+            const id = parseInt(command.slice(`${prefix}note remove `.length).trim());
+
+            if (!isNaN(id)) {
+                if (!Object.keys(instance.serverList[this.serverId].notes).map(Number).includes(id)) {
+                    return `Note ID: '${id}' does not exist.`;
+                }
+
+                delete instance.serverList[this.serverId].notes[id];
+                Client.client.writeInstanceFile(this.guildId, instance);
+                return `Note ID: ${id} was removed.`;
+            }
+            else {
+                return 'Note ID is invalid.';
+            }
+        }
+
+        return strings.length !== 0 ? strings : null;
+    }
+
+    getCommandOffline() {
+        let string = '';
+        for (const player of this.team.players) {
+            if (!player.isOnline) string += `${player.name}, `;
+        }
+
+        return string !== '' ? `${string.slice(0, -2)}.` : 'No one is offline.';
+    }
+
+    getCommandOnline() {
+        let string = '';
+        for (const player of this.team.players) {
+            if (player.isOnline) string += `${player.name}, `;
+        }
+
+        return string !== '' ? `${string.slice(0, -2)}.` : 'No one is online.';
+    }
+
+    getCommandPlayer(message) {
+        const instance = Client.client.readInstanceFile(this.guildId);
+        const battlemetricsId = instance.serverList[this.serverId].battlemetricsId;
+        const command = message.broadcast.teamMessage.message.message;
+        const prefix = this.generalSettings.prefix;
+
+        if (!battlemetricsId) return 'This server is using streamer-mode.';
+        if (!Object.keys(Client.client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
+            return 'Could not find players for this server.';
+        }
+
+        let foundPlayers = [];
+        if (command.toLowerCase() === `${prefix}players`) {
+            foundPlayers = Client.client.battlemetricsOnlinePlayers[battlemetricsId].slice();
+            if (foundPlayers.length === 0) return 'Could not find any players.';
+        }
+        else if (command.toLowerCase().startsWith(`${prefix}player `)) {
+            const name = command.slice(`${prefix}player `.length).trim();
+
+            for (const player of Client.client.battlemetricsOnlinePlayers[battlemetricsId]) {
+                if (player.name.includes(name)) foundPlayers.push(player);
+            }
+            if (foundPlayers.length === 0) return `Could not find any players '${name}'`;
+        }
+        else {
+            return null;
+        }
+
+        const messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - this.trademarkString.length;
+        const leftLength = `...xxx more.`.length;
+
+        let string = '';
+        let playerIndex = 0;
+        for (const player of foundPlayers) {
+            const playerString = `${player.name} [${player.time}], `;
+
+            if ((string.length + playerString.length + leftLength) < messageMaxLength) {
+                string += playerString;
+            }
+            else if ((string.length + playerString.length + leftLength) > messageMaxLength) {
+                break;
+            }
+
+            playerIndex += 1;
+        }
+
+        if (string !== '') {
+            string = string.slice(0, -2);
+
+            if (playerIndex < foundPlayers.length) {
+                return `${string} ...${foundPlayers.length - playerIndex} more.`;
+            }
+            else {
+                return `${string}.`;
+            }
+        }
+    }
+
+    getCommandPop() {
+        let string = `Population: (${this.info.players}/${this.info.maxPlayers}) players`;
+        return `${string}${this.info.queuedPlayers !== 0 ? ` and ${this.info.queuedPlayers} players in queue.` : '.'}`;
+    }
+
+    async getCommandProx(message) {
+        const callerId = message.broadcast.teamMessage.message.steamId.toString();
+        const caller = this.team.getPlayer(callerId);
+        const command = message.broadcast.teamMessage.message.message;
+        const prefix = this.generalSettings.prefix;
+
+        if (command.toLowerCase() !== `${prefix}prox` && !command.toLowerCase().startsWith(`${prefix}prox `)) {
+            return null;
+        }
+
+        const teamInfo = await this.getTeamInfoAsync();
+        if (!(await this.isResponseValid(teamInfo))) return null;
+        TeamHandler.handler(this, Client.client, teamInfo.teamInfo);
+        this.team.updateTeam(teamInfo.teamInfo);
+
+        if (command.toLowerCase() === `${prefix}prox`) {
+            const closestPlayers = [];
+            let players = [...this.team.players].filter(e => e.steamId !== callerId && e.isAlive === true);
+            if (players.length === 0) return 'You are the only one in the team.';
+
+            for (let i = 0; i < 3; i++) {
+                if (players.length > 0) {
+                    const player = players.reduce(function (prev, curr) {
+                        if (Map.getDistance(prev.x, prev.y, caller.x, caller.y) <
+                            Map.getDistance(curr.x, curr.y, caller.x, caller.y)) {
+                            return prev;
+                        }
+                        else {
+                            return curr;
+                        }
+                    });
+                    closestPlayers.push(player);
+                    players = players.filter(e => e.steamId !== player.steamId);
+                }
+            }
+
+            let string = '';
+            for (const player of closestPlayers) {
+                const distance = Math.floor(Map.getDistance(player.x, player.y, caller.x, caller.y));
+                string += `${player.name} (${distance}m), `;
+            }
+
+            return string === '' ? 'All your teammates are dead.' : `${string.slice(0, -2)}.`
+        }
+
+        const memberName = command.slice(`${prefix}prox `.length).trim();
+
+        for (const player of this.team.players) {
+            if (player.name.includes(memberName)) {
+                const distance = Math.floor(Map.getDistance(caller.x, caller.y, player.x, player.y));
+                const direction = Map.getAngleBetweenPoints(caller.x, caller.y, player.x, player.y);
+                return `${player.name} is ${distance}m from ${caller.name} in direction ${direction}.`;
+            }
+        }
+
+        return `Could not identify team member: ${memberName}.`;
+    }
+
+    getCommandSmall() {
+        const strings = [];
+        for (const [id, timer] of Object.entries(this.mapMarkers.crateSmallOilRigTimers)) {
+            const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
+            const time = Timer.getTimeLeftOfTimer(timer);
+            if (time) {
+                strings.push(`${time} before Locked Crate at Small Oil Rig (${crate.location.location}) unlocks.`);
+            }
+        }
+
+        if (strings.length === 0) {
+            if (this.mapMarkers.timeSinceSmallOilRigWasTriggered === null) {
+                return 'No current data on Small Oil Rig.';
+            }
+            else {
+                const secondsSince = (new Date() - this.mapMarkers.timeSinceSmallOilRigWasTriggered) / 1000;
+                return `${Timer.secondsToFullScale(secondsSince)} ` +
+                    `since Heavy Scientists last got called to Small Oil Rig.`;
+            }
+        }
+
+        return strings;
+    }
+
+    getCommandTime() {
+        const string = `In-Game time: ${Timer.convertDecimalToHoursMinutes(this.time.time)}.`;
+        const timeLeft = this.time.getTimeTillDayOrNight();
+
+        if (timeLeft !== null) {
+            return `${string} ${timeLeft} before ${this.time.isDay() ? 'nightfall' : 'daylight'}.`;
+        }
+
+        return string;
+    }
+
+    getCommandTimer(command) {
+        const prefix = this.generalSettings.prefix;
+
+        command = command.slice(`${prefix}timer `.length).trim();
+        const subcommand = command.replace(/ .*/, '');
+        command = command.slice(subcommand.length + 1);
+
+        if (subcommand.toLowerCase() === 'list' && command === '') {
+            const strings = [];
+            if (Object.keys(this.timers).length === 0) {
+                return 'No active timers.';
+            }
+
+            for (const [id, content] of Object.entries(this.timers)) {
+                const timeLeft = Timer.getTimeLeftOfTimer(content.timer);
+                strings.push(`${parseInt(id)}: Time left: ${timeLeft}, Message: ${content.message}`);
+            }
+
+            return strings;
+        }
+
+        if (subcommand.toLowerCase() !== 'add' && subcommand.toLowerCase() !== 'remove') return 'Invalid subcommand.';
+        if (command === '') return 'Missing arguments.';
+
+        switch (subcommand.toLowerCase()) {
+            case 'add': {
+                const time = command.replace(/ .*/, '');
+                const message = command.slice(time.length + 1);
+                if (message === '') return 'Missing timer message.';
+
+                const timeSeconds = Timer.getSecondsFromStringTime(time);
+                if (timeSeconds === null) return 'Time format invalid.';
+
+                let id = 0;
+                while (Object.keys(this.timers).map(Number).includes(id)) {
+                    id += 1;
+                }
+
+                this.timers[id] = {
+                    timer: new Timer.timer(
+                        () => {
+                            this.printCommandOutput(`Timer: ${message}.`, 'TIMER');
+                            delete this.timers[id]
+                        },
+                        timeSeconds * 1000),
+                    message: message
+                };
+                this.timers[id].timer.start();
+
+                return `Timer set for ${time}.`;
+            } break;
+
+            case 'remove': {
+                const id = parseInt(command.replace(/ .*/, ''));
+                if (isNaN(id)) return 'Timer ID is invalid.';
+
+                if (!Object.keys(this.timers).map(Number).includes(id)) return `Timer ID: '${id}' does not exist.`;
+
+                this.timers[id].timer.stop();
+                delete this.timers[id];
+
+                return `Timer ID: ${id} was removed.`;
+            } break;
+
+            default: {
+                return null;
+            } break;
+        }
+    }
+
+    async getCommandTranslateTo(command) {
+        const prefix = this.generalSettings.prefix;
+
+        if (command.toLowerCase().startsWith(`${prefix}tr language `)) {
+            const language = command.slice(`${prefix}tr language `.length).trim();
+            if (language in Languages) {
+                return `Language code: '${Languages[language]}'`;
+            }
+            else {
+                return `Could not find language: '${language}'`;
+            }
+        }
+
+        command = command.slice(`${prefix}tr `.length).trim();
+        const language = command.replace(/ .*/, '');
+        const text = command.slice(language.length).trim();
+
+        if (language === '' || text === '') return 'Missing arguments.';
+
+        try {
+            return await Translate(text, language);
+        }
+        catch (e) {
+            return `The language '${language}' is not supported.`;
+        }
+    }
+
+    async getCommandTranslateFromTo(command) {
+        const prefix = this.generalSettings.prefix;
+
+        command = command.slice(`${prefix}trf `.length).trim();
+        const languageFrom = command.replace(/ .*/, '');
+        command = command.slice(languageFrom.length).trim();
+        const languageTo = command.replace(/ .*/, '');
+        const text = command.slice(languageTo.length).trim();
+
+        if (languageFrom === '' || languageTo === '' || text === '') return 'Missing arguments.';
+
+        try {
+            return await Translate(text, { from: languageFrom, to: languageTo });
+        }
+        catch (e) {
+            const regex = new RegExp('The language "(.*?)"');
+            const invalidLanguage = regex.exec(e.message);
+
+            if (invalidLanguage.length === 2) {
+                return `The language '${invalidLanguage[1]}' is not supported.`;
+            }
+
+            return `The language is not supported.`;
+        }
+    }
+
+    async getCommandTTS(message) {
+        const prefix = this.generalSettings.prefix;
+        const text = message.broadcast.teamMessage.message.message.slice(`${prefix}tts `.length).trim();
+
+        await DiscordMessages.sendTTSMessage(this.guildId, message.broadcast.teamMessage.message.name, text);
+        return 'Sent the Text-To-Speech.';
+    }
+
+    getCommandUnmute() {
+        const instance = Client.client.readInstanceFile(this.guildId);
+        instance.generalSettings.muteInGameBotMessages = false;
+        this.generalSettings.muteInGameBotMessages = false;
+        Client.client.writeInstanceFile(this.guildId, instance);
+
+        return `In-Game bot messages unmuted.`;
+    }
+
+    getCommandUpkeep() {
+        const instance = Client.client.readInstanceFile(this.guildId);
+        let cupboardFound = false;
+        const strings = [];
+        for (const [key, value] of Object.entries(instance.serverList[this.serverId].storageMonitors)) {
+            if (value.type !== 'toolcupboard') continue;
+
+            if (value.upkeep) {
+                cupboardFound = true;
+                strings.push(`${value.name} [${key}] upkeep: ${value.upkeep}`);
+            }
+        }
+
+        if (!cupboardFound) return `No Tool Cupboard monitors were found.`;
+
+        return strings;
+    }
+
+    getCommandWipe() {
+        return `${this.info.getTimeSinceWipe()} since wipe.`;
     }
 }
 

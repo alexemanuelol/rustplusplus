@@ -368,4 +368,15 @@ module.exports = {
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
     },
+
+    sendTTSMessage: async function (guildId, name, text) {
+        const instance = Client.client.readInstanceFile(guildId);
+
+        const content = {
+            content: `${name} said, ${text}`,
+            tts: true
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
+    },
 }
