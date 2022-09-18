@@ -26,7 +26,7 @@ module.exports = {
     getServerButtons: function (guildId, serverId, state = null) {
         const instance = Client.client.readInstanceFile(guildId);
         const server = instance.serverList[serverId];
-        const identifier = `{"serverId":"${serverId}"}`;
+        const identifier = JSON.stringify({ "serverId": serverId });
 
         if (state === null) state = (instance.serverList[serverId].active) ? 1 : 0;
 
@@ -104,7 +104,7 @@ module.exports = {
     getSmartSwitchButtons: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
-        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+        const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
@@ -125,7 +125,7 @@ module.exports = {
     },
 
     getSmartSwitchGroupButtons: function (serverId, groupId) {
-        const identifier = `{"serverId":"${serverId}","groupId":${groupId}}`;
+        const identifier = JSON.stringify({ "serverId": serverId, "groupId": groupId });
 
         return [
             new Discord.ActionRowBuilder().addComponents(
@@ -166,7 +166,7 @@ module.exports = {
     getSmartAlarmButtons: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
-        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+        const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
@@ -189,7 +189,7 @@ module.exports = {
     getStorageMonitorToolCupboardButtons: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
-        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+        const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
@@ -215,7 +215,7 @@ module.exports = {
     },
 
     getStorageMonitorContainerButton: function (serverId, entityId) {
-        const identifier = `{"serverId":"${serverId}","entityId":${entityId}}`;
+        const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
@@ -245,7 +245,7 @@ module.exports = {
     },
 
     getNotificationButtons: function (setting, discordActive, inGameActive) {
-        const identifier = `{"setting":"${setting}"}`;
+        const identifier = JSON.stringify({ "setting": setting });
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
@@ -325,7 +325,7 @@ module.exports = {
     getTrackerButtons: function (guildId, trackerId) {
         const instance = Client.client.readInstanceFile(guildId);
         const tracker = instance.trackers[trackerId];
-        const identifier = `{"trackerId":${trackerId}}`;
+        const identifier = JSON.stringify({ "trackerId": trackerId });
 
         return [
             new Discord.ActionRowBuilder().addComponents(
