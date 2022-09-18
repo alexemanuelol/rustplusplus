@@ -788,15 +788,6 @@ class RustPlus extends RustPlusLib {
         return null;
     }
 
-    getCommandMute() {
-        const instance = Client.client.readInstanceFile(this.guildId);
-        instance.generalSettings.muteInGameBotMessages = true;
-        this.generalSettings.muteInGameBotMessages = true;
-        Client.client.writeInstanceFile(this.guildId, instance);
-
-        return `In-Game bot messages muted.`;
-    }
-
     getCommandNote(command) {
         const prefix = this.generalSettings.prefix;
         const instance = Client.client.readInstanceFile(this.guildId);
@@ -1143,15 +1134,6 @@ class RustPlus extends RustPlusLib {
 
         await DiscordMessages.sendTTSMessage(this.guildId, callerName, text);
         return 'Sent the Text-To-Speech.';
-    }
-
-    getCommandUnmute() {
-        const instance = Client.client.readInstanceFile(this.guildId);
-        instance.generalSettings.muteInGameBotMessages = false;
-        this.generalSettings.muteInGameBotMessages = false;
-        Client.client.writeInstanceFile(this.guildId, instance);
-
-        return `In-Game bot messages unmuted.`;
     }
 
     getCommandUpkeep() {

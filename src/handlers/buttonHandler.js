@@ -46,6 +46,16 @@ module.exports = async (client, interaction) => {
             components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)]
         });
     }
+    else if (interaction.customId === 'BotMutedInGame') {
+        instance.generalSettings.muteInGameBotMessages = !instance.generalSettings.muteInGameBotMessages;
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.muteInGameBotMessages = instance.generalSettings.muteInGameBotMessages;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getBotMutedInGameButton(instance.generalSettings.muteInGameBotMessages)]
+        });
+    }
     else if (interaction.customId === 'InGameTeammateConnection') {
         instance.generalSettings.connectionNotify = !instance.generalSettings.connectionNotify;
         client.writeInstanceFile(guildId, instance);
