@@ -1,7 +1,7 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
-const DiscordButtons = require('..//discordTools/discordButtons.js');
+const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
 const Recycler = require('../util/recycler.js');
 
@@ -44,6 +44,16 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)]
+        });
+    }
+    else if (interaction.customId === 'BotMutedInGame') {
+        instance.generalSettings.muteInGameBotMessages = !instance.generalSettings.muteInGameBotMessages;
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.muteInGameBotMessages = instance.generalSettings.muteInGameBotMessages;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getBotMutedInGameButton(instance.generalSettings.muteInGameBotMessages)]
         });
     }
     else if (interaction.customId === 'InGameTeammateConnection') {

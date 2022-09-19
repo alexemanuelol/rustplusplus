@@ -385,4 +385,13 @@ module.exports = {
                 url: validURL ? body.url : Constants.DEFAULT_SERVER_URL
             }));
     },
+
+    getBotMutedInGameButton: function (isMuted) {
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: 'BotMutedInGame',
+                label: isMuted ? 'MUTED' : 'UNMUTED',
+                style: isMuted ? DANGER : SUCCESS
+            }));
+    },
 }

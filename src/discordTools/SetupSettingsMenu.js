@@ -71,6 +71,17 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
+            title: 'Should the bot be muted in-game?',
+            thumbnail: `attachment://settings_logo.png`
+        })],
+        components: [DiscordButtons.getBotMutedInGameButton(instance.generalSettings.muteInGameBotMessages)],
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [DiscordEmbeds.getEmbed({
+            color: '#861c0c',
             title: 'In-game teammate notifications.',
             thumbnail: `attachment://settings_logo.png`
         })],

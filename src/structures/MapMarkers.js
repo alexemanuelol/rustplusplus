@@ -607,6 +607,7 @@ class MapMarkers {
             marker.location = pos;
             marker.crates = [];
             marker.crateCounter = 1;
+            marker.onItsWayOut = false;
 
             /* Offset that is used to determine if CargoShip just spawned */
             let offset = 4 * Map.gridDiameter;
@@ -1153,6 +1154,8 @@ class MapMarkers {
             this.cargoShipEgressTimers[id].stop();
             delete this.cargoShipEgressTimers[id];
         }
+
+        marker.onItsWayOut = true;
     }
 
     notifyCrateSmallOilRigOpen(args) {

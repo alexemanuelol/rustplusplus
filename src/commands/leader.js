@@ -28,7 +28,7 @@ module.exports = {
 		}
 
 		if (!rustplus.generalSettings.leaderCommandEnabled) {
-			const str = 'Leader command is turned OFF in settings.';
+			const str = 'Leader command is disabled in settings.';
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 				instance.serverList[rustplus.serverId].title));
 			rustplus.log('WARNING', str);
@@ -44,45 +44,28 @@ module.exports = {
 			return;
 		}
 
-		let matchedPlayer = null;
-		/* Look for parts of the name */
 		for (const player of rustplus.team.players) {
-			if (player.name.toLowerCase().includes(member.toLowerCase())) {
-				matchedPlayer = player;
-				break;
-			}
-		}
-
-		if (matchedPlayer === null) {
-			/* Find the closest name */
-			for (const player of rustplus.team.players) {
-				if (Str.similarity(member, player.name) >= 0.9) {
-					matchedPlayer = player;
-					break;
+			if (player.name.includes(member)) {
+				if (rustplus.team.leaderSteamId === player.steamId) {
+					const str = `${player.name} is already team leader.`;
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+						instance.serverList[rustplus.serverId].title));
+					rustplus.log('WARNING', str);
 				}
+				else {
+					await rustplus.team.changeLeadership(player.steamId);
+					const str = `Team leadership was transferred to ${player.name}.`;
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
+						instance.serverList[rustplus.serverId].title));
+					rustplus.log('INFO', str);
+				}
+				return;
 			}
 		}
 
-		if (matchedPlayer === null) {
-			const str = `Could not identify team member: ${member}.`;
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-				instance.serverList[rustplus.serverId].title));
-			rustplus.log('WARNING', str);
-		}
-		else {
-			if (rustplus.team.leaderSteamId === matchedPlayer.steamId) {
-				const str = `${matchedPlayer.name} is already team leader.`;
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-					instance.serverList[rustplus.serverId].title));
-				rustplus.log('WARNING', str);
-			}
-			else {
-				await rustplus.team.changeLeadership(matchedPlayer.steamId);
-				const str = `Team leadership was transferred to ${matchedPlayer.name}.`;
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
-					instance.serverList[rustplus.serverId].title));
-				rustplus.log('INFO', str);
-			}
-		}
+		const str = `Could not identify team member: ${member}.`;
+		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+			instance.serverList[rustplus.serverId].title));
+		rustplus.log('WARNING', str);
 	},
 };
