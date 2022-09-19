@@ -345,6 +345,10 @@ async function alarmAlarm(client, guild, full, data, body) {
 
 async function alarmRaidAlarm(client, guild, full, data, body) {
     const instance = client.readInstanceFile(guild.id);
+    const serverId = `${body.ip}-${body.port}`;
+    const rustplus = client.rustplusInstances[guild.id];
+
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
 
     const content = {
         embeds: [DiscordEmbeds.getAlarmRaidAlarmEmbed(data, body)],
@@ -352,9 +356,6 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
     }
 
     await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
-
-    const rustplus = client.rustplusInstances[guild.id];
-    const serverId = `${body.ip}-${body.port}`;
 
     if (rustplus && (serverId === rustplus.serverId)) {
         rustplus.sendTeamMessageAsync(`${data.title}: ${data.message}`);
