@@ -29,6 +29,18 @@ class DiscordBot extends Discord.Client {
 
         this.loadDiscordCommands();
         this.loadDiscordEvents();
+        this.loadInstances();
+    }
+
+    loadInstances() {
+        this.instances = {};
+        const instancePath = Path.join(__dirname, '..', 'instances');
+        const instanceFiles = Fs.readdirSync(instancePath);
+        for (const instanceFile of instanceFiles) {
+            const guildId = instanceFile.split('.')[0];
+            const instance = JSON.parse(Fs.readFileSync(Path.join(instancePath, `${guildId}.json`)), 'utf8');
+            this.instances[guildId] = instance;
+        }
     }
 
     loadDiscordCommands() {
@@ -94,11 +106,12 @@ class DiscordBot extends Discord.Client {
     }
 
     readInstanceFile(guildId) {
-        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`), 'utf8'));
+        return this.instances[guildId];
     }
 
     writeInstanceFile(guildId, instance) {
-        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`), JSON.stringify(instance, null, 2));
+        this.instances[guildId] = instance;
+        Fs.writeFileSync(Path.join(__dirname, '..', 'instances', `${guildId}.json`), JSON.stringify(instance, null, 2));
     }
 
     readCredentialsFile(guildId) {
