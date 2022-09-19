@@ -26,9 +26,10 @@ module.exports = {
     getSmartSwitchEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name}`,
+            title: `${entity.name}${grid}`,
             color: entity.active ? '#00ff40' : '#ff0040',
             description: `**ID**: \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
@@ -95,9 +96,10 @@ module.exports = {
     getSmartAlarmEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name}`,
+            title: `${entity.name}${grid}`,
             color: entity.active ? '#00ff40' : '#ce412b',
             description: `**ID**: \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
@@ -114,12 +116,13 @@ module.exports = {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const rustplus = Client.client.rustplusInstances[guildId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         let description = `**ID** \`${entityId}\``;
 
         if (!rustplus) {
             return module.exports.getEmbed({
-                title: `${entity.name}`,
+                title: `${entity.name}${grid}`,
                 color: '#ce412b',
                 description: `${description}\n**STATUS** \`NOT CONNECTED TO SERVER!\``,
                 thumbnail: `attachment://${entity.image}`,
@@ -129,7 +132,7 @@ module.exports = {
 
         if (rustplus && rustplus.storageMonitors[entityId].capacity === 0) {
             return module.exports.getEmbed({
-                title: `${entity.name}`,
+                title: `${entity.name}${grid}`,
                 color: '#ce412b',
                 description: `${description}\n**STATUS** \`NOT ELECTRICALLY CONNECTED!\``,
                 thumbnail: `attachment://${entity.image}`,
@@ -181,7 +184,7 @@ module.exports = {
         if (itemQuantity === '') itemQuantity = 'Empty';
 
         return module.exports.getEmbed({
-            title: `${entity.name}`,
+            title: `${entity.name}${grid}`,
             color: '#ce412b',
             description: description,
             thumbnail: `attachment://${entity.image}`,
@@ -200,10 +203,11 @@ module.exports = {
         let switchName = '', switchId = '', switchActive = '';
         for (const groupSwitchId of group.switches) {
             if (instance.serverList[serverId].switches.hasOwnProperty(groupSwitchId)) {
-                const active = instance.serverList[serverId].switches[groupSwitchId].active;
-                switchName += `${instance.serverList[serverId].switches[groupSwitchId].name}\n`;
+                const sw = instance.serverList[serverId].switches[groupSwitchId];
+                const active = sw.active;
+                switchName += `${sw.name}${sw.location !== null ? ` ${sw.location}` : ''}\n`;
                 switchId += `${groupSwitchId}\n`;
-                if (instance.serverList[serverId].switches[groupSwitchId].reachable) {
+                if (sw.reachable) {
                     switchActive += `${(active) ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI}\n`;
                 }
                 else {
@@ -242,9 +246,10 @@ module.exports = {
     getNotFoundSmartDeviceEmbed: function (guildId, serverId, entityId, type) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId][type][entityId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name}`,
+            title: `${entity.name}${grid}`,
             color: '#ff0040',
             description: `**ID**: \`${entityId}\`\n**STATUS**: NOT FOUND ${Constants.NOT_FOUND_EMOJI}`,
             thumbnail: `attachment://${entity.image}`,
@@ -255,7 +260,7 @@ module.exports = {
     getStorageMonitorRecycleEmbed: function (guildId, serverId, entityId, items) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
-        const rustplus = Client.client.rustplusInstances[guildId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         let itemName = '', itemQuantity = '';
         for (const item of items) {
@@ -268,7 +273,7 @@ module.exports = {
             color: '#ce412b',
             thumbnail: 'attachment://recycler.png',
             footer: { text: `${entity.server} | This message will be deleted in 30 seconds.` },
-            description: `**Name** \`${entity.name}\`\n**ID** \`${entityId}\``
+            description: `**Name** \`${entity.name}${grid}\`\n**ID** \`${entityId}\``
         });
 
         if (itemName === '') itemName = 'Empty';
@@ -285,9 +290,10 @@ module.exports = {
     getDecayingNotificationEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name} is decaying!`,
+            title: `${entity.name}${grid} is decaying!`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
@@ -299,9 +305,10 @@ module.exports = {
     getStorageMonitorDisconnectNotificationEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name} is no longer electrically connected!`,
+            title: `${entity.name}${grid} is no longer electrically connected!`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
@@ -315,9 +322,10 @@ module.exports = {
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name} could not be found! Either it have been destroyed or ` +
+            title: `${entity.name}${grid} could not be found! Either it have been destroyed or ` +
                 `${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
@@ -332,9 +340,10 @@ module.exports = {
         const entity = instance.serverList[serverId].switches[entityId];
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name} could not be found! Either it have been destroyed or ` +
+            title: `${entity.name}${grid} could not be found! Either it have been destroyed or ` +
                 `${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
@@ -349,9 +358,10 @@ module.exports = {
         const entity = instance.serverList[serverId].alarms[entityId];
         const credentials = Client.client.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name} could not be found! Either it have been destroyed or ` +
+            title: `${entity.name}${grid} could not be found! Either it have been destroyed or ` +
                 `${user.user.username} have lost tool cupboard access.`,
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
@@ -435,10 +445,12 @@ module.exports = {
     getAlarmEmbed: function (guildId, serverId, entityId) {
         const instance = Client.client.readInstanceFile(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
+        const grid = entity.location !== null ? ` (${entity.location})` : '';
+
         return module.exports.getEmbed({
             color: '#ce412b',
             thumbnail: `attachment://${entity.image}`,
-            title: entity.name,
+            title: `${entity.name}${grid}`,
             footer: { text: entity.server },
             timestamp: true,
             fields: [
