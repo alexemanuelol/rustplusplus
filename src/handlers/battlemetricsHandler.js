@@ -28,6 +28,8 @@ module.exports = {
                 if (!content.active) continue;
                 instance = client.readInstanceFile(guild.id);
 
+                let changed = false;
+
                 let page = null;
                 if (!Object.keys(calledPages).includes(content.battlemetricsId)) {
                     page = await BattlemetricsAPI.getBattlemetricsServerPage(client, content.battlemetricsId);
@@ -42,6 +44,7 @@ module.exports = {
                     client, content.battlemetricsId, page);
                 if (info === null) continue;
 
+                if (instance.trackers[trackerId].status !== info.status) changed = true;
                 instance.trackers[trackerId].status = info.status;
 
                 const onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(
@@ -52,11 +55,13 @@ module.exports = {
                     player = instance.trackers[trackerId].players.find(e => e.steamId === player.steamId);
                     let onlinePlayer = onlinePlayers.find(e => e.name === player.name);
                     if (onlinePlayer) {
+                        changed = true;
                         player.status = true;
                         player.time = onlinePlayer.time;
                         player.playerId = onlinePlayer.id;
                     }
                     else {
+                        if (player.status === true) changed = true;
                         if (!forceSearch) {
                             player.status = false;
                             continue
@@ -108,7 +113,7 @@ module.exports = {
 
                 instance.trackers[trackerId].allOffline = allOffline;
                 client.writeInstanceFile(guild.id, instance);
-                await DiscordMessages.sendTrackerMessage(guild.id, trackerId);
+                if (changed) await DiscordMessages.sendTrackerMessage(guild.id, trackerId);
             }
         }
 
