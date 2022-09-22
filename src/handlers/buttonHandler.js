@@ -173,6 +173,7 @@ module.exports = async (client, interaction) => {
         for (const [serverId, content] of Object.entries(instance.serverList)) {
             if (content.active) {
                 instance.serverList[serverId].active = false;
+                client.writeInstanceFile(guildId, instance);
                 await DiscordMessages.sendServerMessage(guildId, serverId, null);
                 break;
             }
