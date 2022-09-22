@@ -65,6 +65,16 @@ module.exports = {
                         value: 'Rust++'
                     },
                     {
+                        label: 'R++',
+                        description: `R++ will be shown before messages.`,
+                        value: 'R++'
+                    },
+                    {
+                        label: 'RPP',
+                        description: `RPP will be shown before messages.`,
+                        value: 'RPP'
+                    },
+                    {
                         label: 'NOT SHOWING',
                         description: 'Hide trademark.',
                         value: 'NOT SHOWING'
