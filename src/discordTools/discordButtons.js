@@ -394,4 +394,13 @@ module.exports = {
                 style: isMuted ? DANGER : SUCCESS
             }));
     },
+
+    getMapWipeNotifyEveryoneButton: function (everyone) {
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: 'MapWipeNotifyEveryone',
+                label: '@everyone',
+                style: everyone ? SUCCESS : DANGER
+            }));
+    },
 }

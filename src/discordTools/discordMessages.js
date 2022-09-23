@@ -300,7 +300,8 @@ module.exports = {
         const content = {
             embeds: [DiscordEmbeds.getServerWipeDetectedEmbed(guildId, serverId)],
             files: [new Discord.AttachmentBuilder(
-                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))]
+                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))],
+            content: instance.generalSettings.mapWipeNotifyEveryone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
