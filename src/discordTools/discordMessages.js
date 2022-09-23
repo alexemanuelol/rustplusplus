@@ -421,4 +421,12 @@ module.exports = {
         await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.team, instance.channelId.information);
     },
+
+    sendDiscordCommandResponseMessage: async function (rustplus, client, message, response) {
+        const content = {
+            embeds: [DiscordEmbeds.getDiscordCommandResponseEmbed(rustplus, response)]
+        }
+
+        await client.messageReply(message, content);
+    },
 }

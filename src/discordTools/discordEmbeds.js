@@ -645,4 +645,24 @@ module.exports = {
                 { name: 'Location', value: locations, inline: true }]
         });
     },
+
+    getDiscordCommandResponseEmbed: function (rustplus, response) {
+        const instance = Client.client.readInstanceFile(rustplus.guildId);
+
+        let string = '';
+        if (Array.isArray(response)) {
+            for (const str of response) {
+                string += `${str}\n`;
+            }
+        }
+        else {
+            string = response;
+        }
+
+        return module.exports.getEmbed({
+            color: '#ce412b',
+            description: `**${string}**`,
+            footer: { text: `${instance.serverList[rustplus.serverId].title}` }
+        });
+    },
 }

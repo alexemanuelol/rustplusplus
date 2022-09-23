@@ -6,6 +6,7 @@ module.exports = async (client, guild, category) => {
     await addTextChannel('information', client, guild, category);
     await addTextChannel('servers', client, guild, category);
     await addTextChannel('settings', client, guild, category);
+    await addTextChannel('commands', client, guild, category, true);
     await addTextChannel('events', client, guild, category);
     await addTextChannel('teamchat', client, guild, category, true);
     await addTextChannel('switches', client, guild, category);

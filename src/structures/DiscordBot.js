@@ -236,6 +236,17 @@ class DiscordBot extends Discord.Client {
         return undefined;
     }
 
+    async messageReply(message, content) {
+        try {
+            return await message.reply(content);
+        }
+        catch (e) {
+            this.log('ERROR', `Message reply failed: ${e}`, 'error');
+        }
+
+        return undefined;
+    }
+
     async validatePermissions(interaction) {
         const instance = this.readInstanceFile(interaction.guildId);
 
