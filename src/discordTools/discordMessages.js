@@ -391,8 +391,13 @@ module.exports = {
             )]
         }
 
-        await module.exports.sendMessage(rustplus.guildId, content,
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.server, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.server) {
+            instance.informationMessageId.server = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
     },
 
     sendUpdateEventInformationMessage: async function (rustplus) {
@@ -405,8 +410,13 @@ module.exports = {
             )]
         }
 
-        await module.exports.sendMessage(rustplus.guildId, content,
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.event, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.event) {
+            instance.informationMessageId.event = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
     },
 
     sendUpdateTeamInformationMessage: async function (rustplus) {
@@ -419,8 +429,13 @@ module.exports = {
             )]
         }
 
-        await module.exports.sendMessage(rustplus.guildId, content,
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.team, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.team) {
+            instance.informationMessageId.team = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
     },
 
     sendDiscordCommandResponseMessage: async function (rustplus, client, message, response) {
