@@ -34,7 +34,7 @@ module.exports = {
     },
 
     sendServerMessage: async function (guildId, serverId, state = null, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
 
         const content = {
@@ -47,12 +47,12 @@ module.exports = {
 
         if (!interaction) {
             instance.serverList[serverId].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
     },
 
     sendTrackerMessage: async function (guildId, trackerId, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
 
         const content = {
@@ -65,12 +65,12 @@ module.exports = {
 
         if (!interaction) {
             instance.trackers[trackerId].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
     },
 
     sendSmartSwitchMessage: async function (guildId, serverId, entityId, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
 
         const content = {
@@ -91,12 +91,12 @@ module.exports = {
 
         if (!interaction) {
             instance.serverList[serverId].switches[entityId].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
     },
 
     sendSmartAlarmMessage: async function (guildId, serverId, entityId, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
@@ -113,12 +113,12 @@ module.exports = {
 
         if (!interaction) {
             instance.serverList[serverId].alarms[entityId].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
     },
 
     sendStorageMonitorMessage: async function (guildId, serverId, entityId, interaction = null) {
-        let instance = Client.client.readInstanceFile(guildId);
+        let instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
@@ -133,19 +133,19 @@ module.exports = {
                     Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
-        instance = Client.client.readInstanceFile(guildId);
+        instance = Client.client.getInstance(guildId);
 
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
             instance.channelId.storageMonitors, interaction);
 
         if (!interaction) {
             instance.serverList[serverId].storageMonitors[entityId].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
     },
 
     sendSmartSwitchGroupMessage: async function (guildId, serverId, groupId, interaction = null) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
 
         const content = {
@@ -160,12 +160,12 @@ module.exports = {
 
         if (!interaction) {
             instance.serverList[serverId].switchGroups[groupId].messageId = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
     },
 
     sendStorageMonitorRecycleMessage: async function (guildId, serverId, entityId, items) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getStorageMonitorRecycleEmbed(guildId, serverId, entityId, items)],
@@ -178,7 +178,7 @@ module.exports = {
     },
 
     sendDecayingNotificationMessage: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
@@ -192,7 +192,7 @@ module.exports = {
     },
 
     sendStorageMonitorDisconnectNotificationMessage: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
@@ -206,7 +206,7 @@ module.exports = {
     },
 
     sendStorageMonitorNotFoundMessage: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
@@ -220,7 +220,7 @@ module.exports = {
     },
 
     sendSmartSwitchNotFoundMessage: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
 
         const content = {
@@ -233,7 +233,7 @@ module.exports = {
     },
 
     sendSmartAlarmNotFoundMessage: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
@@ -247,7 +247,7 @@ module.exports = {
     },
 
     sendTrackerAllOfflineMessage: async function (guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
 
         const content = {
@@ -259,7 +259,7 @@ module.exports = {
     },
 
     sendTrackerAnyOnlineMessage: async function (guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
 
         const content = {
@@ -271,7 +271,7 @@ module.exports = {
     },
 
     sendSmartAlarmTriggerMessage: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
@@ -285,7 +285,7 @@ module.exports = {
     },
 
     sendServerChangeStateMessage: async function (guildId, serverId, state) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getServerChangedStateEmbed(guildId, serverId, state)]
@@ -295,7 +295,7 @@ module.exports = {
     },
 
     sendServerWipeDetectedMessage: async function (guildId, serverId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getServerWipeDetectedEmbed(guildId, serverId)],
@@ -308,7 +308,7 @@ module.exports = {
     },
 
     sendServerConnectionInvalidMessage: async function (guildId, serverId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getServerConnectionInvalidEmbed(guildId, serverId)]
@@ -318,7 +318,7 @@ module.exports = {
     },
 
     sendInformationMapMessage: async function (guildId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             files: [new Discord.AttachmentBuilder(
@@ -330,12 +330,12 @@ module.exports = {
 
         if (message) {
             instance.informationMessageId.map = message.id;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
     },
 
     sendDiscordEventMessage: async function (guildId, serverId, text, image) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image)],
@@ -347,7 +347,7 @@ module.exports = {
     },
 
     sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const png = await Scrape.scrapeSteamProfilePicture(Client.client, steamId);
         const content = {
@@ -358,7 +358,7 @@ module.exports = {
     },
 
     sendTeamChatMessage: async function (guildId, message) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getEmbed({
@@ -371,7 +371,7 @@ module.exports = {
     },
 
     sendTTSMessage: async function (guildId, name, text) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         const content = {
             content: `${name} said, ${text}`,
@@ -382,7 +382,7 @@ module.exports = {
     },
 
     sendUpdateServerInformationMessage: async function (rustplus) {
-        const instance = Client.client.readInstanceFile(rustplus.guildId);
+        const instance = Client.client.getInstance(rustplus.guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getUpdateServerInformationEmbed(rustplus)],
@@ -401,7 +401,7 @@ module.exports = {
     },
 
     sendUpdateEventInformationMessage: async function (rustplus) {
-        const instance = Client.client.readInstanceFile(rustplus.guildId);
+        const instance = Client.client.getInstance(rustplus.guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getUpdateEventInformationEmbed(rustplus)],
@@ -420,7 +420,7 @@ module.exports = {
     },
 
     sendUpdateTeamInformationMessage: async function (rustplus) {
-        const instance = Client.client.readInstanceFile(rustplus.guildId);
+        const instance = Client.client.getInstance(rustplus.guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getUpdateTeamInformationEmbed(rustplus)],

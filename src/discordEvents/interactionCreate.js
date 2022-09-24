@@ -5,7 +5,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds');
 module.exports = {
     name: 'interactionCreate',
     async execute(client, interaction) {
-        const instance = client.readInstanceFile(interaction.guildId);
+        const instance = client.getInstance(interaction.guildId);
 
         /* Check so that the interaction comes from valid channels */
         if (!Object.values(instance.channelId).includes(interaction.channelId) && !interaction.isCommand) {

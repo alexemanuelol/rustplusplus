@@ -22,7 +22,7 @@ module.exports = {
 			.setDescription('Get the map including markers.')),
 
 	async execute(client, interaction) {
-		const instance = client.readInstanceFile(interaction.guildId);
+		const instance = client.getInstance(interaction.guildId);
 		const rustplus = client.rustplusInstances[interaction.guildId];
 
 		if (!await client.validatePermissions(interaction)) return;

@@ -3,7 +3,7 @@ const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = {
     handler: async function (rustplus, client, time) {
-        const instance = client.readInstanceFile(rustplus.guildId);
+        const instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
 
@@ -25,7 +25,7 @@ module.exports = {
                     if (instance.serverList[serverId].switches[entityId].reachable) {
                         await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
                         instance.serverList[serverId].switches[entityId].reachable = false;
-                        client.writeInstanceFile(guildId, instance);
+                        client.setInstance(guildId, instance);
 
                         await DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                         changedSwitches.push(entityId);
@@ -34,7 +34,7 @@ module.exports = {
                 else {
                     if (!instance.serverList[serverId].switches[entityId].reachable) {
                         instance.serverList[serverId].switches[entityId].reachable = true;
-                        client.writeInstanceFile(guildId, instance);
+                        client.setInstance(guildId, instance);
 
                         await DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                         changedSwitches.push(entityId);
@@ -48,7 +48,7 @@ module.exports = {
             for (const [entityId, content] of Object.entries(instance.serverList[serverId].switches)) {
                 if (content.autoDayNight === 1) {
                     instance.serverList[serverId].switches[entityId].active = true;
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     rustplus.interactionSwitches.push(entityId);
 
@@ -64,14 +64,14 @@ module.exports = {
                     else {
                         instance.serverList[serverId].switches[entityId].reachable = true;
                     }
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                     changedSwitches.push(entityId);
                 }
                 else if (content.autoDayNight === 2) {
                     instance.serverList[serverId].switches[entityId].active = false;
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     rustplus.interactionSwitches.push(entityId);
 
@@ -87,7 +87,7 @@ module.exports = {
                     else {
                         instance.serverList[serverId].switches[entityId].reachable = true;
                     }
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                     changedSwitches.push(entityId);
@@ -98,7 +98,7 @@ module.exports = {
             for (const [entityId, content] of Object.entries(instance.serverList[serverId].switches)) {
                 if (content.autoDayNight === 1) {
                     instance.serverList[serverId].switches[entityId].active = false;
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     rustplus.interactionSwitches.push(entityId);
 
@@ -114,14 +114,14 @@ module.exports = {
                     else {
                         instance.serverList[serverId].switches[entityId].reachable = true;
                     }
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                     changedSwitches.push(entityId);
                 }
                 else if (content.autoDayNight === 2) {
                     instance.serverList[serverId].switches[entityId].active = true;
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     rustplus.interactionSwitches.push(entityId);
 
@@ -137,7 +137,7 @@ module.exports = {
                     else {
                         instance.serverList[serverId].switches[entityId].reachable = true;
                     }
-                    client.writeInstanceFile(guildId, instance);
+                    client.setInstance(guildId, instance);
 
                     DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                     changedSwitches.push(entityId);

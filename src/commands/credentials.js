@@ -3,6 +3,7 @@ const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
+const InstanceUtils = require('../util/instanceUtils.js');
 
 module.exports = {
     data: new Builder.SlashCommandBuilder()
@@ -98,7 +99,7 @@ async function setCredentials(client, interaction) {
     newCredentials.owner = interaction.member.user.id;
 
     for (const guild of client.guilds.cache) {
-        const credentials = client.readCredentialsFile(guild[0]);
+        const credentials = InstanceUtils.readCredentialsFile(guild[0]);
         if (_.isEqual(newCredentials, credentials.credentials)) {
             const str = 'FCM Credentials are already used for another discord server!';
             await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -107,9 +108,9 @@ async function setCredentials(client, interaction) {
         }
     }
 
-    const credentials = client.readCredentialsFile(interaction.guildId);
+    const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
     credentials.credentials = newCredentials;
-    client.writeCredentialsFile(interaction.guildId, credentials);
+    InstanceUtils.writeCredentialsFile(interaction.guildId, credentials);
 
     /* Start Fcm Listener */
     require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
@@ -124,9 +125,9 @@ async function clearCredentials(client, interaction) {
         client.currentFcmListeners[interaction.guildId].destroy();
     }
 
-    const credentials = client.readCredentialsFile(interaction.guildId);
+    const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
     credentials.credentials = null;
-    client.writeCredentialsFile(interaction.guildId, credentials);
+    InstanceUtils.writeCredentialsFile(interaction.guildId, credentials);
 
     const str = 'FCM Credentials were cleared successfully!';
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
@@ -134,7 +135,7 @@ async function clearCredentials(client, interaction) {
 }
 
 async function isSetCredentials(client, interaction) {
-    const credentials = client.readCredentialsFile(interaction.guildId);
+    const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
 
     const str = 'FCM Credentials are ' + ((credentials.credentials === null) ? 'not currently ' : '') + 'set.';
     const isSet = (credentials.credentials === null) ? 1 : 0;

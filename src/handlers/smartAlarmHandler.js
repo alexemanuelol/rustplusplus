@@ -2,7 +2,7 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
-        let instance = client.readInstanceFile(rustplus.guildId);
+        let instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
 
@@ -17,7 +17,7 @@ module.exports = {
 
         if (rustplus.smartAlarmIntervalCounter === 0) {
             for (const entityId in instance.serverList[serverId].alarms) {
-                instance = client.readInstanceFile(guildId);
+                instance = client.getInstance(guildId);
 
                 const info = await rustplus.getEntityInfoAsync(entityId);
                 if (!(await rustplus.isResponseValid(info))) {
@@ -25,7 +25,7 @@ module.exports = {
                         await DiscordMessages.sendSmartAlarmNotFoundMessage(guildId, serverId, entityId);
 
                         instance.serverList[serverId].alarms[entityId].reachable = false;
-                        client.writeInstanceFile(guildId, instance);
+                        client.setInstance(guildId, instance);
 
                         await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
                     }
@@ -33,7 +33,7 @@ module.exports = {
                 else {
                     if (!instance.serverList[serverId].alarms[entityId].reachable) {
                         instance.serverList[serverId].alarms[entityId].reachable = true;
-                        client.writeInstanceFile(guildId, instance);
+                        client.setInstance(guildId, instance);
 
                         await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
                     }

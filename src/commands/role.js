@@ -19,7 +19,7 @@ module.exports = {
 			.setDescription('Clear the role (to allow everyone to see the rustPlusPlus channels).')),
 
 	async execute(client, interaction) {
-		const instance = client.readInstanceFile(interaction.guildId);
+		const instance = client.getInstance(interaction.guildId);
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
@@ -29,13 +29,13 @@ module.exports = {
 			case 'set': {
 				role = interaction.options.getRole('role');
 				instance.role = role.id;
-				client.writeInstanceFile(interaction.guildId, instance);
+				client.setInstance(interaction.guildId, instance);
 
 			} break;
 
 			case 'clear': {
 				instance.role = null;
-				client.writeInstanceFile(interaction.guildId, instance);
+				client.setInstance(interaction.guildId, instance);
 
 			} break;
 

@@ -2,8 +2,9 @@ const Discord = require('discord.js');
 
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.js');
-const Timer = require('../util/timer');
 const DiscordTools = require('./discordTools.js');
+const InstanceUtils = require('../util/instanceUtils.js');
+const Timer = require('../util/timer');
 
 module.exports = {
     getEmbed: function (options = {}) {
@@ -24,7 +25,7 @@ module.exports = {
     },
 
     getSmartSwitchEmbed: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -43,7 +44,7 @@ module.exports = {
     },
 
     getServerEmbed: function (guildId, serverId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
 
         return module.exports.getEmbed({
@@ -60,7 +61,7 @@ module.exports = {
     },
 
     getTrackerEmbed: function (guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
         const serverStatus = tracker.status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
 
@@ -94,7 +95,7 @@ module.exports = {
     },
 
     getSmartAlarmEmbed: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -113,7 +114,7 @@ module.exports = {
     },
 
     getStorageMonitorEmbed: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const rustplus = Client.client.rustplusInstances[guildId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
@@ -162,7 +163,7 @@ module.exports = {
                 instance.serverList[serverId].storageMonitors[entityId].upkeep = `${upkeepTime}`;
             }
             description += `\n**Upkeep** ${upkeep}`;
-            Client.client.writeInstanceFile(guildId, instance);
+            Client.client.setInstance(guildId, instance);
         }
 
         let itemName = '', itemQuantity = '', storageItems = new Object();
@@ -197,7 +198,7 @@ module.exports = {
     },
 
     getSmartSwitchGroupEmbed: function (guildId, serverId, groupId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
 
         let switchName = '', switchId = '', switchActive = '';
@@ -219,7 +220,7 @@ module.exports = {
                     instance.serverList[serverId].switchGroups[groupId].switches.filter(e => e !== groupSwitchId);
             }
         }
-        Client.client.writeInstanceFile(guildId, instance);
+        Client.client.setInstance(guildId, instance);
 
         if (switchName === '') switchName = 'None';
         if (switchId === '') switchId = 'None';
@@ -244,7 +245,7 @@ module.exports = {
     },
 
     getNotFoundSmartDeviceEmbed: function (guildId, serverId, entityId, type) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId][type][entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -258,7 +259,7 @@ module.exports = {
     },
 
     getStorageMonitorRecycleEmbed: function (guildId, serverId, entityId, items) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -288,7 +289,7 @@ module.exports = {
     },
 
     getDecayingNotificationEmbed: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -303,7 +304,7 @@ module.exports = {
     },
 
     getStorageMonitorDisconnectNotificationEmbed: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -318,9 +319,9 @@ module.exports = {
     },
 
     getStorageMonitorNotFoundEmbed: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
-        const credentials = Client.client.readCredentialsFile(guildId);
+        const credentials = InstanceUtils.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -336,9 +337,9 @@ module.exports = {
     },
 
     getSmartSwitchNotFoundEmbed: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
-        const credentials = Client.client.readCredentialsFile(guildId);
+        const credentials = InstanceUtils.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -354,9 +355,9 @@ module.exports = {
     },
 
     getSmartAlarmNotFoundEmbed: async function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
-        const credentials = Client.client.readCredentialsFile(guildId);
+        const credentials = InstanceUtils.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials.credentials.owner);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -372,7 +373,7 @@ module.exports = {
     },
 
     getTrackerAllOfflineEmbed: function (guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
 
         return module.exports.getEmbed({
@@ -385,7 +386,7 @@ module.exports = {
     },
 
     getTrackerAnyOnlineEmbed: function (guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
 
         return module.exports.getEmbed({
@@ -443,7 +444,7 @@ module.exports = {
     },
 
     getAlarmEmbed: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
@@ -461,7 +462,7 @@ module.exports = {
     },
 
     getEventEmbed: function (guildId, serverId, text, image) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: '#ce412b',
@@ -484,7 +485,7 @@ module.exports = {
     },
 
     getServerChangedStateEmbed: function (guildId, serverId, state) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: state ? '#ff0040' : '#00ff40',
@@ -496,7 +497,7 @@ module.exports = {
     },
 
     getServerWipeDetectedEmbed: function (guildId, serverId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: '#ce412b',
@@ -508,7 +509,7 @@ module.exports = {
     },
 
     getServerConnectionInvalidEmbed: function (guildId, serverId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: '#ff0040',
@@ -520,7 +521,7 @@ module.exports = {
     },
 
     getActivityNotificationEmbed: function (guildId, serverId, color, text, steamId, png) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: color,
@@ -535,7 +536,7 @@ module.exports = {
     },
 
     getUpdateServerInformationEmbed: function (rustplus) {
-        const instance = Client.client.readInstanceFile(rustplus.guildId);
+        const instance = Client.client.getInstance(rustplus.guildId);
 
         const time = rustplus.getCommandTime(true);
         const timeLeftTitle = `Time till ` +
@@ -580,7 +581,7 @@ module.exports = {
     },
 
     getUpdateEventInformationEmbed: function (rustplus) {
-        const instance = Client.client.readInstanceFile(rustplus.guildId);
+        const instance = Client.client.getInstance(rustplus.guildId);
 
         const cargoShipMessage = rustplus.getCommandCargo(true);
         const patrolHelicopterMessage = rustplus.getCommandHeli(true);
@@ -608,7 +609,7 @@ module.exports = {
     },
 
     getUpdateTeamInformationEmbed: function (rustplus) {
-        const instance = Client.client.readInstanceFile(rustplus.guildId);
+        const instance = Client.client.getInstance(rustplus.guildId);
 
         let names = '';
         let status = '';
@@ -647,7 +648,7 @@ module.exports = {
     },
 
     getDiscordCommandResponseEmbed: function (rustplus, response) {
-        const instance = Client.client.readInstanceFile(rustplus.guildId);
+        const instance = Client.client.getInstance(rustplus.guildId);
 
         let string = '';
         if (Array.isArray(response)) {

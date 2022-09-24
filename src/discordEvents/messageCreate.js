@@ -3,7 +3,7 @@ const DiscordCommandHandler = require('../handlers/discordCommandHandler.js');
 module.exports = {
     name: 'messageCreate',
     async execute(client, message) {
-        const instance = client.readInstanceFile(message.guild.id);
+        const instance = client.getInstance(message.guild.id);
         const rustplus = client.rustplusInstances[message.guild.id];
 
         if (message.author.bot || !rustplus || (rustplus && !rustplus.isOperational)) return;

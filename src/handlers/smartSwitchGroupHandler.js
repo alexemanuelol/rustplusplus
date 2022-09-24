@@ -5,7 +5,7 @@ module.exports = {
     },
 
     updateSwitchGroupIfContainSwitch: async function (client, guildId, serverId, switchId) {
-        const instance = client.readInstanceFile(guildId);
+        const instance = client.getInstance(guildId);
 
         for (const [groupId, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (content.switches.includes(`${switchId}`)) {
@@ -16,7 +16,7 @@ module.exports = {
     },
 
     getGroupsFromSwitchList: function (client, guildId, serverId, switches) {
-        const instance = client.readInstanceFile(guildId);
+        const instance = client.getInstance(guildId);
 
         let groupsId = [];
         for (let entity of switches) {
@@ -31,7 +31,7 @@ module.exports = {
     },
 
     TurnOnOffGroup: async function (client, rustplus, guildId, serverId, groupId, value) {
-        const instance = client.readInstanceFile(guildId);
+        const instance = client.getInstance(guildId);
 
         const switches = instance.serverList[serverId].switchGroups[groupId].switches;
 
@@ -50,7 +50,7 @@ module.exports = {
         for (const entityId of actionSwitches) {
             const prevActive = instance.serverList[serverId].switches[entityId].active;
             instance.serverList[serverId].switches[entityId].active = value;
-            client.writeInstanceFile(guildId, instance);
+            client.setInstance(guildId, instance);
 
             rustplus.interactionSwitches.push(entityId);
 
@@ -61,13 +61,13 @@ module.exports = {
                 }
                 instance.serverList[serverId].switches[entityId].reachable = false;
                 instance.serverList[serverId].switches[entityId].active = prevActive;
-                client.writeInstanceFile(guildId, instance);
+                client.setInstance(guildId, instance);
 
                 rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
             }
             else {
                 instance.serverList[serverId].switches[entityId].reachable = true;
-                client.writeInstanceFile(guildId, instance);
+                client.setInstance(guildId, instance);
             }
 
             DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);

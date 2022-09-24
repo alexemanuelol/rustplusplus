@@ -12,7 +12,7 @@ module.exports = {
         rustplus.isConnected = true;
         rustplus.isConnectionRefused = false;
 
-        const instance = client.readInstanceFile(rustplus.guildId);
+        const instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
 
@@ -25,7 +25,7 @@ module.exports = {
             rustplus.log('ERROR', 'Something went wrong with connection.', 'error');
 
             instance.serverList[serverId].active = false;
-            client.writeInstanceFile(guildId, instance);
+            client.setInstance(guildId, instance);
 
             await DiscordMessages.sendServerConnectionInvalidMessage(guildId, serverId);
             await DiscordMessages.sendServerMessage(guildId, serverId, null);

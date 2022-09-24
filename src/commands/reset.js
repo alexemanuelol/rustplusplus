@@ -13,7 +13,7 @@ module.exports = {
 			.setName('discord')
 			.setDescription('Reset discord channels.')),
 	async execute(client, interaction) {
-		let instance = client.readInstanceFile(interaction.guildId);
+		let instance = client.getInstance(interaction.guildId);
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
@@ -23,7 +23,7 @@ module.exports = {
 				const guild = DiscordTools.getGuild(interaction.guildId);
 
 				instance.firstTime = true;
-				client.writeInstanceFile(interaction.guildId, instance);
+				client.setInstance(interaction.guildId, instance);
 
 				const category = await require('../discordTools/SetupGuildCategory')(client, guild);
 				await require('../discordTools/SetupGuildChannels')(client, guild, category);
@@ -32,12 +32,12 @@ module.exports = {
 				await require('../discordTools/SetupSettingsMenu')(client, guild);
 				await require('../discordTools/SetupTrackers')(client, guild);
 
-				instance = client.readInstanceFile(interaction.guildId);
+				instance = client.getInstance(interaction.guildId);
 				instance.informationMessageId.map = null;
 				instance.informationMessageId.server = null;
 				instance.informationMessageId.event = null;
 				instance.informationMessageId.team = null;
-				client.writeInstanceFile(interaction.guildId, instance);
+				client.setInstance(interaction.guildId, instance);
 
 				await DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
 
@@ -51,13 +51,13 @@ module.exports = {
 						client.log('ERROR', 'Invalid guild or channel.', 'error');
 					}
 					else {
-						instance = client.readInstanceFile(guild.id);
+						instance = client.getInstance(guild.id);
 
 						const file = new Discord.AttachmentBuilder(
 							Path.join(__dirname, '..', `resources/images/maps/${guild.id}_map_full.png`));
 						const msg = await client.messageSend(channel, { files: [file] });
 						instance.informationMessageId.map = msg.id;
-						client.writeInstanceFile(guild.id, instance);
+						client.setInstance(guild.id, instance);
 					}
 				}
 

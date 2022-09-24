@@ -39,7 +39,7 @@ module.exports = {
                     { name: 'Christmas Lights', value: 'xmas_light' }))),
 
     async execute(client, interaction) {
-        const instance = client.readInstanceFile(interaction.guildId);
+        const instance = client.getInstance(interaction.guildId);
         const rustplus = client.rustplusInstances[interaction.guildId];
 
         if (!await client.validatePermissions(interaction)) return;
@@ -62,7 +62,7 @@ module.exports = {
                 const entity = instance.serverList[device.serverId].switches[entityId];
 
                 if (image !== null) instance.serverList[device.serverId].switches[entityId].image = `${image}.png`;
-                client.writeInstanceFile(interaction.guildId, instance);
+                client.setInstance(interaction.guildId, instance);
 
                 if (rustplus && rustplus.serverId === device.serverId) {
                     DiscordMessages.sendSmartSwitchMessage(interaction.guildId, device.serverId, entityId);

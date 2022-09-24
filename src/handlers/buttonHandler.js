@@ -6,7 +6,7 @@ const DiscordModals = require('../discordTools/discordModals.js');
 const Recycler = require('../util/recycler.js');
 
 module.exports = async (client, interaction) => {
-    const instance = client.readInstanceFile(interaction.guildId);
+    const instance = client.getInstance(interaction.guildId);
     const guildId = interaction.guildId;
     const rustplus = client.rustplusInstances[guildId];
 
@@ -15,7 +15,7 @@ module.exports = async (client, interaction) => {
         const setting = instance.notificationSettings[ids.setting];
 
         setting.discord = !setting.discord;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.notificationSettings[ids.setting].discord = setting.discord;
 
@@ -28,7 +28,7 @@ module.exports = async (client, interaction) => {
         const setting = instance.notificationSettings[ids.setting];
 
         setting.inGame = !setting.inGame;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.notificationSettings[ids.setting].inGame = setting.inGame;
 
@@ -38,7 +38,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'AllowInGameCommands') {
         instance.generalSettings.inGameCommandsEnabled = !instance.generalSettings.inGameCommandsEnabled;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
 
@@ -48,7 +48,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'BotMutedInGame') {
         instance.generalSettings.muteInGameBotMessages = !instance.generalSettings.muteInGameBotMessages;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.muteInGameBotMessages = instance.generalSettings.muteInGameBotMessages;
 
@@ -58,7 +58,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'InGameTeammateConnection') {
         instance.generalSettings.connectionNotify = !instance.generalSettings.connectionNotify;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
 
@@ -68,7 +68,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'InGameTeammateAfk') {
         instance.generalSettings.afkNotify = !instance.generalSettings.afkNotify;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
 
@@ -78,7 +78,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'InGameTeammateDeath') {
         instance.generalSettings.deathNotify = !instance.generalSettings.deathNotify;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
 
@@ -88,7 +88,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'FcmAlarmNotification') {
         instance.generalSettings.fcmAlarmNotificationEnabled = !instance.generalSettings.fcmAlarmNotificationEnabled;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEnabled =
             instance.generalSettings.fcmAlarmNotificationEnabled;
@@ -101,7 +101,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'FcmAlarmNotificationEveryone') {
         instance.generalSettings.fcmAlarmNotificationEveryone = !instance.generalSettings.fcmAlarmNotificationEveryone;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEveryone =
             instance.generalSettings.fcmAlarmNotificationEveryone;
@@ -114,7 +114,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'SmartAlarmNotifyInGame') {
         instance.generalSettings.smartAlarmNotifyInGame = !instance.generalSettings.smartAlarmNotifyInGame;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.smartAlarmNotifyInGame =
             instance.generalSettings.smartAlarmNotifyInGame;
@@ -126,7 +126,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'LeaderCommandEnabled') {
         instance.generalSettings.leaderCommandEnabled = !instance.generalSettings.leaderCommandEnabled;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.leaderCommandEnabled = instance.generalSettings.leaderCommandEnabled;
 
@@ -137,7 +137,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'TrackerNotifyAllOffline') {
         instance.generalSettings.trackerNotifyAllOffline = !instance.generalSettings.trackerNotifyAllOffline;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.trackerNotifyAllOffline =
             instance.generalSettings.trackerNotifyAllOffline;
@@ -150,7 +150,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'TrackerNotifyAnyOnline') {
         instance.generalSettings.trackerNotifyAnyOnline = !instance.generalSettings.trackerNotifyAnyOnline;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.trackerNotifyAnyOnline =
             instance.generalSettings.trackerNotifyAnyOnline;
@@ -163,7 +163,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'MapWipeNotifyEveryone') {
         instance.generalSettings.mapWipeNotifyEveryone = !instance.generalSettings.mapWipeNotifyEveryone;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.mapWipeNotifyEveryone =
             instance.generalSettings.mapWipeNotifyEveryone;
@@ -184,14 +184,14 @@ module.exports = async (client, interaction) => {
         for (const [serverId, content] of Object.entries(instance.serverList)) {
             if (content.active) {
                 instance.serverList[serverId].active = false;
-                client.writeInstanceFile(guildId, instance);
+                client.setInstance(guildId, instance);
                 await DiscordMessages.sendServerMessage(guildId, serverId, null);
                 break;
             }
         }
 
         server.active = true;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
         await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
         /* Disconnect previous instance is any */
@@ -242,7 +242,7 @@ module.exports = async (client, interaction) => {
             img: server.img,
             title: server.title
         }
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(guildId, trackerId);
     }
@@ -265,7 +265,7 @@ module.exports = async (client, interaction) => {
             switches: [],
             messageId: null
         }
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
     }
@@ -281,7 +281,7 @@ module.exports = async (client, interaction) => {
         }
 
         server.active = false;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) {
             rustplus.disconnect();
@@ -315,7 +315,7 @@ module.exports = async (client, interaction) => {
         await DiscordTools.deleteMessageById(guildId, instance.channelId.servers, server.messageId);
 
         delete instance.serverList[ids.serverId];
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartSwitchOn') ||
         interaction.customId.startsWith('SmartSwitchOff')) {
@@ -338,7 +338,7 @@ module.exports = async (client, interaction) => {
         const active = (interaction.customId.startsWith('SmartSwitchOn')) ? true : false;
         const prevActive = server.switches[ids.entityId].active;
         server.switches[ids.entityId].active = active;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         rustplus.interactionSwitches.push(ids.entityId);
 
@@ -349,13 +349,13 @@ module.exports = async (client, interaction) => {
             }
             server.switches[ids.entityId].reachable = false;
             server.switches[ids.entityId].active = prevActive;
-            client.writeInstanceFile(guildId, instance);
+            client.setInstance(guildId, instance);
 
             rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== ids.entityId);
         }
         else {
             server.switches[ids.entityId].reachable = true;
-            client.writeInstanceFile(guildId, instance);
+            client.setInstance(guildId, instance);
         }
 
         DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
@@ -386,7 +386,7 @@ module.exports = async (client, interaction) => {
             server.switches[ids.entityId].messageId);
 
         delete server.switches[ids.entityId];
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         if (rustplus) {
             clearTimeout(rustplus.currentSwitchTimeouts[ids.entityId]);
@@ -396,11 +396,11 @@ module.exports = async (client, interaction) => {
         for (const [groupId, content] of Object.entries(server.switchGroups)) {
             if (content.switches.includes(ids.entityId.toString())) {
                 server.switchGroups[groupId].switches = content.switches.filter(e => e !== ids.entityId.toString());
-                client.writeInstanceFile(guildId, instance);
+                client.setInstance(guildId, instance);
                 await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
             }
         }
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartAlarmEveryone')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEveryone', ''));
@@ -412,7 +412,7 @@ module.exports = async (client, interaction) => {
         }
 
         server.alarms[ids.entityId].everyone = !server.alarms[ids.entityId].everyone;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendSmartAlarmMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
@@ -429,7 +429,7 @@ module.exports = async (client, interaction) => {
             server.alarms[ids.entityId].messageId);
 
         delete server.alarms[ids.entityId];
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
@@ -453,7 +453,7 @@ module.exports = async (client, interaction) => {
         }
 
         server.storageMonitors[ids.entityId].everyone = !server.storageMonitors[ids.entityId].everyone;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
@@ -467,7 +467,7 @@ module.exports = async (client, interaction) => {
         }
 
         server.storageMonitors[ids.entityId].inGame = !server.storageMonitors[ids.entityId].inGame;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
@@ -496,7 +496,7 @@ module.exports = async (client, interaction) => {
             server.storageMonitors[ids.entityId].messageId);
 
         delete server.storageMonitors[ids.entityId];
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
     }
     else if (interaction.customId.startsWith('StorageMonitorRecycle')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorRecycle', ''));
@@ -515,7 +515,7 @@ module.exports = async (client, interaction) => {
         if (!(await rustplus.isResponseValid(entityInfo))) return;
 
         server.storageMonitors[ids.entityId].reachable = true;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         const items = Recycler.calculate(entityInfo.entityInfo.payload.items);
 
@@ -539,7 +539,7 @@ module.exports = async (client, interaction) => {
             server.storageMonitors[ids.entityId].messageId);
 
         delete server.storageMonitors[ids.entityId];
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
     }
     else if (interaction.customId === 'RecycleDelete') {
         await interaction.message.delete();
@@ -599,7 +599,7 @@ module.exports = async (client, interaction) => {
                 server.switchGroups[ids.groupId].messageId);
 
             delete server.switchGroups[ids.groupId];
-            client.writeInstanceFile(guildId, instance);
+            client.setInstance(guildId, instance);
         }
     }
     else if (interaction.customId.startsWith('GroupAddSwitch')) {
@@ -636,7 +636,7 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.active = !tracker.active;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
@@ -650,7 +650,7 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.everyone = !tracker.everyone;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
@@ -679,7 +679,7 @@ module.exports = async (client, interaction) => {
             tracker.messageId);
 
         delete instance.trackers[ids.trackerId];
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
     }
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));

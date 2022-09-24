@@ -44,7 +44,7 @@ module.exports = {
             .setDescription('Display the subscription list.')),
 
     async execute(client, interaction) {
-        const instance = client.readInstanceFile(interaction.guildId);
+        const instance = client.getInstance(interaction.guildId);
         const rustplus = client.rustplusInstances[interaction.guildId];
 
         if (!await client.validatePermissions(interaction)) return;
@@ -209,7 +209,7 @@ module.exports = {
                 }
                 else {
                     instance.marketSubscribeItemIds.push(itemId);
-                    client.writeInstanceFile(interaction.guildId, instance);
+                    client.setInstance(interaction.guildId, instance);
 
                     const str = `Just subscribed to item '${itemName}'.`;
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
@@ -258,7 +258,7 @@ module.exports = {
 
                 if (instance.marketSubscribeItemIds.includes(itemId)) {
                     instance.marketSubscribeItemIds = instance.marketSubscribeItemIds.filter(e => e !== itemId);
-                    client.writeInstanceFile(interaction.guildId, instance);
+                    client.setInstance(interaction.guildId, instance);
 
                     const str = `Item '${itemName}' have been removed from subscription.`;
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,

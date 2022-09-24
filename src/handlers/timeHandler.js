@@ -81,11 +81,11 @@ module.exports = {
 
             rustplus.time.timeTillActive = true;
 
-            const instance = client.readInstanceFile(rustplus.guildId);
+            const instance = client.getInstance(rustplus.guildId);
 
             instance.serverList[rustplus.serverId].timeTillDay = rustplus.time.timeTillDay;
             instance.serverList[rustplus.serverId].timeTillNight = rustplus.time.timeTillNight;
-            client.writeInstanceFile(rustplus.guildId, instance);
+            client.setInstance(rustplus.guildId, instance);
 
             rustplus.log('TIME', '24 Successful Hours in-game time have passed.');
             return;

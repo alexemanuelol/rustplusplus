@@ -57,7 +57,7 @@ class RustPlus extends RustPlusLib {
         this.mapMarkers = null;     /* Stores the MapMarkers structure. */
 
         /* Retrieve the trademark string */
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const trademark = instance.generalSettings.trademark;
         this.trademarkString = (trademark === 'NOT SHOWING') ? '' : `${trademark} | `;
 
@@ -89,7 +89,7 @@ class RustPlus extends RustPlusLib {
     }
 
     loadMarkers() {
-        const instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.getInstance(this.guildId);
 
         for (const [name, location] of Object.entries(instance.serverList[this.serverId].markers)) {
             this.markers[name] = { x: location.x, y: location.y, location: location.location };
@@ -97,7 +97,7 @@ class RustPlus extends RustPlusLib {
     }
 
     build() {
-        const instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.getInstance(this.guildId);
 
         /* Setup the logger */
         this.logger = new Logger(Path.join(__dirname, '..', '..', `logs/${this.guildId}.log`), 'guild');
@@ -112,7 +112,7 @@ class RustPlus extends RustPlusLib {
     }
 
     isServerAvailable() {
-        const instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.getInstance(this.guildId);
         return instance.serverList.hasOwnProperty(this.serverId);
     }
 
@@ -839,11 +839,11 @@ class RustPlus extends RustPlusLib {
 
                 for (const player of teamInfo.teamInfo.members) {
                     if (player.steamId.toString() === callerSteamId) {
-                        const instance = Client.client.readInstanceFile(this.guildId);
+                        const instance = Client.client.getInstance(this.guildId);
                         const location = Map.getPos(player.x, player.y, this.info.correctedMapSize, this);
                         instance.serverList[this.serverId].markers[name] =
                             { x: player.x, y: player.y, location: location.location };
-                        Client.client.writeInstanceFile(this.guildId, instance);
+                        Client.client.setInstance(this.guildId, instance);
                         this.markers[name] = { x: player.x, y: player.y, location: location.location };
 
                         return `Marker '${name}' at [${location.location}] was added.`;
@@ -852,13 +852,13 @@ class RustPlus extends RustPlusLib {
             } break;
 
             case 'remove': {
-                const instance = Client.client.readInstanceFile(this.guildId);
+                const instance = Client.client.getInstance(this.guildId);
 
                 if (name in this.markers) {
                     const location = this.markers[name].location;
                     delete this.markers[name];
                     delete instance.serverList[this.serverId].markers[name];
-                    Client.client.writeInstanceFile(this.guildId, instance);
+                    Client.client.setInstance(this.guildId, instance);
 
                     return `Marker '${name}' at [${location}] was removed.`;
                 }
@@ -898,7 +898,7 @@ class RustPlus extends RustPlusLib {
 
     getCommandNote(command) {
         const prefix = this.generalSettings.prefix;
-        const instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.getInstance(this.guildId);
         const strings = [];
 
         if (command.toLowerCase() === `${prefix}notes`) {
@@ -919,7 +919,7 @@ class RustPlus extends RustPlusLib {
             }
 
             instance.serverList[this.serverId].notes[index] = `${note}`;
-            Client.client.writeInstanceFile(this.guildId, instance);
+            Client.client.setInstance(this.guildId, instance);
             return 'Note saved.';
         }
         else if (command.toLowerCase().startsWith(`${prefix}note remove `)) {
@@ -931,7 +931,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 delete instance.serverList[this.serverId].notes[id];
-                Client.client.writeInstanceFile(this.guildId, instance);
+                Client.client.setInstance(this.guildId, instance);
                 return `Note ID: ${id} was removed.`;
             }
             else {
@@ -961,7 +961,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandPlayer(command) {
-        const instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.getInstance(this.guildId);
         const battlemetricsId = instance.serverList[this.serverId].battlemetricsId;
         const prefix = this.generalSettings.prefix;
 
@@ -1268,7 +1268,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandUpkeep() {
-        const instance = Client.client.readInstanceFile(this.guildId);
+        const instance = Client.client.getInstance(this.guildId);
         let cupboardFound = false;
         const strings = [];
         for (const [key, value] of Object.entries(instance.serverList[this.serverId].storageMonitors)) {

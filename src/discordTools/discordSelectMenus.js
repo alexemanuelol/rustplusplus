@@ -101,7 +101,7 @@ module.exports = {
     },
 
     getSmartSwitchSelectMenu: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 

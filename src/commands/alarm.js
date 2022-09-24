@@ -38,8 +38,7 @@ module.exports = {
 					{ name: 'Christmas Lights', value: 'xmas_light' }))),
 
 	async execute(client, interaction) {
-		const instance = client.readInstanceFile(interaction.guildId);
-		const rustplus = client.rustplusInstances[interaction.guildId];
+		const instance = client.getInstance(interaction.guildId);
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
@@ -61,7 +60,7 @@ module.exports = {
 				const entity = instance.serverList[device.serverId].alarms[entityId];
 
 				if (image !== null) instance.serverList[device.serverId].alarms[entityId].image = `${image}.png`;
-				client.writeInstanceFile(interaction.guildId, instance);
+				client.setInstance(interaction.guildId, instance);
 
 				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, entityId);
 

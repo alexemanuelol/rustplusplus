@@ -57,7 +57,7 @@ class Time {
     isTurnedNight(time) { return (this.isDay() && !(time.time >= time.sunrise && time.time < time.sunset)); }
 
     loadTimeTillConfig() {
-        let instance = this.client.readInstanceFile(this.rustplus.guildId);
+        let instance = this.client.getInstance(this.rustplus.guildId);
 
         if (instance.serverList[this.rustplus.serverId].timeTillDay !== null) {
             this.timeTillDay = instance.serverList[this.rustplus.serverId].timeTillDay;

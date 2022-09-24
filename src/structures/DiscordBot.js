@@ -5,6 +5,7 @@ const Path = require('path');
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
+const InstanceUtils = require('../util/instanceUtils.js');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
 const RustPlus = require('../structures/RustPlus');
@@ -91,29 +92,13 @@ class DiscordBot extends Discord.Client {
         await require('../discordTools/SetupSettingsMenu')(this, guild);
     }
 
-    readInstanceFile(guildId, readFromFile = false) {
-        if (readFromFile) {
-            return JSON.parse(Fs.readFileSync(
-                Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`), 'utf8'));
-        }
-        else {
-            return this.instances[guildId];
-        }
+    getInstance(guildId) {
+        return this.instances[guildId];
     }
 
-    writeInstanceFile(guildId, instance) {
+    setInstance(guildId, instance) {
         this.instances[guildId] = instance;
-        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`),
-            JSON.stringify(instance, null, 2));
-    }
-
-    readCredentialsFile(guildId) {
-        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`), 'utf8'));
-    }
-
-    writeCredentialsFile(guildId, credentials) {
-        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`),
-            JSON.stringify(credentials, null, 2));
+        InstanceUtils.writeInstanceFile(guildId, instance);
     }
 
     readNotificationSettingsTemplate() {
@@ -143,7 +128,7 @@ class DiscordBot extends Discord.Client {
         files.forEach(file => {
             if (file.endsWith('.json')) {
                 let guildId = file.replace('.json', '');
-                let instance = this.readInstanceFile(guildId);
+                let instance = this.getInstance(guildId);
 
                 for (const [key, value] of Object.entries(instance.serverList)) {
                     if (value.active) {
@@ -161,7 +146,7 @@ class DiscordBot extends Discord.Client {
     }
 
     findAvailableTrackerId(guildId) {
-        const instance = this.readInstanceFile(guildId);
+        const instance = this.getInstance(guildId);
 
         while (true) {
             const randomNumber = Math.floor(Math.random() * 1000);
@@ -172,7 +157,7 @@ class DiscordBot extends Discord.Client {
     }
 
     findAvailableGroupId(guildId, serverId) {
-        const instance = this.readInstanceFile(guildId);
+        const instance = this.getInstance(guildId);
 
         while (true) {
             const randomNumber = Math.floor(Math.random() * 1000);
@@ -250,7 +235,7 @@ class DiscordBot extends Discord.Client {
     }
 
     async validatePermissions(interaction) {
-        const instance = this.readInstanceFile(interaction.guildId);
+        const instance = this.getInstance(interaction.guildId);
 
         /* If role isn't setup yet, validate as true */
         if (instance.role === null) return true;

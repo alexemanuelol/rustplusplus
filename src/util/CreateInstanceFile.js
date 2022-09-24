@@ -1,6 +1,8 @@
 const Fs = require('fs');
 const Path = require('path');
 
+const InstanceUtils = require('../util/instanceUtils.js');
+
 module.exports = (client, guild) => {
     let instance = null;
     if (!Fs.existsSync(Path.join(__dirname, '..', '..', 'instances', `${guild.id}.json`))) {
@@ -35,7 +37,7 @@ module.exports = (client, guild) => {
         };
     }
     else {
-        instance = client.readInstanceFile(guild.id, true);
+        instance = InstanceUtils.readInstanceFile(guild.id);
 
         if (!instance.hasOwnProperty('firstTime')) {
             instance.firstTime = true;
@@ -122,5 +124,5 @@ module.exports = (client, guild) => {
         if (!instance.hasOwnProperty('marketSubscribeItemIds')) instance.marketSubscribeItemIds = [];
     }
 
-    client.writeInstanceFile(guild.id, instance);
+    client.setInstance(guild.id, instance);
 };

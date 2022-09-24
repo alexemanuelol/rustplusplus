@@ -356,7 +356,7 @@ class MapMarkers {
                         `Bradley APC was destroyed at ${posString}.`);
                 }
 
-                let instance = this.client.readInstanceFile(this.rustplus.guildId);
+                let instance = this.client.getInstance(this.rustplus.guildId);
                 if (!this.rustplus.isFirstPoll) {
                     this.bradleyAPCRespawnTimers[marker.id] = new Timer.timer(
                         this.notifyBradleyAPCRespawn.bind(this),
@@ -504,7 +504,7 @@ class MapMarkers {
                         let crateId = this.getOilRigCrateId(oilRig.x, oilRig.y, mapMarkers);
 
                         if (crateId !== null) {
-                            let instance = this.client.readInstanceFile(this.rustplus.guildId);
+                            let instance = this.client.getInstance(this.rustplus.guildId);
                             this.crateSmallOilRigTimers[crateId] = new Timer.timer(
                                 this.notifyCrateSmallOilRigOpen.bind(this),
                                 instance.serverList[this.rustplus.serverId].oilRigLockedCrateUnlockTimeMs,
@@ -536,7 +536,7 @@ class MapMarkers {
                         let crateId = this.getOilRigCrateId(oilRig.x, oilRig.y, mapMarkers);
 
                         if (crateId !== null) {
-                            let instance = this.client.readInstanceFile(this.rustplus.guildId);
+                            let instance = this.client.getInstance(this.rustplus.guildId);
                             this.crateLargeOilRigTimers[crateId] = new Timer.timer(
                                 this.notifyCrateLargeOilRigOpen.bind(this),
                                 instance.serverList[this.rustplus.serverId].oilRigLockedCrateUnlockTimeMs,
@@ -618,7 +618,7 @@ class MapMarkers {
                     this.rustplus.notificationSettings.cargoShipDetected,
                     `Cargo Ship enters the map from ${pos.string}.`);
 
-                let instance = this.client.readInstanceFile(this.rustplus.guildId);
+                let instance = this.client.getInstance(this.rustplus.guildId);
                 this.cargoShipEgressTimers[marker.id] = new Timer.timer(
                     this.notifyCargoShipEgress.bind(this),
                     instance.serverList[this.rustplus.serverId].cargoShipEgressTimeMs,
@@ -839,7 +839,7 @@ class MapMarkers {
                         this.rustplus.notificationSettings.lockedCrateDroppedAtMonument,
                         `Locked Crate just got dropped by Chinook 47 at ${name}.`);
 
-                    let instance = this.client.readInstanceFile(this.rustplus.guildId);
+                    let instance = this.client.getInstance(this.rustplus.guildId);
                     this.crateDespawnTimers[marker.id] = new Timer.timer(
                         () => { },
                         instance.serverList[this.rustplus.serverId].lockedCrateDespawnTimeMs);
@@ -1204,7 +1204,7 @@ class MapMarkers {
 
     notifyCrateWarningDespawn(args) {
         let name = args[0];
-        let instance = this.client.readInstanceFile(this.rustplus.guildId);
+        let instance = this.client.getInstance(this.rustplus.guildId);
         this.rustplus.sendEvent(
             this.rustplus.notificationSettings.lockedCrateMonumentDespawnWarning,
             `Locked Crate at ${name} despawns in ` +

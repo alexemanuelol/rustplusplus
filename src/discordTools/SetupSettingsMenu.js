@@ -7,7 +7,7 @@ const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, guild) => {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
     const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.settings);
 
     if (!channel) {
@@ -22,13 +22,13 @@ module.exports = async (client, guild) => {
         await setupNotificationSettings(client, guild.id, channel);
 
         instance.firstTime = false;
-        client.writeInstanceFile(guild.id, instance);
+        client.setInstance(guild.id, instance);
     }
 
 };
 
 async function setupGeneralSettings(client, guildId, channel) {
-    const instance = client.readInstanceFile(guildId);
+    const instance = client.getInstance(guildId);
 
     await client.messageSend(channel, {
         files: [new Discord.AttachmentBuilder(
@@ -170,7 +170,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 }
 
 async function setupNotificationSettings(client, guildId, channel) {
-    const instance = client.readInstanceFile(guildId);
+    const instance = client.getInstance(guildId);
 
     await client.messageSend(channel, {
         files: [new Discord.AttachmentBuilder(

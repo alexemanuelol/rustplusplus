@@ -11,7 +11,7 @@ module.exports = {
 
         for (const guildItem of client.guilds.cache) {
             const guild = guildItem[1];
-            let instance = client.readInstanceFile(guild.id);
+            let instance = client.getInstance(guild.id);
             const activeServer = getActiveServerId(instance.serverList);
 
             if (activeServer !== null && instance.serverList[activeServer].battlemetricsId !== null) {
@@ -26,7 +26,7 @@ module.exports = {
 
             for (const [trackerId, content] of Object.entries(instance.trackers)) {
                 if (!content.active) continue;
-                instance = client.readInstanceFile(guild.id);
+                instance = client.getInstance(guild.id);
 
                 let changed = false;
 
@@ -90,8 +90,8 @@ module.exports = {
                         }
                     }
                 }
-                client.writeInstanceFile(guild.id, instance);
-                instance = client.readInstanceFile(guild.id);
+                client.setInstance(guild.id, instance);
+                instance = client.getInstance(guild.id);
 
                 let allOffline = true;
                 for (const player of instance.trackers[trackerId].players) {
@@ -112,7 +112,7 @@ module.exports = {
                 }
 
                 instance.trackers[trackerId].allOffline = allOffline;
-                client.writeInstanceFile(guild.id, instance);
+                client.setInstance(guild.id, instance);
                 if (changed) await DiscordMessages.sendTrackerMessage(guild.id, trackerId);
             }
         }

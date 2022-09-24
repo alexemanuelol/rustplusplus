@@ -24,7 +24,7 @@ module.exports = {
     },
 
     getServerButtons: function (guildId, serverId, state = null) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         const identifier = JSON.stringify({ "serverId": serverId });
 
@@ -102,7 +102,7 @@ module.exports = {
     },
 
     getSmartSwitchButtons: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
@@ -164,7 +164,7 @@ module.exports = {
     },
 
     getSmartAlarmButtons: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
@@ -187,7 +187,7 @@ module.exports = {
     },
 
     getStorageMonitorToolCupboardButtons: function (guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
@@ -270,7 +270,7 @@ module.exports = {
     },
 
     getInGameTeammateNotificationsButtons: function (guildId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
@@ -323,7 +323,7 @@ module.exports = {
     },
 
     getTrackerButtons: function (guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
         const identifier = JSON.stringify({ "trackerId": trackerId });
 

@@ -17,7 +17,7 @@ module.exports = async (client, guild, category) => {
 };
 
 async function addTextChannel(name, client, guild, parent, permissionWrite = false) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
 
     let channel = undefined;
     if (instance.channelId[name] !== null) {
@@ -26,7 +26,7 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
     if (channel === undefined) {
         channel = await DiscordTools.addTextChannel(guild.id, name);
         instance.channelId[name] = channel.id;
-        client.writeInstanceFile(guild.id, instance);
+        client.setInstance(guild.id, instance);
 
         try {
             channel.setParent(parent.id);

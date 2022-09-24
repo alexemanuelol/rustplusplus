@@ -14,7 +14,7 @@ module.exports = {
     },
 
     getCustomTimersEditModal(guildId, serverId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         const identifier = JSON.stringify({ "serverId": serverId });
 
@@ -61,7 +61,7 @@ module.exports = {
     },
 
     getSmartSwitchEditModal(guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].switches[entityId];
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
@@ -89,7 +89,7 @@ module.exports = {
     },
 
     getGroupEditModal(guildId, serverId, groupId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
         const identifier = JSON.stringify({ "serverId": serverId, "groupId": groupId });
 
@@ -117,7 +117,7 @@ module.exports = {
     },
 
     getGroupAddSwitchModal(guildId, serverId, groupId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
         const identifier = JSON.stringify({ "serverId": serverId, "groupId": groupId });
 
@@ -139,7 +139,7 @@ module.exports = {
     },
 
     getGroupRemoveSwitchModal(guildId, serverId, groupId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const group = instance.serverList[serverId].switchGroups[groupId];
         const identifier = JSON.stringify({ "serverId": serverId, "groupId": groupId });
 
@@ -161,7 +161,7 @@ module.exports = {
     },
 
     getSmartAlarmEditModal(guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
@@ -189,7 +189,7 @@ module.exports = {
     },
 
     getStorageMonitorEditModal(guildId, serverId, entityId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
@@ -211,7 +211,7 @@ module.exports = {
     },
 
     getTrackerEditModal(guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
         const identifier = JSON.stringify({ "trackerId": trackerId });
 
@@ -233,7 +233,7 @@ module.exports = {
     },
 
     getTrackerAddPlayerModal(guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
         const identifier = JSON.stringify({ "trackerId": trackerId });
 
@@ -256,7 +256,7 @@ module.exports = {
     },
 
     getTrackerRemovePlayerModal(guildId, trackerId) {
-        const instance = Client.client.readInstanceFile(guildId);
+        const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
         const identifier = JSON.stringify({ "trackerId": trackerId });
 

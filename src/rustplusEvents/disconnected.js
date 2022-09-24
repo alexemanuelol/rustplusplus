@@ -10,7 +10,7 @@ module.exports = {
         rustplus.isOperational = false;
         rustplus.isFirstPoll = true;
 
-        const instance = client.readInstanceFile(rustplus.guildId);
+        const instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
         const server = instance.serverList[serverId];

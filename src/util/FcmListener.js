@@ -6,11 +6,12 @@ const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
+const InstanceUtils = require('../util/instanceUtils.js');
 const Map = require('../util/map.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild) => {
-    const credentials = client.readCredentialsFile(guild.id);
+    const credentials = InstanceUtils.readCredentialsFile(guild.id);
 
     if (credentials.credentials === null) {
         client.log('WARNING', `Credentials is not set for guild: ${guild.id}, cannot start FCM-listener.`);
@@ -143,7 +144,7 @@ function isValidUrl(url) {
 }
 
 async function pairingServer(client, guild, full, data, body) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
     const serverId = `${body.ip}-${body.port}`;
     const server = instance.serverList[serverId];
 
@@ -191,13 +192,13 @@ async function pairingServer(client, guild, full, data, body) {
         timeTillDay: server ? server.timeTillDay : null,
         timeTillNight: server ? server.timeTillNight : null
     };
-    client.writeInstanceFile(guild.id, instance);
+    client.setInstance(guild.id, instance);
 
     await DiscordMessages.sendServerMessage(guild.id, serverId, null);
 }
 
 async function pairingEntitySwitch(client, guild, full, data, body) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
     const serverId = `${body.ip}-${body.port}`;
     if (!instance.serverList.hasOwnProperty(serverId)) return;
     const switches = instance.serverList[serverId].switches;
@@ -214,7 +215,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         server: entityExist ? switches[body.entityId].server : body.name,
         messageId: entityExist ? switches[body.entityId].messageId : null
     };
-    client.writeInstanceFile(guild.id, instance);
+    client.setInstance(guild.id, instance);
 
     const rustplus = client.rustplusInstances[guild.id];
     if (rustplus && serverId === rustplus.serverId) {
@@ -235,14 +236,14 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         if (instance.serverList[serverId].switches[body.entityId].reachable) {
             instance.serverList[serverId].switches[body.entityId].active = info.entityInfo.payload.value;
         }
-        client.writeInstanceFile(guild.id, instance);
+        client.setInstance(guild.id, instance);
 
         await DiscordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
     }
 }
 
 async function pairingEntitySmartAlarm(client, guild, full, data, body) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
     const serverId = `${body.ip}-${body.port}`;
     if (!instance.serverList.hasOwnProperty(serverId)) return;
     const alarms = instance.serverList[serverId].alarms;
@@ -260,7 +261,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         server: entityExist ? alarms[body.entityId].server : body.name,
         messageId: entityExist ? alarms[body.entityId].messageId : null
     };
-    client.writeInstanceFile(guild.id, instance);
+    client.setInstance(guild.id, instance);
 
     const rustplus = client.rustplusInstances[guild.id];
     if (rustplus && serverId === rustplus.serverId) {
@@ -281,14 +282,14 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         if (instance.serverList[serverId].alarms[body.entityId].reachable) {
             instance.serverList[serverId].alarms[body.entityId].active = info.entityInfo.payload.value;
         }
-        client.writeInstanceFile(guild.id, instance);
+        client.setInstance(guild.id, instance);
     }
 
     await DiscordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
     const serverId = `${body.ip}-${body.port}`;
     if (!instance.serverList.hasOwnProperty(serverId)) return;
     const storageMonitors = instance.serverList[serverId].storageMonitors;
@@ -308,7 +309,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         server: entityExist ? storageMonitors[body.entityId].server : body.name,
         messageId: entityExist ? storageMonitors[body.entityId].messageId : null
     };
-    client.writeInstanceFile(guild.id, instance);
+    client.setInstance(guild.id, instance);
 
     const rustplus = client.rustplusInstances[guild.id];
     if (rustplus && serverId === rustplus.serverId) {
@@ -342,7 +343,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
                 hasProtection: info.entityInfo.payload.hasProtection
             }
         }
-        client.writeInstanceFile(guild.id, instance);
+        client.setInstance(guild.id, instance);
 
         await DiscordMessages.sendStorageMonitorMessage(guild.id, serverId, body.entityId);
     }
@@ -359,7 +360,7 @@ async function alarmAlarm(client, guild, full, data, body) {
     to the credential owner and which is not part of the currently connected rust server can notify IF the general
     setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
 
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
     const serverId = `${body.ip}-${body.port}`;
     const entityId = body.entityId;
     const server = instance.serverList[serverId];
@@ -375,7 +376,7 @@ async function alarmAlarm(client, guild, full, data, body) {
 }
 
 async function alarmRaidAlarm(client, guild, full, data, body) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
     const serverId = `${body.ip}-${body.port}`;
     const rustplus = client.rustplusInstances[guild.id];
 
@@ -412,7 +413,7 @@ async function playerDeath(client, guild, full, data, body, ownerId) {
 }
 
 async function teamLogin(client, guild, full, data, body) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
 
     const content = {
         embeds: [DiscordEmbeds.getTeamLoginEmbed(body, await Scrape.scrapeSteamProfilePicture(client, body.targetId))]
@@ -428,7 +429,7 @@ async function teamLogin(client, guild, full, data, body) {
 }
 
 async function newsNews(client, guild, full, data, body) {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
 
     const content = {
         embeds: [DiscordEmbeds.getNewsEmbed(data)],

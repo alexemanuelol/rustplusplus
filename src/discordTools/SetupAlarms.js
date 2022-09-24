@@ -1,12 +1,12 @@
 const DiscordMessages = require('./discordMessages.js');
 
 module.exports = async (client, rustplus) => {
-    let instance = client.readInstanceFile(rustplus.guildId);
+    let instance = client.getInstance(rustplus.guildId);
     const guildId = rustplus.guildId;
     const serverId = rustplus.serverId;
 
     for (const entityId in instance.serverList[serverId].alarms) {
-        instance = client.readInstanceFile(guildId);
+        instance = client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
         const info = await rustplus.getEntityInfoAsync(entityId);
 
@@ -23,7 +23,7 @@ module.exports = async (client, rustplus) => {
                 entity.active = info.entityInfo.payload.value;
             }
         }
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
     }

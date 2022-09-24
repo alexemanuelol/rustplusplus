@@ -2,7 +2,7 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const Keywords = require('../util/keywords.js');
 
 module.exports = async (client, interaction) => {
-    const instance = client.readInstanceFile(interaction.guildId);
+    const instance = client.getInstance(interaction.guildId);
     const guildId = interaction.guildId;
 
     if (interaction.customId.startsWith('CustomTimersEdit')) {
@@ -54,7 +54,7 @@ module.exports = async (client, interaction) => {
         if (oilRigCrateUnlockTime && ((oilRigCrateUnlockTime * 1000) !== server.oilRigLockedCrateUnlockTimeMs)) {
             server.oilRigLockedCrateUnlockTimeMs = oilRigCrateUnlockTime * 1000;
         }
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
     }
     else if (interaction.customId.startsWith('SmartSwitchEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
@@ -73,7 +73,7 @@ module.exports = async (client, interaction) => {
             !Keywords.getListOfUsedKeywords(client, guildId, ids.serverId).includes(smartSwitchCommand)) {
             server.switches[ids.entityId].command = smartSwitchCommand;
         }
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId);
     }
@@ -94,7 +94,7 @@ module.exports = async (client, interaction) => {
             !Keywords.getListOfUsedKeywords(client, interaction.guildId, ids.serverId).includes(groupCommand)) {
             server.switchGroups[ids.groupId].command = groupCommand;
         }
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
@@ -115,7 +115,7 @@ module.exports = async (client, interaction) => {
         }
 
         server.switchGroups[ids.groupId].switches.push(switchId);
-        client.writeInstanceFile(interaction.guildId, instance);
+        client.setInstance(interaction.guildId, instance);
 
         await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
@@ -131,7 +131,7 @@ module.exports = async (client, interaction) => {
 
         server.switchGroups[ids.groupId].switches =
             server.switchGroups[ids.groupId].switches.filter(e => e !== switchId);
-        client.writeInstanceFile(interaction.guildId, instance);
+        client.setInstance(interaction.guildId, instance);
 
         await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
@@ -148,7 +148,7 @@ module.exports = async (client, interaction) => {
 
         server.alarms[ids.entityId].name = smartAlarmName;
         server.alarms[ids.entityId].message = smartAlarmMessage;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
     }
@@ -163,7 +163,7 @@ module.exports = async (client, interaction) => {
         }
 
         server.storageMonitors[ids.entityId].name = storageMonitorName;
-        client.writeInstanceFile(interaction.guildId, instance);
+        client.setInstance(interaction.guildId, instance);
 
         await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId, ids.entityId);
     }
@@ -178,7 +178,7 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.name = trackerName;
-        client.writeInstanceFile(guildId, instance);
+        client.setInstance(guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
@@ -200,7 +200,7 @@ module.exports = async (client, interaction) => {
         tracker.players.push({
             name: '-', steamId: steamId, playerId: null, status: false, time: null
         });
-        client.writeInstanceFile(interaction.guildId, instance);
+        client.setInstance(interaction.guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
 
@@ -218,7 +218,7 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.players = tracker.players.filter(e => e.steamId !== steamId);
-        client.writeInstanceFile(interaction.guildId, instance);
+        client.setInstance(interaction.guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }

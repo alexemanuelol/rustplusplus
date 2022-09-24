@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, guild) => {
-    const instance = client.readInstanceFile(guild.id);
+    const instance = client.getInstance(guild.id);
 
     let category = undefined;
     if (instance.channelId.category !== null) {
@@ -12,7 +12,7 @@ module.exports = async (client, guild) => {
     if (category === undefined) {
         category = await DiscordTools.addCategory(guild.id, 'rustPlusPlus');
         instance.channelId.category = category.id;
-        client.writeInstanceFile(guild.id, instance);
+        client.setInstance(guild.id, instance);
     }
 
     const perms = [];

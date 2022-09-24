@@ -7,7 +7,7 @@ module.exports = {
     },
 
     checkChanges: async function (rustplus, client, teamInfo) {
-        let instance = client.readInstanceFile(rustplus.guildId);
+        let instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
         const server = instance.serverList[serverId];

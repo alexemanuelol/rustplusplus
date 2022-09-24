@@ -27,7 +27,7 @@ module.exports = {
 				))),
 
 	async execute(client, interaction) {
-		const instance = client.readInstanceFile(interaction.guildId);
+		const instance = client.getInstance(interaction.guildId);
 		const rustplus = client.rustplusInstances[interaction.guildId];
 
 		if (!await client.validatePermissions(interaction)) return;
@@ -52,7 +52,7 @@ module.exports = {
 				if (image !== null) {
 					instance.serverList[device.serverId].storageMonitors[entityId].image = `${image}.png`;
 				}
-				client.writeInstanceFile(interaction.guildId, instance);
+				client.setInstance(interaction.guildId, instance);
 
 				if (rustplus && rustplus.serverId === device.serverId) {
 					await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, device.serverId, entityId);

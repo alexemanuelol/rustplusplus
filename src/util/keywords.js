@@ -31,7 +31,7 @@ module.exports = {
     ],
 
     getListOfUsedKeywords: function (client, guildId, serverId) {
-        const instance = client.readInstanceFile(guildId);
+        const instance = client.getInstance(guildId);
 
         let list = [];
         list = [...module.exports.commands];
