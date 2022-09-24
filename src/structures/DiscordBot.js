@@ -18,6 +18,7 @@ class DiscordBot extends Discord.Client {
         this.commands = new Discord.Collection();
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
+        this.instances = {};
 
         this.items = new Items();
 
@@ -29,18 +30,6 @@ class DiscordBot extends Discord.Client {
 
         this.loadDiscordCommands();
         this.loadDiscordEvents();
-        this.loadInstances();
-    }
-
-    loadInstances() {
-        this.instances = {};
-        const instancePath = Path.join(__dirname, '..', 'instances');
-        const instanceFiles = Fs.readdirSync(instancePath);
-        for (const instanceFile of instanceFiles) {
-            const guildId = instanceFile.split('.')[0];
-            const instance = JSON.parse(Fs.readFileSync(Path.join(instancePath, `${guildId}.json`)), 'utf8');
-            this.instances[guildId] = instance;
-        }
     }
 
     loadDiscordCommands() {
@@ -93,9 +82,6 @@ class DiscordBot extends Discord.Client {
     }
 
     async setupGuild(guild) {
-        require('../util/CreateInstanceFile')(this, guild);
-        require('../util/CreateCredentialsFile')(this, guild);
-
         await require('../discordTools/RegisterSlashCommands')(this, guild);
 
         let category = await require('../discordTools/SetupGuildCategory')(this, guild);
@@ -105,8 +91,13 @@ class DiscordBot extends Discord.Client {
         await require('../discordTools/SetupSettingsMenu')(this, guild);
     }
 
-    readInstanceFile(guildId) {
-        return this.instances[guildId];
+    readInstanceFile(guildId, readFromFile = false) {
+        if (readFromFile) {
+            return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', `instances/${guildId}.json`), 'utf8'));
+        }
+        else {
+            return this.instances[guildId];
+        }
     }
 
     writeInstanceFile(guildId, instance) {
