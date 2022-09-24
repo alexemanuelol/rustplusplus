@@ -21,8 +21,30 @@ module.exports = {
                 placeholder: `Current Prefix: ${prefix}`,
                 options: [
                     { label: '!', description: 'Exlamation Mark', value: '!' },
-                    { label: '/', description: 'Slash', value: '/' },
-                    { label: '.', description: 'Dot', value: '.' }]
+                    { label: '?', description: 'Question Mark', value: '?' },
+                    { label: '.', description: 'Dot', value: '.' },
+                    { label: ':', description: 'Colon', value: ':' },
+                    { label: ',', description: 'Comma', value: ',' },
+                    { label: ';', description: 'Semicolon', value: ';' },
+                    { label: '-', description: 'Dash', value: '-' },
+                    { label: '_', description: 'Underscore', value: '_' },
+                    { label: '=', description: 'Equals Sign', value: '=' },
+                    { label: '*', description: 'Asterisk', value: '*' },
+                    { label: '@', description: 'At Sign', value: '@' },
+                    { label: '+', description: 'Plus Sign', value: '+' },
+                    { label: "'", description: 'Apostrophe', value: "'" },
+                    { label: '#', description: 'Hash', value: '#' },
+                    { label: '¤', description: 'Currency Sign', value: '¤' },
+                    { label: '%', description: 'Percent Sign', value: '%' },
+                    { label: '&', description: 'Ampersand', value: '&' },
+                    { label: '|', description: 'Pipe', value: '|' },
+                    { label: '>', description: 'Greater-than Sign', value: '>' },
+                    { label: '<', description: 'Less-than Sign', value: '<' },
+                    { label: '~', description: 'Tilde', value: '~' },
+                    { label: '^', description: 'Circumflex', value: '^' },
+                    { label: '♥', description: 'Heart', value: '♥' },
+                    { label: '☺', description: 'Smily Face', value: '☺' },
+                    { label: '/', description: 'Slash', value: '/' }]
             }));
     },
 
@@ -41,6 +63,16 @@ module.exports = {
                         label: 'Rust++',
                         description: `Rust++ will be shown before messages.`,
                         value: 'Rust++'
+                    },
+                    {
+                        label: 'R++',
+                        description: `R++ will be shown before messages.`,
+                        value: 'R++'
+                    },
+                    {
+                        label: 'RPP',
+                        description: `RPP will be shown before messages.`,
+                        value: 'RPP'
                     },
                     {
                         label: 'NOT SHOWING',

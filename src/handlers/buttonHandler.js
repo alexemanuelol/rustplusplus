@@ -161,6 +161,17 @@ module.exports = async (client, interaction) => {
                 instance.generalSettings.trackerNotifyAnyOnline)]
         });
     }
+    else if (interaction.customId === 'MapWipeNotifyEveryone') {
+        instance.generalSettings.mapWipeNotifyEveryone = !instance.generalSettings.mapWipeNotifyEveryone;
+        client.writeInstanceFile(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.mapWipeNotifyEveryone =
+            instance.generalSettings.mapWipeNotifyEveryone;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)]
+        });
+    }
     else if (interaction.customId.startsWith('ServerConnect')) {
         const ids = JSON.parse(interaction.customId.replace('ServerConnect', ''));
         const server = instance.serverList[ids.serverId];
@@ -173,6 +184,7 @@ module.exports = async (client, interaction) => {
         for (const [serverId, content] of Object.entries(instance.serverList)) {
             if (content.active) {
                 instance.serverList[serverId].active = false;
+                client.writeInstanceFile(guildId, instance);
                 await DiscordMessages.sendServerMessage(guildId, serverId, null);
                 break;
             }

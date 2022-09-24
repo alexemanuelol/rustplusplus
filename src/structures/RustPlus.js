@@ -92,7 +92,7 @@ class RustPlus extends RustPlusLib {
         const instance = Client.client.readInstanceFile(this.guildId);
 
         for (const [name, location] of Object.entries(instance.serverList[this.serverId].markers)) {
-            this.markers[name] = { x: location.x, y: location.y };
+            this.markers[name] = { x: location.x, y: location.y, location: location.location };
         }
     }
 
@@ -840,11 +840,13 @@ class RustPlus extends RustPlusLib {
                 for (const player of teamInfo.teamInfo.members) {
                     if (player.steamId.toString() === callerSteamId) {
                         const instance = Client.client.readInstanceFile(this.guildId);
-                        instance.serverList[this.serverId].markers[name] = { x: player.x, y: player.y };
+                        const location = Map.getPos(player.x, player.y, this.info.correctedMapSize, this);
+                        instance.serverList[this.serverId].markers[name] =
+                            { x: player.x, y: player.y, location: location.location };
                         Client.client.writeInstanceFile(this.guildId, instance);
-                        this.markers[name] = { x: player.x, y: player.y };
+                        this.markers[name] = { x: player.x, y: player.y, location: location.location };
 
-                        return `Marker '${name}' was added.`;
+                        return `Marker '${name}' at [${location.location}] was added.`;
                     }
                 }
             } break;
@@ -853,17 +855,19 @@ class RustPlus extends RustPlusLib {
                 const instance = Client.client.readInstanceFile(this.guildId);
 
                 if (name in this.markers) {
+                    const location = this.markers[name].location;
                     delete this.markers[name];
                     delete instance.serverList[this.serverId].markers[name];
                     Client.client.writeInstanceFile(this.guildId, instance);
 
-                    return `Marker '${name}' was removed.`;
+                    return `Marker '${name}' at [${location}] was removed.`;
                 }
+                return `Marker '${name}' does not exist.`;
             } break;
 
             case 'list': {
                 let str = '';
-                for (const name in this.markers) str += `${name}, `;
+                for (const name in this.markers) str += `${name} [${this.markers[name].location}], `;
 
                 return str !== '' ? str.slice(0, -2) : 'No registered markers.';
             } break;
@@ -880,8 +884,10 @@ class RustPlus extends RustPlusLib {
                             this.markers[command].y);
                         const distance = Math.floor(Map.getDistance(player.x, player.y, this.markers[command].x,
                             this.markers[command].y));
+                        console.log(this.markers[command])
 
-                        return `Marker '${command}' is ${distance}m from ${player.name} in direction ${direction}°.`;
+                        return `Marker '${command}' at [${this.markers[command].location}] is ${distance}m ` +
+                            `from ${player.name} in direction ${direction}°.`;
                     }
                 }
             } break;
@@ -1059,7 +1065,7 @@ class RustPlus extends RustPlusLib {
             let string = '';
             for (const player of closestPlayers) {
                 const distance = Math.floor(Map.getDistance(player.x, player.y, caller.x, caller.y));
-                string += `${player.name} (${distance}m), `;
+                string += `${player.name} (${distance}m [${player.pos.location}]), `;
             }
 
             return string === '' ? 'All your teammates are dead.' : `${string.slice(0, -2)}.`
@@ -1071,7 +1077,8 @@ class RustPlus extends RustPlusLib {
             if (player.name.includes(memberName)) {
                 const distance = Math.floor(Map.getDistance(caller.x, caller.y, player.x, player.y));
                 const direction = Map.getAngleBetweenPoints(caller.x, caller.y, player.x, player.y);
-                return `${player.name} is ${distance}m from ${caller.name} in direction ${direction}.`;
+                return `${player.name} is ${distance}m from ${caller.name} in direction ` +
+                    `${direction}° [${player.pos.location}].`;
             }
         }
 

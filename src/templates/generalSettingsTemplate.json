@@ -12,5 +12,6 @@
     "commandDelay": 0,
     "connectionNotify": false,
     "afkNotify": false,
-    "deathNotify": false
+    "deathNotify": false,
+    "mapWipeNotifyEveryone": false
 }

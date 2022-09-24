@@ -47,9 +47,6 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}marker `)) {
             rustplus.printCommandOutput(await rustplus.getCommandMarker(command, callerSteamId));
         }
-        else if (commandLowerCase === `${prefix}mute`) {
-            rustplus.printCommandOutput(rustplus.getCommandMute());
-        }
         else if (commandLowerCase.startsWith(`${prefix}note`)) {
             rustplus.printCommandOutput(rustplus.getCommandNote(command));
         }
@@ -85,9 +82,6 @@ module.exports = {
         }
         else if (commandLowerCase.startsWith(`${prefix}tts `)) {
             rustplus.printCommandOutput(await rustplus.getCommandTTS(command, callerName));
-        }
-        else if (commandLowerCase === `${prefix}unmute`) {
-            rustplus.printCommandOutput(rustplus.getCommandUnmute());
         }
         else if (commandLowerCase === `${prefix}upkeep`) {
             rustplus.printCommandOutput(rustplus.getCommandUpkeep());

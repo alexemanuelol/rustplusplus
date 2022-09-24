@@ -63,9 +63,7 @@ module.exports = {
 				if (image !== null) instance.serverList[device.serverId].alarms[entityId].image = `${image}.png`;
 				client.writeInstanceFile(interaction.guildId, instance);
 
-				if (rustplus && rustplus.serverId === device.serverId) {
-					await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, entityId);
-				}
+				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, entityId);
 
 				let str = `Successfully edited Smart Alarm '${entity.name}'.`;
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,

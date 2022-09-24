@@ -300,7 +300,8 @@ module.exports = {
         const content = {
             embeds: [DiscordEmbeds.getServerWipeDetectedEmbed(guildId, serverId)],
             files: [new Discord.AttachmentBuilder(
-                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))]
+                Path.join(__dirname, '..', `resources/images/maps/${guildId}_map_full.png`))],
+            content: instance.generalSettings.mapWipeNotifyEveryone ? '@everyone' : ''
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
@@ -390,8 +391,13 @@ module.exports = {
             )]
         }
 
-        await module.exports.sendMessage(rustplus.guildId, content,
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.server, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.server) {
+            instance.informationMessageId.server = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
     },
 
     sendUpdateEventInformationMessage: async function (rustplus) {
@@ -404,8 +410,13 @@ module.exports = {
             )]
         }
 
-        await module.exports.sendMessage(rustplus.guildId, content,
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.event, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.event) {
+            instance.informationMessageId.event = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
     },
 
     sendUpdateTeamInformationMessage: async function (rustplus) {
@@ -418,7 +429,20 @@ module.exports = {
             )]
         }
 
-        await module.exports.sendMessage(rustplus.guildId, content,
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.team, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.team) {
+            instance.informationMessageId.team = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
+    },
+
+    sendDiscordCommandResponseMessage: async function (rustplus, client, message, response) {
+        const content = {
+            embeds: [DiscordEmbeds.getDiscordCommandResponseEmbed(rustplus, response)]
+        }
+
+        await client.messageReply(message, content);
     },
 }

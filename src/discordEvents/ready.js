@@ -25,6 +25,11 @@ module.exports = {
 
         client.user.setActivity('/help', { type: 'LISTENING' });
 
+        for (const guild of client.guilds.cache) {
+            require('../util/CreateInstanceFile')(client, guild[1]);
+            require('../util/CreateCredentialsFile')(client, guild[1]);
+        }
+
         client.guilds.cache.forEach(async (guild) => {
             try {
                 await guild.members.me.setNickname(config.discord.username);
