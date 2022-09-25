@@ -27,7 +27,7 @@ module.exports = {
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
 			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(interaction.guildId, 'warning'), str);
+			client.log(client.intlGet(null, 'warning'), str);
 			return;
 		}
 
@@ -35,14 +35,14 @@ module.exports = {
 		if (battlemetricsId === null) {
 			const str = client.intlGet(interaction.guildId, 'serverUsingStreamerMode');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(interaction.guildId, 'warning'), str);
+			client.log(client.intlGet(null, 'warning'), str);
 			return;
 		}
 
 		if (!Object.keys(client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
 			const str = client.intlGet(interaction.guildId, 'couldNotFindPlayersForThisServer');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(interaction.guildId, 'warning'), str);
+			client.log(client.intlGet(null, 'warning'), str);
 			return;
 		}
 

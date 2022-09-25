@@ -53,7 +53,7 @@ module.exports = {
 					const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.information);
 
 					if (!channel) {
-						client.log(client.intlGet(interaction.guildId, 'error'),
+						client.log(client.intlGet(null, 'error'),
 							client.intlGet(interaction.guildId, 'invalidGuildOrChannel'), 'error');
 					}
 					else {
@@ -69,7 +69,7 @@ module.exports = {
 
 				const str = client.intlGet(interaction.guildId, 'commandsResetSuccess');
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-				client.log(client.intlGet(interaction.guildId, 'info'), str);
+				client.log(client.intlGet(null, 'info'), str);
 			} break;
 
 			default: {

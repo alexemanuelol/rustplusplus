@@ -40,7 +40,6 @@ module.exports = {
 			],
 			ephemeral: true
 		});
-		client.log(client.intlGet(interaction.guildId, 'info'),
-			client.intlGet(interaction.guildId, 'commandsHelpDesc'));
+		client.log(client.intlGet(null, 'info'), client.intlGet(interaction.guildId, 'commandsHelpDesc'));
 	},
 };

@@ -108,7 +108,7 @@ async function setCredentials(client, interaction) {
         if (_.isEqual(newCredentials, credentials.credentials)) {
             const str = client.intlGet(interaction.guildId, 'commandsCredentialsAlreadyInUse');
             await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            client.log(client.intlGet(interaction.guildId, 'warning'), str);
+            client.log(client.intlGet(null, 'warning'), str);
             return;
         }
     }
@@ -122,7 +122,7 @@ async function setCredentials(client, interaction) {
 
     const str = client.intlGet(interaction.guildId, 'commandsCredentialsSetSuccess');
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(interaction.guildId, 'info'), str);
+    client.log(client.intlGet(null, 'info'), str);
 }
 
 async function clearCredentials(client, interaction) {
@@ -136,7 +136,7 @@ async function clearCredentials(client, interaction) {
 
     const str = client.intlGet(interaction.guildId, 'commandsCredentialsClearSuccess');
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(interaction.guildId, 'info'), str);
+    client.log(client.intlGet(null, 'info'), str);
 }
 
 async function isSetCredentials(client, interaction) {
@@ -145,5 +145,5 @@ async function isSetCredentials(client, interaction) {
         client.intlGet(interaction.guildId, 'commandsCredentialsAreNotSet');
     const isSet = (credentials.credentials === null) ? 1 : 0;
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(isSet, str));
-    client.log(client.intlGet(interaction.guildId, 'info'), str);
+    client.log(client.intlGet(null, 'info'), str);
 }

@@ -58,12 +58,12 @@ module.exports = {
 				name: role.name
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log(client.intlGet(interaction.guildId, 'info'), str);
+			client.log(client.intlGet(null, 'info'), str);
 		}
 		else {
 			const str = client.intlGet(interaction.guildId, 'commandsRoleCleared');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log(client.intlGet(interaction.guildId, 'info'), str);
+			client.log(client.intlGet(null, 'info'), str);
 		}
 	},
 };

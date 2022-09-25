@@ -7,7 +7,7 @@ module.exports = {
     name: 'ready',
     once: true,
     async execute(client) {
-        client.loadGuildIntl();
+        client.loadGuildsIntl();
         client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
 
         try {

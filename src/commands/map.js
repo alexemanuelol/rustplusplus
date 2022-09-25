@@ -33,9 +33,9 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
-			const str = client.intlGet(guildId, 'notConnectedToRustServer');
+			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warning'), str);
+			client.log(client.intlGet(null, 'warning'), str);
 			return;
 		}
 
@@ -80,7 +80,7 @@ module.exports = {
 			files: [file],
 			ephemeral: true
 		});
-		rustplus.log(client.intlGet(guildId, 'info'), client.intlGet(guildId, 'commandsMapDisplayMap', {
+		rustplus.log(client.intlGet(interaction.guildId, 'info'), client.intlGet(interaction.guildId, 'commandsMapDisplayMap', {
 			mapName: fileName
 		}));
 	},

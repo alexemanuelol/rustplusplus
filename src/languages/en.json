@@ -103,5 +103,6 @@
     "storageMonitor": "Storage Monitor",
     "toolCupboard": "Tool Cupboard",
     "vendingMachine": "Vending Machine",
-    "warning": "WARNING"
+    "warning": "WARNING",
+    "unhandledRejection": "Unhandled Rejection: {error}"
 }

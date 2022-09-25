@@ -27,7 +27,7 @@ module.exports = {
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
 			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(interaction.guildId, 'warning'), str);
+			client.log(client.intlGet(null, 'warning'), str);
 			return;
 		}
 

@@ -38,7 +38,9 @@ function createMissingDirectories() {
 }
 
 process.on('unhandledRejection', error => {
-    client.log(`Unhandled Rejection: ${error}`);
+    client.log(client.intlGet(null, 'unhandledRejection', {
+        error: error
+    }));
     console.log(error);
 });
 

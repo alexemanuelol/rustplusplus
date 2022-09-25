@@ -22,6 +22,7 @@ class DiscordBot extends Discord.Client {
         this.currentFcmListeners = new Object();
         this.instances = {};
         this.guildIntl = {};
+        this.botIntl = null;
         this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
 
         this.items = new Items();
@@ -34,6 +35,7 @@ class DiscordBot extends Discord.Client {
 
         this.loadDiscordCommands();
         this.loadDiscordEvents();
+        this.loadBotIntl();
     }
 
     loadDiscordCommands() {
@@ -63,7 +65,19 @@ class DiscordBot extends Discord.Client {
         }
     }
 
-    loadGuildIntl() {
+    loadBotIntl() {
+        const language = Config.general.language;
+        const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
+        const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
+        const cache = FormatJS.createIntlCache();
+        this.botIntl = FormatJS.createIntl({
+            locale: language,
+            defaultLocale: 'en',
+            messages: messages
+        }, cache);
+    }
+
+    loadGuildsIntl() {
         for (const guild of this.guilds.cache) {
             const instance = InstanceUtils.readInstanceFile(guild[0]);
             const language = instance.generalSettings.language;
@@ -79,7 +93,15 @@ class DiscordBot extends Discord.Client {
     }
 
     intlGet(guildId, id, variables = {}) {
-        return this.guildIntl[guildId].formatMessage({
+        let intl = null;
+        if (guildId) {
+            intl = this.guildIntl[guildId];
+        }
+        else {
+            intl = this.botIntl;
+        }
+
+        return intl.formatMessage({
             id: id,
             defaultMessage: this.enMessages[id]
         }, variables);

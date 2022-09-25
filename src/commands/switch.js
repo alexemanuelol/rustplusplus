@@ -61,7 +61,7 @@ module.exports = {
                     });
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[device.serverId].title));
-                    client.log(client.intlGet(interaction.guildId, 'warning'), str);
+                    client.log(client.intlGet(null, 'warning'), str);
                     return;
                 }
 
@@ -81,7 +81,7 @@ module.exports = {
                 });
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                     instance.serverList[device.serverId].title));
-                client.log(client.intlGet(interaction.guildId, 'info'), str);
+                client.log(client.intlGet(null, 'info'), str);
             } break;
 
             default: {
