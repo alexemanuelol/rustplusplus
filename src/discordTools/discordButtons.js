@@ -34,42 +34,42 @@ module.exports = {
         if (state === 0) {
             connectionButton = module.exports.getButton({
                 customId: `ServerConnect${identifier}`,
-                label: 'CONNECT',
+                label: Client.client.intlGet(guildId, 'buttonConnect'),
                 style: PRIMARY
             });
         }
         else if (state === 1) {
             connectionButton = module.exports.getButton({
                 customId: `ServerDisconnect${identifier}`,
-                label: 'DISCONNECT',
+                label: Client.client.intlGet(guildId, 'buttonDisconnect'),
                 style: DANGER
             });
         }
         else if (state === 2) {
             connectionButton = module.exports.getButton({
                 customId: `ServerReconnecting${identifier}`,
-                label: 'RECONNECTING...',
+                label: Client.client.intlGet(guildId, 'buttonReconnecting'),
                 style: DANGER
             });
         }
 
         const customTimersButton = module.exports.getButton({
             customId: `CustomTimersEdit${identifier}`,
-            label: 'CUSTOM TIMERS',
+            label: Client.client.intlGet(guildId, 'buttonCustomTimers'),
             style: PRIMARY
         });
         const trackerButton = module.exports.getButton({
             customId: `CreateTracker${identifier}`,
-            label: 'CREATE TRACKER',
+            label: Client.client.intlGet(guildId, 'buttonCreateTracker'),
             style: PRIMARY
         });
         const groupButton = module.exports.getButton({
             customId: `CreateGroup${identifier}`,
-            label: 'CREATE GROUP',
+            label: Client.client.intlGet(guildId, 'buttonCreateGroup'),
             style: PRIMARY
         });
         let linkButton = module.exports.getButton({
-            label: 'WEBSITE',
+            label: Client.client.intlGet(guildId, 'buttonWebsite'),
             style: LINK,
             url: server.url
         });
@@ -109,12 +109,14 @@ module.exports = {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: `SmartSwitch${entity.active ? 'Off' : 'On'}${identifier}`,
-                label: entity.active ? 'TURN OFF' : 'TURN ON',
+                label: entity.active ?
+                    Client.client.intlGet(guildId, 'buttonTurnOffSwitch') :
+                    Client.client.intlGet(guildId, 'buttonTurnOnSwitch'),
                 style: entity.active ? DANGER : SUCCESS
             }),
             module.exports.getButton({
                 customId: `SmartSwitchEdit${identifier}`,
-                label: 'EDIT',
+                label: Client.client.intlGet(guildId, 'buttonEdit'),
                 style: PRIMARY
             }),
             module.exports.getButton({
@@ -124,24 +126,24 @@ module.exports = {
             }));
     },
 
-    getSmartSwitchGroupButtons: function (serverId, groupId) {
+    getSmartSwitchGroupButtons: function (guildId, serverId, groupId) {
         const identifier = JSON.stringify({ "serverId": serverId, "groupId": groupId });
 
         return [
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
                     customId: `GroupTurnOn${identifier}`,
-                    label: 'TURN ON',
+                    label: Client.client.intlGet(guildId, 'buttonTurnOnSwitch'),
                     style: PRIMARY
                 }),
                 module.exports.getButton({
                     customId: `GroupTurnOff${identifier}`,
-                    label: 'TURN OFF',
+                    label: Client.client.intlGet(guildId, 'buttonTurnOffSwitch'),
                     style: PRIMARY
                 }),
                 module.exports.getButton({
                     customId: `GroupEdit${identifier}`,
-                    label: 'EDIT',
+                    label: Client.client.intlGet(guildId, 'buttonEdit'),
                     style: PRIMARY
                 }),
                 module.exports.getButton({
@@ -152,12 +154,12 @@ module.exports = {
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
                     customId: `GroupAddSwitch${identifier}`,
-                    label: 'ADD SWITCH',
+                    label: Client.client.intlGet(guildId, 'buttonGroupAddSwitch'),
                     style: SUCCESS
                 }),
                 module.exports.getButton({
                     customId: `GroupRemoveSwitch${identifier}`,
-                    label: 'REMOVE SWITCH',
+                    label: Client.client.intlGet(guildId, 'buttonGroupRemoveSwitch'),
                     style: DANGER
                 }))
         ];
@@ -176,7 +178,7 @@ module.exports = {
             }),
             module.exports.getButton({
                 customId: `SmartAlarmEdit${identifier}`,
-                label: 'EDIT',
+                label: Client.client.intlGet(guildId, 'buttonEdit'),
                 style: PRIMARY
             }),
             module.exports.getButton({
@@ -199,12 +201,12 @@ module.exports = {
             }),
             module.exports.getButton({
                 customId: `StorageMonitorToolCupboardInGame${identifier}`,
-                label: 'IN-GAME',
+                label: Client.client.intlGet(guildId, 'buttonInGame'),
                 style: entity.inGame ? SUCCESS : DANGER
             }),
             module.exports.getButton({
                 customId: `StorageMonitorEdit${identifier}`,
-                label: 'EDIT',
+                label: Client.client.intlGet(guildId, 'buttonEdit'),
                 style: PRIMARY,
             }),
             module.exports.getButton({
@@ -214,18 +216,18 @@ module.exports = {
             }));
     },
 
-    getStorageMonitorContainerButton: function (serverId, entityId) {
+    getStorageMonitorContainerButton: function (guildId, serverId, entityId) {
         const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: `StorageMonitorEdit${identifier}`,
-                label: 'EDIT',
+                label: Client.client.intlGet(guildId, 'buttonEdit'),
                 style: PRIMARY,
             }),
             module.exports.getButton({
                 customId: `StorageMonitorRecycle${identifier}`,
-                label: 'RECYCLE',
+                label: Client.client.intlGet(guildId, 'buttonRecycle'),
                 style: PRIMARY,
             }),
             module.exports.getButton({
@@ -244,27 +246,29 @@ module.exports = {
             }));
     },
 
-    getNotificationButtons: function (setting, discordActive, inGameActive) {
+    getNotificationButtons: function (guildId, setting, discordActive, inGameActive) {
         const identifier = JSON.stringify({ "setting": setting });
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: `DiscordNotification${identifier}`,
-                label: 'DISCORD',
+                label: Client.client.intlGet(guildId, 'buttonDiscord'),
                 style: discordActive ? SUCCESS : DANGER
             }),
             module.exports.getButton({
                 customId: `InGameNotification${identifier}`,
-                label: 'IN-GAME',
+                label: Client.client.intlGet(guildId, 'buttonInGame'),
                 style: inGameActive ? SUCCESS : DANGER
             }));
     },
 
-    getInGameCommandsEnabledButton: function (enabled) {
+    getInGameCommandsEnabledButton: function (guildId, enabled) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'AllowInGameCommands',
-                label: enabled ? 'ENABLED' : 'DISABLED',
+                label: enabled ?
+                    Client.client.intlGet(guildId, 'buttonEnabled') :
+                    Client.client.intlGet(guildId, 'buttonDisabled'),
                 style: enabled ? SUCCESS : DANGER
             }));
     },
@@ -275,26 +279,28 @@ module.exports = {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'InGameTeammateConnection',
-                label: 'CONNECTIONS',
+                label: Client.client.intlGet(guildId, 'buttonConnections'),
                 style: instance.generalSettings.connectionNotify ? SUCCESS : DANGER
             }),
             module.exports.getButton({
                 customId: 'InGameTeammateAfk',
-                label: 'AFK',
+                label: Client.client.intlGet(guildId, 'buttonAfk'),
                 style: instance.generalSettings.afkNotify ? SUCCESS : DANGER
             }),
             module.exports.getButton({
                 customId: 'InGameTeammateDeath',
-                label: 'DEATH',
+                label: Client.client.intlGet(guildId, 'buttonDeath'),
                 style: instance.generalSettings.deathNotify ? SUCCESS : DANGER
             }));
     },
 
-    getFcmAlarmNotificationButtons: function (enabled, everyone) {
+    getFcmAlarmNotificationButtons: function (guildId, enabled, everyone) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'FcmAlarmNotification',
-                label: enabled ? 'ENABLED' : 'DISABLED',
+                label: enabled ?
+                    Client.client.intlGet(guildId, 'buttonEnabled') :
+                    Client.client.intlGet(guildId, 'buttonDisabled'),
                 style: enabled ? SUCCESS : DANGER
             }),
             module.exports.getButton({
@@ -304,20 +310,24 @@ module.exports = {
             }));
     },
 
-    getSmartAlarmNotifyInGameButton: function (enabled) {
+    getSmartAlarmNotifyInGameButton: function (guildId, enabled) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'SmartAlarmNotifyInGame',
-                label: enabled ? 'ENABLED' : 'DISABLED',
+                label: enabled ?
+                    Client.client.intlGet(guildId, 'buttonEnabled') :
+                    Client.client.intlGet(guildId, 'buttonDisabled'),
                 style: enabled ? SUCCESS : DANGER
             }));
     },
 
-    getLeaderCommandEnabledButton: function (enabled) {
+    getLeaderCommandEnabledButton: function (guildId, enabled) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'LeaderCommandEnabled',
-                label: enabled ? 'ENABLED' : 'DISABLED',
+                label: enabled ?
+                    Client.client.intlGet(guildId, 'buttonEnabled') :
+                    Client.client.intlGet(guildId, 'buttonDisabled'),
                 style: enabled ? SUCCESS : DANGER
             }));
     },
@@ -331,7 +341,9 @@ module.exports = {
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
                     customId: `TrackerActive${identifier}`,
-                    label: tracker.active ? 'ACTIVE' : 'INACTIVE',
+                    label: tracker.active ?
+                        Client.client.intlGet(guildId, 'buttonActive') :
+                        Client.client.intlGet(guildId, 'buttonInactive'),
                     style: tracker.active ? SUCCESS : DANGER
                 }),
                 module.exports.getButton({
@@ -341,7 +353,7 @@ module.exports = {
                 }),
                 module.exports.getButton({
                     customId: `TrackerEdit${identifier}`,
-                    label: 'EDIT',
+                    label: Client.client.intlGet(guildId, 'buttonEdit'),
                     style: PRIMARY
                 }),
                 module.exports.getButton({
@@ -352,45 +364,47 @@ module.exports = {
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
                     customId: `TrackerAddPlayer${identifier}`,
-                    label: 'ADD PLAYER',
+                    label: Client.client.intlGet(guildId, 'buttonAddPlayer'),
                     style: SUCCESS
                 }),
                 module.exports.getButton({
                     customId: `TrackerRemovePlayer${identifier}`,
-                    label: 'REMOVE PLAYER',
+                    label: Client.client.intlGet(guildId, 'buttonRemovePlayer'),
                     style: DANGER
                 }))
         ];
     },
 
-    getTrackerNotifyButtons: function (allOffline, anyOnline) {
+    getTrackerNotifyButtons: function (guildId, allOffline, anyOnline) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'TrackerNotifyAllOffline',
-                label: 'ALL OFFLINE',
+                label: Client.client.intlGet(guildId, 'buttonAllOffline'),
                 style: allOffline ? SUCCESS : DANGER
             }),
             module.exports.getButton({
                 customId: 'TrackerNotifyAnyOnline',
-                label: 'ANY ONLINE',
+                label: Client.client.intlGet(guildId, 'buttonAnyOnline'),
                 style: anyOnline ? SUCCESS : DANGER
             }));
     },
 
-    getNewsButton: function (body, validURL) {
+    getNewsButton: function (guildId, body, validURL) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 style: LINK,
-                label: 'LINK',
+                label: Client.client.intlGet(guildId, 'buttonLink'),
                 url: validURL ? body.url : Constants.DEFAULT_SERVER_URL
             }));
     },
 
-    getBotMutedInGameButton: function (isMuted) {
+    getBotMutedInGameButton: function (guildId, isMuted) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'BotMutedInGame',
-                label: isMuted ? 'MUTED' : 'UNMUTED',
+                label: isMuted ?
+                    Client.client.intlGet(guildId, 'buttonMuted') :
+                    Client.client.intlGet(guildId, 'buttonUnmuted'),
                 style: isMuted ? DANGER : SUCCESS
             }));
     },

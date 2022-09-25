@@ -20,7 +20,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.notificationSettings[ids.setting].discord = setting.discord;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getNotificationButtons(ids.setting, setting.discord, setting.inGame)]
+            components: [DiscordButtons.getNotificationButtons(guildId, ids.setting, setting.discord, setting.inGame)]
         });
     }
     else if (interaction.customId.startsWith('InGameNotification')) {
@@ -33,7 +33,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.notificationSettings[ids.setting].inGame = setting.inGame;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getNotificationButtons(ids.setting, setting.discord, setting.inGame)]
+            components: [DiscordButtons.getNotificationButtons(guildId, ids.setting, setting.discord, setting.inGame)]
         });
     }
     else if (interaction.customId === 'AllowInGameCommands') {
@@ -43,7 +43,8 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)]
+            components: [DiscordButtons.getInGameCommandsEnabledButton(guildId,
+                instance.generalSettings.inGameCommandsEnabled)]
         });
     }
     else if (interaction.customId === 'BotMutedInGame') {
@@ -53,7 +54,8 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.muteInGameBotMessages = instance.generalSettings.muteInGameBotMessages;
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getBotMutedInGameButton(instance.generalSettings.muteInGameBotMessages)]
+            components: [DiscordButtons.getBotMutedInGameButton(guildId,
+                instance.generalSettings.muteInGameBotMessages)]
         });
     }
     else if (interaction.customId === 'InGameTeammateConnection') {
@@ -95,6 +97,7 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getFcmAlarmNotificationButtons(
+                guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)]
         });
@@ -108,6 +111,7 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getFcmAlarmNotificationButtons(
+                guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)]
         });
@@ -121,6 +125,7 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getSmartAlarmNotifyInGameButton(
+                guildId,
                 instance.generalSettings.smartAlarmNotifyInGame)]
         });
     }
@@ -132,6 +137,7 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getLeaderCommandEnabledButton(
+                guildId,
                 instance.generalSettings.leaderCommandEnabled)]
         });
     }
@@ -144,6 +150,7 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: [getTrackerNotifyButtons(
+                guildId,
                 instance.generalSettings.trackerNotifyAllOffline,
                 instance.generalSettings.trackerNotifyAnyOnline)]
         });
@@ -157,6 +164,7 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getTrackerNotifyButtons(
+                guildId,
                 instance.generalSettings.trackerNotifyAllOffline,
                 instance.generalSettings.trackerNotifyAnyOnline)]
         });

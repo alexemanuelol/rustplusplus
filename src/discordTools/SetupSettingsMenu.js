@@ -63,7 +63,8 @@ async function setupGeneralSettings(client, guildId, channel) {
             title: 'Should in-game commands be enabled?',
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getInGameCommandsEnabledButton(instance.generalSettings.inGameCommandsEnabled)],
+        components: [DiscordButtons.getInGameCommandsEnabledButton(guildId,
+            instance.generalSettings.inGameCommandsEnabled)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -74,7 +75,7 @@ async function setupGeneralSettings(client, guildId, channel) {
             title: 'Should the bot be muted in-game?',
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getBotMutedInGameButton(instance.generalSettings.muteInGameBotMessages)],
+        components: [DiscordButtons.getBotMutedInGameButton(guildId, instance.generalSettings.muteInGameBotMessages)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -116,6 +117,7 @@ async function setupGeneralSettings(client, guildId, channel) {
         })],
         components: [
             DiscordButtons.getFcmAlarmNotificationButtons(
+                guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)],
         files: [new Discord.AttachmentBuilder(
@@ -128,7 +130,8 @@ async function setupGeneralSettings(client, guildId, channel) {
             title: 'Should Smart Alarms notify In-Game?',
             thumbnail: `attachment://settings_logo.png`,
         })],
-        components: [DiscordButtons.getSmartAlarmNotifyInGameButton(instance.generalSettings.smartAlarmNotifyInGame)],
+        components: [DiscordButtons.getSmartAlarmNotifyInGameButton(guildId,
+            instance.generalSettings.smartAlarmNotifyInGame)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -139,7 +142,8 @@ async function setupGeneralSettings(client, guildId, channel) {
             title: 'Should the leader command be enabled?',
             thumbnail: `attachment://settings_logo.png`,
         })],
-        components: [DiscordButtons.getLeaderCommandEnabledButton(instance.generalSettings.leaderCommandEnabled)],
+        components: [DiscordButtons.getLeaderCommandEnabledButton(guildId,
+            instance.generalSettings.leaderCommandEnabled)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -151,6 +155,7 @@ async function setupGeneralSettings(client, guildId, channel) {
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordButtons.getTrackerNotifyButtons(
+            guildId,
             instance.generalSettings.trackerNotifyAllOffline,
             instance.generalSettings.trackerNotifyAnyOnline)],
         files: [new Discord.AttachmentBuilder(
@@ -186,7 +191,7 @@ async function setupNotificationSettings(client, guildId, channel) {
             })],
             components: [
                 DiscordButtons.getNotificationButtons(
-                    setting,
+                    guildId, setting,
                     instance.notificationSettings[setting].discord,
                     instance.notificationSettings[setting].inGame)],
             files: [

@@ -127,7 +127,7 @@ module.exports = {
                 DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'storageMonitors')],
             components: [entity.type === 'toolcupboard' ?
                 DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
-                DiscordButtons.getStorageMonitorContainerButton(serverId, entityId)],
+                DiscordButtons.getStorageMonitorContainerButton(guildId, serverId, entityId)],
             files: [
                 new Discord.AttachmentBuilder(
                     Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
@@ -150,7 +150,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupId)],
-            components: DiscordButtons.getSmartSwitchGroupButtons(serverId, groupId),
+            components: DiscordButtons.getSmartSwitchGroupButtons(guildId, serverId, groupId),
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', 'resources/images/electrics/smart_switch.png'))]
         }

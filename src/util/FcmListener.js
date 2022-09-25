@@ -433,7 +433,7 @@ async function newsNews(client, guild, full, data, body) {
 
     const content = {
         embeds: [DiscordEmbeds.getNewsEmbed(data)],
-        components: [DiscordButtons.getNewsButton(body, isValidUrl(body.url))]
+        components: [DiscordButtons.getNewsButton(guild.id, body, isValidUrl(body.url))]
     }
 
     await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
