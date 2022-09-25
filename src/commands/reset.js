@@ -6,12 +6,17 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
-	data: new Builder.SlashCommandBuilder()
-		.setName('reset')
-		.setDescription('Reset Discord channels.')
-		.addSubcommand(subcommand => subcommand
-			.setName('discord')
-			.setDescription('Reset discord channels.')),
+	name: 'reset',
+
+	getData(client, guildId) {
+		return new Builder.SlashCommandBuilder()
+			.setName('reset')
+			.setDescription(client.intlGet(guildId, 'commandsResetDesc'))
+			.addSubcommand(subcommand => subcommand
+				.setName('discord')
+				.setDescription(client.intlGet(guildId, 'commandsResetDesc')));
+	},
+
 	async execute(client, interaction) {
 		let instance = client.getInstance(interaction.guildId);
 
@@ -48,7 +53,8 @@ module.exports = {
 					const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.information);
 
 					if (!channel) {
-						client.log('ERROR', 'Invalid guild or channel.', 'error');
+						client.log(client.intlGet(interaction.guildId, 'error'),
+							client.intlGet(interaction.guildId, 'invalidGuildOrChannel'), 'error');
 					}
 					else {
 						instance = client.getInstance(guild.id);
@@ -61,9 +67,9 @@ module.exports = {
 					}
 				}
 
-				const str = 'Successfully reset Discord.';
+				const str = client.intlGet(interaction.guildId, 'commandsResetSuccess');
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-				client.log('INFO', str);
+				client.log(client.intlGet(interaction.guildId, 'info'), str);
 			} break;
 
 			default: {

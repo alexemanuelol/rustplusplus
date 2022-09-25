@@ -3,13 +3,17 @@ const Builder = require('@discordjs/builders');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 
 module.exports = {
-	data: new Builder.SlashCommandBuilder()
-		.setName('leader')
-		.setDescription('Give or take the leadership from/to a team member.')
-		.addStringOption(option => option
-			.setName('member')
-			.setDescription('The name of the team member.')
-			.setRequired(true)),
+	name: 'leader',
+
+	getData(client, guildId) {
+		return new Builder.SlashCommandBuilder()
+			.setName('leader')
+			.setDescription(client.intlGet(guildId, 'commandsLeaderDesc'))
+			.addStringOption(option => option
+				.setName('member')
+				.setDescription(client.intlGet(guildId, 'commandsLeaderMemberDesc'))
+				.setRequired(true));
+	},
 
 	async execute(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
@@ -21,51 +25,59 @@ module.exports = {
 		const member = interaction.options.getString('member');
 
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
-			const str = 'Not currently connected to a rust server.';
+			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log('WARNING', str);
+			client.log(client.intlGet(interaction.guildId, 'warning'), str);
 			return;
 		}
 
 		if (!rustplus.generalSettings.leaderCommandEnabled) {
-			const str = 'Leader command is disabled in settings.';
+			const str = client.intlGet(interaction.guildId, 'commandsLeaderDisabled');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 				instance.serverList[rustplus.serverId].title));
-			rustplus.log('WARNING', str);
+			rustplus.log(client.intlGet(interaction.guildId, 'warning'), str);
 			return;
 		}
 
 		if (rustplus.team.leaderSteamId !== rustplus.playerId) {
 			const player = rustplus.team.getPlayer(rustplus.playerId);
-			const str = `Leader command only works if the current leader is ${player.name}.`;
+			const str = client.intlGet(interaction.guildId, 'commandsLeaderOnlyWorks', {
+				name: player.name
+			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 				instance.serverList[rustplus.serverId].title));
-			rustplus.log('WARNING', str);
+			rustplus.log(client.intlGet(interaction.guildId, 'warning'), str);
 			return;
 		}
 
 		for (const player of rustplus.team.players) {
 			if (player.name.includes(member)) {
 				if (rustplus.team.leaderSteamId === player.steamId) {
-					const str = `${player.name} is already team leader.`;
+					const str = client.intlGet(interaction.guildId, 'commandsLeaderAlreadyLeader', {
+						name: player.name
+					});
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
-					rustplus.log('WARNING', str);
+					rustplus.log(client.intlGet(interaction.guildId, 'warning'), str);
 				}
 				else {
 					await rustplus.team.changeLeadership(player.steamId);
-					const str = `Team leadership was transferred to ${player.name}.`;
+					const str = client.intlGet(interaction.guildId, 'commandsLeaderTransferred', {
+						name: player.name
+					});
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
 						instance.serverList[rustplus.serverId].title));
-					rustplus.log('INFO', str);
+					rustplus.log(client.intlGet(interaction.guildId, 'info'), str);
 				}
 				return;
 			}
 		}
 
-		const str = `Could not identify team member: ${member}.`;
+		const str = client.intlGet(interaction.guildId, 'commandsLeaderCouldNotIdentify', {
+			name: member
+		});
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 			instance.serverList[rustplus.serverId].title));
-		rustplus.log('WARNING', str);
+		rustplus.log(client.intlGet(interaction.guildId, 'warning'), str);
 	},
 };

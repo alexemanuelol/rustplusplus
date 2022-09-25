@@ -1,5 +1,6 @@
-const Fs = require('fs');
+const FormatJS = require('@formatjs/intl');
 const Discord = require('discord.js');
+const Fs = require('fs');
 const Path = require('path');
 
 const Config = require('../../config');
@@ -20,6 +21,8 @@ class DiscordBot extends Discord.Client {
         this.rustplusInstances = new Object();
         this.currentFcmListeners = new Object();
         this.instances = {};
+        this.guildIntl = {};
+        this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
 
         this.items = new Items();
 
@@ -38,7 +41,7 @@ class DiscordBot extends Discord.Client {
             .filter(file => file.endsWith('.js'));
         for (const file of commandFiles) {
             const command = require(`../commands/${file}`);
-            this.commands.set(command.data.name, command);
+            this.commands.set(command.name, command);
         }
     }
 
@@ -58,6 +61,28 @@ class DiscordBot extends Discord.Client {
                 this.on(event.name, (...args) => event.execute(this, ...args));
             }
         }
+    }
+
+    loadGuildIntl() {
+        for (const guild of this.guilds.cache) {
+            const instance = InstanceUtils.readInstanceFile(guild[0]);
+            const language = instance.generalSettings.language;
+            const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
+            const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
+            const cache = FormatJS.createIntlCache();
+            this.guildIntl[guild[0]] = FormatJS.createIntl({
+                locale: language,
+                defaultLocale: 'en',
+                messages: messages
+            }, cache);
+        }
+    }
+
+    intlGet(guildId, id, variables = {}) {
+        return this.guildIntl[guildId].formatMessage({
+            id: id,
+            defaultMessage: this.enMessages[id]
+        }, variables);
     }
 
     build() {

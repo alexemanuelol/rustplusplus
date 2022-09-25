@@ -5,26 +5,29 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const InstanceUtils = require('../util/instanceUtils.js');
 
 module.exports = {
-	data: new Builder.SlashCommandBuilder()
-		.setName('storagemonitor')
-		.setDescription('Operations on Storage Monitors.')
-		.addSubcommand(subcommand => subcommand
-			.setName('edit')
-			.setDescription('Edit the properties of a Storage Monitor.')
-			.addStringOption(option => option
-				.setName('id')
-				.setDescription('The ID of the Storage Monitor.')
-				.setRequired(true))
-			.addStringOption(option => option
-				.setName('image')
-				.setDescription('Set the image that best represent the Storage Monitor.')
-				.setRequired(false)
-				.addChoices(
-					{ name: 'Storage Monitor', value: 'storage_monitor' },
-					{ name: 'Tool Cupboard', value: 'tool_cupboard' },
-					{ name: 'Large Wood Box', value: 'large_wood_box' },
-					{ name: 'Vending Machine', value: 'vending_machine' }
-				))),
+	name: 'storagemonitor',
+
+	getData(client, guildId) {
+		return new Builder.SlashCommandBuilder()
+			.setName('storagemonitor')
+			.setDescription(client.intlGet(guildId, 'commandsStoragemonitorDesc'))
+			.addSubcommand(subcommand => subcommand
+				.setName('edit')
+				.setDescription(client.intlGet(guildId, 'commandsStoragemonitorEditDesc'))
+				.addStringOption(option => option
+					.setName('id')
+					.setDescription(client.intlGet(guildId, 'commandsStoragemonitorIdDesc'))
+					.setRequired(true))
+				.addStringOption(option => option
+					.setName('image')
+					.setDescription(client.intlGet(guildId, 'commandsStoragemonitorImageDesc'))
+					.setRequired(false)
+					.addChoices(
+						{ name: client.intlGet(guildId, 'storageMonitor'), value: 'storage_monitor' },
+						{ name: client.intlGet(guildId, 'toolCupboard'), value: 'tool_cupboard' },
+						{ name: client.intlGet(guildId, 'largeWoodBox'), value: 'large_wood_box' },
+						{ name: client.intlGet(guildId, 'vendingMachine'), value: 'vending_machine' })));
+	},
 
 	async execute(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
@@ -40,10 +43,12 @@ module.exports = {
 
 				const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
 				if (device === null) {
-					let str = `Invalid ID: '${entityId}'.`;
+					const str = client.intlGet(interaction.guildId, 'invalidId', {
+						id: entityId
+					});
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[device.serverId].title));
-					client.log('WARNING', str);
+					client.log(client.intlGet(interaction.guildId, 'warning'), str);
 					return;
 				}
 
@@ -58,10 +63,12 @@ module.exports = {
 					await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, device.serverId, entityId);
 				}
 
-				let str = `Successfully edited Storage Monitor '${entity.name}'.`;
+				const str = client.intlGet(interaction.guildId, 'commandsStoragemonitorEditSuccess', {
+					name: entity.name
+				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
 					instance.serverList[device.serverId].title));
-				client.log('INFO', str);
+				client.log(client.intlGet(interaction.guildId, 'info'), str);
 			} break;
 
 			default: {

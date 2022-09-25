@@ -20,6 +20,7 @@
     "homepage": "https://github.com/alexemanuelol/rustPlusPlus#readme",
     "dependencies": {
         "@discordjs/rest": "^1.0.1",
+        "@formatjs/intl": "^2.4.1",
         "discord.js": "^14.2.0",
         "discord-api-types": "^0.37.1",
         "colors": "^1.4.0",

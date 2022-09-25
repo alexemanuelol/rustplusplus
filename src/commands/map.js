@@ -5,21 +5,25 @@ const Path = require('path');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
-	data: new Builder.SlashCommandBuilder()
-		.setName('map')
-		.setDescription('Get the currently connected server map image.')
-		.addSubcommand(subcommand => subcommand
-			.setName('all')
-			.setDescription('Get the map including both monument names and markers.'))
-		.addSubcommand(subcommand => subcommand
-			.setName('clean')
-			.setDescription('Get the clean map.'))
-		.addSubcommand(subcommand => subcommand
-			.setName('monuments')
-			.setDescription('Get the map including monument names.'))
-		.addSubcommand(subcommand => subcommand
-			.setName('markers')
-			.setDescription('Get the map including markers.')),
+	name: 'map',
+
+	getData(client, guildId) {
+		return new Builder.SlashCommandBuilder()
+			.setName('map')
+			.setDescription(client.intlGet(guildId, 'commandsMapDesc'))
+			.addSubcommand(subcommand => subcommand
+				.setName('all')
+				.setDescription(client.intlGet(guildId, 'commandsMapAllDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('clean')
+				.setDescription(client.intlGet(guildId, 'commandsMapCleanDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('monuments')
+				.setDescription(client.intlGet(guildId, 'commandsMapMonumentsDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('markers')
+				.setDescription(client.intlGet(guildId, 'commandsMapMarkersDesc')));
+	},
 
 	async execute(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
@@ -29,9 +33,9 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
-			const str = 'Not currently connected to a rust server.';
+			const str = client.intlGet(guildId, 'notConnectedToRustServer');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log('WARNING', str);
+			client.log(client.intlGet(guildId, 'warning'), str);
 			return;
 		}
 
@@ -76,6 +80,8 @@ module.exports = {
 			files: [file],
 			ephemeral: true
 		});
-		rustplus.log('INFO', `Displaying ${fileName} map.`);
+		rustplus.log(client.intlGet(guildId, 'info'), client.intlGet(guildId, 'commandsMapDisplayMap', {
+			mapName: fileName
+		}));
 	},
 };

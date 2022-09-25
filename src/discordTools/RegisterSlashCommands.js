@@ -11,7 +11,7 @@ module.exports = async (client, guild) => {
 
     for (const file of commandFiles) {
         const command = require(`../commands/${file}`);
-        commands.push(command.data.toJSON());
+        commands.push(command.getData(client, guild.id).toJSON());
     }
 
     const rest = new Rest.REST({ version: '9' }).setToken(Config.discord.token);

@@ -4,19 +4,23 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordTools = require('../discordTools/discordTools');
 
 module.exports = {
-	data: new Builder.SlashCommandBuilder()
-		.setName('role')
-		.setDescription('Set/Clear a specific role that will be able to see the rustPlusPlus category content.')
-		.addSubcommand(subcommand => subcommand
-			.setName('set')
-			.setDescription('Set the role.')
-			.addRoleOption(option => option
-				.setName('role')
-				.setDescription('The role rustPlusPlus channels will be visible to.')
-				.setRequired(true)))
-		.addSubcommand(subcommand => subcommand
-			.setName('clear')
-			.setDescription('Clear the role (to allow everyone to see the rustPlusPlus channels).')),
+	name: 'role',
+
+	getData(client, guildId) {
+		return new Builder.SlashCommandBuilder()
+			.setName('role')
+			.setDescription(client.intlGet(guildId, 'commandsRoleDesc'))
+			.addSubcommand(subcommand => subcommand
+				.setName('set')
+				.setDescription(client.intlGet(guildId, 'commandsRoleSetDesc'))
+				.addRoleOption(option => option
+					.setName('role')
+					.setDescription(client.intlGet(guildId, 'commandsRoleRoleDesc'))
+					.setRequired(true)))
+			.addSubcommand(subcommand => subcommand
+				.setName('clear')
+				.setDescription(client.intlGet(guildId, 'commandsRoleClearDesc')));
+	},
 
 	async execute(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
@@ -50,14 +54,16 @@ module.exports = {
 		}
 
 		if (interaction.options.getSubcommand() === 'set') {
-			const str = `rustPlusPlus role has been set to '${role.name}'.`;
+			const str = client.intlGet(interaction.guildId, 'commandsRoleSet', {
+				name: role.name
+			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log('INFO', str);
+			client.log(client.intlGet(interaction.guildId, 'info'), str);
 		}
 		else {
-			const str = 'rustPlusPlus role has been cleared.';
+			const str = client.intlGet(interaction.guildId, 'commandsRoleCleared');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log('INFO', str);
+			client.log(client.intlGet(interaction.guildId, 'info'), str);
 		}
 	},
 };

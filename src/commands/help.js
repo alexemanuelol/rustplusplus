@@ -4,9 +4,14 @@ const Discord = require('discord.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 
 module.exports = {
-	data: new Builder.SlashCommandBuilder()
-		.setName('help')
-		.setDescription('Display help message'),
+	name: 'help',
+
+	getData(client, guildId) {
+		return new Builder.SlashCommandBuilder()
+			.setName('help')
+			.setDescription(client.intlGet(guildId, 'commandsHelpDesc'));
+	},
+
 	async execute(client, interaction) {
 		await client.interactionReply(interaction, {
 			components: [new Discord.ActionRowBuilder()
@@ -35,6 +40,7 @@ module.exports = {
 			],
 			ephemeral: true
 		});
-		client.log('INFO', 'Displaying help message.');
+		client.log(client.intlGet(interaction.guildId, 'info'),
+			client.intlGet(interaction.guildId, 'commandsHelpDesc'));
 	},
 };
