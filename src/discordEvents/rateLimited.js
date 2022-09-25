@@ -2,7 +2,7 @@ module.exports = {
     name: 'rateLimited',
     async execute(client, info) {
         client.log(
-            'RATELIMITED',
+            client.intlGet(null, 'ratelimited'),
             `Timeout: ${info.timeToReset}, ` +
             `Limit: ${info.limit}, ` +
             `Method: ${info.method}, ` +

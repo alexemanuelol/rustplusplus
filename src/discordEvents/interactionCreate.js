@@ -9,13 +9,14 @@ module.exports = {
 
         /* Check so that the interaction comes from valid channels */
         if (!Object.values(instance.channelId).includes(interaction.channelId) && !interaction.isCommand) {
-            client.log('WARNING', 'Interaction from an invalild channel.')
+            client.log(client.intlGet(null, 'warning'), client.intlGet(null, 'interactionInvalidChannel'))
             if (interaction.isButton()) {
                 try {
                     interaction.deferUpdate();
                 }
                 catch (e) {
-                    client.log('ERROR', 'Could not defer interaction.', 'error');
+                    client.log(client.intlGet(null, 'error'),
+                        client.intlGet(null, 'couldNotDeferInteraction'), 'error');
                 }
             }
         }
@@ -36,25 +37,26 @@ module.exports = {
                 await command.execute(client, interaction);
             }
             catch (e) {
-                client.log('ERROR', e, 'error');
+                client.log(client.intlGet(null, 'error'), e, 'error');
 
-                const str = 'There was an error while executing this command!';
+                const str = client.intlGet(interaction.guildId, 'errorExecutingCommand');
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                client.log('ERROR', str, 'error');
+                client.log(client.intlGet(null, 'error'), str, 'error');
             }
         }
         else if (interaction.type === Discord.InteractionType.ModalSubmit) {
             require('../handlers/modalHandler')(client, interaction);
         }
         else {
-            client.log('ERROR', 'Unknown Interaction...', 'error')
+            client.log(client.intlGet(null, 'error'), client.intlGet(null, 'unknownInteraction'), 'error');
 
             if (interaction.isButton()) {
                 try {
                     interaction.deferUpdate();
                 }
                 catch (e) {
-                    client.log('ERROR', 'Could not defer interaction.', 'error');
+                    client.log(client.intlGet(null, 'error'),
+                        client.intlGet(null, 'couldNotDeferInteraction'), 'error');
                 }
             }
         }

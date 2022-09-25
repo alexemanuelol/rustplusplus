@@ -8,20 +8,22 @@ module.exports = {
     once: true,
     async execute(client) {
         client.loadGuildsIntl();
-        client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
+        client.log(client.intlGet(null, 'info'), client.intlGet(null, 'loggedInAs', {
+            name: client.user.tag
+        }));
 
         try {
             await client.user.setUsername(Config.discord.username);
         }
         catch (e) {
-            client.log('WARNING', 'Ignored setUsername.');
+            client.log(client.intlGet(null, 'warning'), client.intlGet(null, 'ignoreSetUsername'));
         }
 
         try {
             await client.user.setAvatar(Path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
         }
         catch (e) {
-            client.log('WARNING', 'Ignored setAvatar.');
+            client.log(client.intlGet(null, 'warning'), client.intlGet(null, 'ignoreSetAvatar'));
         }
 
         client.user.setActivity('/help', { type: 'LISTENING' });
@@ -36,7 +38,7 @@ module.exports = {
                 await guild.members.me.setNickname(Config.discord.username);
             }
             catch (e) {
-                client.log('WARNING', 'Ignored setNickname.');
+                client.log(client.intlGet(null, 'warning'), client.intlGet(null, 'ignoreSetNickname'));
             }
             await client.setupGuild(guild);
         });
