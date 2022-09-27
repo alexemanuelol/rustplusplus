@@ -416,7 +416,8 @@ async function teamLogin(client, guild, full, data, body) {
     const instance = client.getInstance(guild.id);
 
     const content = {
-        embeds: [DiscordEmbeds.getTeamLoginEmbed(body, await Scrape.scrapeSteamProfilePicture(client, body.targetId))]
+        embeds: [DiscordEmbeds.getTeamLoginEmbed(
+            guild.id, body, await Scrape.scrapeSteamProfilePicture(client, body.targetId))]
     }
 
     const rustplus = client.rustplusInstances[guild.id];
@@ -432,7 +433,7 @@ async function newsNews(client, guild, full, data, body) {
     const instance = client.getInstance(guild.id);
 
     const content = {
-        embeds: [DiscordEmbeds.getNewsEmbed(data)],
+        embeds: [DiscordEmbeds.getNewsEmbed(guild.id, data)],
         components: [DiscordButtons.getNewsButton(guild.id, body, isValidUrl(body.url))]
     }
 
