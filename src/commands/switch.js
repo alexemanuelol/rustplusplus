@@ -17,11 +17,11 @@ module.exports = {
                 .setDescription(client.intlGet(guildId, 'commandsSwitchEditDesc'))
                 .addStringOption(option => option
                     .setName('id')
-                    .setDescription(client.intlGet(guildId, 'commandsSwitchIdDesc'))
+                    .setDescription(client.intlGet(guildId, 'commandsSwitchEditIdDesc'))
                     .setRequired(true))
                 .addStringOption(option => option
                     .setName('image')
-                    .setDescription(client.intlGet(guildId, 'commandsSwitchImageDesc'))
+                    .setDescription(client.intlGet(guildId, 'commandsSwitchEditImageDesc'))
                     .setRequired(true)
                     .addChoices(
                         { name: client.intlGet(guildId, 'autoturret'), value: 'autoturret' },
@@ -56,12 +56,10 @@ module.exports = {
 
                 const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
                 if (device === null) {
-                    const str = client.intlGet(interaction.guildId, 'invalidId', {
-                        id: entityId
-                    });
+                    const str = client.intlGet(interaction.guildId, 'invalidId', { id: entityId });
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[device.serverId].title));
-                    client.log(client.intlGet(null, 'warning'), str);
+                    client.log(client.intlGet(null, 'warningCap'), str);
                     return;
                 }
 
@@ -76,12 +74,12 @@ module.exports = {
                         client, interaction.guildId, device.serverId, entityId);
                 }
 
-                const str = client.intlGet(interaction.guildId, 'commandsSwitchEditSuccess', {
+                const str = client.intlGet(interaction.guildId, 'smartSwitchEditSuccess', {
                     name: entity.name
                 });
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                     instance.serverList[device.serverId].title));
-                client.log(client.intlGet(null, 'info'), str);
+                client.log(client.intlGet(null, 'infoCap'), str);
             } break;
 
             default: {

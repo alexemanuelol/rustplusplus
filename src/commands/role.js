@@ -15,7 +15,7 @@ module.exports = {
 				.setDescription(client.intlGet(guildId, 'commandsRoleSetDesc'))
 				.addRoleOption(option => option
 					.setName('role')
-					.setDescription(client.intlGet(guildId, 'commandsRoleRoleDesc'))
+					.setDescription(client.intlGet(guildId, 'commandsRoleSetRoleDesc'))
 					.setRequired(true)))
 			.addSubcommand(subcommand => subcommand
 				.setName('clear')
@@ -54,16 +54,14 @@ module.exports = {
 		}
 
 		if (interaction.options.getSubcommand() === 'set') {
-			const str = client.intlGet(interaction.guildId, 'commandsRoleSet', {
-				name: role.name
-			});
+			const str = client.intlGet(interaction.guildId, 'roleSet', { name: role.name });
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log(client.intlGet(null, 'info'), str);
+			client.log(client.intlGet(null, 'infoCap'), str);
 		}
 		else {
-			const str = client.intlGet(interaction.guildId, 'commandsRoleCleared');
+			const str = client.intlGet(interaction.guildId, 'roleCleared');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log(client.intlGet(null, 'info'), str);
+			client.log(client.intlGet(null, 'infoCap'), str);
 		}
 	},
 };

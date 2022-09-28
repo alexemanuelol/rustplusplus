@@ -106,9 +106,9 @@ async function setCredentials(client, interaction) {
     for (const guild of client.guilds.cache) {
         const credentials = InstanceUtils.readCredentialsFile(guild[0]);
         if (_.isEqual(newCredentials, credentials.credentials)) {
-            const str = client.intlGet(interaction.guildId, 'commandsCredentialsAlreadyInUse');
+            const str = client.intlGet(interaction.guildId, 'credentialsAlreadyInUse');
             await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            client.log(client.intlGet(null, 'warning'), str);
+            client.log(client.intlGet(null, 'warningCap'), str);
             return;
         }
     }
@@ -120,9 +120,9 @@ async function setCredentials(client, interaction) {
     /* Start Fcm Listener */
     require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
 
-    const str = client.intlGet(interaction.guildId, 'commandsCredentialsSetSuccess');
+    const str = client.intlGet(interaction.guildId, 'credentialsSetSuccess');
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(null, 'info'), str);
+    client.log(client.intlGet(null, 'infoCap'), str);
 }
 
 async function clearCredentials(client, interaction) {
@@ -134,16 +134,16 @@ async function clearCredentials(client, interaction) {
     credentials.credentials = null;
     InstanceUtils.writeCredentialsFile(interaction.guildId, credentials);
 
-    const str = client.intlGet(interaction.guildId, 'commandsCredentialsClearSuccess');
+    const str = client.intlGet(interaction.guildId, 'credentialsClearSuccess');
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(null, 'info'), str);
+    client.log(client.intlGet(null, 'infoCap'), str);
 }
 
 async function isSetCredentials(client, interaction) {
     const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
-    const str = credentials.credentials === null ? client.intlGet(interaction.guildId, 'commandsCredentialsAreSet') :
-        client.intlGet(interaction.guildId, 'commandsCredentialsAreNotSet');
+    const str = credentials.credentials === null ? client.intlGet(interaction.guildId, 'credentialsAreSet') :
+        client.intlGet(interaction.guildId, 'credentialsAreNotSet');
     const isSet = (credentials.credentials === null) ? 1 : 0;
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(isSet, str));
-    client.log(client.intlGet(null, 'info'), str);
+    client.log(client.intlGet(null, 'infoCap'), str);
 }

@@ -36,7 +36,7 @@ module.exports = {
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
             fields: [{
-                name: Client.client.intlGet(guildId, 'embedCustomCommand'),
+                name: Client.client.intlGet(guildId, 'customCommand'),
                 value: `\`${instance.generalSettings.prefix}${entity.command}\``,
                 inline: true
             }]
@@ -53,9 +53,9 @@ module.exports = {
             description: `${server.description}`,
             thumbnail: `${server.img}`,
             fields: [{
-                name: Client.client.intlGet(guildId, 'embedConnect'),
+                name: Client.client.intlGet(guildId, 'connect'),
                 value: `\`${server.connect === null ?
-                    Client.client.intlGet(guildId, 'embedUnavailable') : server.connect}\``,
+                    Client.client.intlGet(guildId, 'unavailable') : server.connect}\``,
                 inline: true
             }]
         });
@@ -79,22 +79,20 @@ module.exports = {
                 `${Constants.ONLINE_EMOJI} [${player.time}]` : `${Constants.OFFLINE_EMOJI}`}\n`;
         }
 
-        if (playerName === '') playerName = Client.client.intlGet(guildId, 'embedEmpty');
-        if (playerSteamId === '') playerSteamId = Client.client.intlGet(guildId, 'embedEmpty');
-        if (playerStatus === '') playerStatus = Client.client.intlGet(guildId, 'embedEmpty');
+        if (playerName === '') playerName = Client.client.intlGet(guildId, 'empty');
+        if (playerSteamId === '') playerSteamId = Client.client.intlGet(guildId, 'empty');
+        if (playerStatus === '') playerStatus = Client.client.intlGet(guildId, 'empty');
 
         return module.exports.getEmbed({
             title: `${tracker.name}`,
             color: '#ce412b',
             description: `**Battlemetrics ID:** \`${tracker.battlemetricsId}\`\n` +
-                `${Client.client.intlGet(guildId, 'embedServerStatus', {
-                    status: serverStatus
-                })}`,
+                `${Client.client.intlGet(guildId, 'serverStatus', { status: serverStatus })}`,
             thumbnail: `${tracker.img}`,
             fields: [
-                { name: Client.client.intlGet(guildId, 'embedName'), value: playerName, inline: true },
+                { name: Client.client.intlGet(guildId, 'name'), value: playerName, inline: true },
                 { name: 'SteamID', value: playerSteamId, inline: true },
-                { name: Client.client.intlGet(guildId, 'embedStatus'), value: playerStatus, inline: true }]
+                { name: Client.client.intlGet(guildId, 'status'), value: playerStatus, inline: true }]
         });
     },
 
@@ -110,7 +108,7 @@ module.exports = {
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
             fields: [{
-                name: Client.client.intlGet(guildId, 'embedMessage'),
+                name: Client.client.intlGet(guildId, 'message'),
                 value: `\`${entity.message}\``,
                 inline: true
             }]
@@ -129,7 +127,7 @@ module.exports = {
             return module.exports.getEmbed({
                 title: `${entity.name}${grid}`,
                 color: '#ce412b',
-                description: `${description}\n${Client.client.intlGet(guildId, 'embedStatusNotConnectedToServer')}`,
+                description: `${description}\n${Client.client.intlGet(guildId, 'statusNotConnectedToServer')}`,
                 thumbnail: `attachment://${entity.image}`,
                 footer: { text: `${entity.server}` }
             });
@@ -140,13 +138,13 @@ module.exports = {
                 title: `${entity.name}${grid}`,
                 color: '#ce412b',
                 description:
-                    `${description}\n${Client.client.intlGet(guildId, 'embedStatusNotElectronicallyConnected')}`,
+                    `${description}\n${Client.client.intlGet(guildId, 'statusNotElectronicallyConnected')}`,
                 thumbnail: `attachment://${entity.image}`,
                 footer: { text: `${entity.server}` }
             });
         }
 
-        description += `\n${Client.client.intlGet(guildId, 'embedType')} \`${(entity.type === 'toolcupboard') ?
+        description += `\n**${Client.client.intlGet(guildId, 'type')}** \`${(entity.type === 'toolcupboard') ?
             Client.client.intlGet(guildId, 'toolCupboard') :
             Client.client.intlGet(guildId, 'container')}\``;
 
@@ -161,16 +159,16 @@ module.exports = {
 
             let upkeep = null;
             if (seconds === 0) {
-                upkeep = `:warning:\`${Client.client.intlGet(guildId, 'embedDecaying')}\`:warning:`;
+                upkeep = `:warning:\`${Client.client.intlGet(guildId, 'decayingCap')}\`:warning:`;
                 instance.serverList[serverId].storageMonitors[entityId].upkeep =
-                    Client.client.intlGet(guildId, 'embedDecaying');
+                    Client.client.intlGet(guildId, 'decayingCap');
             }
             else {
                 let upkeepTime = Timer.secondsToFullScale(seconds);
                 upkeep = `\`${upkeepTime}\``;
                 instance.serverList[serverId].storageMonitors[entityId].upkeep = `${upkeepTime}`;
             }
-            description += `\n**${Client.client.intlGet(guildId, 'embedUpkeep')}** ${upkeep}`;
+            description += `\n**${Client.client.intlGet(guildId, 'upkeep')}** ${upkeep}`;
             Client.client.setInstance(guildId, instance);
         }
 
@@ -189,8 +187,8 @@ module.exports = {
             itemQuantity += `\`${quantity}\`\n`;
         }
 
-        if (itemName === '') itemName = Client.client.intlGet(guildId, 'embedEmpty');
-        if (itemQuantity === '') itemQuantity = Client.client.intlGet(guildId, 'embedEmpty');
+        if (itemName === '') itemName = Client.client.intlGet(guildId, 'empty');
+        if (itemQuantity === '') itemQuantity = Client.client.intlGet(guildId, 'empty');
 
         return module.exports.getEmbed({
             title: `${entity.name}${grid}`,
@@ -199,8 +197,8 @@ module.exports = {
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
             fields: [
-                { name: Client.client.intlGet(guildId, 'embedItem'), value: itemName, inline: true },
-                { name: Client.client.intlGet(guildId, 'embedQuantity'), value: itemQuantity, inline: true }
+                { name: Client.client.intlGet(guildId, 'item'), value: itemName, inline: true },
+                { name: Client.client.intlGet(guildId, 'quantity'), value: itemQuantity, inline: true }
             ]
         });
     },
@@ -230,9 +228,9 @@ module.exports = {
         }
         Client.client.setInstance(guildId, instance);
 
-        if (switchName === '') switchName = Client.client.intlGet(guildId, 'embedNone');
-        if (switchId === '') switchId = Client.client.intlGet(guildId, 'embedNone');
-        if (switchActive === '') switchActive = Client.client.intlGet(guildId, 'embedNone');
+        if (switchName === '') switchName = Client.client.intlGet(guildId, 'none');
+        if (switchId === '') switchId = Client.client.intlGet(guildId, 'none');
+        if (switchActive === '') switchActive = Client.client.intlGet(guildId, 'none');
 
         return module.exports.getEmbed({
             title: group.name,
@@ -241,13 +239,13 @@ module.exports = {
             footer: { text: `${instance.serverList[serverId].title}` },
             fields: [
                 {
-                    name: Client.client.intlGet(guildId, 'embedCustomCommand'),
+                    name: Client.client.intlGet(guildId, 'customCommand'),
                     value: `\`${instance.generalSettings.prefix}${group.command}\``,
                     inline: false
                 },
-                { name: Client.client.intlGet(guildId, 'embedSwitches'), value: switchName, inline: true },
+                { name: Client.client.intlGet(guildId, 'switches'), value: switchName, inline: true },
                 { name: 'ID', value: switchId, inline: true },
-                { name: Client.client.intlGet(guildId, 'embedActive'), value: switchActive, inline: true }
+                { name: Client.client.intlGet(guildId, 'active'), value: switchActive, inline: true }
             ]
         });
     },
@@ -261,7 +259,7 @@ module.exports = {
             title: `${entity.name}${grid}`,
             color: '#ff0040',
             description: `**ID**: \`${entityId}\`\n` +
-                `${Client.client.intlGet(guildId, 'embedStatusNotFound')} ${Constants.NOT_FOUND_EMOJI}`,
+                `${Client.client.intlGet(guildId, 'statusNotFound')} ${Constants.NOT_FOUND_EMOJI}`,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` }
         });
@@ -279,20 +277,20 @@ module.exports = {
         }
 
         const embed = module.exports.getEmbed({
-            title: `${Client.client.intlGet(guildId, 'embedResultRecycling')}:`,
+            title: `${Client.client.intlGet(guildId, 'resultRecycling')}:`,
             color: '#ce412b',
             thumbnail: 'attachment://recycler.png',
-            footer: { text: `${entity.server} | ${Client.client.intlGet(guildId, 'embedMessageDeleted')}` },
-            description: `**${Client.client.intlGet(guildId, 'embedName')}** ` +
+            footer: { text: `${entity.server} | ${Client.client.intlGet(guildId, 'messageDeletedIn30')}` },
+            description: `**${Client.client.intlGet(guildId, 'name')}** ` +
                 `\`${entity.name}${grid}\`\n**ID** \`${entityId}\``
         });
 
-        if (itemName === '') itemName = 'Empty';
-        if (itemQuantity === '') itemQuantity = 'Empty';
+        if (itemName === '') itemName = Client.client.intlGet(guildId, 'empty');
+        if (itemQuantity === '') itemQuantity = Client.client.intlGet(guildId, 'empty');
 
         embed.addFields(
-            { name: Client.client.intlGet(guildId, 'embedItem'), value: itemName, inline: true },
-            { name: Client.client.intlGet(guildId, 'embedQuantity'), value: itemQuantity, inline: true }
+            { name: Client.client.intlGet(guildId, 'item'), value: itemName, inline: true },
+            { name: Client.client.intlGet(guildId, 'quantity'), value: itemQuantity, inline: true }
         );
 
         return embed;
@@ -304,7 +302,9 @@ module.exports = {
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name}${grid} ${Client.client.intlGet(guildId, 'embedIsDecaying')}`,
+            title: Client.client.intlGet(guildId, 'isDecaying', {
+                device: `${entity.name}${grid}`
+            }),
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
@@ -319,7 +319,9 @@ module.exports = {
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: `${entity.name}${grid} ${Client.client.intlGet(guildId, 'embedIsNoLongerConnected')}`,
+            title: Client.client.intlGet(guildId, 'isNoLongerConnected', {
+                device: `${entity.name}${grid}`
+            }),
             color: '#ff0040',
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
@@ -336,7 +338,7 @@ module.exports = {
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'embedSmartDeviceNotFound', {
+            title: Client.client.intlGet(guildId, 'smartDeviceNotFound', {
                 device: `${entity.name}${grid}`,
                 user: user.user.username
             }),
@@ -356,7 +358,7 @@ module.exports = {
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'embedSmartDeviceNotFound', {
+            title: Client.client.intlGet(guildId, 'smartDeviceNotFound', {
                 device: `${entity.name}${grid}`,
                 user: user.user.username
             }),
@@ -376,7 +378,7 @@ module.exports = {
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'embedSmartDeviceNotFound', {
+            title: Client.client.intlGet(guildId, 'smartDeviceNotFound', {
                 device: `${entity.name}${grid}`,
                 user: user.user.username
             }),
@@ -393,7 +395,7 @@ module.exports = {
         const tracker = instance.trackers[trackerId];
 
         return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'embedAllJustOffline', {
+            title: Client.client.intlGet(guildId, 'allJustOfflineTracker', {
                 tracker: tracker.name
             }),
             color: '#ff0040',
@@ -408,7 +410,7 @@ module.exports = {
         const tracker = instance.trackers[trackerId];
 
         return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'embedAnyJustOnline', {
+            title: Client.client.intlGet(guildId, 'anyJustOnlineTracker', {
                 tracker: tracker.name
             }),
             color: '#00ff40',
@@ -420,7 +422,7 @@ module.exports = {
 
     getNewsEmbed: function (data) {
         return module.exports.getEmbed({
-            title: `${Client.client.intlGet(guildId, 'embedNews')}: ${data.title}`,
+            title: `${Client.client.intlGet(guildId, 'newsCap')}: ${data.title}`,
             color: '#ce412b',
             description: `${data.message}`,
             thumbnail: Constants.DEFAULT_SERVER_IMG,
@@ -434,9 +436,7 @@ module.exports = {
             timestamp: true,
             footer: { text: body.name },
             author: {
-                name: Client.client.intlGet(guildId, 'embedJustConnected', {
-                    name: body.targetName
-                }),
+                name: Client.client.intlGet(guildId, 'userJustConnected', { name: body.targetName }),
                 iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
                 url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
             }
@@ -478,7 +478,7 @@ module.exports = {
             timestamp: true,
             fields: [
                 { name: 'ID', value: `\`${entityId}\``, inline: true },
-                { name: Client.client.intlGet(guildId, 'embedMessage'), value: `\`${entity.message}\``, inline: true }]
+                { name: Client.client.intlGet(guildId, 'message'), value: `\`${entity.message}\``, inline: true }]
         });
 
     },
@@ -512,8 +512,8 @@ module.exports = {
         return module.exports.getEmbed({
             color: state ? '#ff0040' : '#00ff40',
             title: state ?
-                Client.client.intlGet(guildId, 'embedServerOffline') :
-                Client.client.intlGet(guildId, 'embedServerOnline'),
+                Client.client.intlGet(guildId, 'serverJustOffline') :
+                Client.client.intlGet(guildId, 'serverJustOnline'),
             thumbnail: server.img,
             timestamp: true,
             footer: { text: server.title }
@@ -525,7 +525,7 @@ module.exports = {
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: '#ce412b',
-            title: Client.client.intlGet(guildId, 'embedWipeDetected'),
+            title: Client.client.intlGet(guildId, 'wipeDetected'),
             image: `attachment://${guildId}_map_full.png`,
             timestamp: true,
             footer: { text: server.title }
@@ -537,7 +537,7 @@ module.exports = {
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
             color: '#ff0040',
-            title: Client.client.intlGet(guildId, 'embedServerInvalid'),
+            title: Client.client.intlGet(guildId, 'serverInvalid'),
             thumbnail: server.img,
             timestamp: true,
             footer: { text: server.title }
@@ -564,7 +564,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         const time = rustplus.getCommandTime(true);
-        const timeLeftTitle = Client.client.intlGet(rustplus.guildId, 'embedTimeTill', {
+        const timeLeftTitle = Client.client.intlGet(rustplus.guildId, 'timeTill', {
             event: rustplus.time.isDay() ? Constants.NIGHT_EMOJI : Constants.DAY_EMOJI
         });
         const playersFieldName = Client.client.intlGet(guildId, 'players');
@@ -576,7 +576,7 @@ module.exports = {
         const mapFieldName = Client.client.intlGet(guildId, 'map');
 
         const embed = module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'embedServerInfo'),
+            title: Client.client.intlGet(guildId, 'serverInfo'),
             color: '#ce412b',
             thumbnail: 'attachment://server_info_logo.png',
             description: rustplus.info.name,
@@ -604,7 +604,7 @@ module.exports = {
 
         if (instance.serverList[rustplus.serverId].connect !== null) {
             embed.addFields({
-                name: Client.client.intlGet(guildId, 'embedConnect'),
+                name: Client.client.intlGet(guildId, 'connect'),
                 value: `\`${instance.serverList[rustplus.serverId].connect}\``,
                 inline: false
             });
@@ -655,7 +655,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         const teamMemberFieldName = Client.client.intlGet(guildId, 'teamMember');
-        const statusFieldName = Client.client.intlGet(guildId, 'embedStatus');
+        const statusFieldName = Client.client.intlGet(guildId, 'status');
         const locationFieldName = Client.client.intlGet(guildId, 'location');
 
         let names = '';
