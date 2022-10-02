@@ -111,15 +111,17 @@ class DiscordBot extends Discord.Client {
         this.login(Config.discord.token).catch(error => {
             switch (error.code) {
                 case 502: {
-                    this.log('ERROR', `Bad Gateway: ${JSON.stringify(error)}`, 'error');
+                    this.log(this.intlGet(null, 'errorCap'),
+                        this.intlGet(null, 'badGateway', { error: JSON.stringify(error) }), 'error')
                 } break;
 
                 case 503: {
-                    this.log('ERROR', `Service Unavailable: ${JSON.stringify(error)}`, 'error');
+                    this.log(this.intlGet(null, 'errorCap'),
+                        this.intlGet(null, 'serviceUnavailable', { error: JSON.stringify(error) }), 'error')
                 } break;
 
                 default: {
-                    this.log('ERROR', `${JSON.stringify(error)}`, 'error');
+                    this.log(this.intlGet(null, 'errorCap'), `${JSON.stringify(error)}`, 'error');
                 } break;
             }
         });
@@ -219,7 +221,8 @@ class DiscordBot extends Discord.Client {
             return await interaction.reply(content);
         }
         catch (e) {
-            this.log('ERROR', `Interaction reply failed: ${e}`, 'error');
+            this.log(this.intlGet(null, 'errorCap'),
+                this.intlGet(null, 'interactionReplyFailed', { error: e }), 'error');
         }
 
         return undefined;
@@ -230,7 +233,8 @@ class DiscordBot extends Discord.Client {
             return await interaction.editReply(content);
         }
         catch (e) {
-            this.log('ERROR', `Interaction edit reply failed: ${e}`, 'error');
+            this.log(this.intlGet(null, 'errorCap'),
+                this.intlGet(null, 'interactionEditReplyFailed', { error: e }), 'error');
         }
 
         return undefined;
@@ -241,7 +245,8 @@ class DiscordBot extends Discord.Client {
             return await interaction.update(content);
         }
         catch (e) {
-            this.log('ERROR', `Interaction update failed: ${e}`, 'error');
+            this.log(this.intlGet(null, 'errorCap'),
+                this.intlGet(null, 'interactionUpdateFailed', { error: e }), 'error');
         }
 
         return undefined;
@@ -252,8 +257,8 @@ class DiscordBot extends Discord.Client {
             return await message.edit(content);
         }
         catch (e) {
-            console.log(message)
-            this.log('ERROR', `Message edit failed: ${e}`, 'error');
+            this.log(this.intlGet(null, 'errorCap'),
+                this.intlGet(null, 'messageEditFailed', { error: e }), 'error');
         }
 
         return undefined;
@@ -264,7 +269,8 @@ class DiscordBot extends Discord.Client {
             return await channel.send(content);
         }
         catch (e) {
-            this.log('ERROR', `Message send failed: ${e}`, 'error');
+            this.log(this.intlGet(null, 'errorCap'),
+                this.intlGet(null, 'messageSendFailed', { error: e }), 'error');
         }
 
         return undefined;
@@ -275,7 +281,8 @@ class DiscordBot extends Discord.Client {
             return await message.reply(content);
         }
         catch (e) {
-            this.log('ERROR', `Message reply failed: ${e}`, 'error');
+            this.log(this.intlGet(null, 'errorCap'),
+                this.intlGet(null, 'messageReplyFailed', { error: e }), 'error');
         }
 
         return undefined;
@@ -290,9 +297,9 @@ class DiscordBot extends Discord.Client {
         if (!interaction.member.permissions.has('ADMINISTRATOR') &&
             !interaction.member.roles.cache.has(instance.role)) {
             let role = DiscordTools.getRole(interaction.guildId, instance.role);
-            let str = `You are not part of the '${role.name}' role, therefore you can't run bot commands.`;
+            const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
             await this.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            this.log('WARNING', str);
+            this.log(this.intlGet(null, 'warningCap'), str);
             return false;
         }
         return true;

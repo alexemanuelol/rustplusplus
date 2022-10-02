@@ -1,3 +1,4 @@
+const Client = require('../../index.ts');
 const Player = require('./Player.js');
 
 class Team {
@@ -40,8 +41,10 @@ class Team {
 
             player = this.getPlayer(team.leaderSteamId.toString());
             if (player !== null) {
-                this.rustplus.log('COMMAND',
-                    `Team Leadership was transferred to ${player.name}:${player.steamId}.`);
+                this.rustplus.log(Client.client.intlGet(null, 'commandCap'),
+                    Client.client.intlGet(null, 'leaderTransferred', {
+                        name: `${player.name}:${player.steamId}`
+                    }));
             }
         }
         this.leaderSteamId = team.leaderSteamId.toString();
