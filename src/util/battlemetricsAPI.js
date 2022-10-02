@@ -10,7 +10,9 @@ module.exports = {
         const response = await Scrape.scrape(search);
 
         if (response.status !== 200) {
-            client.log('ERROR', `Failed to scrape: '${search}'`, 'error')
+            client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToScrape', {
+                scrape: search
+            }), 'error')
             return null;
         }
 
@@ -32,7 +34,9 @@ module.exports = {
         const response = await Scrape.scrape(search);
 
         if (response.status !== 200) {
-            client.log('ERROR', `Failed to scrape: '${search}'`, 'error')
+            client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToScrape', {
+                scrape: search
+            }), 'error')
             return null;
         }
 
@@ -44,7 +48,9 @@ module.exports = {
             page = await module.exports.getBattlemetricsServerPage(client, serverId);
 
             if (page === null) {
-                client.log('ERROR', `Failed to get server info via battlemetrics for serverId: ${serverId}.`, 'error');
+                client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToGetServerInfo', {
+                    id: serverId
+                }), 'error')
                 return null;
             }
         }
@@ -74,8 +80,9 @@ module.exports = {
             page = await module.exports.getBattlemetricsServerPage(client, serverId);
 
             if (page === null) {
-                client.log('ERROR',
-                    `Failed to get server team tracker info via battlemetrics for serverId: ${serverId}.`, 'error');
+                client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToGetTeamTrackerInfo', {
+                    id: serverId
+                }), 'error')
                 return null;
             }
         }

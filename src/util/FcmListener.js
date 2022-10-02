@@ -14,7 +14,8 @@ module.exports = async (client, guild) => {
     const credentials = InstanceUtils.readCredentialsFile(guild.id);
 
     if (credentials.credentials === null) {
-        client.log('WARNING', `Credentials is not set for guild: ${guild.id}, cannot start FCM-listener.`);
+        client.log(client.intlGet(null, 'warningCap'),
+            client.intlGet(null, 'credentialsNotSetForGuild', { id: guild.id }));
         return;
     }
 
@@ -23,7 +24,8 @@ module.exports = async (client, guild) => {
     /* Destroy previous instance of fcm listener */
     if (client.currentFcmListeners[guild.id]) client.currentFcmListeners[guild.id].destroy();
 
-    client.log('INFO', `FCM-listener will start in 5 seconds for guild: ${guild.id}`);
+    client.log(client.intlGet(null, 'infoCap'),
+        client.intlGet(null, 'fcmListenerStartIn', { id: guild.id }));
 
     let startTime = new Date();
     client.currentFcmListeners[guild.id] =
@@ -179,7 +181,7 @@ async function pairingServer(client, guild, full, data, body) {
         switchGroups: server ? server.switchGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
-        connect: (info === null) ? 'Unavailable' : `connect ${info.ip}:${info.port}`,
+        connect: (info === null) ? 'Unavailable' : `${client.intlGet(guild.id, 'connect')} ${info.ip}:${info.port}`,
         cargoShipEgressTimeMs: server ? server.cargoShipEgressTimeMs : Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
         bradleyApcRespawnTimeMs: server ? server.bradleyApcRespawnTimeMs :
             Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
@@ -207,7 +209,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
     instance.serverList[serverId].switches[body.entityId] = {
         active: entityExist ? switches[body.entityId].active : false,
         reachable: entityExist ? switches[body.entityId].reachable : true,
-        name: entityExist ? switches[body.entityId].name : 'Smart Switch',
+        name: entityExist ? switches[body.entityId].name : client.intlGet(guild.id, 'smartSwitch'),
         command: entityExist ? switches[body.entityId].command : body.entityId,
         image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
         autoDayNight: entityExist ? switches[body.entityId].autoDayNight : 0,
@@ -253,8 +255,8 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         active: entityExist ? alarms[body.entityId].active : false,
         reachable: entityExist ? alarms[body.entityId].reachable : true,
         everyone: entityExist ? alarms[body.entityId].everyone : false,
-        name: entityExist ? alarms[body.entityId].name : 'Smart Alarm',
-        message: entityExist ? alarms[body.entityId].message : 'Your base is under attack!',
+        name: entityExist ? alarms[body.entityId].name : client.intlGet(guild.id, 'smartAlarm'),
+        message: entityExist ? alarms[body.entityId].message : client.intlGet(guild.id, 'baseIsUnderAttack'),
         id: entityExist ? alarms[body.entityId].id : body.entityId,
         image: entityExist ? alarms[body.entityId].image : 'smart_alarm.png',
         location: entityExist ? alarms[body.entityId].location : null,
@@ -296,7 +298,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
 
     const entityExist = instance.serverList[serverId].storageMonitors.hasOwnProperty(body.entityId);
     instance.serverList[serverId].storageMonitors[body.entityId] = {
-        name: entityExist ? storageMonitors[body.entityId].name : 'Storage Monitor',
+        name: entityExist ? storageMonitors[body.entityId].name : client.intlGet(guild.id, 'storageMonitor'),
         reachable: entityExist ? storageMonitors[body.entityId].reachable : true,
         id: entityExist ? storageMonitors[body.entityId].id : body.entityId,
         type: entityExist ? storageMonitors[body.entityId].type : 'container',
@@ -371,7 +373,7 @@ async function alarmAlarm(client, guild, full, data, body) {
     if ((!rustplus || (rustplus && (rustplus.serverId !== serverId))) &&
         instance.generalSettings.fcmAlarmNotificationEnabled) {
         await DiscordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
-        client.log('INFO', `${data.title}: ${data.message}`);
+        client.log(client.intlGet(null, 'infoCap'), `${data.title}: ${data.message}`);
     }
 }
 
@@ -393,7 +395,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
         rustplus.sendTeamMessageAsync(`${data.title}: ${data.message}`);
     }
 
-    client.log('INFO', `${data.title} ${data.message}`);
+    client.log(client.intlGet(null, 'infoCap'), `${data.title} ${data.message}`);
 }
 
 async function playerDeath(client, guild, full, data, body, ownerId) {
@@ -425,7 +427,11 @@ async function teamLogin(client, guild, full, data, body) {
 
     if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
         await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
-        client.log('INFO', `${body.targetName} just connected to ${body.name}.`);
+        client.log(client.intlGet(null, 'infoCap'),
+            client.intlGet(null, 'playerJustConnectedTo', {
+                name: body.targetName,
+                server: body.name
+            }));
     }
 }
 

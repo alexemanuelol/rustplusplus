@@ -1,3 +1,5 @@
+const Client = require('../../index.ts');
+
 module.exports = {
     gridDiameter: 146.25,
 
@@ -8,27 +10,29 @@ module.exports = {
         if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
             if (module.exports.isOutsideRowOrColumn(x, y, correctedMapSize)) {
                 if (x < 0 && y > correctedMapSize) {
-                    pos.location = 'North West';
+                    pos.location = Client.client.intlGet(rustplus.guildId, 'northWest');
                 }
                 else if (x < 0 && y < 0) {
-                    pos.location = 'South West';
+                    pos.location = Client.client.intlGet(rustplus.guildId, 'southWest');
                 }
                 else if (x > correctedMapSize && y > correctedMapSize) {
-                    pos.location = 'North East';
+                    pos.location = Client.client.intlGet(rustplus.guildId, 'northEast');
                 }
                 else {
-                    pos.location = 'South East';
+                    pos.location = Client.client.intlGet(rustplus.guildId, 'southEast');
                 }
             }
             else {
                 let str = '';
                 if (x < 0 || x > correctedMapSize) {
-                    str += (x < 0) ? 'West of grid ' : 'East of grid ';
-                    str += `${module.exports.getGridPosNumberY(y, correctedMapSize)}`;
+                    str += (x < 0) ? Client.client.intlGet(rustplus.guildId, 'westOfGrid') :
+                        Client.client.intlGet(rustplus.guildId, 'eastOfGrid');
+                    str += ` ${module.exports.getGridPosNumberY(y, correctedMapSize)}`;
                 }
                 else {
-                    str += (y < 0) ? 'South of grid ' : 'North of grid ';
-                    str += `${module.exports.getGridPosLettersX(x, correctedMapSize)}`;
+                    str += (y < 0) ? Client.client.intlGet(rustplus.guildId, 'southOfGrid') :
+                        Client.client.intlGet(rustplus.guildId, 'northOfGrid');
+                    str += ` ${module.exports.getGridPosLettersX(x, correctedMapSize)}`;
                 }
                 pos.location = str;
             }

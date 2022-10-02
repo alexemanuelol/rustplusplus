@@ -16,8 +16,9 @@ module.exports = {
         const response = await module.exports.scrape(`${Constants.STEAM_PROFILES_URL}${steamId}`);
 
         if (response.status !== 200) {
-            client.log('ERROR',
-                `Failed to scrape profile picture: '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
+            client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToScrapeProfilePicture', {
+                link: `${Constants.STEAM_PROFILES_URL}${steamId}`
+            }), 'error');
             return null;
         }
 
@@ -33,8 +34,9 @@ module.exports = {
         const response = await module.exports.scrape(`${Constants.STEAM_PROFILES_URL}${steamId}`);
 
         if (response.status !== 200) {
-            client.log('ERROR',
-                `Failed to scrape profile name: '${Constants.STEAM_PROFILES_URL}${steamId}'.`, 'error');
+            client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToScrapeProfileName', {
+                link: `${Constants.STEAM_PROFILES_URL}${steamId}`
+            }), 'error');
             return null;
         }
 
