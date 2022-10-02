@@ -20,10 +20,14 @@ module.exports = async (client, guild) => {
         await rest.put(Types.Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
     }
     catch (e) {
-        client.log('ERROR',
-            `Could not register Slash Commands for guild: ${guild.id}. ` +
-            'Make sure applications.commands is checked when creating the invite URL.', 'error');
+        client.log(
+            client.intlGet(null, 'errorCap'),
+            client.intlGet(null, 'couldNotRegisterSlashCommands', { guildId: guild.id }) +
+            client.intlGet(null, 'makeSureApplicationsCommandsEnabled'),
+            'error'
+        );
         process.exit(1);
     }
-    client.log('INFO', `Successfully registered application commands for guild: ${guild.id}.`)
+    client.log(client.intlGet(null, 'infoCap'),
+        client.intlGet(null, 'slashCommandsSuccessRegister', { guildId: guild.id }));
 };

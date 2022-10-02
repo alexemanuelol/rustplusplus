@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const Path = require('path');
+const { Client } = require('undici');
 
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
@@ -11,7 +12,8 @@ module.exports = async (client, guild) => {
     const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.settings);
 
     if (!channel) {
-        client.log('ERROR', 'SetupSettingsMenu: Invalid guild or channel.', 'error');
+        client.log(client.intlGet(null, 'errorCap'), 'SetupSettingsMenu: ' +
+            client.intlGet(null, 'invalidGuildOrChannel'), 'error');
         return;
     }
 
@@ -38,10 +40,10 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'Select what in-game command prefix that should be used:',
+            title: client.intlGet(guildId, 'selectInGamePrefixSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getPrefixSelectMenu(instance.generalSettings.prefix)],
+        components: [DiscordSelectMenus.getPrefixSelectMenu(guildId, instance.generalSettings.prefix)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -49,10 +51,10 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: `Select which trademark that should be shown in every in-game message.`,
+            title: client.intlGet(guildId, 'selectTrademarkSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getTrademarkSelectMenu(instance.generalSettings.trademark)],
+        components: [DiscordSelectMenus.getTrademarkSelectMenu(guildId, instance.generalSettings.trademark)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -60,7 +62,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'Should in-game commands be enabled?',
+            title: client.intlGet(guildId, 'shouldCommandsEnabledSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordButtons.getInGameCommandsEnabledButton(guildId,
@@ -72,7 +74,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'Should the bot be muted in-game?',
+            title: client.intlGet(guildId, 'shouldBotBeMutedSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordButtons.getBotMutedInGameButton(guildId, instance.generalSettings.muteInGameBotMessages)],
@@ -83,7 +85,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'In-game teammate notifications.',
+            title: client.intlGet(guildId, 'inGameTeamNotificationsSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)],
@@ -94,10 +96,10 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'Should there be a command delay? How long?',
+            title: client.intlGet(guildId, 'commandDelaySetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getCommandDelaySelectMenu(instance.generalSettings.commandDelay)],
+        components: [DiscordSelectMenus.getCommandDelaySelectMenu(guildId, instance.generalSettings.commandDelay)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -105,13 +107,12 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'Should Smart Alarms notify even if they are not setup on the connected rust server?',
+            title: client.intlGet(guildId, 'shouldSmartAlarmNotifyNotConnectedSetting'),
             thumbnail: `attachment://settings_logo.png`,
             fields: [
                 {
-                    name: 'NOTE',
-                    value: '- These Alarm notifications will use the title and message given to the Smart Alarm ' +
-                        'in-game.\n- These Smart Alarms might not be available in the alarms text channel in discord.',
+                    name: client.intlGet(guildId, 'noteCap'),
+                    value: client.intlGet(guildId, 'smartAlarmNotifyExtendSetting'),
                     inline: true
                 }]
         })],
@@ -127,7 +128,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'Should Smart Alarms notify In-Game?',
+            title: client.intlGet(guildId, 'shouldSmartAlarmsNotifyInGameSetting'),
             thumbnail: `attachment://settings_logo.png`,
         })],
         components: [DiscordButtons.getSmartAlarmNotifyInGameButton(guildId,
@@ -139,7 +140,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'Should the leader command be enabled?',
+            title: client.intlGet(guildId, 'shouldLeaderCommandEnabledSetting'),
             thumbnail: `attachment://settings_logo.png`,
         })],
         components: [DiscordButtons.getLeaderCommandEnabledButton(guildId,
@@ -151,7 +152,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'When should the Battlemetrics trackers notify?',
+            title: client.intlGet(guildId, 'whenTrackersNotifySetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordButtons.getTrackerNotifyButtons(
@@ -165,7 +166,7 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
-            title: 'When Map Wipe is detected, should @everyone be notified?',
+            title: client.intlGet(guildId, 'mapWipeDetectedNotifySetting', { group: '@everyone' }),
             thumbnail: `attachment://settings_logo.png`
         })],
         components: [DiscordButtons.getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)],
@@ -182,11 +183,11 @@ async function setupNotificationSettings(client, guildId, channel) {
             Path.join(__dirname, '..', 'resources/images/notification_settings_logo.png'))]
     });
 
-    for (let setting in instance.notificationSettings) {
+    for (const setting in instance.notificationSettings) {
         await client.messageSend(channel, {
             embeds: [DiscordEmbeds.getEmbed({
                 color: '#861c0c',
-                title: instance.notificationSettings[setting].description,
+                title: client.intlGet(guildId, setting),
                 thumbnail: `attachment://${instance.notificationSettings[setting].image}`
             })],
             components: [

@@ -25,7 +25,8 @@ module.exports = {
             const channel = DiscordTools.getTextChannelById(guildId, channelId);
 
             if (!channel) {
-                Client.client.log('ERROR', `Could not get channel with id: ${channelId}.`, 'error');
+                Client.client.log(Client.client.intlGet(null, 'errorCap'),
+                    Client.client.intlGet(null, 'couldNotGetChannelWithId', { id: channelId }), 'error');
                 return;
             }
 
@@ -374,7 +375,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         const content = {
-            content: `${name} said, ${text}`,
+            content: Client.client.intlGet(guildId, 'userSaid', { user: name, text: text }),
             tts: true
         }
 

@@ -13,7 +13,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.prefix = interaction.values[0];
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordSelectMenus.getPrefixSelectMenu(interaction.values[0])]
+            components: [DiscordSelectMenus.getPrefixSelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId === 'Trademark') {
@@ -27,7 +27,7 @@ module.exports = async (client, interaction) => {
         }
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordSelectMenus.getTrademarkSelectMenu(interaction.values[0])]
+            components: [DiscordSelectMenus.getTrademarkSelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId === 'CommandDelay') {
@@ -37,7 +37,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.commandDelay = interaction.values[0];
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordSelectMenus.getCommandDelaySelectMenu(interaction.values[0])]
+            components: [DiscordSelectMenus.getCommandDelaySelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId.startsWith('AutoDayNight')) {

@@ -32,7 +32,8 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
             channel.setParent(parent.id);
         }
         catch (e) {
-            client.log('ERROR', `Could not set parent for channel: ${channel.id}`, 'error');
+            client.log(client.intlGet(null, 'errorCap'),
+                client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }), 'error');
         }
     }
 
@@ -41,7 +42,8 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
             channel.setParent(parent.id);
         }
         catch (e) {
-            client.log('ERROR', `Could not set parent for channel: ${channel.id}`, 'error');
+            client.log(client.intlGet(null, 'errorCap'),
+                client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }), 'error');
         }
     }
 
