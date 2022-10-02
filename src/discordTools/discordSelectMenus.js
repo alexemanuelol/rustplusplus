@@ -1,6 +1,9 @@
 const Discord = require('discord.js');
+const Fs = require('fs');
+const Path = require('path');
 
 const Client = require('../../index.ts');
+const Languages = require('../util/languages.js');
 
 module.exports = {
     getSelectMenu: function (options = {}) {
@@ -12,6 +15,35 @@ module.exports = {
         if (options.disabled) selectMenu.setDisabled(options.disabled);
 
         return selectMenu;
+    },
+
+    getLanguageSelectMenu: function (guildId, language) {
+        const languageFiles = Fs.readdirSync(
+            Path.join(__dirname, '..', 'languages')).filter(file => file.endsWith('.json'));
+
+        const options = [];
+        for (const language of languageFiles) {
+            const langShort = language.replace('.json', '')
+            let langLong = Object.keys(Languages).find(e => Languages[e] === langShort)
+            if (!langLong) langLong = Client.client.intlGet(guildId, 'unknown');
+            options.push({
+                label: `${langLong} (${langShort})`,
+                description: Client.client.intlGet(guildId, 'setBotLanguage', {
+                    language: `${langLong} (${langShort})`
+                }),
+                value: langShort
+            });
+        }
+
+        let currentLanguage = Object.keys(Languages).find(e => Languages[e] === language);
+        if (!currentLanguage) currentLanguage = Client.client.intlGet(guildId, 'unknown');
+
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getSelectMenu({
+                customId: 'language',
+                placeholder: `${currentLanguage} (${language})`,
+                options: options
+            }));
     },
 
     getPrefixSelectMenu: function (guildId, prefix) {

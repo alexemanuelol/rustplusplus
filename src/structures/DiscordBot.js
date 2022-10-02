@@ -77,18 +77,22 @@ class DiscordBot extends Discord.Client {
         }, cache);
     }
 
+    loadGuildIntl(guildId) {
+        const instance = InstanceUtils.readInstanceFile(guildId);
+        const language = instance.generalSettings.language;
+        const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
+        const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
+        const cache = FormatJS.createIntlCache();
+        this.guildIntl[guildId] = FormatJS.createIntl({
+            locale: language,
+            defaultLocale: 'en',
+            messages: messages
+        }, cache);
+    }
+
     loadGuildsIntl() {
         for (const guild of this.guilds.cache) {
-            const instance = InstanceUtils.readInstanceFile(guild[0]);
-            const language = instance.generalSettings.language;
-            const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
-            const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
-            const cache = FormatJS.createIntlCache();
-            this.guildIntl[guild[0]] = FormatJS.createIntl({
-                locale: language,
-                defaultLocale: 'en',
-                messages: messages
-            }, cache);
+            this.loadGuildIntl(guild[0]);
         }
     }
 

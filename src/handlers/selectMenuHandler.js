@@ -1,12 +1,30 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
     const guildId = interaction.guildId;
     const rustplus = client.rustplusInstances[guildId];
 
-    if (interaction.customId === 'Prefix') {
+    if (interaction.customId === 'language') {
+        instance.generalSettings.language = interaction.values[0];
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.language = interaction.values[0];
+
+        await interaction.deferUpdate();
+
+        client.loadGuildIntl(guildId);
+
+        await client.interactionEditReply(interaction, {
+            components: [DiscordSelectMenus.getLanguageSelectMenu(guildId, interaction.values[0])]
+        });
+
+        const guild = DiscordTools.getGuild(guildId);
+        await require('../discordTools/RegisterSlashCommands')(client, guild);
+    }
+    else if (interaction.customId === 'Prefix') {
         instance.generalSettings.prefix = interaction.values[0];
         client.setInstance(guildId, instance);
 

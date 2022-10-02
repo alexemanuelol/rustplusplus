@@ -40,6 +40,23 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: '#861c0c',
+            title: client.intlGet(guildId, 'selectLanguageSetting'),
+            thumbnail: `attachment://settings_logo.png`,
+            fields: [
+                {
+                    name: client.intlGet(guildId, 'noteCap'),
+                    value: client.intlGet(guildId, 'selectLanguageExtendSetting'),
+                    inline: true
+                }]
+        })],
+        components: [DiscordSelectMenus.getLanguageSelectMenu(guildId, instance.generalSettings.language)],
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [DiscordEmbeds.getEmbed({
+            color: '#861c0c',
             title: client.intlGet(guildId, 'selectInGamePrefixSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
