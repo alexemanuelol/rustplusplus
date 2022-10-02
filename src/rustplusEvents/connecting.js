@@ -3,6 +3,6 @@ module.exports = {
     async execute(rustplus, client) {
         if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
 
-        rustplus.log('CONNECTING', 'CONNECTING TO SERVER...');
+        rustplus.log(client.intlGet(null, 'connectingCap'), client.intlGet(null, 'connectingToServer'));
     },
 };

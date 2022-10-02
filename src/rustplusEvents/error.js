@@ -5,7 +5,7 @@ module.exports = {
     async execute(rustplus, client, err) {
         if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
 
-        rustplus.log('ERROR', err, 'error')
+        rustplus.log(client.intlGet(null, 'errorCap'), err, 'error');
 
         switch (err.code) {
             case 'ETIMEDOUT': {
@@ -29,18 +29,24 @@ module.exports = {
 
 function errorTimedOut(rustplus, client, err) {
     if (err.syscall === 'connect') {
-        rustplus.log('ERROR', `Could not connect to: ${rustplus.serverId}.`, 'error');
+        rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'couldNotConnectTo', {
+            id: rustplus.serverId
+        }), 'error');
     }
 }
 
 function errorNotFound(rustplus, client, err) {
     if (err.syscall === 'getaddrinfo') {
-        rustplus.log('ERROR', `Could not connect to: ${rustplus.serverId}.`, 'error');
+        rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'couldNotConnectTo', {
+            id: rustplus.serverId
+        }), 'error');
     }
 }
 
 async function errorConnRefused(rustplus, client, err) {
-    rustplus.log('ERROR', `Connection refused to: ${rustplus.serverId}.`, 'error');
+    rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'connectionRefusedTo', {
+        id: rustplus.serverId
+    }), 'error');
 
     if (!rustplus.isConnectionRefused) {
         await DiscordMessages.sendServerChangeStateMessage(rustplus.guildId, rustplus.serverId, 1);
@@ -51,13 +57,14 @@ async function errorConnRefused(rustplus, client, err) {
     rustplus.isConnectionRefused = true;
 
     setTimeout(() => {
-        rustplus.log('RECONNECTING', 'RECONNECTING TO SERVER...');
+        rustplus.log(client.intlGet(null, 'reconnectingCap'), client.intlGet(null, 'reconnectingToServer'));
         rustplus.connect();
     }, 20000);
 }
 
 function errorOther(rustplus, client, err) {
     if (err.toString() === 'Error: WebSocket was closed before the connection was established') {
-        rustplus.log('ERROR', 'WebSocket was closed before the connection was established.', 'error');
+        rustplus.log(client.intlGet(null, 'errorCap'),
+            client.intlGet(null, 'websocketClosedBeforeConnection'), 'error');
     }
 }

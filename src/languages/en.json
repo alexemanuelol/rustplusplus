@@ -333,5 +333,18 @@
     "playerJustDisconnectedFrom": "{name} just disconnected from {server}.",
     "invalidTimeDistance": "Invalid time distance: {distance}, prev: {prevTime}, new: {newTime}",
     "timeCap": "TIME",
-    "24HoursInGameTimePassed": "24 Successful hours in-game time have passed."
+    "24HoursInGameTimePassed": "24 Successful hours in-game time have passed.",
+    "connectedCap": "CONNECTED",
+    "connectedToServer": "CONNECTED TO SERVER.",
+    "somethingWrongWithConnection": "Something went wrong with connection.",
+    "rustplusOperational": "RUSTPLUS OPERATIONAL.",
+    "connectingCap": "CONNECTING",
+    "connectingToServer": "CONNECTING TO SERVER...",
+    "disconnectedCap": "DISCONNECTED",
+    "disconnectedFromServer": "DISCONNECTED FROM SERVER.",
+    "reconnectingCap": "RECONNECTING",
+    "reconnectingToServer": "RECONNECTING TO SERVER...",
+    "couldNotConnectTo": "Could not connect to: {id}.",
+    "connectionRefusedTo": "Connection refused to: {id}.",
+    "websocketClosedBeforeConnection": "WebSocket was closed before the connection was established."
 }

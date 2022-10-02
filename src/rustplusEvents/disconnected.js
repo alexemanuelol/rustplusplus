@@ -5,7 +5,7 @@ module.exports = {
     async execute(rustplus, client) {
         if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
 
-        rustplus.log('DISCONNECTED', 'DISCONNECTED FROM SERVER.');
+        rustplus.log(client.intlGet(null, 'disconnectedCap'), client.intlGet(null, 'disconnectedFromServer'));
         rustplus.isConnected = false;
         rustplus.isOperational = false;
         rustplus.isFirstPoll = true;
@@ -44,7 +44,7 @@ module.exports = {
 
             rustplus.isReconnecting = true;
 
-            rustplus.log('RECONNECTING', 'RECONNECTING TO SERVER...');
+            rustplus.log(client.intlGet(null, 'reconnectingCap'), client.intlGet(null, 'reconnectingToServer'));
             rustplus.connect();
         }
     },

@@ -8,7 +8,7 @@ module.exports = {
     async execute(rustplus, client) {
         if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
 
-        rustplus.log('CONNECTED', 'CONNECTED TO SERVER.');
+        rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'connectedToServer'));
         rustplus.isConnected = true;
         rustplus.isConnectionRefused = false;
 
@@ -22,7 +22,8 @@ module.exports = {
         /* Request the map. Act as a check to see if connection is truly operational. */
         const map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
         if (!(await rustplus.isResponseValid(map))) {
-            rustplus.log('ERROR', 'Something went wrong with connection.', 'error');
+            rustplus.log(client.intlGet(null, 'errorCap'),
+                client.intlGet(null, 'somethingWrongWithConnection'), 'error');
 
             instance.serverList[serverId].active = false;
             client.setInstance(guildId, instance);
@@ -34,7 +35,7 @@ module.exports = {
             delete client.rustplusInstances[guildId]; // TODO: move to disconnected.js?
             return;
         }
-        rustplus.log('CONNECTED', 'RUSTPLUS OPERATIONAL.');
+        rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'rustplusOperational'));
 
         const info = await rustplus.getInfoAsync();
         if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)

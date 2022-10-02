@@ -174,7 +174,9 @@ async function updateToolCupboard(rustplus, client, message) {
             await DiscordMessages.sendDecayingNotificationMessage(rustplus.guildId, rustplus.serverId, entityId);
 
             if (server.storageMonitors[entityId].inGame) {
-                rustplus.sendTeamMessageAsync(`${server.storageMonitors[entityId].name} is decaying!`);
+                rustplus.sendTeamMessageAsync(client.intlGet(rustplus.guildId, 'isDecaying', {
+                    device: server.storageMonitors[entityId].name
+                }));
             }
         }
         else if (info.entityInfo.payload.protectionExpiry !== 0) {
