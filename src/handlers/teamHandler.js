@@ -19,19 +19,19 @@ module.exports = {
 
         for (const steamId of leftPlayers) {
             const player = rustplus.team.getPlayer(steamId);
-            const str = `${player.name} left the team.`;
+            const str = client.intlGet(guildId, 'playerLeftTheTeam', { name: player.name });
             await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#606060', str, steamId);
             if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
-            rustplus.log('INFO', str);
+            rustplus.log(client.intlGet(null, 'infoCap'), str);
         }
 
         for (const steamId of newPlayers) {
             for (const player of teamInfo.members) {
                 if (player.steamId.toString() === steamId) {
-                    const str = `${player.name} joined the team.`;
+                    const str = client.intlGet(guildId, 'playerJoinedTheTeam', { name: player.name });
                     await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#00ff40', str, steamId);
                     if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
-                    rustplus.log('INFO', str);
+                    rustplus.log(client.intlGet(null, 'infoCap'), str);
                 }
             }
         }
@@ -41,44 +41,58 @@ module.exports = {
             for (const playerUpdated of teamInfo.members) {
                 if (player.steamId === playerUpdated.steamId.toString()) {
                     if (player.isGoneDead(playerUpdated)) {
-                        const str = `${player.name} just died at ${player.pos.string}.`;
+                        const str = client.intlGet(guildId, 'playerJustDied', {
+                            name: player.name,
+                            location: player.pos.string
+                        });
                         await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#ff0040', str,
                             player.steamId);
                         if (instance.generalSettings.deathNotify) rustplus.sendTeamMessageAsync(str);
-                        rustplus.log('INFO', str);
+                        rustplus.log(client.intlGet(null, 'infoCap'), str);
                     }
 
                     if (player.isGoneAfk(playerUpdated)) {
                         if (instance.generalSettings.afkNotify) {
-                            const str = `${player.name} just went AFK.`;
+                            const str = client.intlGet(guildId, 'playerJustWentAfk', { name: player.name });
                             rustplus.sendTeamMessageAsync(str);
-                            rustplus.log('INFO', str);
+                            rustplus.log(client.intlGet(null, 'infoCap'), str);
                         }
                     }
 
                     if (player.isAfk() && player.isMoved(playerUpdated)) {
                         if (instance.generalSettings.afkNotify) {
                             const afkTime = player.getAfkTime('dhs');
-                            const str = `${player.name} just returned (${afkTime}).`;
+                            const str = client.intlGet(guildId, 'playerJustReturned', {
+                                name: player.name,
+                                time: afkTime
+                            });
                             rustplus.sendTeamMessageAsync(str);
-                            rustplus.log('INFO', str);
+                            rustplus.log(client.intlGet(null, 'infoCap'), str);
                         }
                     }
 
                     if (player.isGoneOnline(playerUpdated)) {
-                        const str = `${player.name} just connected.`;
+                        const str = client.intlGet(guildId, 'playerJustConnected', { name: player.name });
                         await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#00ff40', str,
                             player.steamId);
                         if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
-                        rustplus.log('INFO', `${player.name} just connected to ${server.title}.`);
+                        rustplus.log(client.intlGet(null, 'infoCap'),
+                            client.intlGet(null, 'playerJustConnectedTo', {
+                                name: player.name,
+                                server: server.title
+                            }));
                     }
 
                     if (player.isGoneOffline(playerUpdated)) {
-                        const str = `${player.name} just disconnected.`;
+                        const str = client.intlGet(guildId, 'playerJustDisconnected', { name: player.name });
                         await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#ff0040', str,
                             player.steamId);
                         if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
-                        rustplus.log('INFO', `${player.name} just disconnected from ${server.title}.`);
+                        rustplus.log(client.intlGet(null, 'infoCap'),
+                            client.intlGet(null, 'playerJustDisconnectedFrom', {
+                                name: player.name,
+                                server: server.title
+                            }));
                     }
                     break;
                 }

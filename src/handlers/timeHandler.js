@@ -21,7 +21,11 @@ module.exports = {
         const distance = (prevTime > newTime) ? (24 - prevTime) + newTime : newTime - prevTime;
         if (distance > 1) {
             /* Too big of a jump for a normal server, might have been a skip night server */
-            rustplus.log('ERROR', `Invalid time distance: ${distance}, prev: ${prevTime}, new: ${newTime}`, 'error');
+            rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'invalidTimeDistance', {
+                distance: distance,
+                prevTime: prevTime,
+                newTime: newTime
+            }), 'error');
             rustplus.passedFirstSunriseOrSunset = false;
             rustplus.time.startTime = newTime;
             rustplus.time.timeTillDay = new Object();
@@ -87,7 +91,7 @@ module.exports = {
             instance.serverList[rustplus.serverId].timeTillNight = rustplus.time.timeTillNight;
             client.setInstance(rustplus.guildId, instance);
 
-            rustplus.log('TIME', '24 Successful Hours in-game time have passed.');
+            rustplus.log(client.intlGet(null, 'timeCap'), client.intlGet(null, '24HoursInGameTimePassed'));
             return;
         }
 

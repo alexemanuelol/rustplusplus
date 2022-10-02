@@ -93,6 +93,10 @@ module.exports = {
             /* Maybe a custom command? */
             let instance = client.getInstance(rustplus.guildId);
 
+            const onCap = client.intlGet(rustplus.guildId, 'onCap');
+            const offCap = client.intlGet(rustplus.guildId, 'offCap');
+            const notFoundCap = client.intlGet(rustplus.guildId, 'notFoundCap');
+
             for (const [id, content] of Object.entries(instance.serverList[rustplus.serverId].switches)) {
                 let cmd = `${prefix}${content.command}`;
                 if (command === cmd || command.startsWith(`${cmd} `)) {
@@ -125,15 +129,16 @@ module.exports = {
                             SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                                 client, rustplus.guildId, rustplus.serverId, id);
 
-                            rustplus.printCommandOutput(
-                                `Could not communicate with Smart Switch: ` +
-                                `${instance.serverList[rustplus.serverId].switches[id].name}`);
+                            rustplus.printCommandOutput(client.intlGet(rustplus.guildId, 'noCommunicationSmartSwitch', {
+                                name: instance.serverList[rustplus.serverId].switches[id].name
+                            }));
                             return false;
                         }
 
-                        active = (info.entityInfo.payload.value) ? 'ON' : 'OFF';
-                        rustplus.printCommandOutput(`${instance.serverList[rustplus.serverId].switches[id].name} ` +
-                            `is currently ${active}.`);
+                        rustplus.printCommandOutput(client.intlGet(rustplus.guildId, 'deviceIsCurrentlyOnOff', {
+                            device: instance.serverList[rustplus.serverId].switches[id].name,
+                            status: info.entityInfo.payload.value ? onCap : offCap
+                        }));
                         return true;
                     }
                     else if (command.startsWith(`${cmd}`)) {
@@ -166,7 +171,9 @@ module.exports = {
                     }
 
                     if (!(await rustplus.isResponseValid(response))) {
-                        rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
+                        rustplus.printCommandOutput(client.intlGet(rustplus.guildId, 'noCommunicationSmartSwitch', {
+                            name: content.name
+                        }));
                         if (instance.serverList[rustplus.serverId].switches[id].reachable) {
                             await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
                                 rustplus.serverId, id);
@@ -187,12 +194,17 @@ module.exports = {
                         client, rustplus.guildId, rustplus.serverId, id);
 
                     if (instance.serverList[rustplus.serverId].switches[id].reachable) {
-                        let str = `${instance.serverList[rustplus.serverId].switches[id].name} was turned `;
-                        str += (active) ? 'ON.' : 'OFF.';
+                        let str = client.intlGet(rustplus.guildId, 'deviceWasTurnedOnOff', {
+                            device: instance.serverList[rustplus.serverId].switches[id].name,
+                            status: active ? onCap : offCap
+                        });
 
                         if (timeSeconds !== null) {
                             let time = Timer.secondsToFullScale(timeSeconds);
-                            str += ` Automatically turned back ${(active) ? 'OFF' : 'ON'} in ${time}.`;
+                            str += client.intlGet(rustplus.guildId, 'automaticallyTurnBackOnOff', {
+                                status: active ? offCap : onCap,
+                                time: time
+                            });
 
                             rustplus.currentSwitchTimeouts[id] = setTimeout(async function () {
                                 let instance = client.getInstance(rustplus.guildId);
@@ -215,7 +227,8 @@ module.exports = {
                                 }
 
                                 if (!(await rustplus.isResponseValid(response))) {
-                                    rustplus.printCommandOutput(`Could not communicate with Smart Switch: ${content.name}`);
+                                    rustplus.printCommandOutput(client.intlGet(rustplus.guildId,
+                                        'noCommunicationSmartSwitch', { name: content.name }));
                                     if (instance.serverList[rustplus.serverId].switches[id].reachable) {
                                         await DiscordMessages.sendSmartSwitchNotFoundMessage(rustplus.guildId,
                                             rustplus.serverId, id);
@@ -235,9 +248,10 @@ module.exports = {
                                 SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                                     client, rustplus.guildId, rustplus.serverId, id);
 
-                                let str = `Automatically turning ` +
-                                    `${instance.serverList[rustplus.serverId].switches[id].name} back ` +
-                                    `${(!active) ? 'ON' : 'OFF'}.`;
+                                let str = client.intlGet(rustplus.guildId, 'automaticallyTurningBackOnOff', {
+                                    device: instance.serverList[rustplus.serverId].switches[id].name,
+                                    status: !active ? onCap : offCap
+                                });
                                 rustplus.printCommandOutput(str);
                             }, timeSeconds * 1000);
                         }
@@ -271,9 +285,9 @@ module.exports = {
                             return { active, name, reachable }
                         });
                         const statusMessage = switchStatus.map(status =>
-                            `${status.name}: ${status.reachable ? (status.active ? 'ON' : 'OFF') : 'NOT FOUND'}`)
+                            `${status.name}: ${status.reachable ? (status.active ? onCap : offCap) : notFoundCap}`)
                             .join(', ');
-                        rustplus.printCommandOutput(`Status: ${statusMessage}`);
+                        rustplus.printCommandOutput(`${client.intlGet(rustplus.guildId, 'status')}: ${statusMessage}`);
                         return true;
                     }
                     else {
@@ -287,11 +301,17 @@ module.exports = {
 
                     let timeSeconds = Timer.getSecondsFromStringTime(rest);
 
-                    let str = `Turning Group ${content.name} ${(active) ? 'ON' : 'OFF'}.`;
+                    let str = client.intlGet(rustplus.guildId, 'turningGroupOnOff', {
+                        group: content.name,
+                        status: active ? onCap : offCap
+                    });
 
                     if (timeSeconds !== null) {
                         let time = Timer.secondsToFullScale(timeSeconds);
-                        str += ` Automatically turned back ${(active) ? 'OFF' : 'ON'} in ${time}.`;
+                        str += client.intlGet(rustplus.guildId, 'automaticallyTurnBackOnOff', {
+                            status: active ? offCap : onCap,
+                            time: time
+                        });
 
                         rustplus.currentSwitchTimeouts[groupId] = setTimeout(async function () {
                             let instance = client.getInstance(rustplus.guildId);
@@ -299,7 +319,10 @@ module.exports = {
                                 !instance.serverList[rustplus.serverId].switchGroups.hasOwnProperty(groupId)) {
                                 return false;
                             }
-                            let str = `Automatically turning ${content.name} back ${(!active) ? 'ON' : 'OFF'}.`;
+                            let str = client.intlGet(rustplus.guildId, 'automaticallyTurningBackOnOff', {
+                                device: content.name,
+                                status: !active ? onCap : offCap
+                            });
                             rustplus.printCommandOutput(str);
 
                             await SmartSwitchGroupHandler.TurnOnOffGroup(

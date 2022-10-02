@@ -58,9 +58,9 @@ module.exports = {
                                     guildId, serverId, entityId);
 
                                 if (instance.serverList[serverId].storageMonitors[entityId].inGame) {
-                                    rustplus.sendTeamMessageAsync(
-                                        `${instance.serverList[serverId].storageMonitors[entityId].name}` +
-                                        ` is decaying!`);
+                                    rustplus.sendTeamMessageAsync(client.intlGet(rustplus.guildId, 'isDecaying', {
+                                        device: instance.serverList[serverId].storageMonitors[entityId].name
+                                    }));
                                 }
                             }
                             else if (info.entityInfo.payload.protectionExpiry !== 0) {
