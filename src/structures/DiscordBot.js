@@ -2,7 +2,7 @@ const Fs = require('fs');
 const Discord = require('discord.js');
 const Path = require('path');
 
-const Config = require('../../config.json');
+const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
 const Items = require('./Items');
@@ -13,7 +13,7 @@ class DiscordBot extends Discord.Client {
     constructor(props) {
         super(props);
 
-        this.logger = new Logger(Path.join(__dirname, '..', 'logs/discordBot.log'), 'default');
+        this.logger = new Logger(Path.join(__dirname, '..', '..', 'logs/discordBot.log'), 'default');
 
         this.commands = new Discord.Collection();
         this.rustplusInstances = new Object();
@@ -106,11 +106,11 @@ class DiscordBot extends Discord.Client {
     }
 
     readCredentialsFile(guildId) {
-        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', `credentials/${guildId}.json`), 'utf8'));
+        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..','..',  'credentials', `${guildId}.json`), 'utf8'));
     }
 
     writeCredentialsFile(guildId, credentials) {
-        Fs.writeFileSync(Path.join(__dirname, '..', `credentials/${guildId}.json`),
+        Fs.writeFileSync(Path.join(__dirname, '..','..',  'credentials', `${guildId}.json`),
             JSON.stringify(credentials, null, 2));
     }
 
@@ -136,7 +136,7 @@ class DiscordBot extends Discord.Client {
     }
 
     createRustplusInstancesFromConfig() {
-        let files = Fs.readdirSync(Path.join(__dirname, '..', 'instances'));
+        let files = Fs.readdirSync(Path.join(__dirname, '..', '..', 'instances'));
 
         files.forEach(file => {
             if (file.endsWith('.json')) {

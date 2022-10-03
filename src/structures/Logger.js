@@ -1,7 +1,7 @@
 const Colors = require("colors");
 const Winston = require("winston");
 
-const Config = require('../../config.json');
+const Config = require('../../config');
 
 class Logger {
     constructor(logFilePath, type) {

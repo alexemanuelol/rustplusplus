@@ -100,7 +100,7 @@ class RustPlus extends RustPlusLib {
         const instance = Client.client.readInstanceFile(this.guildId);
 
         /* Setup the logger */
-        this.logger = new Logger(Path.join(__dirname, '..', `logs/${this.guildId}.log`), 'guild');
+        this.logger = new Logger(Path.join(__dirname, '..', '..', `logs/${this.guildId}.log`), 'guild');
         this.logger.setGuildId(this.guildId);
         this.logger.serverName = instance.serverList[this.serverId].title;
 

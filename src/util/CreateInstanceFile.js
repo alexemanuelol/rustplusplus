@@ -3,7 +3,7 @@ const Path = require('path');
 
 module.exports = (client, guild) => {
     let instance = null;
-    if (!Fs.existsSync(Path.join(__dirname, '..', `instances/${guild.id}.json`))) {
+    if (!Fs.existsSync(Path.join(__dirname, '..', '..', 'instances', `${guild.id}.json`))) {
         instance = {
             firstTime: true,
             role: null,

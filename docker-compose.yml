@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+    app:
+        volumes:
+            - ./credentials:/app/credentials
+            - ./instances:/app/instances
+            - ./logs:/app/logs
+        environment:
+            - DISCORD_CLIENT_ID=111....1111
+            - DISCORD_TOKEN=token
+        container_name: rpp
+        image: ghcr.io/alexemanuelol/rustPlusPlus

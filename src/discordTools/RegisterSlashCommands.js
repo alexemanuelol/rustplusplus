@@ -3,7 +3,7 @@ const Path = require('path');
 const Rest = require('@discordjs/rest');
 const Types = require('discord-api-types/v9');
 
-const Config = require('../../config.json');
+const Config = require('../../config');
 
 module.exports = async (client, guild) => {
     const commands = [];
