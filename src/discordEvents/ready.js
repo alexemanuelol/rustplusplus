@@ -1,7 +1,7 @@
 const Path = require('path');
 
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
-const config = require('../../config');
+const Config = require('../../config');
 
 module.exports = {
     name: 'ready',
@@ -10,7 +10,7 @@ module.exports = {
         client.log('INFO', 'LOGGED IN AS: ' + client.user.tag);
 
         try {
-            await client.user.setUsername(config.discord.username);
+            await client.user.setUsername(Config.discord.username);
         }
         catch (e) {
             client.log('WARNING', 'Ignored setUsername.');
@@ -32,7 +32,7 @@ module.exports = {
 
         client.guilds.cache.forEach(async (guild) => {
             try {
-                await guild.members.me.setNickname(config.discord.username);
+                await guild.members.me.setNickname(Config.discord.username);
             }
             catch (e) {
                 client.log('WARNING', 'Ignored setNickname.');

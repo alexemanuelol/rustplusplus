@@ -93,7 +93,8 @@ class DiscordBot extends Discord.Client {
 
     readInstanceFile(guildId, readFromFile = false) {
         if (readFromFile) {
-            return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', `instances/${guildId}.json`), 'utf8'));
+            return JSON.parse(Fs.readFileSync(
+                Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`), 'utf8'));
         }
         else {
             return this.instances[guildId];
@@ -102,15 +103,16 @@ class DiscordBot extends Discord.Client {
 
     writeInstanceFile(guildId, instance) {
         this.instances[guildId] = instance;
-        Fs.writeFileSync(Path.join(__dirname, '..', 'instances', `${guildId}.json`), JSON.stringify(instance, null, 2));
+        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`),
+            JSON.stringify(instance, null, 2));
     }
 
     readCredentialsFile(guildId) {
-        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..','..',  'credentials', `${guildId}.json`), 'utf8'));
+        return JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`), 'utf8'));
     }
 
     writeCredentialsFile(guildId, credentials) {
-        Fs.writeFileSync(Path.join(__dirname, '..','..',  'credentials', `${guildId}.json`),
+        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`),
             JSON.stringify(credentials, null, 2));
     }
 
