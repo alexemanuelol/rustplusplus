@@ -23,22 +23,22 @@ module.exports = {
     },
 
     readInstanceFile: function (guildId) {
-        const path = Path.join(__dirname, '..', 'instances', `${guildId}.json`);
+        const path = Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`);
         return JSON.parse(Fs.readFileSync(path, 'utf8'));
     },
 
     writeInstanceFile: function (guildId, instance) {
-        const path = Path.join(__dirname, '..', 'instances', `${guildId}.json`);
+        const path = Path.join(__dirname, '..', '..', 'instances', `${guildId}.json`);
         Fs.writeFileSync(path, JSON.stringify(instance, null, 2));
     },
 
     readCredentialsFile: function (guildId) {
-        const path = Path.join(__dirname, '..', 'credentials', `${guildId}.json`);
+        const path = Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`);
         return JSON.parse(Fs.readFileSync(path, 'utf8'));
     },
 
     writeCredentialsFile: function (guildId, credentials) {
-        const path = Path.join(__dirname, '..', 'credentials', `${guildId}.json`);
+        const path = Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`);
         Fs.writeFileSync(path, JSON.stringify(credentials, null, 2));
     },
 }
