@@ -41,9 +41,10 @@ module.exports = {
             for (const playerUpdated of teamInfo.members) {
                 if (player.steamId === playerUpdated.steamId.toString()) {
                     if (player.isGoneDead(playerUpdated)) {
+                        const location = player.pos === null ? 'spawn' : player.pos.string;
                         const str = client.intlGet(guildId, 'playerJustDied', {
                             name: player.name,
-                            location: player.pos.string
+                            location: location
                         });
                         await DiscordMessages.sendActivityNotificationMessage(guildId, serverId, '#ff0040', str,
                             player.steamId);
