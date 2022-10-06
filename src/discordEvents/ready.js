@@ -7,6 +7,11 @@ module.exports = {
     name: 'ready',
     once: true,
     async execute(client) {
+        for (const guild of client.guilds.cache) {
+            require('../util/CreateInstanceFile')(client, guild[1]);
+            require('../util/CreateCredentialsFile')(client, guild[1]);
+        }
+
         client.loadGuildsIntl();
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'loggedInAs', {
             name: client.user.tag
@@ -27,11 +32,6 @@ module.exports = {
         }
 
         client.user.setActivity('/help', { type: 'LISTENING' });
-
-        for (const guild of client.guilds.cache) {
-            require('../util/CreateInstanceFile')(client, guild[1]);
-            require('../util/CreateCredentialsFile')(client, guild[1]);
-        }
 
         client.guilds.cache.forEach(async (guild) => {
             try {
