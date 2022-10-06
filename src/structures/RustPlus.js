@@ -674,7 +674,7 @@ class RustPlus extends RustPlusLib {
                     });
                 }
                 else {
-                    strings.push(Client.client.intlGet(this.guildId, 'chinook47LocatedAt', {
+                    strings.push(Client.client.intlGet(this.guildId, 'chinook47Located', {
                         location: ch47.location.string
                     }));
                 }
