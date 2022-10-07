@@ -221,6 +221,8 @@
     "ignoreSetAvatar": "Ignored setAvatar",
     "ignoreSetNickname": "Ignored setNickname",
     "ignoreSetUsername": "Ignored setUsername",
+    "inGameBotMessagesMuted": "In-Game bot messages muted.",
+    "inGameBotMessagesUnmuted": "In-Game bot messages unmuted.",
     "inGameCap": "IN-GAME",
     "inGameEventInfo": "In-game event information",
     "inGameTeamNotificationsSetting": "In-Game teammate notifications.",

@@ -38,6 +38,9 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}marker `)) {
             response = 'Command is not possible through discord.';
         }
+        else if (commandLowerCase === `${prefix}mute`) {
+            response = rustplus.getCommandMute();
+        }
         else if (commandLowerCase.startsWith(`${prefix}note`)) {
             response = rustplus.getCommandNote(command);
         }
@@ -73,6 +76,9 @@ module.exports = {
         }
         else if (commandLowerCase.startsWith(`${prefix}tts `)) {
             response = await rustplus.getCommandTTS(command, callerName);
+        }
+        else if (commandLowerCase === `${prefix}unmute`) {
+            response = rustplus.getCommandUnmute();
         }
         else if (commandLowerCase === `${prefix}upkeep`) {
             response = rustplus.getCommandUpkeep();

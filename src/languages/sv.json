@@ -221,6 +221,8 @@
     "ignoreSetAvatar": "Ignorerade setAvatar",
     "ignoreSetNickname": "Ignorerade setNickname",
     "ignoreSetUsername": "Ignorerade setUsername",
+    "inGameBotMessagesMuted": "Botmeddelanden i spelet har dämpats.",
+    "inGameBotMessagesUnmuted": "Botmeddelanden i spelet har odämpats.",
     "inGameCap": "I SPELET",
     "inGameEventInfo": "Händelseinformation i spelet",
     "inGameTeamNotificationsSetting": "Aviseringar om lagkamrater i spelet",
