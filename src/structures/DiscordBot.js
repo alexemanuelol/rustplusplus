@@ -176,23 +176,24 @@ class DiscordBot extends Discord.Client {
     }
 
     createRustplusInstancesFromConfig() {
-        let files = Fs.readdirSync(Path.join(__dirname, '..', '..', 'instances'));
+        const files = Fs.readdirSync(Path.join(__dirname, '..', '..', 'instances'));
 
         files.forEach(file => {
-            if (file.endsWith('.json')) {
-                let guildId = file.replace('.json', '');
-                let instance = this.getInstance(guildId);
+            if (!file.endsWith('.json')) return;
 
-                for (const [key, value] of Object.entries(instance.serverList)) {
-                    if (value.active) {
-                        this.createRustplusInstance(
-                            guildId,
-                            value.serverIp,
-                            value.appPort,
-                            value.steamId,
-                            value.playerToken);
-                        break;
-                    }
+            const guildId = file.replace('.json', '');
+            const instance = this.getInstance(guildId);
+            if (!instance) return;
+
+            for (const [key, value] of Object.entries(instance.serverList)) {
+                if (value.active) {
+                    this.createRustplusInstance(
+                        guildId,
+                        value.serverIp,
+                        value.appPort,
+                        value.steamId,
+                        value.playerToken);
+                    break;
                 }
             }
         });
