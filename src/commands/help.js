@@ -34,7 +34,7 @@ module.exports = {
 					DiscordButtons.getButton({
 						style: Discord.ButtonStyle.Link,
 						label: 'CREDENTIALS',
-						url: 'https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/download/v1.0.0'
+						url: 'https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/v1.0.0'
 					})
 				)
 			],
