@@ -141,8 +141,8 @@ async function clearCredentials(client, interaction) {
 
 async function isSetCredentials(client, interaction) {
     const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
-    const str = credentials.credentials === null ? client.intlGet(interaction.guildId, 'credentialsAreSet') :
-        client.intlGet(interaction.guildId, 'credentialsAreNotSet');
+    const str = credentials.credentials === null ? client.intlGet(interaction.guildId, 'credentialsAreNotSet') :
+        client.intlGet(interaction.guildId, 'credentialsAreSet');
     const isSet = (credentials.credentials === null) ? 1 : 0;
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(isSet, str));
     client.log(client.intlGet(null, 'infoCap'), str);

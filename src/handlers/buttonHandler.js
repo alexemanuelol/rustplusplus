@@ -149,7 +149,7 @@ module.exports = async (client, interaction) => {
             instance.generalSettings.trackerNotifyAllOffline;
 
         await client.interactionUpdate(interaction, {
-            components: [getTrackerNotifyButtons(
+            components: [DiscordButtons.getTrackerNotifyButtons(
                 guildId,
                 instance.generalSettings.trackerNotifyAllOffline,
                 instance.generalSettings.trackerNotifyAnyOnline)]
