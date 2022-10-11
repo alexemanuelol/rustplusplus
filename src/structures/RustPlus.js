@@ -553,7 +553,7 @@ class RustPlus extends RustPlusLib {
             if (this.mapMarkers.timeSinceBradleyAPCWasDestroyed === null) {
                 if (isInfoChannel) {
                     return Client.client.intlGet(this.guildId, 'atLocation', {
-                        location: 'Launch Site'
+                        location: Client.client.intlGet(this.guildId, 'launchSite')
                     });
                 }
                 else {
