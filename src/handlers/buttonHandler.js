@@ -246,6 +246,7 @@ module.exports = async (client, interaction) => {
             messageId: null,
             active: true,
             everyone: false,
+            inGame: true,
             players: [],
             img: server.img,
             title: server.title
@@ -712,5 +713,19 @@ module.exports = async (client, interaction) => {
 
         const modal = DiscordModals.getTrackerRemovePlayerModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
+    }
+    else if (interaction.customId.startsWith('TrackerInGame')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerInGame', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        tracker.inGame = !tracker.inGame;
+        client.setInstance(guildId, instance);
+
+        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
 }

@@ -100,14 +100,32 @@ module.exports = {
                     }
                 }
 
+                const rustplus = client.rustplusInstances[guild.id];
+
                 if (!instance.trackers[trackerId].allOffline && allOffline) {
                     if (instance.generalSettings.trackerNotifyAllOffline) {
                         await DiscordMessages.sendTrackerAllOfflineMessage(guild.id, trackerId);
+
+                        if (rustplus && (rustplus.serverId === instance.trackers[trackerId].serverId) &&
+                            instance.trackers[trackerId].inGame) {
+                            const text = client.intlGet(guild.id, 'allJustOfflineTracker', {
+                                tracker: instance.trackers[trackerId].name
+                            });
+                            rustplus.sendTeamMessageAsync(text);
+                        }
                     }
                 }
                 else if (instance.trackers[trackerId].allOffline && !allOffline) {
                     if (instance.generalSettings.trackerNotifyAnyOnline) {
                         await DiscordMessages.sendTrackerAnyOnlineMessage(guild.id, trackerId);
+
+                        if (rustplus && (rustplus.serverId === instance.trackers[trackerId].serverId) &&
+                            instance.trackers[trackerId].inGame) {
+                            const text = client.intlGet(guild.id, 'anyJustOnlineTracker', {
+                                tracker: instance.trackers[trackerId].name
+                            });
+                            rustplus.sendTeamMessageAsync(text);
+                        }
                     }
                 }
 

@@ -371,6 +371,11 @@ module.exports = {
                     customId: `TrackerRemovePlayer${identifier}`,
                     label: Client.client.intlGet(guildId, 'removePlayerCap'),
                     style: DANGER
+                }),
+                module.exports.getButton({
+                    customId: `TrackerInGame${identifier}`,
+                    label: Client.client.intlGet(guildId, 'inGameCap'),
+                    style: tracker.inGame ? SUCCESS : DANGER
                 }))
         ];
     },
