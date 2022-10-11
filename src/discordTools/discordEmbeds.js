@@ -500,9 +500,9 @@ module.exports = {
             embeds: [module.exports.getEmbed({
                 color: color === 0 ? '#ce412b' : '#ff0040',
                 description: `\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``,
-                footer: footer !== null ? { text: footer } : null,
-                ephemeral: ephemeral
-            })]
+                footer: footer !== null ? { text: footer } : null
+            })],
+            ephemeral: ephemeral
         };
     },
 

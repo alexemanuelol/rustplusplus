@@ -299,7 +299,7 @@ class DiscordBot extends Discord.Client {
         /* If role isn't setup yet, validate as true */
         if (instance.role === null) return true;
 
-        if (!interaction.member.permissions.has('ADMINISTRATOR') &&
+        if (!interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator) &&
             !interaction.member.roles.cache.has(instance.role)) {
             let role = DiscordTools.getRole(interaction.guildId, instance.role);
             const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
