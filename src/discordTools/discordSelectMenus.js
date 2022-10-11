@@ -84,7 +84,8 @@ module.exports = {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
                 customId: 'Trademark',
-                placeholder: `${trademark}`,
+                placeholder: `${trademark === 'NOT SHOWING' ?
+                    Client.client.intlGet(guildId, 'notShowingCap') : trademark}`,
                 options: [
                     {
                         label: 'rustPlusPlus',
