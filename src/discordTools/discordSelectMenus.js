@@ -136,42 +136,58 @@ module.exports = {
                     },
                     {
                         label: Client.client.intlGet(guildId, 'second', { second: '1' }),
-                        description: Client.client.intlGet(guildId, 'secondCommandDelay', { second: 'One' }),
+                        description: Client.client.intlGet(guildId, 'secondCommandDelay', {
+                            second: Client.client.intlGet(guildId, 'one')
+                        }),
                         value: '1'
                     },
                     {
                         label: Client.client.intlGet(guildId, 'seconds', { seconds: '2' }),
-                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', { seconds: 'Two' }),
+                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', {
+                            seconds: Client.client.intlGet(guildId, 'two')
+                        }),
                         value: '2'
                     },
                     {
                         label: Client.client.intlGet(guildId, 'seconds', { seconds: '3' }),
-                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', { seconds: 'Three' }),
+                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', {
+                            seconds: Client.client.intlGet(guildId, 'three')
+                        }),
                         value: '3'
                     },
                     {
                         label: Client.client.intlGet(guildId, 'seconds', { seconds: '4' }),
-                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', { seconds: 'Four' }),
+                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', {
+                            seconds: Client.client.intlGet(guildId, 'four')
+                        }),
                         value: '4'
                     },
                     {
                         label: Client.client.intlGet(guildId, 'seconds', { seconds: '5' }),
-                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', { seconds: 'Five' }),
+                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', {
+                            seconds: Client.client.intlGet(guildId, 'five')
+                        }),
                         value: '5'
                     },
                     {
                         label: Client.client.intlGet(guildId, 'seconds', { seconds: '6' }),
-                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', { seconds: 'Six' }),
+                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', {
+                            seconds: Client.client.intlGet(guildId, 'six')
+                        }),
                         value: '6'
                     },
                     {
                         label: Client.client.intlGet(guildId, 'seconds', { seconds: '7' }),
-                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', { seconds: 'Seven' }),
+                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', {
+                            seconds: Client.client.intlGet(guildId, 'seven')
+                        }),
                         value: '7'
                     },
                     {
                         label: Client.client.intlGet(guildId, 'seconds', { seconds: '8' }),
-                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', { seconds: 'Eight' }),
+                        description: Client.client.intlGet(guildId, 'secondsCommandDelay', {
+                            seconds: Client.client.intlGet(guildId, 'eight')
+                        }),
                         value: '8'
                     }]
             }));
