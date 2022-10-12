@@ -40,11 +40,13 @@ module.exports = {
         const info = await rustplus.getInfoAsync();
         if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
         if (!rustplus.map) rustplus.map = new Map(map.map, rustplus);
-        if (rustplus.map.isJpgImageChanged(map.map)) {
-            await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
-        }
+
+        let mapWiped = false;
+        if (rustplus.map.isJpgImageChanged(map.map)) mapWiped = true;
+
         await rustplus.map.updateMap(map.map);
         await rustplus.map.writeMap(false, true);
+        if (mapWiped) await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
         await DiscordMessages.sendInformationMapMessage(guildId);
 
         if (rustplus.isReconnecting) {
