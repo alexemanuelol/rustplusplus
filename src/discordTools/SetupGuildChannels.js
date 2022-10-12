@@ -29,7 +29,7 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
         client.setInstance(guild.id, instance);
 
         try {
-            channel.setParent(parent.id);
+            await channel.setParent(parent.id);
         }
         catch (e) {
             client.log(client.intlGet(null, 'errorCap'),
@@ -39,7 +39,7 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
 
     if (instance.firstTime) {
         try {
-            channel.setParent(parent.id);
+            await channel.setParent(parent.id);
         }
         catch (e) {
             client.log(client.intlGet(null, 'errorCap'),
@@ -81,7 +81,7 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
     }
 
     try {
-        channel.permissionOverwrites.set(perms);
+        await channel.permissionOverwrites.set(perms);
     }
     catch (e) {
         /* Ignore */

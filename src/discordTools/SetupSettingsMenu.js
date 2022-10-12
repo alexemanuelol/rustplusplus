@@ -7,7 +7,7 @@ const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = async (client, guild) => {
+module.exports = async (client, guild, forced = false) => {
     const instance = client.getInstance(guild.id);
     const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.settings);
 
@@ -17,7 +17,7 @@ module.exports = async (client, guild) => {
         return;
     }
 
-    if (instance.firstTime) {
+    if (instance.firstTime || forced) {
         await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
         await setupGeneralSettings(client, guild.id, channel);

@@ -37,7 +37,7 @@ module.exports = async (client, guild) => {
     }
 
     try {
-        category.permissionOverwrites.set(perms);
+        await category.permissionOverwrites.set(perms);
     }
     catch (e) {
         /* Ignore */

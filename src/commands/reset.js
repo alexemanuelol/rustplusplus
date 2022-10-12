@@ -14,7 +14,16 @@ module.exports = {
 			.setDescription(client.intlGet(guildId, 'commandsResetDesc'))
 			.addSubcommand(subcommand => subcommand
 				.setName('discord')
-				.setDescription(client.intlGet(guildId, 'commandsResetDesc')));
+				.setDescription(client.intlGet(guildId, 'commandsResetDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('servers')
+				.setDescription(client.intlGet(guildId, 'commandsResetServersDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('settings')
+				.setDescription(client.intlGet(guildId, 'commandsResetSettingsDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('trackers')
+				.setDescription(client.intlGet(guildId, 'commandsResetTrackersDesc')));
 	},
 
 	async execute(client, interaction) {
@@ -24,6 +33,22 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		switch (interaction.options.getSubcommand()) {
+			case 'servers': {
+				await require('../discordTools/SetupServerList')(client, guild);
+				const str = client.intlGet(interaction.guildId, 'resetSuccess');
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+			} break;
+			case 'settings': {
+				await require('../discordTools/SetupSettingsMenu')(client, guild, forced = true);
+				const str = client.intlGet(interaction.guildId, 'resetSuccess');
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+			} break;
+			case 'trackers': {
+				await require('../discordTools/SetupTrackers')(client, guild);
+				const str = client.intlGet(interaction.guildId, 'resetSuccess');
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+			} break;
+			/* Resetting the entire server (clearing managed channels and resetting their contents) */
 			case 'discord': {
 				const guild = DiscordTools.getGuild(interaction.guildId);
 
