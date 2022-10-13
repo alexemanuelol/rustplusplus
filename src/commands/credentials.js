@@ -2,6 +2,7 @@ const _ = require('lodash');
 const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
 
@@ -13,8 +14,8 @@ module.exports = {
             .setName('credentials')
             .setDescription(client.intlGet(guildId, 'commandsCredentialsDesc'))
             .addSubcommand(subcommand => subcommand
-                .setName('set')
-                .setDescription(client.intlGet(guildId, 'commandsCredentialsSetDesc'))
+                .setName('add')
+                .setDescription(client.intlGet(guildId, 'commandsCredentialsAddDesc'))
                 .addStringOption(option => option
                     .setName('keys_private_key')
                     .setDescription('Keys Private Key.')
@@ -50,13 +51,32 @@ module.exports = {
                 .addStringOption(option => option
                     .setName('gcm_app_id')
                     .setDescription('GCM App ID.')
-                    .setRequired(true)))
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('steam_id')
+                    .setDescription('Steam ID.')
+                    .setRequired(true))
+                .addBooleanOption(option => option
+                    .setName('host')
+                    .setDescription('Host the bot')
+                    .setRequired(false)))
             .addSubcommand(subcommand => subcommand
-                .setName('clear')
-                .setDescription(client.intlGet(guildId, 'commandsCredentialsClearDesc')))
+                .setName('remove')
+                .setDescription(client.intlGet(guildId, 'commandsCredentialsRemoveDesc'))
+                .addStringOption(option => option
+                    .setName('steam_id')
+                    .setDescription(client.intlGet(guildId, 'commandsCredentialsRemoveSteamIdDesc'))
+                    .setRequired(false)))
             .addSubcommand(subcommand => subcommand
-                .setName('is_set')
-                .setDescription(client.intlGet(guildId, 'commandsCredentialsIsSetDesc')));
+                .setName('show')
+                .setDescription(client.intlGet(guildId, 'commandsCredentialsShowDesc')))
+            .addSubcommand(subcommand => subcommand
+                .setName('set_hoster')
+                .setDescription(client.intlGet(guildId, 'commandsCredentialsSetHosterDesc'))
+                .addStringOption(option => option
+                    .setName('steam_id')
+                    .setDescription(client.intlGet(guildId, 'commandsCredentialsSetHosterSteamIdDesc'))
+                    .setRequired(false)));
     },
 
     async execute(client, interaction) {
@@ -64,16 +84,20 @@ module.exports = {
         await interaction.deferReply({ ephemeral: true });
 
         switch (interaction.options.getSubcommand()) {
-            case 'set': {
-                setCredentials(client, interaction);
+            case 'add': {
+                addCredentials(client, interaction);
             } break;
 
-            case 'clear': {
-                clearCredentials(client, interaction);
+            case 'remove': {
+                removeCredentials(client, interaction);
             } break;
 
-            case 'is_set': {
-                isSetCredentials(client, interaction);
+            case 'show': {
+                showCredentials(client, interaction);
+            } break;
+
+            case 'set_hoster': {
+                setHosterCredentials(client, interaction);
             } break;
 
             default: {
@@ -82,68 +106,118 @@ module.exports = {
     },
 };
 
-async function setCredentials(client, interaction) {
-    const newCredentials = new Object();
-    newCredentials.fcm_credentials = {};
+async function addCredentials(client, interaction) {
+    const guildId = interaction.guildId;
+    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    const steamId = interaction.options.getString('steam_id');
+    const isHoster = interaction.options.getBoolean('host') || Object.keys(credentials).length === 1;
 
-    newCredentials.fcm_credentials.keys = {};
-    newCredentials.fcm_credentials.keys.privateKey = interaction.options.getString('keys_private_key');
-    newCredentials.fcm_credentials.keys.publicKey = interaction.options.getString('keys_public_key');
-    newCredentials.fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
-
-    newCredentials.fcm_credentials.fcm = {};
-    newCredentials.fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
-    newCredentials.fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
-
-    newCredentials.fcm_credentials.gcm = {};
-    newCredentials.fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
-    newCredentials.fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
-    newCredentials.fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
-    newCredentials.fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
-
-    newCredentials.owner = interaction.member.user.id;
-
-    for (const guild of client.guilds.cache) {
-        const credentials = InstanceUtils.readCredentialsFile(guild[0]);
-        if (_.isEqual(newCredentials, credentials.credentials)) {
-            const str = client.intlGet(interaction.guildId, 'credentialsAlreadyInUse');
-            await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            client.log(client.intlGet(null, 'warningCap'), str);
-            return;
-        }
+    if (steamId in credentials) {
+        const str = client.intlGet(guildId, 'credentialsAlreadyRegistered', { steamId: steamId });
+        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        client.log(client.intlGet(null, 'warningCap'), str);
+        return;
     }
 
-    const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
-    credentials.credentials = newCredentials;
-    InstanceUtils.writeCredentialsFile(interaction.guildId, credentials);
+    credentials[steamId] = new Object();
+    credentials[steamId].fcm_credentials = new Object();
+
+    credentials[steamId].fcm_credentials.keys = new Object();
+    credentials[steamId].fcm_credentials.keys.privateKey = interaction.options.getString('keys_private_key');
+    credentials[steamId].fcm_credentials.keys.publicKey = interaction.options.getString('keys_public_key');
+    credentials[steamId].fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
+
+    credentials[steamId].fcm_credentials.fcm = new Object();
+    credentials[steamId].fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
+    credentials[steamId].fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
+
+    credentials[steamId].fcm_credentials.gcm = new Object();
+    credentials[steamId].fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
+    credentials[steamId].fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
+    credentials[steamId].fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
+    credentials[steamId].fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
+
+    credentials[steamId].discordUserId = interaction.member.user.id;
+
+    if (isHoster) credentials.hoster = steamId;
+
+    InstanceUtils.writeCredentialsFile(guildId, credentials);
 
     /* Start Fcm Listener */
-    require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
-
-    const str = client.intlGet(interaction.guildId, 'credentialsSetSuccess');
-    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(null, 'infoCap'), str);
-}
-
-async function clearCredentials(client, interaction) {
-    if (client.currentFcmListeners[interaction.guildId]) {
-        client.currentFcmListeners[interaction.guildId].destroy();
+    if (isHoster) {
+        require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
+    }
+    else {
+        /* TODO:
+            - Make none hosters a fcm listener of their own that only listen to server pair
+            - Start rustplus instance for it with one command: leader
+        */
     }
 
-    const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
-    credentials.credentials = null;
-    InstanceUtils.writeCredentialsFile(interaction.guildId, credentials);
-
-    const str = client.intlGet(interaction.guildId, 'credentialsClearSuccess');
+    const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully');
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log(client.intlGet(null, 'infoCap'), str);
 }
 
-async function isSetCredentials(client, interaction) {
-    const credentials = InstanceUtils.readCredentialsFile(interaction.guildId);
-    const str = credentials.credentials === null ? client.intlGet(interaction.guildId, 'credentialsAreNotSet') :
-        client.intlGet(interaction.guildId, 'credentialsAreSet');
-    const isSet = (credentials.credentials === null) ? 1 : 0;
-    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(isSet, str));
+async function removeCredentials(client, interaction) {
+    const guildId = interaction.guildId;
+    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    let steamId = interaction.options.getString('steam_id');
+
+    if (!steamId) {
+        steamId = Object.keys(credentials).find(e => credentials[e].discordUserId === interaction.member.user.id);
+    }
+
+    if (!(steamId in credentials)) {
+        const str = client.intlGet(guildId, 'credentialsDoNotExist', {
+            steamId: steamId ? steamId : client.intlGet(guildId, 'unknown')
+        });
+        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        client.log(client.intlGet(null, 'warningCap'), str);
+        return;
+    }
+
+    if (steamId === credentials.hoster && client.currentFcmListeners[guildId]) {
+        client.currentFcmListeners[guildId].destroy();
+        credentials.hoster = null;
+    }
+
+    delete credentials[steamId];
+    InstanceUtils.writeCredentialsFile(guildId, credentials);
+
+    const str = client.intlGet(guildId, 'credentialsRemovedSuccessfully', { steamId: steamId });
+    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+    client.log(client.intlGet(null, 'infoCap'), str);
+}
+
+async function showCredentials(client, interaction) {
+    await DiscordMessages.sendCredentialsShowMessage(interaction);
+}
+
+async function setHosterCredentials(client, interaction) {
+    const guildId = interaction.guildId;
+    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    let steamId = interaction.options.getString('steam_id');
+
+    if (!steamId) {
+        steamId = Object.keys(credentials).find(e => credentials[e].discordUserId === interaction.member.user.id);
+    }
+
+    if (!(steamId in credentials)) {
+        const str = client.intlGet(guildId, 'credentialsDoNotExist', {
+            steamId: steamId ? steamId : client.intlGet(guildId, 'unknown')
+        });
+        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        client.log(client.intlGet(null, 'warningCap'), str);
+        return;
+    }
+
+    credentials.hoster = steamId;
+    InstanceUtils.writeCredentialsFile(guildId, credentials);
+
+    require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
+
+    const str = client.intlGet(guildId, 'credentialsSetHosterSuccessfully', { steamId: steamId });
+    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log(client.intlGet(null, 'infoCap'), str);
 }

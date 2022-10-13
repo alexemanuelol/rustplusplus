@@ -12,24 +12,30 @@ const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild) => {
     const credentials = InstanceUtils.readCredentialsFile(guild.id);
+    const hoster = credentials.hoster;
 
-    if (credentials.credentials === null) {
+    if (Object.keys(credentials).length === 1) {
         client.log(client.intlGet(null, 'warningCap'),
-            client.intlGet(null, 'credentialsNotSetForGuild', { id: guild.id }));
+            client.intlGet(null, 'credentialsNotRegisteredForGuild', { id: guild.id }));
         return;
     }
 
-    const ownerId = credentials.credentials.owner;
+    if (!hoster) {
+        client.log(client.intlGet(null, 'warningCap'),
+            client.intlGet(guild.id, 'credentialsHosterNotSetForGuild', { id: guild.id }));
+        return;
+    }
+
+    const discordUserId = credentials[hoster].discordUserId;
 
     /* Destroy previous instance of fcm listener */
     if (client.currentFcmListeners[guild.id]) client.currentFcmListeners[guild.id].destroy();
 
-    client.log(client.intlGet(null, 'infoCap'),
-        client.intlGet(null, 'fcmListenerStartIn', { id: guild.id }));
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'fcmListenerStartIn', { id: guild.id }));
 
     let startTime = new Date();
     client.currentFcmListeners[guild.id] =
-        await PushReceiver.listen(credentials.credentials.fcm_credentials, async ({ notification, persistentId }) => {
+        await PushReceiver.listen(credentials[hoster].fcm_credentials, async ({ notification, persistentId }) => {
             /* Create a delay so that buffered notifications are ignored. */
             if ((new Date() - startTime) < 5000) return;
 
@@ -98,7 +104,7 @@ module.exports = async (client, guild) => {
                     switch (body.type) {
                         case 'death': {
                             client.log('FCM', `${guild.id} player: death`);
-                            playerDeath(client, guild, full, data, body, ownerId);
+                            playerDeath(client, guild, full, data, body, discordUserId);
                         } break;
 
                         default: {
@@ -398,8 +404,8 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
     client.log(client.intlGet(null, 'infoCap'), `${data.title} ${data.message}`);
 }
 
-async function playerDeath(client, guild, full, data, body, ownerId) {
-    const user = await DiscordTools.getUserById(guild.id, ownerId);
+async function playerDeath(client, guild, full, data, body, discordUserId) {
+    const user = await DiscordTools.getUserById(guild.id, discordUserId);
 
     let png = null;
     if (body.targetId !== '') png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);

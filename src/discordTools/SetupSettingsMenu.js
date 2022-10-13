@@ -34,7 +34,8 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         files: [new Discord.AttachmentBuilder(
-            Path.join(__dirname, '..', 'resources/images/general_settings_logo.png'))]
+            Path.join(__dirname, '..',
+                `resources/images/settings/general_settings_logo_${instance.generalSettings.language}.png`))]
     });
 
     await client.messageSend(channel, {
@@ -197,7 +198,8 @@ async function setupNotificationSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         files: [new Discord.AttachmentBuilder(
-            Path.join(__dirname, '..', 'resources/images/notification_settings_logo.png'))]
+            Path.join(__dirname, '..',
+                `resources/images/settings/notification_settings_logo_${instance.generalSettings.language}.png`))]
     });
 
     for (const setting in instance.notificationSettings) {

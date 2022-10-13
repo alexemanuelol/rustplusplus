@@ -39,7 +39,7 @@ module.exports = {
         const server = instance.serverList[serverId];
 
         const content = {
-            embeds: [DiscordEmbeds.getServerEmbed(guildId, serverId)],
+            embeds: [await DiscordEmbeds.getServerEmbed(guildId, serverId)],
             components: DiscordButtons.getServerButtons(guildId, serverId, state)
         }
 
@@ -445,5 +445,14 @@ module.exports = {
         }
 
         await client.messageReply(message, content);
+    },
+
+    sendCredentialsShowMessage: async function (interaction) {
+        const content = {
+            embeds: [await DiscordEmbeds.getCredentialsShowEmbed(interaction.guildId)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
     },
 }
