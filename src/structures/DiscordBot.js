@@ -10,6 +10,8 @@ const InstanceUtils = require('../util/instanceUtils.js');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
 const RustPlus = require('../structures/RustPlus');
+const discordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordButtons = require('../discordTools/discordButtons');
 
 class DiscordBot extends Discord.Client {
     constructor(props) {
@@ -136,6 +138,9 @@ class DiscordBot extends Discord.Client {
     }
 
     async setupGuild(guild) {
+        const instance = InstanceUtils.readInstanceFile(guild.id);
+        const credentials = InstanceUtils.readCredentialsFile(guild.id);
+
         await require('../discordTools/RegisterSlashCommands')(this, guild);
 
         let category = await require('../discordTools/SetupGuildCategory')(this, guild);
@@ -143,6 +148,41 @@ class DiscordBot extends Discord.Client {
 
         require('../util/FcmListener')(this, guild);
         await require('../discordTools/SetupSettingsMenu')(this, guild);
+
+        // Send server setup message
+        if(instance?.firstTime) {
+            
+            const channelFields = Object.entries(instance.channelId)
+                .filter(([key]) => key !== 'category')
+                .map(([key, value]) => ({ "name": `${key} channel`, "value": `<#${value}>`, "inline": true }));
+            const fcmMessage = credentials.hoster ? "All Set" : "Missing";
+
+            const embed = discordEmbeds.getEmbed({
+                url: `https://github.com/alexemanuelol/rustPlusPlus`,
+                title: `rustPlusPlus setup`,
+                description: `Discord setup has been completed. You can now begin use the bot. \n\nTo get started, you need to add your server credentials. You can do this by using the \`/credentials\` command. \n\nIf you need help, you can use the \`/help\` command. \n\nIf you need help with the credentials, you can download the credentials helper below.`,
+                color: 0x237427,
+                fields: [...channelFields, {"name": `FCM Credentials`, "value": fcmMessage}]
+            })
+
+            const buttons = new Discord.ActionRowBuilder().addComponents(
+                DiscordButtons.getButton({
+                    style: Discord.ButtonStyle.Link,
+                    label: 'Download Credentials Helper',
+                    url: `https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/download/v1.0.2/rustPlusPlus-1.0.2-win-x64.exe`,
+                }), 
+                DiscordButtons.getButton({
+                    style: Discord.ButtonStyle.Link,
+                    label: 'Documentation',
+                    url: `https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md`,
+                })
+            )
+
+            await DiscordTools.sendOwnerMessage(guild.id, {
+                "components": [buttons],
+                "embeds": [embed]}
+            );
+        }
     }
 
     getInstance(guildId) {

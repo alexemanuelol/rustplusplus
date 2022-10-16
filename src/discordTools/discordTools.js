@@ -46,6 +46,15 @@ module.exports = {
         return undefined;
     },
 
+    getServerOwner:  async guildId => {
+      const guild = module.exports.getGuild(guildId);
+      if (!guild) {
+        return null;
+      }
+    
+      return guild.fetchOwner();
+    },
+
     getTextChannelById: function (guildId, channelId) {
         const guild = module.exports.getGuild(guildId);
 
@@ -253,5 +262,11 @@ module.exports = {
                 }
             }
         }
+    },
+
+    sendOwnerMessage: async(guildId, message) => {
+      const owner = await module.exports.getServerOwner(guildId);
+      if(!owner) return;
+      return owner.send(message);
     },
 }
