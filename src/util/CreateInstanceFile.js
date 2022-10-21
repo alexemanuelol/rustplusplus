@@ -32,6 +32,7 @@ module.exports = (client, guild) => {
                 team: null
             },
             serverList: {},
+            serverListLite: {},
             trackers: {},
             marketSubscribeItemIds: []
         };
@@ -120,6 +121,7 @@ module.exports = (client, guild) => {
         }
 
         if (!instance.hasOwnProperty('serverList')) instance.serverList = {};
+        if (!instance.hasOwnProperty('serverListLite')) instance.serverListLite = {};
         if (!instance.hasOwnProperty('trackers')) instance.trackers = {};
         if (!instance.hasOwnProperty('marketSubscribeItemIds')) instance.marketSubscribeItemIds = [];
     }

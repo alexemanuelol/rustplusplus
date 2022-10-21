@@ -9,8 +9,10 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const Languages = require('../util/languages.js');
 const Logger = require('./Logger.js');
 const Map = require('../util/map.js');
+const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
+const InstanceUtils = require('../util/instanceUtils');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */
@@ -21,6 +23,8 @@ class RustPlus extends RustPlusLib {
 
         this.serverId = `${this.server}-${this.port}`;
         this.guildId = guildId;
+
+        this.leaderRustPlusInstance = null;
 
         /* Status flags */
         this.isConnected = false;           /* Connected to the server, but request not yet verified. */
@@ -109,6 +113,32 @@ class RustPlus extends RustPlusLib {
         this.notificationSettings = instance.notificationSettings;
 
         this.connect();
+    }
+
+    updateLeaderRustPlusLiteInstance() {
+        if (this.leaderRustPlusInstance !== null) {
+            this.leaderRustPlusInstance.isActive = false;
+            this.leaderRustPlusInstance.disconnect();
+            this.leaderRustPlusInstance = null;
+        }
+
+        const instance = Client.client.getInstance(this.guildId);
+        const credentials = InstanceUtils.readCredentialsFile(this.guildId);
+        const leader = this.team.leaderSteamId;
+        if (leader === this.playerId) return;
+        if (!(leader in credentials)) return;
+        if (!(leader in instance.serverListLite[this.serverId])) return;
+        const serverLite = instance.serverListLite[this.serverId][leader];
+
+        this.leaderRustPlusInstance = new RustPlusLite(
+            this.guildId,
+            this.logger,
+            serverLite.serverIp,
+            serverLite.appPort,
+            serverLite.steamId,
+            serverLite.playerToken
+        );
+        this.leaderRustPlusInstance.connect();
     }
 
     isServerAvailable() {
@@ -877,16 +907,30 @@ class RustPlus extends RustPlusLib {
             return Client.client.intlGet(this.guildId, 'leaderCommandIsDisabled');
         }
 
-        if (this.team.leaderSteamId !== this.playerId) {
-            const player = this.team.getPlayer(this.playerId);
+        const instance = Client.client.getInstance(this.guildId);
+        if (!Object.keys(instance.serverListLite[this.serverId]).includes(this.team.leaderSteamId)) {
+            let names = '';
+            for (const player of this.team.players) {
+                if (Object.keys(instance.serverListLite[this.serverId]).includes(player.steamId)) {
+                    names += `${player.name}, `
+                }
+            }
+            names = names.slice(0, -2);
+
             return Client.client.intlGet(this.guildId, 'leaderCommandOnlyWorks', {
-                name: player.name
+                name: names
             });
         }
 
         if (command.toLowerCase() === `${prefix}leader`) {
             if (this.team.leaderSteamId !== callerSteamId) {
-                await this.team.changeLeadership(callerSteamId);
+                if (this.team.leaderSteamId === this.playerId) {
+                    await this.team.changeLeadership(callerSteamId);
+                }
+                else {
+                    this.leaderRustPlusInstance.promoteToLeaderAsync(callerSteamId);
+                }
+
                 const player = this.team.getPlayer(callerSteamId);
                 return Client.client.intlGet(this.guildId, 'leaderTransferred', {
                     name: player.name
@@ -906,7 +950,13 @@ class RustPlus extends RustPlusLib {
                         });
                     }
                     else {
-                        await this.team.changeLeadership(player.steamId);
+                        if (this.team.leaderSteamId === this.playerId) {
+                            await this.team.changeLeadership(player.steamId);
+                        }
+                        else {
+                            this.leaderRustPlusInstance.promoteToLeaderAsync(player.steamId);
+                        }
+
                         return Client.client.intlGet(this.guildId, 'leaderTransferred', {
                             name: player.name
                         });

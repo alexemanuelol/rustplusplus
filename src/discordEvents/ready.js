@@ -10,6 +10,7 @@ module.exports = {
         for (const guild of client.guilds.cache) {
             require('../util/CreateInstanceFile')(client, guild[1]);
             require('../util/CreateCredentialsFile')(client, guild[1]);
+            client.fcmListenersLite[guild[0]] = new Object();
         }
 
         client.loadGuildsIntl();

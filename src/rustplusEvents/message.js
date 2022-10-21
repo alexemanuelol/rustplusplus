@@ -38,7 +38,9 @@ async function messageBroadcast(rustplus, client, message) {
 
 async function messageBroadcastTeamChanged(rustplus, client, message) {
     TeamHandler.handler(rustplus, client, message.broadcast.teamChanged.teamInfo);
+    const changed = rustplus.team.isLeaderSteamIdChanged(message.broadcast.teamChanged.teamInfo);
     rustplus.team.updateTeam(message.broadcast.teamChanged.teamInfo);
+    if (changed) rustplus.updateLeaderRustPlusLiteInstance();
 }
 
 async function messageBroadcastTeamMessage(rustplus, client, message) {

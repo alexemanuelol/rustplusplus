@@ -64,8 +64,10 @@ module.exports = {
         rustplus.isNewConnection = false;
         rustplus.loadMarkers();
 
-        PollingHandler.pollingHandler(rustplus, client);
+        await PollingHandler.pollingHandler(rustplus, client);
         rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
         rustplus.isOperational = true;
+
+        rustplus.updateLeaderRustPlusLiteInstance();
     },
 };

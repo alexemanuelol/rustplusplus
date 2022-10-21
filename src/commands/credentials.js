@@ -139,6 +139,7 @@ async function addCredentials(client, interaction) {
 
     credentials[steamId].discordUserId = interaction.member.user.id;
 
+    const prevHoster = credentials.hoster;
     if (isHoster) credentials.hoster = steamId;
 
     InstanceUtils.writeCredentialsFile(guildId, credentials);
@@ -146,15 +147,20 @@ async function addCredentials(client, interaction) {
     /* Start Fcm Listener */
     if (isHoster) {
         require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
+        if (prevHoster !== null) {
+            require('../util/FcmListenerLite')(client, DiscordTools.getGuild(interaction.guildId), prevHoster);
+        }
     }
     else {
-        /* TODO:
-            - Make none hosters a fcm listener of their own that only listen to server pair
-            - Start rustplus instance for it with one command: leader
-        */
+        require('../util/FcmListenerLite')(client, DiscordTools.getGuild(interaction.guildId), steamId);
+
+        const rustplus = client.rustplusInstances[guildId];
+        if (rustplus && rustplus.team.leaderSteamId === steamId) {
+            rustplus.updateLeaderRustPlusLiteInstance();
+        }
     }
 
-    const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully');
+    const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log(client.intlGet(null, 'infoCap'), str);
 }
@@ -177,9 +183,18 @@ async function removeCredentials(client, interaction) {
         return;
     }
 
-    if (steamId === credentials.hoster && client.currentFcmListeners[guildId]) {
-        client.currentFcmListeners[guildId].destroy();
+    if (steamId === credentials.hoster) {
+        if (client.fcmListeners[guildId]) {
+            client.fcmListeners[guildId].destroy();
+        }
+        delete client.fcmListeners[guildId];
         credentials.hoster = null;
+    }
+    else {
+        if (client.fcmListenersLite[guildId][steamId]) {
+            client.fcmListenersLite[guildId][steamId].destroy();
+        }
+        delete client.fcmListenersLite[guildId][steamId];
     }
 
     delete credentials[steamId];
@@ -212,10 +227,24 @@ async function setHosterCredentials(client, interaction) {
         return;
     }
 
+    const prevHoster = credentials.hoster;
     credentials.hoster = steamId;
     InstanceUtils.writeCredentialsFile(guildId, credentials);
 
+    const instance = client.getInstance(guildId);
+    const rustplus = client.rustplusInstances[guildId];
+    if (rustplus) {
+        instance.serverList[rustplus.serverId].active = false;
+        client.setInstance(guildId, instance);
+        rustplus.disconnect();
+        delete client.rustplusInstances[guildId];
+        await DiscordMessages.sendServerMessage(guildId, rustplus.serverId);
+    }
+
     require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
+    if (prevHoster !== null) {
+        require('../util/FcmListenerLite')(client, DiscordTools.getGuild(interaction.guildId), prevHoster);
+    }
 
     const str = client.intlGet(guildId, 'credentialsSetHosterSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));

@@ -47,7 +47,11 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const credentials = InstanceUtils.readCredentialsFile(guildId);
         const server = instance.serverList[serverId];
-        const hoster = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+        let hoster = Client.client.intlGet(guildId, 'unknown');
+        if (credentials.hasOwnProperty(server.steamId)) {
+            hoster = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+            hoster = hoster.user.username;
+        }
 
         return module.exports.getEmbed({
             title: `${server.title}`,
@@ -62,7 +66,7 @@ module.exports = {
             },
             {
                 name: Client.client.intlGet(guildId, 'hoster'),
-                value: `\`${hoster.user.username} (${server.steamId})\``,
+                value: `\`${hoster} (${server.steamId})\``,
                 inline: false
             }]
         });
@@ -409,8 +413,8 @@ module.exports = {
                 tracker: tracker.name
             }),
             color: '#ff0040',
-            thumbnail: `${instance.serverList[tracker.serverId].img}`,
-            footer: { text: `${instance.serverList[tracker.serverId].title}` },
+            thumbnail: `${instance.trackers[trackerId].img}`,
+            footer: { text: `${instance.trackers[trackerId].title}` },
             timestamp: true
         });
     },
@@ -424,13 +428,13 @@ module.exports = {
                 tracker: tracker.name
             }),
             color: '#00ff40',
-            thumbnail: `${instance.serverList[tracker.serverId].img}`,
-            footer: { text: `${instance.serverList[tracker.serverId].title}` },
+            thumbnail: `${instance.trackers[trackerId].img}`,
+            footer: { text: `${instance.trackers[trackerId].title}` },
             timestamp: true
         });
     },
 
-    getNewsEmbed: function (data) {
+    getNewsEmbed: function (guildId, data) {
         return module.exports.getEmbed({
             title: `${Client.client.intlGet(guildId, 'newsCap')}: ${data.title}`,
             color: '#ce412b',
@@ -672,23 +676,29 @@ module.exports = {
         let status = '';
         let locations = '';
         for (const player of rustplus.team.players) {
-            if (rustplus.team.teamSize < 12) {
-                names += `[${player.name}](${Constants.STEAM_PROFILES_URL}${player.steamId})`;
-            }
-            else {
-                names += `${player.name}`;
-            }
+            names += (rustplus.team.teamSize < 12) ?
+                `[${player.name}](${Constants.STEAM_PROFILES_URL}${player.steamId})` : player.name;
 
             names += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
             locations += (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
 
             if (player.isOnline) {
-                status += (player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS) ?
-                    `${Constants.AFK_EMOJI}${(player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI} ${player.getAfkTime('dhs')}\n` :
-                    `${Constants.ONLINE_EMOJI}${(player.isAlive) ? Constants.ALIVE_EMOJI : Constants.DEAD_EMOJI}\n`;
+                const isAfk = player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS;
+                const afkTime = player.getAfkTime('dhs');
+
+                status += (isAfk) ? Constants.AFK_EMOJI : Constants.ONLINE_EMOJI;
+                status += (player.isAlive) ? ((isAfk) ? Constants.SLEEPING_EMOJI : Constants.ALIVE_EMOJI) :
+                    Constants.DEAD_EMOJI;
+                status += (Object.keys(instance.serverListLite[rustplus.serverId]).includes(player.steamId)) ?
+                    Constants.PAIRED_EMOJI : '';
+                status += (isAfk) ? ` ${afkTime}\n` : '\n';
             }
             else {
-                status += `${Constants.OFFLINE_EMOJI}${(player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI}\n`;
+                status += Constants.OFFLINE_EMOJI;
+                status += (player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI;
+                status += (Object.keys(instance.serverListLite[rustplus.serverId]).includes(player.steamId)) ?
+                    Constants.PAIRED_EMOJI : '';
+                status += '\n';
             }
         }
 

@@ -28,5 +28,6 @@ module.exports = {
     DEAD_EMOJI: ':skull:',
     LEADER_EMOJI: ':crown:',
     DAY_EMOJI: ':sunny:',
-    NIGHT_EMOJI: ':crescent_moon:'
+    NIGHT_EMOJI: ':crescent_moon:',
+    PAIRED_EMOJI: ':parking:'
 }

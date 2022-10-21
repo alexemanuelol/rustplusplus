@@ -19,7 +19,8 @@ class DiscordBot extends Discord.Client {
 
         this.commands = new Discord.Collection();
         this.rustplusInstances = new Object();
-        this.currentFcmListeners = new Object();
+        this.fcmListeners = new Object();
+        this.fcmListenersLite = new Object();
         this.instances = {};
         this.guildIntl = {};
         this.botIntl = null;
@@ -142,6 +143,13 @@ class DiscordBot extends Discord.Client {
         await require('../discordTools/SetupGuildChannels')(this, guild, category);
 
         require('../util/FcmListener')(this, guild);
+        const credentials = InstanceUtils.readCredentialsFile(guild.id);
+        for (const steamId of Object.keys(credentials)) {
+            if (steamId !== credentials.hoster && steamId !== 'hoster') {
+                require('../util/FcmListenerLite')(this, guild, steamId);
+            }
+        }
+
         await require('../discordTools/SetupSettingsMenu')(this, guild);
     }
 

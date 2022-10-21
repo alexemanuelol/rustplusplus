@@ -15,6 +15,12 @@ module.exports = {
         const serverId = rustplus.serverId;
         const server = instance.serverList[serverId];
 
+        if (rustplus.leaderRustPlusInstance !== null) {
+            rustplus.leaderRustPlusInstance.isActive = false;
+            rustplus.leaderRustPlusInstance.disconnect();
+            rustplus.leaderRustPlusInstance = null;
+        }
+
         /* Stop current tasks */
         clearInterval(rustplus.pollingTaskId);
         clearInterval(rustplus.tokensReplenishTaskId);
