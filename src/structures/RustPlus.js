@@ -123,10 +123,8 @@ class RustPlus extends RustPlusLib {
         }
 
         const instance = Client.client.getInstance(this.guildId);
-        const credentials = InstanceUtils.readCredentialsFile(this.guildId);
         const leader = this.team.leaderSteamId;
         if (leader === this.playerId) return;
-        if (!(leader in credentials)) return;
         if (!(leader in instance.serverListLite[this.serverId])) return;
         const serverLite = instance.serverListLite[this.serverId][leader];
 
