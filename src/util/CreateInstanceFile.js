@@ -124,6 +124,19 @@ module.exports = (client, guild) => {
         if (!instance.hasOwnProperty('serverListLite')) instance.serverListLite = {};
         if (!instance.hasOwnProperty('trackers')) instance.trackers = {};
         if (!instance.hasOwnProperty('marketSubscribeItemIds')) instance.marketSubscribeItemIds = [];
+
+        for (const serverId of Object.keys(instance.serverList)) {
+            if (!Object.keys(instance.serverListLite).includes(serverId)) {
+                instance.serverListLite[serverId] = new Object();
+            }
+
+            instance.serverListLite[serverId][instance.serverList[serverId].steamId] = {
+                serverIp: instance.serverList[serverId].serverIp,
+                appPort: instance.serverList[serverId].appPort,
+                steamId: instance.serverList[serverId].steamId,
+                playerToken: instance.serverList[serverId].playerToken
+            };
+        }
     }
 
     client.setInstance(guild.id, instance);
