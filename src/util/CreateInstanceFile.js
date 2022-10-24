@@ -124,6 +124,12 @@ module.exports = (client, guild) => {
         if (!instance.hasOwnProperty('serverListLite')) instance.serverListLite = {};
         if (!instance.hasOwnProperty('trackers')) instance.trackers = {};
         if (!instance.hasOwnProperty('marketSubscribeItemIds')) instance.marketSubscribeItemIds = [];
+
+        for (const server of Object.keys(instance.serverList)) {
+            if (!Object.keys(instance.serverListLite).includes(server)) {
+                instance.serverListLite[server] = new Object();
+            }
+        }
     }
 
     client.setInstance(guild.id, instance);
