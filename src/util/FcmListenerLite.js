@@ -23,6 +23,8 @@ module.exports = async (client, guild, steamId) => {
 
     if (client.fcmListenersLite[guild.id][steamId]) client.fcmListenersLite[guild.id][steamId].destroy();
 
+    const discordUserId = credentials[steamId].discordUserId;
+
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'fcmListenerStartLite', {
         guildId: guild.id,
         steamId: steamId
@@ -43,8 +45,20 @@ module.exports = async (client, guild, steamId) => {
                 case 'pairing': {
                     switch (body.type) {
                         case 'server': {
-                            client.log('FCM Lite', `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: server`);
+                            client.log('FCM LITE', `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: server`);
                             pairingServer(client, guild, steamId, full, data, body);
+                        } break;
+
+                        default: {
+                        } break;
+                    }
+                } break;
+
+                case 'player': {
+                    switch (body.type) {
+                        case 'death': {
+                            client.log('FCM LITE', `GuildID: ${guild.id}, SteamID: ${steamId}, player: death`);
+                            playerDeath(client, guild, full, data, body, discordUserId);
                         } break;
 
                         default: {
@@ -57,6 +71,11 @@ module.exports = async (client, guild, steamId) => {
             }
         });
 };
+
+function isValidUrl(url) {
+    if (url.startsWith('https') || url.startsWith('http')) return true;
+    return false;
+}
 
 async function pairingServer(client, guild, steamId, full, data, body) {
     const instance = client.getInstance(guild.id);
@@ -76,4 +95,19 @@ async function pairingServer(client, guild, steamId, full, data, body) {
     if (rustplus && (rustplus.serverId === serverId) && rustplus.team.leaderSteamId === steamId) {
         rustplus.updateLeaderRustPlusLiteInstance();
     }
+}
+
+async function playerDeath(client, guild, full, data, body, discordUserId) {
+    const user = await DiscordTools.getUserById(guild.id, discordUserId);
+    if (!user) return;
+
+    let png = null;
+    if (body.targetId !== '') png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
+    if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMG;
+
+    const content = {
+        embeds: [DiscordEmbeds.getPlayerDeathEmbed(data, body, png)]
+    }
+
+    await client.messageSend(user, content);
 }
