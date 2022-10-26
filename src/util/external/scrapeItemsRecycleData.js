@@ -1,4 +1,24 @@
 /*
+    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    https://github.com/alexemanuelol/rustPlusPlus
+
+*/
+
+/*
  * Purpose of this script is to scrape Rustlabs website and obtain all items and their recycle information.
  * Upon completing this, I found the page 'https://rustlabs.com/entity/recycler' that basically display every items
  * recycle output. But at this point Im too lazy to change to regex so Ill just leave it since I probably won't
