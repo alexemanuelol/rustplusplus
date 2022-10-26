@@ -12,7 +12,6 @@ const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
-const InstanceUtils = require('../util/instanceUtils');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */
@@ -973,13 +972,20 @@ class RustPlus extends RustPlusLib {
     async getCommandMarker(command, callerSteamId) {
         const prefix = this.generalSettings.prefix;
 
+        if (command.toLowerCase() === `${prefix}markers`) {
+            let str = '';
+            for (const name in this.markers) str += `${name} [${this.markers[name].location}], `;
+
+            return str !== '' ? str.slice(0, -2) : Client.client.intlGet(this.guildId, 'noRegisteredMarkers');
+        }
+
         command = command.slice(`${prefix}marker `.length).trim();
         const subcommand = command.replace(/ .*/, '');
         const name = command.slice(subcommand.length + 1);
 
         switch (subcommand.toLowerCase()) {
             case 'add': {
-                if (name.startsWith('add') || name.startsWith('remove') || name.startsWith('list')) return null;
+                if (name.startsWith('add') || name.startsWith('remove')) return null;
                 if (name === '') return null;
 
                 const teamInfo = await this.getTeamInfoAsync();
@@ -1019,13 +1025,6 @@ class RustPlus extends RustPlusLib {
                 return Client.client.intlGet(this.guildId, 'markerDoesNotExist', {
                     name: name
                 });
-            } break;
-
-            case 'list': {
-                let str = '';
-                for (const name in this.markers) str += `${name} [${this.markers[name].location}], `;
-
-                return str !== '' ? str.slice(0, -2) : Client.client.intlGet(this.guildId, 'noRegisteredMarkers');
             } break;
 
             default: {
@@ -1073,51 +1072,56 @@ class RustPlus extends RustPlusLib {
     getCommandNote(command) {
         const prefix = this.generalSettings.prefix;
         const instance = Client.client.getInstance(this.guildId);
-        const strings = [];
 
         if (command.toLowerCase() === `${prefix}notes`) {
             if (Object.keys(instance.serverList[this.serverId].notes).length === 0) {
                 return Client.client.intlGet(this.guildId, 'noSavedNotes');
             }
 
+            const strings = [];
             for (const [id, note] of Object.entries(instance.serverList[this.serverId].notes)) {
                 strings.push(`${id}: ${note}`);
             }
+            return strings;
         }
-        else if (command.toLowerCase().startsWith(`${prefix}note add `)) {
-            const note = command.slice(`${prefix}note add `.length).trim();
 
-            let index = 0;
-            while (Object.keys(instance.serverList[this.serverId].notes).map(Number).includes(index)) {
-                index += 1;
-            }
+        command = command.slice(`${prefix}note `.length).trim();
+        const subcommand = command.replace(/ .*/, '');
+        const rest = command.slice(subcommand.length + 1);
 
-            instance.serverList[this.serverId].notes[index] = `${note}`;
-            Client.client.setInstance(this.guildId, instance);
-            return Client.client.intlGet(this.guildId, 'noteSaved');
-        }
-        else if (command.toLowerCase().startsWith(`${prefix}note remove `)) {
-            const id = parseInt(command.slice(`${prefix}note remove `.length).trim());
-
-            if (!isNaN(id)) {
-                if (!Object.keys(instance.serverList[this.serverId].notes).map(Number).includes(id)) {
-                    return Client.client.intlGet(this.guildId, 'noteIdDoesNotExist', {
-                        id: id
-                    });
+        switch (subcommand.toLowerCase()) {
+            case 'add': {
+                let index = 0;
+                while (Object.keys(instance.serverList[this.serverId].notes).map(Number).includes(index)) {
+                    index += 1;
                 }
 
-                delete instance.serverList[this.serverId].notes[id];
+                instance.serverList[this.serverId].notes[index] = `${rest}`;
                 Client.client.setInstance(this.guildId, instance);
-                return Client.client.intlGet(this.guildId, 'noteIdWasRemoved', {
-                    id: id
-                });
-            }
-            else {
-                return Client.client.intlGet(this.guildId, 'noteIdInvalid');
-            }
-        }
+                return Client.client.intlGet(this.guildId, 'noteSaved');
+            } break;
 
-        return strings.length !== 0 ? strings : null;
+            case 'remove': {
+                const id = parseInt(rest.trim());
+
+                if (!isNaN(id)) {
+                    if (!Object.keys(instance.serverList[this.serverId].notes).map(Number).includes(id)) {
+                        return Client.client.intlGet(this.guildId, 'noteIdDoesNotExist', { id: id });
+                    }
+
+                    delete instance.serverList[this.serverId].notes[id];
+                    Client.client.setInstance(this.guildId, instance);
+                    return Client.client.intlGet(this.guildId, 'noteIdWasRemoved', { id: id });
+                }
+                else {
+                    return Client.client.intlGet(this.guildId, 'noteIdInvalid');
+                }
+            } break;
+
+            default: {
+                return null;
+            } break;
+        }
     }
 
     getCommandOffline() {
@@ -1357,16 +1361,12 @@ class RustPlus extends RustPlusLib {
     getCommandTimer(command) {
         const prefix = this.generalSettings.prefix;
 
-        command = command.slice(`${prefix}timer `.length).trim();
-        const subcommand = command.replace(/ .*/, '');
-        command = command.slice(subcommand.length + 1);
-
-        if (subcommand.toLowerCase() === 'list' && command === '') {
-            const strings = [];
+        if (command.toLowerCase() === `${prefix}timers`) {
             if (Object.keys(this.timers).length === 0) {
                 return Client.client.intlGet(this.guildId, 'noActiveTimers');
             }
 
+            const strings = [];
             for (const [id, content] of Object.entries(this.timers)) {
                 const timeLeft = Timer.getTimeLeftOfTimer(content.timer);
                 strings.push(Client.client.intlGet(this.guildId, 'timeLeftTimer', {
@@ -1375,20 +1375,17 @@ class RustPlus extends RustPlusLib {
                     message: content.message
                 }));
             }
-
             return strings;
         }
 
-        if (subcommand.toLowerCase() !== 'add' && subcommand.toLowerCase() !== 'remove') {
-            return Client.client.intlGet(this.guildId, 'invalidSubcommand');
-        }
-
-        if (command === '') return Client.client.intlGet(this.guildId, 'missingArguments');
+        command = command.slice(`${prefix}timer `.length).trim();
+        const subcommand = command.replace(/ .*/, '');
+        const rest = command.slice(subcommand.length + 1);
 
         switch (subcommand.toLowerCase()) {
             case 'add': {
-                const time = command.replace(/ .*/, '');
-                const message = command.slice(time.length + 1);
+                const time = rest.replace(/ .*/, '');
+                const message = rest.slice(time.length + 1);
                 if (message === '') return Client.client.intlGet(this.guildId, 'missingTimerMessage');
 
                 const timeSeconds = Timer.getSecondsFromStringTime(time);
@@ -1411,27 +1408,21 @@ class RustPlus extends RustPlusLib {
                 };
                 this.timers[id].timer.start();
 
-                return Client.client.intlGet(this.guildId, 'timerSet', {
-                    time: time
-                });
+                return Client.client.intlGet(this.guildId, 'timerSet', { time: time });
             } break;
 
             case 'remove': {
-                const id = parseInt(command.replace(/ .*/, ''));
+                const id = parseInt(rest.replace(/ .*/, ''));
                 if (isNaN(id)) return Client.client.intlGet(this.guildId, 'timerIdInvalid');
 
                 if (!Object.keys(this.timers).map(Number).includes(id)) {
-                    return Client.client.intlGet(this.guildId, 'timerIdDoesNotExist', {
-                        id: id
-                    });
+                    return Client.client.intlGet(this.guildId, 'timerIdDoesNotExist', { id: id });
                 }
 
                 this.timers[id].timer.stop();
                 delete this.timers[id];
 
-                return Client.client.intlGet(this.guildId, 'timerRemoved', {
-                    id: id
-                });
+                return Client.client.intlGet(this.guildId, 'timerRemoved', { id: id });
             } break;
 
             default: {

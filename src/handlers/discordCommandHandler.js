@@ -35,13 +35,13 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}leader `)) {
             response = await rustplus.getCommandLeader(command, null);
         }
-        else if (commandLowerCase.startsWith(`${prefix}marker `)) {
+        else if (commandLowerCase.startsWith(`${prefix}marker `) || commandLowerCase === `${prefix}markers`) {
             response = 'Command is not possible through discord.';
         }
         else if (commandLowerCase === `${prefix}mute`) {
             response = rustplus.getCommandMute();
         }
-        else if (commandLowerCase.startsWith(`${prefix}note`)) {
+        else if (commandLowerCase.startsWith(`${prefix}note `) || commandLowerCase === `${prefix}notes`) {
             response = rustplus.getCommandNote(command);
         }
         else if (commandLowerCase === `${prefix}offline`) {
@@ -65,7 +65,7 @@ module.exports = {
         else if (commandLowerCase === `${prefix}time`) {
             response = rustplus.getCommandTime();
         }
-        else if (commandLowerCase.startsWith(`${prefix}timer `)) {
+        else if (commandLowerCase.startsWith(`${prefix}timer `) || commandLowerCase === `${prefix}timers`) {
             response = rustplus.getCommandTimer(command);
         }
         else if (commandLowerCase.startsWith(`${prefix}tr `)) {

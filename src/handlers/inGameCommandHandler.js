@@ -44,13 +44,13 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}leader`)) {
             rustplus.printCommandOutput(await rustplus.getCommandLeader(command, callerSteamId));
         }
-        else if (commandLowerCase.startsWith(`${prefix}marker `)) {
+        else if (commandLowerCase.startsWith(`${prefix}marker `) || commandLowerCase === `${prefix}markers`) {
             rustplus.printCommandOutput(await rustplus.getCommandMarker(command, callerSteamId));
         }
         else if (commandLowerCase === `${prefix}mute`) {
             rustplus.printCommandOutput(rustplus.getCommandMute());
         }
-        else if (commandLowerCase.startsWith(`${prefix}note`)) {
+        else if (commandLowerCase.startsWith(`${prefix}note `) || commandLowerCase === `${prefix}notes`) {
             rustplus.printCommandOutput(rustplus.getCommandNote(command));
         }
         else if (commandLowerCase === `${prefix}offline`) {
@@ -74,7 +74,7 @@ module.exports = {
         else if (commandLowerCase === `${prefix}time`) {
             rustplus.printCommandOutput(rustplus.getCommandTime());
         }
-        else if (commandLowerCase.startsWith(`${prefix}timer `)) {
+        else if (commandLowerCase.startsWith(`${prefix}timer `) || commandLowerCase === `${prefix}timers`) {
             rustplus.printCommandOutput(rustplus.getCommandTimer(command));
         }
         else if (commandLowerCase.startsWith(`${prefix}tr `)) {
