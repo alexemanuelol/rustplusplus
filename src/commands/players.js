@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
@@ -101,7 +102,7 @@ module.exports = {
 
 		const embed = DiscordEmbeds.getEmbed({
 			title: title,
-			color: '#ce412b'
+			color: Constants.COLOR_DEFAULT
 		});
 
 		let description = '';

@@ -51,7 +51,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: `${entity.name}${grid}`,
-            color: entity.active ? '#00ff40' : '#ff0040',
+            color: entity.active ? Constants.COLOR_ACTIVE : Constants.COLOR_INACTIVE,
             description: `**ID**: \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -75,7 +75,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: `${server.title}`,
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             description: `${server.description}`,
             thumbnail: `${server.img}`,
             fields: [{
@@ -116,7 +116,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: `${tracker.name}`,
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             description: `**Battlemetrics ID:** \`${tracker.battlemetricsId}\`\n` +
                 `${Client.client.intlGet(guildId, 'serverStatus', { status: serverStatus })}`,
             thumbnail: `${tracker.img}`,
@@ -134,7 +134,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: `${entity.name}${grid}`,
-            color: entity.active ? '#00ff40' : '#ce412b',
+            color: entity.active ? Constants.COLOR_ACTIVE : Constants.COLOR_DEFAULT,
             description: `**ID**: \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -157,7 +157,7 @@ module.exports = {
         if (!rustplus) {
             return module.exports.getEmbed({
                 title: `${entity.name}${grid}`,
-                color: '#ce412b',
+                color: Constants.COLOR_DEFAULT,
                 description: `${description}\n${Client.client.intlGet(guildId, 'statusNotConnectedToServer')}`,
                 thumbnail: `attachment://${entity.image}`,
                 footer: { text: `${entity.server}` }
@@ -167,7 +167,7 @@ module.exports = {
         if (rustplus && rustplus.storageMonitors[entityId].capacity === 0) {
             return module.exports.getEmbed({
                 title: `${entity.name}${grid}`,
-                color: '#ce412b',
+                color: Constants.COLOR_DEFAULT,
                 description:
                     `${description}\n${Client.client.intlGet(guildId, 'statusNotElectronicallyConnected')}`,
                 thumbnail: `attachment://${entity.image}`,
@@ -223,7 +223,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: `${entity.name}${grid}`,
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             description: description,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -265,7 +265,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: group.name,
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://smart_switch.png',
             footer: { text: `${instance.serverList[serverId].title}` },
             fields: [
@@ -288,7 +288,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: `${entity.name}${grid}`,
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             description: `**ID**: \`${entityId}\`\n` +
                 `${Client.client.intlGet(guildId, 'statusNotFound')} ${Constants.NOT_FOUND_EMOJI}`,
             thumbnail: `attachment://${entity.image}`,
@@ -309,7 +309,7 @@ module.exports = {
 
         const embed = module.exports.getEmbed({
             title: `${Client.client.intlGet(guildId, 'resultRecycling')}:`,
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://recycler.png',
             footer: { text: `${entity.server} | ${Client.client.intlGet(guildId, 'messageDeletedIn30')}` },
             description: `**${Client.client.intlGet(guildId, 'name')}** ` +
@@ -336,7 +336,7 @@ module.exports = {
             title: Client.client.intlGet(guildId, 'isDecaying', {
                 device: `${entity.name}${grid}`
             }),
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -353,7 +353,7 @@ module.exports = {
             title: Client.client.intlGet(guildId, 'isNoLongerConnected', {
                 device: `${entity.name}${grid}`
             }),
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -374,7 +374,7 @@ module.exports = {
                 device: `${entity.name}${grid}`,
                 user: user.user.username
             }),
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -395,7 +395,7 @@ module.exports = {
                 device: `${entity.name}${grid}`,
                 user: user.user.username
             }),
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -416,7 +416,7 @@ module.exports = {
                 device: `${entity.name}${grid}`,
                 user: user.user.username
             }),
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
@@ -432,7 +432,7 @@ module.exports = {
             title: Client.client.intlGet(guildId, 'allJustOfflineTracker', {
                 tracker: tracker.name
             }),
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             thumbnail: `${instance.trackers[trackerId].img}`,
             footer: { text: `${instance.trackers[trackerId].title}` },
             timestamp: true
@@ -447,7 +447,7 @@ module.exports = {
             title: Client.client.intlGet(guildId, 'anyJustOnlineTracker', {
                 tracker: tracker.name
             }),
-            color: '#00ff40',
+            color: Constants.COLOR_ACTIVE,
             thumbnail: `${instance.trackers[trackerId].img}`,
             footer: { text: `${instance.trackers[trackerId].title}` },
             timestamp: true
@@ -457,7 +457,7 @@ module.exports = {
     getNewsEmbed: function (guildId, data) {
         return module.exports.getEmbed({
             title: `${Client.client.intlGet(guildId, 'newsCap')}: ${data.title}`,
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             description: `${data.message}`,
             thumbnail: Constants.DEFAULT_SERVER_IMG,
             timestamp: true
@@ -466,7 +466,7 @@ module.exports = {
 
     getTeamLoginEmbed: function (guildId, body, png) {
         return module.exports.getEmbed({
-            color: '#00ff40',
+            color: Constants.COLOR_ACTIVE,
             timestamp: true,
             footer: { text: body.name },
             author: {
@@ -479,7 +479,7 @@ module.exports = {
 
     getPlayerDeathEmbed: function (data, body, png) {
         return module.exports.getEmbed({
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             thumbnail: png,
             title: data.title,
             timestamp: true,
@@ -490,7 +490,7 @@ module.exports = {
 
     getAlarmRaidAlarmEmbed: function (data, body) {
         return module.exports.getEmbed({
-            color: '#00ff40',
+            color: Constants.COLOR_ACTIVE,
             timestamp: true,
             footer: { text: body.name },
             title: data.title,
@@ -505,7 +505,7 @@ module.exports = {
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             thumbnail: `attachment://${entity.image}`,
             title: `${entity.name}${grid}`,
             footer: { text: entity.server },
@@ -521,7 +521,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             thumbnail: `attachment://${image}`,
             title: text,
             footer: { text: server.title },
@@ -532,7 +532,7 @@ module.exports = {
     getActionInfoEmbed: function (color, str, footer = null, ephemeral = true) {
         return {
             embeds: [module.exports.getEmbed({
-                color: color === 0 ? '#ce412b' : '#ff0040',
+                color: color === 0 ? Constants.COLOR_DEFAULT : Constants.COLOR_INACTIVE,
                 description: `\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``,
                 footer: footer !== null ? { text: footer } : null
             })],
@@ -544,7 +544,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
-            color: state ? '#ff0040' : '#00ff40',
+            color: state ? Constants.COLOR_INACTIVE : Constants.COLOR_ACTIVE,
             title: state ?
                 Client.client.intlGet(guildId, 'serverJustOffline') :
                 Client.client.intlGet(guildId, 'serverJustOnline'),
@@ -558,7 +558,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             title: Client.client.intlGet(guildId, 'wipeDetected'),
             image: `attachment://${guildId}_map_full.png`,
             timestamp: true,
@@ -570,7 +570,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
-            color: '#ff0040',
+            color: Constants.COLOR_INACTIVE,
             title: Client.client.intlGet(guildId, 'serverInvalid'),
             thumbnail: server.img,
             timestamp: true,
@@ -611,7 +611,7 @@ module.exports = {
 
         const embed = module.exports.getEmbed({
             title: Client.client.intlGet(guildId, 'serverInfo'),
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://server_info_logo.png',
             description: rustplus.info.name,
             fields: [
@@ -669,7 +669,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: Client.client.intlGet(guildId, 'eventInfo'),
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://event_info_logo.png',
             description: Client.client.intlGet(guildId, 'inGameEventInfo'),
             footer: { text: instance.serverList[rustplus.serverId].title },
@@ -724,7 +724,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             title: Client.client.intlGet(guildId, 'teamMemberInfo'),
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://team_info_logo.png',
             footer: { text: instance.serverList[rustplus.serverId].title },
             fields: [
@@ -748,7 +748,7 @@ module.exports = {
         }
 
         return module.exports.getEmbed({
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             description: `**${string}**`,
             footer: { text: `${instance.serverList[rustplus.serverId].title}` }
         });
@@ -774,7 +774,7 @@ module.exports = {
         if (hoster === '') hoster = Client.client.intlGet(guildId, 'empty');
 
         return module.exports.getEmbed({
-            color: '#ce412b',
+            color: Constants.COLOR_DEFAULT,
             title: Client.client.intlGet(guildId, 'fcmCredentials'),
             fields: [
                 { name: Client.client.intlGet(guildId, 'name'), value: names, inline: true },

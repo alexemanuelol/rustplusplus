@@ -49,5 +49,12 @@ module.exports = {
     LEADER_EMOJI: ':crown:',
     DAY_EMOJI: ':sunny:',
     NIGHT_EMOJI: ':crescent_moon:',
-    PAIRED_EMOJI: ':parking:'
+    PAIRED_EMOJI: ':parking:',
+
+    /* Colors */
+    COLOR_DEFAULT: '#ce412b',
+    COLOR_ACTIVE: '#00ff40',
+    COLOR_INACTIVE: '#ff0040',
+    COLOR_SETTINGS: '#861c0c',
+    COLOR_GREY: '#606060'
 }

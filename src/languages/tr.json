@@ -49,7 +49,7 @@
     "cargoShipDetectedSetting": "Kargo gemisi görüldüğünde bildirim gönder.",
     "cargoShipEgressSetting": "Kargo gemisi çıkış aşamasına geçtiğinde bildirim gönder.",
     "cargoShipEntersEgressStage": "Kargo gemisi {location} geldiğinde tahminen çıkış aşamasına geçecek.",
-    "cargoShipEntersMap": "Kargo gemisi haritaya {location konunmundan giriş yapacak.",
+    "cargoShipEntersMap": "Kargo gemisi haritaya {location} konunmundan giriş yapacak.",
     "cargoShipLeftMap": "Kargo gemisi {location} konumundan haritadan ayrıldı.",
     "cargoShipLeftSetting": "Kargo gemisi haritadan ayrıldığında bildirim gönder.",
     "cargoShipLocated": "Kargo gemisi {location} konumunda.",

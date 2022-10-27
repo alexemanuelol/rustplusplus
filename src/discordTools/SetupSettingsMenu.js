@@ -21,6 +21,7 @@
 const Discord = require('discord.js');
 const Path = require('path');
 
+const Constants = require('../util/constants.js');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
@@ -59,7 +60,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'selectLanguageSetting'),
             thumbnail: `attachment://settings_logo.png`,
             fields: [
@@ -76,7 +77,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'selectInGamePrefixSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -87,7 +88,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'selectTrademarkSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -98,7 +99,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'shouldCommandsEnabledSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -110,7 +111,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'shouldBotBeMutedSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -121,7 +122,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'inGameTeamNotificationsSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -132,7 +133,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'commandDelaySetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -143,7 +144,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'shouldSmartAlarmNotifyNotConnectedSetting'),
             thumbnail: `attachment://settings_logo.png`,
             fields: [
@@ -164,7 +165,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'shouldSmartAlarmsNotifyInGameSetting'),
             thumbnail: `attachment://settings_logo.png`,
         })],
@@ -176,7 +177,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'shouldLeaderCommandEnabledSetting'),
             thumbnail: `attachment://settings_logo.png`,
         })],
@@ -188,7 +189,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'whenTrackersNotifySetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -202,7 +203,7 @@ async function setupGeneralSettings(client, guildId, channel) {
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
-            color: '#861c0c',
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'mapWipeDetectedNotifySetting', { group: '@everyone' }),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -224,7 +225,7 @@ async function setupNotificationSettings(client, guildId, channel) {
     for (const setting in instance.notificationSettings) {
         await client.messageSend(channel, {
             embeds: [DiscordEmbeds.getEmbed({
-                color: '#861c0c',
+                color: Constants.COLOR_SETTINGS,
                 title: client.intlGet(guildId, setting),
                 thumbnail: `attachment://${instance.notificationSettings[setting].image}`
             })],

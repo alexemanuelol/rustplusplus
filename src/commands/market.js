@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
@@ -179,7 +180,7 @@ module.exports = {
                 }
 
                 const embed = DiscordEmbeds.getEmbed({
-                    color: '#ce412b',
+                    color: Constants.COLOR_DEFAULT,
                     title: client.intlGet(interaction.guildId, 'searchResult', { name: itemName }),
                     description: foundLines,
                     footer: { text: `${instance.serverList[rustplus.serverId].title}` }
@@ -337,7 +338,7 @@ module.exports = {
                 else {
                     await client.interactionEditReply(interaction, {
                         embeds: [DiscordEmbeds.getEmbed({
-                            color: '#ce412b',
+                            color: Constants.COLOR_DEFAULT,
                             title: client.intlGet(interaction.guildId, 'subscriptionList'),
                             footer: { text: instance.serverList[rustplus.serverId].title },
                             fields: [

@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
 const Path = require('path');
 
+const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
@@ -93,7 +94,7 @@ module.exports = {
 		const fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';
 		await client.interactionEditReply(interaction, {
 			embeds: [DiscordEmbeds.getEmbed({
-				color: '#ce412b',
+				color: Constants.COLOR_DEFAULT,
 				image: `attachment://${interaction.guildId}_map_${fileName}.png`,
 				footer: { text: instance.serverList[rustplus.serverId].title }
 			})],
