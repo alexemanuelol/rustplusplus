@@ -317,6 +317,7 @@
     "militaryTunnel": "Askeri Tünel",
     "miningOutpost": "Madencilik",
     "missingArguments": "Kayıp argümanlar.",
+    "missingPermission": "Bunu yapmak için izniniz yok.",
     "missingTimerMessage": "Kayıp zamanlayıcı mesajı.",
     "more": "daha",
     "morePlayers": "{players} ...{number} daha.",

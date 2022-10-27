@@ -337,6 +337,10 @@ class DiscordBot extends Discord.Client {
         }
         return true;
     }
+
+    isAdministrator(interaction) {
+        return interaction.member.permissions.has(Discord.PermissionFlagsBits.Administrator);
+    }
 }
 
 module.exports = DiscordBot;

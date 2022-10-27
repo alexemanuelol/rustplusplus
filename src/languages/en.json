@@ -317,6 +317,7 @@
     "militaryTunnel": "Military Tunnel",
     "miningOutpost": "Mining Outpost",
     "missingArguments": "Missing arguments.",
+    "missingPermission": "You don't have permission to do this.",
     "missingTimerMessage": "Missing timer message.",
     "more": "more",
     "morePlayers": "{players} ...{number} more.",

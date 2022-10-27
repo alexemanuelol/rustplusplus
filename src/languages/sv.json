@@ -317,6 +317,7 @@
     "militaryTunnel": "Militära Tunnlar",
     "miningOutpost": "Gruvutpost",
     "missingArguments": "Saknar argument.",
+    "missingPermission": "Du har inte behörighet att göra detta.",
     "missingTimerMessage": "Timermeddelande saknas.",
     "more": "mer",
     "morePlayers": "{players} ...{number} mer.",

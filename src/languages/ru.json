@@ -317,6 +317,7 @@
     "militaryTunnel": "Военный тоннель",
     "miningOutpost": "Склад",
     "missingArguments": "Отсутствует аргумент.",
+    "missingPermission": "У вас нет на это разрешения.",
     "missingTimerMessage": "Отсутствует сообщение таймера.",
     "more": "ещё",
     "morePlayers": "{players} ... ещё {number}.",

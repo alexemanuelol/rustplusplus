@@ -46,6 +46,14 @@ module.exports = {
 		const instance = client.getInstance(interaction.guildId);
 
 		if (!await client.validatePermissions(interaction)) return;
+
+		if (!client.isAdministrator(interaction)) {
+			const str = client.intlGet(interaction.guildId, 'missingPermission');
+			client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			client.log(client.intlGet(null, 'warningCap'), str);
+			return;
+		}
+
 		await interaction.deferReply({ ephemeral: true });
 
 		let role = null;

@@ -323,6 +323,11 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('ServerDelete', ''));
         const server = instance.serverList[ids.serverId];
 
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
+
         if (!server) {
             await interaction.message.delete();
             return;
@@ -406,6 +411,11 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchDelete', ''));
         const server = instance.serverList[ids.serverId];
 
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
+
         if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
             await interaction.message.delete();
             return;
@@ -448,6 +458,11 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('SmartAlarmDelete')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmDelete', ''));
         const server = instance.serverList[ids.serverId];
+
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
 
         if (!server || (server && !server.alarms.hasOwnProperty(ids.entityId))) {
             await interaction.message.delete();
@@ -516,6 +531,11 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardDelete', ''));
         const server = instance.serverList[ids.serverId];
 
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
+
         if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
             await interaction.message.delete();
             return;
@@ -559,6 +579,11 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorContainerDelete', ''));
         const server = instance.serverList[ids.serverId];
 
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
+
         if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
             await interaction.message.delete();
             return;
@@ -571,6 +596,11 @@ module.exports = async (client, interaction) => {
         client.setInstance(guildId, instance);
     }
     else if (interaction.customId === 'RecycleDelete') {
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
+
         await interaction.message.delete();
     }
     else if (interaction.customId.startsWith('GroupTurnOn') ||
@@ -612,6 +642,11 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('GroupDelete')) {
         const ids = JSON.parse(interaction.customId.replace('GroupDelete', ''));
         const server = instance.serverList[ids.serverId];
+
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
 
         if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
             await interaction.message.delete();
@@ -698,6 +733,11 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('TrackerDelete')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerDelete', ''));
         const tracker = instance.trackers[ids.trackerId];
+
+        if (!client.isAdministrator(interaction)) {
+            interaction.deferUpdate();
+            return;
+        }
 
         if (!tracker) {
             await interaction.message.delete();
