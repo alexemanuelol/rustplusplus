@@ -19,6 +19,7 @@
 */
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const Timer = require('../util/timer');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -58,6 +59,11 @@ module.exports = {
         const actionSwitches = [];
         for (const [entityId, content] of Object.entries(instance.serverList[serverId].switches)) {
             if (switches.includes(entityId)) {
+                if (rustplus.currentSwitchTimeouts.hasOwnProperty(entityId)) {
+                    clearTimeout(rustplus.currentSwitchTimeouts[entityId]);
+                    delete rustplus.currentSwitchTimeouts[entityId];
+                }
+
                 if (value && !content.active) {
                     actionSwitches.push(entityId);
                 }
@@ -96,5 +102,93 @@ module.exports = {
         if (actionSwitches.length !== 0) {
             await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
         }
+    },
+
+    smartSwitchGroupCommandHandler: async function (rustplus, client, command) {
+        const guildId = rustplus.guildId;
+        const serverId = rustplus.serverId;
+        const instance = client.getInstance(guildId);
+        const switchGroups = instance.serverList[serverId].switchGroups;
+        const commandLowerCase = command.toLowerCase();
+        const prefix = rustplus.generalSettings.prefix;
+
+        const onCap = client.intlGet(rustplus.guildId, 'onCap');
+        const offCap = client.intlGet(rustplus.guildId, 'offCap');
+        const notFoundCap = client.intlGet(rustplus.guildId, 'notFoundCap');
+
+        const groupId = Object.keys(switchGroups).find(e =>
+            command === `${prefix}${switchGroups[e].command}` ||
+            command.startsWith(`${prefix}${switchGroups[e].command} `));
+
+        if (!groupId) return false;
+
+        const groupCommand = `${prefix}${switchGroups[groupId].command}`;
+        const rest = command.replace(`${groupCommand} on`, '').replace(`${groupCommand} off`, '')
+            .replace(`${groupCommand}`, '').trim();
+
+        let active;
+        if (command.startsWith(`${groupCommand} on`)) {
+            active = true;
+        }
+        else if (command.startsWith(`${groupCommand} off`)) {
+            active = false;
+        }
+        else if (command === `${groupCommand}`) {
+            const switchStatus = switchGroups[groupId].switches.map(switchId => {
+                const { active, name, reachable } = instance.serverList[serverId].switches[switchId];
+                return { active, name, reachable }
+            });
+            const statusMessage = switchStatus.map(status =>
+                `${status.name}: ${status.reachable ? (status.active ? onCap : offCap) : notFoundCap}`).join(', ');
+            rustplus.printCommandOutput(`${client.intlGet(guildId, 'status')}: ${statusMessage}`);
+            return true;
+        }
+        else {
+            return true;
+        }
+
+        if (rustplus.currentSwitchTimeouts.hasOwnProperty(groupId)) {
+            clearTimeout(rustplus.currentSwitchTimeouts[groupId]);
+            delete rustplus.currentSwitchTimeouts[groupId];
+        }
+
+        const timeSeconds = Timer.getSecondsFromStringTime(rest);
+
+        let str = client.intlGet(guildId, 'turningGroupOnOff', {
+            group: switchGroups[groupId].name,
+            status: active ? onCap : offCap
+        });
+
+        if (timeSeconds === null) {
+            rustplus.printCommandOutput(str);
+            await module.exports.TurnOnOffGroup(client, rustplus, guildId, serverId, groupId, active);
+            return true;
+        }
+
+        const time = Timer.secondsToFullScale(timeSeconds);
+        str += client.intlGet(guildId, 'automaticallyTurnBackOnOff', {
+            status: active ? offCap : onCap,
+            time: time
+        });
+
+        rustplus.currentSwitchTimeouts[groupId] = setTimeout(async function () {
+            const instance = client.getInstance(guildId);
+            if (!instance.serverList.hasOwnProperty(serverId) ||
+                !instance.serverList[serverId].switchGroups.hasOwnProperty(groupId)) {
+                return;
+            }
+
+            const str = client.intlGet(guildId, 'automaticallyTurningBackOnOff', {
+                device: instance.serverList[serverId].switchGroups[groupId].name,
+                status: !active ? onCap : offCap
+            });
+            rustplus.printCommandOutput(str);
+
+            await module.exports.TurnOnOffGroup(client, rustplus, guildId, serverId, groupId, !active);
+        }, timeSeconds * 1000);
+
+        rustplus.printCommandOutput(str);
+        await module.exports.TurnOnOffGroup(client, rustplus, guildId, serverId, groupId, active);
+        return true;
     },
 }

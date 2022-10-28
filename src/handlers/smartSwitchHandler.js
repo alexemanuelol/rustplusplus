@@ -20,6 +20,7 @@
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
+const Timer = require('../util/timer');
 
 module.exports = {
     handler: async function (rustplus, client, time) {
@@ -171,5 +172,149 @@ module.exports = {
         for (let groupId of groupsId) {
             await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
         }
+    },
+
+    smartSwitchCommandHandler: async function (rustplus, client, command) {
+        const guildId = rustplus.guildId;
+        const serverId = rustplus.serverId;
+        const instance = client.getInstance(guildId);
+        const switches = instance.serverList[serverId].switches;
+        const commandLowerCase = command.toLowerCase();
+        const prefix = rustplus.generalSettings.prefix;
+
+        const onCap = client.intlGet(guildId, 'onCap');
+        const offCap = client.intlGet(guildId, 'offCap');
+
+        const entityId = Object.keys(switches).find(e =>
+            command === `${prefix}${switches[e].command}` ||
+            command.startsWith(`${prefix}${switches[e].command} `));
+
+        if (!entityId) return false;
+
+        const entityCommand = `${prefix}${switches[entityId].command}`;
+        const rest = command.replace(`${entityCommand} on`, '').replace(`${entityCommand} off`, '')
+            .replace(`${entityCommand}`, '').trim();
+
+        let active;
+        if (command.startsWith(`${entityCommand} on`)) {
+            if (!switches[entityId].active) {
+                active = true;
+            }
+            else {
+                return true;
+            }
+        }
+        else if (command.startsWith(`${entityCommand} off`)) {
+            if (switches[entityId].active) {
+                active = false;
+            }
+            else {
+                return true;
+            }
+        }
+        else if (command === `${entityCommand} status`) {
+            const info = await rustplus.getEntityInfoAsync(entityId);
+            if (!(await rustplus.isResponseValid(info))) {
+                switches[entityId].reachable = false;
+                client.setInstance(guildId, instance);
+                DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+                SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(client, guildId, serverId, entityId);
+
+                rustplus.printCommandOutput(client.intlGet(guildId, 'noCommunicationSmartSwitch', {
+                    name: switches[entityId].name
+                }));
+                return true;
+            }
+
+            rustplus.printCommandOutput(client.intlGet(guildId, 'deviceIsCurrentlyOnOff', {
+                device: switches[entityId].name,
+                status: info.entityInfo.payload.value ? onCap : offCap
+            }));
+            return true;
+        }
+        else if (command.startsWith(`${entityCommand}`)) {
+            active = !switches[entityId].active;
+        }
+        else {
+            return true;
+        }
+
+        if (rustplus.currentSwitchTimeouts.hasOwnProperty(entityId)) {
+            clearTimeout(rustplus.currentSwitchTimeouts[entityId]);
+            delete rustplus.currentSwitchTimeouts[entityId];
+        }
+
+        const timeSeconds = Timer.getSecondsFromStringTime(rest);
+
+        module.exports.smartSwitchCommandTurnOnOff(rustplus, client, entityId, active);
+
+        if (!switches[entityId].reachable) return true;
+
+        let str = client.intlGet(guildId, 'deviceWasTurnedOnOff', {
+            device: switches[entityId].name,
+            status: active ? onCap : offCap
+        });
+
+        if (timeSeconds === null) {
+            rustplus.printCommandOutput(str);
+            return true;
+        }
+
+        const time = Timer.secondsToFullScale(timeSeconds);
+        str += client.intlGet(guildId, 'automaticallyTurnBackOnOff', {
+            status: active ? offCap : onCap,
+            time: time
+        });
+
+        rustplus.currentSwitchTimeouts[entityId] = setTimeout(async function () {
+            const instance = client.getInstance(guildId);
+            if (!instance.serverList[serverId].switches.hasOwnProperty(entityId)) return;
+
+            await module.exports.smartSwitchCommandTurnOnOff(rustplus, client, entityId, !active);
+
+            const str = client.intlGet(guildId, 'automaticallyTurningBackOnOff', {
+                device: instance.serverList[serverId].switches[entityId].name,
+                status: !active ? onCap : offCap
+            });
+
+            rustplus.printCommandOutput(str);
+        }, timeSeconds * 1000);
+
+        rustplus.printCommandOutput(str);
+        return true;
+    },
+
+    smartSwitchCommandTurnOnOff: async function (rustplus, client, entityId, active) {
+        const guildId = rustplus.guildId;
+        const serverId = rustplus.serverId;
+        const instance = client.getInstance(guildId);
+        const switches = instance.serverList[serverId].switches;
+
+        const prevActive = switches[entityId].active;
+        switches[entityId].active = active;
+        client.setInstance(guildId, instance);
+
+        rustplus.interactionSwitches.push(entityId);
+
+        const response = await rustplus.turnSmartSwitchAsync(entityId, active);
+        if (!(await rustplus.isResponseValid(response))) {
+            rustplus.printCommandOutput(client.intlGet(guildId, 'noCommunicationSmartSwitch', {
+                name: switches[entityId].name
+            }));
+            if (switches[entityId].reachable) {
+                await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+            }
+            switches[entityId].reachable = false;
+            switches[entityId].active = prevActive;
+
+            rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
+        }
+        else {
+            switches[entityId].reachable = true;
+        }
+        client.setInstance(guildId, instance);
+
+        DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(client, guildId, serverId, entityId);
     },
 }

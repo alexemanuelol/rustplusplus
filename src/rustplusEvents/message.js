@@ -69,8 +69,12 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
     message.broadcast.teamMessage.message.message =
         message.broadcast.teamMessage.message.message.replace(/^<color.+?<\/color>/g, '');
 
-    if (!(await CommandHandler.inGameCommandHandler(rustplus, client, message)) &&
-        !(message.broadcast.teamMessage.message.message.startsWith(instance.generalSettings.trademark))) {
+    const startsWithTrademark = message.broadcast.teamMessage.message.message
+        .startsWith(instance.generalSettings.trademark);
+
+    const isCommand = await CommandHandler.inGameCommandHandler(rustplus, client, message);
+
+    if (!isCommand && !startsWithTrademark) {
         TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
     }
 }
@@ -98,23 +102,23 @@ async function messageBroadcastEntityChangedSmartSwitch(rustplus, client, messag
 
     if (!server || (server && !server.switches[entityId])) return;
 
+    if (rustplus.interactionSwitches.includes(`${entityId}`)) {
+        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== `${entityId}`);
+        return;
+    }
+
     if (rustplus.currentSwitchTimeouts.hasOwnProperty(entityId)) {
         clearTimeout(rustplus.currentSwitchTimeouts[entityId]);
         delete rustplus.currentSwitchTimeouts[entityId];
     }
 
-    if (rustplus.interactionSwitches.includes(`${entityId}`)) {
-        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== `${entityId}`);
-    }
-    else {
-        const active = message.broadcast.entityChanged.payload.value;
-        server.switches[entityId].active = active;
-        client.setInstance(rustplus.guildId, instance);
+    const active = message.broadcast.entityChanged.payload.value;
+    server.switches[entityId].active = active;
+    client.setInstance(rustplus.guildId, instance);
 
-        DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, serverId, entityId);
-        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-            client, rustplus.guildId, serverId, entityId);
-    }
+    DiscordMessages.sendSmartSwitchMessage(rustplus.guildId, serverId, entityId);
+    SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+        client, rustplus.guildId, serverId, entityId);
 }
 
 async function messageBroadcastEntityChangedSmartAlarm(rustplus, client, message) {
