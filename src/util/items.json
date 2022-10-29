@@ -142,7 +142,7 @@
     "177226991": {
         "shortname": "scarecrow",
         "name": "Scarecrow",
-        "description": "Get into the halloween spirit with this decorate deployable item."
+        "description": "Get into the halloween spirit with this decorative deployable item."
     },
     "185586769": {
         "shortname": "innertube.horse",
@@ -188,6 +188,11 @@
         "shortname": "tshirt",
         "name": "T-Shirt",
         "description": "A t-shirt with very short sleeves."
+    },
+    "236677901": {
+        "shortname": "lumberjack.pickaxe",
+        "name": "Prototype Pickaxe",
+        "description": "A prototype field pickaxe. Useful for gathering ore from rocks."
     },
     "237239288": {
         "shortname": "pants",
@@ -303,11 +308,6 @@
         "shortname": "hosetool",
         "name": "Hose Tool",
         "description": "A tool used to make fluid connections between objects. Aim at an object and click on an input/output handle, then click on another object's input/output handle to form a connection."
-    },
-    "363467698": {
-        "shortname": "chocholate",
-        "name": "Chocolate Bar",
-        "description": "Chocolate Bar found as loot. Eating it provides a small boost to health, hunger, and thirst."
     },
     "390728933": {
         "shortname": "clone.yellow.berry",
@@ -642,7 +642,7 @@
     "833533164": {
         "shortname": "box.wooden.large",
         "name": "Large Wood Box",
-        "description": "Keep your things in this wooden storage box. Stores up to 30 items."
+        "description": "Keep your things in this wooden storage box. Stores up to 48 items."
     },
     "835042040": {
         "shortname": "frankensteins.monster.02.legs",
@@ -678,6 +678,11 @@
         "shortname": "green.berry",
         "name": "Green Berry",
         "description": "A green berry. Can be eaten or used in mixing table recipes to create teas."
+    },
+    "861513346": {
+        "shortname": "hazmatsuit.lumberjack",
+        "name": "Lumberjack Suit",
+        "description": "A Lumberjack Suit"
     },
     "866332017": {
         "shortname": "sign.neon.xl",
@@ -938,6 +943,11 @@
         "shortname": "electric.andswitch",
         "name": "AND Switch",
         "description": "A logic gate that allows electrical passthrough if BOTH inputs receives power, passthrough amount is the greater of either power source"
+    },
+    "1176355476": {
+        "shortname": "concretehatchet",
+        "name": "Concrete Hatchet",
+        "description": "A salvaged piece of concrete and rebar which can be used to harvest wood"
     },
     "1177596584": {
         "shortname": "elevator",
@@ -2112,7 +2122,7 @@
     "-180129657": {
         "shortname": "box.wooden",
         "name": "Wood Storage Box",
-        "description": "Keep your things in this wooden storage box. Stores up to 12 items."
+        "description": "Keep your things in this wooden storage box. Stores up to 18 items."
     },
     "-761829530": {
         "shortname": "burlap.shoes",
@@ -2164,6 +2174,11 @@
         "name": "Chinese Lantern",
         "description": "A decorative Paper lantern"
     },
+    "-965336208": {
+        "shortname": "chocolate",
+        "name": "Chocolate Bar",
+        "description": "Chocolate Bar found as loot. Eating it provides a small boost to health, hunger, and thirst."
+    },
     "-778875547": {
         "shortname": "clone.corn",
         "name": "Corn Clone",
@@ -2198,6 +2213,11 @@
         "shortname": "computerstation",
         "name": "Computer Station",
         "description": "A Computer station for remote control access"
+    },
+    "-1360171080": {
+        "shortname": "concretepickaxe",
+        "name": "Concrete Pickaxe",
+        "description": "A salvaged piece of concrete and rebar with a sharp edge. Can be used to harvest Stone, Metal ore and Sulfur ore."
     },
     "-321733511": {
         "shortname": "crude.oil",
@@ -2905,10 +2925,20 @@
         "name": "Lumberjack Hoodie",
         "description": "A Lumberjack Hoodie"
     },
+    "-399173933": {
+        "shortname": "lumberjack.hatchet",
+        "name": "Prototype Hatchet",
+        "description": "A prototype field hatchet, useful for gathering wood"
+    },
     "-1961560162": {
         "shortname": "lunar.firecrackers",
         "name": "Firecracker String",
         "description": "Happy Lunar New Year!"
+    },
+    "-2026042603": {
+        "shortname": "mace.baseballbat",
+        "name": "Baseball Bat",
+        "description": ""
     },
     "-1966748496": {
         "shortname": "mace",
@@ -2949,6 +2979,11 @@
         "shortname": "megaphone",
         "name": "Megaphone",
         "description": "A megaphone that lets you broadcast your voice. [attack] to activate your voice."
+    },
+    "-1334569149": {
+        "shortname": "metal.facemask.hockey",
+        "name": "Hockey Mask",
+        "description": "A protective facemask which provides the user with excellent head protection from all forms of attacks."
     },
     "-194953424": {
         "shortname": "metal.facemask",
@@ -3478,7 +3513,7 @@
     "-596876839": {
         "shortname": "spraycan",
         "name": "Spray Can",
-        "description": "Use the Spray Can to leave Tags or reskin your items. Press [attack] to spray and [attack2] to reskin items. Insert spray attachments to spray in the world."
+        "description": "Use the Spray Can to leave Tags or reskin your items. Press [attack] to spray and [attack2] to reskin items."
     },
     "-1366326648": {
         "shortname": "spraycandecal",
@@ -3569,6 +3604,11 @@
         "shortname": "tool.instant_camera",
         "name": "Instant Camera",
         "description": "An instant camera. Take photos with primary fire, zoom in and out with secondary fire, and change focus mode with reload."
+    },
+    "-1175656359": {
+        "shortname": "torch.torch.skull",
+        "name": "Cultist Deer Torch",
+        "description": "Cultist Deer Torch"
     },
     "-582782051": {
         "shortname": "trap.bear",
