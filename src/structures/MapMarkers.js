@@ -90,8 +90,6 @@ class MapMarkers {
 
         /* Vending Machine variables */
         this.knownVendingMachines = [];
-        this.subscribedItemsId = [];
-        this.foundItems = [];
 
         this.updateMapMarkers(mapMarkers);
     }
@@ -447,44 +445,6 @@ class MapMarkers {
 
             vendingMachine.id = marker.id;
             vendingMachine.location = pos;
-        }
-
-        let vendingMachines = this.getMarkersOfType(this.types.VendingMachine, mapMarkers.markers);
-        for (let vendingMachine of vendingMachines) {
-            let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(vendingMachine.x, vendingMachine.y, mapSize, this.rustplus);
-
-            for (let order of vendingMachine.sellOrders) {
-                if (this.subscribedItemsId.includes(order.itemId) ||
-                    this.subscribedItemsId.includes(order.currencyId)) {
-                    if (!this.isAlreadyInFoundItems(vendingMachine.x, vendingMachine.y, order)) {
-                        if (order.amountInStock >= 1) {
-                            this.addToFoundItems(vendingMachine.x, vendingMachine.y, order);
-
-                            let item = '';
-                            if (this.subscribedItemsId.includes(order.itemId) &&
-                                this.subscribedItemsId.includes(order.currencyId)) {
-                                item = this.client.items.getName(order.itemId) +
-                                    ` ${this.client.intlGet(this.rustplus.guildId, 'and')} `;
-                                item += this.client.items.getName(order.currencyId);
-                            }
-                            else if (this.subscribedItemsId.includes(order.itemId)) {
-                                item = this.client.items.getName(order.itemId);
-                            }
-                            else if (this.subscribedItemsId.includes(order.currencyId)) {
-                                item = this.client.items.getName(order.currencyId);
-                            }
-
-                            this.rustplus.sendEvent(
-                                this.rustplus.notificationSettings.vendingMachineDetectedSetting,
-                                this.client.intlGet(this.rustplus.guildId, 'itemFoundInVendingMachine', {
-                                    item: item,
-                                    location: pos.string
-                                }));
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -1355,37 +1315,6 @@ class MapMarkers {
         }
 
         return null;
-    }
-
-    isAlreadyInFoundItems(x, y, order) {
-        return this.foundItems.some(e =>
-            e.x === x &&
-            e.y === y &&
-            e.itemId === order.itemId &&
-            e.quantity === order.quantity &&
-            e.currencyId === order.currencyId &&
-            e.costPerItem === order.costPerItem);
-    }
-
-    addToFoundItems(x, y, order) {
-        this.foundItems.push({
-            x: x,
-            y: y,
-            itemId: order.itemId,
-            quantity: order.quantity,
-            currencyId: order.currencyId,
-            costPerItem: order.costPerItem
-        });
-    }
-
-    addItemToSubscribeTo(id) {
-        if (!this.subscribedItemsId.includes(id)) {
-            this.subscribedItemsId.push(id);
-        }
-    }
-
-    removeItemFromSubscription(id) {
-        this.subscribedItemsId = this.subscribedItemsId.filter(e => e !== id);
     }
 
     reset() {

@@ -14,5 +14,6 @@
     "connectionNotify": false,
     "afkNotify": false,
     "deathNotify": false,
-    "mapWipeNotifyEveryone": false
+    "mapWipeNotifyEveryone": false,
+    "itemAvailableInVendingMachineNotifyInGame": true
 }

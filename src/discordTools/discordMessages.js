@@ -475,4 +475,16 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
+
+    sendItemAvailableInVendingMachineMessage: async function (rustplus, str) {
+        const instance = Client.client.getInstance(rustplus.guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getItemAvailableVendingMachineEmbed(
+                rustplus.guildId, rustplus.serverId, str
+            )]
+        }
+
+        await module.exports.sendMessage(rustplus.guildId, content, null, instance.channelId.activity);
+    },
 }

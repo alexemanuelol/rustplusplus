@@ -231,14 +231,7 @@ module.exports = {
                 }
                 const itemName = client.items.getName(itemId);
 
-                /* TODO: Set a variable in rustplus to indicate first loop
-                   Which means that we should NOT notify all found items at first loop,
-                   Only found items AFTER the first loop.
-                   Also, Create an object in rustplus with itemId as key, content should
-                   be an array of all found items in vending machines. If an item is removed
-                   from the vending machine, remove it from the object. */
-
-                if (instance.marketSubscribeItemIds.includes(itemId)) {
+                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
                     const str = client.intlGet(interaction.guildId, 'alreadySubscribedToItem', {
                         name: itemName
                     });
@@ -247,7 +240,8 @@ module.exports = {
                     rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
                 }
                 else {
-                    instance.marketSubscribeItemIds.push(itemId);
+                    instance.marketSubscriptionListItemIds.push(itemId);
+                    rustplus.firstPollItems.push(itemId);
                     client.setInstance(interaction.guildId, instance);
 
                     const str = client.intlGet(interaction.guildId, 'justSubscribedToItem', {
@@ -299,10 +293,8 @@ module.exports = {
                 }
                 const itemName = client.items.getName(itemId);
 
-                /* TODO: Remove item from object in rustplus */
-
-                if (instance.marketSubscribeItemIds.includes(itemId)) {
-                    instance.marketSubscribeItemIds = instance.marketSubscribeItemIds.filter(e => e !== itemId);
+                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
+                    instance.marketSubscriptionListItemIds = instance.marketSubscriptionListItemIds.filter(e => e !== itemId);
                     client.setInstance(interaction.guildId, instance);
 
                     const str = client.intlGet(interaction.guildId, 'removedSubscribeItem', {
@@ -325,7 +317,7 @@ module.exports = {
             case 'list': {
                 let names = '';
                 let ids = '';
-                for (let item of instance.marketSubscribeItemIds) {
+                for (let item of instance.marketSubscriptionListItemIds) {
                     names += `\`${client.items.getName(item)}\`\n`;
                     ids += `\`${item}\`\n`;
                 }

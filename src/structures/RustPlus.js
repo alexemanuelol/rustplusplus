@@ -72,6 +72,10 @@ class RustPlus extends RustPlusLib {
         this.smartAlarmIntervalCounter = 20;        /* Counter to decide when smart alarms should be updated */
         this.interactionSwitches = [];              /* Stores the ids of smart switches that are interacted in-game. */
 
+        this.foundSubscriptionItems = [];           /* Stores found vending machine items that are subscribed to */
+        this.firstPollItems = [];                   /* When a new item is added to subscription list, dont notify
+                                                       about the already available items. */
+
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
         this.info = null;           /* Stores the Info structure. */

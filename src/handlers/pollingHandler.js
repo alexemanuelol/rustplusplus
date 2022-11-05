@@ -28,6 +28,7 @@ const Team = require('../structures/Team');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Time = require('../structures/Time');
 const TimeHandler = require('../handlers/timeHandler.js');
+const VendingMachines = require('../handlers/vendingMachineHandler.js');
 
 module.exports = {
     pollingHandler: async function (rustplus, client) {
@@ -57,6 +58,7 @@ module.exports = {
         SmartSwitchHandler.handler(rustplus, client, time.time);
         TimeHandler.handler(rustplus, client, time.time);
         TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
+        VendingMachines.handler(rustplus, client, mapMarkers.mapMarkers);
 
         /* Update modules */
         rustplus.time.updateTime(time.time);

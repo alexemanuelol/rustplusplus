@@ -211,6 +211,18 @@ async function setupGeneralSettings(client, guildId, channel) {
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
+
+    await client.messageSend(channel, {
+        embeds: [DiscordEmbeds.getEmbed({
+            color: Constants.COLOR_SETTINGS,
+            title: client.intlGet(guildId, 'itemAvailableNotifyInGameSetting'),
+            thumbnail: `attachment://settings_logo.png`
+        })],
+        components: [DiscordButtons.getItemAvailableNotifyInGameButton(guildId,
+            instance.generalSettings.itemAvailableInVendingMachineNotifyInGame)],
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
+    });
 }
 
 async function setupNotificationSettings(client, guildId, channel) {
