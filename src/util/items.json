@@ -649,6 +649,11 @@
         "name": "Medium Frankenstein Legs",
         "description": "A balanced set of legs.\n\nCombined at a Frankenstein Table to create your very own monster."
     },
+    "838308300": {
+        "shortname": "weapon.mod.burstmodule",
+        "name": "Burst Module",
+        "description": "Forces the weapon to fire in 3 round bursts."
+    },
     "838831151": {
         "shortname": "clone.blue.berry",
         "name": "Blue Berry Clone",
@@ -1743,6 +1748,11 @@
         "shortname": "seed.black.berry",
         "name": "Black Berry Seed",
         "description": "These black berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+    },
+    "1914691295": {
+        "shortname": "pistol.prototype17",
+        "name": "Prototype 17",
+        "description": "A burst fire prototype pistol"
     },
     "1917703890": {
         "shortname": "horsemeat.burned",
@@ -2844,7 +2854,6 @@
         "name": "Inner Tube",
         "description": "An inflated tube for aquatic activities."
     },
-    "undefined": {},
     "-1163532624": {
         "shortname": "jacket",
         "name": "Jacket",
