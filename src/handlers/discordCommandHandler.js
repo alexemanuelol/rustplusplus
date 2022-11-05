@@ -79,6 +79,9 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}prox`)) {
             response = 'Command is not possible through discord.';
         }
+        else if (commandLowerCase.startsWith(`${prefix}send `)) {
+            response = 'Command is not possible through discord.';
+        }
         else if (commandLowerCase === `${prefix}small`) {
             response = rustplus.getCommandSmall();
         }

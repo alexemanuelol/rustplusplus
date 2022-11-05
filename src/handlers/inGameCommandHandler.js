@@ -87,6 +87,9 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}prox`)) {
             rustplus.printCommandOutput(await rustplus.getCommandProx(command, callerSteamId));
         }
+        else if (commandLowerCase.startsWith(`${prefix}send `)) {
+            rustplus.printCommandOutput(await rustplus.getCommandSend(command, callerName));
+        }
         else if (commandLowerCase === `${prefix}small`) {
             rustplus.printCommandOutput(rustplus.getCommandSmall());
         }

@@ -25,7 +25,10 @@ const Translate = require('translate');
 
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordTools = require('../discordTools/discordTools.js');
+const InstanceUtils = require('../util/instanceUtils.js');
 const Languages = require('../util/languages.js');
 const Logger = require('./Logger.js');
 const Map = require('../util/map.js');
@@ -1317,6 +1320,49 @@ class RustPlus extends RustPlusLib {
 
         return Client.client.intlGet(this.guildId, 'couldNotIdentifyMember', {
             name: memberName
+        });
+    }
+
+    async getCommandSend(command, callerName) {
+        const credentials = InstanceUtils.readCredentialsFile(this.guildId);
+        const prefix = this.generalSettings.prefix;
+
+        command = command.slice(`${prefix}send `.length).trim();
+        const name = command.replace(/ .*/, '');
+        const message = command.slice(name.length + 1).trim();
+
+        if (name === '' || message === '') {
+            return Client.client.intlGet(this.guildId, 'missingArguments');
+        }
+
+        for (const player of this.team.players) {
+            if (player.name.includes(name)) {
+                if (!(player.steamId in credentials)) {
+                    return Client.client.intlGet(this.guildId, 'userNotRegistered', {
+                        user: player.name
+                    });
+                }
+
+                const discordUserId = credentials[player.steamId].discordUserId;
+                const user = await DiscordTools.getUserById(this.guildId, discordUserId);
+
+                const content = {
+                    embeds: [DiscordEmbeds.getUserSendEmbed(this.guildId, this.serverId, callerName, message)]
+                }
+
+                if (user) {
+                    await Client.client.messageSend(user, content);
+                    return Client.client.intlGet(this.guildId, 'messageWasSent');
+                }
+
+                return Client.client.intlGet(this.guildId, 'couldNotFindUser', {
+                    userId: discordUserId
+                });
+            }
+        }
+
+        return Client.client.intlGet(this.guildId, 'couldNotIdentifyMember', {
+            name: name
         });
     }
 

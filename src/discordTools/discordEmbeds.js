@@ -795,4 +795,15 @@ module.exports = {
             }
         });
     },
+
+    getUserSendEmbed: function (guildId, serverId, sender, str) {
+        const instance = Client.client.getInstance(guildId);
+        const server = instance.serverList[serverId];
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            footer: { text: server.title },
+            description: `**${sender}**: ${str}`
+        });
+    },
 }
