@@ -79,6 +79,9 @@ class RustPlus extends RustPlusLib {
         this.firstPollItems = [];                   /* When a new item is added to subscription list, dont notify
                                                        about the already available items. */
 
+        this.allConnections = [];
+        this.playerConnections = new Object();
+
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
         this.info = null;           /* Stores the Info structure. */
@@ -168,6 +171,25 @@ class RustPlus extends RustPlusLib {
     isServerAvailable() {
         const instance = Client.client.getInstance(this.guildId);
         return instance.serverList.hasOwnProperty(this.serverId);
+    }
+
+    updateConnections(steamId, str) {
+        const time = Timer.getCurrentDateTime();
+        const savedString = `${time} - ${str}`;
+
+        if (this.allConnections.length === 10) {
+            this.allConnections.pop();
+        }
+        this.allConnections.unshift(savedString)
+
+        if (!this.playerConnections.hasOwnProperty(steamId)) {
+            this.playerConnections[steamId] = [];
+        }
+
+        if (this.playerConnections[steamId].length === 10) {
+            this.playerConnections[steamId].pop();
+        }
+        this.playerConnections[steamId].unshift(savedString);
     }
 
     deleteThisRustplusInstance() {
@@ -756,6 +778,59 @@ class RustPlus extends RustPlusLib {
         }
 
         return strings;
+    }
+
+    getCommandConnection(command) {
+        const prefix = this.generalSettings.prefix;
+        if (command.toLowerCase() === `${prefix}connections`) {
+            if (this.allConnections.length === 0) {
+                return Client.client.intlGet(this.guildId, 'noRegisteredConnectionEvents');
+            }
+
+            const strings = [];
+            let counter = 0;
+            for (const event of this.allConnections) {
+                if (counter === 5) break;
+
+                strings.push(event);
+                counter += 1;
+            }
+
+            return strings;
+        }
+        else if (command.toLowerCase().startsWith(`${prefix}connection `)) {
+            const name = command.slice(`${prefix}connection `.length).trim();
+            for (const player of this.team.players) {
+                if (player.name.includes(name)) {
+                    if (!this.playerConnections.hasOwnProperty(player.steamId)) {
+                        this.playerConnections[player.steamId] = [];
+                    }
+
+                    if (this.playerConnections[player.steamId].length === 0) {
+                        return Client.client.intlGet(this.guildId, 'noRegisteredConnectionEventsUser', {
+                            user: player.name
+                        });
+                    }
+
+                    const strings = [];
+                    let counter = 0;
+                    for (const event of this.playerConnections[player.steamId]) {
+                        if (counter === 5) break;
+
+                        strings.push(event);
+                        counter += 1;
+                    }
+
+                    return strings;
+                }
+            }
+
+            return Client.client.intlGet(this.guildId, 'couldNotFindTeammate', {
+                name: name
+            });
+        }
+
+        return null;
     }
 
     getCommandCrate(isInfoChannel = false) {

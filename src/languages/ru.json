@@ -342,6 +342,8 @@
     "noOneIsAfk": "Никого нет в  AFK.",
     "noOneIsOffline": "Никого нет в offline.",
     "noOneIsOnline": "Никого нет в online.",
+    "noRegisteredConnectionEvents": "Пока нет зарегистрированных событий подключения.",
+    "noRegisteredConnectionEventsUser": "Нет зарегистрированных событий подключения для {user}.",
     "noRegisteredMarkers": "Нет сохраненных маркеров.",
     "noSavedNotes": "Нет сохраненных заметок.",
     "noToolCupboardWereFound": "Нет подключенных шкафов.",

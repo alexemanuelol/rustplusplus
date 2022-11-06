@@ -43,6 +43,9 @@ module.exports = {
         else if (commandLowerCase === `${prefix}chinook`) {
             response = rustplus.getCommandChinook();
         }
+        else if (commandLowerCase.startsWith(`${prefix}connection `) || commandLowerCase === `${prefix}connections`) {
+            response = rustplus.getCommandConnection(command);
+        }
         else if (commandLowerCase === `${prefix}crate`) {
             response = rustplus.getCommandCrate();
         }

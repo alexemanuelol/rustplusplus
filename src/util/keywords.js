@@ -25,6 +25,8 @@ module.exports = {
         'bradley',
         'cargo',
         'chinook',
+        'connection',
+        'connections',
         'crate',
         'heli',
         'large',

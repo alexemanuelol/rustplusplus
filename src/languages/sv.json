@@ -342,6 +342,8 @@
     "noOneIsAfk": "Ingen är AFK.",
     "noOneIsOffline": "Ingen är inte ansluten.",
     "noOneIsOnline": "Ingen är ansluten.",
+    "noRegisteredConnectionEvents": "Inga registrerade anslutningshändelser ännu.",
+    "noRegisteredConnectionEventsUser": "Inga registrerade anslutningshändelser för {user}.",
     "noRegisteredMarkers": "Inga registrerade markörer.",
     "noSavedNotes": "Inga sparade anteckningar.",
     "noToolCupboardWereFound": "Inga verktygsskåps monitorer hittades.",

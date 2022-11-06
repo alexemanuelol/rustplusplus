@@ -342,6 +342,8 @@
     "noOneIsAfk": "AFK birisi yok.",
     "noOneIsOffline": "Çevrimdışı birisi yok.",
     "noOneIsOnline": "Çevrimiçi birisi yok.",
+    "noRegisteredConnectionEvents": "Henüz kayıtlı bağlantı olayı yok.",
+    "noRegisteredConnectionEventsUser": "{user} için kayıtlı bağlantı olayı yok.",
     "noRegisteredMarkers": "Kayıtlı bir işaretçi yok.",
     "noSavedNotes": "Kayıtlı bir not yok.",
     "noToolCupboardWereFound": "Alet dolabı monitörü yok.",

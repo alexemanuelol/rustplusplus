@@ -45,6 +45,7 @@ module.exports = {
                 guildId, serverId, Constants.COLOR_GREY, str, steamId);
             if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
             rustplus.log(client.intlGet(null, 'infoCap'), str);
+            rustplus.updateConnections(steamId, str);
         }
 
         for (const steamId of newPlayers) {
@@ -55,6 +56,7 @@ module.exports = {
                         guildId, serverId, Constants.COLOR_ACTIVE, str, steamId);
                     if (instance.generalSettings.connectionNotify) await rustplus.sendTeamMessageAsync(str);
                     rustplus.log(client.intlGet(null, 'infoCap'), str);
+                    rustplus.updateConnections(steamId, str);
                 }
             }
         }
@@ -105,6 +107,7 @@ module.exports = {
                                 name: player.name,
                                 server: server.title
                             }));
+                        rustplus.updateConnections(player.steamId, str);
                     }
 
                     if (player.isGoneOffline(playerUpdated)) {
@@ -117,6 +120,7 @@ module.exports = {
                                 name: player.name,
                                 server: server.title
                             }));
+                        rustplus.updateConnections(player.steamId, str);
                     }
                     break;
                 }

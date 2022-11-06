@@ -205,4 +205,17 @@ module.exports = {
             setTimeout(resolve, ms);
         });
     },
+
+    getCurrentDateTime: function () {
+        const newDate = new Date();
+
+        const date = ('0' + newDate.getDate()).slice(-2);
+        const month = ('0' + (newDate.getMonth() + 1)).slice(-2);
+        const year = newDate.getFullYear();
+        const hours = newDate.getHours();
+        const minutes = newDate.getMinutes();
+        const seconds = newDate.getSeconds();
+
+        return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+    },
 }
