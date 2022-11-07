@@ -50,7 +50,7 @@ module.exports = {
             response = rustplus.getCommandCrate();
         }
         else if (commandLowerCase.startsWith(`${prefix}death`)) {
-            response = 'Command is not possible through discord.';
+            response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
         else if (commandLowerCase === `${prefix}heli`) {
             response = rustplus.getCommandHeli();
@@ -62,7 +62,7 @@ module.exports = {
             response = await rustplus.getCommandLeader(command, null);
         }
         else if (commandLowerCase.startsWith(`${prefix}marker `) || commandLowerCase === `${prefix}markers`) {
-            response = 'Command is not possible through discord.';
+            response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
         else if (commandLowerCase === `${prefix}mute`) {
             response = rustplus.getCommandMute();
@@ -83,10 +83,10 @@ module.exports = {
             response = rustplus.getCommandPop();
         }
         else if (commandLowerCase.startsWith(`${prefix}prox`)) {
-            response = 'Command is not possible through discord.';
+            response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
         else if (commandLowerCase.startsWith(`${prefix}send `)) {
-            response = 'Command is not possible through discord.';
+            response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
         else if (commandLowerCase === `${prefix}small`) {
             response = rustplus.getCommandSmall();

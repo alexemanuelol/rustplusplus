@@ -67,6 +67,7 @@
     "comma": "Virgül",
     "commandCap": "KOMUT",
     "commandDelaySetting": "Komut gecikmesi olsun mu? ne kadar olsun?",
+    "commandNotPossibleDiscord": "Discord üzerinden komut verilemez.",
     "commandsAlarmDesc": "Akıllı Alarm işlemleri.",
     "commandsAlarmEditDesc": "Akıllı Alarm açıklamasını düzenle.",
     "commandsAlarmEditIdDesc": "Akıllı Alarm Kimliği.",

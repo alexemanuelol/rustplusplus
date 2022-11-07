@@ -67,6 +67,7 @@
     "comma": "Запятая",
     "commandCap": "КОМАНДА",
     "commandDelaySetting": "Должна ли быть задержка команды? Сколько?",
+    "commandNotPossibleDiscord": "Командование через discord невозможно.",
     "commandsAlarmDesc": "Операции для Умных сигнализаций.",
     "commandsAlarmEditDesc": "Редактирование свойств умной сигнализации.",
     "commandsAlarmEditIdDesc": "Укажите ID умной сигнализации.",

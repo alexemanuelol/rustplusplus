@@ -67,6 +67,7 @@
     "comma": "Comma",
     "commandCap": "COMMAND",
     "commandDelaySetting": "Should there be a command delay? How long?",
+    "commandNotPossibleDiscord": "Command is not possible through discord.",
     "commandsAlarmDesc": "Operations on Smart Alarms.",
     "commandsAlarmEditDesc": "Edit the properties of a Smart Alarm.",
     "commandsAlarmEditIdDesc": "The ID of the Smart Alarm.",

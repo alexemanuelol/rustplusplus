@@ -67,6 +67,7 @@
     "comma": "Kommatecken",
     "commandCap": "KOMMANDO",
     "commandDelaySetting": "Bör det finnas en kommandofördröjning? Hur länge?",
+    "commandNotPossibleDiscord": "Kommandot är inte möjligt genom discord.",
     "commandsAlarmDesc": "Operationer på Smarta Larm.",
     "commandsAlarmEditDesc": "Redigera egenskaperna för ett Smart Larm.",
     "commandsAlarmEditIdDesc": "ID:t för det Smarta Larmet.",
