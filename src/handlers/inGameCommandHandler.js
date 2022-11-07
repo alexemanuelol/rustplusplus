@@ -57,6 +57,9 @@ module.exports = {
         else if (commandLowerCase === `${prefix}crate`) {
             rustplus.printCommandOutput(rustplus.getCommandCrate());
         }
+        else if (commandLowerCase.startsWith(`${prefix}death`)) {
+            rustplus.printCommandOutput(await rustplus.getCommandDeath(command, callerSteamId));
+        }
         else if (commandLowerCase === `${prefix}heli`) {
             rustplus.printCommandOutput(rustplus.getCommandHeli());
         }

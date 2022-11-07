@@ -81,6 +81,8 @@ class RustPlus extends RustPlusLib {
 
         this.allConnections = [];
         this.playerConnections = new Object();
+        this.allDeaths = [];
+        this.playerDeaths = new Object();
 
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
@@ -190,6 +192,25 @@ class RustPlus extends RustPlusLib {
             this.playerConnections[steamId].pop();
         }
         this.playerConnections[steamId].unshift(savedString);
+    }
+
+    updateDeaths(steamId, data) {
+        const time = Timer.getCurrentDateTime();
+        data['time'] = time;
+
+        if (this.allDeaths.length === 10) {
+            this.allDeaths.pop();
+        }
+        this.allDeaths.unshift(data)
+
+        if (!this.playerDeaths.hasOwnProperty(steamId)) {
+            this.playerDeaths[steamId] = [];
+        }
+
+        if (this.playerDeaths[steamId].length === 10) {
+            this.playerDeaths[steamId].pop();
+        }
+        this.playerDeaths[steamId].unshift(data);
     }
 
     deleteThisRustplusInstance() {
@@ -892,6 +913,97 @@ class RustPlus extends RustPlusLib {
         }
 
         return strings;
+    }
+
+    async getCommandDeath(command, callerSteamId) {
+        const prefix = this.generalSettings.prefix;
+
+        if (command.toLowerCase() !== `${prefix}death` && !command.toLowerCase().startsWith(`${prefix}death `)) {
+            return null;
+        }
+
+        const teamInfo = await this.getTeamInfoAsync();
+        if (!(await this.isResponseValid(teamInfo))) return null;
+        TeamHandler.handler(this, Client.client, teamInfo.teamInfo);
+        this.team.updateTeam(teamInfo.teamInfo);
+
+        const caller = this.team.getPlayer(callerSteamId);
+
+        if (command.toLowerCase() === `${prefix}death`) {
+            if (this.allDeaths.length === 0) {
+                return Client.client.intlGet(this.guildId, 'noRegisteredDeathEvents');
+            }
+
+            const strings = [];
+            let counter = 0;
+            for (const event of this.allDeaths) {
+                if (counter === 5) break;
+                const location = event.location;
+
+                let str = `${event.time} - ${event.name}: `;
+                if (event.location === null) {
+                    strings.push(`${str}${Client.client.intlGet(this.guildId, 'unknown')}`);
+                }
+                else {
+                    const distance = Math.floor(Map.getDistance(caller.x, caller.y, location.x, location.y));
+                    const direction = Map.getAngleBetweenPoints(caller.x, caller.y, location.x, location.y);
+                    const grid = location.location;
+                    str += Client.client.intlGet(this.guildId, 'distanceDirectionGrid', {
+                        distance: distance, direction: direction, grid: grid
+                    });
+                    strings.push(str);
+                }
+
+                counter += 1;
+            }
+
+            return strings;
+        }
+
+        const name = command.slice(`${prefix}death `.length).trim();
+
+        for (const player of this.team.players) {
+            if (player.name.includes(name)) {
+                if (!this.playerDeaths.hasOwnProperty(player.steamId)) {
+                    this.playerDeaths[player.steamId] = [];
+                }
+
+                if (this.playerDeaths[player.steamId].length === 0) {
+                    return Client.client.intlGet(this.guildId, 'noRegisteredDeathEventsUser', {
+                        user: player.name
+                    });
+                }
+
+                const strings = [];
+                let counter = 0;
+                for (const event of this.playerDeaths[player.steamId]) {
+                    if (counter === 5) break;
+                    const location = event.location;
+
+                    let str = `${event.time} - `;
+                    if (event.location === null) {
+                        strings.push(`${str}${Client.client.intlGet(this.guildId, 'unknown')}`);
+                    }
+                    else {
+                        const distance = Math.floor(Map.getDistance(caller.x, caller.y, location.x, location.y));
+                        const direction = Map.getAngleBetweenPoints(caller.x, caller.y, location.x, location.y);
+                        const grid = location.location;
+                        str += Client.client.intlGet(this.guildId, 'distanceDirectionGrid', {
+                            distance: distance, direction: direction, grid: grid
+                        });
+                        strings.push(str);
+                    }
+
+                    counter += 1;
+                }
+
+                return strings;
+            }
+        }
+
+        return Client.client.intlGet(this.guildId, 'couldNotIdentifyMember', {
+            name: name
+        });
     }
 
     getCommandHeli(isInfoChannel = false) {

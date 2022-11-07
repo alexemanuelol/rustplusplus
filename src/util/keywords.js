@@ -28,6 +28,7 @@ module.exports = {
         'connection',
         'connections',
         'crate',
+        'death',
         'heli',
         'large',
         'leader',

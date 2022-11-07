@@ -24,7 +24,7 @@ const Map = require('../util/map.js');
 module.exports = {
     handler: async function (rustplus, client, mapMarkers) {
         /* Handle Vending Machine changes */
-        module.exports.checkChanges(rustplus, client, mapMarkers);
+        await module.exports.checkChanges(rustplus, client, mapMarkers);
     },
 
     checkChanges: async function (rustplus, client, mapMarkers) {

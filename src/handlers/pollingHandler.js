@@ -49,16 +49,16 @@ module.exports = {
             rustplus.mapMarkers = new MapMarkers(mapMarkers.mapMarkers, rustplus, client);
         }
 
-        module.exports.handlers(rustplus, client, info, mapMarkers, teamInfo, time);
+        await module.exports.handlers(rustplus, client, info, mapMarkers, teamInfo, time);
         rustplus.isFirstPoll = false;
     },
 
-    handlers: function (rustplus, client, info, mapMarkers, teamInfo, time) {
+    handlers: async function (rustplus, client, info, mapMarkers, teamInfo, time) {
         /* Module handlers */
-        SmartSwitchHandler.handler(rustplus, client, time.time);
+        await SmartSwitchHandler.handler(rustplus, client, time.time);
         TimeHandler.handler(rustplus, client, time.time);
-        TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
-        VendingMachines.handler(rustplus, client, mapMarkers.mapMarkers);
+        await TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
+        await VendingMachines.handler(rustplus, client, mapMarkers.mapMarkers);
 
         /* Update modules */
         rustplus.time.updateTime(time.time);
@@ -66,8 +66,8 @@ module.exports = {
         rustplus.info.updateInfo(info.info);
         rustplus.mapMarkers.updateMapMarkers(mapMarkers.mapMarkers);
 
-        InformationHandler.handler(rustplus);
-        StorageMonitorHandler.handler(rustplus, client);
-        SmartAlarmHandler.handler(rustplus, client);
+        await InformationHandler.handler(rustplus);
+        await StorageMonitorHandler.handler(rustplus, client);
+        await SmartAlarmHandler.handler(rustplus, client);
     },
 };

@@ -49,6 +49,9 @@ module.exports = {
         else if (commandLowerCase === `${prefix}crate`) {
             response = rustplus.getCommandCrate();
         }
+        else if (commandLowerCase.startsWith(`${prefix}death`)) {
+            response = 'Command is not possible through discord.';
+        }
         else if (commandLowerCase === `${prefix}heli`) {
             response = rustplus.getCommandHeli();
         }

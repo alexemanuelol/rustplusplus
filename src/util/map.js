@@ -25,7 +25,7 @@ module.exports = {
 
     getPos: function (x, y, mapSize, rustplus) {
         const correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
-        const pos = { location: null, monument: null, string: null }
+        const pos = { location: null, monument: null, string: null, x: x, y: y }
 
         if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
             if (module.exports.isOutsideRowOrColumn(x, y, correctedMapSize)) {

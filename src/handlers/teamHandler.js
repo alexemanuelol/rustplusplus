@@ -24,7 +24,7 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 module.exports = {
     handler: async function (rustplus, client, teamInfo) {
         /* Handle team changes */
-        module.exports.checkChanges(rustplus, client, teamInfo);
+        await module.exports.checkChanges(rustplus, client, teamInfo);
     },
 
     checkChanges: async function (rustplus, client, teamInfo) {
@@ -75,6 +75,10 @@ module.exports = {
                             guildId, serverId, Constants.COLOR_INACTIVE, str, player.steamId);
                         if (instance.generalSettings.deathNotify) rustplus.sendTeamMessageAsync(str);
                         rustplus.log(client.intlGet(null, 'infoCap'), str);
+                        rustplus.updateDeaths(player.steamId, {
+                            name: player.name,
+                            location: player.pos
+                        });
                     }
 
                     if (player.isGoneAfk(playerUpdated)) {
