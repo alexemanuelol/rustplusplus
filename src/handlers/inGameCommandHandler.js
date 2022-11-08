@@ -51,13 +51,15 @@ module.exports = {
         else if (commandLowerCase === `${prefix}chinook`) {
             rustplus.printCommandOutput(rustplus.getCommandChinook());
         }
-        else if (commandLowerCase.startsWith(`${prefix}connection `) || commandLowerCase === `${prefix}connections`) {
+        else if (commandLowerCase.startsWith(`${prefix}connection `) ||
+            commandLowerCase.startsWith(`${prefix}connections`)) {
             rustplus.printCommandOutput(rustplus.getCommandConnection(command));
         }
         else if (commandLowerCase === `${prefix}crate`) {
             rustplus.printCommandOutput(rustplus.getCommandCrate());
         }
-        else if (commandLowerCase.startsWith(`${prefix}death`)) {
+        else if (commandLowerCase.startsWith(`${prefix}death `) ||
+            commandLowerCase.startsWith(`${prefix}deaths`)) {
             rustplus.printCommandOutput(await rustplus.getCommandDeath(command, callerSteamId));
         }
         else if (commandLowerCase === `${prefix}heli`) {

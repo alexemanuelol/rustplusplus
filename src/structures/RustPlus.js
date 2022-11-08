@@ -803,15 +803,18 @@ class RustPlus extends RustPlusLib {
 
     getCommandConnection(command) {
         const prefix = this.generalSettings.prefix;
-        if (command.toLowerCase() === `${prefix}connections`) {
+        if (command.toLowerCase().startsWith(`${prefix}connections`)) {
+            const number = parseInt(command.slice(`${prefix}connections`.length).trim());
+
             if (this.allConnections.length === 0) {
                 return Client.client.intlGet(this.guildId, 'noRegisteredConnectionEvents');
             }
 
             const strings = [];
-            let counter = 0;
+            let counter = 1;
             for (const event of this.allConnections) {
-                if (counter === 5) break;
+                if (counter === 6) break;
+                if (number === counter) return event;
 
                 strings.push(event);
                 counter += 1;
@@ -820,7 +823,10 @@ class RustPlus extends RustPlusLib {
             return strings;
         }
         else if (command.toLowerCase().startsWith(`${prefix}connection `)) {
-            const name = command.slice(`${prefix}connection `.length).trim();
+            command = command.slice(`${prefix}connection `.length).trim();
+            const name = command.replace(/ .*/, '');
+            const number = parseInt(command.slice(name.length + 1));
+
             for (const player of this.team.players) {
                 if (player.name.includes(name)) {
                     if (!this.playerConnections.hasOwnProperty(player.steamId)) {
@@ -834,9 +840,10 @@ class RustPlus extends RustPlusLib {
                     }
 
                     const strings = [];
-                    let counter = 0;
+                    let counter = 1;
                     for (const event of this.playerConnections[player.steamId]) {
-                        if (counter === 5) break;
+                        if (counter === 6) break;
+                        if (number === counter) return event;
 
                         strings.push(event);
                         counter += 1;
@@ -918,10 +925,6 @@ class RustPlus extends RustPlusLib {
     async getCommandDeath(command, callerSteamId) {
         const prefix = this.generalSettings.prefix;
 
-        if (command.toLowerCase() !== `${prefix}death` && !command.toLowerCase().startsWith(`${prefix}death `)) {
-            return null;
-        }
-
         const teamInfo = await this.getTeamInfoAsync();
         if (!(await this.isResponseValid(teamInfo))) return null;
         TeamHandler.handler(this, Client.client, teamInfo.teamInfo);
@@ -929,19 +932,22 @@ class RustPlus extends RustPlusLib {
 
         const caller = this.team.getPlayer(callerSteamId);
 
-        if (command.toLowerCase() === `${prefix}death`) {
+        if (command.toLowerCase().startsWith(`${prefix}deaths`)) {
+            const number = parseInt(command.slice(`${prefix}deaths`.length).trim());
+
             if (this.allDeaths.length === 0) {
                 return Client.client.intlGet(this.guildId, 'noRegisteredDeathEvents');
             }
 
             const strings = [];
-            let counter = 0;
+            let counter = 1;
             for (const event of this.allDeaths) {
-                if (counter === 5) break;
+                if (counter === 6) break;
                 const location = event.location;
 
                 let str = `${event.time} - ${event.name}: `;
                 if (event.location === null) {
+                    if (counter === number) return `${str}${Client.client.intlGet(this.guildId, 'unknown')}`;
                     strings.push(`${str}${Client.client.intlGet(this.guildId, 'unknown')}`);
                 }
                 else {
@@ -951,6 +957,7 @@ class RustPlus extends RustPlusLib {
                     str += Client.client.intlGet(this.guildId, 'distanceDirectionGrid', {
                         distance: distance, direction: direction, grid: grid
                     });
+                    if (counter === number) return str;
                     strings.push(str);
                 }
 
@@ -960,7 +967,9 @@ class RustPlus extends RustPlusLib {
             return strings;
         }
 
-        const name = command.slice(`${prefix}death `.length).trim();
+        command = command.slice(`${prefix}death `.length).trim();
+        const name = command.replace(/ .*/, '');
+        const number = parseInt(command.slice(name.length + 1));
 
         for (const player of this.team.players) {
             if (player.name.includes(name)) {
@@ -975,13 +984,14 @@ class RustPlus extends RustPlusLib {
                 }
 
                 const strings = [];
-                let counter = 0;
+                let counter = 1;
                 for (const event of this.playerDeaths[player.steamId]) {
-                    if (counter === 5) break;
+                    if (counter === 6) break;
                     const location = event.location;
 
                     let str = `${event.time} - `;
                     if (event.location === null) {
+                        if (counter === number) return `${str}${Client.client.intlGet(this.guildId, 'unknown')}`;
                         strings.push(`${str}${Client.client.intlGet(this.guildId, 'unknown')}`);
                     }
                     else {
@@ -991,6 +1001,7 @@ class RustPlus extends RustPlusLib {
                         str += Client.client.intlGet(this.guildId, 'distanceDirectionGrid', {
                             distance: distance, direction: direction, grid: grid
                         });
+                        if (counter === number) return str;
                         strings.push(str);
                     }
 
