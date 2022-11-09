@@ -146,7 +146,7 @@ module.exports = {
             embeds: [entity.reachable ?
                 DiscordEmbeds.getStorageMonitorEmbed(guildId, serverId, entityId) :
                 DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'storageMonitors')],
-            components: [entity.type === 'toolcupboard' ?
+            components: [entity.type === 'toolCupboard' ?
                 DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
                 DiscordButtons.getStorageMonitorContainerButton(guildId, serverId, entityId)],
             files: [

@@ -456,6 +456,7 @@
     "six": "Six",
     "slash": "Slash",
     "slashCommandsSuccessRegister": "Successfully registered application commands for guild: {guildId}.",
+    "slots": "Slots",
     "smallOilRig": "Small Oil Rig",
     "smartAlarm": "Smart Alarm",
     "smartAlarmEditMessageLabel": "The message for the Smart Alarm:",

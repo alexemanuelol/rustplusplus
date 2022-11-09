@@ -1911,7 +1911,7 @@ class RustPlus extends RustPlusLib {
         let cupboardFound = false;
         const strings = [];
         for (const [key, value] of Object.entries(instance.serverList[this.serverId].storageMonitors)) {
-            if (value.type !== 'toolcupboard') continue;
+            if (value.type !== 'toolCupboard') continue;
 
             if (value.upkeep) {
                 cupboardFound = true;

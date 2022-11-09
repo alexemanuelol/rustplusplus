@@ -354,7 +354,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         name: entityExist ? storageMonitors[body.entityId].name : client.intlGet(guild.id, 'storageMonitor'),
         reachable: entityExist ? storageMonitors[body.entityId].reachable : true,
         id: entityExist ? storageMonitors[body.entityId].id : body.entityId,
-        type: entityExist ? storageMonitors[body.entityId].type : 'container',
+        type: entityExist ? storageMonitors[body.entityId].type : null,
         decaying: entityExist ? storageMonitors[body.entityId].decaying : false,
         upkeep: entityExist ? storageMonitors[body.entityId].upkeep : null,
         everyone: entityExist ? storageMonitors[body.entityId].everyone : false,
@@ -384,11 +384,19 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
 
         if (instance.serverList[serverId].storageMonitors[body.entityId].reachable) {
             if (info.entityInfo.payload.capacity === 28) {
-                instance.serverList[serverId].storageMonitors[body.entityId].type = 'toolcupboard';
+                instance.serverList[serverId].storageMonitors[body.entityId].type = 'toolCupboard';
                 instance.serverList[serverId].storageMonitors[body.entityId].image = 'tool_cupboard.png';
                 if (info.entityInfo.payload.protectionExpiry === 0) {
                     instance.serverList[serverId].storageMonitors[body.entityId].decaying = true;
                 }
+            }
+            else if (info.entityInfo.payload.capacity === 30) {
+                instance.serverList[serverId].storageMonitors[body.entityId].type = 'vendingMachine';
+                instance.serverList[serverId].storageMonitors[body.entityId].image = 'vending_machine.png';
+            }
+            else if (info.entityInfo.payload.capacity === 48) {
+                instance.serverList[serverId].storageMonitors[body.entityId].type = 'container';
+                instance.serverList[serverId].storageMonitors[body.entityId].image = 'large_wood_box.png';
             }
 
             rustplus.storageMonitors[body.entityId] = {

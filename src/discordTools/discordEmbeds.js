@@ -175,14 +175,18 @@ module.exports = {
             });
         }
 
-        description += `\n**${Client.client.intlGet(guildId, 'type')}** \`${(entity.type === 'toolcupboard') ?
-            Client.client.intlGet(guildId, 'toolCupboard') :
-            Client.client.intlGet(guildId, 'container')}\``;
+        description += `\n**${Client.client.intlGet(guildId, 'type')}** ` +
+            `\`${entity.type !== null ? Client.client.intlGet(guildId, entity.type) :
+                Client.client.intlGet(guildId, 'unknown')}\``;
 
         const items = rustplus.storageMonitors[entityId].items;
         const expiry = rustplus.storageMonitors[entityId].expiry;
+        const capacity = rustplus.storageMonitors[entityId].capacity;
 
-        if (entity.type === 'toolcupboard') {
+        description += `\n**${Client.client.intlGet(guildId, 'slots')}** `;
+        description += `\`(${items.length}/${capacity})\``
+
+        if (entity.type === 'toolCupboard') {
             let seconds = 0;
             if (expiry !== 0) {
                 seconds = (new Date(expiry * 1000) - new Date()) / 1000;

@@ -55,7 +55,7 @@ module.exports = async (client, rustplus) => {
 
             if (info.entityInfo.payload.capacity !== 0) {
                 if (info.entityInfo.payload.capacity === 28) {
-                    entity.type = 'toolcupboard';
+                    entity.type = 'toolCupboard';
                     if (info.entityInfo.payload.protectionExpiry === 0) {
                         entity.decaying = true;
                     }
@@ -63,7 +63,10 @@ module.exports = async (client, rustplus) => {
                         entity.decaying = false;
                     }
                 }
-                else {
+                else if (info.entityInfo.payload.capacity === 30) {
+                    entity.type = 'vendingMachine';
+                }
+                else if (info.entityInfo.payload.capacity === 48) {
                     entity.type = 'container';
                 }
                 client.setInstance(guildId, instance);

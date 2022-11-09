@@ -155,7 +155,7 @@ async function messageBroadcastEntityChangedStorageMonitor(rustplus, client, mes
 
     if (message.broadcast.entityChanged.payload.value === true) return;
 
-    if (server.storageMonitors[entityId].type === 'toolcupboard' ||
+    if (server.storageMonitors[entityId].type === 'toolCupboard' ||
         message.broadcast.entityChanged.payload.capacity === 28) {
         setTimeout(updateToolCupboard.bind(null, rustplus, client, message), 2000);
     }
@@ -169,6 +169,15 @@ async function messageBroadcastEntityChangedStorageMonitor(rustplus, client, mes
 
         const info = await rustplus.getEntityInfoAsync(entityId);
         server.storageMonitors[entityId].reachable = await rustplus.isResponseValid(info) ? true : false;
+
+        if (server.storageMonitors[entityId].reachable) {
+            if (info.entityInfo.payload.capacity === 30) {
+                server.storageMonitors[entityId].type = 'vendingMachine';
+            }
+            else if (info.entityInfo.payload.capacity === 48) {
+                server.storageMonitors[entityId].type = 'container';
+            }
+        }
         client.setInstance(rustplus.guildId, instance);
 
         await DiscordMessages.sendStorageMonitorMessage(rustplus.guildId, serverId, entityId);
@@ -192,7 +201,7 @@ async function updateToolCupboard(rustplus, client, message) {
             hasProtection: info.entityInfo.payload.hasProtection
         }
 
-        server.storageMonitors[entityId].type = 'toolcupboard';
+        server.storageMonitors[entityId].type = 'toolCupboard';
 
         if (info.entityInfo.payload.protectionExpiry === 0 && server.storageMonitors[entityId].decaying === false) {
             server.storageMonitors[entityId].decaying = true;

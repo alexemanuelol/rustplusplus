@@ -69,7 +69,7 @@ module.exports = {
 
                     if (info.entityInfo.payload.capacity !== 0) {
                         if (info.entityInfo.payload.capacity === 28) {
-                            instance.serverList[serverId].storageMonitors[entityId].type = 'toolcupboard';
+                            instance.serverList[serverId].storageMonitors[entityId].type = 'toolCupboard';
                             if (info.entityInfo.payload.protectionExpiry === 0 &&
                                 instance.serverList[serverId].storageMonitors[entityId].decaying === false) {
                                 instance.serverList[serverId].storageMonitors[entityId].decaying = true;
@@ -87,7 +87,10 @@ module.exports = {
                                 instance.serverList[serverId].storageMonitors[entityId].decaying = false;
                             }
                         }
-                        else {
+                        else if (info.entityInfo.payload.capacity === 30) {
+                            instance.serverList[serverId].storageMonitors[entityId].type = 'vendingMachine';
+                        }
+                        else if (info.entityInfo.payload.capacity === 48) {
                             instance.serverList[serverId].storageMonitors[entityId].type = 'container';
                         }
                         client.setInstance(guildId, instance);
