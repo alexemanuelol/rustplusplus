@@ -66,6 +66,9 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}marker `) || commandLowerCase === `${prefix}markers`) {
             response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
+        else if (commandLowerCase.startsWith(`${prefix}market `)) {
+            response = rustplus.getCommandMarket(command);
+        }
         else if (commandLowerCase === `${prefix}mute`) {
             response = rustplus.getCommandMute();
         }

@@ -1285,6 +1285,131 @@ class RustPlus extends RustPlusLib {
         return null;
     }
 
+    getCommandMarket(command) {
+        const instance = Client.client.getInstance(this.guildId);
+        const prefix = this.generalSettings.prefix;
+
+        command = command.slice(`${prefix}market `.length).trim();
+        const subcommand = command.replace(/ .*/, '');
+        const name = command.slice(subcommand.length + 1);
+
+        switch (subcommand) {
+            case 'search': {
+                let itemId = null;
+                if (name !== null) {
+                    const item = Client.client.items.getClosestItemIdByName(name)
+                    if (item === undefined) {
+                        return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                            name: name
+                        });
+                    }
+                    else {
+                        itemId = item;
+                    }
+                }
+
+                const locations = [];
+                for (const vendingMachine of this.mapMarkers.vendingMachines) {
+                    if (!vendingMachine.hasOwnProperty('sellOrders')) continue;
+
+                    for (const order of vendingMachine.sellOrders) {
+                        if (order.amountInStock === 0) continue;
+
+                        if (order.itemId === parseInt(itemId) || order.currencyId === parseInt(itemId)) {
+                            if (locations.includes(vendingMachine.location.location)) continue;
+                            locations.push(vendingMachine.location.location);
+                        }
+                    }
+                }
+
+                if (locations.length === 0) {
+                    return Client.client.intlGet(this.guildId, 'noItemFound');
+                }
+
+                return locations.join(', ');
+            } break;
+
+            case 'sub': {
+                let itemId = null;
+                if (name !== null) {
+                    const item = Client.client.items.getClosestItemIdByName(name)
+                    if (item === undefined) {
+                        return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                            name: name
+                        });
+                    }
+                    else {
+                        itemId = item;
+                    }
+                }
+                const itemName = Client.client.items.getName(itemId);
+
+                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
+                    return Client.client.intlGet(this.guildId, 'alreadySubscribedToItem', {
+                        name: itemName
+                    });
+                }
+                else {
+                    instance.marketSubscriptionListItemIds.push(itemId);
+                    this.firstPollItems.push(itemId);
+                    Client.client.setInstance(this.guildId, instance);
+
+                    return Client.client.intlGet(this.guildId, 'justSubscribedToItem', {
+                        name: itemName
+                    });
+                }
+            } break;
+
+            case 'unsub': {
+                let itemId = null;
+                if (name !== null) {
+                    const item = Client.client.items.getClosestItemIdByName(name)
+                    if (item === undefined) {
+                        return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                            name: name
+                        });
+                    }
+                    else {
+                        itemId = item;
+                    }
+                }
+                const itemName = Client.client.items.getName(itemId);
+
+                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
+                    instance.marketSubscriptionListItemIds = instance.marketSubscriptionListItemIds.filter(e => e !== itemId);
+                    Client.client.setInstance(this.guildId, instance);
+
+                    return Client.client.intlGet(this.guildId, 'removedSubscribeItem', {
+                        name: itemName
+                    });
+                }
+                else {
+                    return Client.client.intlGet(this.guildId, 'notExistInSubscription', {
+                        name: itemName
+                    });
+                }
+            } break;
+
+            case 'list': {
+                const names = [];
+                for (const item of instance.marketSubscriptionListItemIds) {
+                    names.push(Client.client.items.getName(item));
+                }
+
+                if (names.length === 0) {
+                    return Client.client.intlGet(this.guildId, 'subscriptionListEmpty');
+                }
+
+                return names.join(', ');
+            } break;
+
+            default: {
+                return null;
+            } break;
+        }
+    }
+
+
     getCommandMute() {
         const instance = Client.client.getInstance(this.guildId);
         instance.generalSettings.muteInGameBotMessages = true;

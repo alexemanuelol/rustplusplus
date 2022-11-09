@@ -35,6 +35,7 @@ module.exports = {
         'leader',
         'marker',
         'markers',
+        'market',
         'mute',
         'note',
         'notes',

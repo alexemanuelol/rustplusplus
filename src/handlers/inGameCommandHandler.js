@@ -74,6 +74,9 @@ module.exports = {
         else if (commandLowerCase.startsWith(`${prefix}marker `) || commandLowerCase === `${prefix}markers`) {
             rustplus.printCommandOutput(await rustplus.getCommandMarker(command, callerSteamId));
         }
+        else if (commandLowerCase.startsWith(`${prefix}market `)) {
+            rustplus.printCommandOutput(rustplus.getCommandMarket(command));
+        }
         else if (commandLowerCase === `${prefix}mute`) {
             rustplus.printCommandOutput(rustplus.getCommandMute());
         }
