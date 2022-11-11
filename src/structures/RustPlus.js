@@ -1476,22 +1476,32 @@ class RustPlus extends RustPlusLib {
 
     getCommandOffline() {
         let string = '';
+        let counter = 0;
         for (const player of this.team.players) {
-            if (!player.isOnline) string += `${player.name}, `;
+            if (!player.isOnline) {
+                string += `${player.name}, `;
+                counter += 1;
+            }
         }
+        const amount = `(${counter}/${this.team.players.length}) `;
 
-        return string !== '' ? `${string.slice(0, -2)}.` :
-            Client.client.intlGet(this.guildId, 'noOneIsOffline');
+        return string !== '' ? `${amount}${string.slice(0, -2)}.` :
+            `${amount}${Client.client.intlGet(this.guildId, 'noOneIsOffline')}`;
     }
 
     getCommandOnline() {
         let string = '';
+        let counter = 0;
         for (const player of this.team.players) {
-            if (player.isOnline) string += `${player.name}, `;
+            if (player.isOnline) {
+                string += `${player.name}, `;
+                counter += 1;
+            }
         }
+        const amount = `(${counter}/${this.team.players.length}) `;
 
-        return string !== '' ? `${string.slice(0, -2)}.` :
-            Client.client.intlGet(this.guildId, 'noOneIsOnline');
+        return string !== '' ? `${amount}${string.slice(0, -2)}.` :
+            `${amount}${Client.client.intlGet(this.guildId, 'noOneIsOnline')}`;
     }
 
     getCommandPlayer(command) {
