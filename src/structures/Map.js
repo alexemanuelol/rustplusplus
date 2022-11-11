@@ -303,8 +303,14 @@ class Map {
     }
 
     async setupFont() {
-        this.font = await Jimp.loadFont(
-            Path.join(__dirname, '..', 'resources/fonts/PermanentMarker.fnt'));
+        if (this.rustplus.generalSettings.language === 'en') {
+            this.font = await Jimp.loadFont(
+                Path.join(__dirname, '..', 'resources/fonts/PermanentMarker.fnt'));
+        }
+        else {
+            this.font = await Jimp.loadFont(
+                Path.join(__dirname, '..', 'resources/fonts/YuGothic.fnt'));
+        }
     }
 
     async setupMapMarkerImages() {
