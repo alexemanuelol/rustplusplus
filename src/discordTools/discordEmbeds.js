@@ -59,7 +59,8 @@ module.exports = {
                 name: Client.client.intlGet(guildId, 'customCommand'),
                 value: `\`${instance.generalSettings.prefix}${entity.command}\``,
                 inline: true
-            }]
+            }],
+            timestamp: true
         });
     },
 
@@ -123,7 +124,8 @@ module.exports = {
             fields: [
                 { name: Client.client.intlGet(guildId, 'name'), value: playerName, inline: true },
                 { name: 'SteamID', value: playerSteamId, inline: true },
-                { name: Client.client.intlGet(guildId, 'status'), value: playerStatus, inline: true }]
+                { name: Client.client.intlGet(guildId, 'status'), value: playerStatus, inline: true }],
+            timestamp: true
         });
     },
 
@@ -142,7 +144,8 @@ module.exports = {
                 name: Client.client.intlGet(guildId, 'message'),
                 value: `\`${entity.message}\``,
                 inline: true
-            }]
+            }],
+            timestamp: true
         });
     },
 
@@ -160,7 +163,8 @@ module.exports = {
                 color: Constants.COLOR_DEFAULT,
                 description: `${description}\n${Client.client.intlGet(guildId, 'statusNotConnectedToServer')}`,
                 thumbnail: `attachment://${entity.image}`,
-                footer: { text: `${entity.server}` }
+                footer: { text: `${entity.server}` },
+                timestamp: true
             });
         }
 
@@ -171,7 +175,8 @@ module.exports = {
                 description:
                     `${description}\n${Client.client.intlGet(guildId, 'statusNotElectronicallyConnected')}`,
                 thumbnail: `attachment://${entity.image}`,
-                footer: { text: `${entity.server}` }
+                footer: { text: `${entity.server}` },
+                timestamp: true
             });
         }
 
@@ -234,7 +239,8 @@ module.exports = {
             fields: [
                 { name: Client.client.intlGet(guildId, 'item'), value: itemName, inline: true },
                 { name: Client.client.intlGet(guildId, 'quantity'), value: itemQuantity, inline: true }
-            ]
+            ],
+            timestamp: true
         });
     },
 
@@ -281,7 +287,9 @@ module.exports = {
                 { name: Client.client.intlGet(guildId, 'switches'), value: switchName, inline: true },
                 { name: 'ID', value: switchId, inline: true },
                 { name: Client.client.intlGet(guildId, 'active'), value: switchActive, inline: true }
-            ]
+            ],
+
+            timestamp: true
         });
     },
 
@@ -621,7 +629,8 @@ module.exports = {
             fields: [
                 { name: playersFieldName, value: `\`${rustplus.getCommandPop(true)}\``, inline: true },
                 { name: timeFieldName, value: `\`${time[0]}\``, inline: true },
-                { name: wipeFieldName, value: `\`${rustplus.getCommandWipe(true)}\``, inline: true }]
+                { name: wipeFieldName, value: `\`${rustplus.getCommandWipe(true)}\``, inline: true }],
+            timestamp: true
         });
 
         if (time[1] !== null) {
@@ -684,7 +693,8 @@ module.exports = {
                 { name: smallOilRigFieldName, value: `\`${smallOilMessage}\``, inline: true },
                 { name: largeOilRigFieldName, value: `\`${largeOilMessage}\``, inline: true },
                 { name: chinook47FieldName, value: `\`${ch47Message}\``, inline: true },
-                { name: crateFieldName, value: `\`${crateMessage}\``, inline: true }]
+                { name: crateFieldName, value: `\`${crateMessage}\``, inline: true }],
+            timestamp: true
         });
     },
 
@@ -734,7 +744,8 @@ module.exports = {
             fields: [
                 { name: teamMemberFieldName, value: names, inline: true },
                 { name: statusFieldName, value: status, inline: true },
-                { name: locationFieldName, value: locations, inline: true }]
+                { name: locationFieldName, value: locations, inline: true }],
+            timestamp: true
         });
     },
 
