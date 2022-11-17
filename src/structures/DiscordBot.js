@@ -29,6 +29,7 @@ const DiscordTools = require('../discordTools/discordTools');
 const InstanceUtils = require('../util/instanceUtils.js');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
+const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustPlus = require('../structures/RustPlus');
 
 class DiscordBot extends Discord.Client {
@@ -157,10 +158,19 @@ class DiscordBot extends Discord.Client {
     }
 
     async setupGuild(guild) {
+        const instance = this.getInstance(guild.id);
+        const firstTime = instance.firstTime;
+
         await require('../discordTools/RegisterSlashCommands')(this, guild);
 
         let category = await require('../discordTools/SetupGuildCategory')(this, guild);
         await require('../discordTools/SetupGuildChannels')(this, guild, category);
+        if (firstTime) {
+            await PermissionHandler.removeViewPermission(this, guild);
+        }
+        else {
+            await PermissionHandler.resetPermissions(this, guild);
+        }
 
         require('../util/FcmListener')(this, guild);
         const credentials = InstanceUtils.readCredentialsFile(guild.id);
@@ -171,6 +181,8 @@ class DiscordBot extends Discord.Client {
         }
 
         await require('../discordTools/SetupSettingsMenu')(this, guild);
+
+        if (firstTime) await PermissionHandler.resetPermissions(this, guild);
     }
 
     getInstance(guildId) {

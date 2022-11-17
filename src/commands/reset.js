@@ -24,6 +24,7 @@ const Path = require('path');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
+const PermissionHandler = require('../handlers/permissionHandler.js');
 
 module.exports = {
 	name: 'reset',
@@ -61,6 +62,8 @@ module.exports = {
 				const category = await require('../discordTools/SetupGuildCategory')(client, guild);
 				await require('../discordTools/SetupGuildChannels')(client, guild, category);
 
+				await PermissionHandler.removeViewPermission(client, guild);
+
 				await require('../discordTools/SetupServerList')(client, guild);
 				await require('../discordTools/SetupSettingsMenu')(client, guild);
 				await require('../discordTools/SetupTrackers')(client, guild);
@@ -94,6 +97,8 @@ module.exports = {
 						client.setInstance(guild.id, instance);
 					}
 				}
+
+				await PermissionHandler.resetPermissions(client, guild);
 
 				const str = client.intlGet(interaction.guildId, 'resetSuccess');
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));

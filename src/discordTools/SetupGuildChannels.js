@@ -102,9 +102,11 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
     }
 
     try {
-        channel.permissionOverwrites.set(perms);
+        await channel.permissionOverwrites.set(perms);
     }
     catch (e) {
         /* Ignore */
     }
+
+    channel.lockPermissions();
 }
