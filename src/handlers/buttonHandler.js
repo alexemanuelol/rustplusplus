@@ -348,6 +348,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus && (rustplus.serverId === ids.serverId || server.active)) {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
+            await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switchGroups, 100);
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
 
             rustplus.disconnect();
@@ -672,7 +673,7 @@ module.exports = async (client, interaction) => {
         }
 
         if (server.switchGroups.hasOwnProperty(ids.groupId)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelId.switches,
+            await DiscordTools.deleteMessageById(guildId, instance.channelId.switchGroups,
                 server.switchGroups[ids.groupId].messageId);
 
             delete server.switchGroups[ids.groupId];

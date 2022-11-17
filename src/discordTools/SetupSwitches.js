@@ -35,7 +35,6 @@ module.exports = async (client, rustplus) => {
         const entity = instance.serverList[serverId].switches[entityId];
         const info = await rustplus.getEntityInfoAsync(entityId);
 
-
         if (!(await rustplus.isResponseValid(info))) {
             await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
             entity.reachable = false;

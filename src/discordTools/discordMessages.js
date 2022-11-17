@@ -177,7 +177,7 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(guildId, content, group.messageId,
-            instance.channelId.switches, interaction);
+            instance.channelId.switchGroups, interaction);
 
         if (!interaction) {
             instance.serverList[serverId].switchGroups[groupId].messageId = message.id;
