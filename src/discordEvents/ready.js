@@ -18,6 +18,7 @@
 
 */
 
+const Discord = require('discord.js');
 const Path = require('path');
 
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
@@ -52,7 +53,10 @@ module.exports = {
             client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'ignoreSetAvatar'));
         }
 
-        client.user.setActivity('/help', { type: 'LISTENING' });
+        client.user.setPresence({
+            activities: [{ name: '/help', type: Discord.ActivityType.Listening }],
+            status: 'online'
+        });
 
         client.guilds.cache.forEach(async (guild) => {
             try {
