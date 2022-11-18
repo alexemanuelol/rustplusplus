@@ -402,6 +402,23 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
     },
 
+    sendUpdateMapInformationMessage: async function (rustplus) {
+        const instance = Client.client.getInstance(rustplus.guildId);
+
+        const content = {
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', `resources/images/maps/${rustplus.guildId}_map_full.png`))]
+        }
+
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
+            instance.informationMessageId.map, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.map) {
+            instance.informationMessageId.map = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
+    },
+
     sendUpdateServerInformationMessage: async function (rustplus) {
         const instance = Client.client.getInstance(rustplus.guildId);
 
