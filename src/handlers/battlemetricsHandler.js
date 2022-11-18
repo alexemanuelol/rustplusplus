@@ -97,7 +97,7 @@ module.exports = {
                             playerName = calledSteamIdNames[player.steamId];
                         }
 
-                        if (player.name !== playerName) {
+                        if (player.name !== playerName && player.name !== '-') {
                             changed = true;
                             if (content.nameChangeHistory.length === 10) {
                                 content.nameChangeHistory.pop();
