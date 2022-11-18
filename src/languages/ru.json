@@ -452,6 +452,7 @@
     "playerJustReturned": "{name} вернулся, был AFK({time}).",
     "playerJustWentAfk": "{name} AFK.",
     "playerLeftTheTeam": "{name} покинул команду.",
+    "playerNotPairedWithServer": "Команда лидера не работает, потому что {name} не связано с сервером.",
     "players": "Игроки",
     "plusSign": "Плюс",
     "populationPlayers": "Население: ({current}/{max}) игроков.",
@@ -505,6 +506,7 @@
     "shouldBotBeMutedSetting": "Заглушить бота в игровом чате?",
     "shouldCommandsEnabledSetting": "Разрешить использование команд в игре?",
     "shouldLeaderCommandEnabledSetting": "Следует ли включить команду лидера?",
+    "shouldLeaderCommandOnlyForPairedSetting": "Должна ли команда лидера работать только для людей, которые связаны с сервером?",
     "shouldSmartAlarmNotifyNotConnectedSetting": "Должна ли умная сигнализация уведомлять, даже если она не настроена на подключенном сервере?",
     "shouldSmartAlarmsNotifyInGameSetting": "Должна ли сигнализация уведомлять в игре?",
     "showingSubscriptionList": "Показание списка подписки.",
@@ -619,5 +621,6 @@
     "whenTrackersNotifySetting": "В каких случаях уведомлять при отслеживании?",
     "wipe": "Wipe",
     "wipeDetected": "Обнаружен Wipe!",
-    "youAreAlreadyLeader": "Вы уже лидер."
+    "youAreAlreadyLeader": "Вы уже лидер.",
+    "youAreNotPairedWithServer": "Команда лидера не работает, потому что вы не подключены к серверу."
 }

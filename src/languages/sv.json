@@ -452,6 +452,7 @@
     "playerJustReturned": "{name} kom precis tillbaka ({time}).",
     "playerJustWentAfk": "{name} gick precis AFK.",
     "playerLeftTheTeam": "{name} lämnade laget.",
+    "playerNotPairedWithServer": "Leader-kommandot fungerar inte eftersom {name} inte har parat med servern.",
     "players": "Spelare",
     "plusSign": "Plustecken",
     "populationPlayers": "Population: ({current}/{max}) spelare.",
@@ -505,6 +506,7 @@
     "shouldBotBeMutedSetting": "Ska boten dämpas i spelet?",
     "shouldCommandsEnabledSetting": "Ska kommandon i spelet aktiveras?",
     "shouldLeaderCommandEnabledSetting": "Ska leader kommandot vara aktiverat?",
+    "shouldLeaderCommandOnlyForPairedSetting": "Ska ledarkommandot endast fungera för personer som är parade med servern?",
     "shouldSmartAlarmNotifyNotConnectedSetting": "Ska Smarta Larm meddela även om de inte är inställda på den anslutna rust servern?",
     "shouldSmartAlarmsNotifyInGameSetting": "Ska Smarta Larm notifiera i spelet?",
     "showingSubscriptionList": "Visar prenumerationslistan.",
@@ -619,5 +621,6 @@
     "whenTrackersNotifySetting": "När bör Battlemetrics spårare notifiera?",
     "wipe": "Rensning",
     "wipeDetected": "Rensning upptäcktes!",
-    "youAreAlreadyLeader": "Du är redan lagledare."
+    "youAreAlreadyLeader": "Du är redan lagledare.",
+    "youAreNotPairedWithServer": "Leader-kommandot fungerar inte eftersom du inte är parad med servern."
 }

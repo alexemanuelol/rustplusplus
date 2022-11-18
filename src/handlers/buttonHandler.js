@@ -161,6 +161,19 @@ module.exports = async (client, interaction) => {
                 instance.generalSettings.leaderCommandEnabled)]
         });
     }
+    else if (interaction.customId === 'LeaderCommandOnlyForPaired') {
+        instance.generalSettings.leaderCommandOnlyForPaired = !instance.generalSettings.leaderCommandOnlyForPaired;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.leaderCommandOnlyForPaired =
+            instance.generalSettings.leaderCommandOnlyForPaired;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getLeaderCommandOnlyForPairedButton(
+                guildId,
+                instance.generalSettings.leaderCommandOnlyForPaired)]
+        });
+    }
     else if (interaction.customId === 'TrackerNotifyAllOffline') {
         instance.generalSettings.trackerNotifyAllOffline = !instance.generalSettings.trackerNotifyAllOffline;
         client.setInstance(guildId, instance);

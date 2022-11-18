@@ -190,6 +190,18 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: Constants.COLOR_SETTINGS,
+            title: client.intlGet(guildId, 'shouldLeaderCommandOnlyForPairedSetting'),
+            thumbnail: `attachment://settings_logo.png`,
+        })],
+        components: [DiscordButtons.getLeaderCommandOnlyForPairedButton(guildId,
+            instance.generalSettings.leaderCommandOnlyForPaired)],
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [DiscordEmbeds.getEmbed({
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'whenTrackersNotifySetting'),
             thumbnail: `attachment://settings_logo.png`
         })],

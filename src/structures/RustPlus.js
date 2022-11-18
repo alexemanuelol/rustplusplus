@@ -1152,7 +1152,15 @@ class RustPlus extends RustPlusLib {
         }
 
         if (command.toLowerCase() === `${commandLeader}`) {
+            if (callerSteamId === null) return null;
+
             if (this.team.leaderSteamId !== callerSteamId) {
+                if (this.generalSettings.leaderCommandOnlyForPaired) {
+                    if (!Object.keys(instance.serverListLite[this.serverId]).includes(callerSteamId)) {
+                        return Client.client.intlGet(this.guildId, 'youAreNotPairedWithServer');
+                    }
+                }
+
                 if (this.team.leaderSteamId === this.playerId) {
                     await this.team.changeLeadership(callerSteamId);
                 }
@@ -1179,6 +1187,14 @@ class RustPlus extends RustPlusLib {
                         });
                     }
                     else {
+                        if (this.generalSettings.leaderCommandOnlyForPaired) {
+                            if (!Object.keys(instance.serverListLite[this.serverId]).includes(player.steamId)) {
+                                return Client.client.intlGet(this.guildId, 'playerNotPairedWithServer', {
+                                    name: player.name
+                                });
+                            }
+                        }
+
                         if (this.team.leaderSteamId === this.playerId) {
                             await this.team.changeLeadership(player.steamId);
                         }

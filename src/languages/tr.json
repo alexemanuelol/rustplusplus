@@ -452,6 +452,7 @@
     "playerJustReturned": "{name} şimdi döndü - ({time}).",
     "playerJustWentAfk": "{name} AFK oldu.",
     "playerLeftTheTeam": "{name} takımdan ayrıldı.",
+    "playerNotPairedWithServer": "{name} sunucuyla eşleştirilmediğinden Lider komutu çalışmıyor.",
     "players": "Oyuncular",
     "plusSign": "Artı işareti",
     "populationPlayers": "Oyuncu: ({current}/{max})",
@@ -505,6 +506,7 @@
     "shouldBotBeMutedSetting": "Oyun içi komutlar susturulsun mu?",
     "shouldCommandsEnabledSetting": "Oyun içi komutlar aktif olsun mu?",
     "shouldLeaderCommandEnabledSetting": "Takım lideri komutu aktif olsun mu?",
+    "shouldLeaderCommandOnlyForPairedSetting": "Lider komutu yalnızca sunucuyla eşleştirilmiş kişiler için mi çalışmalı?",
     "shouldSmartAlarmNotifyNotConnectedSetting": "Akıllı alarmlar farklı sunucuya ait olsada haber versin mi?",
     "shouldSmartAlarmsNotifyInGameSetting": "Akıllı Alamlar oyun içi bildirim göndersin mi?",
     "showingSubscriptionList": "Abonelik listesi gösteriliyor.",
@@ -619,5 +621,6 @@
     "whenTrackersNotifySetting": "Battlemetrics takipçileri ne zaman bildirim versin?",
     "wipe": "Wipe",
     "wipeDetected": "Wipe tespit edildi!",
-    "youAreAlreadyLeader": "Zaten lidersin."
+    "youAreAlreadyLeader": "Zaten lidersin.",
+    "youAreNotPairedWithServer": "Sunucuyla eşleşmediğiniz için lider komutu çalışmıyor."
 }

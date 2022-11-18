@@ -452,6 +452,7 @@
     "playerJustReturned": "{name} just returned ({time}).",
     "playerJustWentAfk": "{name} just went AFK.",
     "playerLeftTheTeam": "{name} left the team.",
+    "playerNotPairedWithServer": "Leader command does not work because {name} is not paired with the server.",
     "players": "Players",
     "plusSign": "Plus Sign",
     "populationPlayers": "Population: ({current}/{max}) players.",
@@ -505,6 +506,7 @@
     "shouldBotBeMutedSetting": "Should the bot be muted in-game?",
     "shouldCommandsEnabledSetting": "Should in-game commands be enabled?",
     "shouldLeaderCommandEnabledSetting": "Should the leader command be enabled?",
+    "shouldLeaderCommandOnlyForPairedSetting": "Should the leader command only work for people that are paired with the server?",
     "shouldSmartAlarmNotifyNotConnectedSetting": "Should Smart Alarms notify even if they are not setup on the connected rust server?",
     "shouldSmartAlarmsNotifyInGameSetting": "Should Smart Alarms notify In-Game?",
     "showingSubscriptionList": "Showing the subscription list.",
@@ -619,5 +621,6 @@
     "whenTrackersNotifySetting": "When should the Battlemetrics trackers notify?",
     "wipe": "Wipe",
     "wipeDetected": "Wipe detected!",
-    "youAreAlreadyLeader": "You are already leader."
+    "youAreAlreadyLeader": "You are already leader.",
+    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
 }
