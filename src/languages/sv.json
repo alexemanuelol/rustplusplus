@@ -327,6 +327,7 @@
     "morePlayers": "{players} ...{number} mer.",
     "mutedCap": "DÄMPAD",
     "name": "Namn",
+    "nameChangeHistory": "Namnändringshistorik",
     "newVendingMachine": "Ny varuautomat finns vid {location}.",
     "newsCap": "NYHETER",
     "noActiveLockedCrates": "Inga låsta lådor aktiva.",

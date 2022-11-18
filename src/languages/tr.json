@@ -327,6 +327,7 @@
     "morePlayers": "{players} ...{number} daha.",
     "mutedCap": "SUSTURULDU",
     "name": "Ad",
+    "nameChangeHistory": "Ad Değiştirme Geçmiş",
     "newVendingMachine": "{location} konumunda yeni market açıldı.",
     "newsCap": "HABERLER",
     "noActiveLockedCrates": "Aktif bir kilitli sandık yok.",

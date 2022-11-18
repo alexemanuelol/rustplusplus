@@ -327,6 +327,7 @@
     "morePlayers": "{players} ...{number} more.",
     "mutedCap": "MUTED",
     "name": "Name",
+    "nameChangeHistory": "Name Change History",
     "newVendingMachine": "New Vending Machine located at {location}.",
     "newsCap": "NEWS",
     "noActiveLockedCrates": "No active Locked Crates.",

@@ -281,6 +281,7 @@ module.exports = async (client, interaction) => {
             everyone: false,
             inGame: true,
             players: [],
+            nameChangeHistory: [],
             img: server.img,
             title: server.title
         }

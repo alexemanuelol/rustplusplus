@@ -97,6 +97,14 @@ module.exports = {
                             playerName = calledSteamIdNames[player.steamId];
                         }
 
+                        if (player.name !== playerName) {
+                            changed = true;
+                            if (content.nameChangeHistory.length === 10) {
+                                content.nameChangeHistory.pop();
+                            }
+                            content.nameChangeHistory.unshift(`${player.name} → ${playerName} (${player.steamId}).`);
+                        }
+
                         onlinePlayer = onlinePlayers.find(e => e.name === playerName);
                         if (onlinePlayer) {
                             player.status = true;
