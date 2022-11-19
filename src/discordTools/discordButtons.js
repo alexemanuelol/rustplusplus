@@ -464,4 +464,32 @@ module.exports = {
                 style: enabled ? SUCCESS : DANGER
             }));
     },
+
+    getHelpButtons: function () {
+        return [
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    style: Discord.ButtonStyle.Link,
+                    label: 'DEVELOPER',
+                    url: 'https://github.com/alexemanuelol'
+                }),
+                module.exports.getButton({
+                    style: Discord.ButtonStyle.Link,
+                    label: 'REPOSITORY',
+                    url: 'https://github.com/alexemanuelol/rustPlusPlus'
+                })
+            ),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    style: Discord.ButtonStyle.Link,
+                    label: 'DOCUMENTATION',
+                    url: 'https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md'
+                }),
+                module.exports.getButton({
+                    style: Discord.ButtonStyle.Link,
+                    label: 'CREDENTIALS',
+                    url: 'https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/v1.0.2'
+                })
+            )];
+    },
 }

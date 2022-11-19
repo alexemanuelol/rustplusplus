@@ -827,4 +827,23 @@ module.exports = {
             description: `**${sender}**: ${str}`
         });
     },
+
+    getHelpEmbed: function (guildId) {
+        const repository = 'https://github.com/alexemanuelol/rustPlusPlus';
+        const credentials = `${repository}/blob/master/docs/credentials.md`;
+        const pairServer = `${repository}/blob/master/docs/pair_and_connect_to_server.md`;
+        const commands = `${repository}/blob/master/docs/commands.md`;
+
+        const description =
+            `→ [${Client.client.intlGet(guildId, 'commandsHelpHowToCredentials')}](${credentials})\n` +
+            `→ [${Client.client.intlGet(guildId, 'commandsHelpHowToPairServer')}](${pairServer})\n` +
+            `→ [${Client.client.intlGet(guildId, 'commandsHelpCommandList')}](${commands})`;
+
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: `rustPlusPlus Help`,
+            description: description
+        });
+    },
 }

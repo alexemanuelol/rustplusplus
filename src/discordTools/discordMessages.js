@@ -504,4 +504,14 @@ module.exports = {
 
         await module.exports.sendMessage(rustplus.guildId, content, null, instance.channelId.activity);
     },
+
+    sendHelpMessage: async function (interaction) {
+        const content = {
+            embeds: [DiscordEmbeds.getHelpEmbed(interaction.guildId)],
+            components: DiscordButtons.getHelpButtons(),
+            ephemeral: true
+        }
+
+        await Client.client.interactionReply(interaction, content);
+    },
 }
