@@ -13,7 +13,7 @@
 
 ![Steam Account login Image](images/steam_login.png)
 
-* When you have logged in, you should be greeted with a window that display the Slash Command /credentials set .....
+* When you have logged in, you should be greeted with a window that display the Slash Command /credentials add .....
 * Click `Copy` to copy the Slash Command.
 
 ![Credentials copy Image](images/credentials_copy.png)
@@ -21,6 +21,10 @@
 * Paste the Slash command in your Discord Server Text Channel. Which Text Channel you run the Slash Command is not important, as long as the bot has access to it.
 
 ![FCM Credentials discord Image](images/credentials_discord.png)
+
+* This process is the same for the owner of the bot as well as any teammate that want to register their credentials (mainly for the purpose to extend the usage of the leader command). Once a teammate have registered their credentials, they just need to go inside the game and pair with the server. Which teammates that have paired with the server can be seen in the information channel, they should have the P icon beside their name, see below:
+
+![Teammates Paired with Server](images/teammates_paired.png)
 
 ## Why is FCM Credentials necessary?
 

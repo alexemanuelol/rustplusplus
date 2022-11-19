@@ -41,7 +41,7 @@ module.exports = {
 				.addStringOption(option => option
 					.setName('image')
 					.setDescription(client.intlGet(guildId, 'commandsStoragemonitorEditImageDesc'))
-					.setRequired(false)
+					.setRequired(true)
 					.addChoices(
 						{ name: client.intlGet(guildId, 'storageMonitor'), value: 'storage_monitor' },
 						{ name: client.intlGet(guildId, 'toolCupboard'), value: 'tool_cupboard' },
