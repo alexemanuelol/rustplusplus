@@ -23,30 +23,31 @@ const Discord = require('discord.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, guild, category) => {
-    await addTextChannel('information', client, guild, category);
-    await addTextChannel('servers', client, guild, category);
-    await addTextChannel('settings', client, guild, category);
-    await addTextChannel('commands', client, guild, category, true);
-    await addTextChannel('events', client, guild, category);
-    await addTextChannel('teamchat', client, guild, category, true);
-    await addTextChannel('switches', client, guild, category);
-    await addTextChannel('switchGroups', client, guild, category);
-    await addTextChannel('alarms', client, guild, category);
-    await addTextChannel('storageMonitors', client, guild, category);
-    await addTextChannel('activity', client, guild, category);
-    await addTextChannel('trackers', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameInformation'), 'information', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameServers'), 'servers', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameSettings'), 'settings', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameCommands'), 'commands', client, guild, category, true);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameEvents'), 'events', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameTeamchat'), 'teamchat', client, guild, category, true);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameSwitches'), 'switches', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameSwitchGroups'), 'switchGroups', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameAlarms'), 'alarms', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameStorageMonitors'),
+        'storageMonitors', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameActivity'), 'activity', client, guild, category);
+    await addTextChannel(client.intlGet(guild.id, 'channelNameTrackers'), 'trackers', client, guild, category);
 };
 
-async function addTextChannel(name, client, guild, parent, permissionWrite = false) {
+async function addTextChannel(name, idName, client, guild, parent, permissionWrite = false) {
     const instance = client.getInstance(guild.id);
 
     let channel = undefined;
-    if (instance.channelId[name] !== null) {
-        channel = DiscordTools.getTextChannelById(guild.id, instance.channelId[name]);
+    if (instance.channelId[idName] !== null) {
+        channel = DiscordTools.getTextChannelById(guild.id, instance.channelId[idName]);
     }
     if (channel === undefined) {
         channel = await DiscordTools.addTextChannel(guild.id, name);
-        instance.channelId[name] = channel.id;
+        instance.channelId[idName] = channel.id;
         client.setInstance(guild.id, instance);
 
         try {
@@ -107,6 +108,10 @@ async function addTextChannel(name, client, guild, parent, permissionWrite = fal
     catch (e) {
         /* Ignore */
     }
+
+    /* Currently, this halts the entire application... Too lazy to fix...
+       It is possible to just remove the channels and let the bot recreate them with correct name language */
+    //channel.setName(name);
 
     channel.lockPermissions();
 }

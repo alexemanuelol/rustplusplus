@@ -352,6 +352,17 @@ module.exports = {
             }));
     },
 
+    getLeaderCommandOnlyForPairedButton: function (guildId, enabled) {
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: 'LeaderCommandOnlyForPaired',
+                label: enabled ?
+                    Client.client.intlGet(guildId, 'enabledCap') :
+                    Client.client.intlGet(guildId, 'disabledCap'),
+                style: enabled ? SUCCESS : DANGER
+            }));
+    },
+
     getTrackerButtons: function (guildId, trackerId) {
         const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];

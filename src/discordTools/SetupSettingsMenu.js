@@ -27,7 +27,7 @@ const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = async (client, guild) => {
+module.exports = async (client, guild, forced = false) => {
     const instance = client.getInstance(guild.id);
     const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.settings);
 
@@ -37,7 +37,7 @@ module.exports = async (client, guild) => {
         return;
     }
 
-    if (instance.firstTime) {
+    if (instance.firstTime || forced) {
         await DiscordTools.clearTextChannel(guild.id, instance.channelId.settings, 100);
 
         await setupGeneralSettings(client, guild.id, channel);
@@ -183,6 +183,18 @@ async function setupGeneralSettings(client, guildId, channel) {
         })],
         components: [DiscordButtons.getLeaderCommandEnabledButton(guildId,
             instance.generalSettings.leaderCommandEnabled)],
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [DiscordEmbeds.getEmbed({
+            color: Constants.COLOR_SETTINGS,
+            title: client.intlGet(guildId, 'shouldLeaderCommandOnlyForPairedSetting'),
+            thumbnail: `attachment://settings_logo.png`,
+        })],
+        components: [DiscordButtons.getLeaderCommandOnlyForPairedButton(guildId,
+            instance.generalSettings.leaderCommandOnlyForPaired)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });

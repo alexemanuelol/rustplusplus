@@ -26,98 +26,102 @@ module.exports = {
         const callerName = message.author.username;
         const commandLowerCase = command.toLowerCase();
         const prefix = rustplus.generalSettings.prefix;
+        const guildId = rustplus.guildId;
 
         let response = null;
-        if (commandLowerCase === `${prefix}afk`) {
+        if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxAfk')}`) {
             response = rustplus.getCommandAfk();
         }
-        else if (commandLowerCase.startsWith(`${prefix}alive`)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxAlive')}`)) {
             response = rustplus.getCommandAlive(command);
         }
-        else if (commandLowerCase === `${prefix}bradley`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxBradley')}`) {
             response = rustplus.getCommandBradley();
         }
-        else if (commandLowerCase === `${prefix}cargo`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxCargo')}`) {
             response = rustplus.getCommandCargo();
         }
-        else if (commandLowerCase === `${prefix}chinook`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxChinook')}`) {
             response = rustplus.getCommandChinook();
         }
-        else if (commandLowerCase.startsWith(`${prefix}connection `) ||
-            commandLowerCase.startsWith(`${prefix}connections`)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxConnection')} `) ||
+            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxConnections')}`)) {
             response = rustplus.getCommandConnection(command);
         }
-        else if (commandLowerCase === `${prefix}crate`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxCrate')}`) {
             response = rustplus.getCommandCrate();
         }
-        else if (commandLowerCase.startsWith(`${prefix}death `) ||
-            commandLowerCase.startsWith(`${prefix}deaths`)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxDeath')} `) ||
+            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxDeaths')}`)) {
             response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
-        else if (commandLowerCase === `${prefix}heli`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxHeli')}`) {
             response = rustplus.getCommandHeli();
         }
-        else if (commandLowerCase === `${prefix}large`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxLarge')}`) {
             response = rustplus.getCommandLarge();
         }
-        else if (commandLowerCase.startsWith(`${prefix}leader `)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxLeader')}`)) {
             response = await rustplus.getCommandLeader(command, null);
         }
-        else if (commandLowerCase.startsWith(`${prefix}marker `) || commandLowerCase === `${prefix}markers`) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxMarker')} `) ||
+            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxMarkers')}`) {
             response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
-        else if (commandLowerCase.startsWith(`${prefix}market `)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxMarket')} `)) {
             response = rustplus.getCommandMarket(command);
         }
-        else if (commandLowerCase === `${prefix}mute`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxMute')}`) {
             response = rustplus.getCommandMute();
         }
-        else if (commandLowerCase.startsWith(`${prefix}note `) || commandLowerCase === `${prefix}notes`) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxNote')} `) ||
+            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxNotes')}`) {
             response = rustplus.getCommandNote(command);
         }
-        else if (commandLowerCase === `${prefix}offline`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxOffline')}`) {
             response = rustplus.getCommandOffline();
         }
-        else if (commandLowerCase === `${prefix}online`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxOnline')}`) {
             response = rustplus.getCommandOnline();
         }
-        else if (commandLowerCase.startsWith(`${prefix}player`)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxPlayer')}`)) {
             response = rustplus.getCommandPlayer(command);
         }
-        else if (commandLowerCase === `${prefix}pop`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxPop')}`) {
             response = rustplus.getCommandPop();
         }
-        else if (commandLowerCase.startsWith(`${prefix}prox`)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxProx')}`)) {
             response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
-        else if (commandLowerCase.startsWith(`${prefix}send `)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxSend')} `)) {
             response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
-        else if (commandLowerCase === `${prefix}small`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxSmall')}`) {
             response = rustplus.getCommandSmall();
         }
-        else if (commandLowerCase === `${prefix}time`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxTime')}`) {
             response = rustplus.getCommandTime();
         }
-        else if (commandLowerCase.startsWith(`${prefix}timer `) || commandLowerCase === `${prefix}timers`) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxTimer')} `) ||
+            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxTimers')}`) {
             response = rustplus.getCommandTimer(command);
         }
-        else if (commandLowerCase.startsWith(`${prefix}tr `)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxTranslateTo')} `)) {
             response = await rustplus.getCommandTranslateTo(command);
         }
-        else if (commandLowerCase.startsWith(`${prefix}trf `)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxTranslateFromTo')} `)) {
             response = await rustplus.getCommandTranslateFromTo(command);
         }
-        else if (commandLowerCase.startsWith(`${prefix}tts `)) {
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxTTS')} `)) {
             response = await rustplus.getCommandTTS(command, callerName);
         }
-        else if (commandLowerCase === `${prefix}unmute`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxUnmute')}`) {
             response = rustplus.getCommandUnmute();
         }
-        else if (commandLowerCase === `${prefix}upkeep`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxUpkeep')}`) {
             response = rustplus.getCommandUpkeep();
         }
-        else if (commandLowerCase === `${prefix}wipe`) {
+        else if (commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxWipe')}`) {
             response = rustplus.getCommandWipe();
         }
         else {

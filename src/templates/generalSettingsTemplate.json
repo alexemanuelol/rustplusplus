@@ -8,6 +8,7 @@
     "fcmAlarmNotificationEveryone": false,
     "smartAlarmNotifyInGame": true,
     "leaderCommandEnabled": true,
+    "leaderCommandOnlyForPaired": false,
     "trackerNotifyAllOffline": true,
     "trackerNotifyAnyOnline": false,
     "commandDelay": 0,

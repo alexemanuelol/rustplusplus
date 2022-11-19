@@ -19,10 +19,9 @@
 */
 
 const Builder = require('@discordjs/builders');
-const Discord = require('discord.js');
-const Path = require('path');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
@@ -35,11 +34,32 @@ module.exports = {
 			.setDescription(client.intlGet(guildId, 'commandsResetDesc'))
 			.addSubcommand(subcommand => subcommand
 				.setName('discord')
-				.setDescription(client.intlGet(guildId, 'commandsResetDesc')));
+				.setDescription(client.intlGet(guildId, 'commandsResetDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('information')
+				.setDescription(client.intlGet(guildId, 'commandsResetInformationDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('servers')
+				.setDescription(client.intlGet(guildId, 'commandsResetServersDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('settings')
+				.setDescription(client.intlGet(guildId, 'commandsResetSettingsDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('switches')
+				.setDescription(client.intlGet(guildId, 'commandsResetSwitchesDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('alarms')
+				.setDescription(client.intlGet(guildId, 'commandsResetAlarmsDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('storagemonitors')
+				.setDescription(client.intlGet(guildId, 'commandsResetStorageMonitorsDesc')))
+			.addSubcommand(subcommand => subcommand
+				.setName('trackers')
+				.setDescription(client.intlGet(guildId, 'commandsResetTrackersDesc')));
 	},
 
 	async execute(client, interaction) {
-		let instance = client.getInstance(interaction.guildId);
+		const instance = client.getInstance(interaction.guildId);
 
 		if (!await client.validatePermissions(interaction)) return;
 
@@ -52,10 +72,10 @@ module.exports = {
 
 		await interaction.deferReply({ ephemeral: true });
 
+		const guild = DiscordTools.getGuild(interaction.guildId);
+
 		switch (interaction.options.getSubcommand()) {
 			case 'discord': {
-				const guild = DiscordTools.getGuild(interaction.guildId);
-
 				instance.firstTime = true;
 				client.setInstance(interaction.guildId, instance);
 
@@ -64,49 +84,97 @@ module.exports = {
 
 				await PermissionHandler.removeViewPermission(client, guild);
 
+				await DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
+				await DiscordTools.clearTextChannel(guild.id, instance.channelId.switches, 100);
+				await DiscordTools.clearTextChannel(guild.id, instance.channelId.switchGroups, 100);
+				await DiscordTools.clearTextChannel(guild.id, instance.channelId.storageMonitors, 100);
+
+				const rustplus = client.rustplusInstances[guild.id];
+				if (rustplus && rustplus.isOperational) {
+					await rustplus.map.writeMap(false, true);
+					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
+				}
+
 				await require('../discordTools/SetupServerList')(client, guild);
 				await require('../discordTools/SetupSettingsMenu')(client, guild);
+
+				if (rustplus && rustplus.isOperational) {
+					await require('../discordTools/SetupSwitches')(client, rustplus);
+					await require('../discordTools/SetupSwitchGroups')(client, rustplus);
+					await require('../discordTools/SetupAlarms')(client, rustplus);
+					await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+				}
+
 				await require('../discordTools/SetupTrackers')(client, guild);
 
-				instance = client.getInstance(interaction.guildId);
-				instance.informationMessageId.map = null;
-				instance.informationMessageId.server = null;
-				instance.informationMessageId.event = null;
-				instance.informationMessageId.team = null;
-				client.setInstance(interaction.guildId, instance);
+				await PermissionHandler.resetPermissions(client, guild);
+			} break;
 
+			case 'information': {
 				await DiscordTools.clearTextChannel(guild.id, instance.channelId.information, 100);
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
 					await rustplus.map.writeMap(false, true);
-
-					const channel = DiscordTools.getTextChannelById(guild.id, instance.channelId.information);
-
-					if (!channel) {
-						client.log(client.intlGet(null, 'errorCap'),
-							client.intlGet(interaction.guildId, 'invalidGuildOrChannel'), 'error');
-					}
-					else {
-						instance = client.getInstance(guild.id);
-
-						const file = new Discord.AttachmentBuilder(
-							Path.join(__dirname, '..', `resources/images/maps/${guild.id}_map_full.png`));
-						const msg = await client.messageSend(channel, { files: [file] });
-						instance.informationMessageId.map = msg.id;
-						client.setInstance(guild.id, instance);
-					}
+					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
+			} break;
 
+			case 'servers': {
+				await PermissionHandler.removeViewPermission(client, guild);
+				await require('../discordTools/SetupServerList')(client, guild);
 				await PermissionHandler.resetPermissions(client, guild);
+			} break;
 
-				const str = client.intlGet(interaction.guildId, 'resetSuccess');
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-				client.log(client.intlGet(null, 'infoCap'), str);
+			case 'settings': {
+				await PermissionHandler.removeViewPermission(client, guild);
+				await require('../discordTools/SetupSettingsMenu')(client, guild, true);
+				await PermissionHandler.resetPermissions(client, guild);
+			} break;
+
+			case 'switches': {
+				await DiscordTools.clearTextChannel(guild.id, instance.channelId.switches, 100);
+				await DiscordTools.clearTextChannel(guild.id, instance.channelId.switchGroups, 100);
+
+				await PermissionHandler.removeViewPermission(client, guild);
+				const rustplus = client.rustplusInstances[guild.id];
+				if (rustplus && rustplus.isOperational) {
+					await require('../discordTools/SetupSwitches')(client, rustplus);
+					await require('../discordTools/SetupSwitchGroups')(client, rustplus);
+				}
+				await PermissionHandler.resetPermissions(client, guild);
+			} break;
+
+			case 'alarms': {
+				const rustplus = client.rustplusInstances[guild.id];
+				if (rustplus && rustplus.isOperational) {
+					await require('../discordTools/SetupAlarms')(client, rustplus);
+				}
+			} break;
+
+			case 'storagemonitors': {
+				await DiscordTools.clearTextChannel(guild.id, instance.channelId.storageMonitors, 100);
+
+				await PermissionHandler.removeViewPermission(client, guild);
+				const rustplus = client.rustplusInstances[guild.id];
+				if (rustplus && rustplus.isOperational) {
+					await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+				}
+				await PermissionHandler.resetPermissions(client, guild);
+			} break;
+
+			case 'trackers': {
+				await PermissionHandler.removeViewPermission(client, guild);
+				await require('../discordTools/SetupTrackers')(client, guild);
+				await PermissionHandler.resetPermissions(client, guild);
 			} break;
 
 			default: {
 			} break;
 		}
+
+		const str = client.intlGet(interaction.guildId, 'resetSuccess');
+		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+		client.log(client.intlGet(null, 'infoCap'), str);
 	},
 };

@@ -111,6 +111,11 @@ module.exports = {
                 `${Constants.ONLINE_EMOJI} [${player.time}]` : `${Constants.OFFLINE_EMOJI}`}\n`;
         }
 
+        let nameChangeHistory = Client.client.intlGet(guildId, 'empty');
+        if (tracker.nameChangeHistory.length !== 0) {
+            nameChangeHistory = tracker.nameChangeHistory.join('\n');
+        }
+
         if (playerName === '') playerName = Client.client.intlGet(guildId, 'empty');
         if (playerSteamId === '') playerSteamId = Client.client.intlGet(guildId, 'empty');
         if (playerStatus === '') playerStatus = Client.client.intlGet(guildId, 'empty');
@@ -124,7 +129,8 @@ module.exports = {
             fields: [
                 { name: Client.client.intlGet(guildId, 'name'), value: playerName, inline: true },
                 { name: 'SteamID', value: playerSteamId, inline: true },
-                { name: Client.client.intlGet(guildId, 'status'), value: playerStatus, inline: true }],
+                { name: Client.client.intlGet(guildId, 'status'), value: playerStatus, inline: true },
+                { name: Client.client.intlGet(guildId, 'nameChangeHistory'), value: nameChangeHistory }],
             timestamp: true
         });
     },
