@@ -4,7 +4,7 @@
 
 ## Retrieving FCM Credentials
 
-* Download and install the [rustPlusPlus FCM Credential Application](https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/download/v1.0.2/rustPlusPlus-1.0.2-win-x64.exe)
+* Download and install the [rustPlusPlus FCM Credential Application](https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/download/v1.1.0/rustPlusPlus-1.1.0-win-x64.exe)
 * Once downloaded and installed, open it and press the button `Connect with Rust+`.
 
 ![rustPlusPlus FCM Credential Application Image](images/fcm_credential_application_connect.png)

@@ -42,7 +42,7 @@ A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/r
 
 ## **Credentials**
 
-> You can get your credentials by running the `rustPlusPlus FCM Credential Application`. Download it [here](https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/download/v1.0.2/rustPlusPlus-1.0.2-win-x64.exe)
+> You can get your credentials by running the `rustPlusPlus FCM Credential Application`. Download it [here](https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/download/v1.1.0/rustPlusPlus-1.1.0-win-x64.exe)
 
 
 ## **How to run the bot**
