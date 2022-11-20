@@ -87,7 +87,9 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `SmartSwitchEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', { device: entity.name })
+            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
+                device: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
+            })
         });
 
         modal.addComponents(
@@ -115,7 +117,9 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `GroupEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', { device: group.name })
+            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
+                device: group.name.length > 18 ? `${group.name.slice(0, 18)}..` : group.name
+            })
         });
 
         modal.addComponents(
@@ -187,7 +191,9 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `SmartAlarmEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', { device: entity.name })
+            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
+                device: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
+            })
         });
 
         modal.addComponents(
@@ -215,7 +221,9 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `StorageMonitorEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', { device: entity.name })
+            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
+                device: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
+            })
         });
 
         modal.addComponents(
@@ -237,7 +245,9 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `TrackerEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', { device: tracker.name })
+            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
+                device: tracker.name.length > 18 ? `${tracker.name.slice(0, 18)}..` : tracker.name
+            })
         });
 
         modal.addComponents(
