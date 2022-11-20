@@ -76,9 +76,6 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'discord': {
-				instance.firstTime = true;
-				client.setInstance(interaction.guildId, instance);
-
 				const category = await require('../discordTools/SetupGuildCategory')(client, guild);
 				await require('../discordTools/SetupGuildChannels')(client, guild, category);
 
@@ -96,7 +93,7 @@ module.exports = {
 				}
 
 				await require('../discordTools/SetupServerList')(client, guild);
-				await require('../discordTools/SetupSettingsMenu')(client, guild);
+				await require('../discordTools/SetupSettingsMenu')(client, guild, true);
 
 				if (rustplus && rustplus.isOperational) {
 					await require('../discordTools/SetupSwitches')(client, rustplus);

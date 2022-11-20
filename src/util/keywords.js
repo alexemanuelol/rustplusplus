@@ -19,50 +19,52 @@
 */
 
 module.exports = {
-    commands: [
-        'afk',
-        'alive',
-        'bradley',
-        'cargo',
-        'chinook',
-        'connection',
-        'connections',
-        'crate',
-        'death',
-        'deaths',
-        'heli',
-        'large',
-        'leader',
-        'marker',
-        'markers',
-        'market',
-        'mute',
-        'note',
-        'notes',
-        'offline',
-        'online',
-        'player',
-        'players',
-        'pop',
-        'prox',
-        'send',
-        'small',
-        'time',
-        'timer',
-        'timers',
-        'tr',
-        'trf',
-        'tts',
-        'unmute',
-        'upkeep',
-        'wipe'
-    ],
+    getListOfCommandKeywords: function (client, guildId) {
+        return [
+            client.intlGet(guildId, 'commandSyntaxAfk'),
+            client.intlGet(guildId, 'commandSyntaxAlive'),
+            client.intlGet(guildId, 'commandSyntaxBradley'),
+            client.intlGet(guildId, 'commandSyntaxCargo'),
+            client.intlGet(guildId, 'commandSyntaxChinook'),
+            client.intlGet(guildId, 'commandSyntaxConnection'),
+            client.intlGet(guildId, 'commandSyntaxConnections'),
+            client.intlGet(guildId, 'commandSyntaxCrate'),
+            client.intlGet(guildId, 'commandSyntaxDeath'),
+            client.intlGet(guildId, 'commandSyntaxDeaths'),
+            client.intlGet(guildId, 'commandSyntaxHeli'),
+            client.intlGet(guildId, 'commandSyntaxLarge'),
+            client.intlGet(guildId, 'commandSyntaxLeader'),
+            client.intlGet(guildId, 'commandSyntaxMarker'),
+            client.intlGet(guildId, 'commandSyntaxMarkers'),
+            client.intlGet(guildId, 'commandSyntaxMarket'),
+            client.intlGet(guildId, 'commandSyntaxMute'),
+            client.intlGet(guildId, 'commandSyntaxNote'),
+            client.intlGet(guildId, 'commandSyntaxNotes'),
+            client.intlGet(guildId, 'commandSyntaxOffline'),
+            client.intlGet(guildId, 'commandSyntaxOnline'),
+            client.intlGet(guildId, 'commandSyntaxPlayer'),
+            client.intlGet(guildId, 'commandSyntaxPlayers'),
+            client.intlGet(guildId, 'commandSyntaxPop'),
+            client.intlGet(guildId, 'commandSyntaxProx'),
+            client.intlGet(guildId, 'commandSyntaxSend'),
+            client.intlGet(guildId, 'commandSyntaxSmall'),
+            client.intlGet(guildId, 'commandSyntaxTime'),
+            client.intlGet(guildId, 'commandSyntaxTimer'),
+            client.intlGet(guildId, 'commandSyntaxTimers'),
+            client.intlGet(guildId, 'commandSyntaxTranslateTo'),
+            client.intlGet(guildId, 'commandSyntaxTranslateFromTo'),
+            client.intlGet(guildId, 'commandSyntaxTTS'),
+            client.intlGet(guildId, 'commandSyntaxUnmute'),
+            client.intlGet(guildId, 'commandSyntaxUpkeep'),
+            client.intlGet(guildId, 'commandSyntaxWipe')
+        ];
+    },
 
     getListOfUsedKeywords: function (client, guildId, serverId) {
         const instance = client.getInstance(guildId);
 
         let list = [];
-        list = [...module.exports.commands];
+        list = [...module.exports.getListOfCommandKeywords(client, guildId)];
         for (const [id, value] of Object.entries(instance.serverList[serverId].switches)) {
             list.push(value.command);
         }

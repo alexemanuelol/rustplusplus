@@ -11,7 +11,6 @@ Slash Command | Description
 ------------- | -----------
 [**/alarm**](commands.md#alarm) | Operations on Smart Alarms.
 [**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
-[**/customizetimers**](commands.md#customizetimers) | Operations to customize In-Game timers.
 [**/help**](commands.md#help) | Display help message.
 [**/leader**](commands.md#leader) | Give or take the leadership from/to a team member.
 [**/map**](commands.md#map) | Get the currently connected server map image.
@@ -21,7 +20,6 @@ Slash Command | Description
 [**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustPlusPlus category content.
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
 [**/switch**](commands.md#switch) | Operations on Smart Switches.
-[**/tracker**](commands.md#tracker) | Operations for Battlemetrics Player Tracker.
 
 
 ## **/alarm**
@@ -39,11 +37,11 @@ Subcommand | Options | Description | Required
 
 ## **/credentials**
 
-> **Set/Clear the FCM Credentials for the user account.**
+> **Add/Remove the FCM Credentials for the user account.**
 
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
-`set` | &nbsp; | Set the FCM Credentials. | &nbsp;
+`add` | &nbsp; | Add FCM Credentials. | &nbsp;
 &nbsp; | `keys_private_key` | Keys Private Key. | `True`
 &nbsp; | `keys_public_key` | Keys Public Key. | `True`
 &nbsp; | `keys_auth_secret` | Keys Auth Secret. | `True`
@@ -53,30 +51,15 @@ Subcommand | Options | Description | Required
 &nbsp; | `gcm_android_id` | FCM Android ID. | `True`
 &nbsp; | `gcm_security_token` | GCM Security Token. | `True`
 &nbsp; | `gcm_app_id` | GCM App ID. | `True`
-`clear` | &nbsp; | Clear the FCM Credentials. | &nbsp;
-`is_set` | &nbsp; | Is the FCM Credentials already set for this Discord Server? | &nbsp;
+&nbsp; | `steam_id` | Steam ID. | `True`
+&nbsp; | `hoster` | Should be hoster. | `False`
+`remove` | &nbsp; | Remove FCM Credentials. | &nbsp;
+&nbsp; | `steam_id` | Steam ID. | `False`
+`show` | &nbsp; | Show all registered FCM Credentials. | &nbsp;
+`set_hoster` | &nbsp; | Set the hoster. | &nbsp;
+&nbsp; | `steam_id` | Steam ID. | `False`
 
 ![Discord Slash Command credentials Image](images/credentials.png)
-
-
-## **/customizetimers**
-
-> **Operations to customize In-Game timers.** Calling the Slash commands without any options will return the currently configured time.
-
-Subcommand | Options | Description | Required
----------- | ------- | ----------- | --------
-`cargo_ship_egress_time` | &nbsp; | Get/Set time for cargo ship egress stage timer for connected server, default: 50min (3000s). | &nbsp;
-&nbsp; | `seconds` | Seconds before cargo ship enters egress stage. | `False`
-`bradley_apc_respawn_time` | &nbsp; | Get/Set time for Bradley APC respawn timer for connected server, default: 60min (3600s). | &nbsp;
-&nbsp; | `seconds` | Seconds till Bradley APC respawns. | `False`
-`crate_despawn_time` | &nbsp; | Get/Set time for Locked Crate despawn timer for connected server, default: 120min (7200s). | &nbsp;
-&nbsp; | `seconds` | Seconds till Locked Crate despawns. | `False`
-`crate_despawn_warning_time` | &nbsp; | Get/Set time for warning before Locked Crate despawns for connected server, default: 20min (1200s). | &nbsp;
-&nbsp; | `seconds` | Seconds before Locked Crate despawn warning. | `False`
-`oil_rig_crate_unlock_time` | &nbsp; | Get/Set time for Locked Crate on Oil Rig unlocks for connected server, default: 15min (900s). | &nbsp;
-&nbsp; | `seconds` | Seconds till Locked Crate on Oil Rig unlocks. | `False`
-
-![Discord Slash Command customizetimers Image](images/customizetimers.png)
 
 
 ## **/help**
@@ -149,6 +132,13 @@ Subcommand | Options | Description | Required
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `discord` | &nbsp; | Reset discord channels. | &nbsp;
+`information` | &nbsp; | Reset information channel. | &nbsp;
+`servers` | &nbsp; | Reset servers channel. | &nbsp;
+`settings` | &nbsp; | Reset settings channel. | &nbsp;
+`switches` | &nbsp; | Reset switches channels. | &nbsp;
+`alarms` | &nbsp; | Reset alarms channel. | &nbsp;
+`storagemonitors` | &nbsp; | Reset storagemonitors channel. | &nbsp;
+`trackers` | &nbsp; | Reset trackers channel. | &nbsp;
 
 ![Discord Slash Command reset Image](images/reset.png)
 
@@ -174,10 +164,7 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `edit` | &nbsp; | Edit the properties of a Storage Monitor. | &nbsp;
 &nbsp; | `id` | The ID of the Storage Monitor. | `True`
-&nbsp; | `name` | Rename the Storage Monitor. | `False`
-&nbsp; | `image` | Set the image that best represent the Storage Monitor. | `False`
-`recycle` | &nbsp; | Calculate the resources gained from recycling the content of a Storage Monitor. | &nbsp;
-&nbsp; | `id` | The ID of the Storage Monitor. | `True`
+&nbsp; | `image` | Set the image that best represent the Storage Monitor. | `True`
 
 ![Discord Slash Command storagemonitor Image](images/storagemonitor.png)
 
@@ -188,43 +175,11 @@ Subcommand | Options | Description | Required
 
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
-`edit_switch` | &nbsp; | Edit the properties of a Smart Switch. | &nbsp;
+`edit` | &nbsp; | Edit the properties of a Smart Switch. | &nbsp;
 &nbsp; | `id` | The ID of the Smart Switch. | `True`
-&nbsp; | `image` | Set the image that best represent the Smart Switch. | `False`
-`create_group` | &nbsp; | Create a Smart Switch Group. | &nbsp;
-&nbsp; | `group_name` | The name of the Group to be created. | `True`
-&nbsp; | `command` | Set the custom command for the Group. | `True`
-`edit_group` | &nbsp; | Edit the properties of a Group. | &nbsp;
-&nbsp; | `group_name` | The name of the Group. | `True`
-&nbsp; | `command` | Set the custom command for the Group. | `False`
-`add_switch` | &nbsp; | Add a Smart Switch to a Group. | &nbsp;
-&nbsp; | `group_name` | The name of the Group. | `True`
-&nbsp; | `switch_id` | The Smart Switch ID. | `True`
-`remove_switch` | &nbsp; | Remove a Smart Switch to a Group. | &nbsp;
-&nbsp; | `group_name` | The name of the Group. | `True`
-&nbsp; | `switch_id` | The Smart Switch ID. | `True`
+&nbsp; | `image` | Set the image that best represent the Smart Switch. | `True`
 
 ![Discord Slash Command switch Image](images/switch.png)
-
-
-## **/tracker**
-
-> **Operations for Battlemetrics Player Tracker**
-
-Subcommand | Options | Description | Required
----------- | ------- | ----------- | --------
-`edit` | &nbsp; | Edit a Battlemetrics Player Tracker. | &nbsp;
-&nbsp; | `tracker_name` | The name of the Tracker. | `True`
-&nbsp; | `new_tracker_name` | The new name for the tracker. | `True`
-`add_player` | &nbsp; | Add a player to the Battlemetrics Player Tracker. | &nbsp;
-&nbsp; | `tracker_name` | The name of the Tracker. | `True`
-&nbsp; | `steam_id` | The steam ID for the player. | `True`
-`remove_player` | &nbsp; | Remove a player from the Battlemetrics Player Tracker. | &nbsp;
-&nbsp; | `tracker_name` | The name of the Tracker. | `True`
-&nbsp; | `steam_id` | The steam ID for the player. | `True`
-
-![Discord Slash Command tracker Image](images/tracker.png)
-
 
 
 # In-Game Commands
@@ -236,11 +191,14 @@ In-Game Command | Description
 [**bradley**](commands.md#bradley) | Get information about Bradley APC (Time till respawn, time since last destroyed).
 [**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, current crates, time since last on map).
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
+[**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
 [**crate**](commands.md#crate) | Get information about Locked Crate dropped by Chinook47 (Location, time till despawn, time since last dropped).
+[**death/deaths**](commands.md#deathdeaths) | Get recent death events.
 [**heli**](commands.md#heli) | Get information about Patrol Helicopter (Location, time since last downed, time since last on map).
 [**large**](commands.md#large) | Get information about Large Oil Rig (Time till crate unlocks, time since last trigger).
 [**leader**](commands.md#leader-1) | Give/Take the Team Leadership.
 [**marker**](commands.md#marker) | Set custom markers anywhere on the map.
+[**market**](commands.md#market-ingame) | Search for items in vending machines or subscribe/unsubscribe to items.
 [**mute**](commands.md#mute) | Mute the bot from the In-Game Team Chat.
 [**note/notes**](commands.md#notenotes) | Create notes about meaningful things.
 [**offline**](commands.md#offline) | Get the currently offline players in your team.
@@ -248,9 +206,12 @@ In-Game Command | Description
 [**player/players**](commands.md#playerplayers) | Get the names and playtime of the currently online players on the server (Based on Battlemetrics).
 [**pop**](commands.md#pop) | Get the current population of the server including queue size and max population.
 [**prox**](commands.md#prox) | Get the distance to the three closest teammates.
+[**send**](commands.md#send) | Send a message to a discord user.
 [**small**](commands.md#small) | Get information about Small Oil Rig (Time till crate unlocks, time since last trigger).
 [**time**](commands.md#time) | Get the current time In-Game and time till day/night.
 [**timer**](commands.md#timer) | Set custom timers that will notify whenever the timer have expired.
+[**tr**](commands.md#tr) | Translate a text to another language.
+[**trf**](commands.md#trf) | Translate a text from one language to another.
 [**tts**](commands.md#tts) | Send a Text-To-Speech message to the Discord teamchat channel.
 [**unmute**](commands.md#unmute) | Unmute the bot from the In-Game Team Chat.
 [**upkeep**](commands.md#upkeep) | Get the upkeep time of all connected tool cupboard monitors.
@@ -268,8 +229,9 @@ In-Game Command | Description
 
 ## **alive**
 
-> **Get the player with the longest time alive.**
+> **Get the player with the longest time alive or the alive time of a teammate.**
 <br>Command: `!alive`
+<br>Command: `!alive Alle`
 
 ![In-Game Command alive Image](images/alive_ingame.png)
 
@@ -298,12 +260,30 @@ In-Game Command | Description
 ![In-Game Command chinook Image](images/chinook_ingame.png)
 
 
+## **connection/connections**
+
+> **Get recent connection events of the team or from a specific teammate.**
+<br>Command: `!connections`
+<br>Command: `!connection Alle`
+
+![In-Game Command connection Image](images/connection_ingame.png)
+
+
 ## **crate**
 
 > **Get information about Locked Crate dropped by Chinook47 (Location, time till despawn, time since last dropped).**
 <br>Command: `!crate`
 
 ![In-Game Command crate Image](images/crate_ingame.png)
+
+
+## **death/deaths**
+
+> **Get recent death events of the team or from a specific teammate.**
+<br>Command: `!deaths`
+<br>Command: `!death Alle`
+
+![In-Game Command death Image](images/death_ingame.png)
 
 
 ## **heli**
@@ -348,6 +328,20 @@ Subcommand | Description | Required
 ![In-Game Command marker Image](images/marker_ingame.png)
 
 
+## **market ingame**
+
+> **Search for items in vending machines or subscribe/unsubscribe to items.**
+
+Subcommand | Description | Required
+---------- | ----------- | --------
+`search` | Search for an item in Vending Machines (`!market search thompson`). | `False`
+`subscribe` | Subscribe to an item in Vending Machines (`!market sub thompson`). | `False`
+`unsubscribe` | Unsubscribe to an item in Vending Machines (`!market unsub thompson`). | `False`
+`list` | Display the subscription list (`!market list`). | `False`
+
+![In-Game Command market Image](images/market_ingame.png)
+
+
 ## **mute**
 
 > **Mute the bot from the In-Game Team Chat.** This will mute everything the bot would normally say in Team Chat such as command response, event notifications, timers, Smart Device notifications.
@@ -358,10 +352,11 @@ Subcommand | Description | Required
 
 ## **note/notes**
 
-> **Create notes about meaningful things.** To add a note simply run `!note <text>`. To list all registered notes run `!notes`, all note ids will be presented as well.
+> **Create notes about meaningful things.** To list all registered notes run `!notes`, all note ids will be presented as well.
 
 Subcommand | Description | Required
 ---------- | ----------- | --------
+`add` | Add a note (`!note add <text>`). | `False`
 `remove` | Remove a note (`!note remove <id>`). | `False`
 
 ![In-Game Command notes Image](images/notes_ingame.png)
@@ -404,6 +399,14 @@ Subcommand | Description | Required
 > **Get the distance to the three closest teammates.** To get the three closest teammates run `!prox`. To get the distance to a team member run `!prox <name or part of name>`.
 
 ![In-Game Command prox Image](images/prox_ingame.png)
+
+
+## **send**
+
+> **Send a message to a discord user.**
+<br>Command: `!send Alle Hello my friend!`
+
+![In-Game Command send Image](images/send_ingame.png)
 
 
 ## **small**

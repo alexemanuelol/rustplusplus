@@ -19,9 +19,8 @@
 */
 
 const Builder = require('@discordjs/builders');
-const Discord = require('discord.js');
 
-const DiscordButtons = require('../discordTools/discordButtons.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
 	name: 'help',
@@ -33,33 +32,7 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
-		await client.interactionReply(interaction, {
-			components: [new Discord.ActionRowBuilder()
-				.addComponents(
-					DiscordButtons.getButton({
-						style: Discord.ButtonStyle.Link,
-						label: 'DEVELOPER',
-						url: 'https://github.com/alexemanuelol'
-					}),
-					DiscordButtons.getButton({
-						style: Discord.ButtonStyle.Link,
-						label: 'REPOSITORY',
-						url: 'https://github.com/alexemanuelol/rustPlusPlus'
-					}),
-					DiscordButtons.getButton({
-						style: Discord.ButtonStyle.Link,
-						label: 'DOCUMENTATION',
-						url: 'https://github.com/alexemanuelol/rustPlusPlus/blob/master/docs/documentation.md'
-					}),
-					DiscordButtons.getButton({
-						style: Discord.ButtonStyle.Link,
-						label: 'CREDENTIALS',
-						url: 'https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/v1.0.2'
-					})
-				)
-			],
-			ephemeral: true
-		});
+		await DiscordMessages.sendHelpMessage(interaction);
 		client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsHelpDesc'));
 	},
 };
