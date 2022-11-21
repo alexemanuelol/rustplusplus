@@ -185,6 +185,45 @@ class DiscordBot extends Discord.Client {
         if (firstTime) await PermissionHandler.resetPermissions(this, guild);
     }
 
+    async syncCredentialsWithUsers(guild) {
+        const credentials = InstanceUtils.readCredentialsFile(guild.id);
+
+        const members = await guild.members.fetch();
+        const memberIds = [];
+        for (const member of members) {
+            memberIds.push(member[0]);
+        }
+
+        const steamIdRemoveCredentials = [];
+        for (const [steamId, content] of Object.entries(credentials)) {
+            if (steamId === 'hoster') continue;
+
+            if (!(memberIds.includes(content.discordUserId))) {
+                steamIdRemoveCredentials.push(steamId);
+            }
+        }
+
+        for (const steamId of steamIdRemoveCredentials) {
+            if (steamId === credentials.hoster) {
+                if (this.fcmListeners[guild.id]) {
+                    this.fcmListeners[guild.id].destroy();
+                }
+                delete this.fcmListeners[guild.id];
+                credentials.hoster = null;
+            }
+            else {
+                if (this.fcmListenersLite[guild.id][steamId]) {
+                    this.fcmListenersLite[guild.id][steamId].destroy();
+                }
+                delete this.fcmListenersLite[guild.id][steamId];
+            }
+
+            delete credentials[steamId];
+        }
+
+        InstanceUtils.writeCredentialsFile(guild.id, credentials);
+    }
+
     getInstance(guildId) {
         return this.instances[guildId];
     }

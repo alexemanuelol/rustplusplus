@@ -65,6 +65,7 @@ module.exports = {
             catch (e) {
                 client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'ignoreSetNickname'));
             }
+            await client.syncCredentialsWithUsers(guild);
             await client.setupGuild(guild);
         });
 
