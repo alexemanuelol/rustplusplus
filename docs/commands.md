@@ -316,13 +316,12 @@ Subcommand | Description | Required
 
 ## **marker**
 
-> **Set custom markers anywhere on the map.** This command can be very useful for small stash locations. Place down a small stash, create a marker on that spot and be able to navigate back to that exact place at a later stage.
+> **Set custom markers anywhere on the map.** This command can be very useful for small stash locations. Place down a small stash, create a marker on that spot and be able to navigate back to that exact place at a later stage. To list all registered markers, run `!markers`.
 
 Subcommand | Description | Required
 ---------- | ----------- | --------
 `add` | Add a custom marker (`!marker add <name>`). | `False`
 `remove` | Remove a custom marker (`!marker remove <id>`). | `False`
-`list` | List all registered custom markers for this server with respective ID (`!marker list`). | `False`
 `<marker_name>` | Calling with the name of the marker will let you navigate to that marker (`!marker <name>`). | `False`
 
 ![In-Game Command marker Image](images/marker_ingame.png)
@@ -427,14 +426,13 @@ Subcommand | Description | Required
 
 ## **timer**
 
-> **Set custom timers that will notify whenever the timer have expired.**
+> **Set custom timers that will notify whenever the timer have expired.** To list all registered timers run `!timers`.
 <br>`The argument <time> is used to set time in the format: 2h15m or 15m10s etc... (not space between d/h/m/s).`
 
 Subcommand | Description | Required
 ---------- | ----------- | --------
 `add` | Add a custom timer (`!timer add <time> <text>`). | `False`
 `remove` | Remove a custom timer (`!timer remove <id>`). | `False`
-`list` | List all registered custom timers (`!timer list`). | `False`
 
 ![In-Game Command timer Image](images/timer_ingame.png)
 
