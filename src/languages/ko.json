@@ -360,7 +360,7 @@
     "lockedCrateRefreshOnLarge": "{location}에 있는 대형 {rig}가 다시 스폰되었습니다.",
     "lockedCrateRefreshOnSmall": "{location}에 있는 소형 {rig}가 다시 스폰되었습니다.",
     "lockedCrateRespawnOilRigSetting": "석유 굴착지에서 잠긴 상자가 나타나면 알림을 보냅니다.",
-    "lockedCrateRespawnedOnLarge": "{location}에 있는 대형 {rig}에서 잠긴 상자가 리스폰 되었습니다.",
+    "lockedCrateRespawnedOnLarge": "{location}에 있는 {rig}에서 잠긴 상자가 리스폰 되었습니다.",
     "lockedCrateRespawnedOnSmall": "{location}에 있는 소형 {rig}에서 잠긴 상자가 리스폰 되었습니다.",
     "lockedCrateSmallLooted": "{location}에 있는 소형 굴착지의 잠긴 상자가 방금 약탈되었습니다.",
     "lockedCrateSmallOilRigUnlocked": "{location}에 있는 소형 굴착지의 잠긴 상자가 잠금 해제되었습니다.",
