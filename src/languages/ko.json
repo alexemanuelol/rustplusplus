@@ -607,7 +607,7 @@
     "trainYard": "기차 차고지",
     "turnOffCap": "끄기",
     "turnOnCap": "켜기",
-    "turningGroupOnOff": "스위치 {group} {status} 전환 중.",
+    "turningGroupOnOff": "스위치 {group} {status} 전환",
     "two": "2",
     "type": "타입",
     "unavailable": "사용할 수 없습니다",
