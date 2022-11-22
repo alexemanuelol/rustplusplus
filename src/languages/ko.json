@@ -531,7 +531,7 @@
     "smartAlarmEditNameLabel": "스마트 알람의 이름:",
     "smartAlarmEditSuccess": "스마트 알람 {name} 을(를) 수정했습니다.",
     "smartAlarmNotifyExtendSetting": "- 이러한 알람 알림은 게임 내 스마트 알람에 주어진 제목과 메시지를 사용합니다.\n- 이러한 스마트 경보는 디스코드 알람 채널에서 사용할 수 없습니다.",
-    "smartDeviceNotFound": "{device}을(를) 찾을 수 없습니다! 제거되었거나 {user} 이(가) 도구함에 액세스할 수 없습니다.",
+    "smartDeviceNotFound": "{device}을(를) 찾을 수 없습니다! 제거되었거나 {user} 이(가) 디바이스에 액세스할 수 없습니다.",
     "smartSwitch": "스마트 스위치",
     "smartSwitchAutoDay": "스마트 스위치는 낮에만 활성화됩니다.",
     "smartSwitchAutoNight": "스마트 스위치는 밤에만 활성화됩니다.",
