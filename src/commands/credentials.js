@@ -260,7 +260,8 @@ async function setHosterCredentials(client, interaction) {
     }
 
     if (!steamId) {
-        steamId = Object.keys(credentials).find(e => credentials[e].discordUserId === interaction.member.user.id);
+        steamId = Object.keys(credentials).find(e => credentials[e] &&
+            credentials[e].discordUserId === interaction.member.user.id);
     }
 
     if (!(steamId in credentials)) {
