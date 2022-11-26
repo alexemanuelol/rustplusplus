@@ -20,7 +20,11 @@
 
 const PushReceiver = require('push-receiver');
 
+const Constants = require('../util/constants.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
+const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild, steamId) => {
     const credentials = InstanceUtils.readCredentialsFile(guild.id);
