@@ -39,7 +39,7 @@
     "bradleyApcShouldRespawnSetting": "När Bradley APC borde respawna, skicka en notifikation.",
     "bradleyDestroyed": "Bradley APC förstördes på {location}.",
     "bradleyOrHeliDestroyed": "Bradley APC eller Patrullhelikopter förstördes på {location}.",
-    "bradleyRoamingAround": "Bradley APC strövar förmodlingen omkring på Uppskjutningsplatsen.",
+    "bradleyRoamingAround": "Bradley APC strövar förmodligen omkring på Uppskjutningsplatsen.",
     "broadcaster": "Sändare",
     "buttonReconnecting": "ÅTERANSLUTER",
     "cargoAtCrates": "På {location}.\nLådor: {crates}.",
