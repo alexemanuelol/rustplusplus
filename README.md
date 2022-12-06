@@ -8,6 +8,10 @@
 <a href="https://ko-fi.com/alexemanuelol"><img src="https://img.shields.io/badge/Donate%20a%20Coffee-alexemanuelol-yellow?style=flat&logo=buy-me-a-coffee" alt="donate on ko-fi"/></a>
 
 <p align="center">
+<a href="https://crowdin.com/project/rustplusplus"><img src="https://badges.crowdin.net/rustplusplus/localized.svg" alt="donate on ko-fi"/></a>
+</p>
+
+<p align="center">
     <a href="https://discord.gg/vcrKbKVAbc">
         <img src="./join_discord.png" width="250">
     </a>
