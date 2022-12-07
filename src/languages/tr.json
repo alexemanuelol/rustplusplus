@@ -356,7 +356,7 @@
     "lockedCrateMonumentDespawnWarningSetting": "Bir anıtta kilitli sandık silinmek üzereyken bildirim gönder.",
     "lockedCrateMonumentLeftSetting": "Bir anıtta kilitli sandık kaybolduğunda bildirim gönder.",
     "lockedCrateOilRigRefreshedSetting": "Sondaj kulesinde kilitli sandık yenilendiğinde bildirim gönder.",
-    "lockedCrateOilRigUnlockedSetting": "Sondaj kulesinde kilitli sandık açıldığında bildirim gönder.",
+    "lockedCrateOilRigUnlockedSetting": "Şondaj kulesinde ağır bilim adamları çağırıldığında bildirim gönder.",
     "lockedCrateRefreshOnLarge": "Büyük sondaj kulesi kutusu yenilendi. {rig} - {location}.",
     "lockedCrateRefreshOnSmall": "Küçük sondaj kulesi kutusu yenilendi. {rig} - {location}.",
     "lockedCrateRespawnOilRigSetting": "Sondaj kulesinde kilitli sandık doğduğunda bildirim gönder.",
