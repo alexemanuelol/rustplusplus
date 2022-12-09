@@ -199,12 +199,15 @@ async function pairingServer(client, guild, full, data, body) {
 
     let info = null;
     let battlemetricsId = await BattlemetricsAPI.getBattlemetricsServerId(client, data.title);
-    if (battlemetricsId !== null) {
+    if (battlemetricsId !== null && battlemetricsId !== undefined) {
         info = await BattlemetricsAPI.getBattlemetricsServerInfo(client, battlemetricsId);
         let onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(client, battlemetricsId);
         if (BattlemetricsAPI.isBattlemetricsServerHidden(onlinePlayers)) {
             battlemetricsId = null;
         }
+    }
+    else {
+        battlemetricsId = null;
     }
 
     instance.serverList[serverId] = {
