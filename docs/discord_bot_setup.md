@@ -11,7 +11,7 @@
 
 ![Setup Discord Bot create an application Image](images/create_an_application_bot_setup.png)
 
-4. Copy the `APPLICATION ID` to the config.json file located in repository folder `rustPlusPlus/config.json`.
+4. Copy the `APPLICATION ID` to the config/index.js file located in repository folder `rustPlusPlus/config/index.js`.
 
 ![Setup Discord Bot copy application id Image](images/copy_application_id_bot_setup.png)
 
@@ -27,7 +27,7 @@
 
 ![Setup Discord Bot reset token Image](images/reset_token_bot_setup.png)
 
-8. Copy the `TOKEN` to the config.json file located in repository folder `rustPlusPlus/config.json`.
+8. Copy the `TOKEN` to the config/index.js file located in repository folder `rustPlusPlus/config/index.js`.
 
 ![Setup Discord Bot bot token Image](images/bot_token_bot_setup.png)
 
