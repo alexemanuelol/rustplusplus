@@ -23,6 +23,7 @@ const Path = require('path');
 
 const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
+const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
@@ -383,7 +384,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getEmbed({
-                color: message.color,
+                color: Constants.COLOR_TEAMCHAT,
                 description: `**${message.name}**: ${message.message}`
             })]
         }

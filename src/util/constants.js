@@ -56,5 +56,6 @@ module.exports = {
     COLOR_ACTIVE: '#00ff40',
     COLOR_INACTIVE: '#ff0040',
     COLOR_SETTINGS: '#861c0c',
-    COLOR_GREY: '#606060'
+    COLOR_GREY: '#606060',
+    COLOR_TEAMCHAT: '#AD1457'
 }
