@@ -28,6 +28,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
 const InstanceUtils = require('../util/instanceUtils.js');
 const Items = require('./Items');
+const Cctv = require('./Cctv');
 const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustPlus = require('../structures/RustPlus');
@@ -48,6 +49,7 @@ class DiscordBot extends Discord.Client {
         this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
 
         this.items = new Items();
+        this.cctv = new Cctv();
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 

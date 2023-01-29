@@ -846,4 +846,20 @@ module.exports = {
             description: description
         });
     },
+
+    getCctvEmbed: function (guildId, monument, cctvCodes, dynamic) {
+        let  code = '';
+        for (const cctvCode of cctvCodes) {
+            code += `${cctvCode} \n`;
+        }
+        if (dynamic) {
+            code += '*\'s means that you need a numarical code that is different for every map';
+        }
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: `${monument} CCTV Codes`,
+            description: code
+        });
+    },
 }

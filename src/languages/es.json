@@ -127,6 +127,7 @@
     "commandsAlarmEditDesc": "Editar las propiedades de una Alarma Inteligente.",
     "commandsAlarmEditIdDesc": "El ID de la Alarma Inteligente.",
     "commandsAlarmEditImageDesc": "Establezca la imagen que mejor represente la Alarma Inteligente.",
+    "commandsCctvDesc": "Display CCTV codes for a monument",
     "commandsCredentialsAddDesc": "Agregar Credenciales FCM.",
     "commandsCredentialsDesc": "Establecer/Limpiar las Credenciales FCM para la cuenta de usuario.",
     "commandsCredentialsRemoveDesc": "Eliminar Credenciales FCM.",

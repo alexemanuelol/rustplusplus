@@ -127,6 +127,7 @@
     "commandsAlarmEditDesc": "Redigera egenskaperna för ett Smart Larm.",
     "commandsAlarmEditIdDesc": "ID:t för det Smarta Larmet.",
     "commandsAlarmEditImageDesc": "Ställ in en bild som bäst representerar Smarta Larmet.",
+    "commandsCctvDesc": "Display CCTV codes for a monument",
     "commandsCredentialsAddDesc": "Lägg till FCM-uppgifter.",
     "commandsCredentialsDesc": "Ställ in/rensa FCM-uppgifterna för användarkontot.",
     "commandsCredentialsRemoveDesc": "Ta bort FCM-uppgifter.",

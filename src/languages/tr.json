@@ -127,6 +127,7 @@
     "commandsAlarmEditDesc": "Akıllı Alarm açıklamasını düzenle.",
     "commandsAlarmEditIdDesc": "Akıllı Alarm Kimliği.",
     "commandsAlarmEditImageDesc": "Akıllı Alarm resmi ayarla.",
+    "commandsCctvDesc": "Display CCTV codes for a monument",
     "commandsCredentialsAddDesc": "FCM Bilgilerini ekle.",
     "commandsCredentialsDesc": "Kullanıcı hesabı için FCM Bilgilerini ayarla/temizle.",
     "commandsCredentialsRemoveDesc": "FCM Bilgilerini temizle.",

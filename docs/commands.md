@@ -11,6 +11,7 @@ Slash Command | Description
 ------------- | -----------
 [**/alarm**](commands.md#alarm) | Operations on Smart Alarms.
 [**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
+[**/cctv**](commands.md#cctv) | Posts CCTV codes for a monument.
 [**/help**](commands.md#help) | Display help message.
 [**/leader**](commands.md#leader) | Give or take the leadership from/to a team member.
 [**/map**](commands.md#map) | Get the currently connected server map image.
@@ -61,6 +62,15 @@ Subcommand | Options | Description | Required
 
 ![Discord Slash Command credentials Image](images/credentials.png)
 
+## **/cctv**
+
+> **Posts CCTV codes for a monument.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `monument` | Rust monument. | `True`
+
+![Discord Slash Command monument Image](images/cctv.png)
 
 ## **/help**
 
