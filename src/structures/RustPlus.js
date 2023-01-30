@@ -267,11 +267,11 @@ class RustPlus extends RustPlusLib {
         }
     }
 
-    async sendEvent(setting, text, firstPoll = false, image = null) {
+    async sendEvent(setting, text, embed_color, firstPoll = false, image = null) {
         const img = (image !== null) ? image : setting.image;
 
         if (!firstPoll && setting.discord) {
-            await DiscordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, img);
+            await DiscordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, img, embed_color);
         }
         if (!firstPoll && setting.inGame) {
             await this.sendTeamMessageAsync(`${text}`);
