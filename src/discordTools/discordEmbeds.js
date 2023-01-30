@@ -539,7 +539,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
-            color: color,
+            color: color ? color : Constants.COLOR_DEFAULT,
             thumbnail: `attachment://${image}`,
             title: text,
             footer: { text: server.title },
@@ -844,6 +844,22 @@ module.exports = {
             timestamp: true,
             title: `rustPlusPlus Help`,
             description: description
+        });
+    },
+    
+    getCctvEmbed: function (guildId, monument, cctvCodes, dynamic) {
+        let  code = '';
+        for (const cctvCode of cctvCodes) {
+            code += `${cctvCode} \n`;
+        }
+        if (dynamic) {
+            code += '*\'s means that you need a numarical code that is different for every map';
+        }
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: `${monument} CCTV Codes`,
+            description: code
         });
     },
 }
