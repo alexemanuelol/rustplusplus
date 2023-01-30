@@ -360,7 +360,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image,{color: color})],
+            embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image, color)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/events/${image}`))]
         }
