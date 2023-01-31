@@ -542,7 +542,7 @@ module.exports = {
             color: color ? color : Constants.COLOR_DEFAULT,
             thumbnail: `attachment://${image}`,
             title: text,
-            footer: { text: server.title },
+            footer: { text: server.title, iconURL: server.img},
             timestamp: true
         });
     },
