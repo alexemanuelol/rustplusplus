@@ -25,6 +25,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
+const Config = require('../../config');
 
 module.exports = {
     name: 'credentials',
@@ -133,7 +134,7 @@ async function addCredentials(client, interaction) {
     const isHoster = interaction.options.getBoolean('host') || Object.keys(credentials).length === 1;
 
     if (Object.keys(credentials) !== 1 && isHoster) {
-        if (!client.isAdministrator(interaction)) {
+        if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             client.log(client.intlGet(null, 'warningCap'), str);
@@ -200,7 +201,7 @@ async function removeCredentials(client, interaction) {
     let steamId = interaction.options.getString('steam_id');
 
     if (steamId && (steamId in credentials) && credentials[steamId].discordUserId !== interaction.member.user.id) {
-        if (!client.isAdministrator(interaction)) {
+        if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             client.log(client.intlGet(null, 'warningCap'), str);
@@ -252,7 +253,7 @@ async function setHosterCredentials(client, interaction) {
     const credentials = InstanceUtils.readCredentialsFile(guildId);
     let steamId = interaction.options.getString('steam_id');
 
-    if (!client.isAdministrator(interaction)) {
+    if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
         const str = client.intlGet(interaction.guildId, 'missingPermission');
         client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
         client.log(client.intlGet(null, 'warningCap'), str);
