@@ -191,9 +191,6 @@ module.exports = {
                 case 's': { /* Seconds */
                     totSeconds += value;
                 } break;
-
-                default: {
-                } break;
             }
         }
 
