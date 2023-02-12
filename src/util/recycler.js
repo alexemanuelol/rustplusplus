@@ -36,9 +36,8 @@ module.exports = {
         items = mergedItems.slice();
 
         /* Calculate the recycling */
-        while (true) {
-            let noMoreIterations = true;
-
+        let noMoreIterations = true;
+        while (noMoreIterations) {
             let expandedItems = [];
             for (let item of items) {
                 /* If the item isn't included in recycle information object, move on to next item. */
@@ -81,10 +80,6 @@ module.exports = {
             }
 
             items = expandedItems.slice();
-
-            if (noMoreIterations) {
-                break;
-            }
         }
 
         return items;
