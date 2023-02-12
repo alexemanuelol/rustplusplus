@@ -109,9 +109,6 @@ class Logger {
                     }
                 }
             } break;
-
-            default: {
-            } break;
         }
     }
 }
