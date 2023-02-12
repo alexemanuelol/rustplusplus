@@ -65,11 +65,11 @@ module.exports = {
 
         let list = [];
         list = [...module.exports.getListOfCommandKeywords(client, guildId)];
-        for (const [id, value] of Object.entries(instance.serverList[serverId].switches)) {
+        for (const [, value] of Object.entries(instance.serverList[serverId].switches)) {
             list.push(value.command);
         }
 
-        for (const [id, value] of Object.entries(instance.serverList[serverId].switchGroups)) {
+        for (const [, value] of Object.entries(instance.serverList[serverId].switchGroups)) {
             list.push(value.command);
         }
 
