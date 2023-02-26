@@ -127,7 +127,6 @@
     "commandsAlarmEditDesc": "Edit the properties of a Smart Alarm.",
     "commandsAlarmEditIdDesc": "The ID of the Smart Alarm.",
     "commandsAlarmEditImageDesc": "Set the image that best represent the Smart Alarm.",
-    "commandsCctvDesc": "Display CCTV codes for a monument",
     "commandsCredentialsAddDesc": "Add FCM Credentials.",
     "commandsCredentialsDesc": "Set/Clear the FCM Credentials for the user account.",
     "commandsCredentialsRemoveDesc": "Remove FCM Credentials.",

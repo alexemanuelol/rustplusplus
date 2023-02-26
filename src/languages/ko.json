@@ -127,7 +127,6 @@
     "commandsAlarmEditDesc": "스마트 알람의 속성을 수정합니다.",
     "commandsAlarmEditIdDesc": "스마트 알람의 고유ID 입니다.",
     "commandsAlarmEditImageDesc": "스마트 알람의 이미지를 설정합니다.",
-    "commandsCctvDesc": "Display CCTV codes for a monument",
     "commandsCredentialsAddDesc": "FCM 자격 증명을 추가합니다.",
     "commandsCredentialsDesc": "사용자 계정에 대한 FCM 자격 증명을 설정/해제합니다.",
     "commandsCredentialsRemoveDesc": "FCM 자격 증명을 제거합니다.",

@@ -127,7 +127,6 @@
     "commandsAlarmEditDesc": "Редактирование свойств умной сигнализации.",
     "commandsAlarmEditIdDesc": "Укажите ID умной сигнализации.",
     "commandsAlarmEditImageDesc": "Установите изображение, которое лучше всего представляет умную сигнализацию.",
-    "commandsCctvDesc": "Display CCTV codes for a monument",
     "commandsCredentialsAddDesc": "Добавить учетные данные FCM.",
     "commandsCredentialsDesc": "Установите/очистите учетные данные FCM для пользователя.",
     "commandsCredentialsRemoveDesc": "Удалить учетные данные FCM.",
