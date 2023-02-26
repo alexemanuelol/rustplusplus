@@ -23,6 +23,7 @@ const Discord = require('discord.js');
 const Fs = require('fs');
 const Path = require('path');
 
+const Cctv = require('./Cctv');
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
@@ -48,6 +49,7 @@ class DiscordBot extends Discord.Client {
         this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
 
         this.items = new Items();
+        this.cctv = new Cctv();
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 

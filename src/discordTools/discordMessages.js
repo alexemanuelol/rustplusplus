@@ -514,4 +514,12 @@ module.exports = {
 
         await Client.client.interactionReply(interaction, content);
     },
+
+    sendCctvMessage: async function (interaction, monument, cctvCodes, dynamic) {
+        const content = {
+            embeds: [DiscordEmbeds.getCctvEmbed(interaction.guildId, monument, cctvCodes, dynamic)],
+        }
+
+        await Client.client.interactionReply(interaction, content);
+    },
 }

@@ -846,4 +846,20 @@ module.exports = {
             description: description
         });
     },
+
+    getCctvEmbed: function (guildId, monument, cctvCodes, dynamic) {
+        let code = '';
+        for (const cctvCode of cctvCodes) {
+            code += `${cctvCode} \n`;
+        }
+        if (dynamic) {
+            code += Client.client.intlGet(guildId, 'asteriskCctvDesc');
+        }
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: `${monument} CCTV ${Client.client.intlGet(guildId, 'codes')}`,
+            description: code
+        });
+    },
 }

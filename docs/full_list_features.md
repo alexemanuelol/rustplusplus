@@ -41,6 +41,7 @@
 * Retrieve the map with Monument names and Map Markers.
 * Customize the event timers such as cargoship egress time, time before Locked Crate unlocks etc...
 * Search through all the Vending Machines on the connected Rust Server with the Discord command `market`.
+* Have easy access to all CCTV codes.
 * Get the currently AFK teammates.
 * Get the currently alive teammates.
 * Get the currently online teammates.
