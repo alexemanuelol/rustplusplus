@@ -104,6 +104,11 @@
         "name": "Light Frankenstein Legs",
         "description": "Slightly faster, slightly weaker.\n\nCombined at a Frankenstein Table to create your very own monster."
     },
+    "110116923": {
+        "shortname": "metal.facemask.icemask",
+        "name": "Ice Metal Facemask",
+        "description": "A protective facemask which provides the user with excellent head protection from all forms of attacks."
+    },
     "121049755": {
         "shortname": "sign.pictureframe.tall",
         "name": "Tall Picture Frame",
@@ -113,6 +118,11 @@
         "shortname": "clone.black.berry",
         "name": "Black Berry Clone",
         "description": "A clipping of a Black Berry Plant."
+    },
+    "140006625": {
+        "shortname": "ptz.cctv.camera",
+        "name": "PTZ CCTV Camera",
+        "description": "A CCTV Camera system can be used for realtime surveillance and security when paired with the Computer Station. This camera has pan, tilt, and zoom capability."
     },
     "143803535": {
         "shortname": "grenade.f1",
@@ -449,6 +459,11 @@
         "name": "Battery - Small",
         "description": "A Battery."
     },
+    "610102428": {
+        "shortname": "industrial.conveyor",
+        "name": "Industrial Conveyor",
+        "description": "Moves an item from one container to another."
+    },
     "613961768": {
         "shortname": "botabag",
         "name": "Bota Bag",
@@ -538,6 +553,11 @@
         "shortname": "gun.water",
         "name": "Water Gun",
         "description": "A large water gun with pumpable pressure. Hold reload to pump!"
+    },
+    "742745918": {
+        "shortname": "industrial.splitter",
+        "name": "Industrial Splitter",
+        "description": "Splits an industrial connection into three separate connections."
     },
     "755224797": {
         "shortname": "bottle.vodka",
@@ -743,11 +763,6 @@
         "shortname": "floor.grill",
         "name": "Floor grill",
         "description": "A floor grill must be placed in floor frames. Perfect for placing above a large furnace."
-    },
-    "946662961": {
-        "shortname": "car.key",
-        "name": "Car Key",
-        "description": "A key to a car, created at a vehicle lift. Keep this item safe; if lost you'll be unable to drive the car again!"
     },
     "952603248": {
         "shortname": "weapon.mod.flashlight",
@@ -1244,6 +1259,11 @@
         "name": "MC repair",
         "description": "MC repair dummy"
     },
+    "1430085198": {
+        "shortname": "industrial.crafter",
+        "name": "Industrial Crafter",
+        "description": "Attaches to a workbench to allow automated crafting."
+    },
     "1443579727": {
         "shortname": "bow.hunting",
         "name": "Hunting Bow",
@@ -1334,6 +1354,11 @@
         "name": "Cooked Human Meat",
         "description": "Salty meat from a human being, eating this will restore some hunger and health but reduces hydration. Maybe you should look for a better food source."
     },
+    "1538126328": {
+        "shortname": "industrial.combiner",
+        "name": "Industrial Combiner",
+        "description": "Combines three separate industrial connections into one connection."
+    },
     "1540934679": {
         "shortname": "spear.wooden",
         "name": "Wooden Spear",
@@ -1402,7 +1427,7 @@
     "1588492232": {
         "shortname": "drone",
         "name": "Drone",
-        "description": "A remote controlled drone."
+        "description": "A remote controlled drone operated from the Computer station with a limited range. Easily damaged from impacts."
     },
     "1601468620": {
         "shortname": "jumpsuit.suit.blue",
@@ -2159,6 +2184,11 @@
         "name": "Cassette - Medium",
         "description": "A tape that you can record audio on to using a Cassette Recorder. Stores up to 20s of audio."
     },
+    "-1944704288": {
+        "shortname": "chair.icethrone",
+        "name": "Ice Throne",
+        "description": "Every home needs a chair. A decorative item which provides comfort while seated."
+    },
     "-1938052175": {
         "shortname": "charcoal",
         "name": "Charcoal",
@@ -2337,12 +2367,17 @@
     "-502177121": {
         "shortname": "electric.doorcontroller",
         "name": "Door Controller",
-        "description": "A Door Controller. Will manipulate the state of the closest door when it recieves power"
+        "description": "A Door Controller. Will manipulate the state of the closest door when it receives power"
     },
     "-939424778": {
         "shortname": "electric.flasherlight",
         "name": "Flasher Light",
         "description": "A flashing blue light"
+    },
+    "-1196547867": {
+        "shortname": "electric.furnace",
+        "name": "Electric Furnace",
+        "description": "An electrical version of a furnace that uses electricity instead of a fuel source."
     },
     "-295829489": {
         "shortname": "electric.generator.small",
@@ -2664,6 +2699,11 @@
         "name": "Giant Candy Decor",
         "description": "Get into the holiday spirit with this decorative inflated giant candy cane"
     },
+    "-558880549": {
+        "shortname": "gingerbreadsuit",
+        "name": "Gingerbread Suit",
+        "description": "A suit made of gingerbread, slightly crunchy."
+    },
     "-690276911": {
         "shortname": "gloweyes",
         "name": "Glowing Eyes",
@@ -2733,6 +2773,11 @@
         "shortname": "hat.miner",
         "name": "Miners Hat",
         "description": "A leather cap with a flashlight attached. It uses Low Grade Fuel and can be activated from the inventory."
+    },
+    "-986782031": {
+        "shortname": "hat.rabbitmask",
+        "name": "Rabbit Mask",
+        "description": "A Beautifully crafted Rabbit mask to celebrate the 2023 Lunar New Year"
     },
     "-1478212975": {
         "shortname": "hat.wolf",
@@ -3004,6 +3049,11 @@
         "name": "Metal Ore",
         "description": "A naturally occurring rock containing metal and metal compounds. You can extract this metal using a furnace."
     },
+    "-1478855279": {
+        "shortname": "metal.plate.torso.icevest",
+        "name": "Ice Metal Chest Plate",
+        "description": "A metal plate covering your torso, provides excellent protection from all forms of attacks."
+    },
     "-1021495308": {
         "shortname": "metalspring",
         "name": "Metal Spring",
@@ -3073,6 +3123,11 @@
         "shortname": "pickaxe",
         "name": "Pickaxe",
         "description": "A Pickaxe, useful for gathering ore from rocks."
+    },
+    "-144513264": {
+        "shortname": "pipetool",
+        "name": "Pipe Tool",
+        "description": "Now you're thinking with pipes!"
     },
     "-75944661": {
         "shortname": "pistol.eoka",
@@ -3548,6 +3603,11 @@
         "shortname": "stones",
         "name": "Stones",
         "description": "Harvested from rocks using tools, basic building material."
+    },
+    "-1049172752": {
+        "shortname": "storageadaptor",
+        "name": "Storage Adaptor",
+        "description": "Attach to a storage container to allow industrial input/output connections."
     },
     "-1671551935": {
         "shortname": "submarine.torpedo.straight",
