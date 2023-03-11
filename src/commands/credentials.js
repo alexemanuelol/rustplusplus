@@ -22,7 +22,6 @@ const _ = require('lodash');
 const Builder = require('@discordjs/builders');
 
 const Config = require('../../config');
-
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
