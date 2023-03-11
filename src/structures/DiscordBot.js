@@ -46,6 +46,7 @@ class DiscordBot extends Discord.Client {
         this.instances = {};
         this.guildIntl = {};
         this.botIntl = null;
+        this.enIntl = null;
         this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
 
         this.items = new Items();
@@ -59,6 +60,7 @@ class DiscordBot extends Discord.Client {
 
         this.loadDiscordCommands();
         this.loadDiscordEvents();
+        this.loadEnIntl();
         this.loadBotIntl();
     }
 
@@ -87,6 +89,18 @@ class DiscordBot extends Discord.Client {
                 this.on(event.name, (...args) => event.execute(this, ...args));
             }
         }
+    }
+
+    loadEnIntl() {
+        const language = 'en';
+        const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
+        const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
+        const cache = FormatJS.createIntlCache();
+        this.enIntl = FormatJS.createIntl({
+            locale: language,
+            defaultLocale: 'en',
+            messages: messages
+        }, cache);
     }
 
     loadBotIntl() {
@@ -122,11 +136,16 @@ class DiscordBot extends Discord.Client {
 
     intlGet(guildId, id, variables = {}) {
         let intl = null;
-        if (guildId) {
+        if (guildId && guildId !== 'en') {
             intl = this.guildIntl[guildId];
         }
         else {
-            intl = this.botIntl;
+            if (guildId === 'en') {
+                intl = this.enIntl;
+            }
+            else {
+                intl = this.botIntl;
+            }
         }
 
         return intl.formatMessage({
