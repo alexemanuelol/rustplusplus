@@ -18,13 +18,13 @@
 
 */
 
+const Config = require('../../config');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
 const Recycler = require('../util/recycler.js');
-const Config = require('../../config');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
