@@ -254,6 +254,13 @@ In-Game Command | Description
 ![In-Game Command bradley Image](images/bradley_ingame.png)
 
 
+## **cam**
+> **Scan individual cameras or group of cameras to detect players or scientists.** The available camera groups are: airfield, bandit, dome, large, outpost, small.
+<br>Command: `!cam large`, `!cam OILRIG2HELI`, `!cam TESTCAMERA`
+
+![In-Game Command cam Image](images/cam_ingame.png)
+
+
 ## **cargo**
 
 > **Get information about CargoShip (Location, time till enters egress stage, current crates, time since last on map).**

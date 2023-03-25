@@ -56,6 +56,7 @@ class RustPlus extends RustPlusLib {
         this.isConnectionRefused = false;   /* Refused connection when trying to connect? */
         this.isNewConnection = false;       /* Is it an actively selected connection (pressed CONNECT button)? */
         this.isFirstPoll = true;            /* Is this the first poll since connection started? */
+        this.readyForCameraRays = false;     /* Is the bot ready for new camera rays? */
 
         /* Interval ids */
         this.pollingTaskId = 0;             /* The id of the main polling mechanism of the rustplus instance. */
@@ -83,6 +84,9 @@ class RustPlus extends RustPlusLib {
         this.playerConnections = new Object();
         this.allDeaths = [];
         this.playerDeaths = new Object();
+        this.queuedCameras = [];
+        this.cameraPlayerNames = [];
+        this.scannedCameras = 0;
 
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
@@ -465,6 +469,65 @@ class RustPlus extends RustPlusLib {
         }
     }
 
+    async subscribeToCameraAsync(identifier, timeout = 10000) {
+        try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: Client.client.intlGet(null, 'tokensDidNotReplenish') };
+            }
+
+            return await this.sendRequestAsync({
+                cameraSubscribe: {
+                    cameraId: identifier
+                }
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
+            return e;
+        }
+    }
+
+    async unsubscribeFromCameraAsync(timeout = 10000) {
+        try {
+            if (!(await this.waitForAvailableTokens(1))) {
+                return { error: Client.client.intlGet(null, 'tokensDidNotReplenish') };
+            }
+
+            return await this.sendRequestAsync({
+                cameraUnsubscribe: {}
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
+            return e;
+        }
+    }
+
+    async sendCameraInputAsync(buttons, x, y, timeout = 1000) {
+        try {
+            if (!(await this.waitForAvailableTokens(0.01))) {
+                return { error: Client.client.intlGet(null, 'tokensDidNotReplenish') };
+            }
+
+            return await this.sendRequestAsync({
+                cameraInput: {
+                    buttons: buttons,
+                    mouseDelta: {
+                        x: x,
+                        y: y
+                    }
+                }
+            }, timeout).catch((e) => {
+                return e;
+            });
+        }
+        catch (e) {
+            return e;
+        }
+    }
+
     async promoteToLeaderAsync(steamId, timeout = 10000) {
         try {
             if (!(await this.waitForAvailableTokens(1))) {
@@ -681,6 +744,71 @@ class RustPlus extends RustPlusLib {
         }
 
         return strings;
+    }
+
+    async getCommandCam(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandCam = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxCam')}`;
+        const commandCamEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxCam')}`;
+
+        let camera = null;
+        if (command.toLowerCase().startsWith(`${commandCam}`)) {
+            camera = command.slice(`${commandCam} `.length).trim();
+        }
+        else {
+            camera = command.slice(`${commandCamEn} `.length).trim();
+        }
+
+        this.readyForCameraRays = true;
+        const cctvs = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'util/cctv.json'), 'utf8'));
+
+        /* airfield, bandit, dome, large, outpost, small */
+        if (camera === Client.client.intlGet(this.guildId, 'commandSyntaxList') ||
+            camera === Client.client.intlGet('en', 'commandSyntaxList')) {
+            return 'airfield, bandit, dome, large, outpost, small';
+        }
+        else if (camera === 'airfield') {
+            this.queuedCameras.push(...cctvs['Airfield'].codes)
+        }
+        else if (camera === 'bandit') {
+            this.queuedCameras.push(...cctvs['Bandit Camp'].codes)
+        }
+        else if (camera === 'dome') {
+            this.queuedCameras.push(...cctvs['Dome'].codes)
+        }
+        else if (camera === 'large') {
+            this.queuedCameras.push(...cctvs['Large Oil Rig'].codes)
+        }
+        else if (camera === 'outpost') {
+            this.queuedCameras.push(...cctvs['Outpost'].codes)
+        }
+        else if (camera === 'small') {
+            this.queuedCameras.push(...cctvs['Small Oil Rig'].codes)
+        }
+        else {
+            const response = await this.subscribeToCameraAsync(camera);
+            if (!(await this.isResponseValid(response))) {
+                this.readyForCameraRays = false;
+                return `${Client.client.intlGet(this.guildId, 'couldNotFindCamera', {
+                    camera: camera
+                })}`;
+            }
+            return null;
+        }
+
+        camera = this.queuedCameras[0];
+        this.queuedCameras.shift();
+
+        const response = await this.subscribeToCameraAsync(camera);
+        if (!(await this.isResponseValid(response))) {
+            this.readyForCameraRays = false;
+            this.queuedCameras = [];
+            this.scannedCameras = 0;
+            return `${Client.client.intlGet(this.guildId, 'couldNotFindCamera', {
+                camera: camera
+            })}`;
+        }
+        return null;
     }
 
     getCommandCargo(isInfoChannel = false) {
