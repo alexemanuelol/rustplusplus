@@ -109,10 +109,16 @@ async function messageBroadcastCameraRays(rustplus, client, message) {
 
     if (rustplus.queuedCameras.length === 0) {
         rustplus.cameraPlayerNames = [...new Set(rustplus.cameraPlayerNames)];
-        rustplus.sendTeamMessageAsync(`${client.intlGet(rustplus.guildId, 'scannedCameras', {
-            num: rustplus.scannedCameras
-        })}, ${client.intlGet(rustplus.guildId, 'players')}: ` +
-            `${rustplus.cameraPlayerNames.join(', ')}`);
+
+        let str = `${client.intlGet(rustplus.guildId, 'scannedCameras', { num: rustplus.scannedCameras })}, ` +
+            `${client.intlGet(rustplus.guildId, 'players')}: ${rustplus.cameraPlayerNames.join(', ')}`;
+        if (!rustplus.isCamCommandInGame) {
+            await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, rustplus.camCommandMessage, str);
+            rustplus.camCommandMessage = null;
+        }
+        else {
+            rustplus.sendTeamMessageAsync(str);
+        }
         rustplus.cameraPlayerNames = [];
         rustplus.scannedCameras = 0;
     }
@@ -126,9 +132,16 @@ async function messageBroadcastCameraRays(rustplus, client, message) {
             rustplus.readyForCameraRays = false;
             rustplus.queuedCameras = [];
             rustplus.scannedCameras = 0;
-            rustplus.sendTeamMessageAsync(`${client.intlGet(rustplus.guildId, 'couldNotFindCamera', {
-                camera: camera
-            })}`);
+
+            let str = `${client.intlGet(rustplus.guildId, 'couldNotFindCamera', { camera: camera })}`;
+            if (!rustplus.isCamCommandInGame) {
+                await DiscordMessages.sendDiscordCommandResponseMessge(rustplus, client, rustplus.camCommandMessage,
+                    str);
+                rustplus.camCommandMessage = null;
+            }
+            else {
+                rustplus.sendTeamMessageAsync(str);
+            }
         }
     }
 }

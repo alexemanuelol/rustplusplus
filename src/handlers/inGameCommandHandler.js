@@ -51,6 +51,7 @@ module.exports = {
         }
         else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxCam')} `) ||
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxCam')} `)) {
+            rustplus.isCamCommandInGame = true;
             rustplus.printCommandOutput(await rustplus.getCommandCam(command));
         }
         else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxCargo')}` ||

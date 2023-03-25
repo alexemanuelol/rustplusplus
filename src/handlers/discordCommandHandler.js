@@ -43,6 +43,8 @@ module.exports = {
         }
         else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxCam')} `) ||
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxCam')} `)) {
+            rustplus.isCamCommandInGame = false;
+            rustplus.camCommandMessage = message;
             response = await rustplus.getCommandCam(command);
         }
         else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxCargo')}` ||
@@ -171,7 +173,7 @@ module.exports = {
         }
 
         if (response !== null) {
-            DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, message, response);
+            await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, message, response);
         }
 
         return true;

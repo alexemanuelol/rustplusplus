@@ -57,6 +57,7 @@ class RustPlus extends RustPlusLib {
         this.isNewConnection = false;       /* Is it an actively selected connection (pressed CONNECT button)? */
         this.isFirstPoll = true;            /* Is this the first poll since connection started? */
         this.readyForCameraRays = false;     /* Is the bot ready for new camera rays? */
+        this.isCamCommandInGame = true;
 
         /* Interval ids */
         this.pollingTaskId = 0;             /* The id of the main polling mechanism of the rustplus instance. */
@@ -87,6 +88,7 @@ class RustPlus extends RustPlusLib {
         this.queuedCameras = [];
         this.cameraPlayerNames = [];
         this.scannedCameras = 0;
+        this.camCommandMessage = null;
 
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
