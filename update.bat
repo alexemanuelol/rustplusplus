@@ -19,6 +19,8 @@
 ::  https://github.com/alexemanuelol/rustPlusPlus
 ::
 
+git checkout -- package-lock.json
+
 git stash
 if not %errorlevel%==0 (
     echo "Could not successfully stash current changes"
