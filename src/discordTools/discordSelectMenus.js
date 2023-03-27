@@ -27,7 +27,7 @@ const Languages = require('../util/languages.js');
 
 module.exports = {
     getSelectMenu: function (options = {}) {
-        const selectMenu = new Discord.SelectMenuBuilder();
+        const selectMenu = new Discord.StringSelectMenuBuilder();
 
         if (options.customId) selectMenu.setCustomId(options.customId);
         if (options.placeholder) selectMenu.setPlaceholder(options.placeholder);

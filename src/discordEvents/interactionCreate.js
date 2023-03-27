@@ -44,7 +44,7 @@ module.exports = {
         if (interaction.isButton()) {
             require('../handlers/buttonHandler')(client, interaction);
         }
-        else if (interaction.isSelectMenu()) {
+        else if (interaction.isStringSelectMenu()) {
             require('../handlers/selectMenuHandler')(client, interaction);
         }
         else if (interaction.type === Discord.InteractionType.ApplicationCommand) {

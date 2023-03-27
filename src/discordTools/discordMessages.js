@@ -381,9 +381,18 @@ module.exports = {
     sendTeamChatMessage: async function (guildId, message) {
         const instance = Client.client.getInstance(guildId);
 
+        let color = null;
+        if (message.color.length === 4) {
+            color = message.color.replace('#', '');
+            color = `#${color.split('').map(function (hex) { return hex + hex; }).join('')}`;
+        }
+        else {
+            color = message.color;
+        }
+
         const content = {
             embeds: [DiscordEmbeds.getEmbed({
-                color: message.color,
+                color: color,
                 description: `**${message.name}**: ${message.message}`
             })]
         }
