@@ -128,7 +128,22 @@ async function messageBroadcastCameraRays(rustplus, client, message) {
         rustplus.queuedCameras.shift();
 
         const response = await rustplus.subscribeToCameraAsync(camera);
-        if (!(await rustplus.isResponseValid(response))) {
+        if (response.hasOwnProperty('error') && response.error === 'no_player') {
+            rustplus.readyForCameraRays = false;
+            rustplus.queuedCameras = [];
+            rustplus.scannedCameras = 0;
+
+            let str = `${client.intlGet(rustplus.guildId, 'commandUnavailable')}`;
+            if (!rustplus.isCamCommandInGame) {
+                await DiscordMessages.sendDiscordCommandResponseMessge(rustplus, client, rustplus.camCommandMessage,
+                    str);
+                rustplus.camCommandMessage = null;
+            }
+            else {
+                rustplus.sendTeamMessageAsync(str);
+            }
+        }
+        else if (!(await rustplus.isResponseValid(response))) {
             rustplus.readyForCameraRays = false;
             rustplus.queuedCameras = [];
             rustplus.scannedCameras = 0;

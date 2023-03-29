@@ -802,7 +802,13 @@ class RustPlus extends RustPlusLib {
         this.queuedCameras.shift();
 
         const response = await this.subscribeToCameraAsync(camera);
-        if (!(await this.isResponseValid(response))) {
+        if (response.hasOwnProperty('error') && response.error === 'no_player') {
+            this.readyForCameraRays = false;
+            this.queuedCameras = [];
+            this.scannedCameras = 0;
+            return `${Client.client.intlGet(this.guildId, 'commandUnavailable')}`;
+        }
+        else if (!(await this.isResponseValid(response))) {
             this.readyForCameraRays = false;
             this.queuedCameras = [];
             this.scannedCameras = 0;
