@@ -126,6 +126,7 @@
     "commandSyntaxUnsubscribe": "unsub",
     "commandSyntaxUpkeep": "upkeep",
     "commandSyntaxWipe": "wipe",
+    "commandUnavailable": "Command is unavailable when host is offline and dead.",
     "commandsAlarmDesc": "Operations on Smart Alarms.",
     "commandsAlarmEditDesc": "Upravit popis chytrého alarmu.",
     "commandsAlarmEditIdDesc": "ID chytrého alarmu.",
