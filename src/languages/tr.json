@@ -126,6 +126,7 @@
     "commandSyntaxUnsubscribe": "unsub",
     "commandSyntaxUpkeep": "upkeep",
     "commandSyntaxWipe": "wipe",
+    "commandUnavailable": "Command is unavailable when host is offline and dead.",
     "commandsAlarmDesc": "Akıllı Alarm işlemleri.",
     "commandsAlarmEditDesc": "Akıllı Alarm açıklamasını düzenle.",
     "commandsAlarmEditIdDesc": "Akıllı Alarm Kimliği.",
