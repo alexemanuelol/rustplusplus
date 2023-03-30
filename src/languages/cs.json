@@ -641,5 +641,8 @@
     "wipe": "Wipe",
     "wipeDetected": "Wipe byl detekován!",
     "youAreAlreadyLeader": "Už jsi vůdce.",
-    "youAreNotPairedWithServer": "Příkaz na vůdce nefunguje, protože nejsi spárován se serverem."
+    "youAreNotPairedWithServer": "Příkaz na vůdce nefunguje, protože nejsi spárován se serverem.",
+    "commandSyntaxOn": "on",
+    "commandSyntaxOff": "off",
+    "commandSyntaxStatus": "status"
 }
