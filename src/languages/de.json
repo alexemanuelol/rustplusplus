@@ -105,7 +105,9 @@
     "commandSyntaxMute": "stumm",
     "commandSyntaxNote": "notiz",
     "commandSyntaxNotes": "notizen",
+    "commandSyntaxOff": "aus",
     "commandSyntaxOffline": "offline",
+    "commandSyntaxOn": "an",
     "commandSyntaxOnline": "online",
     "commandSyntaxPlayer": "player",
     "commandSyntaxPlayers": "players",
@@ -115,6 +117,7 @@
     "commandSyntaxSearch": "suche",
     "commandSyntaxSend": "sende",
     "commandSyntaxSmall": "klein",
+    "commandSyntaxStatus": "status",
     "commandSyntaxSubscribe": "abonniere",
     "commandSyntaxTTS": "tts",
     "commandSyntaxTime": "zeit",
@@ -641,8 +644,5 @@
     "wipe": "Wipe",
     "wipeDetected": "Wipe erkannt!",
     "youAreAlreadyLeader": "Du bist bereits Anführer.",
-    "youAreNotPairedWithServer": "Anführer-Befehl funktioniert nicht, weil du nicht mit dem Server gekoppelt bist.",
-    "commandSyntaxOn": "an",
-    "commandSyntaxOff": "aus",
-    "commandSyntaxStatus": "status"
+    "youAreNotPairedWithServer": "Anführer-Befehl funktioniert nicht, weil du nicht mit dem Server gekoppelt bist."
 }

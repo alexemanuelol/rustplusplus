@@ -105,7 +105,9 @@
     "commandSyntaxMute": "mute",
     "commandSyntaxNote": "note",
     "commandSyntaxNotes": "notes",
+    "commandSyntaxOff": "off",
     "commandSyntaxOffline": "offline",
+    "commandSyntaxOn": "on",
     "commandSyntaxOnline": "online",
     "commandSyntaxPlayer": "player",
     "commandSyntaxPlayers": "игроки",
@@ -115,6 +117,7 @@
     "commandSyntaxSearch": "search",
     "commandSyntaxSend": "send",
     "commandSyntaxSmall": "small",
+    "commandSyntaxStatus": "status",
     "commandSyntaxSubscribe": "sub",
     "commandSyntaxTTS": "tts",
     "commandSyntaxTime": "time",
@@ -641,8 +644,5 @@
     "wipe": "вайп",
     "wipeDetected": "Обнаружен Wipe!",
     "youAreAlreadyLeader": "Вы уже лидер.",
-    "youAreNotPairedWithServer": "Команда лидера не работает, потому что вы не подключены к серверу.",
-    "commandSyntaxOn": "on",
-    "commandSyntaxOff": "off",
-    "commandSyntaxStatus": "status"
+    "youAreNotPairedWithServer": "Команда лидера не работает, потому что вы не подключены к серверу."
 }

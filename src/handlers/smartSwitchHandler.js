@@ -179,11 +179,17 @@ module.exports = {
         const serverId = rustplus.serverId;
         const instance = client.getInstance(guildId);
         const switches = instance.serverList[serverId].switches;
-        const commandLowerCase = command.toLowerCase();
         const prefix = rustplus.generalSettings.prefix;
 
         const onCap = client.intlGet(guildId, 'onCap');
         const offCap = client.intlGet(guildId, 'offCap');
+
+        const onEn = client.intlGet('en', 'commandSyntaxOn');
+        const onLang = client.intlGet(guildId, 'commandSyntaxOn');
+        const offEn = client.intlGet('en', 'commandSyntaxOff');
+        const offLang = client.intlGet(guildId, 'commandSyntaxOff');
+        const statusEn = client.intlGet('en', 'commandSyntaxStatus');
+        const statusLang = client.intlGet(guildId, 'commandSyntaxStatus');
 
         const entityId = Object.keys(switches).find(e =>
             command === `${prefix}${switches[e].command}` ||
@@ -192,11 +198,14 @@ module.exports = {
         if (!entityId) return false;
 
         const entityCommand = `${prefix}${switches[entityId].command}`;
-        const rest = command.replace(`${entityCommand} on`, '').replace(`${entityCommand} off`, '')
-            .replace(`${entityCommand}`, '').trim();
+        let rest = command.replace(`${entityCommand} ${onEn}`, '');
+        rest = rest.replace(`${entityCommand} ${onLang}`, '');
+        rest = rest.replace(`${entityCommand} ${offEn}`, '');
+        rest = rest.replace(`${entityCommand} ${offLang}`, '');
+        rest = rest.replace(`${entityCommand}`, '').trim();
 
         let active;
-        if (command.startsWith(`${entityCommand} on`)) {
+        if (command.startsWith(`${entityCommand} ${onEn}`) || command.startsWith(`${entityCommand} ${onLang}`)) {
             if (!switches[entityId].active) {
                 active = true;
             }
@@ -204,7 +213,7 @@ module.exports = {
                 return true;
             }
         }
-        else if (command.startsWith(`${entityCommand} off`)) {
+        else if (command.startsWith(`${entityCommand} ${offEn}`) || command.startsWith(`${entityCommand} ${offLang}`)) {
             if (switches[entityId].active) {
                 active = false;
             }
@@ -212,7 +221,7 @@ module.exports = {
                 return true;
             }
         }
-        else if (command === `${entityCommand} status`) {
+        else if (command === `${entityCommand} ${statusEn}` || command === `${entityCommand} ${statusLang}`) {
             const info = await rustplus.getEntityInfoAsync(entityId);
             if (!(await rustplus.isResponseValid(info))) {
                 switches[entityId].reachable = false;

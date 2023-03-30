@@ -105,7 +105,9 @@
     "commandSyntaxMute": "silenciar",
     "commandSyntaxNote": "nota",
     "commandSyntaxNotes": "notas",
+    "commandSyntaxOff": "off",
     "commandSyntaxOffline": "desconectado",
+    "commandSyntaxOn": "on",
     "commandSyntaxOnline": "conectado",
     "commandSyntaxPlayer": "jugador",
     "commandSyntaxPlayers": "jugadores",
@@ -115,6 +117,7 @@
     "commandSyntaxSearch": "buscar",
     "commandSyntaxSend": "enviar",
     "commandSyntaxSmall": "pequeña",
+    "commandSyntaxStatus": "status",
     "commandSyntaxSubscribe": "sub",
     "commandSyntaxTTS": "tts",
     "commandSyntaxTime": "tiempo",
@@ -641,8 +644,5 @@
     "wipe": "Wipe",
     "wipeDetected": "¡Wipe detectado!",
     "youAreAlreadyLeader": "Ya eres líder.",
-    "youAreNotPairedWithServer": "El comando líder no funciona porque no está emparejado con el servidor.",
-    "commandSyntaxOn": "on",
-    "commandSyntaxOff": "off",
-    "commandSyntaxStatus": "status"
+    "youAreNotPairedWithServer": "El comando líder no funciona porque no está emparejado con el servidor."
 }

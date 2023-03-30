@@ -105,7 +105,9 @@
     "commandSyntaxMute": "wycisz",
     "commandSyntaxNote": "note",
     "commandSyntaxNotes": "notes",
+    "commandSyntaxOff": "off",
     "commandSyntaxOffline": "w trybie offline",
+    "commandSyntaxOn": "on",
     "commandSyntaxOnline": "online",
     "commandSyntaxPlayer": "gracz",
     "commandSyntaxPlayers": "Gracze",
@@ -115,6 +117,7 @@
     "commandSyntaxSearch": "wyszukaj",
     "commandSyntaxSend": "wyślij",
     "commandSyntaxSmall": "mały",
+    "commandSyntaxStatus": "status",
     "commandSyntaxSubscribe": "sub",
     "commandSyntaxTTS": "tts",
     "commandSyntaxTime": "czas",
@@ -641,8 +644,5 @@
     "wipe": "Wipe",
     "wipeDetected": "Wipe detected!",
     "youAreAlreadyLeader": "You are already leader.",
-    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server.",
-    "commandSyntaxOn": "on",
-    "commandSyntaxOff": "off",
-    "commandSyntaxStatus": "status"
+    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
 }
