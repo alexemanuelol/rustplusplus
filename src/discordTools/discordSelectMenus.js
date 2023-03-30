@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    https://github.com/alexemanuelol/rustPlusPlus
+    https://github.com/alexemanuelol/rustplusplus
 
 */
 
@@ -108,11 +108,11 @@ module.exports = {
                     Client.client.intlGet(guildId, 'notShowingCap') : trademark}`,
                 options: [
                     {
-                        label: 'rustPlusPlus',
+                        label: 'rustplusplus',
                         description: Client.client.intlGet(guildId, 'trademarkShownBeforeMessage', {
-                            trademark: 'rustPlusPlus'
+                            trademark: 'rustplusplus'
                         }),
-                        value: 'rustPlusPlus'
+                        value: 'rustplusplus'
                     },
                     {
                         label: 'Rust++',

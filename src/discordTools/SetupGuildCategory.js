@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    https://github.com/alexemanuelol/rustPlusPlus
+    https://github.com/alexemanuelol/rustplusplus
 
 */
 
@@ -30,7 +30,7 @@ module.exports = async (client, guild) => {
         category = DiscordTools.getCategoryById(guild.id, instance.channelId.category);
     }
     if (category === undefined) {
-        category = await DiscordTools.addCategory(guild.id, 'rustPlusPlus');
+        category = await DiscordTools.addCategory(guild.id, 'rustplusplus');
         instance.channelId.category = category.id;
         client.setInstance(guild.id, instance);
     }

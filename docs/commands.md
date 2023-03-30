@@ -18,7 +18,7 @@ Slash Command | Description
 [**/market**](commands.md#market) | Operations for In-Game Vending Machines.
 [**/players**](commands.md#players) | Get player/players information based on battlemetrics.
 [**/reset**](commands.md#reset) | Reset Discord channels.
-[**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustPlusPlus category content.
+[**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustplusplus category content.
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
 [**/switch**](commands.md#switch) | Operations on Smart Switches.
 
@@ -155,13 +155,13 @@ Subcommand | Options | Description | Required
 
 ## **/role**
 
-> **Set/Clear a specific role that will be able to see the rustPlusPlus category content.**
+> **Set/Clear a specific role that will be able to see the rustplusplus category content.**
 
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `set` | &nbsp; | Set the role. | &nbsp;
-&nbsp; | `role` | The role rustPlusPlus channels will be visible to. | `True`
-`clear` | &nbsp; | Clear the role (to allow everyone to see the rustPlusPlus channels). | &nbsp;
+&nbsp; | `role` | The role rustplusplus channels will be visible to. | `True`
+`clear` | &nbsp; | Clear the role (to allow everyone to see the rustplusplus channels). | &nbsp;
 
 ![Discord Slash Command role Image](images/role.png)
 

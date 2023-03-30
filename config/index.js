@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    https://github.com/alexemanuelol/rustPlusPlus
+    https://github.com/alexemanuelol/rustplusplus
 
 */
 
@@ -25,7 +25,7 @@ module.exports = {
         showCallStackError: process.env.RPP_LOG_CALL_STACK || false
     },
     discord: {
-        username: process.env.RPP_DISCORD_USERNAME || 'rustPlusPlus',
+        username: process.env.RPP_DISCORD_USERNAME || 'rustplusplus',
         clientId: process.env.RPP_DISCORD_CLIENT_ID || '',
         token: process.env.RPP_DISCORD_TOKEN || '',
         needAdminPrivileges: process.env.RPP_NEED_ADMIN_PRIVILEGES || true, /* If true, only admins can delete (server, switch..), manage credentials and reset a channel */

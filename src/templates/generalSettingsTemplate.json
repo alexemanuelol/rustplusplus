@@ -2,7 +2,7 @@
     "language": "en",
     "prefix": "!",
     "muteInGameBotMessages": false,
-    "trademark": "rustPlusPlus",
+    "trademark": "rustplusplus",
     "inGameCommandsEnabled": true,
     "fcmAlarmNotificationEnabled": false,
     "fcmAlarmNotificationEveryone": false,

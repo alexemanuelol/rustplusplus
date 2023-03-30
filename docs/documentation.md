@@ -1,4 +1,4 @@
-# rustPlusPlus Documentation
+# rustplusplus Documentation
 
 ## Table of Contents
 

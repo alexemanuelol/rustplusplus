@@ -12,6 +12,6 @@ Program | Version | Download | Note
 
 Open a terminal (`Git Bash` / `CMD` / `Terminal` / `PowerShell` or similar) and run the following commands:
 
-    $ git clone https://github.com/alexemanuelol/rustPlusPlus.git
-    $ cd rustPlusPlus
+    $ git clone https://github.com/alexemanuelol/rustplusplus.git
+    $ cd rustplusplus
     $ npm install

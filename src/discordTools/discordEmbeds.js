@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-    https://github.com/alexemanuelol/rustPlusPlus
+    https://github.com/alexemanuelol/rustplusplus
 
 */
 
@@ -829,7 +829,7 @@ module.exports = {
     },
 
     getHelpEmbed: function (guildId) {
-        const repository = 'https://github.com/alexemanuelol/rustPlusPlus';
+        const repository = 'https://github.com/alexemanuelol/rustplusplus';
         const credentials = `${repository}/blob/master/docs/credentials.md`;
         const pairServer = `${repository}/blob/master/docs/pair_and_connect_to_server.md`;
         const commands = `${repository}/blob/master/docs/commands.md`;
@@ -842,7 +842,7 @@ module.exports = {
         return module.exports.getEmbed({
             color: Constants.COLOR_DEFAULT,
             timestamp: true,
-            title: `rustPlusPlus Help`,
+            title: `rustplusplus Help`,
             description: description
         });
     },

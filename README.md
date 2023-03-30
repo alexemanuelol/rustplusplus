@@ -17,7 +17,7 @@
     </a>
 </p>
 
-<h1 align="center"><em><b>rustPlusPlus</b> ~ Rust+ Discord Bot</em></h1>
+<h1 align="center"><em><b>rustplusplus</b> ~ Rust+ Discord Bot</em></h1>
 </p>
 
 A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/rustplus.js) library to utilize the power of the [Rust+ Companion App](https://rust.facepunch.com/companion) with additional Quality-of-Life features.
@@ -46,7 +46,7 @@ A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/r
 
 ## **Credentials**
 
-> You can get your credentials by running the `rustPlusPlus FCM Credential Application`. Download it [here](https://github.com/alexemanuelol/rustPlusPlus-Credential-Application/releases/download/v1.1.0/rustPlusPlus-1.1.0-win-x64.exe)
+> You can get your credentials by running the `rustplusplus FCM Credential Application`. Download it [here](https://github.com/alexemanuelol/rustplusplus-Credential-Application/releases/download/v1.1.0/rustPlusPlus-1.1.0-win-x64.exe)
 
 
 ## **How to run the bot**
@@ -69,7 +69,7 @@ or
 
 ## **Running via docker**
 
-    $ docker run --rm -it -v ${pwd}/credentials:/app/credentials -v ${pwd}/instances:/app/instances -v ${pwd}/logs:/app/logs -e RPP_DISCORD_CLIENT_ID=111....1111 -e RPP_DISCORD_TOKEN=token --name rpp ghcr.io/alexemanuelol/rustPlusPlus
+    $ docker run --rm -it -v ${pwd}/credentials:/app/credentials -v ${pwd}/instances:/app/instances -v ${pwd}/logs:/app/logs -e RPP_DISCORD_CLIENT_ID=111....1111 -e RPP_DISCORD_TOKEN=token --name rpp ghcr.io/alexemanuelol/rustplusplus
 
 or
 
