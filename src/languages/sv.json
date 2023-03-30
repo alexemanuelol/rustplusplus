@@ -641,5 +641,8 @@
     "wipe": "Rensning",
     "wipeDetected": "Rensning upptäcktes!",
     "youAreAlreadyLeader": "Du är redan lagledare.",
-    "youAreNotPairedWithServer": "Leader-kommandot fungerar inte eftersom du inte är parad med servern."
+    "youAreNotPairedWithServer": "Leader-kommandot fungerar inte eftersom du inte är parad med servern.",
+    "commandSyntaxOn": "on",
+    "commandSyntaxOff": "off",
+    "commandSyntaxStatus": "status"
 }
