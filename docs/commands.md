@@ -199,6 +199,7 @@ In-Game Command | Description
 [**afk**](commands.md#afk) | Get the currently afk players in your team.
 [**alive**](commands.md#alive) | Get the player with the longest time alive.
 [**bradley**](commands.md#bradley) | Get information about Bradley APC (Time till respawn, time since last destroyed).
+[**cam**](commands.md#cam) | Scan individual cameras or group of cameras to detect players or scientists.
 [**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, current crates, time since last on map).
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
 [**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
@@ -351,8 +352,8 @@ Subcommand | Description | Required
 Subcommand | Description | Required
 ---------- | ----------- | --------
 `search` | Search for an item in Vending Machines (`!market search thompson`). | `False`
-`subscribe` | Subscribe to an item in Vending Machines (`!market sub thompson`). | `False`
-`unsubscribe` | Unsubscribe to an item in Vending Machines (`!market unsub thompson`). | `False`
+`sub` | Subscribe to an item in Vending Machines (`!market sub thompson`). | `False`
+`unsub` | Unsubscribe to an item in Vending Machines (`!market unsub thompson`). | `False`
 `list` | Display the subscription list (`!market list`). | `False`
 
 ![In-Game Command market Image](images/market_ingame.png)
