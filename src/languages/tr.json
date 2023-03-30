@@ -641,5 +641,8 @@
     "wipe": "Wipe",
     "wipeDetected": "Wipe tespit edildi!",
     "youAreAlreadyLeader": "Zaten lidersin.",
-    "youAreNotPairedWithServer": "Sunucuyla eşleşmediğiniz için lider komutu çalışmıyor."
+    "youAreNotPairedWithServer": "Sunucuyla eşleşmediğiniz için lider komutu çalışmıyor.",
+    "commandSyntaxOn": "on",
+    "commandSyntaxOff": "off",
+    "commandSyntaxStatus": "status"
 }

@@ -641,5 +641,8 @@
     "wipe": "Wipe",
     "wipeDetected": "Rilevato wipe!",
     "youAreAlreadyLeader": "Sei già il leader.",
-    "youAreNotPairedWithServer": "Il comando del leader non funziona perché non sei associato al server."
+    "youAreNotPairedWithServer": "Il comando del leader non funziona perché non sei associato al server.",
+    "commandSyntaxOn": "on",
+    "commandSyntaxOff": "off",
+    "commandSyntaxStatus": "status"
 }
