@@ -641,5 +641,8 @@
     "wipe": "초기화",
     "wipeDetected": "서버 초기화가 감지되었습니다!",
     "youAreAlreadyLeader": "당신은 이미 팀 리더 입니다.",
-    "youAreNotPairedWithServer": "서버와 페어링되지 않았기 때문에 리더 명령어가 작동하지 않습니다."
+    "youAreNotPairedWithServer": "서버와 페어링되지 않았기 때문에 리더 명령어가 작동하지 않습니다.",
+    "commandSyntaxOn": "on",
+    "commandSyntaxOff": "off",
+    "commandSyntaxStatus": "status"
 }
