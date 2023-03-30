@@ -641,5 +641,8 @@
     "wipe": "вайп",
     "wipeDetected": "Обнаружен Wipe!",
     "youAreAlreadyLeader": "Вы уже лидер.",
-    "youAreNotPairedWithServer": "Команда лидера не работает, потому что вы не подключены к серверу."
+    "youAreNotPairedWithServer": "Команда лидера не работает, потому что вы не подключены к серверу.",
+    "commandSyntaxOn": "on",
+    "commandSyntaxOff": "off",
+    "commandSyntaxStatus": "status"
 }
