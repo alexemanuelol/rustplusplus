@@ -109,12 +109,16 @@ module.exports = {
         const serverId = rustplus.serverId;
         const instance = client.getInstance(guildId);
         const switchGroups = instance.serverList[serverId].switchGroups;
-        const commandLowerCase = command.toLowerCase();
         const prefix = rustplus.generalSettings.prefix;
 
         const onCap = client.intlGet(rustplus.guildId, 'onCap');
         const offCap = client.intlGet(rustplus.guildId, 'offCap');
         const notFoundCap = client.intlGet(rustplus.guildId, 'notFoundCap');
+
+        const onEn = client.intlGet('en', 'commandSyntaxOn');
+        const onLang = client.intlGet(guildId, 'commandSyntaxOn');
+        const offEn = client.intlGet('en', 'commandSyntaxOff');
+        const offLang = client.intlGet(guildId, 'commandSyntaxOff');
 
         const groupId = Object.keys(switchGroups).find(e =>
             command === `${prefix}${switchGroups[e].command}` ||
@@ -123,14 +127,17 @@ module.exports = {
         if (!groupId) return false;
 
         const groupCommand = `${prefix}${switchGroups[groupId].command}`;
-        const rest = command.replace(`${groupCommand} on`, '').replace(`${groupCommand} off`, '')
-            .replace(`${groupCommand}`, '').trim();
+        let rest = command.replace(`${groupCommand} ${onEn}`, '');
+        rest = rest.replace(`${groupCommand} ${onLang}`, '');
+        rest = rest.replace(`${groupCommand} ${offEn}`, '');
+        rest = rest.replace(`${groupCommand} ${offLang}`, '');
+        rest = rest.replace(`${groupCommand}`, '').trim();
 
         let active;
-        if (command.startsWith(`${groupCommand} on`)) {
+        if (command.startsWith(`${groupCommand} ${onEn}`) || command.startsWith(`${groupCommand} ${onLang}`)) {
             active = true;
         }
-        else if (command.startsWith(`${groupCommand} off`)) {
+        else if (command.startsWith(`${groupCommand} ${offEn}`) || command.startsWith(`${groupCommand} ${offLang}`)) {
             active = false;
         }
         else if (command === `${groupCommand}`) {
