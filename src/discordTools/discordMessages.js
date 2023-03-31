@@ -20,7 +20,7 @@
 
 const Discord = require('discord.js');
 const Path = require('path');
-
+const Constants = require('../util/constants.js');
 const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
@@ -355,11 +355,11 @@ module.exports = {
         }
     },
 
-    sendDiscordEventMessage: async function (guildId, serverId, text, image) {
+    sendDiscordEventMessage: async function (guildId, serverId, text, image, color) {
         const instance = Client.client.getInstance(guildId);
 
         const content = {
-            embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image)],
+            embeds: [DiscordEmbeds.getEventEmbed(guildId, serverId, text, image, color)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/events/${image}`))]
         }
@@ -382,7 +382,11 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         let color = null;
-        if (message.color.length === 4) {
+        //Check if COLOR_TEAMCHAT is not null and 7 digits long, what represent a Hex Color Code. e.g. #ffffff
+        if (Constants.COLOR_TEAMCHAT != null && Constants.COLOR_TEAMCHAT.length === 7) {
+            color = Constants.COLOR_TEAMCHAT;
+        }
+        else if (message.color.length === 4) {
             color = message.color.replace('#', '');
             color = `#${color.split('').map(function (hex) { return hex + hex; }).join('')}`;
         }
