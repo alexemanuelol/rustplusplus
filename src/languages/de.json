@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "Bradley APC streift wahrscheinlich beim Raketenstartplatz herum.",
     "broadcaster": "Funksender",
     "buttonReconnecting": "WIEDERVERBINDEN",
+    "cams": "Cameras",
     "cargoAtCrates": "Position: {location}.\nKisten: {crates}.",
     "cargoLeavingMapAt": "Frachtschiff verlässt die Karte [{location}]. Kisten: {crates}.",
     "cargoLocatedAtCrates": "Frachtschiff hält sich [{location}] auf. Kisten: {crates}.",

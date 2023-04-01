@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "Tank fırlatma üssünde devriye geziyor.",
     "broadcaster": "Yayıncı",
     "buttonReconnecting": "TEKRAR BAĞLANILIYOR",
+    "cams": "Cameras",
     "cargoAtCrates": "{location} konumunda.\nGanimet: {crates}.",
     "cargoLeavingMapAt": "Kargo gemisi haritadan ayrılıyor - {location}. Ganimet: {crates}.",
     "cargoLocatedAtCrates": "Kargo gemisi {location} konumunda görüldü. Ganimet: {crates}.",

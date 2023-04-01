@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "Il Bradley APC sta probabilmente vagando nei dintorni del Launch Site.",
     "broadcaster": "Trasmettitore",
     "buttonReconnecting": "RICONNESSIONE",
+    "cams": "Cameras",
     "cargoAtCrates": "In {location}.\nCasse: {crates}.",
     "cargoLeavingMapAt": "Nave Cargo sta lasciando la mappa a {location}. Cassa: {crates}.",
     "cargoLocatedAtCrates": "Nave Cargo si trova a {location}. Cassa: {crates}.",

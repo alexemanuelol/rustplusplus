@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "Bradley APC se pravděpodobně pohybuje na odpalovací základně.",
     "broadcaster": "Vysílač",
     "buttonReconnecting": "OPĚTOVNÉ PŘIPOJOVÁNÍ",
+    "cams": "Cameras",
     "cargoAtCrates": "Na {location}.\nBedny: {crates}.",
     "cargoLeavingMapAt": "Cargo Ship opouští mapu na {location}. Bedny: {crates}.",
     "cargoLocatedAtCrates": "Cargo Ship je na {location}. Bedny: {crates}.",

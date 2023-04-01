@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "브래들리 APC는 발사장 주변에 있습니다.",
     "broadcaster": "방송",
     "buttonReconnecting": "재연결중",
+    "cams": "Cameras",
     "cargoAtCrates": "{location}에 있습니다\n상자: {crates}.",
     "cargoLeavingMapAt": "화물선이 {location}에서 떠나고 있습니다. 상자: {crates}.",
     "cargoLocatedAtCrates": "화물선은 {location}에 있습니다. 상자: {crates}.",

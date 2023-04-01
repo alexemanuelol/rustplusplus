@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "El Bradley APC probablemente esté en la Estación de Lanzamiento de Misiles.",
     "broadcaster": "Emisora",
     "buttonReconnecting": "RECONECTANDO",
+    "cams": "Cameras",
     "cargoAtCrates": "En {location}.\nCajas: {crates}.",
     "cargoLeavingMapAt": "El Cargo está saliendo del mapa por {location}. Cajas: {crates}.",
     "cargoLocatedAtCrates": "El Cargo está en {location}. Cajas: {crates}.",

@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "Вероятно Танк сейчас патрулирует космодром.",
     "broadcaster": "Радиопередатчик",
     "buttonReconnecting": "ПЕРЕПОДКЛЮЧЕНИЕ",
+    "cams": "Cameras",
     "cargoAtCrates": "({location}).\nЯщики: {crates}.",
     "cargoLeavingMapAt": "Грузовой корабль покидает карту ({location}). Ящики: {crates}.",
     "cargoLocatedAtCrates": "Грузовой корабль расположен ({location}). Ящики: {crates}.",

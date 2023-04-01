@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "Bradley APC strövar förmodlingen omkring på Uppskjutningsplatsen.",
     "broadcaster": "Sändare",
     "buttonReconnecting": "ÅTERANSLUTER",
+    "cams": "Cameras",
     "cargoAtCrates": "På {location}.\nLådor: {crates}.",
     "cargoLeavingMapAt": "Lastfartyget lämnar kartan vid {location}. Lådor: {crates}.",
     "cargoLocatedAtCrates": "Lastfartyget ligger på {location}. Lådor: {crates}.",

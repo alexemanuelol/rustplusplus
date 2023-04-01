@@ -43,6 +43,7 @@
     "bradleyRoamingAround": "Bradley APC krąży po okolicy Kosmodromu.",
     "broadcaster": "Broadcaster",
     "buttonReconnecting": "PONOWNE ŁĄCZENIE",
+    "cams": "Cameras",
     "cargoAtCrates": "At {location}.\nCrates: {crates}.",
     "cargoLeavingMapAt": "Cargo Ship is leaving the map at {location}. Crates: {crates}.",
     "cargoLocatedAtCrates": "Cargo Ship is located at {location}. Crates: {crates}.",
