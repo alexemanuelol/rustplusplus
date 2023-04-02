@@ -71,27 +71,51 @@ module.exports = {
 
         switch (interaction.options.getSubcommand()) {
             case 'edit': {
+                let isSmartSwitchGroup = false;
                 const entityId = interaction.options.getString('id');
                 const image = interaction.options.getString('image');
 
-                const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
+                let device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
                 if (device === null) {
-                    const str = client.intlGet(interaction.guildId, 'invalidId', { id: entityId });
-                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-                        instance.serverList[device.serverId].title));
-                    client.log(client.intlGet(null, 'warningCap'), str);
-                    return;
+                    isSmartSwitchGroup = true;
+                    for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {
+                        if (groupId === entityId) {
+                            device = { type: 'switchGroup', serverId: rustplus.serverId };
+                            break;
+                        }
+                    }
+
+                    if (device === null) {
+                        const str = client.intlGet(interaction.guildId, 'invalidId', { id: entityId });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+                            instance.serverList[rustplus.serverId].title));
+                        client.log(client.intlGet(null, 'warningCap'), str);
+                        return;
+                    }
                 }
 
-                const entity = instance.serverList[device.serverId].switches[entityId];
+                const entity = isSmartSwitchGroup ? instance.serverList[device.serverId].switchGroups[entityId] :
+                    instance.serverList[device.serverId].switches[entityId];
 
-                if (image !== null) instance.serverList[device.serverId].switches[entityId].image = `${image}.png`;
+                if (image !== null) {
+                    if (isSmartSwitchGroup) {
+                        instance.serverList[device.serverId].switchGroups[entityId].image = `${image}.png`;
+                    }
+                    else {
+                        instance.serverList[device.serverId].switches[entityId].image = `${image}.png`;
+                    }
+                }
                 client.setInstance(interaction.guildId, instance);
 
                 if (rustplus && rustplus.serverId === device.serverId) {
-                    DiscordMessages.sendSmartSwitchMessage(interaction.guildId, device.serverId, entityId);
-                    SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                        client, interaction.guildId, device.serverId, entityId);
+                    if (isSmartSwitchGroup) {
+                        DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, device.serverId, entityId);
+                    }
+                    else {
+                        DiscordMessages.sendSmartSwitchMessage(interaction.guildId, device.serverId, entityId);
+                        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
+                            client, interaction.guildId, device.serverId, entityId);
+                    }
                 }
 
                 const str = client.intlGet(interaction.guildId, 'smartSwitchEditSuccess', {
