@@ -282,7 +282,8 @@ module.exports = {
         return module.exports.getEmbed({
             title: group.name,
             color: Constants.COLOR_DEFAULT,
-            thumbnail: 'attachment://smart_switch.png',
+            description: `**ID**: \`${groupId}\``,
+            thumbnail: `attachment://${group.image}`,
             footer: { text: `${instance.serverList[serverId].title}` },
             fields: [
                 {

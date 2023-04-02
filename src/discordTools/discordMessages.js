@@ -173,7 +173,7 @@ module.exports = {
             embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupId)],
             components: DiscordButtons.getSmartSwitchGroupButtons(guildId, serverId, groupId),
             files: [new Discord.AttachmentBuilder(
-                Path.join(__dirname, '..', 'resources/images/electrics/smart_switch.png'))]
+                Path.join(__dirname, '..', `resources/images/electrics/${group.image}`))]
         }
 
         const message = await module.exports.sendMessage(guildId, content, group.messageId,
