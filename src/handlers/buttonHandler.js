@@ -320,6 +320,7 @@ module.exports = async (client, interaction) => {
             name: 'Group',
             command: `${groupId}`,
             switches: [],
+            image: 'smart_switch.png',
             messageId: null
         }
         client.setInstance(guildId, instance);
