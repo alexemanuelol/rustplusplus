@@ -228,7 +228,7 @@ async function pairingServer(client, guild, full, data, body) {
         switchGroups: server ? server.switchGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
-        connect: (info === null) ? 'Unavailable' : `${client.intlGet(guild.id, 'connect')} ${info.ip}:${info.port}`,
+        connect: (info === null) ? 'Unavailable' : `${info.ip}:${info.port}`,
         cargoShipEgressTimeMs: server ? server.cargoShipEgressTimeMs : Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
         bradleyApcRespawnTimeMs: server ? server.bradleyApcRespawnTimeMs :
             Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,

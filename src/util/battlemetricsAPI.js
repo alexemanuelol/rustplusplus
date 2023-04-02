@@ -26,7 +26,7 @@ module.exports = {
         let searchServerName = encodeURI(serverName);
         serverName = module.exports.escapeRegExp(serverName);
         searchServerName = searchServerName.replace('\#', '\*');
-        const search = `https://www.battlemetrics.com/servers/search?q=${searchServerName}&sort=score&game=rust`;
+        const search = `https://api.battlemetrics.com/servers?filter[search]=${searchServerName}&filter[game]=rust`;
         const response = await Scrape.scrape(search);
 
         if (response.status !== 200) {
@@ -36,12 +36,11 @@ module.exports = {
             return null;
         }
 
-        let regex = new RegExp(`"id":"(\\d+?)","game_id":"rust","name":"${serverName}","`, 'g');
-        let data = regex.exec(response.data);
+        let id = response.data['data'][0]['attributes'].id;
 
         try {
-            if (data.length === 2) {
-                return data[1];
+            if (id !== null) {
+                return id;
             }
         }
         catch (e) { }
@@ -50,7 +49,7 @@ module.exports = {
     },
 
     getBattlemetricsServerPage: async function (client, serverId) {
-        const search = `https://www.battlemetrics.com/servers/rust/${serverId}`;
+        const search = `https://api.battlemetrics.com/servers/${serverId}?include=player`;
         const response = await Scrape.scrape(search);
 
         if (response.status !== 200) {
@@ -59,8 +58,7 @@ module.exports = {
             }), 'error')
             return null;
         }
-
-        return response.data;
+        return response['data'];
     },
 
     getBattlemetricsServerInfo: async function (client, serverId, page = null) {
@@ -74,19 +72,15 @@ module.exports = {
                 return null;
             }
         }
-
-        let regex = new RegExp(
-            `"id":"${serverId}".*?"ip":"(.+?)","port":(.+?),".*?"rank":(\\d+?),".*?"country":"(.+?)","status":"(.+?)"`, 'g');
-        let data = regex.exec(page);
-
+        data = page['data']['attributes']
         try {
-            if (data.length === 6) {
+            if (page.length !== null) {
                 return {
-                    ip: data[1],
-                    port: data[2],
-                    rank: data[3],
-                    country: data[4],
-                    status: (data[5] === 'online') ? true : false
+                    ip: data.ip,
+                    port: data.port,
+                    rank: data.rank,
+                    country: data.country,
+                    status: (data.status === 'online') ? true : false
                 }
             }
         }
@@ -108,19 +102,16 @@ module.exports = {
         }
 
         let onlinePlayers = [];
-        let regex = new RegExp(
-            `<a class="css-zwebxb" href="/players/(\\d+?)">(.+?)</a>.*?time=".*?">(.+?)</`, 'gm');
-        let players = page.matchAll(regex)
+        let players = page['included']
 
         for (let player of players) {
             try {
-                if (player.length === 4) {
-                    onlinePlayers.push({ id: player[1], name: player[2], time: player[3] });
+                if (player.length !== null) {
+                    onlinePlayers.push({ id: player['attributes'].id, name: player['attributes'].name, time: '13:37' });
                 }
             }
             catch (e) { }
         }
-
         return onlinePlayers;
     },
 
