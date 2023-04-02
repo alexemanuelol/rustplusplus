@@ -397,6 +397,10 @@ module.exports = {
             })]
         }
 
+        if (message.message.includes('@everyone')) {
+            content.content = '@everyone';
+        }
+
         await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
     },
 
