@@ -81,7 +81,7 @@ module.exports = {
             thumbnail: `${server.img}`,
             fields: [{
                 name: Client.client.intlGet(guildId, 'connect'),
-                value: `${server.connect === null ?
+                value: `${server.connect === null || server.connect === 'Unavailable' ?
                     Client.client.intlGet(guildId, 'unavailable') : `steam://connect/${server.connect}`}`,
                 inline: true
             },
