@@ -411,7 +411,7 @@ module.exports = {
         ];
     },
 
-    getTrackerNotifyButtons: function (guildId, allOffline, anyOnline) {
+    getTrackerNotifyButtons: function (guildId, allOffline, anyOnline, inGameConnections) {
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getButton({
                 customId: 'TrackerNotifyAllOffline',
@@ -422,6 +422,12 @@ module.exports = {
                 customId: 'TrackerNotifyAnyOnline',
                 label: Client.client.intlGet(guildId, 'anyOnlineCap'),
                 style: anyOnline ? SUCCESS : DANGER
+            }),
+            module.exports.getButton({
+                customId: 'TrackerNotifyInGameConnections',
+                label: `${Client.client.intlGet(guildId, 'inGameCap')} ` +
+                    `${Client.client.intlGet(guildId, 'connectionsCap')}`,
+                style: inGameConnections ? SUCCESS : DANGER
             }));
     },
 

@@ -11,6 +11,7 @@
     "leaderCommandOnlyForPaired": false,
     "trackerNotifyAllOffline": true,
     "trackerNotifyAnyOnline": false,
+    "trackerNotifyInGameConnections": true,
     "commandDelay": 0,
     "connectionNotify": false,
     "afkNotify": false,
