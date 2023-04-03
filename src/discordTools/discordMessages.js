@@ -370,7 +370,10 @@ module.exports = {
     sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId) {
         const instance = Client.client.getInstance(guildId);
 
-        const png = await Scrape.scrapeSteamProfilePicture(Client.client, steamId);
+        let png = null;
+        if (steamId !== null) {
+            png = await Scrape.scrapeSteamProfilePicture(Client.client, steamId);
+        }
         const content = {
             embeds: [DiscordEmbeds.getActivityNotificationEmbed(guildId, serverId, color, text, steamId, png)]
         }
