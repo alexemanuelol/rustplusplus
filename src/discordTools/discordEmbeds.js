@@ -536,14 +536,14 @@ module.exports = {
 
     },
 
-    getEventEmbed: function (guildId, serverId, text, image, color = Constants.COLOR_DEFAULT) {
+    getEventEmbed: function (guildId, serverId, text, image) {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         return module.exports.getEmbed({
-            color: color,
+            color: Constants.COLOR_DEFAULT,
             thumbnail: `attachment://${image}`,
             title: text,
-            footer: { text: server.title, iconURL: server.img},
+            footer: { text: server.title },
             timestamp: true
         });
     },
