@@ -19,6 +19,7 @@
 */
 
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
+const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Scrape = require('../util/scrape.js');
 
@@ -71,17 +72,44 @@ module.exports = {
                     client, content.battlemetricsId, page);
                 if (onlinePlayers === null) continue;
 
+                const rustplus = client.rustplusInstances[guild.id];
+
                 for (let player of content.players) {
                     player = instance.trackers[trackerId].players.find(e => e.steamId === player.steamId);
                     let onlinePlayer = onlinePlayers.find(e => e.name === player.name);
                     if (onlinePlayer) {
                         changed = true;
+                        if (player.status === false) {
+                            const str = client.intlGet(guild.id, 'playerJustConnectedTracker', {
+                                name: player.name,
+                                tracker: content.name
+                            });
+                            await DiscordMessages.sendActivityNotificationMessage(
+                                guild.id, content.serverId, Constants.COLOR_ACTIVE, str, null);
+                            if (instance.generalSettings.trackerNotifyInGameConnections && rustplus &&
+                                (rustplus.serverId === content.serverId) && content.inGame) {
+                                rustplus.sendTeamMessageAsync(str);
+                            }
+                        }
+
                         player.status = true;
                         player.time = onlinePlayer.time;
                         player.playerId = onlinePlayer.id;
                     }
                     else {
-                        if (player.status === true) changed = true;
+                        if (player.status === true) {
+                            changed = true;
+                            const str = client.intlGet(guild.id, 'playerJustDisconnectedTracker', {
+                                name: player.name,
+                                tracker: content.name
+                            });
+                            await DiscordMessages.sendActivityNotificationMessage(
+                                guild.id, content.serverId, Constants.COLOR_INACTIVE, str, null);
+                            if (instance.generalSettings.trackerNotifyInGameConnections && rustplus &&
+                                (rustplus.serverId === content.serverId) && content.inGame) {
+                                rustplus.sendTeamMessageAsync(str);
+                            }
+                        }
                         if (!forceSearch) {
                             player.status = false;
                             continue
@@ -127,8 +155,6 @@ module.exports = {
                         allOffline = false;
                     }
                 }
-
-                const rustplus = client.rustplusInstances[guild.id];
 
                 if (!instance.trackers[trackerId].allOffline && allOffline) {
                     if (instance.generalSettings.trackerNotifyAllOffline) {

@@ -208,7 +208,8 @@ async function setupGeneralSettings(client, guildId, channel) {
         components: [DiscordButtons.getTrackerNotifyButtons(
             guildId,
             instance.generalSettings.trackerNotifyAllOffline,
-            instance.generalSettings.trackerNotifyAnyOnline)],
+            instance.generalSettings.trackerNotifyAnyOnline,
+            instance.generalSettings.trackerNotifyInGameConnections)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });

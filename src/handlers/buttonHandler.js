@@ -203,6 +203,22 @@ module.exports = async (client, interaction) => {
                 instance.generalSettings.trackerNotifyAnyOnline)]
         });
     }
+    else if (interaction.customId === 'TrackerNotifyInGameConnections') {
+        instance.generalSettings.trackerNotifyInGameConnections =
+            !instance.generalSettings.trackerNotifyInGameConnections;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.trackerNotifyInGameConnections =
+            instance.generalSettings.trackerNotifyInGameConnections;
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getTrackerNotifyButtons(
+                guildId,
+                instance.generalSettings.trackerNotifyAllOffline,
+                instance.generalSettings.trackerNotifyAnyOnline,
+                instance.generalSettings.trackerNotifyInGameConnections)]
+        });
+    }
     else if (interaction.customId === 'MapWipeNotifyEveryone') {
         instance.generalSettings.mapWipeNotifyEveryone = !instance.generalSettings.mapWipeNotifyEveryone;
         client.setInstance(guildId, instance);
