@@ -103,11 +103,14 @@ module.exports = {
 
         let onlinePlayers = [];
         let players = page['included']
-
+        
         for (let player of players) {
             try {
                 if (player.length !== null) {
-                    onlinePlayers.push({ id: player['attributes'].id, name: player['attributes'].name, time: '13:37' });
+                    onlinePlayers.push({ id: player['attributes'].id, 
+                        name: player['attributes'].name, 
+                        time: await this.formatTime(player['attributes'].updatedAt)
+                    });
                 }
             }
             catch (e) { }
@@ -132,4 +135,15 @@ module.exports = {
     escapeRegExp: function (text) {
         return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     },
+
+    formatTime: async function (timestamp) {
+        const date = new Date(timestamp);
+        const now = Date.now();
+        const diffMs = now - date;
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
+        const hoursStr = diffHours.toString().padStart(2, "0");
+        const minutesStr = diffMinutes.toString().padStart(2, "0");
+        return `${hoursStr}:${minutesStr}`;
+      }
 }
