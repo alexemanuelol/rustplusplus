@@ -385,7 +385,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         let color = null;
-        //Check if COLOR_TEAMCHAT is not null and 7 digits long, what represent a Hex Color Code. e.g. #ffffff
+        /** Check if COLOR_TEAMCHAT is not null and 7 digits long, what represent a Hex Color Code. e.g. #ffffff */
         if (Constants.COLOR_TEAMCHAT != null && Constants.COLOR_TEAMCHAT.length === 7) {
             color = Constants.COLOR_TEAMCHAT;
         }
