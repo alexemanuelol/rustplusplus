@@ -72,7 +72,7 @@ module.exports = {
                 return null;
             }
         }
-        data = page['data']['attributes']
+        let data = page['data']['attributes']
         try {
             if (page.length !== null) {
                 return {
