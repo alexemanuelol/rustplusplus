@@ -749,6 +749,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandCam(command) {
+        const instance = Client.client.getInstance(this.guildId);
         const prefix = this.generalSettings.prefix;
         const commandCam = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxCam')}`;
         const commandCamEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxCam')}`;
@@ -767,7 +768,11 @@ class RustPlus extends RustPlusLib {
         /* airfield, bandit, dome, large, outpost, small */
         if (camera === Client.client.intlGet(this.guildId, 'commandSyntaxList') ||
             camera === Client.client.intlGet('en', 'commandSyntaxList')) {
-            return 'airfield, bandit, dome, large, outpost, small';
+            let groups = 'airfield, bandit, dome, large, outpost, small';
+            for (const group in instance.serverList[this.serverId].customCameraGroups) {
+                groups += `, ${group}`;
+            }
+            return groups;
         }
         else if (camera === 'airfield') {
             this.queuedCameras.push(...cctvs['Airfield'].codes)
@@ -786,6 +791,9 @@ class RustPlus extends RustPlusLib {
         }
         else if (camera === 'small') {
             this.queuedCameras.push(...cctvs['Small Oil Rig'].codes)
+        }
+        else if (instance.serverList[this.serverId].customCameraGroups.hasOwnProperty(camera)) {
+            this.queuedCameras.push(...instance.serverList[this.serverId].customCameraGroups[camera]);
         }
         else {
             const response = await this.subscribeToCameraAsync(camera);
