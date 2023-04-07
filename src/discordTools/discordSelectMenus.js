@@ -222,16 +222,20 @@ module.exports = {
         const off = Client.client.intlGet(guildId, 'offCap');
         const autoDay = Client.client.intlGet(guildId, 'autoDayCap');
         const autoNight = Client.client.intlGet(guildId, 'autoNightCap');
+        const autoOn = Client.client.intlGet(guildId, 'autoOnCap');
+        const autoOff = Client.client.intlGet(guildId, 'autoOffCap');
 
-        let autoDayNightString = autoSetting;
-        if (entity.autoDayNight === 0) autoDayNightString += off;
-        else if (entity.autoDayNight === 1) autoDayNightString += autoDay;
-        else if (entity.autoDayNight === 2) autoDayNightString += autoNight;
+        let autoDayNightOnOffString = autoSetting;
+        if (entity.autoDayNightOnOff === 0) autoDayNightOnOffString += off;
+        else if (entity.autoDayNightOnOff === 1) autoDayNightOnOffString += autoDay;
+        else if (entity.autoDayNightOnOff === 2) autoDayNightOnOffString += autoNight;
+        else if (entity.autoDayNightOnOff === 3) autoDayNightOnOffString += autoOn;
+        else if (entity.autoDayNightOnOff === 4) autoDayNightOnOffString += autoOff;
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
-                customId: `AutoDayNight${identifier}`,
-                placeholder: `${autoDayNightString}`,
+                customId: `AutoDayNightOnOff${identifier}`,
+                placeholder: `${autoDayNightOnOffString}`,
                 options: [
                     {
                         label: off,
@@ -247,6 +251,16 @@ module.exports = {
                         label: autoNight,
                         description: Client.client.intlGet(guildId, 'smartSwitchAutoNight'),
                         value: '2'
+                    },
+                    {
+                        label: autoOn,
+                        description: Client.client.intlGet(guildId, 'smartSwitchAutoOn'),
+                        value: '3'
+                    },
+                    {
+                        label: autoOff,
+                        description: Client.client.intlGet(guildId, 'smartSwitchAutoOff'),
+                        value: '4'
                     }]
             }));
     },

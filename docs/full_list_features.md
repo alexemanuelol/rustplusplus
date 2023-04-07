@@ -55,3 +55,4 @@
 * Check the upkeep of all Tool Cupboard via the `upkeep` command.
 * Get Facepunch news in Discord.
 * Scan CCTV cameras for players and scientists.
+* Create custom camera groups.

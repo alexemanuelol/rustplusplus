@@ -119,6 +119,8 @@ module.exports = {
         const onLang = client.intlGet(guildId, 'commandSyntaxOn');
         const offEn = client.intlGet('en', 'commandSyntaxOff');
         const offLang = client.intlGet(guildId, 'commandSyntaxOff');
+        const statusEn = client.intlGet('en', 'commandSyntaxStatus');
+        const statusLang = client.intlGet(guildId, 'commandSyntaxStatus');
 
         const groupId = Object.keys(switchGroups).find(e =>
             command === `${prefix}${switchGroups[e].command}` ||
@@ -140,7 +142,7 @@ module.exports = {
         else if (command.startsWith(`${groupCommand} ${offEn}`) || command.startsWith(`${groupCommand} ${offLang}`)) {
             active = false;
         }
-        else if (command === `${groupCommand}`) {
+        else if (command === `${groupCommand} ${statusEn}` || command === `${groupCommand} ${statusLang}`) {
             const switchStatus = switchGroups[groupId].switches.map(switchId => {
                 const { active, name, reachable } = instance.serverList[serverId].switches[switchId];
                 return { active, name, reachable }

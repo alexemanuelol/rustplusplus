@@ -542,4 +542,12 @@ module.exports = {
 
         await Client.client.interactionReply(interaction, content);
     },
+
+    sendCameraGroupShowMessage: async function (interaction, rustplus) {
+        const content = {
+            embeds: [DiscordEmbeds.getCameraGroupShowEmbed(interaction.guildId, rustplus)],
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
 }
