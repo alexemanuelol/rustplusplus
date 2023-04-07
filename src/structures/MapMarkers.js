@@ -590,6 +590,8 @@ class MapMarkers {
             let mapSize = this.rustplus.info.correctedMapSize;
             let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
 
+            this.rustplus.cargoShipTracers[marker.id] = [{ x: marker.x, y: marker.y }];
+
             marker.location = pos;
             marker.crates = [];
             marker.crateCounter = 1;
@@ -643,6 +645,7 @@ class MapMarkers {
             this.timeSinceCargoShipWasOut = new Date();
 
             this.cargoShips = this.cargoShips.filter(e => e.id !== marker.id);
+            delete this.rustplus.cargoShipTracers[marker.id];
         }
 
         /* CargoShip markers that still remains. */
@@ -650,6 +653,8 @@ class MapMarkers {
             let mapSize = this.rustplus.info.correctedMapSize;
             let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
             let cargoShip = this.getMarkerByTypeId(this.types.CargoShip, marker.id);
+
+            this.rustplus.cargoShipTracers[marker.id].push({ x: marker.x, y: marker.y });
 
             cargoShip.x = marker.x;
             cargoShip.y = marker.y;
@@ -1100,6 +1105,8 @@ class MapMarkers {
             let mapSize = this.rustplus.info.correctedMapSize;
             let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
 
+            this.rustplus.patrolHelicopterTracers[marker.id] = [{ x: marker.x, y: marker.y }];
+
             marker.location = pos;
 
             /* Offset that is used to determine if PatrolHelicopter just spawned */
@@ -1160,6 +1167,7 @@ class MapMarkers {
             }
 
             this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== marker.id);
+            delete this.rustplus.patrolHelicopterTracers[marker.id];
         }
 
         /* PatrolHelicopter markers that still remains. */
@@ -1167,6 +1175,8 @@ class MapMarkers {
             let mapSize = this.rustplus.info.correctedMapSize;
             let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
             let patrolHelicopter = this.getMarkerByTypeId(this.types.PatrolHelicopter, marker.id);
+
+            this.rustplus.patrolHelicopterTracers[marker.id].push({ x: marker.x, y: marker.y });
 
             patrolHelicopter.x = marker.x;
             patrolHelicopter.y = marker.y;
