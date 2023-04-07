@@ -226,9 +226,10 @@ async function pairingServer(client, guild, full, data, body) {
         storageMonitors: server ? server.storageMonitors : {},
         markers: server ? server.markers : {},
         switchGroups: server ? server.switchGroups : {},
+        customCameraGroups: server ? server.customCameraGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
-        connect: (info === null) ? 'Unavailable' : `${info.ip}:${info.port}`,
+        connect: (info === null) ? 'Unavailable' : `connect ${info.ip}:${info.port}`,
         cargoShipEgressTimeMs: server ? server.cargoShipEgressTimeMs : Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
         bradleyApcRespawnTimeMs: server ? server.bradleyApcRespawnTimeMs :
             Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
@@ -268,7 +269,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         name: entityExist ? switches[body.entityId].name : client.intlGet(guild.id, 'smartSwitch'),
         command: entityExist ? switches[body.entityId].command : body.entityId,
         image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
-        autoDayNight: entityExist ? switches[body.entityId].autoDayNight : 0,
+        autoDayNightOnOff: entityExist ? switches[body.entityId].autoDayNightOnOff : 0,
         location: entityExist ? switches[body.entityId].location : null,
         server: entityExist ? switches[body.entityId].server : body.name,
         messageId: entityExist ? switches[body.entityId].messageId : null

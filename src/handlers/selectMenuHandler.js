@@ -78,8 +78,8 @@ module.exports = async (client, interaction) => {
             components: [DiscordSelectMenus.getCommandDelaySelectMenu(guildId, interaction.values[0])]
         });
     }
-    else if (interaction.customId.startsWith('AutoDayNight')) {
-        const ids = JSON.parse(interaction.customId.replace('AutoDayNight', ''));
+    else if (interaction.customId.startsWith('AutoDayNightOnOff')) {
+        const ids = JSON.parse(interaction.customId.replace('AutoDayNightOnOff', ''));
         const server = instance.serverList[ids.serverId];
 
         if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
@@ -87,7 +87,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        server.switches[ids.entityId].autoDayNight = parseInt(interaction.values[0]);
+        server.switches[ids.entityId].autoDayNightOnOff = parseInt(interaction.values[0]);
         client.setInstance(guildId, instance);
 
         DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);

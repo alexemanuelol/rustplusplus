@@ -10,8 +10,9 @@
 Slash Command | Description
 ------------- | -----------
 [**/alarm**](commands.md#alarm) | Operations on Smart Alarms.
-[**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
+[**/cam**](commands.md#cam) | Create custom camera groups.
 [**/cctv**](commands.md#cctv) | Posts CCTV codes for a monument.
+[**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
 [**/help**](commands.md#help) | Display help message.
 [**/leader**](commands.md#leader) | Give or take the leadership from/to a team member.
 [**/map**](commands.md#map) | Get the currently connected server map image.
@@ -34,6 +35,38 @@ Subcommand | Options | Description | Required
 &nbsp; | `image` | Set the image that best represent the Smart Alarm. | `True`
 
 ![Discord Slash Command alarm Image](images/alarms_edit.png)
+
+
+## **/cam**
+
+> **Create custom camera groups.**.
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+`create` | &nbsp; | Create a custom camera group. | &nbsp;
+&nbsp; | `name` | Name of the custom camera group. | `True`
+`destroy` | &nbsp; | Destroy a custom camera group. | &nbsp;
+&nbsp; | `name` | Name of the custom camera group. | `True`
+`add` | &nbsp; | Add a camera identifier to a custom camera group. | &nbsp;
+&nbsp; | `group` | Name of the custom camera group. | `True`
+&nbsp; | `id` | Camera identifier. | `True`
+`remove` | &nbsp; | Remove a camera identifier from a custom camera group. | &nbsp;
+&nbsp; | `group` | Name of the custom camera group. | `True`
+&nbsp; | `id` | Camera identifier. | `True`
+`show` | &nbsp; | Show all custom camera groups. | &nbsp;
+
+![Discord Slash Command cam Image](images/cam.png)
+
+
+## **/cctv**
+
+> **Posts CCTV codes for a monument.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `monument` | Rust monument. | `True`
+
+![Discord Slash Command monument Image](images/cctv.png)
 
 
 ## **/credentials**
@@ -62,15 +95,6 @@ Subcommand | Options | Description | Required
 
 ![Discord Slash Command credentials Image](images/credentials.png)
 
-## **/cctv**
-
-> **Posts CCTV codes for a monument.**
-
-Subcommand | Options | Description | Required
----------- | ------- | ----------- | --------
-&nbsp; | `monument` | Rust monument. | `True`
-
-![Discord Slash Command monument Image](images/cctv.png)
 
 ## **/help**
 
@@ -106,7 +130,7 @@ Subcommand | Options | Description | Required
 
 ## **/market**
 
-> **Operations for In-Game Vending Machines.**. Item subscription is currently not implemented.
+> **Operations for In-Game Vending Machines.**.
 
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
@@ -199,7 +223,7 @@ In-Game Command | Description
 [**afk**](commands.md#afk) | Get the currently afk players in your team.
 [**alive**](commands.md#alive) | Get the player with the longest time alive.
 [**bradley**](commands.md#bradley) | Get information about Bradley APC (Time till respawn, time since last destroyed).
-[**cam**](commands.md#cam) | Scan individual cameras or group of cameras to detect players or scientists.
+[**cam**](commands.md#cam-ingame) | Scan individual cameras or group of cameras to detect players or scientists.
 [**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, current crates, time since last on map).
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
 [**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
@@ -255,7 +279,7 @@ In-Game Command | Description
 ![In-Game Command bradley Image](images/bradley_ingame.png)
 
 
-## **cam**
+## **cam-ingame**
 > **Scan individual cameras or group of cameras to detect players or scientists.** The available camera groups are: airfield, bandit, dome, large, outpost, small.
 <br>Command: `!cam large`, `!cam OILRIG2HELI`, `!cam TESTCAMERA`
 
