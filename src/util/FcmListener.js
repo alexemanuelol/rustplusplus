@@ -269,7 +269,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         name: entityExist ? switches[body.entityId].name : client.intlGet(guild.id, 'smartSwitch'),
         command: entityExist ? switches[body.entityId].command : body.entityId,
         image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
-        autoDayNight: entityExist ? switches[body.entityId].autoDayNight : 0,
+        autoDayNightOnOff: entityExist ? switches[body.entityId].autoDayNightOnOff : 0,
         location: entityExist ? switches[body.entityId].location : null,
         server: entityExist ? switches[body.entityId].server : body.name,
         messageId: entityExist ? switches[body.entityId].messageId : null
