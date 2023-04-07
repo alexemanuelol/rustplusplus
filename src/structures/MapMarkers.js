@@ -485,8 +485,8 @@ class MapMarkers {
 
                         this.rustplus.sendEvent(
                             this.rustplus.notificationSettings.heavyScientistCalledSetting,
-                            this.client.intlGet(this.rustplus.guildId, 'heavyScientistsCalledSmall', 
-                                {location: oilRigLocation.location}),
+                            this.client.intlGet(this.rustplus.guildId, 'heavyScientistsCalledSmall',
+                                { location: oilRigLocation.location }),
                             Constants.COLOR_SMALL_RIG,
                             this.rustplus.isFirstPoll,
                             'small_oil_rig_logo.png');
@@ -520,8 +520,8 @@ class MapMarkers {
 
                         this.rustplus.sendEvent(
                             this.rustplus.notificationSettings.heavyScientistCalledSetting,
-                            this.client.intlGet(this.rustplus.guildId, 'heavyScientistsCalledLarge', 
-                                {location: oilRigLocation.location}),
+                            this.client.intlGet(this.rustplus.guildId, 'heavyScientistsCalledLarge',
+                                { location: oilRigLocation.location }),
                             Constants.COLOR_LARGE_RIG,
                             this.rustplus.isFirstPoll,
                             'large_oil_rig_logo.png');
@@ -645,7 +645,7 @@ class MapMarkers {
 
             this.rustplus.sendEvent(
                 this.rustplus.notificationSettings.cargoShipLeftSetting,
-                this.client.intlGet(this.rustplus.guildId, 'cargoShipLeftMap', {location: marker.location.string}),
+                this.client.intlGet(this.rustplus.guildId, 'cargoShipLeftMap', { location: marker.location.string }),
                 Constants.COLOR_CARGO_SHIP_LEFT);
 
             if (this.cargoShipEgressTimers[marker.id]) {

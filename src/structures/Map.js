@@ -19,9 +19,11 @@
 */
 
 const Fs = require('fs');
+const Gm = require('gm');
 const Jimp = require('jimp');
 const Path = require('path');
 
+const Constants = require('../util/constants.js');
 const Client = require('../../index.ts');
 
 class Map {
@@ -406,16 +408,52 @@ class Map {
             await this.mapAppendMonuments();
         }
 
-        let oceanMarginOffset = this.oceanMargin * (1 / 2);
-
-        await this.mapMarkerImageMeta.map.jimp.crop(
-            oceanMarginOffset,
-            oceanMarginOffset,
-            this.width - (oceanMarginOffset * 2),
-            this.height - (oceanMarginOffset * 2));
-
         await this.mapMarkerImageMeta.map.jimp.writeAsync(
             this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
+
+        const image = Gm(this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
+
+        if (this.rustplus.info === null) {
+            this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
+                Client.client.intlGet(null, 'couldNotAppendMapTracers'));
+            return;
+        }
+
+        if (!markers) return;
+
+        /* Tracer for CargoShip */
+        image.stroke(Constants.COLOR_CARGO_TRACER, 2);
+        for (const [id, coords] of Object.entries(this.rustplus.cargoShipTracers)) {
+            let prev = null;
+            for (const point of coords) {
+                if (prev === null) {
+                    prev = point;
+                    continue;
+                }
+                const point1 = this.calculateImageXY(prev);
+                const point2 = this.calculateImageXY(point);
+                image.drawLine(point1.x, point1.y, point2.x, point2.y);
+                prev = point;
+            }
+        }
+
+        /* Tracer for Patrol Helicopter */
+        image.stroke(Constants.COLOR_PATROL_HELICOPTER_TRACER, 2);
+        for (const [id, coords] of Object.entries(this.rustplus.patrolHelicopterTracers)) {
+            let prev = null;
+            for (const point of coords) {
+                if (prev === null) {
+                    prev = point;
+                    continue;
+                }
+                const point1 = this.calculateImageXY(prev);
+                const point2 = this.calculateImageXY(point);
+                image.drawLine(point1.x, point1.y, point2.x, point2.y);
+                prev = point;
+            }
+        }
+
+        await this.gmWriteAsync(image, this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
     }
 
     getMarkerImageMetaByType(type) {
@@ -435,6 +473,26 @@ class Map {
             }
         }
         return matches;
+    }
+
+    calculateImageXY(coords) {
+        const x = coords.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.info.mapSize) + this.oceanMargin;
+        const n = this.height - 2 * this.oceanMargin;
+        const y = this.height - (coords.y * (n / this.rustplus.info.mapSize) + this.oceanMargin);
+        return { x: x, y: y };
+    }
+
+    async gmWriteAsync(image, path) {
+        return new Promise(function (resolve, reject) {
+            image.write(path, (err) => {
+                if (err) {
+                    reject(err);
+                }
+                else {
+                    resolve()
+                }
+            })
+        });
     }
 }
 

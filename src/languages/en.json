@@ -213,6 +213,7 @@
     "container": "Container",
     "couldNotAppendMapMarkers": "Could not append map markers, rustplus info instance is not set.",
     "couldNotAppendMapMonuments": "Could not append map monuments, rustplus info instance is not set.",
+    "couldNotAppendMapTracers": "Could not append map tracers, rustplus info instance is not set.",
     "couldNotConnectTo": "Could not connect to: {id}.",
     "couldNotCreateCategory": "Could not create category: {name}",
     "couldNotCreateTextChannel": "Could not create text channel: {name}",

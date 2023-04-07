@@ -27,6 +27,7 @@
         "discord-api-types": "^0.37.37",
         "discord.js": "^14.8.0",
         "fuse.js": "^6.6.2",
+        "gm": "^1.25.0",
         "jimp": "^0.22.7",
         "lodash": "^4.17.21",
         "push-receiver": "^2.1.1",
