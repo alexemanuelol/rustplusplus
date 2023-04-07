@@ -28,11 +28,11 @@ You can also create Smart Switch Groups. By doing this you can easily control mu
 <br><br>
 From In-Game you can interact with the Smart Switch Group by using the custom command for the group. If your groups custom command is `group` and your prefix is `!`, you can run the following commands:
 
-* `!group` - To get status of all Smart Switches in the group.
 * `!group on` - To turn all the switches in the group ON.
 * `!group off` - To turn all the switches in the group OFF.
 * `!group on 60s` - To turn all the switches in the group ON and automatically turn them OFF after 60 seconds.
 * `!group off 60s` - To turn all the switches in the group OFF and automatically turn them ON after 60 seconds.
+* `!group status` - To get status of all Smart Switches in the group.
 
 
 ## Smart Alarms
