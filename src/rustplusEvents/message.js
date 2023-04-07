@@ -117,7 +117,7 @@ async function messageBroadcastCameraRays(rustplus, client, message) {
             rustplus.camCommandMessage = null;
         }
         else {
-            rustplus.sendTeamMessageAsync(str);
+            rustplus.printCommandOutput(str);
         }
         rustplus.cameraPlayerNames = [];
         rustplus.scannedCameras = 0;
@@ -140,7 +140,7 @@ async function messageBroadcastCameraRays(rustplus, client, message) {
                 rustplus.camCommandMessage = null;
             }
             else {
-                rustplus.sendTeamMessageAsync(str);
+                rustplus.printCommandOutput(str);
             }
         }
         else if (!(await rustplus.isResponseValid(response))) {
@@ -155,7 +155,7 @@ async function messageBroadcastCameraRays(rustplus, client, message) {
                 rustplus.camCommandMessage = null;
             }
             else {
-                rustplus.sendTeamMessageAsync(str);
+                rustplus.printCommandOutput(str);
             }
         }
     }
