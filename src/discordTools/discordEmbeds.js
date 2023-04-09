@@ -895,4 +895,40 @@ module.exports = {
 
         return embed;
     },
+
+    getVoiceMessage: function (guildId, interaction) {
+        console.log(interaction);
+        switch (interaction) {
+            case 'join':
+                return module.exports.getEmbed({
+                    color: Constants.COLOR_DEFAULT,
+                    timestamp: true,
+                    description: `${Client.client.intlGet(guildId, 'voiceJoinDesc')}`
+                });
+            case 'leave':
+                return module.exports.getEmbed({
+                    color: Constants.COLOR_DEFAULT,
+                    timestamp: true,
+                    description: `${Client.client.intlGet(guildId, 'voiceLeaveDesc')}`
+                });
+            case 'notInVoice':
+                return module.exports.getEmbed({
+                    color: Constants.COLOR_DEFAULT,
+                    timestamp: true,
+                    description: `${Client.client.intlGet(guildId, 'notInVoice')}`
+                });
+            case 'alreadyInVoice':
+                return module.exports.getEmbed({
+                    color: Constants.COLOR_DEFAULT,
+                    timestamp: true,
+                    description: `${Client.client.intlGet(guildId, 'alreadyInVoice')}`
+                });
+            default:
+                return module.exports.getEmbed({
+                    color: Constants.COLOR_DEFAULT,
+                    timestamp: true,
+                    description: `${Client.client.intlGet(guildId, 'somethingWrongWithConnection')}`
+                });
+        }
+    }
 }

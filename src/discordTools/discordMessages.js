@@ -551,4 +551,13 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
+
+    sendVoiceMessage: async function (interaction, type) {
+        
+        const content = {
+            embeds: [DiscordEmbeds.getVoiceMessage(interaction.guildId, type)],
+        }
+        
+        await Client.client.interactionReply(interaction, content);
+    },
 }

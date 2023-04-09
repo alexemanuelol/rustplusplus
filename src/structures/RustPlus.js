@@ -58,6 +58,7 @@ class RustPlus extends RustPlusLib {
         this.isFirstPoll = true;            /* Is this the first poll since connection started? */
         this.readyForCameraRays = false;     /* Is the bot ready for new camera rays? */
         this.isCamCommandInGame = true;
+        this.isInVoice = false;             /* Is the bot in a voice channel? */
 
         /* Interval ids */
         this.pollingTaskId = 0;             /* The id of the main polling mechanism of the rustplus instance. */
