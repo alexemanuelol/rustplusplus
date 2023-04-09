@@ -19,6 +19,13 @@
 
 */
 
+/* TODO:
+    - Add a way to change the voice
+    - Add a way to change the speed
+    - Add a way to change the pitch
+    - Add a way to change the volume
+*/
+
 const Builder = require('@discordjs/builders');
 const Voice = require('@discordjs/voice');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -37,17 +44,6 @@ module.exports = {
 			.addSubcommand(subcommand => subcommand
 				.setName('leave')
 				.setDescription(client.intlGet(guildId, 'voiceLeaveDesc')))
-            .addSubcommand(subcommand => subcommand
-                .setName('set')
-                .setDescription(client.intlGet(guildId, 'changeVoice'))
-                .addStringOption(option =>
-                    option.setName('actor')
-                        .setDescription(client.intlGet(guildId, 'voiceDesc'))
-                        .setRequired(true)
-                ))
-            .addSubcommand(subcommand => subcommand
-                .setName('test')
-                .setDescription(client.intlGet(guildId, 'commandsVoiceDesc')));
 	},
 
     async execute(client, interaction) {
@@ -64,16 +60,14 @@ module.exports = {
                     return;
                 }
                 if (!interaction.member.voice.channel) {
-                    // User is not in a voice channel
                     await DiscordMessages.sendVoiceMessage(interaction, 'userNotInVoice');
                     return;
                 }
                 await DiscordMessages.sendVoiceMessage(interaction, 'join');
-                console.log(interaction)
-                client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'voiceJoinDesc'));
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'voiceJoinedDesc'));
                 Voice.joinVoiceChannel({
-                    channelId: interaction.member.voice.channelId,
-                    guildId: interaction.guildId,
+                    channelId: interaction.member.voice.channel.id,
+                    guildId: interaction.guild.id,
                     adapterCreator: interaction.guild.voiceAdapterCreator,
                 });
                 rustplus.isInVoice = true;
@@ -85,28 +79,17 @@ module.exports = {
                     await DiscordMessages.sendVoiceMessage(interaction, 'notInVoice');
                     return;
                 }
+                if (Voice.getVoiceConnection(interaction.guildId).state.status === 'disconnected') {
+                    await DiscordMessages.sendVoiceMessage(interaction, 'notInVoice');
+                    rustplus.isInVoice = false;
+                    return;
+                }
                 await DiscordMessages.sendVoiceMessage(interaction, 'leave');
-                console.log(interaction)
-                client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'voiceLeaveDesc'));
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'voiceLeftDesc'));
                 const connection = Voice.getVoiceConnection(interaction.guildId);
                 connection.destroy();
                 rustplus.isInVoice = false;
                 } break;
-
-            case 'set' :{
-                const newVoice = interaction.options.getString('set');
-                console.log(newVoice);
-                } break;
-
-            case 'test':{
-                if (!rustplus.isInVoice) {
-                    await DiscordMessages.sendVoiceMessage(interaction, 'notInVoice');
-                    return;
-                }
-                await DiscordMessages.sendVoiceMessage(interaction, 'userNotInVoice');
-                DiscordVoice.sendvoice(interaction.guildId,"This is a Test Message from Rust++ Discord Bot by alexemanuelol" );
-                } break;
-
             default:
                 break;
         }

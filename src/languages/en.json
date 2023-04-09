@@ -670,12 +670,13 @@
     "wipeDetected": "Wipe detected!",
     "youAreAlreadyLeader": "You are already leader.",
     "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server.",
-    "commandsVoiceDesc": "Commands for voice chat.",
-    "voiceJoinDesc": "Join a voice channel.",
-    "voiceLeaveDesc": "Leave a voice channel.",
+    "commandsVoiceDesc": "Control the bot's voice settings.",
+    "voiceJoinDesc": "Join the voice channel.",
+    "voiceLeaveDesc": "Leave the voice channel.",
     "alreadyInVoice": "Bot is already in a voice channel.",
     "notInVoice": "Bot is not in a voice channel.",
-    "userNotInVoice": "You are not in a voice channel.",
-    "setVoice": "Set the Voiceactor",
-    "changeVoice": "Change the Voiceactor"
+    "voiceJoinedDesc": "Joined the voice channel.",
+    "voiceLeftDesc": "Left the voice channel.",
+    "userNotInVoice": "User is not in a voice channel.",
+    "somethingWentWrong": "Something went wrong."
 }

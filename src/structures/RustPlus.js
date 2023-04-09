@@ -35,6 +35,7 @@ const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
+const discordVoice = require('../discordTools/discordVoice.js');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */
@@ -284,6 +285,9 @@ class RustPlus extends RustPlusLib {
         }
         if (!firstPoll && setting.inGame) {
             await this.sendTeamMessageAsync(`${text}`);
+        }
+        if (!firstPoll && this.isInVoice) {
+            await discordVoice.playVoice(this.guildId, text);
         }
         this.log(Client.client.intlGet(null, 'eventCap'), text);
     }

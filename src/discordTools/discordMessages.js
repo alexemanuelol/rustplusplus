@@ -556,6 +556,7 @@ module.exports = {
         
         const content = {
             embeds: [DiscordEmbeds.getVoiceMessage(interaction.guildId, type)],
+            ephemeral: true
         }
         
         await Client.client.interactionReply(interaction, content);

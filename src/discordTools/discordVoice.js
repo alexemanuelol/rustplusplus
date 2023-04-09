@@ -21,30 +21,21 @@
 const { getVoiceConnection, createAudioPlayer, createAudioResource, NoSubscriberBehavior } = require('@discordjs/voice');
 
 module.exports = {
-  async sendvoice(guildID, event) {
-    try {
-      await playVoice(guildID, event);
-    } catch (error) {
-      console.error('Error:', error);
+    playVoice(guildID, event, voice = 'Salli') {
+        if (!getVoiceConnection(guildID)) return;
+        const connection = getVoiceConnection(guildID);
+        const url = `https://api.streamelements.com/kappa/v2/speech?voice=${encodeURIComponent(voice)}&text=${encodeURIComponent(event)}`;
+        const player = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+                },
+            });
+        const resource = createAudioResource(url);
+        connection.subscribe(player);
+        player.play(resource);
+        player.on('error', (error) => {
+            console.error('Error:', error);
+            reject(error);
+        });
     }
-  },
-};
-
-function playVoice(guildID, event, voice = 'Sally') {
-    return new Promise((resolve, reject) => {
-      const connection = getVoiceConnection(guildID);
-      const url = `https://api.streamelements.com/kappa/v2/speech?voice=${encodeURIComponent(voice)}&text=${encodeURIComponent(event)}`;
-      const player = createAudioPlayer({
-        behaviors: {
-          noSubscriber: NoSubscriberBehavior.Pause,
-        },
-      });
-      const resource = createAudioResource(url);
-      connection.subscribe(player);
-      player.play(resource);
-      player.on('error', (error) => {
-        console.error('Error:', error);
-        reject(error);
-      });
-    });
-  }
+}

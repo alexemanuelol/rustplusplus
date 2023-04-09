@@ -897,7 +897,6 @@ module.exports = {
     },
 
     getVoiceMessage: function (guildId, interaction) {
-        console.log(interaction);
         switch (interaction) {
             case 'join':
                 return module.exports.getEmbed({
@@ -927,7 +926,7 @@ module.exports = {
                 return module.exports.getEmbed({
                     color: Constants.COLOR_DEFAULT,
                     timestamp: true,
-                    description: `${Client.client.intlGet(guildId, 'somethingWrongWithConnection')}`
+                    description: `${Client.client.intlGet(guildId, 'somethingWentWrong')}`
                 });
         }
     }
