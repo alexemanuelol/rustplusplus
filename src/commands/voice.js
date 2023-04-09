@@ -40,7 +40,11 @@ module.exports = {
             .addSubcommand(subcommand => subcommand
                 .setName('set')
                 .setDescription(client.intlGet(guildId, 'changeVoice'))
-                .setRequired(true))
+                .addStringOption(option =>
+                    option.setName('actor')
+                        .setDescription(client.intlGet(guildId, 'voiceDesc'))
+                        .setRequired(true)
+                ))
             .addSubcommand(subcommand => subcommand
                 .setName('test')
                 .setDescription(client.intlGet(guildId, 'commandsVoiceDesc')));
