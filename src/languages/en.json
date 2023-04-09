@@ -674,5 +674,6 @@
     "voiceJoinDesc": "Join a voice channel.",
     "voiceLeaveDesc": "Leave a voice channel.",
     "alreadyInVoice": "Bot is already in a voice channel.",
-    "notInVoice": "Bot is not in a voice channel."
+    "notInVoice": "Bot is not in a voice channel.",
+    "userNotInVoice": "You are not in a voice channel."
 }

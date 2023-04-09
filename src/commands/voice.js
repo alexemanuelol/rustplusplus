@@ -19,13 +19,10 @@
 
 */
 
-//Add commandsVoiceDesc to en.json
-//Add voiceJoinDesc to en.json
-//Add voiceLeaveDesc to en.json
-
 const Builder = require('@discordjs/builders');
-const { joinVoiceChannel,getVoiceConnection } = require('@discordjs/voice');
+const Voice = require('@discordjs/voice');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordVoice = require('../discordTools/discordVoice.js');
 
 module.exports = {
     name: 'voice',
@@ -39,12 +36,16 @@ module.exports = {
 				.setDescription(client.intlGet(guildId, 'voiceJoinDesc')))
 			.addSubcommand(subcommand => subcommand
 				.setName('leave')
-				.setDescription(client.intlGet(guildId, 'voiceLeaveDesc')));
+				.setDescription(client.intlGet(guildId, 'voiceLeaveDesc')))
+            .addSubcommand(subcommand => subcommand
+                .setName('test')
+                .setDescription(client.intlGet(guildId, 'commandsVoiceDesc')));
 	},
 
     async execute(client, interaction) {
 
         const rustplus = client.rustplusInstances[interaction.guildId];
+        const guildId = rustplus.guildId;
 
         if (!await client.validatePermissions(interaction)) return;
 
@@ -54,10 +55,15 @@ module.exports = {
                     await DiscordMessages.sendVoiceMessage(interaction, 'alreadyInVoice');
                     return;
                 }
+                if (!interaction.member.voice.channel) {
+                    // User is not in a voice channel
+                    await DiscordMessages.sendVoiceMessage(interaction, 'userNotInVoice');
+                    return;
+                }
                 await DiscordMessages.sendVoiceMessage(interaction, 'join');
                 console.log(interaction)
                 client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'voiceJoinDesc'));
-                joinVoiceChannel({
+                Voice.joinVoiceChannel({
                     channelId: interaction.member.voice.channelId,
                     guildId: interaction.guildId,
                     adapterCreator: interaction.guild.voiceAdapterCreator,
@@ -65,6 +71,7 @@ module.exports = {
                 rustplus.isInVoice = true;
 
                 } break;
+
             case 'leave':{
                 if (!rustplus.isInVoice) {
                     await DiscordMessages.sendVoiceMessage(interaction, 'notInVoice');
@@ -73,10 +80,20 @@ module.exports = {
                 await DiscordMessages.sendVoiceMessage(interaction, 'leave');
                 console.log(interaction)
                 client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'voiceLeaveDesc'));
-                const connection = getVoiceConnection(interaction.guildId);
+                const connection = Voice.getVoiceConnection(interaction.guildId);
                 connection.destroy();
                 rustplus.isInVoice = false;
-                }break;
+                } break;
+
+            case 'test':{
+                if (!rustplus.isInVoice) {
+                    await DiscordMessages.sendVoiceMessage(interaction, 'notInVoice');
+                    return;
+                }
+                await DiscordMessages.sendVoiceMessage(interaction, 'userNotInVoice');
+                DiscordVoice.sendvoice(interaction.guildId,"This is a Test Message from Rust++ Discord Bot by alexemanuelol" );
+                } break;
+
             default:
                 break;
         }
