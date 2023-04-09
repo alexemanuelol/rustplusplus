@@ -1399,6 +1399,11 @@
         "name": "Engine Vehicle Module",
         "description": "Single module large engine."
     },
+    "1559915778": {
+        "shortname": "horse.saddle.single",
+        "name": "Single Horse Saddle",
+        "description": "A horse saddle with one seat. Having this item allows you to claim a horse in a stable by holding E and selecting the \"Claim\" option"
+    },
     "1568388703": {
         "shortname": "diesel_barrel",
         "name": "Diesel Fuel",
@@ -2047,7 +2052,7 @@
     "-747743875": {
         "shortname": "attire.egg.suit",
         "name": "Egg Suit",
-        "description": "An eggsquisite egg costume, can be painted when unequipped. Releasing publicly in 2023"
+        "description": "An eggsquisite egg costume, can be painted when unequipped."
     },
     "-1773144852": {
         "shortname": "attire.hide.skirt",
@@ -2844,6 +2849,11 @@
         "name": "Hobo Barrel",
         "description": "A vagabond staple. Use this repurposed oil barrel to stay warm."
     },
+    "-1323101799": {
+        "shortname": "horse.saddle.double",
+        "name": "Double Horse Saddle",
+        "description": "A horse saddle with two seats. Having this item allows you to claim a horse in a stable by holding E and selecting the \"Claim\" option"
+    },
     "-1997543660": {
         "shortname": "horse.saddle",
         "name": "Horse Saddle",
@@ -3278,6 +3288,11 @@
         "shortname": "rustige_egg_e",
         "name": "Rustigé Egg - Green",
         "description": "A beautiful hand crafted gold and green egg, with a miniature traincart contained inside."
+    },
+    "-173268128": {
+        "shortname": "rustige_egg_f",
+        "name": "Rustigé Egg - White",
+        "description": "A beautiful hand crafted gold and white egg, with a miniature underwater lab scene contained inside."
     },
     "-1978999529": {
         "shortname": "salvaged.cleaver",
