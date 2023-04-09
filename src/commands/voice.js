@@ -38,6 +38,10 @@ module.exports = {
 				.setName('leave')
 				.setDescription(client.intlGet(guildId, 'voiceLeaveDesc')))
             .addSubcommand(subcommand => subcommand
+                .setName('set')
+                .setDescription(client.intlGet(guildId, 'changeVoice'))
+                .setRequired(true))
+            .addSubcommand(subcommand => subcommand
                 .setName('test')
                 .setDescription(client.intlGet(guildId, 'commandsVoiceDesc')));
 	},
@@ -83,6 +87,11 @@ module.exports = {
                 const connection = Voice.getVoiceConnection(interaction.guildId);
                 connection.destroy();
                 rustplus.isInVoice = false;
+                } break;
+
+            case 'set' :{
+                const newVoice = interaction.options.getString('set');
+                console.log(newVoice);
                 } break;
 
             case 'test':{

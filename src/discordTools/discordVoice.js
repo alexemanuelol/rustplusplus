@@ -18,69 +18,33 @@
 
 */
 
-const path = require('path');
-const say = require('say');
 const { getVoiceConnection, createAudioPlayer, createAudioResource, NoSubscriberBehavior } = require('@discordjs/voice');
 
 module.exports = {
   async sendvoice(guildID, event) {
     try {
-      const filePath = await getVoiceFile(event);
-      await playVoice(guildID, filePath);
+      await playVoice(guildID, event);
     } catch (error) {
       console.error('Error:', error);
     }
   },
 };
 
-function getVoiceFile(event) {
-  return new Promise((resolve, reject) => {
-    const filePath = path.join(__dirname, '../resources/voice', 'output.wav');
-    say.getInstalledVoices((err, voices) => {
-        if (err) {
-            reject(err);
-            return;
-        }
-        console.log(voices);
-    });
-    say.export(event, undefined, 1, filePath, (err) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      console.log('Success!');
-      resolve(filePath);
-    });
-  });
-}
-
-function playVoice(guildID, filePath) {
+function playVoice(guildID, event, voice = 'Sally') {
     return new Promise((resolve, reject) => {
       const connection = getVoiceConnection(guildID);
-      if (connection) console.log('connection is ok');
-      if (!connection) {
-        reject(new Error('connection is not ok'));
-        return;
-      }
+      const url = `https://api.streamelements.com/kappa/v2/speech?voice=${encodeURIComponent(voice)}&text=${encodeURIComponent(event)}`;
       const player = createAudioPlayer({
         behaviors: {
           noSubscriber: NoSubscriberBehavior.Pause,
         },
       });
-      const resource = createAudioResource(filePath);
+      const resource = createAudioResource(url);
       connection.subscribe(player);
       player.play(resource);
       player.on('error', (error) => {
         console.error('Error:', error);
         reject(error);
-      });
-      player.on('warn', (warning) => {
-        console.warn('Warning:', warning);
-      });
-      player.on('stateChange', (oldState, newState) => {
-        if (newState.status === 'idle') {
-          resolve();
-        }
       });
     });
   }
