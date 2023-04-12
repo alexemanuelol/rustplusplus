@@ -112,7 +112,8 @@ async function messageBroadcastCameraRays(rustplus, client, message) {
 
 		let str = `${client.intlGet(rustplus.guildId, 'scannedCameras', { num: rustplus.scannedCameras })}, `;
 		
-		str += rustplus.cameraPlayerNames.length != 0 ? `${client.intlGet(rustplus.guildId, 'players')}: ${rustplus.cameraPlayerNames.join(', ')}` : `${client.intlGet(rustplus.guildId, 'noPlayersFound')}`;
+		str += rustplus.cameraPlayerNames.length !== 0 ? `${client.intlGet(rustplus.guildId, 'players')}: 
+            ${rustplus.cameraPlayerNames.join(', ')}` : `${client.intlGet(rustplus.guildId, 'noPlayersFound')}`;
         
         if (!rustplus.isCamCommandInGame) {
             await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, rustplus.camCommandMessage, str);
