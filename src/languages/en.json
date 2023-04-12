@@ -439,6 +439,7 @@
     "noOneIsAfk": "No one is AFK.",
     "noOneIsOffline": "No one is offline.",
     "noOneIsOnline": "No one is online.",
+    "noPlayersFound": "No players found.",
     "noRegisteredConnectionEvents": "No registered connection events yet.",
     "noRegisteredConnectionEventsUser": "No registered connection events for {user}.",
     "noRegisteredDeathEvents": "No registered death events yet.",
