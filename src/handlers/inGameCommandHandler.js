@@ -174,6 +174,10 @@ module.exports = {
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxWipe')}`) {
             rustplus.printCommandOutput(rustplus.getCommandWipe());
         }
+        else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxUptime')}` ||
+            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxUptime')}`) {
+                rustplus.printCommandOutput(rustplus.getCommandUptime());
+        }
         else {
             /* Maybe a custom command? */
 

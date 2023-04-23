@@ -530,3 +530,10 @@ Subcommand | Description | Required
 <br>Command: `!wipe`
 
 ![In-Game Command wipe Image](images/wipe_ingame.png)
+
+## **uptime**
+
+> **Get the time since bot connect to server.**
+<br>Command: `!uptime`
+<!-- TODO <Get ingame !uptime image>: -->
+<!-- ![In-Game Command uptime Image](images/wipe_ingame.png) -->

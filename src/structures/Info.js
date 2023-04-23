@@ -34,6 +34,7 @@ class Info {
         this._queuedPlayers = info.queuedPlayers;
         this._seed = info.seed;
         this._salt = info.salt;
+        this._connectedTimeStamp = new Date();
 
         this._correctedMapSize = Map.getCorrectedMapSize(info.mapSize);
     }
@@ -63,6 +64,7 @@ class Info {
     set salt(salt) { this._salt = salt; }
     get correctedMapSize() { return this._correctedMapSize; }
     set correctedMapSize(correctedMapSize) { this._correctedMapSize = correctedMapSize; }
+    get connectedTimeStamp() { return this._connectedTimeStamp; } // No setter, timestamp does not need update.
 
     /* Change checkers */
     isNameChanged(info) { return ((this.name) !== (info.name)); }
@@ -100,6 +102,9 @@ class Info {
 
     getSecondsSinceWipe() { return (new Date() - new Date(this.wipeTime * 1000)) / 1000; }
     getTimeSinceWipe(ignore = '') { return Timer.secondsToFullScale(this.getSecondsSinceWipe(), ignore); }
+
+    getSecSinceConnected() { return (new Date() - new Date(this.connectedTimeStamp)) / 1000; }
+    getUptime(ignore = '') { return Timer.secondsToFullScale(this.getSecSinceConnected(), ignore); }
 }
 
 module.exports = Info;

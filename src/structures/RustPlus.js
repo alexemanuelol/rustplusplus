@@ -2288,6 +2288,12 @@ class RustPlus extends RustPlusLib {
             });
         }
     }
+
+    getCommandUptime() {
+        return Client.client.intlGet(this.guildId, 'uptime', {
+            time: this.info.getUptime()
+        });
+    }
 }
 
 module.exports = RustPlus;
