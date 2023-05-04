@@ -543,7 +543,7 @@ module.exports = {
             color: color,
             thumbnail: `attachment://${image}`,
             title: text,
-            footer: { text: server.title, iconURL: server.img},
+            footer: { text: server.title, iconURL: server.img },
             timestamp: true
         });
     },
@@ -862,37 +862,5 @@ module.exports = {
             title: `${monument} CCTV ${Client.client.intlGet(guildId, 'codes')}`,
             description: code
         });
-    },
-
-    getCameraGroupShowEmbed: function (guildId, rustplus) {
-        const instance = InstanceUtils.readInstanceFile(guildId);
-
-        const embed = module.exports.getEmbed({
-            color: Constants.COLOR_DEFAULT,
-            title: Client.client.intlGet(guildId, 'customCameraGroups'),
-            footer: { text: instance.serverList[rustplus.serverId].title },
-        });
-
-        let empty = true;
-        for (const [group, cameras] of Object.entries(instance.serverList[rustplus.serverId].customCameraGroups)) {
-            empty = false;
-            let value = '';
-            if (cameras.length === 0) {
-                value = Client.client.intlGet(guildId, 'empty');
-            }
-            else {
-                for (const camera of cameras) {
-                    value += `${camera}\n`;
-                }
-            }
-
-            embed.addFields({ name: group, value: value, inline: true });
-        }
-
-        if (empty) {
-            embed.setDescription(Client.client.intlGet(guildId, 'empty'));
-        }
-
-        return embed;
     },
 }

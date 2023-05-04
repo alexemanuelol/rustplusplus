@@ -98,67 +98,7 @@ async function messageBroadcastEntityChanged(rustplus, client, message) {
 }
 
 async function messageBroadcastCameraRays(rustplus, client, message) {
-    if (!rustplus.readyForCameraRays) return;
-    rustplus.readyForCameraRays = false;
-    await rustplus.unsubscribeFromCameraAsync();
-    rustplus.scannedCameras += 1;
-
-    for (const entity of message.broadcast.cameraRays.entities) {
-        if (entity.type === 2) rustplus.cameraPlayerNames.push(entity.name)
-    }
-
-    if (rustplus.queuedCameras.length === 0) {
-        rustplus.cameraPlayerNames = [...new Set(rustplus.cameraPlayerNames)];
-
-        let str = `${client.intlGet(rustplus.guildId, 'scannedCameras', { num: rustplus.scannedCameras })}, ` +
-            `${client.intlGet(rustplus.guildId, 'players')}: ${rustplus.cameraPlayerNames.join(', ')}`;
-        if (!rustplus.isCamCommandInGame) {
-            await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, rustplus.camCommandMessage, str);
-            rustplus.camCommandMessage = null;
-        }
-        else {
-            rustplus.printCommandOutput(str);
-        }
-        rustplus.cameraPlayerNames = [];
-        rustplus.scannedCameras = 0;
-    }
-    else {
-        rustplus.readyForCameraRays = true;
-        const camera = rustplus.queuedCameras[0];
-        rustplus.queuedCameras.shift();
-
-        const response = await rustplus.subscribeToCameraAsync(camera);
-        if (response.hasOwnProperty('error') && response.error === 'no_player') {
-            rustplus.readyForCameraRays = false;
-            rustplus.queuedCameras = [];
-            rustplus.scannedCameras = 0;
-
-            let str = `${client.intlGet(rustplus.guildId, 'commandUnavailable')}`;
-            if (!rustplus.isCamCommandInGame) {
-                await DiscordMessages.sendDiscordCommandResponseMessge(rustplus, client, rustplus.camCommandMessage,
-                    str);
-                rustplus.camCommandMessage = null;
-            }
-            else {
-                rustplus.printCommandOutput(str);
-            }
-        }
-        else if (!(await rustplus.isResponseValid(response))) {
-            rustplus.readyForCameraRays = false;
-            rustplus.queuedCameras = [];
-            rustplus.scannedCameras = 0;
-
-            let str = `${client.intlGet(rustplus.guildId, 'couldNotFindCamera', { camera: camera })}`;
-            if (!rustplus.isCamCommandInGame) {
-                await DiscordMessages.sendDiscordCommandResponseMessge(rustplus, client, rustplus.camCommandMessage,
-                    str);
-                rustplus.camCommandMessage = null;
-            }
-            else {
-                rustplus.printCommandOutput(str);
-            }
-        }
-    }
+    /* Not implemented */
 }
 
 async function messageBroadcastEntityChangedSmartSwitch(rustplus, client, message) {

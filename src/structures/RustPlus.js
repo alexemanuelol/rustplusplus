@@ -56,8 +56,6 @@ class RustPlus extends RustPlusLib {
         this.isConnectionRefused = false;   /* Refused connection when trying to connect? */
         this.isNewConnection = false;       /* Is it an actively selected connection (pressed CONNECT button)? */
         this.isFirstPoll = true;            /* Is this the first poll since connection started? */
-        this.readyForCameraRays = false;     /* Is the bot ready for new camera rays? */
-        this.isCamCommandInGame = true;
 
         /* Interval ids */
         this.pollingTaskId = 0;             /* The id of the main polling mechanism of the rustplus instance. */
@@ -85,10 +83,6 @@ class RustPlus extends RustPlusLib {
         this.playerConnections = new Object();
         this.allDeaths = [];
         this.playerDeaths = new Object();
-        this.queuedCameras = [];
-        this.cameraPlayerNames = [];
-        this.scannedCameras = 0;
-        this.camCommandMessage = null;
         this.patrolHelicopterTracers = new Object();
         this.cargoShipTracers = new Object();
 
@@ -748,88 +742,6 @@ class RustPlus extends RustPlusLib {
         }
 
         return strings;
-    }
-
-    async getCommandCam(command) {
-        const instance = Client.client.getInstance(this.guildId);
-        const prefix = this.generalSettings.prefix;
-        const commandCam = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxCam')}`;
-        const commandCamEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxCam')}`;
-
-        let camera = null;
-        if (command.toLowerCase().startsWith(`${commandCam}`)) {
-            camera = command.slice(`${commandCam} `.length).trim();
-        }
-        else {
-            camera = command.slice(`${commandCamEn} `.length).trim();
-        }
-
-        this.readyForCameraRays = true;
-        const cctvs = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'util/cctv.json'), 'utf8'));
-
-        /* airfield, bandit, dome, large, outpost, silo, small */
-        if (camera === Client.client.intlGet(this.guildId, 'commandSyntaxList') ||
-            camera === Client.client.intlGet('en', 'commandSyntaxList')) {
-            let groups = 'airfield, bandit, dome, large, outpost, silo, small';
-            for (const group in instance.serverList[this.serverId].customCameraGroups) {
-                groups += `, ${group}`;
-            }
-            return groups;
-        }
-        else if (camera === 'airfield') {
-            this.queuedCameras.push(...cctvs['Airfield'].codes)
-        }
-        else if (camera === 'bandit') {
-            this.queuedCameras.push(...cctvs['Bandit Camp'].codes)
-        }
-        else if (camera === 'dome') {
-            this.queuedCameras.push(...cctvs['Dome'].codes)
-        }
-        else if (camera === 'large') {
-            this.queuedCameras.push(...cctvs['Large Oil Rig'].codes)
-        }
-        else if (camera === 'outpost') {
-            this.queuedCameras.push(...cctvs['Outpost'].codes)
-        }
-        else if (camera === 'silo') {
-            this.queuedCameras.push(...cctvs['Missile Silo'].codes)
-        }
-        else if (camera === 'small') {
-            this.queuedCameras.push(...cctvs['Small Oil Rig'].codes)
-        }
-        else if (instance.serverList[this.serverId].customCameraGroups.hasOwnProperty(camera)) {
-            this.queuedCameras.push(...instance.serverList[this.serverId].customCameraGroups[camera]);
-        }
-        else {
-            const response = await this.subscribeToCameraAsync(camera);
-            if (!(await this.isResponseValid(response))) {
-                this.readyForCameraRays = false;
-                return `${Client.client.intlGet(this.guildId, 'couldNotFindCamera', {
-                    camera: camera
-                })}`;
-            }
-            return null;
-        }
-
-        camera = this.queuedCameras[0];
-        this.queuedCameras.shift();
-
-        const response = await this.subscribeToCameraAsync(camera);
-        if (response.hasOwnProperty('error') && response.error === 'no_player') {
-            this.readyForCameraRays = false;
-            this.queuedCameras = [];
-            this.scannedCameras = 0;
-            return `${Client.client.intlGet(this.guildId, 'commandUnavailable')}`;
-        }
-        else if (!(await this.isResponseValid(response))) {
-            this.readyForCameraRays = false;
-            this.queuedCameras = [];
-            this.scannedCameras = 0;
-            return `${Client.client.intlGet(this.guildId, 'couldNotFindCamera', {
-                camera: camera
-            })}`;
-        }
-        return null;
     }
 
     getCommandCargo(isInfoChannel = false) {

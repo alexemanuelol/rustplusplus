@@ -226,7 +226,6 @@ async function pairingServer(client, guild, full, data, body) {
         storageMonitors: server ? server.storageMonitors : {},
         markers: server ? server.markers : {},
         switchGroups: server ? server.switchGroups : {},
-        customCameraGroups: server ? server.customCameraGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
         connect: (info === null) ? null : `connect ${info.ip}:${info.port}`,
