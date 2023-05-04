@@ -89,7 +89,7 @@ module.exports = {
 			case 'create': {
 				const name = interaction.options.getString('name');
 
-				if (['airfield', 'bandit', 'dome', 'large', 'outpost', 'small'].includes(name)) {
+				if (['airfield', 'bandit', 'dome', 'large', 'outpost', 'silo', 'small'].includes(name)) {
 					const str = client.intlGet(interaction.guildId, 'invalidCameraGroupCreation', { group: name });
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));

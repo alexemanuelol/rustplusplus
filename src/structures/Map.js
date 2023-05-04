@@ -168,6 +168,11 @@ class Map {
                 map: Client.client.intlGet(rustplus.guildId, 'miningOutpost').toUpperCase(),
                 radius: 17
             },
+            missile_silo_monument: {
+                clean: Client.client.intlGet(rustplus.guildId, 'missileSilo'),
+                map: Client.client.intlGet(rustplus.guildId, 'missileSilo').toUpperCase(),
+                radius: 81
+            },
             mining_quarry_hqm_display_name: {
                 clean: Client.client.intlGet(rustplus.guildId, 'hqmQuarry'),
                 map: Client.client.intlGet(rustplus.guildId, 'hqmQuarry').toUpperCase(),

@@ -44,6 +44,15 @@
       ],
       "dynamic": false
    },
+   "Missile Silo": {
+      "codes": [
+         "SILOTOWER",
+         "SILOEXIT1",
+         "SILOEXIT2",
+         "SILOMISSILE"
+      ],
+      "dynamic": false
+   },
    "Outpost": {
       "codes": [
          "COMPOUNDSTREET",

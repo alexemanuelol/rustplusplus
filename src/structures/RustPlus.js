@@ -767,10 +767,10 @@ class RustPlus extends RustPlusLib {
         this.readyForCameraRays = true;
         const cctvs = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'util/cctv.json'), 'utf8'));
 
-        /* airfield, bandit, dome, large, outpost, small */
+        /* airfield, bandit, dome, large, outpost, silo, small */
         if (camera === Client.client.intlGet(this.guildId, 'commandSyntaxList') ||
             camera === Client.client.intlGet('en', 'commandSyntaxList')) {
-            let groups = 'airfield, bandit, dome, large, outpost, small';
+            let groups = 'airfield, bandit, dome, large, outpost, silo, small';
             for (const group in instance.serverList[this.serverId].customCameraGroups) {
                 groups += `, ${group}`;
             }
@@ -790,6 +790,9 @@ class RustPlus extends RustPlusLib {
         }
         else if (camera === 'outpost') {
             this.queuedCameras.push(...cctvs['Outpost'].codes)
+        }
+        else if (camera === 'silo') {
+            this.queuedCameras.push(...cctvs['Missile Silo'].codes)
         }
         else if (camera === 'small') {
             this.queuedCameras.push(...cctvs['Small Oil Rig'].codes)
