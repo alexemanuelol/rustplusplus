@@ -28,7 +28,7 @@ Displays player population, current time and time till daylight/nightfall, wipe 
 
 ### Event Information
 
-Displays events such as Cargoship, Patrol Helicopter, Bradley APC, Small/ Large Oil Rig, Chinook 47 and Locked Crates.
+Displays events such as Cargoship, Patrol Helicopter, Bradley APC, Small/ Large Oil Rig and Chinook 47.
 
 ### Team Member Information
 
@@ -62,9 +62,6 @@ Displays information about teammates, what their current status is (online/offli
 <br>- `Patrol Helicopter destroyed`
 <br>- `Bradley APC destroyed`
 <br>- `Bradley APC should respawn`
-<br>- `Locked Crate spawn`
-<br>- `Locked Crate despawn`
-<br>- `Locked Crate despawn warning`
 <br>- `Oil Rig have been triggered`
 <br>- `Chinook 47 spawn`
 <br>- `New Vending Machine detected`

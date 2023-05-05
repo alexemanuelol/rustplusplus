@@ -39,47 +39,7 @@
         "discord": true,
         "inGame": false
     },
-    "lockedCrateSpawnCargoShipSetting": {
-        "image": "locked_crate_cargoship_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "lockedCrateRespawnOilRigSetting": {
-        "image": "locked_crate_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "lockedCrateDroppedAtMonumentSetting": {
-        "image": "locked_crate_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "lockedCrateLeftCargoShipSetting": {
-        "image": "locked_crate_cargoship_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "lockedCrateLootedOilRigSetting": {
-        "image": "locked_crate_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "lockedCrateMonumentLeftSetting": {
-        "image": "locked_crate_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "lockedCrateMonumentDespawnWarningSetting": {
-        "image": "locked_crate_logo.png",
-        "discord": true,
-        "inGame": false
-    },
     "lockedCrateOilRigUnlockedSetting": {
-        "image": "locked_crate_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "lockedCrateOilRigRefreshedSetting": {
         "image": "locked_crate_logo.png",
         "discord": true,
         "inGame": false

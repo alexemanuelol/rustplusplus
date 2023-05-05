@@ -64,10 +64,6 @@ class Map {
                 image:
                     Path.join(__dirname, '..', 'resources/images/markers/cargo.png'), size: 100, type: 5, jimp: null
             },
-            crate: {
-                image:
-                    Path.join(__dirname, '..', 'resources/images/markers/crate.png'), size: 25, type: 6, jimp: null
-            },
             blade: {
                 image:
                     Path.join(__dirname, '..', 'resources/images/markers/blade.png'), size: 25, type: 7, jimp: null

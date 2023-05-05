@@ -57,18 +57,6 @@ module.exports = {
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
-                customId: 'CrateDespawnTime',
-                label: Client.client.intlGet(guildId, 'customTimerEditCrateDespawnLabel'),
-                value: `${server.lockedCrateDespawnTimeMs / 1000}`,
-                style: Discord.TextInputStyle.Short
-            })),
-            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
-                customId: 'CrateDespawnWarningTime',
-                label: Client.client.intlGet(guildId, 'customTimerEditCrateDespawnWarningLabel'),
-                value: `${server.lockedCrateDespawnWarningTimeMs / 1000}`,
-                style: Discord.TextInputStyle.Short
-            })),
-            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'OilRigCrateUnlockTime',
                 label: Client.client.intlGet(guildId, 'customTimerEditCrateOilRigUnlockLabel'),
                 value: `${server.oilRigLockedCrateUnlockTimeMs / 1000}`,
@@ -77,7 +65,6 @@ module.exports = {
         );
 
         return modal;
-
     },
 
     getSmartSwitchEditModal(guildId, serverId, entityId) {

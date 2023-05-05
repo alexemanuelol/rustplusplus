@@ -752,17 +752,15 @@ class RustPlus extends RustPlusLib {
             const time = Timer.getTimeLeftOfTimer(timer);
             if (time) {
                 if (isInfoChannel) {
-                    return Client.client.intlGet(this.guildId, 'egressInTimeCrates', {
+                    return Client.client.intlGet(this.guildId, 'egressInTime', {
                         time: Timer.getTimeLeftOfTimer(timer, 's'),
-                        location: cargoShip.location.string,
-                        crates: `(${cargoShip.crates.length}/3)`
+                        location: cargoShip.location.string
                     });
                 }
                 else {
-                    strings.push(Client.client.intlGet(this.guildId, 'timeBeforeCargoEntersEgressCrates', {
+                    strings.push(Client.client.intlGet(this.guildId, 'timeBeforeCargoEntersEgress', {
                         time: time,
-                        location: cargoShip.location.string,
-                        crates: `(${cargoShip.crates.length}/3)`
+                        location: cargoShip.location.string
                     }));
                 }
             }
@@ -775,28 +773,24 @@ class RustPlus extends RustPlusLib {
                 if (cargoShip.onItsWayOut) {
                     if (isInfoChannel) {
                         return Client.client.intlGet(this.guildId, 'leavingMapAt', {
-                            location: cargoShip.location.string,
-                            crates: `(${cargoShip.crates.length}/3)`
+                            location: cargoShip.location.string
                         });
                     }
                     else {
                         strings.push(Client.client.intlGet(this.guildId, 'cargoLeavingMapAt', {
-                            location: cargoShip.location.string,
-                            crates: `(${cargoShip.crates.length}/3)`
+                            location: cargoShip.location.string
                         }));
                     }
                 }
                 else {
                     if (isInfoChannel) {
-                        return Client.client.intlGet(this.guildId, 'cargoAtCrates', {
-                            location: cargoShip.location.string,
-                            crates: `(${cargoShip.crates.length}/3)`
+                        return Client.client.intlGet(this.guildId, 'cargoAt', {
+                            location: cargoShip.location.string
                         });
                     }
                     else {
-                        strings.push(Client.client.intlGet(this.guildId, 'cargoLocatedAtCrates', {
-                            location: cargoShip.location.string,
-                            crates: `(${cargoShip.crates.length}/3)`
+                        strings.push(Client.client.intlGet(this.guildId, 'cargoLocatedAt', {
+                            location: cargoShip.location.string
                         }));
                     }
                 }
@@ -946,67 +940,6 @@ class RustPlus extends RustPlusLib {
         }
 
         return null;
-    }
-
-    getCommandCrate(isInfoChannel = false) {
-        const strings = [];
-        for (const [id, timer] of Object.entries(this.mapMarkers.crateDespawnTimers)) {
-            const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
-            const time = Timer.getTimeLeftOfTimer(timer);
-
-            if (time) {
-                if (isInfoChannel) {
-                    return Client.client.intlGet(this.guildId, 'timeUntilDespawnsAt', {
-                        time: Timer.getTimeLeftOfTimer(timer, 's'),
-                        location: crate.crateType
-                    });
-                }
-                else {
-                    strings.push(Client.client.intlGet(this.guildId, 'timeBeforeCrateDespawnsAt', {
-                        time: time,
-                        location: crate.crateType
-                    }));
-                }
-            }
-        }
-
-        if (strings.length === 0) {
-            if (this.mapMarkers.timeSinceCH47DroppedCrate === null) {
-                for (const crate of this.mapMarkers.crates) {
-                    if (!['cargoShip', 'oil_rig_small', 'large_oil_rig', 'invalid'].includes(crate.crateType)) {
-                        if (isInfoChannel) {
-                            return Client.client.intlGet(this.guildId, 'atLocation', {
-                                location: crate.crateType === 'grid' ? crate.location.string : crate.crateType
-                            });
-                        }
-                        else {
-                            strings.push(Client.client.intlGet(this.guildId, 'lockedCrateLocatedAt', {
-                                location: crate.crateType === 'grid' ? crate.location.string : crate.crateType
-                            }));
-                        }
-                    }
-                }
-
-                if (strings.length === 0) return Client.client.intlGet(this.guildId, 'noActiveLockedCrates');
-            }
-            else {
-                const secondsSince = (new Date() - this.mapMarkers.timeSinceCH47DroppedCrate) / 1000;
-                if (isInfoChannel) {
-                    const timeSince = Timer.secondsToFullScale(secondsSince, 's');
-                    return Client.client.intlGet(this.guildId, 'timeSinceLastDrop', {
-                        time: timeSince
-                    });
-                }
-                else {
-                    const timeSince = Timer.secondsToFullScale(secondsSince);
-                    return Client.client.intlGet(this.guildId, 'timeSinceChinook47LastDropped', {
-                        time: timeSince
-                    });
-                }
-            }
-        }
-
-        return strings;
     }
 
     async getCommandDeath(command, callerSteamId) {
@@ -1183,20 +1116,19 @@ class RustPlus extends RustPlusLib {
 
     getCommandLarge(isInfoChannel = false) {
         const strings = [];
-        for (const [id, timer] of Object.entries(this.mapMarkers.crateLargeOilRigTimers)) {
-            const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
-            const time = Timer.getTimeLeftOfTimer(timer);
+        if (this.mapMarkers.crateLargeOilRigTimer) {
+            const time = Timer.getTimeLeftOfTimer(this.mapMarkers.crateLargeOilRigTimer);
             if (time) {
                 if (isInfoChannel) {
                     return Client.client.intlGet(this.guildId, 'timeUntilUnlocksAt', {
-                        time: Timer.getTimeLeftOfTimer(timer, 's'),
-                        location: crate.location.location
+                        time: Timer.getTimeLeftOfTimer(this.mapMarkers.crateLargeOilRigTimer, 's'),
+                        location: this.mapMarkers.crateLargeOilRigLocation
                     });
                 }
                 else {
                     strings.push(Client.client.intlGet(this.guildId, 'timeBeforeCrateAtLargeOilRigUnlocks', {
                         time: time,
-                        location: crate.location.location
+                        location: this.mapMarkers.crateLargeOilRigLocation
                     }));
                 }
             }
@@ -1907,20 +1839,19 @@ class RustPlus extends RustPlusLib {
 
     getCommandSmall(isInfoChannel = false) {
         const strings = [];
-        for (const [id, timer] of Object.entries(this.mapMarkers.crateSmallOilRigTimers)) {
-            const crate = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.Crate, parseInt(id));
-            const time = Timer.getTimeLeftOfTimer(timer);
+        if (this.mapMarkers.crateSmallOilRigTimer) {
+            const time = Timer.getTimeLeftOfTimer(this.mapMarkers.crateSmallOilRigTimer);
             if (time) {
                 if (isInfoChannel) {
                     return Client.client.intlGet(this.guildId, 'timeUntilUnlocksAt', {
-                        time: Timer.getTimeLeftOfTimer(timer, 's'),
-                        location: crate.location.location
+                        time: Timer.getTimeLeftOfTimer(this.mapMarkers.crateSmallOilRigTimer, 's'),
+                        location: this.mapMarkers.crateSmallOilRigLocation
                     });
                 }
                 else {
                     strings.push(Client.client.intlGet(this.guildId, 'timeBeforeCrateAtSmallOilRigUnlocks', {
                         time: time,
-                        location: crate.location.location
+                        location: this.mapMarkers.crateSmallOilRigLocation
                     }));
                 }
             }

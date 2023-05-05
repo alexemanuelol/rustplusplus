@@ -30,8 +30,6 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
         const cargoShipEgressTime = parseInt(interaction.fields.getTextInputValue('CargoShipEgressTime'));
         const bradleyApcRespawnTime = parseInt(interaction.fields.getTextInputValue('BradleyApcRespawnTime'));
-        const crateDespawnTime = parseInt(interaction.fields.getTextInputValue('CrateDespawnTime'));
-        const crateDespawnWarningTime = parseInt(interaction.fields.getTextInputValue('CrateDespawnWarningTime'));
         const oilRigCrateUnlockTime = parseInt(interaction.fields.getTextInputValue('OilRigCrateUnlockTime'));
 
         if (!server) {
@@ -44,32 +42,6 @@ module.exports = async (client, interaction) => {
         }
         if (bradleyApcRespawnTime && ((bradleyApcRespawnTime * 1000) !== server.bradleyApcRespawnTimeMs)) {
             server.bradleyApcRespawnTimeMs = bradleyApcRespawnTime * 1000;
-        }
-
-        if (crateDespawnTime && ((crateDespawnTime * 1000) !== server.lockedCrateDespawnTimeMs)) {
-            if (crateDespawnWarningTime && ((crateDespawnWarningTime * 1000) !==
-                server.lockedCrateDespawnWarningTimeMs)) {
-                if (crateDespawnTime > crateDespawnWarningTime) {
-                    server.lockedCrateDespawnTimeMs = crateDespawnTime * 1000;
-                }
-            }
-            else {
-                if ((crateDespawnTime * 1000) > server.lockedCrateDespawnWarningTimeMs) {
-                    server.lockedCrateDespawnTimeMs = crateDespawnTime * 1000;
-                }
-            }
-        }
-        if (crateDespawnWarningTime && ((crateDespawnWarningTime * 1000) !== server.lockedCrateDespawnWarningTimeMs)) {
-            if (crateDespawnTime && ((crateDespawnTime * 1000) !== server.lockedCrateDespawnTimeMs)) {
-                if (crateDespawnWarningTime < crateDespawnTime) {
-                    server.lockedCrateDespawnWarningTimeMs = crateDespawnWarningTime * 1000;
-                }
-            }
-            else {
-                if ((crateDespawnWarningTime * 1000) < server.lockedCrateDespawnTimeMs) {
-                    server.lockedCrateDespawnWarningTimeMs = crateDespawnWarningTime * 1000;
-                }
-            }
         }
         if (oilRigCrateUnlockTime && ((oilRigCrateUnlockTime * 1000) !== server.oilRigLockedCrateUnlockTimeMs)) {
             server.oilRigLockedCrateUnlockTimeMs = oilRigCrateUnlockTime * 1000;

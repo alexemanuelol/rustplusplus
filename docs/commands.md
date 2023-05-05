@@ -201,10 +201,9 @@ In-Game Command | Description
 [**afk**](commands.md#afk) | Get the currently afk players in your team.
 [**alive**](commands.md#alive) | Get the player with the longest time alive.
 [**bradley**](commands.md#bradley) | Get information about Bradley APC (Time till respawn, time since last destroyed).
-[**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, current crates, time since last on map).
+[**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, time since last on map).
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
 [**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
-[**crate**](commands.md#crate) | Get information about Locked Crate dropped by Chinook47 (Location, time till despawn, time since last dropped).
 [**death/deaths**](commands.md#deathdeaths) | Get recent death events.
 [**heli**](commands.md#heli) | Get information about Patrol Helicopter (Location, time since last downed, time since last on map).
 [**large**](commands.md#large) | Get information about Large Oil Rig (Time till crate unlocks, time since last trigger).
@@ -258,7 +257,7 @@ In-Game Command | Description
 
 ## **cargo**
 
-> **Get information about CargoShip (Location, time till enters egress stage, current crates, time since last on map).**
+> **Get information about CargoShip (Location, time till enters egress stage, time since last on map).**
 <br>Command: `!cargo`
 
 ![In-Game Command cargo Image](images/cargo_ingame.png)
@@ -279,14 +278,6 @@ In-Game Command | Description
 <br>Command: `!connection Alle`
 
 ![In-Game Command connection Image](images/connection_ingame.png)
-
-
-## **crate**
-
-> **Get information about Locked Crate dropped by Chinook47 (Location, time till despawn, time since last dropped).**
-<br>Command: `!crate`
-
-![In-Game Command crate Image](images/crate_ingame.png)
 
 
 ## **death/deaths**

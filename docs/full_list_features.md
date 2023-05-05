@@ -1,12 +1,11 @@
 # Full list of Features
 
 * Receive notifications for In-Game Events
-    - `Cargo Ship` - When it spawns, despawns, how long before it enters egress stage, how many crates are on it and when they are looted. How long time since it was last out. route-trace.
+    - `Cargo Ship` - When it spawns, despawns, how long before it enters egress stage. How long time since it was last out. route-trace.
     - `Patrol Helicopter` - When it spawns, despawns or gets taken down. How long time since it was last out and how long since it was taken down. route-trace.
     - `Bradley APC` - When it gets destroyed, time left before it respawns, how long since it was last destroyed.
-    - `Locked Crate` - When it get's dropped at a monument or somewhere else and how long before it despawns as well as when it gets looted.
     - `Chinook 47` - When it enters map and when it leaves.
-    - `Oil Rigs` - When Oil Rig calls in Heavy Scientists and how long till the Locked Crate unlocks and when it gets looted, respawns or refreshes.
+    - `Oil Rigs` - When Oil Rig calls in Heavy Scientists and how long till the Locked Crate unlocks.
     - `Vending Machine` - Whenever a new Vending Machine appears on the map.
 * Control [Smart Switches](smart_devices.md#smart-switches) or Groups of Smart Switches via Discord or In-Game Team Chat.
     - Turn a Switch ON/OFF with a interaction button in Discord.

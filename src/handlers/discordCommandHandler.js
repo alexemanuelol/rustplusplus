@@ -55,10 +55,6 @@ module.exports = {
                 commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxConnections')}`))) {
             response = rustplus.getCommandConnection(command);
         }
-        else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxCrate')}` ||
-            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxCrate')}`) {
-            response = rustplus.getCommandCrate();
-        }
         else if ((commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxDeath')} `) ||
             commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxDeaths')}`)) ||
             (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxDeath')} `) ||

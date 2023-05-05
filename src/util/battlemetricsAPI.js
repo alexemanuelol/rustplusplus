@@ -103,12 +103,13 @@ module.exports = {
 
         let onlinePlayers = [];
         let players = page['included']
-        
+
         for (let player of players) {
             try {
                 if (player.length !== null) {
-                    onlinePlayers.push({ id: player['attributes'].id, 
-                        name: player['attributes'].name, 
+                    onlinePlayers.push({
+                        id: player['attributes'].id,
+                        name: player['attributes'].name,
                         time: await this.formatTime(player['attributes'].updatedAt)
                     });
                 }
@@ -145,5 +146,5 @@ module.exports = {
         const hoursStr = diffHours.toString().padStart(2, '0');
         const minutesStr = diffMinutes.toString().padStart(2, '0');
         return `${hoursStr}:${minutesStr}`;
-      }
+    }
 }
