@@ -49,6 +49,7 @@
          "SILOTOWER",
          "SILOEXIT1",
          "SILOEXIT2",
+         "SILOSHIPPING",
          "SILOMISSILE"
       ],
       "dynamic": false
