@@ -29,6 +29,11 @@
         "name": "Burlap Gloves",
         "description": "Basic burlap gloves, offering protection from the elements"
     },
+    "22947882": {
+        "shortname": "whiteidtag",
+        "name": "White ID Tag",
+        "description": "White ID Tag"
+    },
     "23352662": {
         "shortname": "sign.hanging.banner.large",
         "name": "Large Banner Hanging",
@@ -79,10 +84,25 @@
         "name": "Metal Fragments",
         "description": "Metal Fragments. Smelted from Metal Ore, used in lots of different crafting recipes."
     },
+    "70102328": {
+        "shortname": "redidtag",
+        "name": "Red ID Tag",
+        "description": "Red ID Tag"
+    },
     "73681876": {
         "shortname": "techparts",
         "name": "Tech Trash",
         "description": "A collection of random tech parts."
+    },
+    "81423963": {
+        "shortname": "yellowidtag",
+        "name": "Yellow ID Tag",
+        "description": "Yellow ID Tag"
+    },
+    "86840834": {
+        "shortname": "hazmatsuit_scientist_nvgm",
+        "name": "NVGM Scientist Suit",
+        "description": "A hazmat suit made from radiation resistant rubber."
     },
     "95950017": {
         "shortname": "metalpipe",
@@ -153,6 +173,11 @@
         "shortname": "scarecrow",
         "name": "Scarecrow",
         "description": "Get into the halloween spirit with this decorative deployable item."
+    },
+    "180752235": {
+        "shortname": "pinkidtag",
+        "name": "Pink ID Tag",
+        "description": "Pink ID Tag"
     },
     "185586769": {
         "shortname": "innertube.horse",
@@ -1154,6 +1179,11 @@
         "name": "Snow Machine",
         "description": "A machine which will blanket the surrounding terrain in snow."
     },
+    "1364514421": {
+        "shortname": "blueidtag",
+        "name": "Blue ID Tag",
+        "description": "Blue ID Tag"
+    },
     "1366282552": {
         "shortname": "burlap.gloves",
         "name": "Leather Gloves",
@@ -1608,6 +1638,11 @@
         "shortname": "easter.silveregg",
         "name": "Silver Egg",
         "description": "A Silver Egg. Contains medium level loot, Collect 10 to upgrade to a gold Egg"
+    },
+    "1762167092": {
+        "shortname": "greenidtag",
+        "name": "Green ID Tag",
+        "description": "Green ID Tag"
     },
     "1768112091": {
         "shortname": "snowmobiletomaha",
@@ -2724,6 +2759,11 @@
         "name": "Granola Bar",
         "description": "Granola Bar found as loot. Eating it provides a small boost to health, hunger."
     },
+    "-455286320": {
+        "shortname": "grayidtag",
+        "name": "Gray ID Tag",
+        "description": "Gray ID Tag"
+    },
     "-936921910": {
         "shortname": "grenade.flashbang",
         "name": "Flashbang",
@@ -3109,6 +3149,11 @@
         "name": "Night Vision Goggles",
         "description": "Enables vision at nighttime by projecting and amplifying infrared light.The batteries can be recharged at a Lvl 2 workbench. Cannot be worn with a helmet."
     },
+    "-282193997": {
+        "shortname": "orangeidtag",
+        "name": "Orange ID Tag",
+        "description": "Orange ID Tag"
+    },
     "-733625651": {
         "shortname": "paddlingpool",
         "name": "Paddling Pool",
@@ -3183,6 +3228,11 @@
         "shortname": "pumpkin",
         "name": "Pumpkin",
         "description": "An edible vegetable that can also be worn as a hat. Eating it provides a small boost to health, hunger, and thirst."
+    },
+    "-1386082991": {
+        "shortname": "purpleidtag",
+        "name": "Purple ID Tag",
+        "description": "Purple ID Tag"
     },
     "-496584751": {
         "shortname": "radiationremovetea",
@@ -3664,6 +3714,11 @@
         "name": "Sunglasses",
         "description": "A pair of sunglasses. Functional and stylish!"
     },
+    "-1003665711": {
+        "shortname": "supertea",
+        "name": "Super Tea",
+        "description": "Super Tea, more health, more ore, more wood, more scrap"
+    },
     "-1108136649": {
         "shortname": "tactical.gloves",
         "name": "Tactical Gloves",
@@ -3808,6 +3863,11 @@
         "shortname": "wall.graveyard.fence",
         "name": "Graveyard Fence",
         "description": "A Spooky Fence"
+    },
+    "-81700958": {
+        "shortname": "wall.window.bars.brickskin",
+        "name": "Brick Skin Window Bars",
+        "description": "Metal window bars made to fit a brick skin sized window."
     },
     "-819720157": {
         "shortname": "wall.window.bars.metal",
