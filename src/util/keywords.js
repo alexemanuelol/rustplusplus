@@ -23,7 +23,6 @@ module.exports = {
         return [
             client.intlGet(guildId, 'commandSyntaxAfk'),
             client.intlGet(guildId, 'commandSyntaxAlive'),
-            client.intlGet(guildId, 'commandSyntaxBradley'),
             client.intlGet(guildId, 'commandSyntaxCargo'),
             client.intlGet(guildId, 'commandSyntaxChinook'),
             client.intlGet(guildId, 'commandSyntaxConnection'),
@@ -58,7 +57,6 @@ module.exports = {
             client.intlGet(guildId, 'commandSyntaxWipe'),
             client.intlGet('en', 'commandSyntaxAfk'),
             client.intlGet('en', 'commandSyntaxAlive'),
-            client.intlGet('en', 'commandSyntaxBradley'),
             client.intlGet('en', 'commandSyntaxCargo'),
             client.intlGet('en', 'commandSyntaxChinook'),
             client.intlGet('en', 'commandSyntaxConnection'),

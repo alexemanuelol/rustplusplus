@@ -29,7 +29,6 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('CustomTimersEdit', ''));
         const server = instance.serverList[ids.serverId];
         const cargoShipEgressTime = parseInt(interaction.fields.getTextInputValue('CargoShipEgressTime'));
-        const bradleyApcRespawnTime = parseInt(interaction.fields.getTextInputValue('BradleyApcRespawnTime'));
         const oilRigCrateUnlockTime = parseInt(interaction.fields.getTextInputValue('OilRigCrateUnlockTime'));
 
         if (!server) {
@@ -39,9 +38,6 @@ module.exports = async (client, interaction) => {
 
         if (cargoShipEgressTime && ((cargoShipEgressTime * 1000) !== server.cargoShipEgressTimeMs)) {
             server.cargoShipEgressTimeMs = cargoShipEgressTime * 1000;
-        }
-        if (bradleyApcRespawnTime && ((bradleyApcRespawnTime * 1000) !== server.bradleyApcRespawnTimeMs)) {
-            server.bradleyApcRespawnTimeMs = bradleyApcRespawnTime * 1000;
         }
         if (oilRigCrateUnlockTime && ((oilRigCrateUnlockTime * 1000) !== server.oilRigLockedCrateUnlockTimeMs)) {
             server.oilRigLockedCrateUnlockTimeMs = oilRigCrateUnlockTime * 1000;

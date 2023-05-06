@@ -37,10 +37,6 @@ module.exports = {
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxAlive')}`)) {
             response = rustplus.getCommandAlive(command);
         }
-        else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxBradley')}` ||
-            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxBradley')}`) {
-            response = rustplus.getCommandBradley();
-        }
         else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxCargo')}` ||
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxCargo')}`) {
             response = rustplus.getCommandCargo();

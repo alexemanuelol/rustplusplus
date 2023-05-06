@@ -3,7 +3,6 @@
 * Receive notifications for In-Game Events
     - `Cargo Ship` - When it spawns, despawns, how long before it enters egress stage. How long time since it was last out. route-trace.
     - `Patrol Helicopter` - When it spawns, despawns or gets taken down. How long time since it was last out and how long since it was taken down. route-trace.
-    - `Bradley APC` - When it gets destroyed, time left before it respawns, how long since it was last destroyed.
     - `Chinook 47` - When it enters map and when it leaves.
     - `Oil Rigs` - When Oil Rig calls in Heavy Scientists and how long till the Locked Crate unlocks.
     - `Vending Machine` - Whenever a new Vending Machine appears on the map.

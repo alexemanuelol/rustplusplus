@@ -29,16 +29,6 @@
         "discord": true,
         "inGame": false
     },
-    "bradleyApcDestroyedSetting": {
-        "image": "bradley_apc_destroyed_logo.png",
-        "discord": true,
-        "inGame": false
-    },
-    "bradleyApcShouldRespawnSetting": {
-        "image": "bradley_apc_logo.png",
-        "discord": true,
-        "inGame": false
-    },
     "lockedCrateOilRigUnlockedSetting": {
         "image": "locked_crate_logo.png",
         "discord": true,

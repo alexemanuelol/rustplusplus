@@ -48,10 +48,6 @@ class Map {
                 image:
                     Path.join(__dirname, '..', 'resources/images/markers/player.png'), size: 20, type: 1, jimp: null
             },
-            explosion: {
-                image:
-                    Path.join(__dirname, '..', 'resources/images/markers/explosion.png'), size: 30, type: 2, jimp: null
-            },
             shop: {
                 image:
                     Path.join(__dirname, '..', 'resources/images/markers/shop.png'), size: 20, type: 3, jimp: null

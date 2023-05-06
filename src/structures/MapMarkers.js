@@ -41,7 +41,6 @@ class MapMarkers {
         }
 
         this._players = [];
-        this._explosions = [];
         this._vendingMachines = [];
         this._ch47s = [];
         this._cargoShips = [];
@@ -54,7 +53,6 @@ class MapMarkers {
         this.crateSmallOilRigLocation = null;
         this.crateLargeOilRigTimer = null;
         this.crateLargeOilRigLocation = null;
-        this.bradleyAPCRespawnTimers = new Object();
 
         /* Event dates */
         this.timeSinceCargoShipWasOut = null;
@@ -63,10 +61,6 @@ class MapMarkers {
         this.timeSinceLargeOilRigWasTriggered = null;
         this.timeSincePatrolHelicopterWasOnMap = null;
         this.timeSincePatrolHelicopterWasDestroyed = null;
-        this.timeSinceBradleyAPCWasDestroyed = null;
-
-        /* Checker variables */
-        this.patrolHelicoptersLeft = [];
 
         /* Vending Machine variables */
         this.knownVendingMachines = [];
@@ -85,8 +79,6 @@ class MapMarkers {
     set types(types) { this._types = types; }
     get players() { return this._players; }
     set players(players) { this._players = players; }
-    get explosions() { return this._explosions; }
-    set explosions(explosions) { this._explosions = explosions; }
     get vendingMachines() { return this._vendingMachines; }
     set vendingMachines(vendingMachines) { this._vendingMachines = vendingMachines; }
     get ch47s() { return this._ch47s; }
@@ -106,10 +98,6 @@ class MapMarkers {
         switch (type) {
             case this.types.Player: {
                 return this.players;
-            } break;
-
-            case this.types.Explosion: {
-                return this.explosions;
             } break;
 
             case this.types.VendingMachine: {
@@ -260,7 +248,6 @@ class MapMarkers {
         this.updatePlayers(mapMarkers);
         this.updateCargoShips(mapMarkers);
         this.updatePatrolHelicopters(mapMarkers);
-        this.updateExplosions(mapMarkers);
         this.updateCH47s(mapMarkers);
         this.updateVendingMachines(mapMarkers);
         this.updateGenericRadiuses(mapMarkers);
@@ -295,92 +282,6 @@ class MapMarkers {
             player.x = marker.x;
             player.y = marker.y;
             player.location = pos;
-        }
-    }
-
-    updateExplosions(mapMarkers) {
-        let newMarkers = this.getNewMarkersOfTypeId(this.types.Explosion, mapMarkers.markers);
-        let leftMarkers = this.getLeftMarkersOfTypeId(this.types.Explosion, mapMarkers.markers);
-        let remainingMarkers = this.getRemainingMarkersOfTypeId(this.types.Explosion, mapMarkers.markers);
-
-        /* Explosion markers that are new. */
-        for (let marker of newMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
-
-            marker.location = pos;
-
-            let isExplosionMarkerHeli = false;
-            if (this.patrolHelicoptersLeft.length !== 0) {
-                for (let heli of this.patrolHelicoptersLeft) {
-                    if (Map.getDistance(marker.x, marker.y, heli.x, heli.y) <=
-                        Constants.PATROL_HELI_DOWNED_RADIUS) {
-                        isExplosionMarkerHeli = true;
-                        this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== heli.id);
-                        this.patrolHelicoptersLeft = this.patrolHelicoptersLeft.filter(e => e.id !== heli.id);
-                    }
-                }
-            }
-
-            if (isExplosionMarkerHeli) {
-                /* PatrolHelicopter just got downed */
-                this.rustplus.sendEvent(
-                    this.rustplus.notificationSettings.patrolHelicopterDestroyedSetting,
-                    this.client.intlGet(this.rustplus.guildId, 'patrolHelicopterTakenDown', { location: pos.string }),
-                    Constants.COLOR_PATROL_HELICOPTER_TAKEN_DOWN);
-
-                this.timeSincePatrolHelicopterWasDestroyed = new Date();
-                this.timeSincePatrolHelicopterWasOnMap = new Date();
-            }
-            else {
-                /* Bradley APC just got destroyed */
-                let atLaunch = this.isBradleyExplosionAtLaunchSite(marker.x, marker.y);
-                let posString = (atLaunch) ? this.client.intlGet(this.rustplus.guildId, 'launchSite') : pos.string;
-
-                if (this.rustplus.isFirstPoll) {
-                    this.rustplus.sendEvent(
-                        this.rustplus.notificationSettings.bradleyApcDestroyedSetting,
-                        this.client.intlGet(this.rustplus.guildId, 'bradleyOrHeliDestroyed', { location: posString }),
-                        Constants.COLOR_BRADLEY_OR_HELI_DESTROYED);
-                }
-                else {
-                    this.rustplus.sendEvent(
-                        this.rustplus.notificationSettings.bradleyApcDestroyedSetting,
-                        this.client.intlGet(this.rustplus.guildId, 'bradleyDestroyed', { location: posString }),
-                        Constants.COLOR_BRADLEY_DESTROYED);
-                }
-
-                let instance = this.client.getInstance(this.rustplus.guildId);
-                if (!this.rustplus.isFirstPoll) {
-                    this.bradleyAPCRespawnTimers[marker.id] = new Timer.timer(
-                        this.notifyBradleyAPCRespawn.bind(this),
-                        instance.serverList[this.rustplus.serverId].bradleyApcRespawnTimeMs,
-                        marker.id);
-                    this.bradleyAPCRespawnTimers[marker.id].start();
-                }
-
-                this.timeSinceBradleyAPCWasDestroyed = new Date();
-            }
-
-            this.explosions.push(marker);
-        }
-
-        /* Explosion markers that have left. */
-        for (let marker of leftMarkers) {
-            /* Unused */
-
-            this.explosions = this.explosions.filter(e => e.id !== marker.id);
-        }
-
-        /* Explosion markers that still remains. */
-        for (let marker of remainingMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
-            let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
-            let explosion = this.getMarkerByTypeId(this.types.Explosion, marker.id);
-
-            explosion.x = marker.x;
-            explosion.y = marker.y;
-            explosion.location = pos;
         }
     }
 
@@ -700,15 +601,9 @@ class MapMarkers {
 
         /* PatrolHelicopter markers that have left. */
         for (let marker of leftMarkers) {
-            if (marker.fakeLeft && marker.stage === 1) {
-                let patrolHelicopter = this.getMarkerByTypeId(this.types.PatrolHelicopter, marker.id);
+            let mapSize = this.rustplus.info.correctedMapSize;
 
-                /* Add fakeLeft, in case it left the map rather than got downed */
-                patrolHelicopter.fakeLeft = true;
-                patrolHelicopter.stage = 2;
-                continue;
-            }
-            else if (marker.fakeLeft && marker.stage === 2) {
+            if (Map.isOutsideGridSystem(marker.x, marker.y, mapSize)) {
                 this.rustplus.sendEvent(
                     this.rustplus.notificationSettings.patrolHelicopterLeftSetting,
                     this.client.intlGet(this.rustplus.guildId, 'patrolHelicopterLeftMap', {
@@ -719,19 +614,15 @@ class MapMarkers {
                 this.timeSincePatrolHelicopterWasOnMap = new Date();
             }
             else {
-                let patrolHelicopter = this.getMarkerByTypeId(this.types.PatrolHelicopter, marker.id);
+                this.rustplus.sendEvent(
+                    this.rustplus.notificationSettings.patrolHelicopterDestroyedSetting,
+                    this.client.intlGet(this.rustplus.guildId, 'patrolHelicopterTakenDown', {
+                        location: marker.location.string
+                    }),
+                    Constants.COLOR_PATROL_HELICOPTER_TAKEN_DOWN);
 
-                this.patrolHelicoptersLeft.push({
-                    id: marker.id,
-                    location: marker.location,
-                    x: marker.x,
-                    y: marker.y
-                });
-
-                /* Add fakeLeft, in case it left the map rather than got downed */
-                patrolHelicopter.fakeLeft = true;
-                patrolHelicopter.stage = 1;
-                continue;
+                this.timeSincePatrolHelicopterWasDestroyed = new Date();
+                this.timeSincePatrolHelicopterWasOnMap = new Date();
             }
 
             this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== marker.id);
@@ -809,31 +700,7 @@ class MapMarkers {
         this.crateLargeOilRigLocation = null;
     }
 
-    notifyBradleyAPCRespawn(args) {
-        let explosionId = args[0];
-        this.rustplus.sendEvent(
-            this.rustplus.notificationSettings.bradleyApcShouldRespawnSetting,
-            this.client.intlGet(this.rustplus.guildId, 'bradleyApcRespawn'),
-            Constants.COLOR_BRADLEY_APC_RESPAWN);
-
-        if (this.bradleyAPCRespawnTimers[explosionId]) {
-            this.bradleyAPCRespawnTimers[explosionId].stop();
-            delete this.bradleyAPCRespawnTimers[explosionId];
-        }
-    }
-
     /* Help functions */
-
-    isBradleyExplosionAtLaunchSite(x, y) {
-        /* Check where the explosion marker is located, if near Launch Site, return true */
-        for (let monument of this.rustplus.map.monuments) {
-            if (monument.token === 'launchsite') {
-                return (Map.getDistance(x, y, monument.x, monument.y) <=
-                    this.rustplus.map.monumentInfo['launchsite'].radius);
-            }
-        }
-        return false;
-    }
 
     getClosestMonument(x, y) {
         let minDistance = 1000000;
@@ -851,7 +718,6 @@ class MapMarkers {
 
     reset() {
         this.players = [];
-        this.explosions = [];
         this.vendingMachines = [];
         this.ch47s = [];
         this.cargoShips = [];
@@ -870,18 +736,6 @@ class MapMarkers {
             this.crateLargeOilRigTimer.stop();
         }
         this.crateLargeOilRigTimer = null;
-        for (const [id, timer] of Object.entries(this.bradleyAPCRespawnTimers)) {
-            timer.stop();
-        }
-        this.bradleyAPCRespawnTimers = new Object();
-        for (const [id, timer] of Object.entries(this.crateDespawnTimers)) {
-            timer.stop();
-        }
-        this.crateDespawnTimers = new Object();
-        for (const [id, timer] of Object.entries(this.crateDespawnWarningTimers)) {
-            timer.stop();
-        }
-        this.crateDespawnWarningTimers = new Object();
 
         this.timeSinceCargoShipWasOut = null;
         this.timeSinceCH47WasOut = null;
@@ -889,9 +743,7 @@ class MapMarkers {
         this.timeSinceLargeOilRigWasTriggered = null;
         this.timeSincePatrolHelicopterWasOnMap = null;
         this.timeSincePatrolHelicopterWasDestroyed = null;
-        this.timeSinceBradleyAPCWasDestroyed = null;
 
-        this.patrolHelicoptersLeft = [];
         this.knownVendingMachines = [];
         this.subscribedItemsId = [];
         this.foundItems = [];

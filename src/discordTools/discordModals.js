@@ -51,12 +51,6 @@ module.exports = {
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
-                customId: 'BradleyApcRespawnTime',
-                label: Client.client.intlGet(guildId, 'customTimerEditBradleyRespawnLabel'),
-                value: `${server.bradleyApcRespawnTimeMs / 1000}`,
-                style: Discord.TextInputStyle.Short
-            })),
-            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'OilRigCrateUnlockTime',
                 label: Client.client.intlGet(guildId, 'customTimerEditCrateOilRigUnlockLabel'),
                 value: `${server.oilRigLockedCrateUnlockTimeMs / 1000}`,

@@ -697,53 +697,6 @@ class RustPlus extends RustPlusLib {
         });
     }
 
-    getCommandBradley(isInfoChannel = false) {
-        const strings = [];
-        for (const timer of Object.values(this.mapMarkers.bradleyAPCRespawnTimers)) {
-            const time = Timer.getTimeLeftOfTimer(timer);
-            if (time) {
-                if (isInfoChannel) {
-                    return Client.client.intlGet(this.guildId, 'timeBeforeRespawn', {
-                        time: Timer.getTimeLeftOfTimer(timer, 's')
-                    });
-                }
-                else {
-                    strings.push(Client.client.intlGet(this.guildId, 'timeBeforeBradleyRespawns', {
-                        time: time
-                    }));
-                }
-            }
-        }
-
-        if (strings.length === 0) {
-            if (this.mapMarkers.timeSinceBradleyAPCWasDestroyed === null) {
-                if (isInfoChannel) {
-                    return Client.client.intlGet(this.guildId, 'atLocation', {
-                        location: Client.client.intlGet(this.guildId, 'launchSite')
-                    });
-                }
-                else {
-                    return Client.client.intlGet(this.guildId, 'bradleyRoamingAround');
-                }
-            }
-            else {
-                const secondsSince = (new Date() - this.mapMarkers.timeSinceBradleyAPCWasDestroyed) / 1000;
-                if (isInfoChannel) {
-                    return Client.client.intlGet(this.guildId, 'timeSinceDestroyed', {
-                        time: Timer.secondsToFullScale(secondsSince, 's')
-                    });
-                }
-                else {
-                    return Client.client.intlGet(this.guildId, 'timeSinceBradleyDestroyed', {
-                        time: Timer.secondsToFullScale(secondsSince)
-                    });
-                }
-            }
-        }
-
-        return strings;
-    }
-
     getCommandCargo(isInfoChannel = false) {
         const strings = [];
         let unhandled = this.mapMarkers.cargoShips.map(e => e.id);

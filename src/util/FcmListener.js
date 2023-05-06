@@ -230,8 +230,6 @@ async function pairingServer(client, guild, full, data, body) {
         battlemetricsId: battlemetricsId,
         connect: (info === null) ? null : `connect ${info.ip}:${info.port}`,
         cargoShipEgressTimeMs: server ? server.cargoShipEgressTimeMs : Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
-        bradleyApcRespawnTimeMs: server ? server.bradleyApcRespawnTimeMs :
-            Constants.DEFAULT_BRADLEY_APC_RESPAWN_TIME_MS,
         oilRigLockedCrateUnlockTimeMs: server ? server.oilRigLockedCrateUnlockTimeMs :
             Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
         timeTillDay: server ? server.timeTillDay : null,
