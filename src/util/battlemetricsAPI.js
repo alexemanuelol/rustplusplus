@@ -77,6 +77,7 @@ module.exports = {
             if (page.length !== null) {
                 return {
                     ip: data.ip,
+                    name: data.name,
                     port: data.port,
                     rank: data.rank,
                     country: data.country,

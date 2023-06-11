@@ -18,6 +18,8 @@
 
 */
 
+const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
+const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Keywords = require('../util/keywords.js');
 
@@ -159,6 +161,7 @@ module.exports = async (client, interaction) => {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
         const tracker = instance.trackers[ids.trackerId];
         const trackerName = interaction.fields.getTextInputValue('TrackerName');
+        const trackerBattlemetricsId = interaction.fields.getTextInputValue('TrackerBattlemetricsId');
 
         if (!tracker) {
             interaction.deferUpdate();
@@ -166,6 +169,20 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.name = trackerName;
+
+        if (trackerBattlemetricsId !== tracker.battlemetricsId) {
+            const info = await BattlemetricsAPI.getBattlemetricsServerInfo(client, trackerBattlemetricsId);
+            if (info === null) {
+                interaction.deferUpdate();
+                return;
+            }
+
+            tracker.serverId = `${info.ip}-${info.port}`;
+            tracker.battlemetricsId = trackerBattlemetricsId;
+            tracker.img = Constants.DEFAULT_SERVER_IMG;
+            tracker.title = info.name;
+        }
+
         client.setInstance(guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);

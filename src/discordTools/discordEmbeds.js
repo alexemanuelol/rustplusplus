@@ -597,13 +597,13 @@ module.exports = {
         });
     },
 
-    getActivityNotificationEmbed: function (guildId, serverId, color, text, steamId, png) {
+    getActivityNotificationEmbed: function (guildId, serverId, color, text, steamId, png, title = null) {
         const instance = Client.client.getInstance(guildId);
-        const server = instance.serverList[serverId];
+        const footerTitle = title !== null ? title : instance.serverList[serverId].title;
         return module.exports.getEmbed({
             color: color,
             timestamp: true,
-            footer: { text: server.title },
+            footer: { text: footerTitle },
             author: {
                 name: text,
                 iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,

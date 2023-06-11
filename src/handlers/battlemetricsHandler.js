@@ -85,7 +85,7 @@ module.exports = {
                                 tracker: content.name
                             });
                             await DiscordMessages.sendActivityNotificationMessage(
-                                guild.id, content.serverId, Constants.COLOR_ACTIVE, str, null);
+                                guild.id, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title);
                             if (instance.generalSettings.trackerNotifyInGameConnections && rustplus &&
                                 (rustplus.serverId === content.serverId) && content.inGame) {
                                 rustplus.sendTeamMessageAsync(str);
@@ -104,7 +104,7 @@ module.exports = {
                                 tracker: content.name
                             });
                             await DiscordMessages.sendActivityNotificationMessage(
-                                guild.id, content.serverId, Constants.COLOR_INACTIVE, str, null);
+                                guild.id, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title);
                             if (instance.generalSettings.trackerNotifyInGameConnections && rustplus &&
                                 (rustplus.serverId === content.serverId) && content.inGame) {
                                 rustplus.sendTeamMessageAsync(str);

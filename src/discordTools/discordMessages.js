@@ -368,7 +368,7 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.events);
     },
 
-    sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId) {
+    sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId, title = null) {
         const instance = Client.client.getInstance(guildId);
 
         let png = null;
@@ -376,7 +376,7 @@ module.exports = {
             png = await Scrape.scrapeSteamProfilePicture(Client.client, steamId);
         }
         const content = {
-            embeds: [DiscordEmbeds.getActivityNotificationEmbed(guildId, serverId, color, text, steamId, png)]
+            embeds: [DiscordEmbeds.getActivityNotificationEmbed(guildId, serverId, color, text, steamId, png, title)]
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);

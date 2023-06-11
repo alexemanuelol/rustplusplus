@@ -575,6 +575,7 @@
     "toolCupboard": "Tool Cupboard",
     "trackerAddPlayerDesc": "Add Player to {tracker}",
     "trackerAddPlayerIdLabel": "The SteamID of the player to add:",
+    "trackerEditBattlemetricsIdLabel": "The Battlemetrics Id of the tracker:",
     "trackerEditNameLabel": "The name of the Tracker:",
     "trackerRemovePlayerDesc": "Remove Player from {tracker}",
     "trackerRemovePlayerIdLabel": "The SteamID of the player to remove:",

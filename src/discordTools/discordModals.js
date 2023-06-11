@@ -237,6 +237,12 @@ module.exports = {
                 label: Client.client.intlGet(guildId, 'trackerEditNameLabel'),
                 value: tracker.name,
                 style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'TrackerBattlemetricsId',
+                label: Client.client.intlGet(guildId, 'trackerEditBattlemetricsIdLabel'),
+                value: tracker.battlemetricsId,
+                style: Discord.TextInputStyle.Short
             }))
         );
 
