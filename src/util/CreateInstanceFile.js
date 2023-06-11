@@ -55,7 +55,8 @@ module.exports = (client, guild) => {
             serverList: {},
             serverListLite: {},
             trackers: {},
-            marketSubscriptionListItemIds: []
+            marketSubscriptionListItemIds: [],
+            teamChatColors: {}
         };
     }
     else {
@@ -147,6 +148,7 @@ module.exports = (client, guild) => {
         if (!instance.hasOwnProperty('serverListLite')) instance.serverListLite = {};
         if (!instance.hasOwnProperty('trackers')) instance.trackers = {};
         if (!instance.hasOwnProperty('marketSubscriptionListItemIds')) instance.marketSubscriptionListItemIds = [];
+        if (!instance.hasOwnProperty('teamChatColors')) instance.teamChatColors = {};
 
         for (const serverId of Object.keys(instance.serverList)) {
             if (!Object.keys(instance.serverListLite).includes(serverId)) {

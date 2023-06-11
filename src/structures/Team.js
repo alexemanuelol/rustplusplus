@@ -53,6 +53,8 @@ class Team {
     isLeaderSteamIdChanged(team) { return (this.leaderSteamId !== team.leaderSteamId.toString()); }
 
     updateTeam(team) {
+        const instance = Client.client.getInstance(this.rustplus.guildId);
+
         if (this.isLeaderSteamIdChanged(team)) {
             let player = this.getPlayer(this.leaderSteamId);
             if (player !== null) {
@@ -80,6 +82,16 @@ class Team {
             else {
                 this.addPlayer(player);
             }
+
+            if (!instance.teamChatColors.hasOwnProperty(steamId)) {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+
+                instance.teamChatColors[steamId] = color;
+            }
         }
 
         /* Remove players that have left */
@@ -101,6 +113,8 @@ class Team {
         if (player !== null) {
             player.teamLeader = true;
         }
+
+        Client.client.setInstance(this.rustplus.guildId, instance);
     }
 
     addPlayer(player) {
