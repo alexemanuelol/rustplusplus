@@ -1833,6 +1833,15 @@ class RustPlus extends RustPlusLib {
         return strings;
     }
 
+    getCommandTeam() {
+        let string = '';
+        for (const player of this.team.players) {
+            string += `${player.name}, `;
+        }
+
+        return string !== '' ? `${string.slice(0, -2)}.` : null;
+    }
+
     getCommandTime(isInfoChannel = false) {
         const time = Timer.convertDecimalToHoursMinutes(this.time.time);
         if (isInfoChannel) {

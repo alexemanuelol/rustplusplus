@@ -112,6 +112,7 @@
     "commandSyntaxStatus": "status",
     "commandSyntaxSubscribe": "sub",
     "commandSyntaxTTS": "tts",
+    "commandSyntaxTeam": "team",
     "commandSyntaxTime": "time",
     "commandSyntaxTimer": "timer",
     "commandSyntaxTimers": "timers",
