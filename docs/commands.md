@@ -218,6 +218,7 @@ In-Game Command | Description
 [**prox**](commands.md#prox) | Get the distance to the three closest teammates.
 [**send**](commands.md#send) | Send a message to a discord user.
 [**small**](commands.md#small) | Get information about Small Oil Rig (Time till crate unlocks, time since last trigger).
+[**team**](commands.md#team) | Get the names of all members in the team.
 [**time**](commands.md#time) | Get the current time In-Game and time till day/night.
 [**timer**](commands.md#timer) | Set custom timers that will notify whenever the timer have expired.
 [**tr**](commands.md#tr) | Translate a text to another language.
@@ -408,6 +409,14 @@ Subcommand | Description | Required
 <br>Command: `!small`
 
 ![In-Game Command small Image](images/small_ingame.png)
+
+
+## **team**
+
+> **Get the names of all members in the team.**
+<br>Command: `!team`
+
+![In-Game Command team Image](images/team_ingame.png)
 
 
 ## **time**
