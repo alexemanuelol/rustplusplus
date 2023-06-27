@@ -203,7 +203,7 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.players.push({
-            name: '-', steamId: steamId, playerId: null, status: false, time: null
+            name: '-', steamId: steamId, playerId: null, status: false, time: null, offlineTime: null
         });
         client.setInstance(interaction.guildId, instance);
 

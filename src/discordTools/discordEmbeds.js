@@ -107,8 +107,21 @@ module.exports = {
             else {
                 playerSteamId += `${player.steamId}\n`;
             }
-            playerStatus += `${(player.status === true) ?
-                `${Constants.ONLINE_EMOJI} [${player.time}]` : `${Constants.OFFLINE_EMOJI}`}\n`;
+
+            if (player.status === true) {
+                playerStatus += `${Constants.ONLINE_EMOJI} [${player.time}]\n`;
+            }
+            else {
+                let offlineTime = player.offlineTime;
+                if (offlineTime === null) {
+                    playerStatus += `${Constants.OFFLINE_EMOJI}\n`;
+                }
+                else {
+                    let seconds = (new Date() - new Date(offlineTime)) / 1000;
+                    offlineTime = Timer.secondsToFullScale(seconds, 's');
+                    playerStatus += `${Constants.OFFLINE_EMOJI} [${offlineTime}]\n`;
+                }
+            }
         }
 
         let nameChangeHistory = Client.client.intlGet(guildId, 'empty');

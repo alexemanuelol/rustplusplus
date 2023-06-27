@@ -24,7 +24,7 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = {
-    handler: async function (client) {
+    handler: async function (client, firstTime = false) {
         const forceSearch = (client.battlemetricsIntervalCounter === 0) ? true : false;
 
         const calledPages = new Object();
@@ -43,6 +43,16 @@ module.exports = {
                         calledPages[battlemetricsId] = page;
                     }
                 }
+            }
+
+            /* Clear offlineTime for all players */
+            if (firstTime) {
+                for (const [trackerId, content] of Object.entries(instance.trackers)) {
+                    for (let player of content.players) {
+                        player.offlineTime = null;
+                    }
+                }
+                client.setInstance(guild.id, instance);
             }
 
             for (const [trackerId, content] of Object.entries(instance.trackers)) {
@@ -103,6 +113,9 @@ module.exports = {
                                 name: player.name,
                                 tracker: content.name
                             });
+
+                            player.offlineTime = Date.now();
+
                             await DiscordMessages.sendActivityNotificationMessage(
                                 guild.id, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title);
                             if (instance.generalSettings.trackerNotifyInGameConnections && rustplus &&

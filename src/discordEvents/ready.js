@@ -69,7 +69,7 @@ module.exports = {
             await client.setupGuild(guild);
         });
 
-        BattlemetricsHandler.handler(client);
+        BattlemetricsHandler.handler(client, true);
         client.battlemetricsIntervalId = setInterval(BattlemetricsHandler.handler, 60000, client);
 
         client.createRustplusInstancesFromConfig();
