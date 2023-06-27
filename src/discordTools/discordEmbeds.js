@@ -729,10 +729,12 @@ module.exports = {
                 status += (isAfk) ? ` ${afkTime}\n` : '\n';
             }
             else {
+                const offlineTime = player.getOfflineTime('s');
                 status += Constants.OFFLINE_EMOJI;
                 status += (player.isAlive) ? Constants.SLEEPING_EMOJI : Constants.DEAD_EMOJI;
                 status += (Object.keys(instance.serverListLite[rustplus.serverId]).includes(player.steamId)) ?
                     Constants.PAIRED_EMOJI : '';
+                status += (offlineTime !== null) ? offlineTime : '';
                 status += '\n';
             }
         }

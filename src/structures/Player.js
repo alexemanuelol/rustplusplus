@@ -39,6 +39,7 @@ class Player {
         this._lastMovement = new Date();
         this._teamLeader = false;
         this._afkSeconds = 0;
+        this._wentOfflineTime = null;
 
         this.updatePos();
     }
@@ -70,6 +71,8 @@ class Player {
     set teamLeader(teamLeader) { this._teamLeader = teamLeader; }
     get afkSeconds() { return this._afkSeconds; }
     set afkSeconds(afkSeconds) { this._afkSeconds = afkSeconds; }
+    get wentOfflineTime() { return this._wentOfflineTime; }
+    set wentOfflineTime(wentOfflineTime) { this._wentOfflineTime = wentOfflineTime; }
 
     /* Change checkers */
     isSteamIdChanged(player) { return (this.steamId !== player.steamId.toString()); }
@@ -100,6 +103,10 @@ class Player {
     }
 
     updatePlayer(player) {
+        if (this.isGoneOffline(player)) {
+            this.wentOfflineTime = new Date();
+        }
+
         if (this.isGoneOnline(player)) {
             this.lastMovement = new Date();
             this.afkSeconds = 0;
@@ -153,6 +160,11 @@ class Player {
         return (new Date() - new Date(this.deathTime * 1000)) / 1000;
     }
     getDeathTime(ignore = '') { return (Time.secondsToFullScale(this.getDeathSeconds(), ignore)); }
+    getOfflineTime(ignore = '') {
+        if (this.wentOfflineTime === null) return null;
+        const seconds = (new Date() - this.wentOfflineTime) / 1000;
+        return (Time.secondsToFullScale(seconds, ignore));
+    }
 
     async assignLeader() {
         return await this.rustplus.promoteToLeaderAsync(this.steamId);
