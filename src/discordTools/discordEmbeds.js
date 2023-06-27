@@ -872,4 +872,12 @@ module.exports = {
             description: code
         });
     },
+
+    getUptimeEmbed: function (guildId, uptime) {
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: uptime
+        });
+    },
 }

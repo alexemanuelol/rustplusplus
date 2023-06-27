@@ -35,6 +35,8 @@ module.exports = {
         const serverId = rustplus.serverId;
         const server = instance.serverList[serverId];
 
+        rustplus.uptimeServer = null;
+
         if (rustplus.leaderRustPlusInstance !== null) {
             rustplus.leaderRustPlusInstance.isActive = false;
             rustplus.leaderRustPlusInstance.disconnect();

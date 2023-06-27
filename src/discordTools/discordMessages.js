@@ -535,4 +535,13 @@ module.exports = {
 
         await Client.client.interactionReply(interaction, content);
     },
+
+    sendUptimeMessage: async function (interaction, uptime) {
+        const content = {
+            embeds: [DiscordEmbeds.getUptimeEmbed(interaction.guildId, uptime)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
 }

@@ -161,6 +161,10 @@ module.exports = {
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxUpkeep')}`) {
             rustplus.printCommandOutput(rustplus.getCommandUpkeep());
         }
+        else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxUptime')}` ||
+            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxUptime')}`) {
+            rustplus.printCommandOutput(rustplus.getCommandUptime());
+        }
         else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxWipe')}` ||
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxWipe')}`) {
             rustplus.printCommandOutput(rustplus.getCommandWipe());

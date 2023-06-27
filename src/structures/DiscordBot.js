@@ -49,6 +49,8 @@ class DiscordBot extends Discord.Client {
         this.enIntl = null;
         this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
 
+        this.uptimeBot = null;
+
         this.items = new Items();
         this.cctv = new Cctv();
 

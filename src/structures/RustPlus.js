@@ -47,6 +47,7 @@ class RustPlus extends RustPlusLib {
         this.guildId = guildId;
 
         this.leaderRustPlusInstance = null;
+        this.uptimeServer = null;
 
         /* Status flags */
         this.isConnected = false;           /* Connected to the server, but request not yet verified. */
@@ -2082,6 +2083,32 @@ class RustPlus extends RustPlusLib {
         if (!cupboardFound) return Client.client.intlGet(this.guildId, 'noToolCupboardWereFound');
 
         return strings;
+    }
+
+    getCommandUptime() {
+        let uptimeBot = Client.client.uptimeBot;
+        let uptimeServer = this.uptimeServer;
+
+        if (uptimeBot !== null) {
+            const seconds = (new Date() - uptimeBot) / 1000;
+            uptimeBot = Timer.secondsToFullScale(seconds);
+        }
+        else {
+            uptimeBot = Client.client.intlGet(this.guildId, 'offline');
+        }
+
+        if (uptimeServer !== null) {
+            const seconds = (new Date() - uptimeServer) / 1000;
+            uptimeServer = Timer.secondsToFullScale(seconds);
+        }
+        else {
+            uptimeServer = Client.client.intlGet(this.guildId, 'offline');
+        }
+
+        let string = `${Client.client.intlGet(this.guildId, 'bot')}: ${uptimeBot} `;
+        string += `${Client.client.intlGet(this.guildId, 'server')}: ${uptimeServer}.`;
+
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     getCommandWipe(isInfoChannel = false) {

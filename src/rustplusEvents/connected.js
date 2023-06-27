@@ -36,6 +36,8 @@ module.exports = {
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
 
+        rustplus.uptimeServer = new Date();
+
         /* Start the token replenish task */
         rustplus.tokensReplenishTaskId = setInterval(rustplus.replenishTokens.bind(rustplus), 1000);
 

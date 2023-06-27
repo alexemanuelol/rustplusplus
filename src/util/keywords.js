@@ -55,6 +55,7 @@ module.exports = {
             client.intlGet(guildId, 'commandSyntaxTTS'),
             client.intlGet(guildId, 'commandSyntaxUnmute'),
             client.intlGet(guildId, 'commandSyntaxUpkeep'),
+            client.intlGet(guildId, 'commandSyntaxUptime'),
             client.intlGet(guildId, 'commandSyntaxWipe'),
             client.intlGet('en', 'commandSyntaxAfk'),
             client.intlGet('en', 'commandSyntaxAlive'),
@@ -90,6 +91,7 @@ module.exports = {
             client.intlGet('en', 'commandSyntaxTTS'),
             client.intlGet('en', 'commandSyntaxUnmute'),
             client.intlGet('en', 'commandSyntaxUpkeep'),
+            client.intlGet('en', 'commandSyntaxUptime'),
             client.intlGet('en', 'commandSyntaxWipe')
         ];
     },

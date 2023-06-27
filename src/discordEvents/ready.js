@@ -58,6 +58,8 @@ module.exports = {
             status: 'online'
         });
 
+        client.uptimeBot = new Date();
+
         client.guilds.cache.forEach(async (guild) => {
             try {
                 await guild.members.me.setNickname(Config.discord.username);
