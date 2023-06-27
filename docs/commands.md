@@ -21,6 +21,7 @@ Slash Command | Description
 [**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustplusplus category content.
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
 [**/switch**](commands.md#switch) | Operations on Smart Switches.
+[**/uptime**](commands.md#uptime) | Display uptime of the bot and server.
 
 
 ## **/alarm**
@@ -193,6 +194,17 @@ Subcommand | Options | Description | Required
 
 ![Discord Slash Command switch Image](images/switch.png)
 
+## **/uptime**
+
+> **Display uptime of the bot and server.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+`bot` | &nbsp; | Display uptime of bot. | &nbsp;
+`server` | &nbsp; | Display uptime of server. | &nbsp;
+
+![Discord Slash Command uptime Image](images/uptime.png)
+
 
 # In-Game Commands
 
@@ -226,6 +238,7 @@ In-Game Command | Description
 [**tts**](commands.md#tts) | Send a Text-To-Speech message to the Discord teamchat channel.
 [**unmute**](commands.md#unmute) | Unmute the bot from the In-Game Team Chat.
 [**upkeep**](commands.md#upkeep) | Get the upkeep time of all connected tool cupboard monitors.
+[**uptime**](commands.md#uptime-ingame) | Display uptime of the bot and server.
 [**wipe**](commands.md#wipe) | Get the time since it was wiped.
 
 
@@ -483,6 +496,14 @@ Subcommand | Description | Required
 <br>Command: `!upkeep`
 
 ![In-Game Command upkeep Image](images/upkeep_ingame.png)
+
+
+## **uptime ingame**
+
+> **Display the uptime of the bot and server.**
+<br>Command: `!uptime`
+
+![In-Game Command uptime Image](images/uptime_ingame.png)
 
 
 ## **wipe**
