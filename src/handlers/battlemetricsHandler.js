@@ -59,8 +59,6 @@ module.exports = {
                 if (!content.active) continue;
                 instance = client.getInstance(guild.id);
 
-                let changed = false;
-
                 let page = null;
                 if (!Object.keys(calledPages).includes(content.battlemetricsId)) {
                     page = await BattlemetricsAPI.getBattlemetricsServerPage(client, content.battlemetricsId);
@@ -75,7 +73,6 @@ module.exports = {
                     client, content.battlemetricsId, page);
                 if (info === null) continue;
 
-                if (instance.trackers[trackerId].status !== info.status) changed = true;
                 instance.trackers[trackerId].status = info.status;
 
                 const onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(
@@ -88,7 +85,6 @@ module.exports = {
                     player = instance.trackers[trackerId].players.find(e => e.steamId === player.steamId);
                     let onlinePlayer = onlinePlayers.find(e => e.name === player.name);
                     if (onlinePlayer) {
-                        changed = true;
                         if (player.status === false) {
                             const str = client.intlGet(guild.id, 'playerJustConnectedTracker', {
                                 name: player.name,
@@ -108,7 +104,6 @@ module.exports = {
                     }
                     else {
                         if (player.status === true) {
-                            changed = true;
                             const str = client.intlGet(guild.id, 'playerJustDisconnectedTracker', {
                                 name: player.name,
                                 tracker: content.name
@@ -139,7 +134,6 @@ module.exports = {
                         }
 
                         if (player.name !== playerName && player.name !== '-') {
-                            changed = true;
                             if (content.nameChangeHistory.length === 10) {
                                 content.nameChangeHistory.pop();
                             }
@@ -198,7 +192,7 @@ module.exports = {
 
                 instance.trackers[trackerId].allOffline = allOffline;
                 client.setInstance(guild.id, instance);
-                if (changed) await DiscordMessages.sendTrackerMessage(guild.id, trackerId);
+                await DiscordMessages.sendTrackerMessage(guild.id, trackerId);
             }
         }
 
