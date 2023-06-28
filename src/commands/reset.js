@@ -76,6 +76,8 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'discord': {
+				await require('../discordTools/RemoveGuildChannels')(client, guild);
+
 				const category = await require('../discordTools/SetupGuildCategory')(client, guild);
 				await require('../discordTools/SetupGuildChannels')(client, guild, category);
 

@@ -203,6 +203,20 @@ module.exports = {
         return undefined;
     },
 
+    removeCategory: async function (guildId, categoryId) {
+        const category = module.exports.getCategoryById(guildId, categoryId);
+
+        try {
+            await category.delete();
+        }
+        catch (e) {
+            Client.client.log(Client.client.intlGet(null, 'errorCap'),
+                Client.client.intlGet(null, 'couldNotDeleteCategory', { categoryId: categoryId }), 'error');
+            return false;
+        }
+        return true;
+    },
+
     addTextChannel: async function (guildId, name) {
         const guild = module.exports.getGuild(guildId);
 
@@ -223,6 +237,20 @@ module.exports = {
             }
         }
         return undefined;
+    },
+
+    removeTextChannel: async function (guildId, channelId) {
+        const channel = module.exports.getTextChannelById(guildId, channelId);
+
+        try {
+            await channel.delete();
+        }
+        catch (e) {
+            Client.client.log(Client.client.intlGet(null, 'errorCap'),
+                Client.client.intlGet(null, 'couldNotDeleteChannel', { channelId: channelId }), 'error');
+            return false;
+        }
+        return true;
     },
 
     clearTextChannel: async function (guildId, channelId, numberOfMessages) {
