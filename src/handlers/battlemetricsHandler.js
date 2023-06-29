@@ -30,25 +30,39 @@ module.exports = {
         const calledPages = new Object();
         const calledSteamIdNames = new Object();
 
+        /* Populate calledPages with all battlemetrics pages */
         for (const guildItem of client.guilds.cache) {
             const guild = guildItem[1];
-            let instance = client.getInstance(guild.id);
+            const instance = client.getInstance(guild.id);
             const activeServer = getActiveServerId(instance.serverList);
 
             if (activeServer !== null && instance.serverList[activeServer].battlemetricsId !== null) {
-                let battlemetricsId = instance.serverList[activeServer].battlemetricsId;
+                const battlemetricsId = instance.serverList[activeServer].battlemetricsId;
                 if (!Object.keys(calledPages).includes(battlemetricsId)) {
                     const page = await BattlemetricsAPI.getBattlemetricsServerPage(client, battlemetricsId);
-                    if (page !== null) {
-                        calledPages[battlemetricsId] = page;
-                    }
+                    if (page !== null) calledPages[battlemetricsId] = page;
                 }
             }
 
-            /* Clear offlineTime for all players */
+            for (const [trackerId, content] of Object.entries(instance.trackers)) {
+                if (!content.active) continue;
+                if (!Object.keys(calledPages).includes(content.battlemetricsId)) {
+                    const page = await BattlemetricsAPI.getBattlemetricsServerPage(client, content.battlemetricsId);
+                    if (page !== null) calledPages[content.battlemetricsId] = page;
+                }
+            }
+        }
+
+        /* Go through all trackers in all instances */
+        for (const guildItem of client.guilds.cache) {
+            const guild = guildItem[1];
+            const instance = client.getInstance(guild.id);
+
+            /* Clear status and offlineTime for all players */
             if (firstTime) {
                 for (const [trackerId, content] of Object.entries(instance.trackers)) {
                     for (let player of content.players) {
+                        player.status = false;
                         player.offlineTime = null;
                     }
                 }
@@ -57,35 +71,30 @@ module.exports = {
 
             for (const [trackerId, content] of Object.entries(instance.trackers)) {
                 if (!content.active) continue;
-                instance = client.getInstance(guild.id);
 
-                let page = null;
-                if (!Object.keys(calledPages).includes(content.battlemetricsId)) {
-                    page = await BattlemetricsAPI.getBattlemetricsServerPage(client, content.battlemetricsId);
-                    if (page === null) continue;
-                    calledPages[content.battlemetricsId] = page;
-                }
-                else {
-                    page = calledPages[content.battlemetricsId];
-                }
+                const bmId = content.battlemetricsId;
 
-                const info = await BattlemetricsAPI.getBattlemetricsServerInfo(
-                    client, content.battlemetricsId, page);
+                /* Get the page */
+                const page = Object.keys(calledPages).includes(bmId) ? calledPages[bmId] : null;
+                if (page === null) continue;
+
+                /* Get info from page */
+                const info = await BattlemetricsAPI.getBattlemetricsServerInfo(client, bmId, page);
                 if (info === null) continue;
 
                 instance.trackers[trackerId].status = info.status;
 
-                const onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(
-                    client, content.battlemetricsId, page);
+                /* Get online players from page */
+                const onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(client, bmId, page);
                 if (onlinePlayers === null) continue;
 
                 const rustplus = client.rustplusInstances[guild.id];
 
+                /* Loop through all players of the tracker */
                 for (let player of content.players) {
-                    player = instance.trackers[trackerId].players.find(e => e.steamId === player.steamId);
-                    let onlinePlayer = onlinePlayers.find(e => e.name === player.name);
+                    const onlinePlayer = onlinePlayers.find(e => e.name === player.name);
                     if (onlinePlayer) {
-                        if (player.status === false) {
+                        if (player.status === false && !firstTime) {
                             const str = client.intlGet(guild.id, 'playerJustConnectedTracker', {
                                 name: player.name,
                                 tracker: content.name
@@ -104,23 +113,26 @@ module.exports = {
                     }
                     else {
                         if (player.status === true) {
-                            const str = client.intlGet(guild.id, 'playerJustDisconnectedTracker', {
-                                name: player.name,
-                                tracker: content.name
-                            });
-
                             player.offlineTime = Date.now();
 
-                            await DiscordMessages.sendActivityNotificationMessage(
-                                guild.id, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title);
-                            if (instance.generalSettings.trackerNotifyInGameConnections && rustplus &&
-                                (rustplus.serverId === content.serverId) && content.inGame) {
-                                rustplus.sendTeamMessageAsync(str);
+                            if (!firstTime) {
+                                const str = client.intlGet(guild.id, 'playerJustDisconnectedTracker', {
+                                    name: player.name,
+                                    tracker: content.name
+                                });
+
+                                await DiscordMessages.sendActivityNotificationMessage(
+                                    guild.id, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title);
+                                if (instance.generalSettings.trackerNotifyInGameConnections && rustplus &&
+                                    (rustplus.serverId === content.serverId) && content.inGame) {
+                                    rustplus.sendTeamMessageAsync(str);
+                                }
                             }
                         }
+
                         if (!forceSearch) {
                             player.status = false;
-                            continue
+                            continue;
                         }
 
                         let playerName = null;
@@ -140,12 +152,12 @@ module.exports = {
                             content.nameChangeHistory.unshift(`${player.name} → ${playerName} (${player.steamId}).`);
                         }
 
-                        onlinePlayer = onlinePlayers.find(e => e.name === playerName);
-                        if (onlinePlayer) {
+                        const newPlayerName = onlinePlayers.find(e => e.name === playerName);
+                        if (newPlayerName) {
                             player.status = true;
-                            player.time = onlinePlayer.time;
-                            player.playerId = onlinePlayer.id;
-                            player.name = onlinePlayer.name;
+                            player.time = newPlayerName.time;
+                            player.playerId = newPlayerName.id;
+                            player.name = newPlayerName.name;
                         }
                         else {
                             player.status = false;
@@ -154,7 +166,6 @@ module.exports = {
                     }
                 }
                 client.setInstance(guild.id, instance);
-                instance = client.getInstance(guild.id);
 
                 let allOffline = true;
                 for (const player of instance.trackers[trackerId].players) {
@@ -164,7 +175,7 @@ module.exports = {
                 }
 
                 if (!instance.trackers[trackerId].allOffline && allOffline) {
-                    if (instance.generalSettings.trackerNotifyAllOffline) {
+                    if (instance.generalSettings.trackerNotifyAllOffline && !firstTime) {
                         await DiscordMessages.sendTrackerAllOfflineMessage(guild.id, trackerId);
 
                         if (rustplus && (rustplus.serverId === instance.trackers[trackerId].serverId) &&
@@ -177,7 +188,7 @@ module.exports = {
                     }
                 }
                 else if (instance.trackers[trackerId].allOffline && !allOffline) {
-                    if (instance.generalSettings.trackerNotifyAnyOnline) {
+                    if (instance.generalSettings.trackerNotifyAnyOnline && !firstTime) {
                         await DiscordMessages.sendTrackerAnyOnlineMessage(guild.id, trackerId);
 
                         if (rustplus && (rustplus.serverId === instance.trackers[trackerId].serverId) &&
@@ -197,9 +208,9 @@ module.exports = {
         }
 
         /* Update onlinePlayers Object */
-        let battlemetricsOnlinePlayers = new Object();
+        const battlemetricsOnlinePlayers = new Object();
         for (const [key, value] of Object.entries(calledPages)) {
-            let onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(client, key, value);
+            const onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(client, key, value);
             if (onlinePlayers === null) continue;
             battlemetricsOnlinePlayers[key] = onlinePlayers;
         }
