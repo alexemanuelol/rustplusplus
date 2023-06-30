@@ -252,27 +252,26 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        for (const [serverId, content] of Object.entries(instance.serverList)) {
-            if (content.active) {
-                instance.serverList[serverId].active = false;
-                client.setInstance(guildId, instance);
-                await DiscordMessages.sendServerMessage(guildId, serverId, null);
-                break;
-            }
-        }
-
         client.resetRustplusVariables(guildId);
 
-        server.active = true;
+        if (instance.activeServer !== null) {
+            await DiscordMessages.sendServerMessage(guildId, instance.activeServer, null);
+        }
+
+        instance.activeServer = ids.serverId;
         client.setInstance(guildId, instance);
-        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
         /* Disconnect previous instance is any */
-        if (rustplus) rustplus.disconnect();
+        if (rustplus) {
+            rustplus.isDeleted = true;
+            rustplus.disconnect();
+        }
 
         /* Create the rustplus instance */
         const newRustplus = client.createRustplusInstance(
             guildId, server.serverIp, server.appPort, server.steamId, server.playerToken);
+
+        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
         newRustplus.isNewConnection = true;
     }
@@ -355,11 +354,13 @@ module.exports = async (client, interaction) => {
             await interaction.message.delete();
             return;
         }
-        server.active = false;
+        instance.activeServer = null;
         client.setInstance(guildId, instance);
+
         client.resetRustplusVariables(guildId);
 
         if (rustplus) {
+            rustplus.isDeleted = true;
             rustplus.disconnect();
             delete client.rustplusInstances[guildId];
         }
@@ -380,13 +381,17 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        if (rustplus && (rustplus.serverId === ids.serverId || server.active)) {
+        if (rustplus && (rustplus.serverId === ids.serverId || rustplus.serverId === instance.activeServer)) {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switches, 100);
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switchGroups, 100);
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
 
+            instance.activeServer = null;
+            client.setInstance(guildId, instance);
+
             client.resetRustplusVariables(guildId);
 
+            rustplus.isDeleted = true;
             rustplus.disconnect();
             delete client.rustplusInstances[guildId];
         }

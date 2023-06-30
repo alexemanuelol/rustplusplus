@@ -51,6 +51,8 @@ module.exports = {
         /* Stop all custom timers */
         for (const [id, timer] of Object.entries(rustplus.timers)) timer.timer.stop();
 
+        if (rustplus.isDeleted) return;
+
         /* Was the disconnection unexpected? */
         if (client.activeRustplusInstances[guildId]) {
             if (!client.rustplusReconnecting[guildId]) {

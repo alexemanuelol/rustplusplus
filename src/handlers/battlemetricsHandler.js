@@ -34,7 +34,7 @@ module.exports = {
         for (const guildItem of client.guilds.cache) {
             const guild = guildItem[1];
             const instance = client.getInstance(guild.id);
-            const activeServer = getActiveServerId(instance.serverList);
+            const activeServer = instance.activeServer;
 
             if (activeServer !== null && instance.serverList[activeServer].battlemetricsId !== null) {
                 const battlemetricsId = instance.serverList[activeServer].battlemetricsId;
@@ -223,13 +223,4 @@ module.exports = {
             client.battlemetricsIntervalCounter += 1;
         }
     }
-}
-
-function getActiveServerId(serverList) {
-    for (const [key, value] of Object.entries(serverList)) {
-        if (value.active) {
-            return key;
-        }
-    }
-    return null;
 }
