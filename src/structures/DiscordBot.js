@@ -40,7 +40,6 @@ class DiscordBot extends Discord.Client {
         this.logger = new Logger(Path.join(__dirname, '..', '..', 'logs/discordBot.log'), 'default');
 
         this.commands = new Discord.Collection();
-        this.rustplusInstances = new Object();
         this.fcmListeners = new Object();
         this.fcmListenersLite = new Object();
         this.instances = {};
@@ -48,6 +47,11 @@ class DiscordBot extends Discord.Client {
         this.botIntl = null;
         this.enIntl = null;
         this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
+
+        this.rustplusInstances = new Object();
+        this.activeRustplusInstances = new Object();
+        this.rustplusReconnectTimers = new Object();
+        this.rustplusReconnecting = new Object();
 
         this.uptimeBot = null;
 
@@ -206,6 +210,8 @@ class DiscordBot extends Discord.Client {
         await require('../discordTools/SetupSettingsMenu')(this, guild);
 
         if (firstTime) await PermissionHandler.resetPermissions(this, guild);
+
+        this.resetRustplusVariables(guild.id);
     }
 
     async syncCredentialsWithUsers(guild) {
@@ -271,6 +277,7 @@ class DiscordBot extends Discord.Client {
 
         /* Add rustplus instance to Object */
         this.rustplusInstances[guildId] = rustplus;
+        this.activeRustplusInstances[guildId] = true;
 
         rustplus.build();
 
@@ -299,6 +306,16 @@ class DiscordBot extends Discord.Client {
                 }
             }
         });
+    }
+
+    resetRustplusVariables(guildId) {
+        this.activeRustplusInstances[guildId] = false;
+        this.rustplusReconnecting[guildId] = false;
+
+        if (this.rustplusReconnectTimers[guildId]) {
+            clearTimeout(this.rustplusReconnectTimers[guildId]);
+            this.rustplusReconnectTimers[guildId] = null;
+        }
     }
 
     findAvailableTrackerId(guildId) {

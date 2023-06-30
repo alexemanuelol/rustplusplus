@@ -261,6 +261,8 @@ module.exports = async (client, interaction) => {
             }
         }
 
+        client.resetRustplusVariables(guildId);
+
         server.active = true;
         client.setInstance(guildId, instance);
         await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
@@ -353,9 +355,9 @@ module.exports = async (client, interaction) => {
             await interaction.message.delete();
             return;
         }
-
         server.active = false;
         client.setInstance(guildId, instance);
+        client.resetRustplusVariables(guildId);
 
         if (rustplus) {
             rustplus.disconnect();
@@ -383,8 +385,9 @@ module.exports = async (client, interaction) => {
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.switchGroups, 100);
             await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelId.storageMonitors, 100);
 
+            client.resetRustplusVariables(guildId);
+
             rustplus.disconnect();
-            rustplus.isDeleted = true;
             delete client.rustplusInstances[guildId];
         }
 

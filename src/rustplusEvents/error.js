@@ -68,18 +68,18 @@ async function errorConnRefused(rustplus, client, err) {
         id: rustplus.serverId
     }), 'error');
 
-    if (!rustplus.isConnectionRefused) {
-        await DiscordMessages.sendServerChangeStateMessage(rustplus.guildId, rustplus.serverId, 1);
-        await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, 2);
-    }
+    //if (!rustplus.isConnectionRefused) {
+    //    await DiscordMessages.sendServerChangeStateMessage(rustplus.guildId, rustplus.serverId, 1);
+    //    await DiscordMessages.sendServerMessage(rustplus.guildId, rustplus.serverId, 2);
+    //}
 
-    rustplus.isReconnecting = true;
-    rustplus.isConnectionRefused = true;
+    //rustplus.isReconnecting = true;
+    //rustplus.isConnectionRefused = true;
 
-    setTimeout(() => {
-        rustplus.log(client.intlGet(null, 'reconnectingCap'), client.intlGet(null, 'reconnectingToServer'));
-        rustplus.connect();
-    }, 20000);
+    //setTimeout(() => {
+    //    rustplus.log(client.intlGet(null, 'reconnectingCap'), client.intlGet(null, 'reconnectingToServer'));
+    //    rustplus.connect();
+    //}, 20000);
 }
 
 function errorOther(rustplus, client, err) {
