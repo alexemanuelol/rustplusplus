@@ -211,7 +211,6 @@ async function pairingServer(client, guild, full, data, body) {
     }
 
     instance.serverList[serverId] = {
-        active: server ? server.active : false,
         title: data.title,
         serverIp: body.ip,
         appPort: body.port,

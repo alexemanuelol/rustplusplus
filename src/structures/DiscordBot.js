@@ -294,16 +294,13 @@ class DiscordBot extends Discord.Client {
             const instance = this.getInstance(guildId);
             if (!instance) return;
 
-            for (const [key, value] of Object.entries(instance.serverList)) {
-                if (value.active) {
-                    this.createRustplusInstance(
-                        guildId,
-                        value.serverIp,
-                        value.appPort,
-                        value.steamId,
-                        value.playerToken);
-                    break;
-                }
+            if (instance.activeServer !== null && instance.serverList.hasOwnProperty(instance.activeServer)) {
+                this.createRustplusInstance(
+                    guildId,
+                    instance.serverList[instance.activeServer].serverIp,
+                    instance.serverList[instance.activeServer].appPort,
+                    instance.serverList[instance.activeServer].steamId,
+                    instance.serverList[instance.activeServer].playerToken);
             }
         });
     }

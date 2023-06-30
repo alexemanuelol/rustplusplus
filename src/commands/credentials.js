@@ -281,8 +281,9 @@ async function setHosterCredentials(client, interaction) {
     const instance = client.getInstance(guildId);
     const rustplus = client.rustplusInstances[guildId];
     if (rustplus) {
-        instance.serverList[rustplus.serverId].active = false;
+        instance.activeServer = null;
         client.setInstance(guildId, instance);
+        client.resetRustplusVariables(guildId);
         rustplus.disconnect();
         delete client.rustplusInstances[guildId];
         await DiscordMessages.sendServerMessage(guildId, rustplus.serverId);

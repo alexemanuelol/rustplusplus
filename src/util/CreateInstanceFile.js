@@ -52,6 +52,7 @@ module.exports = (client, guild) => {
                 event: null,
                 team: null
             },
+            activeServer: null,
             serverList: {},
             serverListLite: {},
             trackers: {},
@@ -144,6 +145,7 @@ module.exports = (client, guild) => {
             if (!instance.informationMessageId.hasOwnProperty('team')) instance.informationMessageId.team = null;
         }
 
+        if (!instance.hasOwnProperty('activeServer')) instance.activeServer = null;
         if (!instance.hasOwnProperty('serverList')) instance.serverList = {};
         if (!instance.hasOwnProperty('serverListLite')) instance.serverListLite = {};
         if (!instance.hasOwnProperty('trackers')) instance.trackers = {};

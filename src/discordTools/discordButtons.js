@@ -48,7 +48,14 @@ module.exports = {
         const server = instance.serverList[serverId];
         const identifier = JSON.stringify({ "serverId": serverId });
 
-        if (state === null) state = (instance.serverList[serverId].active) ? 1 : 0;
+        if (state === null) {
+            if (instance.activeServer === serverId && Client.client.activeRustplusInstances[guildId]) {
+                state = 1;
+            }
+            else {
+                state = 0;
+            }
+        }
 
         let connectionButton = null;
         if (state === 0) {
