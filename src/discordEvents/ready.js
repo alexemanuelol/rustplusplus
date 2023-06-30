@@ -60,7 +60,9 @@ module.exports = {
 
         client.uptimeBot = new Date();
 
-        client.guilds.cache.forEach(async (guild) => {
+        for (let guildArray of client.guilds.cache) {
+            const guild = guildArray[1];
+
             try {
                 await guild.members.me.setNickname(Config.discord.username);
             }
@@ -69,7 +71,7 @@ module.exports = {
             }
             await client.syncCredentialsWithUsers(guild);
             await client.setupGuild(guild);
-        });
+        }
 
         BattlemetricsHandler.handler(client, true);
         client.battlemetricsIntervalId = setInterval(BattlemetricsHandler.handler, 60000, client);

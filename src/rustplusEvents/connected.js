@@ -30,7 +30,6 @@ module.exports = {
 
         rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'connectedToServer'));
         rustplus.isConnected = true;
-        rustplus.isConnectionRefused = false;
 
         const instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
@@ -53,8 +52,10 @@ module.exports = {
             await DiscordMessages.sendServerConnectionInvalidMessage(guildId, serverId);
             await DiscordMessages.sendServerMessage(guildId, serverId, null);
 
+            client.resetRustplusVariables(guildId);
+
             rustplus.disconnect();
-            delete client.rustplusInstances[guildId]; // TODO: move to disconnected.js?
+            delete client.rustplusInstances[guildId];
             return;
         }
         rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'rustplusOperational'));
@@ -63,16 +64,22 @@ module.exports = {
         if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
         if (!rustplus.map) rustplus.map = new Map(map.map, rustplus);
 
-        let mapWiped = false;
-        if (rustplus.map.isJpgImageChanged(map.map)) mapWiped = true;
+        //let mapWiped = false;
+        //if (rustplus.map.isJpgImageChanged(map.map)) mapWiped = true;
 
         await rustplus.map.updateMap(map.map);
         await rustplus.map.writeMap(false, true);
-        if (mapWiped) await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
+        //if (mapWiped) await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
         await DiscordMessages.sendInformationMapMessage(guildId);
 
-        if (rustplus.isReconnecting) {
-            rustplus.isReconnecting = false;
+        if (client.rustplusReconnecting[guildId]) {
+            client.rustplusReconnecting[guildId] = false;
+
+            if (client.rustplusReconnectTimers[guildId]) {
+                clearTimeout(client.rustplusReconnectTimers[guildId]);
+                client.rustplusReconnectTimers[guildId] = null;
+            }
+
             await DiscordMessages.sendServerChangeStateMessage(guildId, serverId, 0);
         }
 
