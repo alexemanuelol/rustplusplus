@@ -724,8 +724,9 @@ module.exports = {
         let status = '';
         let locations = '';
         for (const player of rustplus.team.players) {
+            const backupName = player.name === '' ? '-' : player.name;
             names += (rustplus.team.teamSize < 12) ?
-                `[${player.name}](${Constants.STEAM_PROFILES_URL}${player.steamId})` : player.name;
+                `[${backupName}](${Constants.STEAM_PROFILES_URL}${player.steamId})` : backupName;
 
             names += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
             locations += (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
