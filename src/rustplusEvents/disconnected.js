@@ -25,14 +25,15 @@ const Config = require('../../config');
 module.exports = {
     name: 'disconnected',
     async execute(rustplus, client) {
-        if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
+        if (!rustplus.isServerAvailable() && !rustplus.isDeleted) {
+            rustplus.deleteThisRustplusInstance();
+        }
 
         rustplus.log(client.intlGet(null, 'disconnectedCap'), client.intlGet(null, 'disconnectedFromServer'));
 
         const instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
-        const server = instance.serverList[serverId];
 
         // TODO! Fix potential reconnect issues for rustpluslite
         if (rustplus.leaderRustPlusInstance !== null) {

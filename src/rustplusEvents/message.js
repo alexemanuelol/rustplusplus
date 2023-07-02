@@ -27,7 +27,7 @@ const TeamHandler = require('../handlers/teamHandler.js');
 module.exports = {
     name: 'message',
     async execute(rustplus, client, message) {
-        if (!rustplus.isServerAvailable()) return rustplus.deleteThisServer();
+        if (!rustplus.isServerAvailable()) return rustplus.deleteThisRustplusInstance();
 
         if (!rustplus.isOperational) return;
 
