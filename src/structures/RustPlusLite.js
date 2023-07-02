@@ -21,23 +21,18 @@
 const RustPlusLib = require('@liamcottle/rustplus.js');
 
 const Client = require('../../index.ts');
+const Config = require('../../config');
 
 class RustPlusLite extends RustPlusLib {
-    constructor(guildId, logger, serverIp, appPort, steamId, playerToken) {
+    constructor(guildId, logger, rustplus, serverIp, appPort, steamId, playerToken) {
         super(serverIp, appPort, steamId, playerToken);
 
         this.serverId = `${this.server}-${this.port}`;
         this.guildId = guildId;
-
         this.logger = logger;
+        this.rustplus = rustplus;
 
-        /* Status flags */
         this.isActive = true;
-        this.isConnected = false;
-        this.isReconnecting = false;
-        this.isOperational = false;
-        this.isConnectionRefused = false;
-        this.isDeleted = false;
 
         this.loadRustPlusLiteEvents();
     }
@@ -107,58 +102,53 @@ class RustPlusLite extends RustPlusLib {
     }
 }
 
-async function rustPlusLiteConnectedEvent(rustplus) {
-    rustplus.log(Client.client.intlGet(null, 'connectedCap'),
+async function rustPlusLiteConnectedEvent(rustplusLite) {
+    rustplusLite.log(Client.client.intlGet(null, 'connectedCap'),
         Client.client.intlGet(null, 'connectedToServer'));
-    rustplus.isConnected = true;
-    rustplus.isConnectionRefused = false;
 
-    const info = await rustplus.getInfoAsync();
-    if (!rustplus.isResponseValid(info)) {
-        rustplus.log(Client.client.intlGet(null, 'errorCap'),
+    const info = await rustplusLite.getInfoAsync();
+    if (!rustplusLite.isResponseValid(info)) {
+        rustplusLite.log(Client.client.intlGet(null, 'errorCap'),
             Client.client.intlGet(null, 'somethingWrongWithConnection'), 'error');
-
-        rustplus.disconnect();
+        rustplusLite.disconnect();
         return;
     }
-    rustplus.log(Client.client.intlGet(null, 'connectedCap'),
+    rustplusLite.log(Client.client.intlGet(null, 'connectedCap'),
         Client.client.intlGet(null, 'rustplusOperational'));
-    rustplus.isReconnecting = false;
-    rustplus.isOperational = true;
+
+    if (Client.client.rustplusReconnectTimers[this.guildId]) {
+        clearTimeout(Client.client.rustplusReconnectTimers[this.guildId]);
+        Client.client.rustplusReconnectTimers[this.guildId] = null;
+    }
 }
 
-async function rustPlusLiteConnectingEvent(rustplus) {
-    rustplus.log(Client.client.intlGet(null, 'connectingCap'),
+async function rustPlusLiteConnectingEvent(rustplusLite) {
+    rustplusLite.log(Client.client.intlGet(null, 'connectingCap'),
         Client.client.intlGet(null, 'connectingToServer'));
 }
 
-async function rustPlusLiteDisconnectedEvent(rustplus) {
-    rustplus.log(Client.client.intlGet(null, 'disconnectedCap'),
+async function rustPlusLiteDisconnectedEvent(rustplusLite) {
+    rustplusLite.log(Client.client.intlGet(null, 'disconnectedCap'),
         Client.client.intlGet(null, 'disconnectedFromServer'));
-    rustplus.isConnected = false;
-    rustplus.isOperational = false;
 
-    if (rustplus.isActive && !rustplus.isConnectionRefused) {
-        rustplus.isReconnecting = true;
-        rustplus.log(Client.client.intlGet(null, 'reconnectingCap'),
+    /* Was the disconnection unexpected? */
+    if (rustplusLite.isActive && Client.client.activeRustplusInstances[this.guildId]) {
+        rustplusLite.log(Client.client.intlGet(null, 'reconnectingCap'),
             Client.client.intlGet(null, 'reconnectingToServer'));
-        rustplus.connect();
+
+        if (Client.client.rustplusLiteReconnectTimers[this.guildId]) {
+            clearTimeout(Client.client.rustplusLiteReconnectTimers[this.guildId]);
+            Client.client.rustplusLiteReconnectTimers[this.guildId] = null;
+        }
+
+        Client.client.rustplusLiteReconnectTimers[this.guildId] = setTimeout(
+            this.rustplus.updateLeaderRustPlusInstance.bind(this.rustplus),
+            Config.general.reconnectIntervalMs);
     }
 }
 
-async function rustPlusLiteErrorEvent(rustplus, error) {
-    rustplus.log(Client.client.intlGet(null, 'errorCap'), err, 'error');
-
-    if (error.code === 'ECONNREFUSED') {
-        rustplus.isReconnecting = true;
-        rustplus.isConnectionRefused = true;
-
-        setTimeout(() => {
-            rustplus.log(Client.client.intlGet(null, 'reconnectingCap'),
-                Client.client.intlGet(null, 'reconnectingToServer'));
-            rustplus.connect();
-        }, 20000);
-    }
+async function rustPlusLiteErrorEvent(rustplusLite, error) {
+    rustplusLite.log(Client.client.intlGet(null, 'errorCap'), err, 'error');
 }
 
 module.exports = RustPlusLite;

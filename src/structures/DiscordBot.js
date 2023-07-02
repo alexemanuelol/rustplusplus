@@ -51,6 +51,7 @@ class DiscordBot extends Discord.Client {
         this.rustplusInstances = new Object();
         this.activeRustplusInstances = new Object();
         this.rustplusReconnectTimers = new Object();
+        this.rustplusLiteReconnectTimers = new Object();
         this.rustplusReconnecting = new Object();
         this.rustplusMaps = new Object();
 
@@ -314,6 +315,10 @@ class DiscordBot extends Discord.Client {
         if (this.rustplusReconnectTimers[guildId]) {
             clearTimeout(this.rustplusReconnectTimers[guildId]);
             this.rustplusReconnectTimers[guildId] = null;
+        }
+        if (this.rustplusLiteReconnectTimers[guildId]) {
+            clearTimeout(this.rustplusLiteReconnectTimers[guildId]);
+            this.rustplusLiteReconnectTimers[guildId] = null;
         }
     }
 
