@@ -148,6 +148,10 @@ class RustPlus extends RustPlusLib {
 
     updateLeaderRustPlusLiteInstance() {
         if (this.leaderRustPlusInstance !== null) {
+            if (Client.client.rustplusLiteReconnectTimers[this.guildId]) {
+                clearTimeout(Client.client.rustplusLiteReconnectTimers[this.guildId]);
+                Client.client.rustplusLiteReconnectTimers[this.guildId] = null;
+            }
             this.leaderRustPlusInstance.isActive = false;
             this.leaderRustPlusInstance.disconnect();
             this.leaderRustPlusInstance = null;

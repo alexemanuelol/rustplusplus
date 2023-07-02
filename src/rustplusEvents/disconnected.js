@@ -31,12 +31,14 @@ module.exports = {
 
         rustplus.log(client.intlGet(null, 'disconnectedCap'), client.intlGet(null, 'disconnectedFromServer'));
 
-        const instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
 
-        // TODO! Fix potential reconnect issues for rustpluslite
         if (rustplus.leaderRustPlusInstance !== null) {
+            if (Client.client.rustplusLiteReconnectTimers[this.guildId]) {
+                clearTimeout(Client.client.rustplusLiteReconnectTimers[this.guildId]);
+                Client.client.rustplusLiteReconnectTimers[this.guildId] = null;
+            }
             rustplus.leaderRustPlusInstance.isActive = false;
             rustplus.leaderRustPlusInstance.disconnect();
             rustplus.leaderRustPlusInstance = null;
