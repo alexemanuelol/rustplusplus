@@ -50,11 +50,8 @@ class RustPlus extends RustPlusLib {
         this.uptimeServer = null;
 
         /* Status flags */
-        this.isConnected = false;           /* Connected to the server, but request not yet verified. */
-        this.isReconnecting = false;        /* Trying to reconnect? */
         this.isOperational = false;         /* Connected to the server, and request is verified. */
         this.isDeleted = false;             /* Is the rustplus instance deleted? */
-        this.isConnectionRefused = false;   /* Refused connection when trying to connect? */
         this.isNewConnection = false;       /* Is it an actively selected connection (pressed CONNECT button)? */
         this.isFirstPoll = true;            /* Is this the first poll since connection started? */
 
@@ -218,10 +215,10 @@ class RustPlus extends RustPlusLib {
 
     deleteThisRustplusInstance() {
         this.isDeleted = true;
+        this.disconnect();
 
         if (Client.client.rustplusInstances.hasOwnProperty(this.guildId)) {
             if (Client.client.rustplusInstances[this.guildId].serverId === this.serverId) {
-                this.disconnect();
                 delete Client.client.rustplusInstances[this.guildId];
                 return true;
             }
