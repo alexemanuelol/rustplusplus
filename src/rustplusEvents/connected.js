@@ -62,15 +62,28 @@ module.exports = {
 
         const info = await rustplus.getInfoAsync();
         if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
-        if (!rustplus.map) rustplus.map = new Map(map.map, rustplus);
 
-        //let mapWiped = false;
-        //if (rustplus.map.isJpgImageChanged(map.map)) mapWiped = true;
+        if (client.rustplusMaps.hasOwnProperty(guildId)) {
+            if (client.isJpgImageChanged(guildId, map.map)) {
+                rustplus.map = new Map(map.map, rustplus);
 
-        await rustplus.map.updateMap(map.map);
-        await rustplus.map.writeMap(false, true);
-        //if (mapWiped) await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
-        await DiscordMessages.sendInformationMapMessage(guildId);
+                await rustplus.map.writeMap(false, true);
+                await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
+                await DiscordMessages.sendInformationMapMessage(guildId);
+            }
+            else {
+                rustplus.map = new Map(map.map, rustplus);
+
+                await rustplus.map.writeMap(false, true);
+                await DiscordMessages.sendInformationMapMessage(guildId);
+            }
+        }
+        else {
+            rustplus.map = new Map(map.map, rustplus);
+
+            await rustplus.map.writeMap(false, true);
+            await DiscordMessages.sendInformationMapMessage(guildId);
+        }
 
         if (client.rustplusReconnecting[guildId]) {
             client.rustplusReconnecting[guildId] = false;
