@@ -52,6 +52,7 @@ class DiscordBot extends Discord.Client {
         this.activeRustplusInstances = new Object();
         this.rustplusReconnectTimers = new Object();
         this.rustplusReconnecting = new Object();
+        this.rustplusMaps = new Object();
 
         this.uptimeBot = null;
 
@@ -308,11 +309,16 @@ class DiscordBot extends Discord.Client {
     resetRustplusVariables(guildId) {
         this.activeRustplusInstances[guildId] = false;
         this.rustplusReconnecting[guildId] = false;
+        delete this.rustplusMaps[guildId];
 
         if (this.rustplusReconnectTimers[guildId]) {
             clearTimeout(this.rustplusReconnectTimers[guildId]);
             this.rustplusReconnectTimers[guildId] = null;
         }
+    }
+
+    isJpgImageChanged(guildId, map) {
+        return ((JSON.stringify(this.rustplusMaps[guildId])) !== (JSON.stringify(map.jpgImage)));
     }
 
     findAvailableTrackerId(guildId) {

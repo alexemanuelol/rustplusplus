@@ -30,7 +30,7 @@ class Map {
     constructor(map, rustplus) {
         this._width = map.width;
         this._height = map.height;
-        this._jpgImage = map.jpgImage;
+        Client.client.rustplusMaps[rustplus.guildId] = map.jpgImage;
         this._oceanMargin = map.oceanMargin;
         this._monuments = map.monuments;
         this._background = map.background;
@@ -255,8 +255,6 @@ class Map {
     set width(width) { this._width = width; }
     get height() { return this._height; }
     set height(height) { this._height = height; }
-    get jpgImage() { return this._jpgImage; }
-    set jpgImage(jpgImage) { this._jpgImage = jpgImage; }
     get oceanMargin() { return this._oceanMargin; }
     set oceanMargin(oceanMargin) { this._oceanMargin = oceanMargin; }
     get monuments() { return this._monuments; }
@@ -275,7 +273,6 @@ class Map {
     /* Change checkers */
     isWidthChanged(map) { return ((this.width) !== (map.width)); }
     isHeightChanged(map) { return ((this.height) !== (map.height)); }
-    isJpgImageChanged(map) { return ((JSON.stringify(this.jpgImage)) !== (JSON.stringify(map.jpgImage))); }
     isOceanMarginChanged(map) { return ((this.oceanMargin) !== (map.oceanMargin)); }
     isMonumentsChanged(map) { return ((JSON.stringify(this.monuments)) !== (JSON.stringify(map.monuments))); }
     isBackgroundChanged(map) { return ((this.background) !== (map.background)); }
@@ -283,7 +280,7 @@ class Map {
     updateMap(map) {
         this.width = map.width;
         this.height = map.height;
-        this.jpgImage = map.jpgImage;
+        Client.client.rustplusMaps[this.rustplus.guildId] = map.jpgImage;
         this.oceanMargin = map.oceanMargin;
         this.monuments = map.monuments;
         this.background = map.background;
@@ -298,7 +295,7 @@ class Map {
     }
 
     async writeMapClean() {
-        await Fs.writeFileSync(this.mapMarkerImageMeta.map.image, this.jpgImage);
+        await Fs.writeFileSync(this.mapMarkerImageMeta.map.image, Client.client.rustplusMaps[this.rustplus.guildId]);
     }
 
     async setupFont() {
