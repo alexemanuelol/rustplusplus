@@ -22,7 +22,7 @@ const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
 module.exports = async (client, rustplus) => {
-    let instance = client.getInstance(rustplus.guildId);
+    const instance = client.getInstance(rustplus.guildId);
     const guildId = rustplus.guildId;
     const serverId = rustplus.serverId;
 
@@ -31,13 +31,13 @@ module.exports = async (client, rustplus) => {
     }
 
     for (const entityId in instance.serverList[serverId].storageMonitors) {
-        instance = client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const info = await rustplus.getEntityInfoAsync(entityId);
 
-
         if (!(await rustplus.isResponseValid(info))) {
-            await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
+            if (entity.reachable === true) {
+                await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
+            }
             entity.reachable = false;
         }
         else {
