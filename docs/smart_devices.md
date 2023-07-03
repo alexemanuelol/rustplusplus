@@ -24,7 +24,7 @@ From In-Game you can interact with Smart Switches by using the custom command fo
 
 ### Groups
 
-You can also create Smart Switch Groups. By doing this you can easily control multiple Smart Switches with one click of a button (Discord) or with a custom command for the group (In-Game). To create a group you run the command `/switch create_group` and then `/switch add_switch` to add a switch to the group.
+You can also create Smart Switch Groups. By doing this you can easily control multiple Smart Switches with one click of a button (Discord) or with a custom command for the group (In-Game). To create a group you simply press the `CREATE GROUP` button in the servers channel. This will create an embed in the switchgroups channel.
 <br><br>
 From In-Game you can interact with the Smart Switch Group by using the custom command for the group. If your groups custom command is `group` and your prefix is `!`, you can run the following commands:
 
