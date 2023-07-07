@@ -864,6 +864,11 @@
         "name": "Blue Dog Tags",
         "description": "Blue Dog Tags"
     },
+    "1046904719": {
+        "shortname": "diverhatchet",
+        "name": "Abyss Metal Hatchet",
+        "description": "Metal hatchet, reclaimed from the abyss, perfect for survival and crafting"
+    },
     "1052926200": {
         "shortname": "mining.quarry",
         "name": "Mining Quarry",
@@ -1434,6 +1439,11 @@
         "name": "Single Horse Saddle",
         "description": "A horse saddle with one seat. Having this item allows you to claim a horse in a stable by holding E and selecting the \"Claim\" option"
     },
+    "1561022037": {
+        "shortname": "diverpickaxe",
+        "name": "Abyss Metal Pickaxe",
+        "description": "Plucked from the abyss, this Metal Pickaxe is a prized possession for any survivor"
+    },
     "1568388703": {
         "shortname": "diesel_barrel",
         "name": "Diesel Fuel",
@@ -1723,6 +1733,11 @@
         "shortname": "grenade.beancan",
         "name": "Beancan Grenade",
         "description": "Unreliable explosive device."
+    },
+    "1846605708": {
+        "shortname": "divertorch",
+        "name": "Abyss Torch",
+        "description": "Illuminate the underwater depths with this durable and waterproof diving torch"
     },
     "1849887541": {
         "shortname": "electric.fuelgenerator.small",
@@ -2839,6 +2854,11 @@
         "name": "Arctic Suit",
         "description": "An arctic variant of the hazmat suit which trades radiation for cold protection."
     },
+    "-797592358": {
+        "shortname": "hazmatsuit.diver",
+        "name": "Abyss Divers Suit",
+        "description": "A divers suit found in the abyss, doubles as a reliable hazmat suit"
+    },
     "-560304835": {
         "shortname": "hazmatsuit.spacesuit",
         "name": "Space Suit",
@@ -3273,6 +3293,11 @@
         "shortname": "rf_pager",
         "name": "RF Pager",
         "description": "An RF Pager. An audible tone will be produced when a signal is picked up on the listening frequency. Can be set to silent mode."
+    },
+    "-139037392": {
+        "shortname": "rifle.ak.diver",
+        "name": "Abyss Assault Rifle",
+        "description": "A waterlogged assault rifle from the abyss"
     },
     "-1335497659": {
         "shortname": "rifle.ak.ice",
@@ -3716,8 +3741,8 @@
     },
     "-1003665711": {
         "shortname": "supertea",
-        "name": "Super Tea",
-        "description": "Super Tea, more health, more ore, more wood, more scrap"
+        "name": "Super Serum",
+        "description": "Super Serum, more health, more ore, more wood, more scrap"
     },
     "-1108136649": {
         "shortname": "tactical.gloves",
@@ -3758,6 +3783,11 @@
         "shortname": "trap.landmine",
         "name": "Homemade Landmine",
         "description": "Homemade Landmine. If you stand on one, you can ask a friend to disarm it before it explodes."
+    },
+    "-561148628": {
+        "shortname": "tugboat",
+        "name": "Tugboat",
+        "description": ""
     },
     "-1478445584": {
         "shortname": "tunalight",
