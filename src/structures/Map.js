@@ -105,6 +105,11 @@ class Map {
                 map: Client.client.intlGet(rustplus.guildId, 'giantExcavatorPit').toUpperCase(),
                 radius: 110
             },
+            ferryterminal: {
+                clean: Client.client.intlGet(rustplus.guildId, 'ferryTerminal'),
+                map: Client.client.intlGet(rustplus.guildId, 'ferryTerminal').toUpperCase(),
+                radius: 88
+            },
             fishing_village_display_name: {
                 clean: Client.client.intlGet(rustplus.guildId, 'fishingVillage'),
                 map: Client.client.intlGet(rustplus.guildId, 'fishingVillage').toUpperCase(),
