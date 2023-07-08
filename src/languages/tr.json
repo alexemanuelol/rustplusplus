@@ -200,6 +200,8 @@
     "couldNotCreateCategory": "Kategori oluşturulamadı: {name}",
     "couldNotCreateTextChannel": "Yazı kanalı oluşturulamadı: {name}",
     "couldNotDeferInteraction": "Etkilşim ertelenemedi.",
+    "couldNotDeleteCategory": "Could not delete category: {categoryId}",
+    "couldNotDeleteChannel": "Could not delete channel: {channelId}",
     "couldNotDeleteMessage": "Mesaj silinmedi: {message}",
     "couldNotFindAnyPlayers": "Herhangi bir oyuncu bulunamadı.",
     "couldNotFindCategory": "Kategori bulunamadı: {category}",
