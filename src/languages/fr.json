@@ -200,6 +200,8 @@
     "couldNotCreateCategory": "Impossible de créer la catégorie: {name}",
     "couldNotCreateTextChannel": "Impossible de créer le salon textuel : {name}",
     "couldNotDeferInteraction": "Impossible de reporter l'interaction.",
+    "couldNotDeleteCategory": "Could not delete category: {categoryId}",
+    "couldNotDeleteChannel": "Could not delete channel: {channelId}",
     "couldNotDeleteMessage": "Impossible de supprimer le message : {message}",
     "couldNotFindAnyPlayers": "Impossible de trouver des joueurs.",
     "couldNotFindCategory": "Impossible de trouver la catégorie: {category}",
