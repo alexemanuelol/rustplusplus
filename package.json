@@ -37,6 +37,7 @@
         "winston": "^3.8.2"
     },
     "resolutions": {
-        "jpeg-js": "0.4.4"
+        "jpeg-js": "0.4.4",
+        "protobufjs": "7.2.4"
     }
 }
