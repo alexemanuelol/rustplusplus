@@ -200,6 +200,8 @@
     "couldNotCreateCategory": "Det gick inte att skapa kategorin: {name}.",
     "couldNotCreateTextChannel": "Det gick inte att skapa textkanalen: {name}.",
     "couldNotDeferInteraction": "Kunde inte skjuta upp interaktionen.",
+    "couldNotDeleteCategory": "Could not delete category: {categoryId}",
+    "couldNotDeleteChannel": "Could not delete channel: {channelId}",
     "couldNotDeleteMessage": "Kunde inte radera meddelandet: {message}.",
     "couldNotFindAnyPlayers": "Kunde inte hitta några spelare.",
     "couldNotFindCategory": "Kunde inte hitta kategorin: {category}.",

@@ -200,6 +200,8 @@
     "couldNotCreateCategory": "Could not create category: {name}",
     "couldNotCreateTextChannel": "Could not create text channel: {name}",
     "couldNotDeferInteraction": "Could not defer interaction.",
+    "couldNotDeleteCategory": "Could not delete category: {categoryId}",
+    "couldNotDeleteChannel": "Could not delete channel: {channelId}",
     "couldNotDeleteMessage": "Could not delete message: {message}",
     "couldNotFindAnyPlayers": "Could not find any players.",
     "couldNotFindCategory": "Could not find category: {category}",

@@ -200,6 +200,8 @@
     "couldNotCreateCategory": "{name} 카테고리를 생성할 수 없습니다.",
     "couldNotCreateTextChannel": "{name} 텍스트 채널을 생성할 수 없습니다.",
     "couldNotDeferInteraction": "인스턴스를 수행할 수 없습니다..",
+    "couldNotDeleteCategory": "Could not delete category: {categoryId}",
+    "couldNotDeleteChannel": "Could not delete channel: {channelId}",
     "couldNotDeleteMessage": "{message} 메시지를 삭제할 수 없습니다.",
     "couldNotFindAnyPlayers": "플레이어를 찾을 수 없습니다.",
     "couldNotFindCategory": "{category} 카테고리를 찾을 수 없습니다.",

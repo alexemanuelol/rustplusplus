@@ -200,6 +200,8 @@
     "couldNotCreateCategory": "Не удалось создать категорию: {name}",
     "couldNotCreateTextChannel": "Не удалось создать канал: {name}",
     "couldNotDeferInteraction": "Не удалось отложить взаимодействие.",
+    "couldNotDeleteCategory": "Could not delete category: {categoryId}",
+    "couldNotDeleteChannel": "Could not delete channel: {channelId}",
     "couldNotDeleteMessage": "Не удалось удалить сообщение: {message}",
     "couldNotFindAnyPlayers": "Не удалось найти игроков.",
     "couldNotFindCategory": "Не удалось найти категорию: {category}",

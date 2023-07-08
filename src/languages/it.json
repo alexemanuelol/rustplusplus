@@ -200,6 +200,8 @@
     "couldNotCreateCategory": "Impossibile creare la categoria: {name}",
     "couldNotCreateTextChannel": "Impossibile creare il canale di testo: {name}",
     "couldNotDeferInteraction": "Impossibile rinviare l'interazione.",
+    "couldNotDeleteCategory": "Could not delete category: {categoryId}",
+    "couldNotDeleteChannel": "Could not delete channel: {channelId}",
     "couldNotDeleteMessage": "Impossibile eliminare il messaggio: {message}",
     "couldNotFindAnyPlayers": "Impossibile trovare alcun giocatore.",
     "couldNotFindCategory": "Impossibile trovare la categoria: {category}",
