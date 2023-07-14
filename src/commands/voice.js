@@ -20,8 +20,7 @@
 */
 
 const Builder = require('@discordjs/builders');
-const {joinVoiceChannel, getVoiceConnection, createAudioPlayer, createAudioResource, VoiceConnectionStatus} = require('@discordjs/voice');
-const DiscordMessages = require('../discordTools/discordMessages.js');
+const {joinVoiceChannel, getVoiceConnection, createAudioPlayer, createAudioResource} = require('@discordjs/voice');
 
 module.exports = {
     name: 'voice',
@@ -35,11 +34,7 @@ module.exports = {
 				.setDescription(client.intlGet(guildId, 'commandsVcJoinDesc')))
             .addSubcommand(subcommand => subcommand
                 .setName('test')
-                .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc'))
-                .addStringOption(option => option
-                    .setName('tts')
-                    .setDescription('Text to speech')
-                    .setRequired(false)))
+                .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc')))
             .addSubcommand(subcommand => subcommand
                 .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc')))
@@ -57,8 +52,6 @@ module.exports = {
     },
 
     async execute(client, interaction) {
-        const instance = client.getInstance(interaction.guildId);
-
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
 
@@ -73,9 +66,6 @@ module.exports = {
                         channelId: voiceChannel.id,
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
-                    });
-                    connection.on(VoiceConnectionStatus.Ready, () => {
-                        console.log('The connection has entered the Ready state - ready to play audio!');
                     });
                 }
                 
@@ -93,11 +83,10 @@ module.exports = {
 
             case 'test': {
                 const connection = getVoiceConnection(interaction.guild.id);
-                if (connection && interaction.member.voice.channel.id == connection.joinConfig.channelId) {
-                    let speak = 'https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=' + encodeURIComponent(interaction.options.getString('tts'));
+                if (connection) {
                     const player = createAudioPlayer();
                     connection.subscribe(player);
-                    let resource = createAudioResource(speak);
+                    let resource = createAudioResource('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
                     player.play(resource);
                 }
             } break;
