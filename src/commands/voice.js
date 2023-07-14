@@ -20,7 +20,7 @@
 */
 
 const Builder = require('@discordjs/builders');
-
+const {joinVoiceChannel, getVoiceConnection, createAudioPlayer, createAudioResource, VoiceConnectionStatus} = require('@discordjs/voice');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -31,21 +31,28 @@ module.exports = {
             .setName('voice')
             .setDescription(client.intlGet(guildId, 'commandsVoiceDesc'))
 			.addSubcommand(subcommand => subcommand
-				.setName('vcjoin')
+				.setName('join')
 				.setDescription(client.intlGet(guildId, 'commandsVcJoinDesc')))
             .addSubcommand(subcommand => subcommand
-                .setName('vcleave')
+                .setName('test')
+                .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc'))
+                .addStringOption(option => option
+                    .setName('tts')
+                    .setDescription('Text to speech')
+                    .setRequired(false)))
+            .addSubcommand(subcommand => subcommand
+                .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc')))
             .addSubcommand(subcommand => subcommand
-                .setName('vcsettings')
+                .setName('settings')
                 .setDescription(client.intlGet(guildId, 'commandsVcSettingsDesc'))
                 .addStringOption(option => option
                     .setName('gender')
-                    .setDescription(client.intlGet(guildId, 'commandsVcSettingsGenderDesc'))
-                    .setRequired(true))
+                    .setDescription(client.intlGet(guildId, 'commandsVcGenderDesc'))
+                    .setRequired(true)
                     .addChoices(
                         { name: client.intlGet(guildId, 'commandsVcMale'), value: 'Male' },
-                        { name: client.intlGet(guildId, 'commandsVcFemale'), value: 'Female' }))
+                        { name: client.intlGet(guildId, 'commandsVcFemale'), value: 'Female' })))
 
     },
 
@@ -56,17 +63,47 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		switch (interaction.options.getSubcommand()) {
-			case 'vcjoin': {
+			case 'join': {
+                const voiceState = interaction.member.voice;
+                if (voiceState && voiceState.channel) {
+                    const voiceChannelId = voiceState.channel.id;
+                    const voiceChannel = interaction.guild.channels.cache.get(voiceChannelId);
+                    console.log(`Joining voice channel ${voiceChannel.name} with the ID ${voiceChannel.id} in guild ${interaction.guild.name}`);
+                    const connection = joinVoiceChannel({
+                        channelId: voiceChannel.id,
+                        guildId: interaction.guild.id,
+                        adapterCreator: interaction.guild.voiceAdapterCreator,
+                    });
+                    connection.on(VoiceConnectionStatus.Ready, () => {
+                        console.log('The connection has entered the Ready state - ready to play audio!');
+                    });
+                }
+                
 			} break;
 
-            case 'vcleave': {
+            case 'leave': {
+                const connection = getVoiceConnection(interaction.guild.id);
+                if (connection) {
+                    connection.destroy();
+                }
             } break;
 
-            case 'vcsettings': {
+            case 'settings': {
+            } break;
+
+            case 'test': {
+                const connection = getVoiceConnection(interaction.guild.id);
+                if (connection && interaction.member.voice.channel.id == connection.joinConfig.channelId) {
+                    let speak = 'https://api.streamelements.com/kappa/v2/speech?voice=Brian&text=' + encodeURIComponent(interaction.options.getString('tts'));
+                    const player = createAudioPlayer();
+                    connection.subscribe(player);
+                    let resource = createAudioResource(speak);
+                    player.play(resource);
+                }
             } break;
 
 			default: {
 			} break;
 		}
-    }
+    },
 };
