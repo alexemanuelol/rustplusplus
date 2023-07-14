@@ -1,5 +1,6 @@
 {
     "language": "en",
+    "gender": "male",
     "prefix": "!",
     "muteInGameBotMessages": false,
     "trademark": "rustplusplus",
