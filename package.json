@@ -27,7 +27,7 @@
         "colors": "^1.4.0",
         "discord-api-types": "^0.37.37",
         "discord.js": "^14.8.0",
-        "ffmpeg-static": "^5.1.0",
+        "ffmpeg": "^0.0.4",
         "fuse.js": "^6.6.2",
         "gm": "^1.25.0",
         "jimp": "^0.22.7",
