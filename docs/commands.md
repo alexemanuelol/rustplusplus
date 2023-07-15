@@ -22,6 +22,7 @@ Slash Command | Description
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
 [**/switch**](commands.md#switch) | Operations on Smart Switches.
 [**/uptime**](commands.md#uptime) | Display uptime of the bot and server.
+[**/voice**](commands.md#voice) | Operations on Voice Feature.
 
 
 ## **/alarm**
@@ -204,6 +205,17 @@ Subcommand | Options | Description | Required
 `server` | &nbsp; | Display uptime of server. | &nbsp;
 
 ![Discord Slash Command uptime Image](images/uptime.png)
+
+## **/voice**
+
+> **Operations on Voice Feature.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+`join` | &nbsp; | Bot Joins a Voicechannel. | &nbsp;
+`leave` | &nbsp; | Bot Leaves a Voicechannel. | &nbsp;
+
+![Discord Slash Command uptime Image](images/voice.png)
 
 
 # In-Game Commands
