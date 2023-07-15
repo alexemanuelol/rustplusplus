@@ -881,4 +881,12 @@ module.exports = {
             title: uptime
         });
     },
+
+    getVoiceEmbed: function (guildId, state) {
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: state
+        });
+    },
 }

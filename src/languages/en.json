@@ -191,6 +191,8 @@
     "commandsVcMale": "Male",
     "commandsVcSettingsDesc": "Changes the Bot's voice settings.",
     "commandsVoiceDesc": "Bot Voice Commands",
+    "commandsVoiceLeave": "Leaving voice channel {name} with the ID {id} in guild {guild}",
+    "commandsVoiceJoin": "Joining voice channel {name} with the ID {id} in guild {guild}",
     "connect": "Connect",
     "connectCap": "CONNECT",
     "connectedCap": "CONNECTED",

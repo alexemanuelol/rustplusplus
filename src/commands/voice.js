@@ -21,6 +21,7 @@
 
 const Builder = require('@discordjs/builders');
 const {joinVoiceChannel, getVoiceConnection, createAudioPlayer, createAudioResource} = require('@discordjs/voice');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
     name: 'voice',
@@ -61,12 +62,13 @@ module.exports = {
                 if (voiceState && voiceState.channel) {
                     const voiceChannelId = voiceState.channel.id;
                     const voiceChannel = interaction.guild.channels.cache.get(voiceChannelId);
-                    console.log(`Joining voice channel ${voiceChannel.name} with the ID ${voiceChannel.id} in guild ${interaction.guild.name}`);
                     const connection = joinVoiceChannel({
                         channelId: voiceChannel.id,
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
                     });
+                    await DiscordMessages.sendVoiceMessage(interaction, 'Joined voice channel!');
+                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin', { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
                 }
                 
 			} break;
@@ -74,7 +76,12 @@ module.exports = {
             case 'leave': {
                 const connection = getVoiceConnection(interaction.guild.id);
                 if (connection) {
+                    const voiceState = interaction.member.voice;
+                    const voiceChannelId = voiceState.channel.id;
+                    const voiceChannel = interaction.guild.channels.cache.get(voiceChannelId);
                     connection.destroy();
+                    await DiscordMessages.sendVoiceMessage(interaction, 'Left voice channel!');
+                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceLeave', { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
                 }
             } break;
 
