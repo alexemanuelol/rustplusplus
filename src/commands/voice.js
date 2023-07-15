@@ -19,7 +19,6 @@
 
 */
 
-const voice = require('../discordTools/discordVoice.js');
 const Builder = require('@discordjs/builders');
 const {joinVoiceChannel, getVoiceConnection, createAudioPlayer, createAudioResource} = require('@discordjs/voice');
 const DiscordMessages = require('../discordTools/discordMessages.js');
