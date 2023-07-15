@@ -273,7 +273,7 @@ module.exports = {
             }));
     },
 
-    getNotificationButtons: function (guildId, setting, discordActive, inGameActive) {
+    getNotificationButtons: function (guildId, setting, discordActive, inGameActive, voiceActive) {
         const identifier = JSON.stringify({ "setting": setting });
 
         return new Discord.ActionRowBuilder().addComponents(
@@ -286,6 +286,11 @@ module.exports = {
                 customId: `InGameNotification${identifier}`,
                 label: Client.client.intlGet(guildId, 'inGameCap'),
                 style: inGameActive ? SUCCESS : DANGER
+            }),
+            module.exports.getButton({
+                customId: `VoiceNotification${identifier}`,
+                label: Client.client.intlGet(guildId, 'voiceCap'),
+                style: voiceActive ? SUCCESS : DANGER
             }));
     },
 

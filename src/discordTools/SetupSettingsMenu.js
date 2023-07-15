@@ -258,7 +258,8 @@ async function setupNotificationSettings(client, guildId, channel) {
                 DiscordButtons.getNotificationButtons(
                     guildId, setting,
                     instance.notificationSettings[setting].discord,
-                    instance.notificationSettings[setting].inGame)],
+                    instance.notificationSettings[setting].inGame,
+                    instance.notificationSettings[setting].voice)],
             files: [
                 new Discord.AttachmentBuilder(
                     Path.join(__dirname, '..',

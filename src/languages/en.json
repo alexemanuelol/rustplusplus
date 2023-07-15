@@ -618,6 +618,7 @@
     "userSaid": "{user} said, {text}",
     "vendingMachine": "Vending Machine",
     "vendingMachineDetectedSetting": "When a new Vending Machine is detected, send a notification.",
+    "voiceCap": "VOICE",
     "warningCap": "WARNING",
     "waterTreatmentPlant": "Water Treatment Plant",
     "websiteCap": "WEBSITE",
