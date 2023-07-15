@@ -19,6 +19,7 @@
 
 */
 
+const voice = require('../discordTools/discordVoice.js');
 const Builder = require('@discordjs/builders');
 const {joinVoiceChannel, getVoiceConnection, createAudioPlayer, createAudioResource} = require('@discordjs/voice');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -34,21 +35,8 @@ module.exports = {
 				.setName('join')
 				.setDescription(client.intlGet(guildId, 'commandsVcJoinDesc')))
             .addSubcommand(subcommand => subcommand
-                .setName('test')
-                .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc')))
-            .addSubcommand(subcommand => subcommand
                 .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc')))
-            .addSubcommand(subcommand => subcommand
-                .setName('settings')
-                .setDescription(client.intlGet(guildId, 'commandsVcSettingsDesc'))
-                .addStringOption(option => option
-                    .setName('gender')
-                    .setDescription(client.intlGet(guildId, 'commandsVcGenderDesc'))
-                    .setRequired(true)
-                    .addChoices(
-                        { name: client.intlGet(guildId, 'commandsVcMale'), value: 'Male' },
-                        { name: client.intlGet(guildId, 'commandsVcFemale'), value: 'Female' })))
 
     },
 
@@ -70,31 +58,18 @@ module.exports = {
                     await DiscordMessages.sendVoiceMessage(interaction, 'Joined voice channel!');
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin', { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
                 }
+                else {
+                    await DiscordMessages.sendVoiceMessage(interaction, 'You need to join a voice channel first!');
+                }
                 
 			} break;
 
             case 'leave': {
                 const connection = getVoiceConnection(interaction.guild.id);
                 if (connection) {
-                    const voiceState = interaction.member.voice;
-                    const voiceChannelId = voiceState.channel.id;
-                    const voiceChannel = interaction.guild.channels.cache.get(voiceChannelId);
                     connection.destroy();
                     await DiscordMessages.sendVoiceMessage(interaction, 'Left voice channel!');
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceLeave', { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
-                }
-            } break;
-
-            case 'settings': {
-            } break;
-
-            case 'test': {
-                const connection = getVoiceConnection(interaction.guild.id);
-                if (connection) {
-                    const player = createAudioPlayer();
-                    connection.subscribe(player);
-                    let resource = createAudioResource('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-                    player.play(resource);
                 }
             } break;
 

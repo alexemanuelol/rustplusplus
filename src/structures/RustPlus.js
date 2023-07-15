@@ -282,7 +282,7 @@ class RustPlus extends RustPlusLib {
             await this.sendTeamMessageAsync(`${text}`);
         }
         if (!firstPoll && setting.voice) {
-            await DiscordVoice.sendDiscordVoiceMessage(this.guildId, this.serverId, text);
+            await DiscordVoice.sendDiscordVoiceMessage(this.guildId, text);
         }
         this.log(Client.client.intlGet(null, 'eventCap'), text);
     }
