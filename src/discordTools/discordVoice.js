@@ -24,7 +24,7 @@ const Client = require('../../index.ts');
 module.exports = {
     sendDiscordVoiceMessage: async function (guildId, text) {
         const connection = getVoiceConnection(guildId);
-        const voice = this.getVoice(guildId);
+        const voice = await this.getVoice(guildId);
         const url = `https://api.streamelements.com/kappa/v2/speech?voice=${voice}&text=${encodeURIComponent(text)}`;
 
         if(connection){

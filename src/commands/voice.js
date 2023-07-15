@@ -68,7 +68,7 @@ module.exports = {
                 if (connection) {
                     connection.destroy();
                     await DiscordMessages.sendVoiceMessage(interaction, 'Left voice channel!');
-                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceLeave', { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
+                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceLeave', { name: interaction.member.voice.channel.name, id: interaction.member.voice.channel.id, guild: interaction.member.guild.name }));
                 }
             } break;
 
