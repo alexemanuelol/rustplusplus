@@ -20,7 +20,7 @@
 */
 
 const Builder = require('@discordjs/builders');
-const {joinVoiceChannel, getVoiceConnection, createAudioPlayer, createAudioResource} = require('@discordjs/voice');
+const {joinVoiceChannel, getVoiceConnection} = require('@discordjs/voice');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
