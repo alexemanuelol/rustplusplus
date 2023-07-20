@@ -280,6 +280,7 @@
     "fcmCredentials": "Credenciales FCM",
     "fcmListenerStartHost": "El host del FCM-listener va a empezar en 5 segundos para guildId: {guildId}, steamId: {steamId}.",
     "fcmListenerStartLite": "El Lite del FCM-listener va a empezar en 5 segundos para guildId: {guildId}, steamId: {steamId}.",
+    "ferryTerminal": "Terminal del Ferry",
     "fishingVillage": "Poblado pesquero",
     "five": "Cinco",
     "four": "Cuatro",
