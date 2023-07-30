@@ -410,49 +410,55 @@ class Map {
         await this.mapMarkerImageMeta.map.jimp.writeAsync(
             this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
 
-        const image = Gm(this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
+        try {
+            const image = Gm(this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
 
-        if (this.rustplus.info === null) {
+            if (this.rustplus.info === null) {
+                this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
+                    Client.client.intlGet(null, 'couldNotAppendMapTracers'));
+                return;
+            }
+
+            if (!markers) return;
+
+            /* Tracer for CargoShip */
+            image.stroke(Constants.COLOR_CARGO_TRACER, 2);
+            for (const [id, coords] of Object.entries(this.rustplus.cargoShipTracers)) {
+                let prev = null;
+                for (const point of coords) {
+                    if (prev === null) {
+                        prev = point;
+                        continue;
+                    }
+                    const point1 = this.calculateImageXY(prev);
+                    const point2 = this.calculateImageXY(point);
+                    image.drawLine(point1.x, point1.y, point2.x, point2.y);
+                    prev = point;
+                }
+            }
+
+            /* Tracer for Patrol Helicopter */
+            image.stroke(Constants.COLOR_PATROL_HELICOPTER_TRACER, 2);
+            for (const [id, coords] of Object.entries(this.rustplus.patrolHelicopterTracers)) {
+                let prev = null;
+                for (const point of coords) {
+                    if (prev === null) {
+                        prev = point;
+                        continue;
+                    }
+                    const point1 = this.calculateImageXY(prev);
+                    const point2 = this.calculateImageXY(point);
+                    image.drawLine(point1.x, point1.y, point2.x, point2.y);
+                    prev = point;
+                }
+            }
+
+            await this.gmWriteAsync(image, this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
+        }
+        catch (error) {
             this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
-                Client.client.intlGet(null, 'couldNotAppendMapTracers'));
-            return;
+                Client.client.intlGet(null, 'couldNotAddStepTracers'));
         }
-
-        if (!markers) return;
-
-        /* Tracer for CargoShip */
-        image.stroke(Constants.COLOR_CARGO_TRACER, 2);
-        for (const [id, coords] of Object.entries(this.rustplus.cargoShipTracers)) {
-            let prev = null;
-            for (const point of coords) {
-                if (prev === null) {
-                    prev = point;
-                    continue;
-                }
-                const point1 = this.calculateImageXY(prev);
-                const point2 = this.calculateImageXY(point);
-                image.drawLine(point1.x, point1.y, point2.x, point2.y);
-                prev = point;
-            }
-        }
-
-        /* Tracer for Patrol Helicopter */
-        image.stroke(Constants.COLOR_PATROL_HELICOPTER_TRACER, 2);
-        for (const [id, coords] of Object.entries(this.rustplus.patrolHelicopterTracers)) {
-            let prev = null;
-            for (const point of coords) {
-                if (prev === null) {
-                    prev = point;
-                    continue;
-                }
-                const point1 = this.calculateImageXY(prev);
-                const point2 = this.calculateImageXY(point);
-                image.drawLine(point1.x, point1.y, point2.x, point2.y);
-                prev = point;
-            }
-        }
-
-        await this.gmWriteAsync(image, this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
     }
 
     getMarkerImageMetaByType(type) {

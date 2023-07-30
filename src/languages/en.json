@@ -193,6 +193,7 @@
     "connectionRefusedTo": "Connection refused to: {id}.",
     "connectionsCap": "CONNECTIONS",
     "container": "Container",
+    "couldNotAddStepTracers": "Could not add step tracers.",
     "couldNotAppendMapMarkers": "Could not append map markers, rustplus info instance is not set.",
     "couldNotAppendMapMonuments": "Could not append map monuments, rustplus info instance is not set.",
     "couldNotAppendMapTracers": "Could not append map tracers, rustplus info instance is not set.",
