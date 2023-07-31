@@ -166,6 +166,7 @@ class RustPlus extends RustPlusLib {
         this.leaderRustPlusInstance = new RustPlusLite(
             this.guildId,
             this.logger,
+            this,
             serverLite.serverIp,
             serverLite.appPort,
             serverLite.steamId,

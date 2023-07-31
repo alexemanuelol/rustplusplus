@@ -116,9 +116,9 @@ async function rustPlusLiteConnectedEvent(rustplusLite) {
     rustplusLite.log(Client.client.intlGet(null, 'connectedCap'),
         Client.client.intlGet(null, 'rustplusOperational'));
 
-    if (Client.client.rustplusReconnectTimers[this.guildId]) {
-        clearTimeout(Client.client.rustplusReconnectTimers[this.guildId]);
-        Client.client.rustplusReconnectTimers[this.guildId] = null;
+    if (Client.client.rustplusReconnectTimers[rustplusLite.guildId]) {
+        clearTimeout(Client.client.rustplusReconnectTimers[rustplusLite.guildId]);
+        Client.client.rustplusReconnectTimers[rustplusLite.guildId] = null;
     }
 }
 
@@ -132,17 +132,17 @@ async function rustPlusLiteDisconnectedEvent(rustplusLite) {
         Client.client.intlGet(null, 'disconnectedFromServer'));
 
     /* Was the disconnection unexpected? */
-    if (rustplusLite.isActive && Client.client.activeRustplusInstances[this.guildId]) {
+    if (rustplusLite.isActive && Client.client.activeRustplusInstances[rustplusLite.guildId]) {
         rustplusLite.log(Client.client.intlGet(null, 'reconnectingCap'),
             Client.client.intlGet(null, 'reconnectingToServer'));
 
-        if (Client.client.rustplusLiteReconnectTimers[this.guildId]) {
-            clearTimeout(Client.client.rustplusLiteReconnectTimers[this.guildId]);
-            Client.client.rustplusLiteReconnectTimers[this.guildId] = null;
+        if (Client.client.rustplusLiteReconnectTimers[rustplusLite.guildId]) {
+            clearTimeout(Client.client.rustplusLiteReconnectTimers[rustplusLite.guildId]);
+            Client.client.rustplusLiteReconnectTimers[rustplusLite.guildId] = null;
         }
 
-        Client.client.rustplusLiteReconnectTimers[this.guildId] = setTimeout(
-            this.rustplus.updateLeaderRustPlusInstance.bind(this.rustplus),
+        Client.client.rustplusLiteReconnectTimers[rustplusLite.guildId] = setTimeout(
+            rustplusLite.rustplus.updateLeaderRustPlusInstance.bind(rustplusLite.rustplus),
             Config.general.reconnectIntervalMs);
     }
 }
