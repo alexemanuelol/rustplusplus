@@ -34,6 +34,14 @@ module.exports = {
                 .setName('search')
                 .setDescription(client.intlGet(guildId, 'commandsMarketSearchDesc'))
                 .addStringOption(option => option
+                    .setName('order')
+                    .setDescription(client.intlGet(guildId, 'commandsMarketSearchOrderDesc'))
+                    .setRequired(true)
+                    .addChoices(
+                        { name: client.intlGet(guildId, 'all'), value: 'all' },
+                        { name: client.intlGet(guildId, 'buy'), value: 'buy' },
+                        { name: client.intlGet(guildId, 'sell'), value: 'sell' }))
+                .addStringOption(option => option
                     .setName('name')
                     .setDescription(client.intlGet(guildId, 'commandsMarketSearchNameDesc'))
                     .setRequired(false))
@@ -86,6 +94,7 @@ module.exports = {
             case 'search': {
                 const searchItemName = interaction.options.getString('name');
                 const searchItemId = interaction.options.getString('id');
+                const orderType = interaction.options.getString('order');
 
                 let itemId = null;
                 if (searchItemName !== null) {
@@ -150,7 +159,11 @@ module.exports = {
                             client.items.getName(orderCurrencyId) : unknownString;
 
                         const prevFoundLines = foundLines;
-                        if (orderItemId === parseInt(itemId) || orderCurrencyId === parseInt(itemId)) {
+
+                        if ((orderType === 'all' &&
+                            (orderItemId === parseInt(itemId) || orderCurrencyId === parseInt(itemId))) ||
+                            (orderType === 'buy' && orderCurrencyId === parseInt(itemId)) ||
+                            (orderType === 'sell' && orderItemId === parseInt(itemId))) {
                             if (foundLines === '') {
                                 foundLines += '```diff\n';
                             }

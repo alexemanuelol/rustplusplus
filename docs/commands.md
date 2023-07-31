@@ -114,6 +114,7 @@ Subcommand | Options | Description | Required
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 `search` | &nbsp; | Search for an item in Vending Machines. | &nbsp;
+&nbsp; | `order` | The order type to search for (all, buy, sell). | `True`
 &nbsp; | `name` | The name of the item to search for. | `False`
 &nbsp; | `id` | The ID of the item to search for. | `False`
 `subscribe` | &nbsp; | Subscribe to an item in Vending Machines. | &nbsp;
