@@ -30,16 +30,16 @@ module.exports = {
     getEmbed: function (options = {}) {
         const embed = new Discord.EmbedBuilder();
 
-        if (options.title) embed.setTitle(options.title);
-        if (options.color) embed.setColor(options.color);
-        if (options.description) embed.setDescription(options.description);
-        if (options.thumbnail) embed.setThumbnail(options.thumbnail);
-        if (options.image) embed.setImage(options.image);
-        if (options.url) embed.setURL(options.url);
-        if (options.author) embed.setAuthor(options.author);
-        if (options.footer) embed.setFooter(options.footer);
-        if (options.timestamp) embed.setTimestamp();
-        if (options.fields) embed.setFields(...options.fields);
+        if (options.hasOwnProperty('title')) embed.setTitle(options.title);
+        if (options.hasOwnProperty('color')) embed.setColor(options.color);
+        if (options.hasOwnProperty('description')) embed.setDescription(options.description);
+        if (options.hasOwnProperty('thumbnail')) embed.setThumbnail(options.thumbnail);
+        if (options.hasOwnProperty('image')) embed.setImage(options.image);
+        if (options.hasOwnProperty('url') && options.url !== '') embed.setURL(options.url);
+        if (options.hasOwnProperty('author')) embed.setAuthor(options.author);
+        if (options.hasOwnProperty('footer')) embed.setFooter(options.footer);
+        if (options.hasOwnProperty('timestamp')) embed.setTimestamp();
+        if (options.hasOwnProperty('fields')) embed.setFields(...options.fields);
 
         return embed;
     },
@@ -137,6 +137,8 @@ module.exports = {
             title: `${tracker.name}`,
             color: Constants.COLOR_DEFAULT,
             description: `**Battlemetrics ID:** \`${tracker.battlemetricsId}\`\n` +
+                `**${Client.client.intlGet(guildId, 'clanTag')}:** ` +
+                (tracker.clanTag !== '' ? `\`${tracker.clanTag}\`` : '') + '\n' +
                 `${Client.client.intlGet(guildId, 'serverStatus', { status: serverStatus })}`,
             thumbnail: `${tracker.img}`,
             fields: [

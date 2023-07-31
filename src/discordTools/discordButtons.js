@@ -33,12 +33,12 @@ module.exports = {
     getButton: function (options = {}) {
         const button = new Discord.ButtonBuilder();
 
-        if (options.customId) button.setCustomId(options.customId);
-        if (options.label) button.setLabel(options.label);
-        if (options.style) button.setStyle(options.style);
-        if (options.url) button.setURL(options.url);
-        if (options.emoji) button.setEmoji(options.emoji);
-        if (options.disabled) button.setDisabled(options.disabled);
+        if (options.hasOwnProperty('customId')) button.setCustomId(options.customId);
+        if (options.hasOwnProperty('label')) button.setLabel(options.label);
+        if (options.hasOwnProperty('style')) button.setStyle(options.style);
+        if (options.hasOwnProperty('url') && options.url !== '') button.setURL(options.url);
+        if (options.hasOwnProperty('emoji')) button.setEmoji(options.emoji);
+        if (options.hasOwnProperty('disabled')) button.setDisabled(options.disabled);
 
         return button;
     },

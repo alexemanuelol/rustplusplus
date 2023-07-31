@@ -162,6 +162,7 @@ module.exports = async (client, interaction) => {
         const tracker = instance.trackers[ids.trackerId];
         const trackerName = interaction.fields.getTextInputValue('TrackerName');
         const trackerBattlemetricsId = interaction.fields.getTextInputValue('TrackerBattlemetricsId');
+        const trackerClanTag = interaction.fields.getTextInputValue('TrackerClanTag');
 
         if (!tracker) {
             interaction.deferUpdate();
@@ -169,6 +170,13 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.name = trackerName;
+
+        if (trackerClanTag !== tracker.clanTag) {
+            tracker.clanTag = trackerClanTag;
+            for (const player of tracker.players) {
+                player.name = '-';
+            }
+        }
 
         if (trackerBattlemetricsId !== tracker.battlemetricsId) {
             const info = await BattlemetricsAPI.getBattlemetricsServerInfo(client, trackerBattlemetricsId);
@@ -186,6 +194,9 @@ module.exports = async (client, interaction) => {
         client.setInstance(guildId, instance);
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+
+        /* To force search of player name via scrape */
+        client.battlemetricsIntervalCounter = 0;
     }
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));

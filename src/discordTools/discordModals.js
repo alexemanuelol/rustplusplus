@@ -27,8 +27,8 @@ module.exports = {
     getModal: function (options = {}) {
         const modal = new Discord.ModalBuilder();
 
-        if (options.customId) modal.setCustomId(options.customId);
-        if (options.title) modal.setTitle(options.title);
+        if (options.hasOwnProperty('customId')) modal.setCustomId(options.customId);
+        if (options.hasOwnProperty('title')) modal.setTitle(options.title);
 
         return modal;
     },
@@ -243,6 +243,14 @@ module.exports = {
                 label: Client.client.intlGet(guildId, 'trackerEditBattlemetricsIdLabel'),
                 value: tracker.battlemetricsId,
                 style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'TrackerClanTag',
+                label: Client.client.intlGet(guildId, 'trackerEditClanTagLabel'),
+                value: tracker.clanTag,
+                style: Discord.TextInputStyle.Short,
+                required: false,
+                minLength: 0
             }))
         );
 

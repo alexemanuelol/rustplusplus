@@ -135,24 +135,28 @@ module.exports = {
                             continue;
                         }
 
-                        let playerName = null;
+                        let playerSteamName = null;
                         if (!Object.keys(calledSteamIdNames).includes(player.steamId)) {
-                            playerName = await Scrape.scrapeSteamProfileName(client, player.steamId);
-                            if (!playerName) continue;
-                            calledSteamIdNames[player.steamId] = playerName;
+                            playerSteamName = await Scrape.scrapeSteamProfileName(client, player.steamId);
+                            if (!playerSteamName) continue;
+                            calledSteamIdNames[player.steamId] = playerSteamName;
                         }
                         else {
-                            playerName = calledSteamIdNames[player.steamId];
+                            playerSteamName = calledSteamIdNames[player.steamId];
                         }
 
-                        if (player.name !== playerName && player.name !== '-') {
+                        const playerSteamNameClan = (content.clanTag !== '' ? `${content.clanTag} ` : '') +
+                            `${playerSteamName}`;
+
+                        if (player.name !== playerSteamNameClan && player.name !== '-') {
                             if (content.nameChangeHistory.length === 10) {
                                 content.nameChangeHistory.pop();
                             }
-                            content.nameChangeHistory.unshift(`${player.name} → ${playerName} (${player.steamId}).`);
+                            content.nameChangeHistory.unshift(
+                                `${player.name} → ${playerSteamNameClan} (${player.steamId}).`);
                         }
 
-                        const newPlayerName = onlinePlayers.find(e => e.name === playerName);
+                        const newPlayerName = onlinePlayers.find(e => e.name === playerSteamNameClan);
                         if (newPlayerName) {
                             player.status = true;
                             player.time = newPlayerName.time;
@@ -161,7 +165,7 @@ module.exports = {
                         }
                         else {
                             player.status = false;
-                            player.name = playerName;
+                            player.name = playerSteamNameClan;
                         }
                     }
                 }

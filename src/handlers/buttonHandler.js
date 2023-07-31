@@ -305,6 +305,7 @@ module.exports = async (client, interaction) => {
             name: 'Tracker',
             serverId: ids.serverId,
             battlemetricsId: server.battlemetricsId,
+            clanTag: '',
             status: false,
             allOffline: true,
             messageId: null,
