@@ -55,11 +55,11 @@ module.exports = {
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
                     });
-                    await DiscordMessages.sendVoiceMessage(interaction, 'Joined voice channel!');
+                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin', { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
                 }
                 else {
-                    await DiscordMessages.sendVoiceMessage(interaction, 'You need to join a voice channel first!');
+                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
                 
 			} break;
@@ -68,7 +68,7 @@ module.exports = {
                 const connection = getVoiceConnection(interaction.guild.id);
                 if (connection) {
                     connection.destroy();
-                    await DiscordMessages.sendVoiceMessage(interaction, 'Left voice channel!');
+                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceLeave', { name: interaction.member.voice.channel.name, id: interaction.member.voice.channel.id, guild: interaction.member.guild.name }));
                 }
             } break;
