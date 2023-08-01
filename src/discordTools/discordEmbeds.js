@@ -154,17 +154,30 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
+        let description = `**ID**: \`${entityId}\`\n`;
+        description += `**${Client.client.intlGet(guildId, 'lastTrigger')}:** `;
+
+        if (entity.lastTrigger !== null) {
+            const lastTriggerDate = new Date(entity.lastTrigger * 1000);
+            const timeSinceTriggerSeconds = Math.floor((new Date() - lastTriggerDate) / 1000);
+            const time = Timer.secondsToFullScale(timeSinceTriggerSeconds);
+            description += `${time}`;
+        }
 
         return module.exports.getEmbed({
             title: `${entity.name}${grid}`,
             color: entity.active ? Constants.COLOR_ACTIVE : Constants.COLOR_DEFAULT,
-            description: `**ID**: \`${entityId}\``,
+            description: description,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
             fields: [{
                 name: Client.client.intlGet(guildId, 'message'),
                 value: `\`${entity.message}\``,
                 inline: true
+            }, {
+                name: Client.client.intlGet(guildId, 'customCommand'),
+                value: `\`${instance.generalSettings.prefix}${entity.command}\``,
+                inline: false
             }],
             timestamp: true
         });

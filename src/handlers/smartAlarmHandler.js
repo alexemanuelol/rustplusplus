@@ -19,6 +19,7 @@
 */
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const Timer = require('../util/timer.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -60,5 +61,33 @@ module.exports = {
                 }
             }
         }
+    },
+
+    smartAlarmCommandHandler: function (rustplus, client, command) {
+        const guildId = rustplus.guildId;
+        const serverId = rustplus.serverId;
+        const instance = client.getInstance(guildId);
+        const alarms = instance.serverList[serverId].alarms;
+        const prefix = rustplus.generalSettings.prefix;
+
+        const entityId = Object.keys(alarms).find(e => command === `${prefix}${alarms[e].command}`);
+        if (!entityId) return false;
+
+        if (alarms[entityId].lastTrigger === null) {
+            rustplus.printCommandOutput(client.intlGet(guildId, 'alarmHaveNotBeenTriggeredYet', {
+                alarm: alarms[entityId].name
+            }));
+            return true;
+        }
+
+        const lastTriggerDate = new Date(alarms[entityId].lastTrigger * 1000);
+        const timeSinceTriggerSeconds = Math.floor((new Date() - lastTriggerDate) / 1000);
+        const time = Timer.secondsToFullScale(timeSinceTriggerSeconds);
+
+        rustplus.printCommandOutput(client.intlGet(guildId, 'timeSinceAlarmWasTriggered', {
+            alarm: alarms[entityId].name,
+            time: time
+        }));
+        return true;
     },
 }

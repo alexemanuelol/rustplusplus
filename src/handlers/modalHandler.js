@@ -128,8 +128,9 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
         const server = instance.serverList[ids.serverId];
-        let smartAlarmName = interaction.fields.getTextInputValue('SmartAlarmName');
-        let smartAlarmMessage = interaction.fields.getTextInputValue('SmartAlarmMessage');
+        const smartAlarmName = interaction.fields.getTextInputValue('SmartAlarmName');
+        const smartAlarmMessage = interaction.fields.getTextInputValue('SmartAlarmMessage');
+        const smartAlarmCommand = interaction.fields.getTextInputValue('SmartAlarmCommand');
 
         if (!server || (server && !server.alarms.hasOwnProperty(ids.entityId))) {
             interaction.deferUpdate();
@@ -138,6 +139,11 @@ module.exports = async (client, interaction) => {
 
         server.alarms[ids.entityId].name = smartAlarmName;
         server.alarms[ids.entityId].message = smartAlarmMessage;
+
+        if (smartAlarmCommand !== server.alarms[ids.entityId].command &&
+            !Keywords.getListOfUsedKeywords(client, guildId, ids.serverId).includes(smartAlarmCommand)) {
+            server.alarms[ids.entityId].command = smartAlarmCommand;
+        }
         client.setInstance(guildId, instance);
 
         await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);

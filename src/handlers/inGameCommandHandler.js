@@ -18,6 +18,7 @@
 
 */
 
+const SmartAlarmHandler = require('./smartAlarmHandler.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const SmartSwitchHandler = require('./smartSwitchHandler.js');
 
@@ -175,6 +176,10 @@ module.exports = {
         }
         else {
             /* Maybe a custom command? */
+
+            if (SmartAlarmHandler.smartAlarmCommandHandler(rustplus, client, command)) {
+                return true;
+            }
 
             if (await SmartSwitchHandler.smartSwitchCommandHandler(rustplus, client, command)) {
                 return true;

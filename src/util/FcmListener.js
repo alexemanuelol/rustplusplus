@@ -306,6 +306,8 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         everyone: entityExist ? alarms[body.entityId].everyone : false,
         name: entityExist ? alarms[body.entityId].name : client.intlGet(guild.id, 'smartAlarm'),
         message: entityExist ? alarms[body.entityId].message : client.intlGet(guild.id, 'baseIsUnderAttack'),
+        lastTrigger: entityExist ? alarms[body.entityId].lastTrigger : null,
+        command: entityExist ? alarms[body.entityId].command : body.entityId,
         id: entityExist ? alarms[body.entityId].id : body.entityId,
         image: entityExist ? alarms[body.entityId].image : 'smart_alarm.png',
         location: entityExist ? alarms[body.entityId].location : null,
@@ -429,6 +431,8 @@ async function alarmAlarm(client, guild, full, data, body) {
 
     if ((!rustplus || (rustplus && (rustplus.serverId !== serverId))) &&
         instance.generalSettings.fcmAlarmNotificationEnabled) {
+        server.alarms[entityId].lastTrigger = Math.floor(new Date() / 1000);
+        client.setInstance(guild.id, instance);
         await DiscordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
         client.log(client.intlGet(null, 'infoCap'), `${data.title}: ${data.message}`);
     }

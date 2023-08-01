@@ -142,6 +142,8 @@ async function messageBroadcastEntityChangedSmartAlarm(rustplus, client, message
     client.setInstance(rustplus.guildId, instance);
 
     if (active) {
+        server.alarms[entityId].lastTrigger = Math.floor(new Date() / 1000);
+        client.setInstance(rustplus.guildId, instance);
         await DiscordMessages.sendSmartAlarmTriggerMessage(rustplus.guildId, serverId, entityId);
 
         if (instance.generalSettings.smartAlarmNotifyInGame) {

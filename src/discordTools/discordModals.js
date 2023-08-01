@@ -189,6 +189,12 @@ module.exports = {
                 label: Client.client.intlGet(guildId, 'smartAlarmEditMessageLabel'),
                 value: entity.message,
                 style: Discord.TextInputStyle.Short
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'SmartAlarmCommand',
+                label: Client.client.intlGet(guildId, 'smartAlarmEditCommandLabel'),
+                value: entity.command,
+                style: Discord.TextInputStyle.Short
             }))
         );
 

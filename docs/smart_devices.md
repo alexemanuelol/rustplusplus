@@ -39,7 +39,7 @@ From In-Game you can interact with the Smart Switch Group by using the custom co
 
 > All paired Smart Alarms will be located in the `alarms` Discord Text Channel.
 
-From Discord, you you can choose to do different stuff with Smart Alarms. You could use the Slash Command to edit the name of the alarm, the image representing the alarm or edit the alarm message that will be used when the alarm is triggered (Alarm message from in-game will be used if the Smart Alarm belongs to a server that is not currently connected). You could also use the `@everyone` button to enable the alarm to notify everyone whenever it is triggered. You can also remove the Smart Alarm by clicking on the `basket` button.
+From Discord, you you can choose to do different stuff with Smart Alarms. You could use the Slash Command to edit the name of the alarm, the image representing the alarm or edit the alarm message that will be used when the alarm is triggered (Alarm message from in-game will be used if the Smart Alarm belongs to a server that is not currently connected). You could also use the `@everyone` button to enable the alarm to notify everyone whenever it is triggered. There is the possibility to use a custom command to get the time since it last triggered. You can also remove the Smart Alarm by clicking on the `basket` button.
 <br><br>
 From the settings channel, there are two settings that has to do with Smart Alarms. The first one is if Smart Alarms that are not currently part of the connected rust server should notify anyway when triggered. This is possible due to the FCM listener getting the alarm notification rather than broadcast notification from the connected server.
 <br><br>
