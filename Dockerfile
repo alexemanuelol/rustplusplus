@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:18
 
 RUN apt-get update && apt-get install -y graphicsmagick && apt-get clean
 
