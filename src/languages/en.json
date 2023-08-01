@@ -187,7 +187,7 @@
     "commandsVcFemale": "Female",
     "commandsVcFemaleDescription": "Sets the voiceactor gender to Female",
     "commandsVcGenderDesc": "Sets the Bot's voiceactor gender.",
-    "commandsVcJoinDesc": "Joins the Voicechannel",
+    "commandsVoiceJoinDesc": "Joins the Voicechannel",
     "commandsVcLeaveDesc": "Leaves the Voicechannel",
     "commandsVcMale": "Male",
     "commandsVcMaleDescription": "Sets the voiceactor gender to Male",
