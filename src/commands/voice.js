@@ -36,7 +36,7 @@ module.exports = {
 				.setDescription(client.intlGet(guildId, 'commandsVoiceJoinDesc')))
             .addSubcommand(subcommand => subcommand
                 .setName('leave')
-                .setDescription(client.intlGet(guildId, 'commandsVcLeaveDesc')))
+                .setDescription(client.intlGet(guildId, 'commandsVoiceLeaveDesc')))
 
     },
 
