@@ -27,6 +27,7 @@ const Client = require('../../index.ts');
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordVoice = require('../discordTools/discordVoice.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
 const Languages = require('../util/languages.js');
@@ -280,6 +281,9 @@ class RustPlus extends RustPlusLib {
         }
         if (!firstPoll && setting.inGame) {
             await this.sendTeamMessageAsync(`${text}`);
+        }
+        if (!firstPoll && setting.voice) {
+            await DiscordVoice.sendDiscordVoiceMessage(this.guildId, text);
         }
         this.log(Client.client.intlGet(null, 'eventCap'), text);
     }

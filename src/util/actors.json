@@ -1,0 +1,46 @@
+{
+    "cs":{
+        "male": null,
+        "female": "Aleksandra"
+    },
+    "de":{
+        "male": "Albert",
+        "female": "Nina"
+    },
+    "en":{
+        "male": "Brian",
+        "female": "Joanna"
+    },
+    "es":{
+        "male": "Miguel",
+        "female": "Mia"
+    },
+    "fr":{
+        "male": "Mathieu",
+        "female": "Emilie"
+    },
+    "it":{
+        "male": "Luca",
+        "female": "Stella"
+    },
+    "ko":{
+        "male": null,
+        "female": "Seoyeon"
+    },
+    "pl":{
+        "male": "Jacek",
+        "female": "Maja"
+    },
+    "ru":{
+        "male": "Maxim",
+        "female": "Tatyana"
+    },
+    "sv":{
+        "male": null,
+        "female": "Astrid"
+    },
+    "tr":{
+        "male": "Mehmet",
+        "female": "Miray"
+    }
+}

@@ -94,6 +94,13 @@ module.exports = (client, guild) => {
                 if (!instance.notificationSettings.hasOwnProperty(key)) {
                     instance.notificationSettings[key] = value;
                 }
+                else {
+                    for (const [setting, settingValue] of Object.entries(value)) {
+                        if (!instance.notificationSettings[key].hasOwnProperty(setting)) {
+                            instance.notificationSettings[key][setting] = settingValue;
+                        }
+                    }
+                }
             }
         }
 

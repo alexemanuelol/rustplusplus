@@ -264,4 +264,25 @@ module.exports = {
                     }]
             }));
     },
+
+    getVoiceGenderSelectMenu: function (guildId, gender) {
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getSelectMenu({
+                customId: 'VoiceGender',
+                placeholder: `${gender === 'male' ?
+                    Client.client.intlGet(guildId, 'commandsVoiceMale') : 
+                    Client.client.intlGet(guildId, 'commandsVoiceFemale')}`,
+                options: [
+                    {
+                        label: Client.client.intlGet(guildId, 'commandsVoiceMale'),
+                        description: Client.client.intlGet(guildId, 'commandsVoiceMaleDescription'),
+                        value: 'male'
+                    },
+                    {
+                        label: Client.client.intlGet(guildId, 'commandsVoiceFemale'),
+                        description: Client.client.intlGet(guildId, 'commandsVoiceFemaleDescription'),
+                        value: 'female'
+                    }]
+            }));
+    },
 }

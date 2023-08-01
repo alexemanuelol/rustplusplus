@@ -78,6 +78,17 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: Constants.COLOR_SETTINGS,
+            title: client.intlGet(guildId, 'commandsVoiceGenderDesc'),
+            thumbnail: `attachment://settings_logo.png`
+        })],
+        components: [DiscordSelectMenus.getVoiceGenderSelectMenu(guildId, instance.generalSettings.voiceGender)],
+        files: [new Discord.AttachmentBuilder(
+            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
+    });
+
+    await client.messageSend(channel, {
+        embeds: [DiscordEmbeds.getEmbed({
+            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'selectInGamePrefixSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
@@ -258,7 +269,8 @@ async function setupNotificationSettings(client, guildId, channel) {
                 DiscordButtons.getNotificationButtons(
                     guildId, setting,
                     instance.notificationSettings[setting].discord,
-                    instance.notificationSettings[setting].inGame)],
+                    instance.notificationSettings[setting].inGame,
+                    instance.notificationSettings[setting].voice)],
             files: [
                 new Discord.AttachmentBuilder(
                     Path.join(__dirname, '..',
