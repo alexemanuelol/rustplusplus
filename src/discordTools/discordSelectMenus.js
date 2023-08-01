@@ -270,17 +270,17 @@ module.exports = {
             module.exports.getSelectMenu({
                 customId: 'VoiceGender',
                 placeholder: `${gender === 'male' ?
-                    Client.client.intlGet(guildId, 'commandsVcMale') : 
-                    Client.client.intlGet(guildId, 'commandsVcFemale')}`,
+                    Client.client.intlGet(guildId, 'commandsVoiceMale') : 
+                    Client.client.intlGet(guildId, 'commandsVoiceFemale')}`,
                 options: [
                     {
-                        label: Client.client.intlGet(guildId, 'commandsVcMale'),
-                        description: Client.client.intlGet(guildId, 'commandsVcMaleDescription'),
+                        label: Client.client.intlGet(guildId, 'commandsVoiceMale'),
+                        description: Client.client.intlGet(guildId, 'commandsVoiceMaleDescription'),
                         value: 'male'
                     },
                     {
-                        label: Client.client.intlGet(guildId, 'commandsVcFemale'),
-                        description: Client.client.intlGet(guildId, 'commandsVcFemaleDescription'),
+                        label: Client.client.intlGet(guildId, 'commandsVoiceFemale'),
+                        description: Client.client.intlGet(guildId, 'commandsVoiceFemaleDescription'),
                         value: 'female'
                     }]
             }));

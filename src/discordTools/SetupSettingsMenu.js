@@ -78,10 +78,10 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: Constants.COLOR_SETTINGS,
-            title: client.intlGet(guildId, 'commandsVcGenderDesc'),
+            title: client.intlGet(guildId, 'commandsVoiceGenderDesc'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getVoiceGenderSelectMenu(guildId, instance.generalSettings.gender)],
+        components: [DiscordSelectMenus.getVoiceGenderSelectMenu(guildId, instance.generalSettings.voiceGender)],
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });

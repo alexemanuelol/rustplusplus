@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2023 FaiThiX
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +19,7 @@
 
 */
 const {getVoiceConnection, createAudioPlayer, createAudioResource} = require('@discordjs/voice');
-const actors = require('../util/actors.json');
+const Actors = require('../util/actors.json');
 const Client = require('../../index.ts');
 
 module.exports = {
@@ -39,16 +40,16 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const gender = instance.generalSettings.gender;
         const language = instance.generalSettings.language;
-        if(actors[language]?.[gender] === null || undefined){
+        if(Actors[language]?.[gender] === null || undefined){
             if(gender === 'male'){
                 gender = 'female';
-                return actors[language]?.[gender];
+                return Actors[language]?.[gender];
             }
             if(gender === 'female'){
                 gender = 'male';
-                return actors[language]?.[gender];
+                return Actors[language]?.[gender];
             }
         }
-        else return actors[language]?.[gender];
+        else return Actors[language]?.[gender];
     },
 }
