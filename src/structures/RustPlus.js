@@ -1836,6 +1836,40 @@ class RustPlus extends RustPlusLib {
         return strings;
     }
 
+    getCommandSteamId(command, callerSteamId, callerName) {
+        const prefix = this.generalSettings.prefix;
+        const commandSteamid = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxSteamid')}`;
+        const commandSteamidEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxSteamid')}`;
+
+        if (command.toLowerCase() === `${commandSteamid}` || command.toLowerCase() === `${commandSteamidEn}`) {
+            if (callerSteamId === null || callerName === null) return null;
+
+            return `${callerName}: ${callerSteamId}`;
+        }
+        else if (command.toLowerCase().startsWith(`${commandSteamid} `) ||
+            command.toLowerCase().startsWith(`${commandSteamidEn} `)) {
+            let name = null;
+            if (command.toLowerCase().startsWith(`${commandSteamid} `)) {
+                name = command.slice(`${commandSteamid} `.length).trim();
+            }
+            else {
+                name = command.slice(`${commandSteamidEn} `.length).trim();
+            }
+
+            for (const player of this.team.players) {
+                if (player.name.includes(name)) {
+                    return `${player.name}: ${player.steamId}`;
+                }
+            }
+
+            return Client.client.intlGet(this.guildId, 'couldNotIdentifyMember', {
+                name: name
+            });
+        }
+
+        return null;
+    }
+
     getCommandTeam() {
         let string = '';
         for (const player of this.team.players) {

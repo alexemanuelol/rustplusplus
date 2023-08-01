@@ -114,6 +114,7 @@
     "commandSyntaxSend": "send",
     "commandSyntaxSmall": "small",
     "commandSyntaxStatus": "status",
+    "commandSyntaxSteamid": "steamid",
     "commandSyntaxSubscribe": "sub",
     "commandSyntaxTTS": "tts",
     "commandSyntaxTeam": "team",

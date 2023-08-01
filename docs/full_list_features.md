@@ -20,6 +20,7 @@
 * Get notified whenever a Smart Device cannot be reached (might be destroyed).
 * Get notified whenever a Server have wiped and get the latest map image sent to Discord.
 * Get information about the population of the server as well as queue size.
+* Get steamid of teammates from a command.
 * Get the current In-Game time and how long before nightfall/daybreak.
 * Get information about how long since wipe.
 * Get map information such as map size, map seed, map salt and map name.
