@@ -55,11 +55,14 @@ module.exports = {
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
                     });
-                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
-                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin', { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
+                    await DiscordMessages.sendVoiceMessage(interaction, 
+                        client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
+                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin', 
+                        { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
                 }
                 else {
-                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
+                    await DiscordMessages.sendVoiceMessage(interaction, 
+                        client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
                 
 			} break;
@@ -68,8 +71,13 @@ module.exports = {
                 const connection = getVoiceConnection(interaction.guild.id);
                 if (connection) {
                     connection.destroy();
-                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
-                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceLeave', { name: interaction.member.voice.channel.name, id: interaction.member.voice.channel.id, guild: interaction.member.guild.name }));
+                    await DiscordMessages.sendVoiceMessage(interaction, 
+                        client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
+                    client.log(client.intlGet(null, 'infoCap'), 
+                                client.intlGet(interaction.guildId, 'commandsVoiceLeave',
+                                    {name: interaction.member.voice.channel.name, 
+                                    id: interaction.member.voice.channel.id, 
+                                    guild: interaction.member.guild.name }));
                 }
             } break;
 
