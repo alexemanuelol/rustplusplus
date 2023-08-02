@@ -18,7 +18,7 @@
     https://github.com/alexemanuelol/rustplusplus
 
 */
-const {getVoiceConnection, createAudioPlayer, createAudioResource} = require('@discordjs/voice');
+const { getVoiceConnection, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
 const Actors = require('../util/actors.json');
 const Client = require('../../index.ts');
 
@@ -28,7 +28,7 @@ module.exports = {
         const voice = await this.getVoice(guildId);
         const url = `https://api.streamelements.com/kappa/v2/speech?voice=${voice}&text=${encodeURIComponent(text)}`;
 
-        if(connection){
+        if (connection) {
             const resource = createAudioResource(url);
             const player = createAudioPlayer();
             connection.subscribe(player);
@@ -40,16 +40,12 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const gender = instance.generalSettings.gender;
         const language = instance.generalSettings.language;
-        if(Actors[language]?.[gender] === null || undefined){
-            if(gender === 'male'){
-                gender = 'female';
-                return Actors[language]?.[gender];
-            }
-            if(gender === 'female'){
-                gender = 'male';
-                return Actors[language]?.[gender];
-            }
+
+        if (Actors[language]?.[gender] === null || Actors[language]?.[gender] === undefined) {
+            return Actors[language]?.[gender === 'male' ? 'female' : 'male'];
         }
-        else return Actors[language]?.[gender];
+        else {
+            return Actors[language]?.[gender];
+        }
     },
 }

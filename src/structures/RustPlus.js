@@ -25,6 +25,7 @@ const Translate = require('translate');
 
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.js');
+const Decay = require('../util/decay.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordVoice = require('../discordTools/discordVoice.js');
@@ -1011,6 +1012,88 @@ class RustPlus extends RustPlusLib {
         return Client.client.intlGet(this.guildId, 'couldNotIdentifyMember', {
             name: name
         });
+    }
+
+    getCommandDecay(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandDecay = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxDecay')}`;
+        const commandDecayEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxDecay')}`;
+        const commandTwig = `${Client.client.intlGet(this.guildId, 'commandSyntaxTwig')}`;
+        const commandTwigEn = `${Client.client.intlGet('en', 'commandSyntaxTwig')}`;
+        const commandWood = `${Client.client.intlGet(this.guildId, 'commandSyntaxWood')}`;
+        const commandWoodEn = `${Client.client.intlGet('en', 'commandSyntaxWood')}`;
+        const commandStone = `${Client.client.intlGet(this.guildId, 'commandSyntaxStone')}`;
+        const commandStoneEn = `${Client.client.intlGet('en', 'commandSyntaxStone')}`;
+        const commandMetal = `${Client.client.intlGet(this.guildId, 'commandSyntaxMetal')}`;
+        const commandMetalEn = `${Client.client.intlGet('en', 'commandSyntaxMetal')}`;
+        const commandArmored = `${Client.client.intlGet(this.guildId, 'commandSyntaxArmored')}`;
+        const commandArmoredEn = `${Client.client.intlGet('en', 'commandSyntaxArmored')}`;
+
+        if (command.toLowerCase() === `${commandDecay}` || command.toLowerCase() === `${commandDecayEn}`) {
+            let str = `${Client.client.intlGet(this.guildId, 'commandSyntaxTwig')} (${Decay.TwigWallMaxHp}), `;
+            str += `${Client.client.intlGet(this.guildId, 'commandSyntaxWood')} (${Decay.WoodWallMaxHp}), `;
+            str += `${Client.client.intlGet(this.guildId, 'commandSyntaxStone')} (${Decay.StoneWallMaxHp}), `;
+            str += `${Client.client.intlGet(this.guildId, 'commandSyntaxMetal')} (${Decay.MetalWallMaxHp}), `;
+            str += `${Client.client.intlGet(this.guildId, 'commandSyntaxArmored')} (${Decay.ArmoredWallMaxHp})`;
+
+            return str;
+        }
+
+        if (command.toLowerCase().startsWith(`${commandDecay} `)) {
+            command = command.slice(`${commandDecay} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandDecayEn} `.length).trim();
+        }
+        const subcommand = command.replace(/ .*/, '');
+        const hp = command.slice(subcommand.length + 1);
+
+        let type = null;
+        switch (subcommand.toLowerCase()) {
+            case commandTwigEn:
+            case commandTwig: {
+                type = commandTwigEn;
+            } break;
+
+            case commandWoodEn:
+            case commandWood: {
+                type = commandWoodEn;
+            } break;
+
+            case commandStoneEn:
+            case commandStone: {
+                type = commandStoneEn;
+            } break;
+
+            case commandMetalEn:
+            case commandMetal: {
+                type = commandMetalEn;
+            } break;
+
+            case commandArmoredEn:
+            case commandArmored: {
+                type = commandArmoredEn;
+            } break;
+
+            default: {
+                return `${Client.client.intlGet(this.guildId, 'invalidSubcommand')}`;
+            } break;
+        }
+
+        const decaySeconds = Decay.getTimeLeftSeconds(Client.client, type, hp);
+        if (decaySeconds === null) {
+            return `${Client.client.intlGet(this.guildId, 'invalidHpInterval', { hp: hp })}`;
+        }
+        else if (decaySeconds === undefined) {
+            return `${Client.client.intlGet(this.guildId, 'invalidStructureType', { type: subcommand })}`;
+        }
+        else {
+            const time = Timer.secondsToFullScale(decaySeconds);
+            return `${Client.client.intlGet(this.guildId, 'timeTillStructureDecay', {
+                time: time,
+                type: subcommand.toLowerCase()
+            })}`;
+        }
     }
 
     getCommandHeli(isInfoChannel = false) {

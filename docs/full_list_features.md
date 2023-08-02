@@ -45,6 +45,7 @@
 * Get the currently alive teammates.
 * Get the currently online teammates.
 * Get the currently offline teammates.
+* Check time before structure decay via command.
 * Set custom markers on the map and navigate to them at a later stage.
 * Create notes to remind yourself or your teammates about things to do.
 * Get the three closest teammates with the `prox` command.

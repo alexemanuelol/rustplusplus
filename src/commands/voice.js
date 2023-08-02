@@ -20,7 +20,7 @@
 */
 
 const Builder = require('@discordjs/builders');
-const {joinVoiceChannel, getVoiceConnection} = require('@discordjs/voice');
+const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
@@ -31,9 +31,9 @@ module.exports = {
         return new Builder.SlashCommandBuilder()
             .setName('voice')
             .setDescription(client.intlGet(guildId, 'commandsVoiceDesc'))
-			.addSubcommand(subcommand => subcommand
-				.setName('join')
-				.setDescription(client.intlGet(guildId, 'commandsVoiceJoinDesc')))
+            .addSubcommand(subcommand => subcommand
+                .setName('join')
+                .setDescription(client.intlGet(guildId, 'commandsVoiceJoinDesc')))
             .addSubcommand(subcommand => subcommand
                 .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVoiceLeaveDesc')))
@@ -41,11 +41,11 @@ module.exports = {
     },
 
     async execute(client, interaction) {
-		if (!await client.validatePermissions(interaction)) return;
-		await interaction.deferReply({ ephemeral: true });
+        if (!await client.validatePermissions(interaction)) return;
+        await interaction.deferReply({ ephemeral: true });
 
-		switch (interaction.options.getSubcommand()) {
-			case 'join': {
+        switch (interaction.options.getSubcommand()) {
+            case 'join': {
                 const voiceState = interaction.member.voice;
                 if (voiceState && voiceState.channel) {
                     const voiceChannelId = voiceState.channel.id;
@@ -55,34 +55,35 @@ module.exports = {
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
                     });
-                    await DiscordMessages.sendVoiceMessage(interaction, 
+                    await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
-                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin', 
+                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
                         { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
                 }
                 else {
-                    await DiscordMessages.sendVoiceMessage(interaction, 
+                    await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
-                
-			} break;
+            } break;
 
             case 'leave': {
                 const connection = getVoiceConnection(interaction.guild.id);
                 if (connection) {
                     connection.destroy();
-                    await DiscordMessages.sendVoiceMessage(interaction, 
+                    await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
-                    client.log(client.intlGet(null, 'infoCap'), 
-                                client.intlGet(interaction.guildId, 'commandsVoiceLeave',
-                                    {name: interaction.member.voice.channel.name, 
-                                    id: interaction.member.voice.channel.id, 
-                                    guild: interaction.member.guild.name }));
+                    client.log(client.intlGet(null, 'infoCap'),
+                        client.intlGet(interaction.guildId, 'commandsVoiceLeave',
+                            {
+                                name: interaction.member.voice.channel.name,
+                                id: interaction.member.voice.channel.id,
+                                guild: interaction.member.guild.name
+                            }));
                 }
             } break;
 
-			default: {
-			} break;
-		}
+            default: {
+            } break;
+        }
     },
 };

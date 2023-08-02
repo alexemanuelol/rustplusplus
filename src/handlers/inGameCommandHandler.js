@@ -66,6 +66,10 @@ module.exports = {
                 commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxDeaths')}`))) {
             rustplus.printCommandOutput(await rustplus.getCommandDeath(command, callerSteamId));
         }
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxDecay')}`) ||
+            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxDecay')}`)) {
+            rustplus.printCommandOutput(rustplus.getCommandDecay(command));
+        }
         else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxHeli')}` ||
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxHeli')}`) {
             rustplus.printCommandOutput(rustplus.getCommandHeli());

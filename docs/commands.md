@@ -229,6 +229,7 @@ In-Game Command | Description
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
 [**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
 [**death/deaths**](commands.md#deathdeaths) | Get recent death events.
+[**decay**](commands.md#decay) | Get time before structure decay.
 [**heli**](commands.md#heli) | Get information about Patrol Helicopter (Location, time since last downed, time since last on map).
 [**large**](commands.md#large) | Get information about Large Oil Rig (Time till crate unlocks, time since last trigger).
 [**leader**](commands.md#leader-1) | Give/Take the Team Leadership.
@@ -306,6 +307,16 @@ In-Game Command | Description
 <br>Command: `!death Alle`
 
 ![In-Game Command death Image](images/death_ingame.png)
+
+
+# **decay**
+
+> **Get time before structure decay.**
+<br>Command: `!decay`
+<br>Command: `!decay stone 100`
+<br>Command: `!decay armored 1000`
+
+![In-Game Command decay Image](images/decay_ingame.png)
 
 
 ## **heli**
