@@ -25,7 +25,7 @@ module.exports = {
         const textInput = new Discord.TextInputBuilder();
 
         if (options.hasOwnProperty('customId')) textInput.setCustomId(options.customId);
-        if (options.hasOwnProperty('label')) textInput.setLabel(options.label);
+        if (options.hasOwnProperty('label')) textInput.setLabel(options.label.slice(0, 45));
         if (options.hasOwnProperty('value')) textInput.setValue(options.value);
         if (options.hasOwnProperty('style')) textInput.setStyle(options.style);
         if (options.hasOwnProperty('minLength')) textInput.setMinLength(options.minLength);

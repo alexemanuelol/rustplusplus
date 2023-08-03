@@ -28,7 +28,7 @@ module.exports = {
         const modal = new Discord.ModalBuilder();
 
         if (options.hasOwnProperty('customId')) modal.setCustomId(options.customId);
-        if (options.hasOwnProperty('title')) modal.setTitle(options.title);
+        if (options.hasOwnProperty('title')) modal.setTitle(options.title.slice(0, 45));
 
         return modal;
     },
