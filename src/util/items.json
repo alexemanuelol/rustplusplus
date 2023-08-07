@@ -384,6 +384,11 @@
         "name": "Large Loot Bag",
         "description": "A massive haul. Contains the best halloween loot"
     },
+    "486661382": {
+        "shortname": "clantable",
+        "name": "Clan Table",
+        "description": "A table for managing clans."
+    },
     "491263800": {
         "shortname": "hazmatsuit.nomadsuit",
         "name": "Nomad Suit",
