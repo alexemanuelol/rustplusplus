@@ -41,7 +41,7 @@ class Map {
 
         this._mapMarkerImageMeta = {
             map: {
-                image: Path.join(__dirname, '..', `resources/images/maps/${this.rustplus.guildId}_map_clean.png`),
+                image: Path.join(__dirname, '..', '..', `maps/${this.rustplus.guildId}_map_clean.png`),
                 size: null, type: null, jimp: null
             },
             player: {
