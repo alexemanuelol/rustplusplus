@@ -119,9 +119,11 @@ Subcommand | Options | Description | Required
 &nbsp; | `name` | The name of the item to search for. | `False`
 &nbsp; | `id` | The ID of the item to search for. | `False`
 `subscribe` | &nbsp; | Subscribe to an item in Vending Machines. | &nbsp;
+&nbsp; | `order` | The order type (all, buy, sell). | `True`
 &nbsp; | `name` | The name of the item to subscribe to. | `False`
 &nbsp; | `id` | The ID of the item to subscribe to. | `False`
 `unsubscribe` | &nbsp; | Unsubscribe to an item in Vending Machines. | &nbsp;
+&nbsp; | `order` | The order type (all, buy, sell). | `True`
 &nbsp; | `name` | The name of the item to unsubscribe to. | `False`
 &nbsp; | `id` | The ID of the item to unsubscribe to. | `False`
 `list` | &nbsp; | Display the subscription list. | &nbsp;
@@ -363,12 +365,17 @@ Subcommand | Description | Required
 ## **market ingame**
 
 > **Search for items in vending machines or subscribe/unsubscribe to items.**
+<br>Command: `!market search sell Thompson`
+<br>Command: `!market sub sell m249`
+<br>Command: `!market sub all Scrap`
+<br>Command: `!market unsub sell m249`
+<br>Command: `!market list`
 
 Subcommand | Description | Required
 ---------- | ----------- | --------
-`search` | Search for an item in Vending Machines (`!market search thompson`). | `False`
-`sub` | Subscribe to an item in Vending Machines (`!market sub thompson`). | `False`
-`unsub` | Unsubscribe to an item in Vending Machines (`!market unsub thompson`). | `False`
+`search` | Search for an item in Vending Machines (`!market search sell thompson`). | `False`
+`sub` | Subscribe to an item in Vending Machines (`!market sub all thompson`). | `False`
+`unsub` | Unsubscribe to an item in Vending Machines (`!market unsub sell thompson`). | `False`
 `list` | Display the subscription list (`!market list`). | `False`
 
 ![In-Game Command market Image](images/market_ingame.png)

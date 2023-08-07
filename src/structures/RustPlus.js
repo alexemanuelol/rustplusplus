@@ -75,9 +75,11 @@ class RustPlus extends RustPlusLib {
         this.smartAlarmIntervalCounter = 20;        /* Counter to decide when smart alarms should be updated */
         this.interactionSwitches = [];              /* Stores the ids of smart switches that are interacted in-game. */
 
-        this.foundSubscriptionItems = [];           /* Stores found vending machine items that are subscribed to */
-        this.firstPollItems = [];                   /* When a new item is added to subscription list, dont notify
-                                                       about the already available items. */
+        /* Stores found vending machine items that are subscribed to */
+        this.foundSubscriptionItems = { all: [], buy: [], sell: [] };
+
+        /* When a new item is added to subscription list, dont notify about the already available items. */
+        this.firstPollItems = { all: [], buy: [], sell: [] };
 
         this.allConnections = [];
         this.playerConnections = new Object();
@@ -1426,22 +1428,25 @@ class RustPlus extends RustPlusLib {
             command = command.slice(`${commandMarketEn} `.length).trim();
         }
         const subcommand = command.replace(/ .*/, '');
-        const name = command.slice(subcommand.length + 1);
+        command = command.slice(subcommand.length + 1);
+
+        const orderType = command.replace(/ .*/, '');
+        const name = command.slice(orderType.length + 1);
 
         switch (subcommand) {
             case commandSearchEn:
             case commandSearch: {
-                let itemId = null;
-                if (name !== null) {
-                    const item = Client.client.items.getClosestItemIdByName(name)
-                    if (item === undefined) {
-                        return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
-                            name: name
-                        });
-                    }
-                    else {
-                        itemId = item;
-                    }
+                if (!['all', 'buy', 'sell'].includes(orderType)) {
+                    return Client.client.intlGet(this.guildId, 'notAValidOrderType', {
+                        order: orderType
+                    });
+                }
+
+                const itemId = Client.client.items.getClosestItemIdByName(name);
+                if (itemId === undefined) {
+                    return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                        name: name
+                    });
                 }
 
                 const locations = [];
@@ -1451,7 +1456,17 @@ class RustPlus extends RustPlusLib {
                     for (const order of vendingMachine.sellOrders) {
                         if (order.amountInStock === 0) continue;
 
-                        if (order.itemId === parseInt(itemId) || order.currencyId === parseInt(itemId)) {
+                        const orderItemId =
+                            (Object.keys(Client.client.items.items).includes(order.itemId.toString())) ?
+                                order.itemId : null;
+                        const orderCurrencyId =
+                            (Object.keys(Client.client.items.items).includes(order.currencyId.toString())) ?
+                                order.currencyId : null;
+
+                        if ((orderType === 'all' &&
+                            (orderItemId === parseInt(itemId) || orderCurrencyId === parseInt(itemId))) ||
+                            (orderType === 'buy' && orderCurrencyId === parseInt(itemId)) ||
+                            (orderType === 'sell' && orderItemId === parseInt(itemId))) {
                             if (locations.includes(vendingMachine.location.location)) continue;
                             locations.push(vendingMachine.location.location);
                         }
@@ -1467,28 +1482,29 @@ class RustPlus extends RustPlusLib {
 
             case commandSubEn:
             case commandSub: {
-                let itemId = null;
-                if (name !== null) {
-                    const item = Client.client.items.getClosestItemIdByName(name)
-                    if (item === undefined) {
-                        return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
-                            name: name
-                        });
-                    }
-                    else {
-                        itemId = item;
-                    }
+                if (!['all', 'buy', 'sell'].includes(orderType)) {
+                    return Client.client.intlGet(this.guildId, 'notAValidOrderType', {
+                        order: orderType
+                    });
+                }
+
+                const itemId = Client.client.items.getClosestItemIdByName(name);
+                if (itemId === undefined) {
+                    return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                        name: name
+                    });
                 }
                 const itemName = Client.client.items.getName(itemId);
 
-                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
+
+                if (instance.marketSubscriptionList[orderType].includes(itemId)) {
                     return Client.client.intlGet(this.guildId, 'alreadySubscribedToItem', {
                         name: itemName
                     });
                 }
                 else {
-                    instance.marketSubscriptionListItemIds.push(itemId);
-                    this.firstPollItems.push(itemId);
+                    instance.marketSubscriptionList[orderType].push(itemId);
+                    this.firstPollItems[orderType].push(itemId);
                     Client.client.setInstance(this.guildId, instance);
 
                     return Client.client.intlGet(this.guildId, 'justSubscribedToItem', {
@@ -1499,22 +1515,23 @@ class RustPlus extends RustPlusLib {
 
             case commandUnsubEn:
             case commandUnsub: {
-                let itemId = null;
-                if (name !== null) {
-                    const item = Client.client.items.getClosestItemIdByName(name)
-                    if (item === undefined) {
-                        return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
-                            name: name
-                        });
-                    }
-                    else {
-                        itemId = item;
-                    }
+                if (!['all', 'buy', 'sell'].includes(orderType)) {
+                    return Client.client.intlGet(this.guildId, 'notAValidOrderType', {
+                        order: orderType
+                    });
+                }
+
+                const itemId = Client.client.items.getClosestItemIdByName(name);
+                if (itemId === undefined) {
+                    return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                        name: name
+                    });
                 }
                 const itemName = Client.client.items.getName(itemId);
 
-                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
-                    instance.marketSubscriptionListItemIds = instance.marketSubscriptionListItemIds.filter(e => e !== itemId);
+                if (instance.marketSubscriptionList[orderType].includes(itemId)) {
+                    instance.marketSubscriptionList[orderType] =
+                        instance.marketSubscriptionList[orderType].filter(e => e !== itemId);
                     Client.client.setInstance(this.guildId, instance);
 
                     return Client.client.intlGet(this.guildId, 'removedSubscribeItem', {
@@ -1530,16 +1547,27 @@ class RustPlus extends RustPlusLib {
 
             case commandListEn:
             case commandList: {
-                const names = [];
-                for (const item of instance.marketSubscriptionListItemIds) {
-                    names.push(Client.client.items.getName(item));
+                const names = { all: '', buy: '', sell: '' };
+                for (const [ot, itemIds] of Object.entries(instance.marketSubscriptionList)) {
+                    let counter = 0;
+                    for (const itemId of itemIds) {
+                        if (counter === 0) names[ot] += `${Client.client.intlGet(this.guildId, ot)}: `;
+                        names[ot] += `${Client.client.items.getName(itemId)} (${itemId}), `;
+                        counter += 1;
+                    }
+                    if (counter !== 0) names[ot] = names[ot].slice(0, -2);
                 }
 
-                if (names.length === 0) {
+                if (names.all === '' && names.buy === '' && names.sell === '') {
                     return Client.client.intlGet(this.guildId, 'subscriptionListEmpty');
                 }
 
-                return names.join(', ');
+                let str = '';
+                for (const [ot, otString] of Object.entries(names)) {
+                    str += otString;
+                }
+
+                return str;
             } break;
 
             default: {

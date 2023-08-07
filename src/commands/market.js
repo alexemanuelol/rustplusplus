@@ -35,7 +35,7 @@ module.exports = {
                 .setDescription(client.intlGet(guildId, 'commandsMarketSearchDesc'))
                 .addStringOption(option => option
                     .setName('order')
-                    .setDescription(client.intlGet(guildId, 'commandsMarketSearchOrderDesc'))
+                    .setDescription(client.intlGet(guildId, 'commandsMarketOrderDesc'))
                     .setRequired(true)
                     .addChoices(
                         { name: client.intlGet(guildId, 'all'), value: 'all' },
@@ -53,6 +53,14 @@ module.exports = {
                 .setName('subscribe')
                 .setDescription(client.intlGet(guildId, 'commandsMarketSubscribeDesc'))
                 .addStringOption(option => option
+                    .setName('order')
+                    .setDescription(client.intlGet(guildId, 'commandsMarketOrderDesc'))
+                    .setRequired(true)
+                    .addChoices(
+                        { name: client.intlGet(guildId, 'all'), value: 'all' },
+                        { name: client.intlGet(guildId, 'buy'), value: 'buy' },
+                        { name: client.intlGet(guildId, 'sell'), value: 'sell' }))
+                .addStringOption(option => option
                     .setName('name')
                     .setDescription(client.intlGet(guildId, 'commandsMarketSubscribeNameDesc'))
                     .setRequired(false))
@@ -63,6 +71,14 @@ module.exports = {
             .addSubcommand(subcommand => subcommand
                 .setName('unsubscribe')
                 .setDescription(client.intlGet(guildId, 'commandsMarketUnsubscribeDesc'))
+                .addStringOption(option => option
+                    .setName('order')
+                    .setDescription(client.intlGet(guildId, 'commandsMarketOrderDesc'))
+                    .setRequired(true)
+                    .addChoices(
+                        { name: client.intlGet(guildId, 'all'), value: 'all' },
+                        { name: client.intlGet(guildId, 'buy'), value: 'buy' },
+                        { name: client.intlGet(guildId, 'sell'), value: 'sell' }))
                 .addStringOption(option => option
                     .setName('name')
                     .setDescription(client.intlGet(guildId, 'commandsMarketUnsubscribeNameDesc'))
@@ -207,6 +223,7 @@ module.exports = {
             case 'subscribe': {
                 const subscribeItemName = interaction.options.getString('name');
                 const subscribeItemId = interaction.options.getString('id');
+                const orderType = interaction.options.getString('order');
 
                 let itemId = null;
                 if (subscribeItemName !== null) {
@@ -244,7 +261,7 @@ module.exports = {
                 }
                 const itemName = client.items.getName(itemId);
 
-                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
+                if (instance.marketSubscriptionList[orderType].includes(itemId)) {
                     const str = client.intlGet(interaction.guildId, 'alreadySubscribedToItem', {
                         name: itemName
                     });
@@ -253,8 +270,8 @@ module.exports = {
                     rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
                 }
                 else {
-                    instance.marketSubscriptionListItemIds.push(itemId);
-                    rustplus.firstPollItems.push(itemId);
+                    instance.marketSubscriptionList[orderType].push(itemId);
+                    rustplus.firstPollItems[orderType].push(itemId);
                     client.setInstance(interaction.guildId, instance);
 
                     const str = client.intlGet(interaction.guildId, 'justSubscribedToItem', {
@@ -269,6 +286,7 @@ module.exports = {
             case 'unsubscribe': {
                 const subscribeItemName = interaction.options.getString('name');
                 const subscribeItemId = interaction.options.getString('id');
+                const orderType = interaction.options.getString('order');
 
                 let itemId = null;
                 if (subscribeItemName !== null) {
@@ -306,8 +324,9 @@ module.exports = {
                 }
                 const itemName = client.items.getName(itemId);
 
-                if (instance.marketSubscriptionListItemIds.includes(itemId)) {
-                    instance.marketSubscriptionListItemIds = instance.marketSubscriptionListItemIds.filter(e => e !== itemId);
+                if (instance.marketSubscriptionList[orderType].includes(itemId)) {
+                    instance.marketSubscriptionList[orderType] =
+                        instance.marketSubscriptionList[orderType].filter(e => e !== itemId);
                     client.setInstance(interaction.guildId, instance);
 
                     const str = client.intlGet(interaction.guildId, 'removedSubscribeItem', {
@@ -328,31 +347,37 @@ module.exports = {
             } break;
 
             case 'list': {
-                let names = '';
-                let ids = '';
-                for (let item of instance.marketSubscriptionListItemIds) {
-                    names += `\`${client.items.getName(item)}\`\n`;
-                    ids += `\`${item}\`\n`;
+                const names = { all: '', buy: '', sell: '' };
+                for (const [orderType, itemIds] of Object.entries(instance.marketSubscriptionList)) {
+                    for (const itemId of itemIds) {
+                        names[orderType] += `\`${client.items.getName(itemId)} (${itemId})\`\n`;
+                    }
                 }
 
-                if (names === '' || ids === '') {
-                    const str = client.intlGet(interaction.guildId, 'subscriptionListEmpty');
-                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-                        instance.serverList[rustplus.serverId].title));
-                }
-                else {
-                    await client.interactionEditReply(interaction, {
-                        embeds: [DiscordEmbeds.getEmbed({
-                            color: Constants.COLOR_DEFAULT,
-                            title: client.intlGet(interaction.guildId, 'subscriptionList'),
-                            footer: { text: instance.serverList[rustplus.serverId].title },
-                            fields: [
-                                { name: client.intlGet(interaction.guildId, 'name'), value: names, inline: true },
-                                { name: 'ID', value: ids, inline: true }]
-                        })],
-                        ephemeral: true
-                    });
-                }
+                await client.interactionEditReply(interaction, {
+                    embeds: [DiscordEmbeds.getEmbed({
+                        color: Constants.COLOR_DEFAULT,
+                        title: client.intlGet(interaction.guildId, 'subscriptionList'),
+                        footer: { text: instance.serverList[rustplus.serverId].title },
+                        fields: [
+                            {
+                                name: client.intlGet(interaction.guildId, 'all'),
+                                value: names['all'] === '' ? '\u200B' : names['all'],
+                                inline: true
+                            },
+                            {
+                                name: client.intlGet(interaction.guildId, 'buy'),
+                                value: names['buy'] === '' ? '\u200B' : names['buy'],
+                                inline: true
+                            },
+                            {
+                                name: client.intlGet(interaction.guildId, 'sell'),
+                                value: names['sell'] === '' ? '\u200B' : names['sell'],
+                                inline: true
+                            }]
+                    })],
+                    ephemeral: true
+                });
 
                 rustplus.log(client.intlGet(interaction.guildId, 'infoCap'),
                     client.intlGet(interaction.guildId, 'showingSubscriptionList'));

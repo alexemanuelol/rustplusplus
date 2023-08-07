@@ -30,7 +30,7 @@ module.exports = {
     checkChanges: async function (rustplus, client, mapMarkers) {
         const guildId = rustplus.guildId;
         const instance = client.getInstance(guildId);
-        const subscriptionList = instance.marketSubscriptionListItemIds;
+        const subscriptionList = instance.marketSubscriptionList;
         const vendingMachineType = rustplus.mapMarkers.types.VendingMachine;
         const vendingMachines = rustplus.mapMarkers.getMarkersOfType(vendingMachineType, mapMarkers.markers);
 
@@ -45,66 +45,77 @@ module.exports = {
                 const currencyId = order.currencyId.toString();
                 const amountInStock = order.amountInStock;
 
-                const found = rustplus.foundSubscriptionItems.find(e =>
-                    e.vId === vId && e.itemId === itemId && e.currencyId === currencyId);
+                for (const orderType of ['all', 'buy', 'sell']) {
+                    const found = rustplus.foundSubscriptionItems[orderType].find(e =>
+                        e.vId === vId && e.itemId === itemId && e.currencyId === currencyId);
 
-                if (!(subscriptionList.includes(itemId) || subscriptionList.includes(currencyId)) ||
-                    amountInStock === 0) {
-                    rustplus.foundSubscriptionItems = rustplus.foundSubscriptionItems.filter(e =>
-                        e.vId !== vId || e.itemId !== itemId || e.currencyId !== currencyId);
-                    continue;
+                    const allCond = orderType === 'all' && (!(subscriptionList[orderType].includes(itemId) ||
+                        subscriptionList[orderType].includes(currencyId)) || amountInStock === 0);
+                    const buyCond = orderType === 'buy' && (!subscriptionList[orderType].includes(currencyId) ||
+                        amountInStock === 0);
+                    const sellCond = orderType === 'sell' && (!subscriptionList[orderType].includes(itemId) ||
+                        amountInStock === 0);
+
+                    if (allCond || buyCond || sellCond) {
+                        rustplus.foundSubscriptionItems[orderType] = rustplus.foundSubscriptionItems[orderType]
+                            .filter(e => e.vId !== vId || e.itemId !== itemId || e.currencyId !== currencyId);
+                        continue;
+                    }
+
+                    if (found) continue;
+
+                    rustplus.foundSubscriptionItems[orderType].push({
+                        vId: vId,
+                        itemId: itemId,
+                        currencyId: currencyId
+                    });
+
+                    if (rustplus.isFirstPoll || rustplus.firstPollItems[orderType].includes(itemId) ||
+                        rustplus.firstPollItems[orderType].includes(currencyId)) {
+                        continue;
+                    }
+
+                    const location = Map.getPos(x, y, rustplus.info.correctedMapSize, rustplus);
+                    const itemName = client.items.getName(itemId);
+                    const currencyName = client.items.getName(currencyId);
+
+                    const items = [];
+                    if (subscriptionList[orderType].includes(itemId)) items.push(itemName)
+                    if (subscriptionList[orderType].includes(currencyId)) items.push(currencyName)
+
+                    const str = client.intlGet(guildId, 'itemAvailableInVendingMachine', {
+                        items: items.join(', '),
+                        location: location.location
+                    });
+
+                    await DiscordMessages.sendItemAvailableInVendingMachineMessage(rustplus, str);
+
+                    if (rustplus.generalSettings.itemAvailableInVendingMachineNotifyInGame) {
+                        rustplus.sendTeamMessageAsync(str);
+                    }
+                    rustplus.log(client.intlGet(null, 'infoCap'), str);
                 }
-
-                if (found) continue;
-
-                rustplus.foundSubscriptionItems.push({
-                    vId: vId,
-                    itemId: itemId,
-                    currencyId: currencyId
-                });
-
-                if (rustplus.isFirstPoll || rustplus.firstPollItems.includes(itemId) ||
-                    rustplus.firstPollItems.includes(currencyId)) {
-                    continue;
-                }
-
-                const location = Map.getPos(x, y, rustplus.info.correctedMapSize, rustplus);
-                const itemName = client.items.getName(itemId);
-                const currencyName = client.items.getName(currencyId);
-
-                const items = [];
-                if (subscriptionList.includes(itemId)) items.push(itemName)
-                if (subscriptionList.includes(currencyId)) items.push(currencyName)
-
-                const str = client.intlGet(guildId, 'itemAvailableInVendingMachine', {
-                    items: items.join(', '),
-                    location: location.location
-                });
-
-                await DiscordMessages.sendItemAvailableInVendingMachineMessage(rustplus, str);
-
-                if (rustplus.generalSettings.itemAvailableInVendingMachineNotifyInGame) {
-                    rustplus.sendTeamMessageAsync(str);
-                }
-                rustplus.log(client.intlGet(null, 'infoCap'), str);
             }
         }
 
-        for (const foundItem of rustplus.foundSubscriptionItems) {
-            let stillPresent = false;
-            for (const vendingMachine of vendingMachines) {
-                const vId = `${vendingMachine.x}:${vendingMachine.y}`;
-                if (foundItem.vId === vId) {
-                    stillPresent = true;
-                    break;
+        for (const orderType of ['all', 'buy', 'sell']) {
+            for (const foundItem of rustplus.foundSubscriptionItems[orderType]) {
+                let stillPresent = false;
+                for (const vendingMachine of vendingMachines) {
+                    const vId = `${vendingMachine.x}:${vendingMachine.y}`;
+                    if (foundItem.vId === vId) {
+                        stillPresent = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!stillPresent) {
-                rustplus.foundSubscriptionItems = rustplus.foundSubscriptionItems.filter(e => e.vId !== foundItem.vId);
+                if (!stillPresent) {
+                    rustplus.foundSubscriptionItems[orderType] = rustplus.foundSubscriptionItems[orderType]
+                        .filter(e => e.vId !== foundItem.vId);
+                }
             }
         }
 
-        rustplus.firstPollItems = [];
+        rustplus.firstPollItems = { all: [], buy: [], sell: [] };
     },
 }
