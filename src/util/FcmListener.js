@@ -18,6 +18,8 @@
 
 */
 
+const Discord = require('discord.js');
+const Path = require('path');
 const PushReceiver = require('push-receiver');
 
 const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
@@ -445,9 +447,15 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
 
     if (!instance.serverList.hasOwnProperty(serverId)) return;
 
+    const files = [];
+    if (body.img === '') {
+        files.push(new Discord.AttachmentBuilder(Path.join(__dirname, '..', `resources/images/rocket.png`)));
+    }
+
     const content = {
         embeds: [DiscordEmbeds.getAlarmRaidAlarmEmbed(data, body)],
-        content: '@everyone'
+        content: '@everyone',
+        files: files
     }
 
     if (rustplus && (serverId === rustplus.serverId)) {
