@@ -133,10 +133,13 @@ module.exports = {
         if (playerSteamId === '') playerSteamId = Client.client.intlGet(guildId, 'empty');
         if (playerStatus === '') playerStatus = Client.client.intlGet(guildId, 'empty');
 
+        const bmId = tracker.battlemetricsId;
+        const bmIdLink = `[${bmId}](${Constants.BATTLEMETRICS_SERVER_URL}${bmId})`;
+
         return module.exports.getEmbed({
             title: `${tracker.name}`,
             color: Constants.COLOR_DEFAULT,
-            description: `**Battlemetrics ID:** \`${tracker.battlemetricsId}\`\n` +
+            description: `**Battlemetrics ID:** ${bmIdLink}\n` +
                 `**${Client.client.intlGet(guildId, 'clanTag')}:** ` +
                 (tracker.clanTag !== '' ? `\`${tracker.clanTag}\`` : '') + '\n' +
                 `${Client.client.intlGet(guildId, 'serverStatus', { status: serverStatus })}`,

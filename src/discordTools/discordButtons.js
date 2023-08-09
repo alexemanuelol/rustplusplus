@@ -100,6 +100,11 @@ module.exports = {
             style: LINK,
             url: server.url
         });
+        let battlemetricsButton = module.exports.getButton({
+            label: Client.client.intlGet(guildId, 'battlemetricsCap'),
+            style: LINK,
+            url: `${Constants.BATTLEMETRICS_SERVER_URL}${server.battlemetricsId}`
+        });
         let deleteButton = module.exports.getButton({
             customId: `ServerDelete${identifier}`,
             style: SECONDARY,
@@ -109,7 +114,7 @@ module.exports = {
         if (server.battlemetricsId !== null) {
             return [
                 new Discord.ActionRowBuilder().addComponents(
-                    connectionButton, linkButton, deleteButton
+                    connectionButton, linkButton, battlemetricsButton, deleteButton
                 ),
                 new Discord.ActionRowBuilder().addComponents(
                     customTimersButton, trackerButton, groupButton
