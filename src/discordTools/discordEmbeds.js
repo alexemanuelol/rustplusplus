@@ -152,6 +152,7 @@ module.exports = {
                 (tracker.clanTag !== '' ? `\`${tracker.clanTag}\`` : '') + '\n' +
                 `${Client.client.intlGet(guildId, 'serverStatus', { status: serverStatus })}`,
             thumbnail: `${tracker.img}`,
+            footer: { text: `${tracker.title}` },
             fields: [
                 { name: Client.client.intlGet(guildId, 'name'), value: playerName, inline: true },
                 { name: 'SteamID', value: playerSteamId, inline: true },
