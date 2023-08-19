@@ -74,10 +74,18 @@ module.exports = {
             hoster = hoster.user.username;
         }
 
+        let description = '';
+        if (server.battlemetricsId !== null) {
+            const bmId = server.battlemetricsId;
+            const bmIdLink = `[${bmId}](${Constants.BATTLEMETRICS_SERVER_URL}${bmId})`;
+            description += `**Battlemetrics ID:** ${bmIdLink}\n\n`;
+        }
+        description += `${server.description}`;
+
         return module.exports.getEmbed({
             title: `${server.title}`,
             color: Constants.COLOR_DEFAULT,
-            description: `${server.description}`,
+            description: description,
             thumbnail: `${server.img}`,
             fields: [{
                 name: Client.client.intlGet(guildId, 'connect'),

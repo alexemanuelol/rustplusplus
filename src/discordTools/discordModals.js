@@ -33,6 +33,30 @@ module.exports = {
         return modal;
     },
 
+    getServerEditModal(guildId, serverId) {
+        const instance = Client.client.getInstance(guildId);
+        const server = instance.serverList[serverId];
+        const identifier = JSON.stringify({ "serverId": serverId });
+
+        const modal = module.exports.getModal({
+            customId: `ServerEdit${identifier}`,
+            title: Client.client.intlGet(guildId, 'editing')
+        });
+
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'ServerBattlemetricsId',
+                label: Client.client.intlGet(guildId, 'serverEditBattlemetricsIdLabel'),
+                value: server.battlemetricsId === null ? '' : server.battlemetricsId,
+                style: Discord.TextInputStyle.Short,
+                required: false,
+                minLength: 0
+            }))
+        );
+
+        return modal;
+    },
+
     getCustomTimersEditModal(guildId, serverId) {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];

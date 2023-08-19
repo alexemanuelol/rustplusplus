@@ -46,6 +46,25 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
     }
+    else if (interaction.customId.startsWith('ServerEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('ServerEdit', ''));
+        const server = instance.serverList[ids.serverId];
+        const battlemetricsId = interaction.fields.getTextInputValue('ServerBattlemetricsId');
+
+        if (battlemetricsId === '') {
+            server.battlemetricsId = null;
+        }
+        else {
+            server.battlemetricsId = battlemetricsId;
+        }
+
+        client.setInstance(guildId, instance);
+
+        await DiscordMessages.sendServerMessage(interaction.guildId, ids.serverId);
+
+        /* To force search of player name via scrape */
+        client.battlemetricsIntervalCounter = 0;
+    }
     else if (interaction.customId.startsWith('SmartSwitchEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
         const server = instance.serverList[ids.serverId];

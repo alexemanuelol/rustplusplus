@@ -291,6 +291,18 @@ module.exports = async (client, interaction) => {
 
         newRustplus.isNewConnection = true;
     }
+    else if (interaction.customId.startsWith('ServerEdit')) {
+        const ids = JSON.parse(interaction.customId.replace('ServerEdit', ''));
+        const server = instance.serverList[ids.serverId];
+
+        if (!server) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getServerEditModal(guildId, ids.serverId);
+        await interaction.showModal(modal);
+    }
     else if (interaction.customId.startsWith('CustomTimersEdit')) {
         const ids = JSON.parse(interaction.customId.replace('CustomTimersEdit', ''));
         const server = instance.serverList[ids.serverId];
