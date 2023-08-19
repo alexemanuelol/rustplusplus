@@ -672,7 +672,7 @@ module.exports = {
             title: Client.client.intlGet(guildId, 'serverInfo'),
             color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://server_info_logo.png',
-            description: rustplus.info.name,
+            footer: { text: instance.serverList[rustplus.serverId].title },
             fields: [
                 { name: playersFieldName, value: `\`${rustplus.getCommandPop(true)}\``, inline: true },
                 { name: timeFieldName, value: `\`${time[0]}\``, inline: true },
