@@ -188,8 +188,8 @@ class DiscordBot extends Discord.Client {
         });
     }
 
-    log(title, text, level = 'info') {
-        this.logger.log(title, text, level);
+    log(title, text, level = 'info', ignoreConsole = false) {
+        this.logger.log(title, text, level, ignoreConsole);
     }
 
     logInteraction(interaction, verifyId, type) {
@@ -285,6 +285,9 @@ class DiscordBot extends Discord.Client {
     }
 
     setInstance(guildId, instance) {
+        const stack = new Error().stack;
+        this.log('TRACEBACK', `${stack}`, 'info', true);
+
         this.instances[guildId] = instance;
         InstanceUtils.writeInstanceFile(guildId, instance);
     }

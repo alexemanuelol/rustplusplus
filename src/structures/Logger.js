@@ -56,7 +56,7 @@ class Logger {
         return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
     }
 
-    log(title, text, level) {
+    log(title, text, level, ignoreConsole = false) {
         let time = this.getTime();
 
         switch (this.type) {
@@ -67,10 +67,12 @@ class Logger {
                     message: `${time} | ${text}`
                 });
 
-                console.log(
-                    Colors.green(`${time} `) +
-                    ((level === 'error') ? Colors.red(text) : Colors.yellow(text))
-                );
+                if (!ignoreConsole) {
+                    console.log(
+                        Colors.green(`${time} `) +
+                        ((level === 'error') ? Colors.red(text) : Colors.yellow(text))
+                    );
+                }
 
                 if (level === 'error' && Config.general.showCallStackError) {
                     for (let line of (new Error().stack.split(/\r?\n/))) {
@@ -88,12 +90,14 @@ class Logger {
                     message: `${time} | ${this.guildId} | ${this.serverName} | ${text}`
                 });
 
-                console.log(
-                    Colors.green(`${time} `) +
-                    Colors.cyan(`${this.guildId} `) +
-                    Colors.white(`${this.serverName} `) +
-                    ((level === 'error') ? Colors.red(text) : Colors.yellow(text))
-                );
+                if (!ignoreConsole) {
+                    console.log(
+                        Colors.green(`${time} `) +
+                        Colors.cyan(`${this.guildId} `) +
+                        Colors.white(`${this.serverName} `) +
+                        ((level === 'error') ? Colors.red(text) : Colors.yellow(text))
+                    );
+                }
 
                 if (level === 'error' && Config.general.showCallStackError) {
                     for (let line of (new Error().stack.split(/\r?\n/))) {
