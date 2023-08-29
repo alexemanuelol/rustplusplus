@@ -35,9 +35,9 @@ module.exports = {
         const serverId = rustplus.serverId;
 
         if (rustplus.leaderRustPlusInstance !== null) {
-            if (Client.client.rustplusLiteReconnectTimers[this.guildId]) {
-                clearTimeout(Client.client.rustplusLiteReconnectTimers[this.guildId]);
-                Client.client.rustplusLiteReconnectTimers[this.guildId] = null;
+            if (client.rustplusLiteReconnectTimers[guildId]) {
+                clearTimeout(client.rustplusLiteReconnectTimers[guildId]);
+                client.rustplusLiteReconnectTimers[guildId] = null;
             }
             rustplus.leaderRustPlusInstance.isActive = false;
             rustplus.leaderRustPlusInstance.disconnect();
