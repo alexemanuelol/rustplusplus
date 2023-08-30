@@ -18,6 +18,8 @@
 
 */
 
+const Discord = require('discord.js');
+
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -26,6 +28,11 @@ module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
     const guildId = interaction.guildId;
     const rustplus = client.rustplusInstances[guildId];
+
+    if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
+        !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+        return;
+    }
 
     if (interaction.customId === 'language') {
         instance.generalSettings.language = interaction.values[0];

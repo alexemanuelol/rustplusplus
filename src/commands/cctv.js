@@ -48,6 +48,8 @@ module.exports = {
     },
 
     async execute(client, interaction) {
+        if (!await client.validatePermissions(interaction)) return;
+
         const monument = interaction.options.getString('monument');
         const cctvCodes = client.cctv.getCodes(monument);
         const dynamic = client.cctv.isDynamic(monument);

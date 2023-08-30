@@ -10,6 +10,7 @@
 Slash Command | Description
 ------------- | -----------
 [**/alarm**](commands.md#alarm) | Operations on Smart Alarms.
+[**/blacklist**](commands.md#blacklist) | Blacklist a user from using the bot.
 [**/cctv**](commands.md#cctv) | Posts CCTV codes for a monument.
 [**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
 [**/help**](commands.md#help) | Display help message.
@@ -36,6 +37,23 @@ Subcommand | Options | Description | Required
 &nbsp; | `image` | Set the image that best represent the Smart Alarm. | `True`
 
 ![Discord Slash Command alarm Image](images/alarms_edit.png)
+
+
+## **/blacklist**
+
+> **Blacklist a user from using the bot.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+`add` | &nbsp; | Add user to the blacklist. | &nbsp;
+&nbsp; | `discord_user` | The discord user. | `False`
+&nbsp; | `steamid` | The steamid of the user. | `False`
+`remove` | &nbsp; | Remove user from the blacklist. | &nbsp;
+&nbsp; | `discord_user` | The discord user. | `False`
+&nbsp; | `steamid` | The steamid of the user. | `False`
+`show` | &nbsp; | Show blacklisted users. | &nbsp;
+
+![Discord Slash Command blacklist Image](images/blacklist.png)
 
 
 ## **/cctv**

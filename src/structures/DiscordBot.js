@@ -195,10 +195,16 @@ class DiscordBot extends Discord.Client {
         let category = await require('../discordTools/SetupGuildCategory')(this, guild);
         await require('../discordTools/SetupGuildChannels')(this, guild, category);
         if (firstTime) {
-            await PermissionHandler.removeViewPermission(this, guild);
+            const perms = PermissionHandler.getPermissionsRemoved(this, guild);
+            try {
+                await category.permissionOverwrites.set(perms);
+            }
+            catch (e) {
+                /* Ignore */
+            }
         }
         else {
-            await PermissionHandler.resetPermissions(this, guild);
+            await PermissionHandler.resetPermissionsAllChannels(this, guild);
         }
 
         require('../util/FcmListener')(this, guild);
@@ -211,7 +217,7 @@ class DiscordBot extends Discord.Client {
 
         await require('../discordTools/SetupSettingsMenu')(this, guild);
 
-        if (firstTime) await PermissionHandler.resetPermissions(this, guild);
+        if (firstTime) await PermissionHandler.resetPermissionsAllChannels(this, guild);
 
         this.resetRustplusVariables(guild.id);
     }
@@ -422,6 +428,11 @@ class DiscordBot extends Discord.Client {
 
     async validatePermissions(interaction) {
         const instance = this.getInstance(interaction.guildId);
+
+        if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
+            !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+            return false;
+        }
 
         /* If role isn't setup yet, validate as true */
         if (instance.role === null) return true;

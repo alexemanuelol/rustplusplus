@@ -72,6 +72,11 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
     message.broadcast.teamMessage.message.message =
         message.broadcast.teamMessage.message.message.replace(/^<color.+?<\/color>/g, '');
 
+    if (instance.blacklist['steamIds'].includes(`${message.broadcast.teamMessage.message.steamId}`)) {
+        TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
+        return;
+    }
+
     const startsWithTrademark = message.broadcast.teamMessage.message.message
         .startsWith(instance.generalSettings.trademark);
 

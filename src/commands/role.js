@@ -80,7 +80,7 @@ module.exports = {
 		if (guild) {
 			const category = await require('../discordTools/SetupGuildCategory')(client, guild);
 			await require('../discordTools/SetupGuildChannels')(client, guild, category);
-			await PermissionHandler.resetPermissions(client, guild);
+			await PermissionHandler.resetPermissionsAllChannels(client, guild);
 		}
 
 		if (interaction.options.getSubcommand() === 'set') {

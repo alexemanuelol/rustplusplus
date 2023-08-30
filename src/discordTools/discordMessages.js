@@ -531,6 +531,7 @@ module.exports = {
     sendCctvMessage: async function (interaction, monument, cctvCodes, dynamic) {
         const content = {
             embeds: [DiscordEmbeds.getCctvEmbed(interaction.guildId, monument, cctvCodes, dynamic)],
+            ephemeral: true
         }
 
         await Client.client.interactionReply(interaction, content);
