@@ -71,11 +71,21 @@ or
 
     $ docker run --rm -it -v ${pwd}/credentials:/app/credentials -v ${pwd}/instances:/app/instances -v ${pwd}/logs:/app/logs -e RPP_DISCORD_CLIENT_ID=111....1111 -e RPP_DISCORD_TOKEN=token --name rpp ghcr.io/alexemanuelol/rustplusplus
 
-or
+or by using the example docker compose file in the `examples/docker-compose` directory:
 
     $ docker-compose up -d
 
-Make sure you use the correct values for DISCORD_CLIENT_ID as well as DISCORD_TOKEN in the docker command/docker-compose.yml
+Make sure you use the correct values for `DISCORD_CLIENT_ID` as well as `DISCORD_TOKEN`` in the `docker-compose.yml` file.
+
+## **Running in kubernetes**
+
+Edit the `examples/kubernetes/rustplusplus.yml` file, modifying the client id and token for the token. After that, apply the modified manifest with
+
+    $ kubectl apply -f examples/kubernetes/rustplusplus.yml
+
+You can check the progress of the deployment by running
+
+    $ kubectl describe deploy/rustplusplus
 
 ## **Thanks to**
 
