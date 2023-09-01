@@ -42,5 +42,8 @@
     "resolutions": {
         "jpeg-js": "0.4.4",
         "protobufjs": "7.2.4"
+    },
+    "devDependencies": {
+        "prettier": "^3.0.3"
     }
 }
