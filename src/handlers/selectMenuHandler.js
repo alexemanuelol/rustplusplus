@@ -113,14 +113,14 @@ module.exports = async (client, interaction) => {
         });
     }
     else if (interaction.customId === 'VoiceGender') {
-        instance.generalSettings.gender = interaction.values[0];
+        instance.generalSettings.voiceGender = interaction.values[0];
         client.setInstance(guildId, instance);
 
-        if (rustplus) rustplus.generalSettings.gender = interaction.values[0];
+        if (rustplus) rustplus.generalSettings.voiceGender = interaction.values[0];
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
-            value: `${instance.generalSettings.gender}`
+            value: `${instance.generalSettings.voiceGender}`
         }));
 
         await client.interactionUpdate(interaction, {
