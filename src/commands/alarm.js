@@ -62,7 +62,11 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
-		const instance = client.getInstance(interaction.guildId);
+		const guildId = interaction.guildId;
+		const instance = client.getInstance(guildId);
+
+		const verifyId = Math.floor(100000 + Math.random() * 900000);
+		client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
@@ -72,11 +76,10 @@ module.exports = {
 				const entityId = interaction.options.getString('id');
 				const image = interaction.options.getString('image');
 
-				const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
+				const device = InstanceUtils.getSmartDevice(guildId, entityId);
 				if (device === null) {
-					const str = client.intlGet(interaction.guildId, 'invalidId', { id: entityId });
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-						instance.serverList[device.serverId].title));
+					const str = client.intlGet(guildId, 'invalidId', { id: entityId });
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 					client.log(client.intlGet(null, 'warningCap'), str);
 					return;
 				}
@@ -84,11 +87,16 @@ module.exports = {
 				const entity = instance.serverList[device.serverId].alarms[entityId];
 
 				if (image !== null) instance.serverList[device.serverId].alarms[entityId].image = `${image}.png`;
-				client.setInstance(interaction.guildId, instance);
+				client.setInstance(guildId, instance);
 
-				await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, device.serverId, entityId);
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `edit, ${entityId}, ${image}.png`
+				}));
 
-				const str = client.intlGet(interaction.guildId, 'smartAlarmEditSuccess', { name: entity.name });
+				await DiscordMessages.sendSmartAlarmMessage(guildId, device.serverId, entityId);
+
+				const str = client.intlGet(guildId, 'smartAlarmEditSuccess', { name: entity.name });
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
 					instance.serverList[device.serverId].title));
 				client.log(client.intlGet(null, 'infoCap'), str);

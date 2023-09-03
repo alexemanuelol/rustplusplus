@@ -186,6 +186,19 @@ class DiscordBot extends Discord.Client {
         this.logger.log(title, text, level);
     }
 
+    logInteraction(interaction, verifyId, type) {
+        const channel = DiscordTools.getTextChannelById(interaction.guildId, interaction.channelId);
+        const args = new Object();
+        args['guild'] = `${interaction.member.guild.name} (${interaction.member.guild.id})`;
+        args['channel'] = `${channel.name} (${interaction.channelId})`;
+        args['user'] = `${interaction.user.username} (${interaction.user.id})`;
+        args[(type === 'slashCommand') ? 'command' : 'customId'] = (type === 'slashCommand') ?
+            `${interaction.commandName}` : `${interaction.customId}`;
+        args['id'] = `${verifyId}`;
+
+        this.log(this.intlGet(null, 'infoCap'), this.intlGet(null, `${type}Interaction`, args));
+    }
+
     async setupGuild(guild) {
         const instance = this.getInstance(guild.id);
         const firstTime = instance.firstTime;

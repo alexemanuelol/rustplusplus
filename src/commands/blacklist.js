@@ -64,6 +64,9 @@ module.exports = {
 		const guildId = interaction.guildId;
 		const instance = client.getInstance(guildId);
 
+		const verifyId = Math.floor(100000 + Math.random() * 900000);
+		client.logInteraction(interaction, verifyId, 'slashCommand');
+
 		if (!await client.validatePermissions(interaction)) return;
 
 		if (!client.isAdministrator(interaction)) {
@@ -132,6 +135,11 @@ module.exports = {
 					}
 				}
 
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `add, ${discordUser}, ${steamid}`
+				}));
+
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(successful, str));
 				client.log(client.intlGet(null, 'infoCap'), str);
 				return;
@@ -193,6 +201,10 @@ module.exports = {
 					}
 				}
 
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `remove, ${discordUser}, ${steamid}`
+				}));
 
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(successful, str));
 				client.log(client.intlGet(null, 'infoCap'), str);
@@ -224,10 +236,10 @@ module.exports = {
 				await client.interactionEditReply(interaction, {
 					embeds: [DiscordEmbeds.getEmbed({
 						color: Constants.COLOR_DEFAULT,
-						title: client.intlGet(interaction.guildId, 'blacklist'),
+						title: client.intlGet(guildId, 'blacklist'),
 						fields: [
 							{
-								name: client.intlGet(interaction.guildId, 'discordUsers'),
+								name: client.intlGet(guildId, 'discordUsers'),
 								value: discordUsers === '' ? '\u200B' : discordUsers,
 								inline: true
 							},
@@ -240,7 +252,7 @@ module.exports = {
 					ephemeral: true
 				});
 
-				client.log(client.intlGet(guildId, 'infoCap'), client.intlGet(interaction.guildId, 'showingBlacklist'));
+				client.log(client.intlGet(guildId, 'infoCap'), client.intlGet(guildId, 'showingBlacklist'));
 			} break;
 
 			default: {

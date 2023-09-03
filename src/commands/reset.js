@@ -62,6 +62,9 @@ module.exports = {
 	async execute(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
 
+		const verifyId = Math.floor(100000 + Math.random() * 900000);
+		client.logInteraction(interaction, verifyId, 'slashCommand');
+
 		if (!await client.validatePermissions(interaction)) return;
 
 		if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
@@ -113,6 +116,11 @@ module.exports = {
 				await require('../discordTools/SetupTrackers')(client, guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `discord`
+				}));
 			} break;
 
 			case 'information': {
@@ -123,6 +131,11 @@ module.exports = {
 					await rustplus.map.writeMap(false, true);
 					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `information`
+				}));
 			} break;
 
 			case 'servers': {
@@ -138,6 +151,11 @@ module.exports = {
 				await require('../discordTools/SetupServerList')(client, guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `servers`
+				}));
 			} break;
 
 			case 'settings': {
@@ -153,6 +171,11 @@ module.exports = {
 				await require('../discordTools/SetupSettingsMenu')(client, guild, true);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `settings`
+				}));
 			} break;
 
 			case 'switches': {
@@ -175,6 +198,11 @@ module.exports = {
 				}
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `switches`
+				}));
 			} break;
 
 			case 'alarms': {
@@ -182,6 +210,11 @@ module.exports = {
 				if (rustplus && rustplus.isOperational) {
 					await require('../discordTools/SetupAlarms')(client, rustplus);
 				}
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `alarms`
+				}));
 			} break;
 
 			case 'storagemonitors': {
@@ -202,6 +235,11 @@ module.exports = {
 				}
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `storagemonitors`
+				}));
 			} break;
 
 			case 'trackers': {
@@ -217,6 +255,11 @@ module.exports = {
 				await require('../discordTools/SetupTrackers')(client, guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `trackers`
+				}));
 			} break;
 
 			default: {

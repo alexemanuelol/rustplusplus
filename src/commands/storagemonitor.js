@@ -50,8 +50,12 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
-		const instance = client.getInstance(interaction.guildId);
-		const rustplus = client.rustplusInstances[interaction.guildId];
+		const guildId = interaction.guildId;
+		const instance = client.getInstance(guildId);
+		const rustplus = client.rustplusInstances[guildId];
+
+		const verifyId = Math.floor(100000 + Math.random() * 900000);
+		client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
@@ -61,11 +65,10 @@ module.exports = {
 				const entityId = interaction.options.getString('id');
 				const image = interaction.options.getString('image');
 
-				const device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
+				const device = InstanceUtils.getSmartDevice(guildId, entityId);
 				if (device === null) {
-					const str = client.intlGet(interaction.guildId, 'invalidId', { id: entityId });
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
-						instance.serverList[device.serverId].title));
+					const str = client.intlGet(guildId, 'invalidId', { id: entityId });
+					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 					client.log(client.intlGet(null, 'warningCap'), str);
 					return;
 				}
@@ -75,13 +78,18 @@ module.exports = {
 				if (image !== null) {
 					instance.serverList[device.serverId].storageMonitors[entityId].image = `${image}.png`;
 				}
-				client.setInstance(interaction.guildId, instance);
+				client.setInstance(guildId, instance);
+
+				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+					id: `${verifyId}`,
+					value: `edit, ${entityId}, ${image}.png`
+				}));
 
 				if (rustplus && rustplus.serverId === device.serverId) {
-					await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, device.serverId, entityId);
+					await DiscordMessages.sendStorageMonitorMessage(guildId, device.serverId, entityId);
 				}
 
-				const str = client.intlGet(interaction.guildId, 'storageMonitorEditSuccess', { name: entity.name });
+				const str = client.intlGet(guildId, 'storageMonitorEditSuccess', { name: entity.name });
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
 					instance.serverList[device.serverId].title));
 				client.log(client.intlGet(null, 'infoCap'), str);

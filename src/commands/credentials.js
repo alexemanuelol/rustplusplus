@@ -101,6 +101,9 @@ module.exports = {
     },
 
     async execute(client, interaction) {
+        const verifyId = Math.floor(100000 + Math.random() * 900000);
+        client.logInteraction(interaction, verifyId, 'slashCommand');
+
         if (!await client.validatePermissions(interaction)) return;
         await interaction.deferReply({ ephemeral: true });
 
@@ -190,6 +193,22 @@ async function addCredentials(client, interaction) {
         }
     }
 
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+        id: `${verifyId}`,
+        value: `add, ${steamId}, ` +
+            `${credentials[steamId].discordUserId}, ` +
+            `${isHoster}, ` +
+            `${credentials[steamId].fcm_credentials.keys.privateKey}, ` +
+            `${credentials[steamId].fcm_credentials.keys.publicKey}, ` +
+            `${credentials[steamId].fcm_credentials.keys.authSecret}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.token}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.pushSet}, ` +
+            `${credentials[steamId].fcm_credentials.gcm.token}, ` +
+            `${credentials[steamId].fcm_credentials.gcm.androidId}, ` +
+            `${credentials[steamId].fcm_credentials.gcm.securityToken}, ` +
+            `${credentials[steamId].fcm_credentials.gcm.appId}`
+    }));
+
     const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log(client.intlGet(null, 'infoCap'), str);
@@ -239,12 +258,22 @@ async function removeCredentials(client, interaction) {
     delete credentials[steamId];
     InstanceUtils.writeCredentialsFile(guildId, credentials);
 
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+        id: `${verifyId}`,
+        value: `remove, ${steamId}`
+    }));
+
     const str = client.intlGet(guildId, 'credentialsRemovedSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log(client.intlGet(null, 'infoCap'), str);
 }
 
 async function showCredentials(client, interaction) {
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+        id: `${verifyId}`,
+        value: `show`
+    }));
+
     await DiscordMessages.sendCredentialsShowMessage(interaction);
 }
 
@@ -293,6 +322,11 @@ async function setHosterCredentials(client, interaction) {
     if (prevHoster !== null) {
         require('../util/FcmListenerLite')(client, DiscordTools.getGuild(interaction.guildId), prevHoster);
     }
+
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+        id: `${verifyId}`,
+        value: `setHoster, ${steamId}`
+    }));
 
     const str = client.intlGet(guildId, 'credentialsSetHosterSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));

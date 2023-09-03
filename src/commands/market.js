@@ -96,6 +96,9 @@ module.exports = {
         const instance = client.getInstance(interaction.guildId);
         const rustplus = client.rustplusInstances[interaction.guildId];
 
+        const verifyId = Math.floor(100000 + Math.random() * 900000);
+        client.logInteraction(interaction, verifyId, 'slashCommand');
+
         if (!await client.validatePermissions(interaction)) return;
         await interaction.deferReply({ ephemeral: true });
 
@@ -208,6 +211,11 @@ module.exports = {
                     foundLines += '```'
                 }
 
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                    id: `${verifyId}`,
+                    value: `search, ${searchItemName}, ${searchItemId}, ${orderType}`
+                }));
+
                 const embed = DiscordEmbeds.getEmbed({
                     color: Constants.COLOR_DEFAULT,
                     title: client.intlGet(interaction.guildId, 'searchResult', { name: itemName }),
@@ -281,6 +289,11 @@ module.exports = {
                         instance.serverList[rustplus.serverId].title));
                     rustplus.log(client.intlGet(interaction.guildId, 'infoCap'), str);
                 }
+
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                    id: `${verifyId}`,
+                    value: `subscribe, ${subscribeItemName}, ${subscribeItemId}, ${orderType}`
+                }));
             } break;
 
             case 'unsubscribe': {
@@ -344,6 +357,11 @@ module.exports = {
                         instance.serverList[rustplus.serverId].title));
                     rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
                 }
+
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                    id: `${verifyId}`,
+                    value: `subscribe, ${subscribeItemName}, ${subscribeItemId}, ${orderType}`
+                }));
             } break;
 
             case 'list': {
@@ -353,6 +371,11 @@ module.exports = {
                         names[orderType] += `\`${client.items.getName(itemId)} (${itemId})\`\n`;
                     }
                 }
+
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                    id: `${verifyId}`,
+                    value: `list`
+                }));
 
                 await client.interactionEditReply(interaction, {
                     embeds: [DiscordEmbeds.getEmbed({
