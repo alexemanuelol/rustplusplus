@@ -73,6 +73,11 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
         message.broadcast.teamMessage.message.message.replace(/^<color.+?<\/color>/g, '');
 
     if (instance.blacklist['steamIds'].includes(`${message.broadcast.teamMessage.message.steamId}`)) {
+        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `userPartOfBlacklistInGame`, {
+            user: `${message.broadcast.teamMessage.message.name}` +
+                ` (${message.broadcast.teamMessage.message.steamId.toString()})`,
+            message: message.broadcast.teamMessage.message.message
+        }));
         TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
         return;
     }
@@ -83,6 +88,12 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
     const isCommand = await CommandHandler.inGameCommandHandler(rustplus, client, message);
 
     if (!isCommand && !startsWithTrademark) {
+        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logInGameMessage`, {
+            message: message.broadcast.teamMessage.message.message,
+            user: `${message.broadcast.teamMessage.message.name}` +
+                ` (${message.broadcast.teamMessage.message.steamId.toString()})`
+        }));
+
         TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
     }
 }

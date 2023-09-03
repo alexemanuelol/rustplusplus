@@ -239,6 +239,16 @@ class RustPlus extends RustPlusLib {
         this.logger.log(title, text, level);
     }
 
+    logInGameCommand(type = 'Default', message) {
+        const args = new Object();
+        args['type'] = type;
+        args['command'] = message.broadcast.teamMessage.message.message;
+        args['user'] = `${message.broadcast.teamMessage.message.name}`;
+        args['user'] += ` (${message.broadcast.teamMessage.message.steamId.toString()})`;
+
+        this.log(Client.client.intlGet(null, 'infoCap'), Client.client.intlGet(null, `logInGameCommand`, args));
+    }
+
     async printCommandOutput(str, type = 'COMMAND') {
         if (str === null) return;
 

@@ -310,6 +310,10 @@ module.exports = {
 
         const timeSeconds = Timer.getSecondsFromStringTime(rest);
 
+        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logSmartSwitchValueChange`, {
+            value: active
+        }));
+
         module.exports.smartSwitchCommandTurnOnOff(rustplus, client, entityId, active);
 
         if (!switches[entityId].reachable) return true;

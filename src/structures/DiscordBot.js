@@ -192,7 +192,7 @@ class DiscordBot extends Discord.Client {
         args['guild'] = `${interaction.member.guild.name} (${interaction.member.guild.id})`;
         args['channel'] = `${channel.name} (${interaction.channelId})`;
         args['user'] = `${interaction.user.username} (${interaction.user.id})`;
-        args[(type === 'slashCommand') ? 'command' : 'customId'] = (type === 'slashCommand') ?
+        args[(type === 'slashCommand') ? 'command' : 'customid'] = (type === 'slashCommand') ?
             `${interaction.commandName}` : `${interaction.customId}`;
         args['id'] = `${verifyId}`;
 
