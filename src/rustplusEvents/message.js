@@ -69,8 +69,17 @@ async function messageBroadcastTeamChanged(rustplus, client, message) {
 async function messageBroadcastTeamMessage(rustplus, client, message) {
     const instance = client.getInstance(rustplus.guildId);
 
-    message.broadcast.teamMessage.message.message =
-        message.broadcast.teamMessage.message.message.replace(/^<color.+?<\/color>/g, '');
+    let tempName = message.broadcast.teamMessage.message.name;
+    let tempMessage = message.broadcast.teamMessage.message.message;
+
+    tempName = tempName.replace(/^<size=.*?><color=.*?>/, '');  /* Rustafied */
+    tempName = tempName.replace(/<\/color><\/size>$/, '');      /* Rustafied */
+    message.broadcast.teamMessage.message.name = tempName;
+
+    tempMessage = tempMessage.replace(/^<size=.*?><color=.*?>/, '');  /* Rustafied */
+    tempMessage = tempMessage.replace(/<\/color><\/size>$/, '');      /* Rustafied */
+    tempMessage = tempMessage.replace(/^<color.+?<\/color>/g, '');      /* Unknown */
+    message.broadcast.teamMessage.message.message = tempMessage;
 
     if (instance.blacklist['steamIds'].includes(`${message.broadcast.teamMessage.message.steamId}`)) {
         rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `userPartOfBlacklistInGame`, {
