@@ -164,7 +164,10 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
         autoDayNightOnOff: entityExist ? switches[body.entityId].autoDayNightOnOff : 0,
         location: entityExist ? switches[body.entityId].location : null,
+        x: entityExist ? switches[body.entityId].x : null,
+        y: entityExist ? switches[body.entityId].y : null,
         server: entityExist ? switches[body.entityId].server : body.name,
+        proximity: entityExist ? switches[body.entityId].proximity : Constants.PROXIMITY_SETTING_DEFAULT_METERS,
         messageId: entityExist ? switches[body.entityId].messageId : null
     };
     client.setInstance(guild.id, instance);
@@ -182,6 +185,8 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
             if (player) {
                 const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
+                instance.serverList[serverId].switches[body.entityId].x = location.x;
+                instance.serverList[serverId].switches[body.entityId].y = location.y;
             }
         }
 

@@ -94,6 +94,13 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
         const smartSwitchName = interaction.fields.getTextInputValue('SmartSwitchName');
         const smartSwitchCommand = interaction.fields.getTextInputValue('SmartSwitchCommand');
+        let smartSwitchProximity = null;
+        try {
+            smartSwitchProximity = parseInt(interaction.fields.getTextInputValue('SmartSwitchProximity'));
+        }
+        catch (e) {
+            smartSwitchProximity = null;
+        }
 
         if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
             interaction.deferUpdate();
@@ -105,6 +112,10 @@ module.exports = async (client, interaction) => {
         if (smartSwitchCommand !== server.switches[ids.entityId].command &&
             !Keywords.getListOfUsedKeywords(client, guildId, ids.serverId).includes(smartSwitchCommand)) {
             server.switches[ids.entityId].command = smartSwitchCommand;
+        }
+
+        if (smartSwitchProximity !== null && smartSwitchProximity >= 0) {
+            server.switches[ids.entityId].proximity = smartSwitchProximity;
         }
         client.setInstance(guildId, instance);
 

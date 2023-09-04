@@ -136,8 +136,12 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        server.switches[ids.entityId].autoDayNightOnOff = parseInt(interaction.values[0]);
-        client.setInstance(guildId, instance);
+        const value = parseInt(interaction.values[0]);
+        if ((value !== 5 && value !== 6) ||
+            ((value === 5 || value === 6) && server.switches[ids.entityId].location !== null)) {
+            server.switches[ids.entityId].autoDayNightOnOff = value;
+            client.setInstance(guildId, instance);
+        }
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
