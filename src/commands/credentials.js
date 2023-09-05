@@ -109,19 +109,19 @@ module.exports = {
 
         switch (interaction.options.getSubcommand()) {
             case 'add': {
-                addCredentials(client, interaction);
+                addCredentials(client, interaction, verifyId);
             } break;
 
             case 'remove': {
-                removeCredentials(client, interaction);
+                removeCredentials(client, interaction, verifyId);
             } break;
 
             case 'show': {
-                showCredentials(client, interaction);
+                showCredentials(client, interaction, verifyId);
             } break;
 
             case 'set_hoster': {
-                setHosterCredentials(client, interaction);
+                setHosterCredentials(client, interaction, verifyId);
             } break;
 
             default: {
@@ -130,7 +130,7 @@ module.exports = {
     },
 };
 
-async function addCredentials(client, interaction) {
+async function addCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
     const credentials = InstanceUtils.readCredentialsFile(guildId);
     const steamId = interaction.options.getString('steam_id');
@@ -214,7 +214,7 @@ async function addCredentials(client, interaction) {
     client.log(client.intlGet(null, 'infoCap'), str);
 }
 
-async function removeCredentials(client, interaction) {
+async function removeCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
     const credentials = InstanceUtils.readCredentialsFile(guildId);
     let steamId = interaction.options.getString('steam_id');
@@ -268,7 +268,7 @@ async function removeCredentials(client, interaction) {
     client.log(client.intlGet(null, 'infoCap'), str);
 }
 
-async function showCredentials(client, interaction) {
+async function showCredentials(client, interaction, verifyId) {
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
         value: `show`
@@ -277,7 +277,7 @@ async function showCredentials(client, interaction) {
     await DiscordMessages.sendCredentialsShowMessage(interaction);
 }
 
-async function setHosterCredentials(client, interaction) {
+async function setHosterCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
     const credentials = InstanceUtils.readCredentialsFile(guildId);
     let steamId = interaction.options.getString('steam_id');
