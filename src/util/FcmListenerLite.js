@@ -22,8 +22,10 @@ const PushReceiver = require('push-receiver');
 
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
+const Map = require('../util/map.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild, steamId) => {
@@ -212,6 +214,8 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         everyone: entityExist ? alarms[body.entityId].everyone : false,
         name: entityExist ? alarms[body.entityId].name : client.intlGet(guild.id, 'smartAlarm'),
         message: entityExist ? alarms[body.entityId].message : client.intlGet(guild.id, 'baseIsUnderAttack'),
+        lastTrigger: entityExist ? alarms[body.entityId].lastTrigger : null,
+        command: entityExist ? alarms[body.entityId].command : body.entityId,
         id: entityExist ? alarms[body.entityId].id : body.entityId,
         image: entityExist ? alarms[body.entityId].image : 'smart_alarm.png',
         location: entityExist ? alarms[body.entityId].location : null,
