@@ -22,8 +22,10 @@ const PushReceiver = require('push-receiver');
 
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
+const Map = require('../util/map.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild, steamId) => {
@@ -164,7 +166,10 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
         autoDayNightOnOff: entityExist ? switches[body.entityId].autoDayNightOnOff : 0,
         location: entityExist ? switches[body.entityId].location : null,
+        x: entityExist ? switches[body.entityId].x : null,
+        y: entityExist ? switches[body.entityId].y : null,
         server: entityExist ? switches[body.entityId].server : body.name,
+        proximity: entityExist ? switches[body.entityId].proximity : Constants.PROXIMITY_SETTING_DEFAULT_METERS,
         messageId: entityExist ? switches[body.entityId].messageId : null
     };
     client.setInstance(guild.id, instance);
@@ -182,6 +187,8 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
             if (player) {
                 const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
+                instance.serverList[serverId].switches[body.entityId].x = location.x;
+                instance.serverList[serverId].switches[body.entityId].y = location.y;
             }
         }
 
@@ -207,6 +214,8 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         everyone: entityExist ? alarms[body.entityId].everyone : false,
         name: entityExist ? alarms[body.entityId].name : client.intlGet(guild.id, 'smartAlarm'),
         message: entityExist ? alarms[body.entityId].message : client.intlGet(guild.id, 'baseIsUnderAttack'),
+        lastTrigger: entityExist ? alarms[body.entityId].lastTrigger : null,
+        command: entityExist ? alarms[body.entityId].command : body.entityId,
         id: entityExist ? alarms[body.entityId].id : body.entityId,
         image: entityExist ? alarms[body.entityId].image : 'smart_alarm.png',
         location: entityExist ? alarms[body.entityId].location : null,

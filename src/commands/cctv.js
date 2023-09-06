@@ -48,11 +48,19 @@ module.exports = {
     },
 
     async execute(client, interaction) {
+        const verifyId = Math.floor(100000 + Math.random() * 900000);
+        client.logInteraction(interaction, verifyId, 'slashCommand');
+
         if (!await client.validatePermissions(interaction)) return;
 
         const monument = interaction.options.getString('monument');
         const cctvCodes = client.cctv.getCodes(monument);
         const dynamic = client.cctv.isDynamic(monument);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+            id: `${verifyId}`,
+            value: `${monument}`
+        }));
 
         await DiscordMessages.sendCctvMessage(interaction, monument, cctvCodes, dynamic);
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsCctvDesc'));

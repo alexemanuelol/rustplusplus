@@ -33,6 +33,7 @@ module.exports = {
     /* Other constants */
     PATROL_HELI_DOWNED_RADIUS: 400,
     OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE: 550,
+    PROXIMITY_SETTING_DEFAULT_METERS: 500,
 
     /* Emojis */
     ONLINE_EMOJI: ':green_circle:',

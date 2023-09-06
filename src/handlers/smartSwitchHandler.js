@@ -19,6 +19,7 @@
 */
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const Map = require('../util/map.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const Timer = require('../util/timer');
 
@@ -167,8 +168,6 @@ module.exports = {
         }
 
         for (const [entityId, content] of Object.entries(instance.serverList[serverId].switches)) {
-            if (rustplus.smartSwitchIntervalCounter !== 0) continue;
-
             if (content.autoDayNightOnOff === 3) { /* AUTO-ON */
                 if (content.active) continue;
 
@@ -218,6 +217,70 @@ module.exports = {
 
                 DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                 changedSwitches.push(entityId);
+            }
+            else if (content.autoDayNightOnOff === 5 && content.location !== null) { /* AUTO-ON-PROXIMITY */
+                let shouldBeOn = false;
+                for (const player of rustplus.team.players) {
+                    if (Map.getDistance(content.x, content.y, player.x, player.y) <= content.proximity) {
+                        shouldBeOn = true;
+                    }
+                }
+
+                if ((shouldBeOn && !content.active) || (!shouldBeOn && content.active)) {
+                    instance.serverList[serverId].switches[entityId].active = shouldBeOn;
+                    client.setInstance(guildId, instance);
+
+                    rustplus.interactionSwitches.push(entityId);
+
+                    const response = await rustplus.turnSmartSwitchAsync(entityId, shouldBeOn);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        if (instance.serverList[serverId].switches[entityId].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                        }
+                        instance.serverList[serverId].switches[entityId].reachable = false;
+
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
+                    }
+                    else {
+                        instance.serverList[serverId].switches[entityId].reachable = true;
+                    }
+                    client.setInstance(guildId, instance);
+
+                    DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+                    changedSwitches.push(entityId);
+                }
+            }
+            else if (content.autoDayNightOnOff === 6 && content.location !== null) { /* AUTO-OFF-PROXIMITY */
+                let shouldBeOn = true;
+                for (const player of rustplus.team.players) {
+                    if (Map.getDistance(content.x, content.y, player.x, player.y) <= content.proximity) {
+                        shouldBeOn = false;
+                    }
+                }
+
+                if ((shouldBeOn && !content.active) || (!shouldBeOn && content.active)) {
+                    instance.serverList[serverId].switches[entityId].active = shouldBeOn;
+                    client.setInstance(guildId, instance);
+
+                    rustplus.interactionSwitches.push(entityId);
+
+                    const response = await rustplus.turnSmartSwitchAsync(entityId, shouldBeOn);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        if (instance.serverList[serverId].switches[entityId].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                        }
+                        instance.serverList[serverId].switches[entityId].reachable = false;
+
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
+                    }
+                    else {
+                        instance.serverList[serverId].switches[entityId].reachable = true;
+                    }
+                    client.setInstance(guildId, instance);
+
+                    DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+                    changedSwitches.push(entityId);
+                }
             }
         }
 
@@ -309,6 +372,10 @@ module.exports = {
         }
 
         const timeSeconds = Timer.getSecondsFromStringTime(rest);
+
+        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logSmartSwitchValueChange`, {
+            value: active
+        }));
 
         module.exports.smartSwitchCommandTurnOnOff(rustplus, client, entityId, active);
 

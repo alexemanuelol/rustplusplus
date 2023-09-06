@@ -69,10 +69,24 @@ async function messageBroadcastTeamChanged(rustplus, client, message) {
 async function messageBroadcastTeamMessage(rustplus, client, message) {
     const instance = client.getInstance(rustplus.guildId);
 
-    message.broadcast.teamMessage.message.message =
-        message.broadcast.teamMessage.message.message.replace(/^<color.+?<\/color>/g, '');
+    let tempName = message.broadcast.teamMessage.message.name;
+    let tempMessage = message.broadcast.teamMessage.message.message;
+
+    tempName = tempName.replace(/^<size=.*?><color=.*?>/, '');  /* Rustafied */
+    tempName = tempName.replace(/<\/color><\/size>$/, '');      /* Rustafied */
+    message.broadcast.teamMessage.message.name = tempName;
+
+    tempMessage = tempMessage.replace(/^<size=.*?><color=.*?>/, '');  /* Rustafied */
+    tempMessage = tempMessage.replace(/<\/color><\/size>$/, '');      /* Rustafied */
+    tempMessage = tempMessage.replace(/^<color.+?<\/color>/g, '');      /* Unknown */
+    message.broadcast.teamMessage.message.message = tempMessage;
 
     if (instance.blacklist['steamIds'].includes(`${message.broadcast.teamMessage.message.steamId}`)) {
+        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `userPartOfBlacklistInGame`, {
+            user: `${message.broadcast.teamMessage.message.name}` +
+                ` (${message.broadcast.teamMessage.message.steamId.toString()})`,
+            message: message.broadcast.teamMessage.message.message
+        }));
         TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
         return;
     }
@@ -83,6 +97,12 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
     const isCommand = await CommandHandler.inGameCommandHandler(rustplus, client, message);
 
     if (!isCommand && !startsWithTrademark) {
+        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logInGameMessage`, {
+            message: message.broadcast.teamMessage.message.message,
+            user: `${message.broadcast.teamMessage.message.name}` +
+                ` (${message.broadcast.teamMessage.message.steamId.toString()})`
+        }));
+
         TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
     }
 }

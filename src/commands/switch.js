@@ -63,8 +63,12 @@ module.exports = {
     },
 
     async execute(client, interaction) {
-        const instance = client.getInstance(interaction.guildId);
-        const rustplus = client.rustplusInstances[interaction.guildId];
+        const guildId = interaction.guildId;
+        const instance = client.getInstance(guildId);
+        const rustplus = client.rustplusInstances[guildId];
+
+        const verifyId = Math.floor(100000 + Math.random() * 900000);
+        client.logInteraction(interaction, verifyId, 'slashCommand');
 
         if (!await client.validatePermissions(interaction)) return;
         await interaction.deferReply({ ephemeral: true });
@@ -75,7 +79,7 @@ module.exports = {
                 const entityId = interaction.options.getString('id');
                 const image = interaction.options.getString('image');
 
-                let device = InstanceUtils.getSmartDevice(interaction.guildId, entityId);
+                let device = InstanceUtils.getSmartDevice(guildId, entityId);
                 if (device === null) {
                     isSmartSwitchGroup = true;
                     for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {
@@ -86,7 +90,7 @@ module.exports = {
                     }
 
                     if (device === null) {
-                        const str = client.intlGet(interaction.guildId, 'invalidId', { id: entityId });
+                        const str = client.intlGet(guildId, 'invalidId', { id: entityId });
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                             instance.serverList[rustplus.serverId].title));
                         client.log(client.intlGet(null, 'warningCap'), str);
@@ -105,20 +109,25 @@ module.exports = {
                         instance.serverList[device.serverId].switches[entityId].image = `${image}.png`;
                     }
                 }
-                client.setInstance(interaction.guildId, instance);
+                client.setInstance(guildId, instance);
+
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                    id: `${verifyId}`,
+                    value: `edit, ${entityId}, ${image}.png`
+                }));
 
                 if (rustplus && rustplus.serverId === device.serverId) {
                     if (isSmartSwitchGroup) {
-                        DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, device.serverId, entityId);
+                        DiscordMessages.sendSmartSwitchGroupMessage(guildId, device.serverId, entityId);
                     }
                     else {
-                        DiscordMessages.sendSmartSwitchMessage(interaction.guildId, device.serverId, entityId);
+                        DiscordMessages.sendSmartSwitchMessage(guildId, device.serverId, entityId);
                         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                            client, interaction.guildId, device.serverId, entityId);
+                            client, guildId, device.serverId, entityId);
                     }
                 }
 
-                const str = client.intlGet(interaction.guildId, 'smartSwitchEditSuccess', {
+                const str = client.intlGet(guildId, 'smartSwitchEditSuccess', {
                     name: entity.name
                 });
                 await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,

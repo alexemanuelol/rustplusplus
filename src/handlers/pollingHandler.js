@@ -54,15 +54,14 @@ module.exports = {
     },
 
     handlers: async function (rustplus, client, info, mapMarkers, teamInfo, time) {
-        /* Module handlers */
+        await TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
+        rustplus.team.updateTeam(teamInfo.teamInfo);
+
         await SmartSwitchHandler.handler(rustplus, client, time.time);
         TimeHandler.handler(rustplus, client, time.time);
-        await TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
         await VendingMachines.handler(rustplus, client, mapMarkers.mapMarkers);
 
-        /* Update modules */
         rustplus.time.updateTime(time.time);
-        rustplus.team.updateTeam(teamInfo.teamInfo);
         rustplus.info.updateInfo(info.info);
         rustplus.mapMarkers.updateMapMarkers(mapMarkers.mapMarkers);
 

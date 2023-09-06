@@ -112,6 +112,17 @@ module.exports = {
             }))
         );
 
+        if (entity.autoDayNightOnOff === 5 || entity.autoDayNightOnOff === 6) {
+            modal.addComponents(
+                new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                    customId: 'SmartSwitchProximity',
+                    label: Client.client.intlGet(guildId, 'smartSwitchEditProximityLabel'),
+                    value: `${entity.proximity}`,
+                    style: Discord.TextInputStyle.Short
+                }))
+            );
+        }
+
         return modal;
     },
 

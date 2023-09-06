@@ -182,19 +182,24 @@ module.exports = {
             /* Maybe a custom command? */
 
             if (SmartAlarmHandler.smartAlarmCommandHandler(rustplus, client, command)) {
+                rustplus.logInGameCommand('Smart Alarm', message);
                 return true;
             }
 
             if (await SmartSwitchHandler.smartSwitchCommandHandler(rustplus, client, command)) {
+                rustplus.logInGameCommand('Smart Switch', message);
                 return true;
             }
 
             if (await SmartSwitchGroupHandler.smartSwitchGroupCommandHandler(rustplus, client, command)) {
+                rustplus.logInGameCommand('Smart Switch Group', message);
                 return true;
             }
 
             return false;
         }
+
+        rustplus.logInGameCommand('Default', message);
 
         return true;
     },

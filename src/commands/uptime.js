@@ -39,8 +39,10 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
-		const instance = client.getInstance(interaction.guildId);
 		const rustplus = client.rustplusInstances[interaction.guildId];
+
+		const verifyId = Math.floor(100000 + Math.random() * 900000);
+		client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
@@ -70,6 +72,11 @@ module.exports = {
 			default: {
 			} break;
 		}
+
+		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+			id: `${verifyId}`,
+			value: `${interaction.options.getSubcommand()}`
+		}));
 
 		await DiscordMessages.sendUptimeMessage(interaction, string);
 		client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsUptimeDesc'));

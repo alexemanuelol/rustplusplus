@@ -29,8 +29,15 @@ module.exports = async (client, interaction) => {
     const guildId = interaction.guildId;
     const rustplus = client.rustplusInstances[guildId];
 
+    const verifyId = Math.floor(100000 + Math.random() * 900000);
+    client.logInteraction(interaction, verifyId, 'userSelectMenu');
+
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userPartOfBlacklist', {
+            id: `${verifyId}`,
+            user: `${interaction.user.username} (${interaction.user.id})`
+        }));
         return;
     }
 
@@ -39,6 +46,11 @@ module.exports = async (client, interaction) => {
         client.setInstance(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.language = interaction.values[0];
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.language}`
+        }));
 
         await interaction.deferUpdate();
 
@@ -57,6 +69,11 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.prefix = interaction.values[0];
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.prefix}`
+        }));
+
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getPrefixSelectMenu(guildId, interaction.values[0])]
         });
@@ -71,6 +88,11 @@ module.exports = async (client, interaction) => {
                 '' : `${instance.generalSettings.trademark} | `;
         }
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.trademark}`
+        }));
+
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getTrademarkSelectMenu(guildId, interaction.values[0])]
         });
@@ -81,15 +103,25 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.commandDelay = interaction.values[0];
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.commandDelay}`
+        }));
+
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getCommandDelaySelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId === 'VoiceGender') {
-        instance.generalSettings.gender = interaction.values[0];
+        instance.generalSettings.voiceGender = interaction.values[0];
         client.setInstance(guildId, instance);
 
-        if (rustplus) rustplus.generalSettings.gender = interaction.values[0];
+        if (rustplus) rustplus.generalSettings.voiceGender = interaction.values[0];
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voiceGender}`
+        }));
 
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getVoiceGenderSelectMenu(guildId, interaction.values[0])]
@@ -104,9 +136,22 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        server.switches[ids.entityId].autoDayNightOnOff = parseInt(interaction.values[0]);
-        client.setInstance(guildId, instance);
+        const value = parseInt(interaction.values[0]);
+        if ((value !== 5 && value !== 6) ||
+            ((value === 5 || value === 6) && server.switches[ids.entityId].location !== null)) {
+            server.switches[ids.entityId].autoDayNightOnOff = value;
+            client.setInstance(guildId, instance);
+        }
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${server.switches[ids.entityId].autoDayNightOnOff}`
+        }));
 
         DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
+
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userSelectMenuInteractionSuccess', {
+        id: `${verifyId}`
+    }));
 }

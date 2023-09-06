@@ -19,6 +19,7 @@
 */
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordTools = require('../discordTools/discordTools');
 
 module.exports = {
     discordCommandHandler: async function (rustplus, client, message) {
@@ -177,6 +178,15 @@ module.exports = {
         if (response !== null) {
             await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, message, response);
         }
+
+        const guild = DiscordTools.getGuild(message.guild.id);
+        const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logDiscordCommand`, {
+            guild: `${guild.name} (${guild.id})`,
+            channel: `${channel.name} (${channel.id})`,
+            user: `${message.author.username} (${message.author.id})`,
+            message: message.cleanContent
+        }));
 
         return true;
     },

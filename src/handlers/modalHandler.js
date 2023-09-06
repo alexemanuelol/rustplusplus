@@ -29,8 +29,15 @@ module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
     const guildId = interaction.guildId;
 
+    const verifyId = Math.floor(100000 + Math.random() * 900000);
+    client.logInteraction(interaction, verifyId, 'userModal');
+
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userPartOfBlacklist', {
+            id: `${verifyId}`,
+            user: `${interaction.user.username} (${interaction.user.id})`
+        }));
         return;
     }
 
@@ -52,6 +59,11 @@ module.exports = async (client, interaction) => {
             server.oilRigLockedCrateUnlockTimeMs = oilRigCrateUnlockTime * 1000;
         }
         client.setInstance(guildId, instance);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${server.cargoShipEgressTimeMs}, ${server.oilRigLockedCrateUnlockTimeMs}`
+        }));
     }
     else if (interaction.customId.startsWith('ServerEdit')) {
         const ids = JSON.parse(interaction.customId.replace('ServerEdit', ''));
@@ -67,6 +79,11 @@ module.exports = async (client, interaction) => {
 
         client.setInstance(guildId, instance);
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${server.battlemetricsId}`
+        }));
+
         await DiscordMessages.sendServerMessage(interaction.guildId, ids.serverId);
 
         /* To force search of player name via scrape */
@@ -77,6 +94,13 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
         const smartSwitchName = interaction.fields.getTextInputValue('SmartSwitchName');
         const smartSwitchCommand = interaction.fields.getTextInputValue('SmartSwitchCommand');
+        let smartSwitchProximity = null;
+        try {
+            smartSwitchProximity = parseInt(interaction.fields.getTextInputValue('SmartSwitchProximity'));
+        }
+        catch (e) {
+            smartSwitchProximity = null;
+        }
 
         if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
             interaction.deferUpdate();
@@ -89,7 +113,16 @@ module.exports = async (client, interaction) => {
             !Keywords.getListOfUsedKeywords(client, guildId, ids.serverId).includes(smartSwitchCommand)) {
             server.switches[ids.entityId].command = smartSwitchCommand;
         }
+
+        if (smartSwitchProximity !== null && smartSwitchProximity >= 0) {
+            server.switches[ids.entityId].proximity = smartSwitchProximity;
+        }
         client.setInstance(guildId, instance);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${smartSwitchName}, ${server.switches[ids.entityId].command}`
+        }));
 
         await DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId);
     }
@@ -112,6 +145,11 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${groupName}, ${server.switchGroups[ids.groupId].command}`
+        }));
+
         await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('GroupAddSwitch')) {
@@ -133,6 +171,11 @@ module.exports = async (client, interaction) => {
         server.switchGroups[ids.groupId].switches.push(switchId);
         client.setInstance(interaction.guildId, instance);
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${switchId}`
+        }));
+
         await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
@@ -148,6 +191,11 @@ module.exports = async (client, interaction) => {
         server.switchGroups[ids.groupId].switches =
             server.switchGroups[ids.groupId].switches.filter(e => e !== switchId);
         client.setInstance(interaction.guildId, instance);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${switchId}`
+        }));
 
         await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
@@ -172,6 +220,11 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${smartAlarmName}, ${smartAlarmMessage}, ${server.alarms[ids.entityId].command}`
+        }));
+
         await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('StorageMonitorEdit')) {
@@ -186,6 +239,11 @@ module.exports = async (client, interaction) => {
 
         server.storageMonitors[ids.entityId].name = storageMonitorName;
         client.setInstance(interaction.guildId, instance);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${storageMonitorName}`
+        }));
 
         await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId, ids.entityId);
     }
@@ -225,6 +283,11 @@ module.exports = async (client, interaction) => {
 
         client.setInstance(guildId, instance);
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${trackerName}, ${tracker.battlemetricsId}, ${tracker.clanTag}`
+        }));
+
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
 
         /* To force search of player name via scrape */
@@ -250,6 +313,11 @@ module.exports = async (client, interaction) => {
         });
         client.setInstance(interaction.guildId, instance);
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${steamId}`
+        }));
+
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
 
         /* To force search of player name via scrape */
@@ -268,8 +336,17 @@ module.exports = async (client, interaction) => {
         tracker.players = tracker.players.filter(e => e.steamId !== steamId);
         client.setInstance(interaction.guildId, instance);
 
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+            id: `${verifyId}`,
+            value: `${steamId}`
+        }));
+
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
+
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userModalInteractionSuccess', {
+        id: `${verifyId}`
+    }));
 
     interaction.deferUpdate();
 }

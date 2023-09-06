@@ -168,6 +168,10 @@ module.exports = {
             status: active ? onCap : offCap
         });
 
+        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logSmartSwitchGroupValueChange`, {
+            value: active
+        }));
+
         if (timeSeconds === null) {
             rustplus.printCommandOutput(str);
             await module.exports.TurnOnOffGroup(client, rustplus, guildId, serverId, groupId, active);

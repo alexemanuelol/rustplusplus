@@ -224,6 +224,8 @@ module.exports = {
         const autoNight = Client.client.intlGet(guildId, 'autoNightCap');
         const autoOn = Client.client.intlGet(guildId, 'autoOnCap');
         const autoOff = Client.client.intlGet(guildId, 'autoOffCap');
+        const autoOnProximity = Client.client.intlGet(guildId, 'autoOnProximityCap');
+        const autoOffProximity = Client.client.intlGet(guildId, 'autoOffProximityCap');
 
         let autoDayNightOnOffString = autoSetting;
         if (entity.autoDayNightOnOff === 0) autoDayNightOnOffString += off;
@@ -231,6 +233,8 @@ module.exports = {
         else if (entity.autoDayNightOnOff === 2) autoDayNightOnOffString += autoNight;
         else if (entity.autoDayNightOnOff === 3) autoDayNightOnOffString += autoOn;
         else if (entity.autoDayNightOnOff === 4) autoDayNightOnOffString += autoOff;
+        else if (entity.autoDayNightOnOff === 5) autoDayNightOnOffString += autoOnProximity;
+        else if (entity.autoDayNightOnOff === 6) autoDayNightOnOffString += autoOffProximity;
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
@@ -261,6 +265,16 @@ module.exports = {
                         label: autoOff,
                         description: Client.client.intlGet(guildId, 'smartSwitchAutoOff'),
                         value: '4'
+                    },
+                    {
+                        label: autoOnProximity,
+                        description: Client.client.intlGet(guildId, 'smartSwitchAutoOnProximity'),
+                        value: '5'
+                    },
+                    {
+                        label: autoOffProximity,
+                        description: Client.client.intlGet(guildId, 'smartSwitchAutoOffProximity'),
+                        value: '6'
                     }]
             }));
     },
@@ -270,7 +284,7 @@ module.exports = {
             module.exports.getSelectMenu({
                 customId: 'VoiceGender',
                 placeholder: `${gender === 'male' ?
-                    Client.client.intlGet(guildId, 'commandsVoiceMale') : 
+                    Client.client.intlGet(guildId, 'commandsVoiceMale') :
                     Client.client.intlGet(guildId, 'commandsVoiceFemale')}`,
                 options: [
                     {
