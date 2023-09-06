@@ -397,7 +397,7 @@
     "logDiscordMessage": "Discord Message - Guild: {guild}, Channel: {channel}, User: {user}, Message: {message}.",
     "logInGameCommand": "{type} - Command: {command}, User: {user}.",
     "logInGameMessage": "Message: {message}, User: {user}",
-    "logSmartSwitchGroupValueChange": "Smart Switch Group - Value: {}.",
+    "logSmartSwitchGroupValueChange": "Smart Switch Group - Value: {value}.",
     "logSmartSwitchValueChange": "Smart Switch - Value: {value}.",
     "loggedInAs": "LOGGED IN AS: {name}",
     "makeSureApplicationsCommandsEnabled": "Make sure applications.commands is checked when creating the invite URL.",
