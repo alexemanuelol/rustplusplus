@@ -11,7 +11,7 @@ Program | Version | Download | Note
 To enable step-trace for cargoship and patrol helicopter, [**GraphicsMagick**](http://www.graphicsmagick.org/download.html) needs to be downloaded.
 
 
-## Download the repository
+## Clone the repository
 
 Open a terminal (`Git Bash` / `CMD` / `Terminal` / `PowerShell` or similar) and run the following commands:
 

@@ -5,9 +5,11 @@
 * [**Information**](discord_text_channels.md#information-channel)
 * [**Servers**](discord_text_channels.md#servers-channel)
 * [**Settings**](discord_text_channels.md#settings-channel)
+* [**Commands**](discord_text_channels.md#commands-channel)
 * [**Events**](discord_text_channels.md#events-channel)
 * [**Teamchat**](discord_text_channels.md#teamchat-channel)
 * [**Switches**](discord_text_channels.md#switches-channel)
+* [**Switchgroups**](discord_text_channels.md#switch-groups-channel)
 * [**Alarms**](discord_text_channels.md#alarms-channel)
 * [**Storagemonitors**](discord_text_channels.md#storagemonitors-channel)
 * [**Activity**](discord_text_channels.md#activity-channel)
@@ -16,96 +18,121 @@
 
 ## Information Channel
 
-> The Information Channel present information about the currently connected Rust Server. It is split up into four sections, the map, server information, event information and team information.
+> The Information Channel present information about the currently connected Rust Server. It is split up into four sections, `The Map`, `Server Information`, `Event Information` and `Team Member Information` (See below).
 
-### The map
+**The Map** is simple an image of the Rust Server Map.
+<br>
 
-Displays the map of the Rust Server.
+**Server Information** is just that, information about the server such as:
+- Players currently online
+- Time In-Game
+- How long ago Map Wipe was
+- Time till day/night
+- Map Size
+- Map Seed
+- Map Salt
+- Map Name
+- Connect information for join through In-Game console
+<br>
 
-### Server Information
+**Event Information** shows event activities In-Game such as:
+- Cargoship
+- Patrol Helicopter
+- Small Oil Rig
+- Large Oil Rig
+- Chinookk 47
+<br>
 
-Displays player population, current time and time till daylight/nightfall, wipe day, map size, map seed, map salt, name of the map and connect information.
+**Team Member Information** shows the entire team. Whos online/offline/afk/alive/dead, location, leader and paired.
 
-### Event Information
-
-Displays events such as Cargoship, Patrol Helicopter, Small/ Large Oil Rig and Chinook 47.
-
-### Team Member Information
-
-Displays information about teammates, what their current status is (online/offline/afk/dead) and their location.
-
-![Discord Text Channel Information](images/information_channel.png)
+![Discord Text Channel Information](images/channels/information_channel.png)
 
 
 ## Servers Channel
 
-> The Server Channel lists all the paired Rust Servers. Given that you have setup your FCM Credentials properly, once you pair a server in-game via `ESC -> Rust+ -> Pair With Server`, it should automatically appear in the servers channel. From there you can decide which server you want the bot to connect to by clicking the `CONNECT` button for that server.
+> The Server Channel lists all the paired Rust Servers. Given that you have setup your FCM Credentials properly, once you pair a Rust Server In-Game via `ESC -> Rust+ -> Pair With Server`, it should automatically appear in the `servers` channel. From there you can decide which server you want the bot to connect to by clicking the `CONNECT` button for that server.
 
-![Discord Text Channel Servers](images/servers_channel.png)
+The server embed displays a bunch of information. The title of the embed is the name of the server. The Battlemetrics Id is also displayed. The Description of the embed is basically the description of the Rust Server. Here you can also find the connect information that could be found in `information` channel. You can also see who is the hoster of the bot for the server.
+<br>
+
+There are a few buttons for each server. The `CONNECT` button lets you start a connection to the server. Once connected you can disconnect by clicking the `DISCONNECT` button. By clicking the `WEBSITE` button, you will be re-directed to the Rust Servers website. By clicking the `BATTLEMETRICS` button, you will be re-directed to the Battlemetrics page for the Rust Server. By clicking the `EDIT` button, you can change the `Battlemetrics Id` for the server. By clicking the `CUSTOM TIMERS` button, you can change Custom Timers for Cargoship egress time and time before a Locked Crate at Oil Rig is unlocked. By clicking the `CREATE TRACKER` button, you create a battlemetrics tracker that will appear in the `trackers` Text-Channel on Discord. By clicking the `CREATE GROUP` button, you create a Smart Switch Group that can be used to manage several Smart Switches at once. The Smart Switch Group will appear in the `switchgroups` Text-Channel on Discord. To remove the Server, just click the trashcan button.
+
+![Discord Text Channel Servers](images/channels/servers_channel.png)
 
 
 ## Settings Channel
 
-> The Settings Channel contain a bunch of different settings for the bot. There are settings for prefix, trademark visibility, allow in-game commands, Smart Alarm notifications, enable leader command, battlemetrics notifications and event notification settings.
+> The Settings Channel contain a bunch of different settings for rustplusplus. There are settings for language, voice gender, command prefix, trademark visibility, allow in-game commands, mute in-game, in-game teammate notifications, command delay, Smart Alarm notifications, enable leader command, battlemetrics notifications, wipe detection, vending machine subscription and event notifications.
 
-![Discord Text Channel Settings](images/settings_channel.png)
+![Discord Text Channel Settings](images/channels/settings_channel.png)
+
+
+## Commands Channel
+
+> The Commands Channel allows you to run In-Game Commands straight from Discord.
+
+![Discord Text Channel Commands](images/channels/commands_channel.png)
 
 
 ## Events Channel
 
-> The Events Channel contains all the event notifications that occur such as:
-<br>- `Cargoship spawn`
-<br>- `Cargoship despawn`
-<br>- `Cargoship enters egress stage`
-<br>- `Patrol Helicopter spawn`
-<br>- `Patrol Helicopter despawn`
-<br>- `Patrol Helicopter destroyed`
-<br>- `Oil Rig have been triggered`
-<br>- `Chinook 47 spawn`
-<br>- `New Vending Machine detected`
+> The Events Channel contains all the event notifications that occurs such as:
 
-![Discord Text Channel Events](images/events_channel.png)
+- `Cargoship spawn`
+- `Cargoship despawn`
+- `Cargoship enters egress stage`
+- `Patrol Helicopter spawn`
+- `Patrol Helicopter despawn`
+- `Patrol Helicopter destroyed`
+- `Locked Crate at Oil Rig Unlocked`
+- `Oil Rig have been triggered`
+- `Chinook 47 spawn`
+- `New Vending Machine detected`
+
+![Discord Text Channel Events](images/channels/events_channel.png)
 
 
 ## Teamchat Channel
 
-> The Teamchat Channel is where you communicate with your teammates In-Game. Whatever you type in the text channel will appear In-Game as well and vice versa.
+> The Teamchat Channel makes it possible to communicate with your teammates In-Game. What you write in `teamchat` Channel appears In-Game and whatever you write In-Game appears in the `teamchat` Channel.
 
-![Discord Text Channel Teamchat](images/teamchat_channel.png)
+![Discord Text Channel Teamchat](images/channels/teamchat_channel.png)
 
 
 ## Switches Channel
 
-> The Switches Channel lists all the paired Smart Switches. Given that you have setup your FCM Credentials properly, once you pair a Smart Switch in-game by `using a wiretool`, it should automatically appear in the switches channel. From there you can turn the switch ON/OFF, edit the AUTO setting or remove it. You can also use the /switch Slash Command to edit the name, command and image of the Smart Switch.
+> The Switches Channel lists all the paired Smart Switches. See [Smart Devices](smart_devices.md#smart-switches).
 
-![Discord Text Channel Switches](images/switches_channel.png)
+
+## Switch Groups Channel
+
+> The Switch Groups Channel lists all groups of Smart Switches. See [Smart Devices](smart_devices.md#smart-switch-groups).
 
 
 ## Alarms Channel
 
-> The Alarms Channel lists all the paired Smart Alarms. Given that you have setup your FCM Credentials properly, once you pair a Smart Alarm in-game by `using a wiretool`, it should automatically appear in the alarms channel. From there you can enable if it should notify `@everyone` when triggered or remove it. You can also use the /alarm Slash Command to edit the name, message and image of the Smart Alarm.
-
-
-![Discord Text Channel Alarms](images/alarms_channel.png)
+> The Alarms Channel lists all the paired Smart Alarms. See [Smart Devices](smart_devices.md#smart-alarms).
 
 
 ## Storagemonitors Channel
 
-> The Storagemonitors Channel lists all the paired Storage Monitors. Given that you have setup your FCM Credentials properly, once you pair a Storage Monitor in-game by `using a wiretool`, it should automatically appear in the storagemonitors channel. Depending on if you've placed the Storage Monitor on a Tool cupboard or Large Wooden Box/Vending Machine, they work differently. For Tool Cupboards you can select if you want it to notify @everyone when it starts to decay or cannot be found. You can also decide if the notification should be forwarded in teamchat in-game. For Large Wooden Box and Vending Machines, you are able to view the content inside it via discord. There is also a useful recycle command that you can use to calculate the expected output of recycling everything in a container (`/storagemonitors recycle`). You can also use the /storagemonitor Slash Command to edit the name and image of the Storage Monitor.
-
-![Discord Text Channel Storagemonitors](images/storagemonitors_channel.png)
-
+> The Storagemonitors Channel lists all the paired Storage Monitors. See [Smart Devices](smart_devices.md#storage-monitors).
 
 ## Activity Channel
 
-> The Activity Channel is used to display a bunch of different things such as team member joined/ left/ connected/ disconnected/ offline killed, Not found notifications from Smart Devices, Smart Alarm notifications, Decaying notifications, Tracker information, Server went down/up notifications, facepunch news etc...
+> The Activity Channel is used to display a bunch of different things such as team member joined/ left/ connected/ disconnected/ killed/ offline killed, Not found notifications from Smart Devices, Smart Alarm notifications, Decaying notifications, Tracker information, Server went down/up notifications, facepunch news etc...
 
-![Discord Text Channel Activity](images/activity_channel.png)
+![Discord Text Channel Activity](images/channels/activity_channel.png)
 
 
 ## Trackers Channel
 
-> The Trackers Channel is used to keep track of players or groups on a specific server (Online/Offline/playtime). Given that the server does not use `Streamer mode`, it is possible to create a tracker from the server embed located in the servers channel. By clicking `CREATE TRACKER`, a new tracker appears in the trackers channel. From there you can use the /tracker Slash Command to edit the name of the tracker as well as adding players or removing them by steamId.
+> The Trackers Channel is used to keep track of players or groups on a specific server (Online/Offline/playtime). Given that the server does not use `Streamer mode`, it is possible to create a tracker from the server embed located in the `servers` channel. By clicking `CREATE TRACKER`, a new tracker appears in the trackers channel.
 
-![CREATE TRACKER](images/tracker_create.png)
-![Discord Text Channel Trackers](images/trackers_channel.png)
+The Tracker embed displays a few things. The Title of the embed is the name of the Tracker. The Tracker embed also displays the Battlemetrics Id of the tracker, potential Clan Tag setting and Server status. Under that, all players in the tracker are displayed. The `Names`, `SteamID` and `Status` of every player. The tracker also detects name changes made.
+<br>
+
+By clicking the `ACTIVE` button, you decide if the tracker should be active (in use). By clicking the `@everyone` button, you decide if the @everyone tag should be used whenever a person connect/disconnect/someone join/all offline. By clicking the `EDIT` button, you can change the `Name` of the tracker, the `Battlemetrics Id` of the tracker and the `Clan Tag` for all the players in the tracker. By clicking the `ADD PLAYER` button, you can add a player to the tracker by providing the steamId. By clicking the `REMOVE PLAYER` button, you can remove a player from the tracker by providing the steamId. By clicking the `IN-GAME` button, you let the tracker notify in teamchat. To remove the tracker, click the trashcan button.
+
+![CREATE TRACKER](images/channels/tracker_create.png)
+![Discord Text Channel Trackers](images/channels/trackers_channel.png)

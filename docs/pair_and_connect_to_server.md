@@ -5,10 +5,10 @@
 3. Click `ESC` and then on `Rust+`.
 4. Click `PAIR WITH SERVER`.
 
-![Pair to server image](images/pairing_server.png)
+![Pair to server image](images/bot_setup/pairing_server.png)
 
 5. When you've paired the server it should appear in the Discord Text Channel `servers`.
 
-![server in servers image](images/servers_channel.png)
+![server in servers image](images/channels/servers_channel.png)
 
 6. From there, you just click the `CONNECT` button and the bot will connect to the Rust server.
