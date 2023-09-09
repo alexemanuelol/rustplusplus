@@ -234,6 +234,11 @@
         "name": "Pants",
         "description": "Pants."
     },
+    "240752557": {
+        "shortname": "gunrack_tall.horizontal",
+        "name": "Tall Weapon Rack",
+        "description": "Artfully display your arsenal with a handcrafted wall-mounted weapon rack."
+    },
     "254522515": {
         "shortname": "largemedkit",
         "name": "Large Medkit",
@@ -468,6 +473,11 @@
         "shortname": "rf.detonator",
         "name": "RF Transmitter",
         "description": "A hand held RF signal broadcaster. Left click to broadcast. Configurable with right mouse."
+    },
+    "602628465": {
+        "shortname": "parachute",
+        "name": "Parachute",
+        "description": "Once equipped, press [+jump] while in mid-air to pull the cord. Must be repacked after use. Must be at least 15m above the ground in order to deploy."
     },
     "602741290": {
         "shortname": "burlap.shirt",
@@ -949,10 +959,20 @@
         "name": "Blue Berry",
         "description": "A blue berry. Can be eaten or used in mixing table recipes to create teas."
     },
+    "1113514903": {
+        "shortname": "attackhelicopter",
+        "name": "Attack Helicopter",
+        "description": "A fairly solid helicopter with weapons capability."
+    },
     "1121925526": {
         "shortname": "candycane",
         "name": "Candy Cane",
         "description": "A very old candy cane from 2014"
+    },
+    "1132603396": {
+        "shortname": "gunrack_stand",
+        "name": "Weapon Rack Stand",
+        "description": "Holds weaponry haphazardly, a charmingly chaotic addition to your virtual armory."
     },
     "1142993169": {
         "shortname": "ceilinglight",
@@ -1124,10 +1144,20 @@
         "name": "Spoiled Human Meat",
         "description": "Spoiled Human Meat. Consuming will damage your health."
     },
+    "1277159544": {
+        "shortname": "weaponrack.doublelight",
+        "name": "Weapon Rack Double Light",
+        "description": "A weapon rack light."
+    },
     "1293102274": {
         "shortname": "electric.xorswitch",
         "name": "XOR Switch",
         "description": "An exclusive-or logic gate that allows electrical passthrough if ONLY ONE input receives power, passthrough amount is whichever single input is active. if BOTH inputs recieve power, passthrough will be zero."
+    },
+    "1296788329": {
+        "shortname": "ammo.rocket.seeker",
+        "name": "Homing Missile",
+        "description": "Fast moving rocket ammunition. Uses a type of radar for active target guidance from a Homing Launcher"
     },
     "1305578813": {
         "shortname": "sign.neon.125x125",
@@ -1688,6 +1718,11 @@
         "shortname": "cactusflesh",
         "name": "Cactus Flesh",
         "description": "Flesh of a Cactus, contains water."
+    },
+    "1784005657": {
+        "shortname": "parachute.deployed",
+        "name": "Parachute (Deployed)",
+        "description": "Deployed version of parachute. Hidden."
     },
     "1784406797": {
         "shortname": "fun.tuba",
@@ -2799,6 +2834,21 @@
         "name": "Gun Powder",
         "description": "Made from Sulfur and Charcoal, a key ingredient of anything that goes bang!"
     },
+    "-246672609": {
+        "shortname": "gunrack.horizontal",
+        "name": "Horizontal Weapon Rack",
+        "description": "Artfully display your arsenal with a handcrafted wall-mounted weapon rack."
+    },
+    "-96256997": {
+        "shortname": "gunrack_wide.horizontal",
+        "name": "Wide Weapon Rack",
+        "description": "Artfully display your arsenal with a handcrafted wall-mounted weapon rack."
+    },
+    "-1989600732": {
+        "shortname": "hab.armor",
+        "name": "Hot Air Balloon Armor",
+        "description": "Armor for the Hot Air Balloon"
+    },
     "-1759188988": {
         "shortname": "habrepair",
         "name": "Hab Repair",
@@ -2913,6 +2963,11 @@
         "shortname": "hobobarrel",
         "name": "Hobo Barrel",
         "description": "A vagabond staple. Use this repurposed oil barrel to stay warm."
+    },
+    "-218009552": {
+        "shortname": "homingmissile.launcher",
+        "name": "Homing Missile Launcher",
+        "description": "An active-guidance homing missile launcher. Once launched, the target must be tracked by the launcher until impact. Can be distracted by flares."
     },
     "-1323101799": {
         "shortname": "horse.saddle.double",
@@ -3978,6 +4033,11 @@
         "shortname": "weapon.mod.simplesight",
         "name": "Simple Handmade Sight",
         "description": "A poorly made sight, slightly better than iron sights."
+    },
+    "-1163943815": {
+        "shortname": "weaponrack.light",
+        "name": "Weapon Rack Light",
+        "description": "A weapon rack light."
     },
     "-144417939": {
         "shortname": "wiretool",

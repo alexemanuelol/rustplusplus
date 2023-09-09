@@ -46,7 +46,7 @@ module.exports = {
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'ServerBattlemetricsId',
-                label: Client.client.intlGet(guildId, 'serverEditBattlemetricsIdLabel'),
+                label: Client.client.intlGet(guildId, 'battlemetricsId'),
                 value: server.battlemetricsId === null ? '' : server.battlemetricsId,
                 style: Discord.TextInputStyle.Short,
                 required: false,
@@ -92,21 +92,21 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `SmartSwitchEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
-                device: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
+            title: Client.client.intlGet(guildId, 'editingOf', {
+                entity: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
             })
         });
 
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'SmartSwitchName',
-                label: Client.client.intlGet(guildId, 'smartSwitchEditNameLabel'),
+                label: Client.client.intlGet(guildId, 'name'),
                 value: entity.name,
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'SmartSwitchCommand',
-                label: Client.client.intlGet(guildId, 'smartSwitchEditCommandLabel'),
+                label: Client.client.intlGet(guildId, 'customCommand'),
                 value: entity.command,
                 style: Discord.TextInputStyle.Short
             }))
@@ -133,21 +133,21 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `GroupEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
-                device: group.name.length > 18 ? `${group.name.slice(0, 18)}..` : group.name
+            title: Client.client.intlGet(guildId, 'editingOf', {
+                entity: group.name.length > 18 ? `${group.name.slice(0, 18)}..` : group.name
             })
         });
 
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'GroupName',
-                label: Client.client.intlGet(guildId, 'groupEditNameLabel'),
+                label: Client.client.intlGet(guildId, 'name'),
                 value: group.name,
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'GroupCommand',
-                label: Client.client.intlGet(guildId, 'groupEditCommandLabel'),
+                label: Client.client.intlGet(guildId, 'customCommand'),
                 value: group.command,
                 style: Discord.TextInputStyle.Short
             }))
@@ -169,7 +169,7 @@ module.exports = {
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'GroupAddSwitchId',
-                label: Client.client.intlGet(guildId, 'groupAddSwitchIdLabel'),
+                label: Client.client.intlGet(guildId, 'entityId'),
                 value: '',
                 style: Discord.TextInputStyle.Short
             }))
@@ -191,7 +191,7 @@ module.exports = {
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'GroupRemoveSwitchId',
-                label: Client.client.intlGet(guildId, 'groupRemoveSwitchIdLabel'),
+                label: Client.client.intlGet(guildId, 'entityId'),
                 value: '',
                 style: Discord.TextInputStyle.Short
             }))
@@ -207,27 +207,27 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `SmartAlarmEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
-                device: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
+            title: Client.client.intlGet(guildId, 'editingOf', {
+                entity: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
             })
         });
 
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'SmartAlarmName',
-                label: Client.client.intlGet(guildId, 'smartAlarmEditNameLabel'),
+                label: Client.client.intlGet(guildId, 'name'),
                 value: entity.name,
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'SmartAlarmMessage',
-                label: Client.client.intlGet(guildId, 'smartAlarmEditMessageLabel'),
+                label: Client.client.intlGet(guildId, 'message'),
                 value: entity.message,
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'SmartAlarmCommand',
-                label: Client.client.intlGet(guildId, 'smartAlarmEditCommandLabel'),
+                label: Client.client.intlGet(guildId, 'customCommand'),
                 value: entity.command,
                 style: Discord.TextInputStyle.Short
             }))
@@ -243,15 +243,15 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `StorageMonitorEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
-                device: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
+            title: Client.client.intlGet(guildId, 'editingOf', {
+                entity: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
             })
         });
 
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'StorageMonitorName',
-                label: Client.client.intlGet(guildId, 'storageMonitorEditNameLabel'),
+                label: Client.client.intlGet(guildId, 'name'),
                 value: entity.name,
                 style: Discord.TextInputStyle.Short
             }))
@@ -267,27 +267,27 @@ module.exports = {
 
         const modal = module.exports.getModal({
             customId: `TrackerEdit${identifier}`,
-            title: Client.client.intlGet(guildId, 'editingOfDeviceDesc', {
-                device: tracker.name.length > 18 ? `${tracker.name.slice(0, 18)}..` : tracker.name
+            title: Client.client.intlGet(guildId, 'editingOf', {
+                entity: tracker.name.length > 18 ? `${tracker.name.slice(0, 18)}..` : tracker.name
             })
         });
 
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'TrackerName',
-                label: Client.client.intlGet(guildId, 'trackerEditNameLabel'),
+                label: Client.client.intlGet(guildId, 'name'),
                 value: tracker.name,
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'TrackerBattlemetricsId',
-                label: Client.client.intlGet(guildId, 'trackerEditBattlemetricsIdLabel'),
+                label: Client.client.intlGet(guildId, 'battlemetricsId'),
                 value: tracker.battlemetricsId,
                 style: Discord.TextInputStyle.Short
             })),
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'TrackerClanTag',
-                label: Client.client.intlGet(guildId, 'trackerEditClanTagLabel'),
+                label: Client.client.intlGet(guildId, 'clanTag'),
                 value: tracker.clanTag,
                 style: Discord.TextInputStyle.Short,
                 required: false,
@@ -312,7 +312,7 @@ module.exports = {
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'TrackerAddPlayerSteamId',
-                label: Client.client.intlGet(guildId, 'trackerAddPlayerIdLabel'),
+                label: Client.client.intlGet(guildId, 'steamId'),
                 value: '',
                 style: Discord.TextInputStyle.Short
             }))
@@ -334,7 +334,7 @@ module.exports = {
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'TrackerRemovePlayerSteamId',
-                label: Client.client.intlGet(guildId, 'trackerRemovePlayerIdLabel'),
+                label: Client.client.intlGet(guildId, 'steamId'),
                 value: '',
                 style: Discord.TextInputStyle.Short
             }))

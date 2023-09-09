@@ -1,6 +1,6 @@
 # Commands Documentation
 
-> Commands can be executed via Discord or In-Game Team Chat. To be able to run Slash Commands in Discord, you need to be part of the designated Discord Role for the bot. If no role is set for the bot then everyone should be able to use the Slash Commands by default. To be able to run In-Game Commands, you need to be in the same In-Game Team as the person who setup the FCM credentials. In-Game Commands can only be run from Team Chat, not global chat.
+> Commands can be executed via Discord or In-Game Team Chat. To be able to run Slash Commands in Discord, you need to be part of the designated Discord Role for the bot. If no role is set for the bot then everyone should be able to use the Slash Commands by default. To be able to run In-Game Commands, you need to be in the same In-Game Team as the hoster. In-Game Commands can only be run from Team Chat, not global chat. You can also run In-Game commands from the Discord Text-Channel `commands`.
 
 - [Discord Slash Commands](commands.md#discord-slash-commands)
 - [In-Game Commands](commands.md#in-game-commands)
@@ -36,7 +36,7 @@ Subcommand | Options | Description | Required
 &nbsp; | `id` | The ID of the Smart Alarm. | `True`
 &nbsp; | `image` | Set the image that best represent the Smart Alarm. | `True`
 
-![Discord Slash Command alarm Image](images/alarms_edit.png)
+![Discord Slash Command alarm Image](images/slash_commands/alarms_edit.png)
 
 
 ## **/blacklist**
@@ -53,7 +53,7 @@ Subcommand | Options | Description | Required
 &nbsp; | `steamid` | The steamid of the user. | `False`
 `show` | &nbsp; | Show blacklisted users. | &nbsp;
 
-![Discord Slash Command blacklist Image](images/blacklist.png)
+![Discord Slash Command blacklist Image](images/slash_commands/blacklist.png)
 
 
 ## **/cctv**
@@ -64,7 +64,7 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 &nbsp; | `monument` | Rust monument. | `True`
 
-![Discord Slash Command monument Image](images/cctv.png)
+![Discord Slash Command monument Image](images/slash_commands/cctv.png)
 
 
 ## **/credentials**
@@ -91,14 +91,14 @@ Subcommand | Options | Description | Required
 `set_hoster` | &nbsp; | Set the hoster. | &nbsp;
 &nbsp; | `steam_id` | Steam ID. | `False`
 
-![Discord Slash Command credentials Image](images/credentials.png)
+![Discord Slash Command credentials Image](images/slash_commands/credentials.png)
 
 
 ## **/help**
 
 > Display help message.
 
-![Discord Slash Command help Image](images/help.png)
+![Discord Slash Command help Image](images/slash_commands/help.png)
 
 
 ## **/leader**
@@ -109,7 +109,7 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 &nbsp; | `member` | The name of the team member. | `True`
 
-![Discord Slash Command leader Image](images/leader.png)
+![Discord Slash Command leader Image](images/slash_commands/leader.png)
 
 
 ## **/map**
@@ -123,7 +123,7 @@ Subcommand | Options | Description | Required
 `monuments`| &nbsp; | Get the map including monument names. | &nbsp;
 `markers` | &nbsp; | Get the map including markers. | &nbsp;
 
-![Discord Slash Command map Image](images/map.png)
+![Discord Slash Command map Image](images/slash_commands/map.png)
 
 
 ## **/market**
@@ -146,7 +146,7 @@ Subcommand | Options | Description | Required
 &nbsp; | `id` | The ID of the item to unsubscribe to. | `False`
 `list` | &nbsp; | Display the subscription list. | &nbsp;
 
-![Discord Slash Command market Image](images/market.png)
+![Discord Slash Command market Image](images/slash_commands/market.png)
 
 
 ## **/players**
@@ -157,7 +157,7 @@ Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 &nbsp; | `name` | The name or part of the name of the player. | `False`
 
-![Discord Slash Command players Image](images/players.png)
+![Discord Slash Command players Image](images/slash_commands/players.png)
 
 
 ## **/reset**
@@ -175,7 +175,7 @@ Subcommand | Options | Description | Required
 `storagemonitors` | &nbsp; | Reset storagemonitors channel. | &nbsp;
 `trackers` | &nbsp; | Reset trackers channel. | &nbsp;
 
-![Discord Slash Command reset Image](images/reset.png)
+![Discord Slash Command reset Image](images/slash_commands/reset.png)
 
 
 ## **/role**
@@ -188,7 +188,7 @@ Subcommand | Options | Description | Required
 &nbsp; | `role` | The role rustplusplus channels will be visible to. | `True`
 `clear` | &nbsp; | Clear the role (to allow everyone to see the rustplusplus channels). | &nbsp;
 
-![Discord Slash Command role Image](images/role.png)
+![Discord Slash Command role Image](images/slash_commands/role.png)
 
 
 ## **/storagemonitors**
@@ -201,7 +201,7 @@ Subcommand | Options | Description | Required
 &nbsp; | `id` | The ID of the Storage Monitor. | `True`
 &nbsp; | `image` | Set the image that best represent the Storage Monitor. | `True`
 
-![Discord Slash Command storagemonitor Image](images/storagemonitor.png)
+![Discord Slash Command storagemonitor Image](images/slash_commands/storagemonitor.png)
 
 
 ## **/switch**
@@ -214,7 +214,7 @@ Subcommand | Options | Description | Required
 &nbsp; | `id` | The ID of the Smart Switch. | `True`
 &nbsp; | `image` | Set the image that best represent the Smart Switch. | `True`
 
-![Discord Slash Command switch Image](images/switch.png)
+![Discord Slash Command switch Image](images/slash_commands/switch.png)
 
 ## **/uptime**
 
@@ -225,7 +225,7 @@ Subcommand | Options | Description | Required
 `bot` | &nbsp; | Display uptime of bot. | &nbsp;
 `server` | &nbsp; | Display uptime of server. | &nbsp;
 
-![Discord Slash Command uptime Image](images/uptime.png)
+![Discord Slash Command uptime Image](images/slash_commands/uptime.png)
 
 ## **/voice**
 
@@ -236,7 +236,7 @@ Subcommand | Options | Description | Required
 `join` | &nbsp; | Bot Joins a Voicechannel. | &nbsp;
 `leave` | &nbsp; | Bot Leaves a Voicechannel. | &nbsp;
 
-![Discord Slash Command uptime Image](images/voice.png)
+![Discord Slash Command uptime Image](images/slash_commands/voice.png)
 
 
 # In-Game Commands
@@ -283,7 +283,7 @@ In-Game Command | Description
 > **Get the currently afk players in your team.** Definition of AFK for this command is inactivity (No change in XY-coordinate) for more than 5 minutes.
 <br>Command: `!afk`
 
-![In-Game Command afk Image](images/afk_ingame.png)
+![In-Game Command afk Image](images/ingame_commands/afk_ingame.png)
 
 
 ## **alive**
@@ -292,7 +292,7 @@ In-Game Command | Description
 <br>Command: `!alive`
 <br>Command: `!alive Alle`
 
-![In-Game Command alive Image](images/alive_ingame.png)
+![In-Game Command alive Image](images/ingame_commands/alive_ingame.png)
 
 
 ## **cargo**
@@ -300,7 +300,7 @@ In-Game Command | Description
 > **Get information about CargoShip (Location, time till enters egress stage, time since last on map).**
 <br>Command: `!cargo`
 
-![In-Game Command cargo Image](images/cargo_ingame.png)
+![In-Game Command cargo Image](images/ingame_commands/cargo_ingame.png)
 
 
 ## **chinook**
@@ -308,7 +308,7 @@ In-Game Command | Description
 > **Get information about Chinook 47 (Location, time since last on map).**
 <br>Command: `!chinook`
 
-![In-Game Command chinook Image](images/chinook_ingame.png)
+![In-Game Command chinook Image](images/ingame_commands/chinook_ingame.png)
 
 
 ## **connection/connections**
@@ -317,7 +317,7 @@ In-Game Command | Description
 <br>Command: `!connections`
 <br>Command: `!connection Alle`
 
-![In-Game Command connection Image](images/connection_ingame.png)
+![In-Game Command connection Image](images/ingame_commands/connection_ingame.png)
 
 
 ## **death/deaths**
@@ -326,17 +326,17 @@ In-Game Command | Description
 <br>Command: `!deaths`
 <br>Command: `!death Alle`
 
-![In-Game Command death Image](images/death_ingame.png)
+![In-Game Command death Image](images/ingame_commands/death_ingame.png)
 
 
-# **decay**
+## **decay**
 
 > **Get time before structure decay.**
 <br>Command: `!decay`
 <br>Command: `!decay stone 100`
 <br>Command: `!decay armored 1000`
 
-![In-Game Command decay Image](images/decay_ingame.png)
+![In-Game Command decay Image](images/ingame_commands/decay_ingame.png)
 
 
 ## **heli**
@@ -344,7 +344,7 @@ In-Game Command | Description
 > **Get information about Patrol Helicopter (Location, time since last downed, time since last on map).**
 <br>Command: `!heli`
 
-![In-Game Command heli Image](images/heli_ingame.png)
+![In-Game Command heli Image](images/ingame_commands/heli_ingame.png)
 
 
 ## **large**
@@ -352,7 +352,7 @@ In-Game Command | Description
 > **Get information about Large Oil Rig (Time till crate unlocks, time since last trigger).**
 <br>Command: `!large`
 
-![In-Game Command large Image](images/large_ingame.png)
+![In-Game Command large Image](images/ingame_commands/large_ingame.png)
 
 
 ## **leader**
@@ -364,7 +364,7 @@ Subcommand | Description | Required
 ---------- | ----------- | --------
 `<team_member_name>` | The name or part of the name of a team member (`!leader <name>`). | `False`
 
-![In-Game Command leader Image](images/leader_ingame.png)
+![In-Game Command leader Image](images/ingame_commands/leader_ingame.png)
 
 
 ## **marker**
@@ -377,7 +377,7 @@ Subcommand | Description | Required
 `remove` | Remove a custom marker (`!marker remove <id>`). | `False`
 `<marker_name>` | Calling with the name of the marker will let you navigate to that marker (`!marker <name>`). | `False`
 
-![In-Game Command marker Image](images/marker_ingame.png)
+![In-Game Command marker Image](images/ingame_commands/marker_ingame.png)
 
 
 ## **market ingame**
@@ -396,7 +396,7 @@ Subcommand | Description | Required
 `unsub` | Unsubscribe to an item in Vending Machines (`!market unsub sell thompson`). | `False`
 `list` | Display the subscription list (`!market list`). | `False`
 
-![In-Game Command market Image](images/market_ingame.png)
+![In-Game Command market Image](images/ingame_commands/market_ingame.png)
 
 
 ## **mute**
@@ -404,7 +404,7 @@ Subcommand | Description | Required
 > **Mute the bot from the In-Game Team Chat.** This will mute everything the bot would normally say in Team Chat such as command response, event notifications, timers, Smart Device notifications.
 <br>Command: `!mute`
 
-![In-Game Command mute Image](images/mute_ingame.png)
+![In-Game Command mute Image](images/ingame_commands/mute_ingame.png)
 
 
 ## **note/notes**
@@ -416,7 +416,7 @@ Subcommand | Description | Required
 `add` | Add a note (`!note add <text>`). | `False`
 `remove` | Remove a note (`!note remove <id>`). | `False`
 
-![In-Game Command notes Image](images/notes_ingame.png)
+![In-Game Command notes Image](images/ingame_commands/notes_ingame.png)
 
 
 ## **offline**
@@ -424,7 +424,7 @@ Subcommand | Description | Required
 > **Get the currently offline players in your team.**
 <br>Command: `!offline`
 
-![In-Game Command offline Image](images/offline_ingame.png)
+![In-Game Command offline Image](images/ingame_commands/offline_ingame.png)
 
 
 ## **online**
@@ -432,15 +432,15 @@ Subcommand | Description | Required
 > **Get the currently online players in your team.**
 <br>Command: `!online`
 
-![In-Game Command online Image](images/online_ingame.png)
+![In-Game Command online Image](images/ingame_commands/online_ingame.png)
 
 
 ## **player/players**
 
 > **Get the names and playtime of the currently online players on the server (Based on Battlemetrics).** To get all the currently online players on the server run `!players`. To get the information from a certain player run `!player <name or part of name>`.
 
-![In-Game Command players Image](images/players_ingame.png)
-![In-Game Command player Image](images/player_ingame.png)
+![In-Game Command players Image](images/ingame_commands/players_ingame.png)
+![In-Game Command player Image](images/ingame_commands/player_ingame.png)
 
 
 ## **pop**
@@ -448,14 +448,14 @@ Subcommand | Description | Required
 > **Get the current population of the server including queue size and max population.**
 <br>Command: `!pop`
 
-![In-Game Command pop Image](images/pop_ingame.png)
+![In-Game Command pop Image](images/ingame_commands/pop_ingame.png)
 
 
 ## **prox**
 
 > **Get the distance to the three closest teammates.** To get the three closest teammates run `!prox`. To get the distance to a team member run `!prox <name or part of name>`.
 
-![In-Game Command prox Image](images/prox_ingame.png)
+![In-Game Command prox Image](images/ingame_commands/prox_ingame.png)
 
 
 ## **send**
@@ -463,7 +463,7 @@ Subcommand | Description | Required
 > **Send a message to a discord user.**
 <br>Command: `!send Alle Hello my friend!`
 
-![In-Game Command send Image](images/send_ingame.png)
+![In-Game Command send Image](images/ingame_commands/send_ingame.png)
 
 
 ## **small**
@@ -471,7 +471,7 @@ Subcommand | Description | Required
 > **Get information about Small Oil Rig (Time till crate unlocks, time since last trigger).**
 <br>Command: `!small`
 
-![In-Game Command small Image](images/small_ingame.png)
+![In-Game Command small Image](images/ingame_commands/small_ingame.png)
 
 
 ## **steamid**
@@ -482,7 +482,7 @@ Subcommand | Description | Required
 ---------- | ----------- | --------
 `<team_member_name>` | The name or part of the name of a team member (`!steamid <name>`). | `False`
 
-![In-Game Command steamid Image](images/steamid_ingame.png)
+![In-Game Command steamid Image](images/ingame_commands/steamid_ingame.png)
 
 
 ## **team**
@@ -490,7 +490,7 @@ Subcommand | Description | Required
 > **Get the names of all members in the team.**
 <br>Command: `!team`
 
-![In-Game Command team Image](images/team_ingame.png)
+![In-Game Command team Image](images/ingame_commands/team_ingame.png)
 
 
 ## **time**
@@ -498,7 +498,7 @@ Subcommand | Description | Required
 > **Get the current time In-Game and time till day/night.**
 <br>Command: `!time`
 
-![In-Game Command time Image](images/time_ingame.png)
+![In-Game Command time Image](images/ingame_commands/time_ingame.png)
 
 
 ## **timer**
@@ -511,7 +511,7 @@ Subcommand | Description | Required
 `add` | Add a custom timer (`!timer add <time> <text>`). | `False`
 `remove` | Remove a custom timer (`!timer remove <id>`). | `False`
 
-![In-Game Command timer Image](images/timer_ingame.png)
+![In-Game Command timer Image](images/ingame_commands/timer_ingame.png)
 
 
 ## **tr**
@@ -524,8 +524,8 @@ Subcommand | Description | Required
 `language` | Get the language code (`!tr language <language>`). | `False`
 `<language-code>` | Translate the text to this language (`!tr <language> <text>`). | `False`
 
-![In-Game Command get language code Image](images/language_code_ingame.png)
-![In-Game Command translateTo Image](images/translateTo_ingame.png)
+![In-Game Command get language code Image](images/ingame_commands/language_code_ingame.png)
+![In-Game Command translateTo Image](images/ingame_commands/translateTo_ingame.png)
 
 
 ## **trf**
@@ -533,14 +533,14 @@ Subcommand | Description | Required
 > **Translate a text from a language to another language.**
 <br>Command: `!trf <language-code-from> <language-code-to> <Text>`
 
-![In-Game Command translateFrom Image](images/translateFrom_ingame.png)
+![In-Game Command translateFrom Image](images/ingame_commands/translateFrom_ingame.png)
 
 ## **tts**
 
 > **Send a Text-To-Speech message to the Discord teamchat channel.** To execute a Text-To-Speech command run `!tts <text>`.
 <br>Command: `!tts <text>`
 
-![In-Game Command tts Image](images/tts_ingame.png)
+![In-Game Command tts Image](images/ingame_commands/tts_ingame.png)
 
 
 ## **unmute**
@@ -548,7 +548,7 @@ Subcommand | Description | Required
 > **Unmute the bot from the In-Game Team Chat.**
 <br>Command: `!unmute`
 
-![In-Game Command unmute Image](images/unmute_ingame.png)
+![In-Game Command unmute Image](images/ingame_commands/unmute_ingame.png)
 
 
 ## **upkeep**
@@ -556,7 +556,7 @@ Subcommand | Description | Required
 > **Get the upkeep time of all connected tool cupboard monitors.**
 <br>Command: `!upkeep`
 
-![In-Game Command upkeep Image](images/upkeep_ingame.png)
+![In-Game Command upkeep Image](images/ingame_commands/upkeep_ingame.png)
 
 
 ## **uptime ingame**
@@ -564,7 +564,7 @@ Subcommand | Description | Required
 > **Display the uptime of the bot and server.**
 <br>Command: `!uptime`
 
-![In-Game Command uptime Image](images/uptime_ingame.png)
+![In-Game Command uptime Image](images/ingame_commands/uptime_ingame.png)
 
 
 ## **wipe**
@@ -572,4 +572,4 @@ Subcommand | Description | Required
 > **Get the time since it was wiped.**
 <br>Command: `!wipe`
 
-![In-Game Command wipe Image](images/wipe_ingame.png)
+![In-Game Command wipe Image](images/ingame_commands/wipe_ingame.png)

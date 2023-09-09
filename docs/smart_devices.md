@@ -1,57 +1,87 @@
-# Smart Devices Documentation
+# Smart Devices
 
-> Smart Devices is a umbrella term for three different devices, Smart Switches, Smart Alarms and Storage Monitors. To pair a Smart Device you need a `wire tool`. Once you've paired your Smart Device, it should appear in their respective Discord Text Channel.
+> Smart Devices is an umbrella term for three different devices, `Smart Switches`, `Smart Alarms` and `Storage Monitors`. To pair a Smart Device with rustplusplus, make sure you've [setup the FCM-Credentials](credentials.md). When the FCM-Credentials are setup, you just need a `wire tool` and start pairing like you would with the [Rust+ Companion App](https://rust.facepunch.com/companion). Once you've paired your Smart Devices, they should appear in their respective Discord Text-Channel (`switches`, `alarms` or `storagemonitors`).
+<br>
+
+It is possible to change the display image for all the different Smart Devices by running the corresponding Slash Command. The Slash Commands to change Smart Device images is `/switch`, `/alarm` and `/storagemonitor`.
+
 
 ## Smart Switches
+> Paired Smart Switches can be located in the `switches` Text-Channel on Discord. Only Smart Switches from the currently/last connected Rust server will be shown in the channel.
 
-> All paired Smart Switches for the currently connected server will be located in the `switches` Discord Text Channel.
+![Image of a Smart Switch](images/smart_devices/smart_switch.png)
 
-### Switch
-
-From Discord, you can choose to do different stuff with Smart Switches. You could use the Slash Command to edit the name of the switch, the image representing the switch or edit the custom command used in-game to turn it ON/OFF.
+The image above is what a paired Smart Switch looks like in Discord. In this case the Smart Switch is called `Switch` and is located at E16. All Smart Devices have an Entity Id which is used to identify it. The Custom Command for this switch is `!sw` which can be used from the in-game teamchat.
 <br><br>
-If you take a look at the Switch embed located in the `switches` channel, you can turn a switch ON/OFF with the button `TURN ON`/`TURN OFF`. When the button is green and the embed color is red it means the switch is currently OFF. When the button is red and the embed color is green it means the switch is currently ON. You can also remove the switch by clicking on the `basket` button. For Smart Switches there is also a select menu located under the embed. With this select menu, you can set the switch to automatically turn ON at nightfall or turn ON at daybreak (default this is set to OFF).
+The Smart Switch can be turned ON/OFF by clicking the `TURN ON` / `TURN OFF` button at the bottom. By clicking on the `EDIT` button, you can edit things such as the `Name` and the `Custom Command` for the Smart Switch. If the `AUTO SETTING` is set to either `AUTO-ON-PROXIMITY` or `AUTO-OFF-PROXIMITY`, there will be a proximity setting available to edit. The proximity setting is used to turn the switch ON/OFF when a teammate is within the proximity of the Smart Switch. To remove the Smart Switch, just click the trashcan button.
 <br><br>
-From In-Game you can interact with Smart Switches by using the custom command for that switch. If your switchs custom command is `lights` and your prefix is `!`, you can run the following commands:
+There are a few auto settings for Smart Switches:
+- **OFF** - Smart Switch work as normal.
+- **AUTO-DAY** - Smart Switch will be active only during the day.
+- **AUTO-NIGHT** - Smart Switch will be active only during the night.
+- **AUTO-ON** - Smart Switch will automatically go active during update cycle.
+- **AUTO-OFF** - Smart Switch will automatically go inactive during update cycle.
+- **AUTO-ON-PROXIMITY** - Smart Switch will automatically go active if teammate is in proximity.
+- **AUTO-OFF-PROXIMITY** - Smart Switch will automatically go inactive if teammate is in proximity.
 
-* `!lights` - To toggle the switch.
-* `!lights 60s` - To toggle the switch and then toggle it back after 60 seconds.
-* `!lights on` - To turn the switch ON.
-* `!lights off` - To turn the switch OFF.
-* `!lights on 60s` - To turn the switch ON and automatically turn it OFF after 60 seconds.
-* `!lights off 60s` - To turn the switch OFF and automatically turn it ON after 60 seconds.
-* `!lights status` - To get the current status of the switch.
+<br>
 
-### Groups
+Smart Switches can also be controlled from within the game through teamchat via custom commands. Custom command call combinations for the Smart Switch `Switch` are shown below:
+* **!sw** - To toggle the switch.
+* **!sw 60s** - To toggle the switch and then toggle it back after 60 seconds.
+* **!sw on** - To turn the switch ON.
+* **!sw off** - To turn the switch OFF.
+* **!sw on 60s** - To turn the switch ON and automatically turn it OFF after 60 seconds.
+* **!sw off 60s** - To turn the switch OFF and automatically turn it ON after 60 seconds.
+* **!sw status** - To get the current status of the switch.
 
-You can also create Smart Switch Groups. By doing this you can easily control multiple Smart Switches with one click of a button (Discord) or with a custom command for the group (In-Game). To create a group you simply press the `CREATE GROUP` button in the servers channel. This will create an embed in the switchgroups channel.
+### Smart Switch Groups
+> Smart Switch Groups is a feature that allows you to control multiple Smart Switches at once. The image below is what a Smart Switch Group looks like in Discord.
+
+![Image of a Smart Switch Group](images/smart_devices/smart_switch_group.png)
+
+To create a Smart Switch Group, click the `CREATE GROUP` button located under appropriate server in the `servers` Text-Channel on Discord. This will create the Smart Switch Group embed above located in the `switchgroups` Text-Channel on Discord. The Group above is called `Turrets` and have the entity id `518`. The Custom Command for this group is `!t` and the Group have three Smart Switches connected to it.
 <br><br>
-From In-Game you can interact with the Smart Switch Group by using the custom command for the group. If your groups custom command is `group` and your prefix is `!`, you can run the following commands:
+The Smart Switch Group can be turned ON/OFF by clicking the `TURN ON` / `TURN OFF` button at the bottom. By clicking on the `EDIT` button, you can edit things such as the `Name` and the `Custom Command` for the Smart Switch Group. To add a Smart Switch to the Group you click the `ADD SWITCH` button and if you want to remove a Smart Switch from the Group you click the `REMOVE SWITCH` button. You provide the entity id of the Smart Switch you want to add/remove. To remove the Smart Switch Group, just click the trashcan button.
 
-* `!group on` - To turn all the switches in the group ON.
-* `!group off` - To turn all the switches in the group OFF.
-* `!group on 60s` - To turn all the switches in the group ON and automatically turn them OFF after 60 seconds.
-* `!group off 60s` - To turn all the switches in the group OFF and automatically turn them ON after 60 seconds.
-* `!group status` - To get status of all Smart Switches in the group.
+<br>
+
+Smart Switch Groups can also be controlled from within the game through teamchat via custom commands. Custom command call combinations for the Smart Switch Group `Turrets` are shown below:
+* **!t on** - To turn all the switches in the group ON.
+* **!t off** - To turn all the switches in the group OFF.
+* **!t on 60s** - To turn all the switches in the group ON and automatically turn them OFF after 60 seconds.
+* **!t off 60s** - To turn all the switches in the group OFF and automatically turn them ON after 60 seconds.
+* **!t status** - To get status of all Smart Switches in the group.
 
 
 ## Smart Alarms
+> Paired Smart Alarms can be located in the `alarms` Text-Channel on Discord. All Smart Alarms from all servers will be shown in the channel.
 
-> All paired Smart Alarms will be located in the `alarms` Discord Text Channel.
+![Image of a Smart Alarm](images/smart_devices/smart_alarm.png)
 
-From Discord, you you can choose to do different stuff with Smart Alarms. You could use the Slash Command to edit the name of the alarm, the image representing the alarm or edit the alarm message that will be used when the alarm is triggered (Alarm message from in-game will be used if the Smart Alarm belongs to a server that is not currently connected). You could also use the `@everyone` button to enable the alarm to notify everyone whenever it is triggered. There is the possibility to use a custom command to get the time since it last triggered. You can also remove the Smart Alarm by clicking on the `basket` button.
+The image above is what a paired Smart Alarm looks like in Discord. In this case the Smart Alarm is called `Alarm` and is located at E16. All Smart Devices have an Entity Id which is used to identify it. From the `Last Trigger` you can see when the Smart Alarm was last triggered. Under `Message` you can see the Message is that will be broadcast when the Smart Alarm gets triggered. The Custom Command for this alarm is `!alarm` which can be used from the in-game teamchat. The Custom Command will tell you when it was last triggered.
 <br><br>
-From the settings channel, there are two settings that has to do with Smart Alarms. The first one is if Smart Alarms that are not currently part of the connected rust server should notify anyway when triggered. This is possible due to the FCM listener getting the alarm notification rather than broadcast notification from the connected server.
+By clicking the `@everyone` button you decide if the @everyone tag should be used in Discord when the Smart Alarm gets triggered. By clicking on the `EDIT` button, you can edit things such as the `Name`, `Message` and the `Custom Command` for the Smart Alarm. To remove the Smart Alarm, just click the trashcan button.
 <br><br>
-The other setting concerns if alarm notifications should be forwarded to In-Game Team Chat as well.
+There are a few more settings for Smart Alarms that can be found in the `settings` channel. The first one lets you decide if Smart Alarms that are not part of the currently connected server still should notify when triggered. The second one lets you decide if Smart Alarms should notify In-Game when triggered.
 
 
 ## Storage Monitors
+> Paired Storage Monitors can be located in the `storagemonitors` Text-Channel on Discord. Only Storage Monitors from the currently/last connected Rust server will be shown in the channel.
 
-> All paired Storage Monitors for the currently connected server will be located in the `storagemonitors` Discord Text Channel.
+![Image of a Storage Monitor](images/smart_devices/storage_monitor_tool_cupboard.png)
+![Image of a Storage Monitor](images/smart_devices/storage_monitor_container.png)
 
-Depending on what the Storage Monitor have been placed on, it will work differently. Currently Storage Monitors can be placed on Tool cupboards, Large Wooden Boxes and Vending Machines. If the Storage Monitor is placed on a Tool cupboard, you can from the `storagemonitors` channel see The upkeep of the tool cupboard as well as the content inside it. Tool cupboard monitors also have two buttons that the other monitors does not have, `@everyone` and `IN-GAME`. They are used to determine where and how the decay alerts should be forwarded. If `@everyone` is set (green), then everyone will be notified whenever it starts to decay or could not be found. If `IN-GAME` is set (green), then the notification will be forwarded in-game as well.
+The images above is what paired Storage Monitors looks like in Discord. There are two types of Storage Monitors depending on where you place them. The first one is of type `Tool Cupboard` and works almost like the second type `Container` but with the difference that it shows upkeep. In both cases the `Name` of the Storage Monitors is `Storage Monitor` and can be located at E16. All Smart Devices have an Entity Id which is used to identify it. It also shows how many slots the Storage Monitor has and how many of them are occupied. Lastly the Storage Monitor shows the content inside it, the items and quantity.
 <br><br>
-All Storage Monitors embeds in the `storagemonitors` channel have the `basket` button to remove respective device. Large Wooden Boxes and Vending Machines monitors works the same, both of them displays the content inside.
+Tool Cupboard type Storage Monitor have the `@everyone` button that lets you decide if @everyone tag should be used in Discord when the Tool Cupboard starts to decay. By clicking on the `IN-GAME` button, you decide if decay notifications should be made In-Game as well.
 <br><br>
-Another thing that could be useful for all Storage Monitors is the `/storagemonitor recycle` command. This will calculate the output content of recycling everything inside the container.
+Container type Storage Monitor have the `RECYCLE` button which lets you calculate what resources you would get if you recycled the content of the container.
+<br><br>
+By clicking on the `EDIT` button, you can edit the `Name` of the Storage Monitor. To remove the Storage Monitor, just click the trashcan button.
+
+
+## Unreachable Smart Devices
+> When a Smart Devices gets removed, the hoster loses building privilege to the Smart Device or rustplusplus just don't get a response from pinging it, the device is unreachable. In the image below you can see the Smart Switch `Switch` can no longer be reached. In this case its because of a force wipe, The Smart Switch does no longer exist. If the Smart Device is unreachable because the hoster lost building privilege, gaining building privilege again will make the device reachable again. But if the Smart Device was removed from where it was placed you might as well remove it from Discord, once a Smart Device gets removed the Entity Id is invalid. Even if you place the same Smart Device, the Entity Id will be different.
+
+![Image of an unreachable Smart Device](images/smart_devices/unreachable_device.png)

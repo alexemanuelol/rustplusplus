@@ -333,7 +333,7 @@ module.exports = {
                 },
                 { name: Client.client.intlGet(guildId, 'switches'), value: switchName, inline: true },
                 { name: 'ID', value: switchId, inline: true },
-                { name: Client.client.intlGet(guildId, 'active'), value: switchActive, inline: true }
+                { name: Client.client.intlGet(guildId, 'status'), value: switchActive, inline: true }
             ],
 
             timestamp: true

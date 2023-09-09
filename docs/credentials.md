@@ -7,24 +7,24 @@
 * Download and install the [rustplusplus FCM Credential Application](https://github.com/alexemanuelol/rustplusplus-Credential-Application/releases/download/v1.1.0/rustPlusPlus-1.1.0-win-x64.exe)
 * Once downloaded and installed, open it and press the button `Connect with Rust+`.
 
-![rustplusplus FCM Credential Application Image](images/fcm_credential_application_connect.png)
+![rustplusplus FCM Credential Application Image](images/bot_setup/fcm_credential_application_connect.png)
 
 * Another window will pop up where you need to login with your Steam Account.
 
-![Steam Account login Image](images/steam_login.png)
+![Steam Account login Image](images/bot_setup/steam_login.png)
 
 * When you have logged in, you should be greeted with a window that display the Slash Command /credentials add .....
 * Click `Copy` to copy the Slash Command.
 
-![Credentials copy Image](images/credentials_copy.png)
+![Credentials copy Image](images/bot_setup/credentials_copy.png)
 
 * Paste the Slash command in your Discord Server Text Channel. Which Text Channel you run the Slash Command is not important, as long as the bot has access to it.
 
-![FCM Credentials discord Image](images/credentials_discord.png)
+![FCM Credentials discord Image](images/bot_setup/credentials_discord.png)
 
 * This process is the same for the owner of the bot as well as any teammate that want to register their credentials (mainly for the purpose to extend the usage of the leader command). Once a teammate have registered their credentials, they just need to go inside the game and pair with the server. Which teammates that have paired with the server can be seen in the information channel, they should have the P icon beside their name, see below:
 
-![Teammates Paired with Server](images/teammates_paired.png)
+![Teammates Paired with Server](images/bot_setup/teammates_paired.png)
 
 ## Why is FCM Credentials necessary?
 
