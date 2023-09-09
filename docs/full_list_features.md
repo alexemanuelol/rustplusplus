@@ -1,57 +1,91 @@
 # Full list of Features
 
-* Receive notifications for In-Game Events
-    - `Cargo Ship` - When it spawns, despawns, how long before it enters egress stage. How long time since it was last out. route-trace.
-    - `Patrol Helicopter` - When it spawns, despawns or gets taken down. How long time since it was last out and how long since it was taken down. route-trace.
-    - `Chinook 47` - When it enters map and when it leaves.
-    - `Oil Rigs` - When Oil Rig calls in Heavy Scientists and how long till the Locked Crate unlocks.
-    - `Vending Machine` - Whenever a new Vending Machine appears on the map.
-* Control [Smart Switches](smart_devices.md#smart-switches) or Groups of Smart Switches via Discord or In-Game Team Chat.
-    - Turn a Switch ON/OFF with a interaction button in Discord.
-    - Use a custom command In-Game to turn a Switch ON/OFF or check status.
-    - Set the Switch to Auto-Day or Auto-Night.
-    - Control several Smart Switches with a Group that have a custom command as well.
-* Setup [Smart Alarms](smart_devices.md#smart-alarms) to notify in Discord or In-Game Team Chat whenever they are triggered.
-    - Let `@everyone` know when a Smart Alarm goes off.
-* Use [Storage Monitors](smart_devices.md#storage-monitors) to keep track of Tool Cupboard Upkeep or Large Wooden Box/Vending Machine content.
-    - Get notified whenever a Tool Cupboard starts to decay.
-    - Run the recycle command to get the expected output from recycling the content.
-    - Keep track of sold items in a Vending Machine from Discord.
-* Get notified whenever a Smart Device cannot be reached (might be destroyed).
-* Get notified whenever a Server have wiped and get the latest map image sent to Discord.
-* Get information about the population of the server as well as queue size.
-* Get steamid of teammates from a command.
-* Get the current In-Game time and how long before nightfall/daybreak.
-* Get information about how long since wipe.
-* Get map information such as map size, map seed, map salt and map name.
-* Know the status of your teammates (Online/Offline/AFK/Dead/Alive/Location).
-* Get notified whenever teammates dies while offline, when they join/leave the team as well as connect/disconnect from the server.
-* Easily choose what Rust Server you want to play on by navigating to that server in the Discord Text Channel Servers.
-* Easily access the bot settings via the Discord Text Channel Settings.
-* Communicate with teammates from Discord to In-Game and vice versa.
-* Get notified whenever the connected Rust Server goes down or crashes.
-* Keep track of other teams on the server with the Battlemetrics Player Tracker.
-    - Add players by their steamId.
-    - Name changes are captured as well.
-    - Only works for servers that have Streamer Mode disabled.
-* Set a specific role in Discord that will allow a few people access to the bot.
-* Get all the player names and their playtime on the currently connected Rust server.
-* Give/Take leadership with a Discord command or In-Game command.
-* Retrieve the map with Monument names and Map Markers.
-* Customize the event timers such as cargoship egress time, time before Locked Crate unlocks etc...
-* Search through all the Vending Machines on the connected Rust Server with the Discord command `market`.
-* Have easy access to all CCTV codes.
-* Get the currently AFK teammates.
-* Get the currently alive teammates.
-* Get the currently online teammates.
-* Get the currently offline teammates.
-* Check time before structure decay via command.
-* Set custom markers on the map and navigate to them at a later stage.
-* Create notes to remind yourself or your teammates about things to do.
-* Get the three closest teammates with the `prox` command.
-* Set custom timers to keep track of when Locked Crate unlocks for instance.
-* Translate messages from different languages from teamchat.
-* Send a Text-To-Speech message from in-game to Discord teamchat channel.
-* Check the upkeep of all Tool Cupboard via the `upkeep` command.
-* Get Facepunch news in Discord.
-* Blacklist users from using the bot.
+## Discord Slash Commands
+- **/alarm** - Change image of paired Smart Alarms.
+- **/blacklist** - Blacklist a user from using the bot.
+- **/cctv** - Get cctv camera codes for monuments.
+- **/credentials** - Setup FCM-Credentials.
+- **/help** - Get help message.
+- **/leader** - Transfer leadership.
+- **/map** - Display the In-Game Map.
+- **/market** - Search for or subscribe to items in vending machines.
+- **/players** - Get Battlemetrics data on all connected players.
+- **/reset** - Reset Discord Channels.
+- **/role** - Setup a specific role to use rustplusplus.
+- **/storagemonitor** - Change image of paired Storage Monitors.
+- **/switch** - Change image of paired Storage Monitors.
+- **/uptime** - Get the current uptime for rustplusplus.
+- **/voice** - Let rustplusplus join voicechat.
+
+## In-Game Commands
+- **afk** - Display afk teammates.
+- **alive** - Display who has been alive longest.
+- **cargo** - Display information regarding Cargoship.
+- **chinook** - Display information regarding Chinook 47.
+- **connection/connections** - Display latest team connections.
+- **death/deaths** - Display latest deaths.
+- **decay** - Get decay time of different wall-types.
+- **heli** - Get information regarding Patrol Helicopter.
+- **large** - Get information regarding Large Oil Rig.
+- **leader** - Transfer leadership.
+- **marker/markers** - Set markers to navigate to.
+- **market** - Search for or subscribe to items in vending machines.
+- **mute** - Mute rustplusplus In-Game.
+- **note/notes** - Add notes.
+- **offline** - Display offline teammates.
+- **online** - Display online teammates.
+- **player/players** - Get Battlemetrics information about players.
+- **pop** - Get population of the server.
+- **prox** - Display teammates that are nearby.
+- **send** - Send a message through rustplusplus to a person on Discord.
+- **small** - Get information regarding Small Oil Rig.
+- **steamid** - Get teammate steamid.
+- **team** - Get team information (names of all teammates).
+- **time** - Get In-Game time.
+- **timer/timers** - Setup timers.
+- **tr** - Translate from English to another language.
+- **trf** - Translate from one language to another.
+- **tts** - Text-To-Speech (Need to have teamchat open in Discord).
+- **unmute** - Unmute rustplusplus In-Game.
+- **upkeep** - Check upkeep of Storage Monitor Tool Cupboards.
+- **uptime** - Display the uptime of rustplusplus and currently connected server.
+- **wipe** - Display time since wipe.
+
+## Smart Devices
+> Pair Smart Devices such as `Smart Switches`, `Smart Alarms`, `Storage Monitors` and control them from Discord or In-Game teamchat.
+
+- See [Smart Switches](smart_devices.md#smart-switches).
+- See [Smart Switch Groups](smart_devices.md#smart-switch-groups).
+- See [Smart Alarms](smart_devices.md#smart-alarms).
+- See [Storage Monitors](smart_devices.md#storage-monitors).
+
+
+## Rust Server Information
+- See number of players, max capacity and queue size of the Rust Server.
+- See the In-Game time and time till day/night.
+- See how long ago wipe was.
+- See Map Size.
+- See Map Seed.
+- See Map Salt.
+- See Map Name.
+- F1 console connect information.
+
+## In-Game Event Notifications
+> Receive notifications for In-Game Events such as:
+- **Cargo Ship** - When it spawns, despawns, how long before it enters egress stage. How long time since it was last out. step-trace.
+- **Patrol Helicopter** - When it spawns, despawns or gets taken down. How long time since it was last out and how long since it was taken down. step-trace.
+- **Oil Rig** - When Oil Rig calls in Heavy Scientists and how long till the Locked Crate unlocks.
+- **Chinook 47** - When it enters map and when it leaves.
+- **Vending Machines** - Whenever a new Vending Machine appears on the map.
+
+## Teammate Information
+> Get information about teammates such as Online/Offline/AFK/Alive/Dead/Location/Paired/Leader.
+
+## Other
+- Connect through different Rust Servers seemingly through the `servers` Text-Channel in Discord.
+- Easily access rustplusplus settings via the Discord Text-Channel `settings`.
+- Run In-Game commands either from In-Game teamchat or from Discord Text-Channel `commands`.
+- Communicate with teammates from In-Game to Discord and vice versa.
+- Get activity information in the `activity` Text-Channel on Discord. Information such as Smart Devices not reachable, Teammate connect/disconnect/leave/join/death, Smart Alarms notify when triggered, Server went offline/online, Map Wipe Detection, Storage Monitor Decay Notification, Tracker notifications etc...
+- Create Battlemetrics Trackers to track players or groups.
+- Get Facepunch news in Discord.
