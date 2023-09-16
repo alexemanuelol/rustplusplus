@@ -285,6 +285,7 @@
     "dayOfWipe": "Day {day}",
     "deathCap": "DEATH",
     "decayingCap": "DECAYING",
+    "deleteUnreachableDevicesCap": "DELETE UNREACHABLE DEVICES",
     "deviceIsCurrentlyOnOff": "{device} is currently {status}.",
     "deviceWasTurnedOnOff": "{device} was turned {status}.",
     "disabledCap": "DISABLED",

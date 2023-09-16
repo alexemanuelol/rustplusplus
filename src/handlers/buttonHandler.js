@@ -407,6 +407,51 @@ module.exports = async (client, interaction) => {
         const modal = DiscordModals.getServerEditModal(guildId, ids.serverId);
         await interaction.showModal(modal);
     }
+    else if (interaction.customId.startsWith('DeleteUnreachableDevices')) {
+        const ids = JSON.parse(interaction.customId.replace('DeleteUnreachableDevices', ''));
+        const server = instance.serverList[ids.serverId];
+
+        if (!server) {
+            await interaction.message.delete();
+            return;
+        }
+
+        interaction.deferUpdate();
+
+        const groupsToUpdate = [];
+        for (const [entityId, content] of Object.entries(server.switches)) {
+            if (!content.reachable) {
+                await DiscordTools.deleteMessageById(guildId, instance.channelId.switches, content.messageId);
+                delete server.switches[entityId];
+
+                for (const [groupId, groupContent] of Object.entries(server.switchGroups)) {
+                    if (groupContent.switches.includes(`${entityId}`) && !groupsToUpdate.includes(groupId)) {
+                        groupsToUpdate.push(groupId);
+                    }
+                }
+            }
+        }
+
+        for (const groupId of groupsToUpdate) {
+            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
+        }
+
+        for (const [entityId, content] of Object.entries(server.alarms)) {
+            if (!content.reachable) {
+                await DiscordTools.deleteMessageById(guildId, instance.channelId.alarms, content.messageId)
+                delete server.alarms[entityId];
+            }
+        }
+
+        for (const [entityId, content] of Object.entries(server.storageMonitors)) {
+            if (!content.reachable) {
+                await DiscordTools.deleteMessageById(guildId, instance.channelId.storageMonitors, content.messageId)
+                delete server.storageMonitors[entityId];
+            }
+        }
+
+        client.setInstance(guildId, instance);
+    }
     else if (interaction.customId.startsWith('CustomTimersEdit')) {
         const ids = JSON.parse(interaction.customId.replace('CustomTimersEdit', ''));
         const server = instance.serverList[ids.serverId];
@@ -773,7 +818,16 @@ module.exports = async (client, interaction) => {
         if (!rustplus || (rustplus && rustplus.serverId !== ids.serverId)) return;
 
         const entityInfo = await rustplus.getEntityInfoAsync(ids.entityId);
-        if (!(await rustplus.isResponseValid(entityInfo))) return;
+        if (!(await rustplus.isResponseValid(entityInfo))) {
+            if (server.storageMonitors[ids.entityId].reachable) {
+                await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, ids.serverId, ids.entityId);
+            }
+            server.storageMonitors[ids.entityId].reachable = false;
+            client.setInstance(guildId, instance);
+
+            await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId);
+            return;
+        }
 
         server.storageMonitors[ids.entityId].reachable = true;
         client.setInstance(guildId, instance);
