@@ -20,9 +20,13 @@
 */
 
 const Builder = require('@discordjs/builders');
-const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
+const {joinVoiceChannel, getVoiceConnection} = require('@discordjs/voice');
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
+
+function isUserInVoiceChannel(interaction) {
+    return interaction.member.voice && interaction.member.voice.channel;
+}
 
 module.exports = {
     name: 'voice',
@@ -37,7 +41,6 @@ module.exports = {
             .addSubcommand(subcommand => subcommand
                 .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVoiceLeaveDesc')))
-
     },
 
     async execute(client, interaction) {
@@ -45,7 +48,7 @@ module.exports = {
         client.logInteraction(interaction, verifyId, 'slashCommand');
 
         if (!await client.validatePermissions(interaction)) return;
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ephemeral: true});
 
         switch (interaction.options.getSubcommand()) {
             case 'join': {
@@ -58,40 +61,43 @@ module.exports = {
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
                     });
-                    await DiscordMessages.sendVoiceMessage(interaction,
-                        client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
-                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
-                        { name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name }));
+                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
+                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin', {
+                        name: voiceChannel.name, id: voiceChannel.id, guild: voiceChannel.guild.name
+                    }));
+                } else {
+                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
-                else {
-                    await DiscordMessages.sendVoiceMessage(interaction,
-                        client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
-                }
-            } break;
+            }
+                break;
 
             case 'leave': {
-                const connection = getVoiceConnection(interaction.guild.id);
-                if (connection) {
-                    connection.destroy();
-                    await DiscordMessages.sendVoiceMessage(interaction,
-                        client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
-                    client.log(client.intlGet(null, 'infoCap'),
-                        client.intlGet(interaction.guildId, 'commandsVoiceLeave',
-                            {
-                                name: interaction.member.voice.channel.name,
-                                id: interaction.member.voice.channel.id,
-                                guild: interaction.member.guild.name
-                            }));
+                if (isUserInVoiceChannel(interaction)) {
+                    const connection = getVoiceConnection(interaction.guild.id);
+                    if (connection) {
+                        connection.destroy();
+                        await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
+                        client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceLeave', {
+                            name: interaction.member.voice.channel.name,
+                            id: interaction.member.voice.channel.id,
+                            guild: interaction.member.guild.name
+                        }));
+                    } else {
+                        await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceBotNotInVoice'));
+                    }
+                } else {
+                    await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
-            } break;
+            }
+                break;
 
             default: {
-            } break;
+            }
+                break;
         }
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
-            id: `${verifyId}`,
-            value: `${interaction.options.getSubcommand()}`
+            id: `${verifyId}`, value: `${interaction.options.getSubcommand()}`
         }));
     },
 };

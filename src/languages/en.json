@@ -211,6 +211,7 @@
     "commandsUptimeServerDesc": "Display uptime of server.",
     "commandsVoiceBotJoinedVoice": "The Bot has joined the Voicechannel",
     "commandsVoiceBotLeftVoice": "The Bot has left the Voicechannel",
+    "commandsVoiceBotNotInVoice": "You are not in a Voicechannel",
     "commandsVoiceDesc": "Bot Voice Commands",
     "commandsVoiceFemale": "Female",
     "commandsVoiceFemaleDescription": "Sets the voiceactor gender to Female",
