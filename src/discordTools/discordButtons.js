@@ -80,6 +80,11 @@ module.exports = {
             });
         }
 
+        const deleteUnreachableDevicesButton = module.exports.getButton({
+            customId: `DeleteUnreachableDevices${identifier}`,
+            label: Client.client.intlGet(guildId, 'deleteUnreachableDevicesCap'),
+            style: PRIMARY
+        });
         const customTimersButton = module.exports.getButton({
             customId: `CustomTimersEdit${identifier}`,
             label: Client.client.intlGet(guildId, 'customTimersCap'),
@@ -123,6 +128,9 @@ module.exports = {
                 ),
                 new Discord.ActionRowBuilder().addComponents(
                     customTimersButton, trackerButton, groupButton
+                ),
+                new Discord.ActionRowBuilder().addComponents(
+                    deleteUnreachableDevicesButton
                 )
             ];
         }
@@ -133,6 +141,9 @@ module.exports = {
                 ),
                 new Discord.ActionRowBuilder().addComponents(
                     customTimersButton, groupButton
+                ),
+                new Discord.ActionRowBuilder().addComponents(
+                    deleteUnreachableDevicesButton
                 )
             ];
         }

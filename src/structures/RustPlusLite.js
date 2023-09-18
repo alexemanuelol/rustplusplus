@@ -148,7 +148,7 @@ async function rustPlusLiteDisconnectedEvent(rustplusLite) {
 }
 
 async function rustPlusLiteErrorEvent(rustplusLite, error) {
-    rustplusLite.log(Client.client.intlGet(null, 'errorCap'), err, 'error');
+    rustplusLite.log(Client.client.intlGet(null, 'errorCap'), error, 'error');
 }
 
 module.exports = RustPlusLite;

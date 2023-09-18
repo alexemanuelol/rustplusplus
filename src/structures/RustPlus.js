@@ -85,6 +85,14 @@ class RustPlus extends RustPlusLib {
         this.playerConnections = new Object();
         this.allDeaths = [];
         this.playerDeaths = new Object();
+        this.events = {
+            all: [],
+            cargo: [],
+            heli: [],
+            small: [],
+            large: [],
+            chinook: []
+        };
         this.patrolHelicopterTracers = new Object();
         this.cargoShipTracers = new Object();
 
@@ -222,6 +230,27 @@ class RustPlus extends RustPlusLib {
         this.playerDeaths[steamId].unshift(data);
     }
 
+    updateEvents(event, message) {
+        const commandCargoEn = `${Client.client.intlGet('en', 'commandSyntaxCargo')}`;
+        const commandHeliEn = `${Client.client.intlGet('en', 'commandSyntaxHeli')}`;
+        const commandSmallEn = `${Client.client.intlGet('en', 'commandSyntaxSmall')}`;
+        const commandLargeEn = `${Client.client.intlGet('en', 'commandSyntaxLarge')}`;
+        const commandChinookEn = `${Client.client.intlGet('en', 'commandSyntaxChinook')}`;
+        if (![commandCargoEn, commandHeliEn, commandSmallEn, commandLargeEn, commandChinookEn].includes(event)) return;
+
+        const str = `${Timer.getCurrentDateTime()} - ${message}`;
+
+        if (this.events['all'].length === 10) {
+            this.events['all'].pop();
+        }
+        this.events['all'].unshift(str);
+
+        if (this.events[event].length === 10) {
+            this.events[event].pop();
+        }
+        this.events[event].unshift(str);
+    }
+
     deleteThisRustplusInstance() {
         this.isDeleted = true;
         this.disconnect();
@@ -286,8 +315,10 @@ class RustPlus extends RustPlusLib {
         }
     }
 
-    async sendEvent(setting, text, embed_color, firstPoll = false, image = null) {
+    async sendEvent(setting, text, event, embed_color, firstPoll = false, image = null) {
         const img = (image !== null) ? image : setting.image;
+
+        this.updateEvents(event, text);
 
         if (!firstPoll && setting.discord) {
             await DiscordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, img, embed_color);
@@ -1106,6 +1137,107 @@ class RustPlus extends RustPlusLib {
                 type: subcommand.toLowerCase()
             })}`;
         }
+    }
+
+    getCommandEvents(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandEvents = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxEvents')}`;
+        const commandEventsEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxEvents')}`;
+        const commandCargo = `${Client.client.intlGet(this.guildId, 'commandSyntaxCargo')}`;
+        const commandCargoEn = `${Client.client.intlGet('en', 'commandSyntaxCargo')}`;
+        const commandHeli = `${Client.client.intlGet(this.guildId, 'commandSyntaxHeli')}`;
+        const commandHeliEn = `${Client.client.intlGet('en', 'commandSyntaxHeli')}`;
+        const commandSmall = `${Client.client.intlGet(this.guildId, 'commandSyntaxSmall')}`;
+        const commandSmallEn = `${Client.client.intlGet('en', 'commandSyntaxSmall')}`;
+        const commandLarge = `${Client.client.intlGet(this.guildId, 'commandSyntaxLarge')}`;
+        const commandLargeEn = `${Client.client.intlGet('en', 'commandSyntaxLarge')}`;
+        const commandChinook = `${Client.client.intlGet(this.guildId, 'commandSyntaxChinook')}`;
+        const commandChinookEn = `${Client.client.intlGet('en', 'commandSyntaxChinook')}`;
+
+        const EVENTS = [commandCargo, commandCargoEn, commandHeli, commandHeliEn, commandSmall,
+            commandSmallEn, commandLarge, commandLargeEn, commandChinook, commandChinookEn];
+
+        if (command.toLowerCase().startsWith(`${commandEvents}`)) {
+            command = command.slice(`${commandEvents}`.length).trim();
+        }
+        else {
+            command = command.slice(`${commandEventsEn}`.length).trim();
+        }
+
+        let event = command.replace(/ .*/, '').toLowerCase();
+        let number = command.slice(event.length + 1);
+
+        if (event === '') {
+            event = 'all';
+            number = 5;
+        }
+        else if (event !== '' && EVENTS.includes(event)) {
+            if (number === '') {
+                number = 5;
+            }
+            else {
+                number = parseInt(number);
+                if (isNaN(number)) {
+                    number = 5;
+                }
+            }
+        }
+        else if (event !== '' && !EVENTS.includes(event)) {
+            number = parseInt(event);
+            event = 'all';
+            if (isNaN(number)) {
+                number = 5;
+            }
+        }
+        else {
+            event = 'all';
+            number = 5;
+        }
+
+        switch (event) {
+            case commandCargoEn:
+            case commandCargo: {
+                event = 'cargo';
+            } break;
+
+            case commandHeliEn:
+            case commandHeli: {
+                event = 'heli';
+            } break;
+
+            case commandSmallEn:
+            case commandSmall: {
+                event = 'small';
+            } break;
+
+            case commandLargeEn:
+            case commandLarge: {
+                event = 'large';
+            } break;
+
+            case commandChinookEn:
+            case commandChinook: {
+                event = 'chinook';
+            } break;
+
+            default: {
+                event = 'all';
+            } break;
+        }
+
+        const strings = [];
+        let counter = 0;
+        for (const e of this.events[event]) {
+            if (counter === 5 || counter === number) break;
+            strings.push(e);
+            counter += 1;
+        }
+
+        if (strings.length === 0) {
+            return Client.client.intlGet(this.guildId, 'noRegisteredEvents');
+        }
+
+        return strings;
     }
 
     getCommandHeli(isInfoChannel = false) {

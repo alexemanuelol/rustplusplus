@@ -25,6 +25,7 @@
 - **connection/connections** - Display latest team connections.
 - **death/deaths** - Display latest deaths.
 - **decay** - Get decay time of different wall-types.
+- **events** - Get recent events.
 - **heli** - Get information regarding Patrol Helicopter.
 - **large** - Get information regarding Large Oil Rig.
 - **leader** - Transfer leadership.
