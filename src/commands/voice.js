@@ -72,16 +72,16 @@ module.exports = {
             case 'leave': {
                 const connection = getVoiceConnection(interaction.guild.id);
                 if (connection) {
-                    connection.destroy();
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
                     client.log(client.intlGet(null, 'infoCap'),
                         client.intlGet(interaction.guildId, 'commandsVoiceLeave',
                             {
-                                name: interaction.member.voice.channel.name,
-                                id: interaction.member.voice.channel.id,
+                                name: interaction.member.user.username,
+                                id: connection.joinConfig.channelId,
                                 guild: interaction.member.guild.name
                             }));
+                    connection.destroy();
                 }
             } break;
 
