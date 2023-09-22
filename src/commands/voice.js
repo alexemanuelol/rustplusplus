@@ -71,7 +71,7 @@ module.exports = {
 
             case 'leave': {
                 const connection = getVoiceConnection(interaction.guild.id);
-                if (connection) {
+                if (connection && connection.joinConfig.channelId === interaction.member.voice.channelId) {
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
                     client.log(client.intlGet(null, 'infoCap'),
@@ -82,6 +82,10 @@ module.exports = {
                                 guild: interaction.member.guild.name
                             }));
                     connection.destroy();
+                }
+                else {
+                    await DiscordMessages.sendVoiceMessage(interaction,
+                        client.intlGet(interaction.guildId, 'commandsVoiceNotInVoiceWithBot'));
                 }
             } break;
 
