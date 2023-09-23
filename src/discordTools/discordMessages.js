@@ -554,4 +554,16 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
+
+    sendResearchMessage: async function (interaction, itemname, data) {
+        const content = {
+            embeds: [DiscordEmbeds.getResearchEmbed(interaction.guildId, itemname, data)],
+            ephemeral: true,
+            files: [new Discord.AttachmentBuilder(
+                Path.join(__dirname, '..', 'resources/images/research_table.png')
+            )]
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
 }
