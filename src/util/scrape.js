@@ -19,6 +19,7 @@
 */
 
 const Axios = require('axios');
+const Cheerio = require('cheerio');
 
 const Constants = require('../util/constants.js');
 
@@ -67,5 +68,31 @@ module.exports = {
         }
 
         return null;
+    },
+
+    scrapeRustLabs: async function (client, item) {
+        item = item.toLowerCase().replace(/\s/g, '-');
+        const response = await module.exports.scrape(`${Constants.RUSTLABS_URL}${item}`);
+        console.log(`${Constants.RUSTLABS_URL}${item}`)
+
+        if (response.status !== 200) {
+            client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToScrapeRustLabs', {
+                link: `${Constants.RUSTLABS_URL}/${item}`
+            }), 'error');
+            return null;
+        }
+
+        const $ = Cheerio.load(response.data);
+        const resultArray = [];
+
+        $('div[data-name="blueprint"] > table > tbody > tr').each((i, element) => {
+            const $element = $(element);
+            const item = $element.find('td:nth-child(2)').text();
+            const scrap = $element.find('td:nth-child(4)').text();
+            resultArray.push({ item, scrap });
+        });
+
+        return resultArray;
+
     },
 }
