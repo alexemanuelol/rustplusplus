@@ -917,18 +917,34 @@ module.exports = {
         });
     },
 
-    getResearchEmbed: function (guildId, itemname, data, url) {
-        console.log(url)
-        return module.exports.getEmbed({
+    getResearchEmbed: function (guildId, itemname, data) {
+        if(data.length === 2) return module.exports.getEmbed({
             color: Constants.COLOR_DEFAULT,
             timestamp: true,
             title: Client.client.intlGet(guildId, 'ResearchTitle'),
             description: itemname,
             fields:
             [
-                { name: Client.client.intlGet(guildId, 'ResearchTable'), value: `${data[0].scrap} Scrap`, inline: true },
-                { name: Client.client.intlGet(guildId, 'ResearchWorkbenchWayOne'), value: `${data[1].scrap} Scrap`, inline: true },
-                { name: Client.client.intlGet(guildId, 'ResearchWorkbenchWayTwo'), value: `${data[2] ? `${data[2].scrap} Scrap`:`${Client.client.intlGet(guildId, 'noData')}`}`, inline: true }],
+                {name: Client.client.intlGet(guildId, data[0].item.replace(/ /g, '')), 
+                 value: `${data[0].scrap} Scrap`, inline: true},
+                {name: Client.client.intlGet(guildId, data[1].item.replace(/ /g, '')), 
+                value: `${data[1].scrap} Scrap`, inline: true}],
+            thumbnail: 'attachment://research_table.png',
+        });
+
+        if(data.length === 3) return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: Client.client.intlGet(guildId, 'ResearchTitle'),
+            description: itemname,
+            fields:
+            [
+                {name: Client.client.intlGet(guildId, data[0].item.replace(/ /g, '')),
+                value: `${data[0].scrap} Scrap`, inline: true},
+                {name: Client.client.intlGet(guildId, data[1].item.replace(/ /g, '')), 
+                value: `${data[1].scrap} Scrap`, inline: true},
+                {name: Client.client.intlGet(guildId, data[2].item.replace(/ /g, '')), 
+                value: `${data[2].scrap} Scrap`, inline: true}],
                 thumbnail: 'attachment://research_table.png',
         });
     },

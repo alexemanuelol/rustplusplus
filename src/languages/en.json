@@ -532,8 +532,6 @@
     "roleSet": "rustplusplus role has been set to {name}.",
     "ResearchTitle": "Research Cost",
     "ResearchTable": "Research Table",
-    "ResearchWorkbenchWayOne": "Research Workbench Way One",
-    "ResearchWorkbenchWayTwo": "Research Workbench Way Two",
     "rustMonument": "Rust Monument",
     "rustplusOperational": "RUSTPLUS OPERATIONAL.",
     "samsite": "SAM site",
@@ -692,6 +690,9 @@
     "whenTrackersNotifySetting": "When should the Battlemetrics trackers notify?",
     "wipe": "Wipe",
     "wipeDetected": "Wipe detected!",
+    "WorkbenchLevel1": "Workbench Level 1",
+    "WorkbenchLevel2": "Workbench Level 2",
+    "WorkbenchLevel3": "Workbench Level 3",
     "youAreAlreadyLeader": "You are already leader.",
     "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
 }
