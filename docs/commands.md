@@ -18,6 +18,7 @@ Slash Command | Description
 [**/map**](commands.md#map) | Get the currently connected server map image.
 [**/market**](commands.md#market) | Operations for In-Game Vending Machines.
 [**/players**](commands.md#players) | Get player/players information based on battlemetrics.
+[**/research**](commands.md#research) | Get Information about Research Cost for a Item
 [**/reset**](commands.md#reset) | Reset Discord channels.
 [**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustplusplus category content.
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
@@ -158,6 +159,17 @@ Subcommand | Options | Description | Required
 &nbsp; | `name` | The name or part of the name of the player. | `False`
 
 ![Discord Slash Command players Image](images/slash_commands/players.png)
+
+
+## **/research**
+
+> **Get Information about the Research Cost of a Item**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to get Research Cost of. | `True`
+
+![Discord Slash Command research Image](images/slash_commands/research.png)
 
 
 ## **/reset**
