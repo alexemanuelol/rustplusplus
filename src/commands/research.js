@@ -46,7 +46,6 @@ module.exports = {
         
         const item = client.items.getName(client.items.getClosestItemIdByName(interaction.options.getString('item')));
         const itemData = await getItemData(client, item);
-        console.log(itemData)
         await DiscordMessages.sendResearchMessage(interaction, item, itemData);
 
 

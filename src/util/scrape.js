@@ -73,7 +73,6 @@ module.exports = {
     scrapeRustLabs: async function (client, item) {
         item = item.toLowerCase().replace(/\s/g, '-');
         const response = await module.exports.scrape(`${Constants.RUSTLABS_URL}${item}`);
-        console.log(`${Constants.RUSTLABS_URL}${item}`)
 
         if (response.status !== 200) {
             client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'failedToScrapeRustLabs', {
