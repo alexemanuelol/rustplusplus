@@ -167,7 +167,7 @@ Subcommand | Options | Description | Required
 
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
-&nbsp; | `name` | The name of the item to get Research Cost of. | `True`
+&nbsp; | `item` | The name of the item to get Research Cost of. | `True`
 
 ![Discord Slash Command research Image](images/slash_commands/research.png)
 
