@@ -56,7 +56,7 @@ module.exports = {
                         channelId: voiceChannel.id,
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
-                        })
+                        });
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
@@ -76,7 +76,7 @@ module.exports = {
                     client.log(client.intlGet(null, 'infoCap'),
                         client.intlGet(interaction.guildId, 'commandsVoiceLeave',
                             {
-                                name: interaction.member.user.username,
+                                name: client.channels.cache.get(connection.joinConfig.channelId).name,
                                 id: connection.joinConfig.channelId,
                                 guild: interaction.member.guild.name
                             }));

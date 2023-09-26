@@ -30,7 +30,7 @@ module.exports = {
 
         if (connection) {
             const resource = createAudioResource(url);
-            const player = createAudioPlayer()
+            const player = createAudioPlayer();
             connection.subscribe(player);
             player.play(resource);
         }
