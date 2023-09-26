@@ -23,7 +23,6 @@ const Builder = require('@discordjs/builders');
 const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordVoice = require('../discordTools/discordVoice.js');
 
 module.exports = {
     name: 'voice',
@@ -38,10 +37,6 @@ module.exports = {
             .addSubcommand(subcommand => subcommand
                 .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVoiceLeaveDesc')))
-            .addSubcommand(subcommand => subcommand
-                .setName('test')
-                .setDescription(client.intlGet(guildId, 'noData')))
-
     },
 
     async execute(client, interaction) {
@@ -62,8 +57,6 @@ module.exports = {
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
                         })
-                        .on('debug', console.log)
-                        .on('error', console.error);
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
@@ -93,10 +86,6 @@ module.exports = {
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceNotInVoiceWithBot'));
                 }
-            } break;
-
-            case 'test': {
-                await DiscordVoice.sendDiscordVoiceMessage(interaction.guild.id, "Cargoship enters the map from north of grid A. Hurry up Phillip! NOW!");
             } break;
 
             default: {
