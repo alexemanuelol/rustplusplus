@@ -1,6 +1,6 @@
 FROM node:18
 
-RUN apt-get update && apt-get install -y graphicsmagick && apt-get clean
+RUN apt-get update && apt-get install -y graphicsmagick ffmpeg && apt-get clean
 
 WORKDIR /app
 

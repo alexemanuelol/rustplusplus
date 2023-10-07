@@ -222,6 +222,7 @@
     "commandsVoiceMale": "Male",
     "commandsVoiceMaleDescription": "Sets the voiceactor gender to Male",
     "commandsVoiceNotInVoice": "You are not in a voicechannel",
+    "commandsVoiceNotInVoiceWithBot": "You are not in a voicechannel with the Bot",
     "commandsVoiceSettingsDesc": "Changes the Bot's voice settings.",
     "connect": "Connect",
     "connectCap": "CONNECT",

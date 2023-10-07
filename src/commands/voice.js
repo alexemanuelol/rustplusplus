@@ -37,7 +37,6 @@ module.exports = {
             .addSubcommand(subcommand => subcommand
                 .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVoiceLeaveDesc')))
-
     },
 
     async execute(client, interaction) {
@@ -57,7 +56,7 @@ module.exports = {
                         channelId: voiceChannel.id,
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
-                    });
+                        });
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
@@ -71,17 +70,21 @@ module.exports = {
 
             case 'leave': {
                 const connection = getVoiceConnection(interaction.guild.id);
-                if (connection) {
-                    connection.destroy();
+                if (connection && connection.joinConfig.channelId === interaction.member.voice.channelId) {
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
                     client.log(client.intlGet(null, 'infoCap'),
                         client.intlGet(interaction.guildId, 'commandsVoiceLeave',
                             {
-                                name: interaction.member.voice.channel.name,
-                                id: interaction.member.voice.channel.id,
+                                name: client.channels.cache.get(connection.joinConfig.channelId).name,
+                                id: connection.joinConfig.channelId,
                                 guild: interaction.member.guild.name
                             }));
+                    connection.destroy();
+                }
+                else {
+                    await DiscordMessages.sendVoiceMessage(interaction,
+                        client.intlGet(interaction.guildId, 'commandsVoiceNotInVoiceWithBot'));
                 }
             } break;
 
