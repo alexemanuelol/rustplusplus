@@ -19,6 +19,7 @@
 */
 
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
+const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 const TeamChatHandler = require("../handlers/teamChatHandler.js");
@@ -190,7 +191,7 @@ async function messageBroadcastEntityChangedStorageMonitor(rustplus, client, mes
     if (message.broadcast.entityChanged.payload.value === true) return;
 
     if (server.storageMonitors[entityId].type === 'toolCupboard' ||
-        message.broadcast.entityChanged.payload.capacity === 28) {
+        message.broadcast.entityChanged.payload.capacity === Constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
         setTimeout(updateToolCupboard.bind(null, rustplus, client, message), 2000);
     }
     else {
@@ -205,11 +206,11 @@ async function messageBroadcastEntityChangedStorageMonitor(rustplus, client, mes
         server.storageMonitors[entityId].reachable = await rustplus.isResponseValid(info) ? true : false;
 
         if (server.storageMonitors[entityId].reachable) {
-            if (info.entityInfo.payload.capacity === 30) {
+            if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_VENDING_MACHINE_CAPACITY) {
                 server.storageMonitors[entityId].type = 'vendingMachine';
             }
-            else if (info.entityInfo.payload.capacity === 48) {
-                server.storageMonitors[entityId].type = 'container';
+            else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
+                server.storageMonitors[entityId].type = 'largeWoodBox';
             }
         }
         client.setInstance(rustplus.guildId, instance);
