@@ -56,15 +56,12 @@ module.exports = {
 		}
 
 		const battlemetricsId = instance.serverList[rustplus.serverId].battlemetricsId;
-		if (battlemetricsId === null) {
-			const str = client.intlGet(interaction.guildId, 'serverUsingStreamerMode');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(null, 'warningCap'), str);
-			return;
-		}
+		const bmInstance = client.battlemetricsInstances[battlemetricsId];
 
-		if (!Object.keys(client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
-			const str = client.intlGet(interaction.guildId, 'couldNotFindPlayersForThisServer');
+		if (!bmInstance || !bmInstance.lastUpdateSuccessful) {
+			const str = client.intlGet(interaction.guildId, 'battlemetricsInstanceCouldNotBeFound', {
+				id: battlemetricsId
+			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log(client.intlGet(null, 'warningCap'), str);
 			return;
@@ -72,13 +69,24 @@ module.exports = {
 
 		let foundPlayers = [];
 		if (name === null) {
-			foundPlayers = client.battlemetricsOnlinePlayers[battlemetricsId].slice();
+			foundPlayers = bmInstance.getOnlinePlayerIdsOrderedByTime();
+			if (foundPlayers.length === 0) {
+				const str = client.intlGet(interaction.guildId, 'couldNotFindAnyPlayers');
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				client.log(client.intlGet(null, 'warningCap'), str);
+				return;
+			}
 		}
 		else {
-			for (const player of client.battlemetricsOnlinePlayers[battlemetricsId]) {
-				if (player.name.includes(name)) {
-					foundPlayers.push(player);
-				}
+			for (const playerId of bmInstance.getOnlinePlayerIdsOrderedByTime()) {
+				if (bmInstance.players[playerId]['name'].includes(name)) foundPlayers.push(playerId);
+			}
+
+			if (foundPlayers.length === 0) {
+				const str = client.intlGet(this.guildId, 'couldNotFindPlayer', { name: name });
+				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				client.log(client.intlGet(null, 'warningCap'), str);
+				return;
 			}
 		}
 
@@ -86,22 +94,21 @@ module.exports = {
 		const playerColumns = ['', '', ''];
 		let playerIndex = 0;
 		let isFull = false;
-		for (const player of foundPlayers) {
-			const playerStr = `\`[${player.time}] ${player.name}\`\n`;
+		for (const playerId of foundPlayers) {
+			const time = bmInstance.getOnlineTime(playerId);
+			const playerString = `\`[${time[1]}] ${bmInstance.players[playerId]['name']}\`\n`;
 
-			if (playerColumns[playerIndex % 3].length + playerStr.length > 1024) {
+			if (playerColumns[playerIndex % 3].length + playerString.length > 1024) {
 				isFull = true;
 				break;
 			}
 
-			playerColumns[playerIndex % 3] += playerStr;
+			playerColumns[playerIndex % 3] += playerString;
 			playerIndex += 1;
 		}
 
 		let title = client.intlGet(interaction.guildId, 'onlinePlayers');
-		if (name !== null) {
-			title += ` '${name}'`;
-		}
+		if (name !== null) title += ` '${name}'`;
 
 		const embed = DiscordEmbeds.getEmbed({
 			title: title,

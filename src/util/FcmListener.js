@@ -22,7 +22,7 @@ const Discord = require('discord.js');
 const Path = require('path');
 const PushReceiver = require('push-receiver');
 
-const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
+const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -199,17 +199,14 @@ async function pairingServer(client, guild, full, data, body) {
     let message = undefined;
     if (server) message = await DiscordTools.getMessageById(guild.id, instance.channelId.servers, server.messageId);
 
-    let info = null;
-    let battlemetricsId = await BattlemetricsAPI.getBattlemetricsServerId(client, data.title);
-    if (battlemetricsId !== null && battlemetricsId !== undefined) {
-        info = await BattlemetricsAPI.getBattlemetricsServerInfo(client, battlemetricsId);
-        let onlinePlayers = await BattlemetricsAPI.getBattlemetricsServerOnlinePlayers(client, battlemetricsId);
-        if (BattlemetricsAPI.isBattlemetricsServerHidden(onlinePlayers)) {
-            battlemetricsId = null;
+    let battlemetricsId = null;
+    const bmInstance = new Battlemetrics(null, data.title);
+    await bmInstance.setup();
+    if (bmInstance.lastUpdateSuccessful) {
+        battlemetricsId = bmInstance.id;
+        if (!client.battlemetricsInstances.hasOwnProperty(bmInstance.id)) {
+            client.battlemetricsInstances[bmInstance.id] = bmInstance;
         }
-    }
-    else {
-        battlemetricsId = null;
     }
 
     instance.serverList[serverId] = {
@@ -229,7 +226,8 @@ async function pairingServer(client, guild, full, data, body) {
         switchGroups: server ? server.switchGroups : {},
         messageId: (message !== undefined) ? message.id : null,
         battlemetricsId: battlemetricsId,
-        connect: (info === null) ? null : `connect ${info.ip}:${info.port}`,
+        connect: (!bmInstance.lastUpdateSuccessful) ? null :
+            `connect ${bmInstance.server_ip}:${bmInstance.server_port}`,
         cargoShipEgressTimeMs: server ? server.cargoShipEgressTimeMs : Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
         oilRigLockedCrateUnlockTimeMs: server ? server.oilRigLockedCrateUnlockTimeMs :
             Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,

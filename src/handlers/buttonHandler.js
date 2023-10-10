@@ -270,65 +270,6 @@ module.exports = async (client, interaction) => {
                 instance.generalSettings.leaderCommandOnlyForPaired)]
         });
     }
-    else if (interaction.customId === 'TrackerNotifyAllOffline') {
-        instance.generalSettings.trackerNotifyAllOffline = !instance.generalSettings.trackerNotifyAllOffline;
-        client.setInstance(guildId, instance);
-
-        if (rustplus) rustplus.generalSettings.trackerNotifyAllOffline =
-            instance.generalSettings.trackerNotifyAllOffline;
-
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
-            id: `${verifyId}`,
-            value: `${instance.generalSettings.trackerNotifyAllOffline}`
-        }));
-
-        await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getTrackerNotifyButtons(
-                guildId,
-                instance.generalSettings.trackerNotifyAllOffline,
-                instance.generalSettings.trackerNotifyAnyOnline)]
-        });
-    }
-    else if (interaction.customId === 'TrackerNotifyAnyOnline') {
-        instance.generalSettings.trackerNotifyAnyOnline = !instance.generalSettings.trackerNotifyAnyOnline;
-        client.setInstance(guildId, instance);
-
-        if (rustplus) rustplus.generalSettings.trackerNotifyAnyOnline =
-            instance.generalSettings.trackerNotifyAnyOnline;
-
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
-            id: `${verifyId}`,
-            value: `${instance.generalSettings.trackerNotifyAnyOnline}`
-        }));
-
-        await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getTrackerNotifyButtons(
-                guildId,
-                instance.generalSettings.trackerNotifyAllOffline,
-                instance.generalSettings.trackerNotifyAnyOnline)]
-        });
-    }
-    else if (interaction.customId === 'TrackerNotifyInGameConnections') {
-        instance.generalSettings.trackerNotifyInGameConnections =
-            !instance.generalSettings.trackerNotifyInGameConnections;
-        client.setInstance(guildId, instance);
-
-        if (rustplus) rustplus.generalSettings.trackerNotifyInGameConnections =
-            instance.generalSettings.trackerNotifyInGameConnections;
-
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
-            id: `${verifyId}`,
-            value: `${instance.generalSettings.trackerNotifyInGameConnections}`
-        }));
-
-        await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getTrackerNotifyButtons(
-                guildId,
-                instance.generalSettings.trackerNotifyAllOffline,
-                instance.generalSettings.trackerNotifyAnyOnline,
-                instance.generalSettings.trackerNotifyInGameConnections)]
-        });
-    }
     else if (interaction.customId === 'MapWipeNotifyEveryone') {
         instance.generalSettings.mapWipeNotifyEveryone = !instance.generalSettings.mapWipeNotifyEveryone;
         client.setInstance(guildId, instance);
@@ -482,17 +423,13 @@ module.exports = async (client, interaction) => {
             name: 'Tracker',
             serverId: ids.serverId,
             battlemetricsId: server.battlemetricsId,
+            title: server.title,
+            img: server.img,
             clanTag: '',
-            status: false,
-            allOffline: true,
-            messageId: null,
-            active: true,
             everyone: false,
             inGame: true,
             players: [],
-            nameChangeHistory: [],
-            img: server.img,
-            title: server.title
+            messageId: null
         }
         client.setInstance(guildId, instance);
 
@@ -961,25 +898,6 @@ module.exports = async (client, interaction) => {
         const modal = DiscordModals.getGroupRemoveSwitchModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
-    else if (interaction.customId.startsWith('TrackerActive')) {
-        const ids = JSON.parse(interaction.customId.replace('TrackerActive', ''));
-        const tracker = instance.trackers[ids.trackerId];
-
-        if (!tracker) {
-            await interaction.message.delete();
-            return;
-        }
-
-        tracker.active = !tracker.active;
-        client.setInstance(guildId, instance);
-
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
-            id: `${verifyId}`,
-            value: `${tracker.active}`
-        }));
-
-        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
-    }
     else if (interaction.customId.startsWith('TrackerEveryone')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEveryone', ''));
         const tracker = instance.trackers[ids.trackerId];
@@ -996,6 +914,19 @@ module.exports = async (client, interaction) => {
             id: `${verifyId}`,
             value: `${tracker.everyone}`
         }));
+
+        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
+    }
+    else if (interaction.customId.startsWith('TrackerUpdate')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerUpdate', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        // TODO! Remove name change icon from status
 
         await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }

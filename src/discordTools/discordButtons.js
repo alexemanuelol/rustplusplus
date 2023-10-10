@@ -404,16 +404,14 @@ module.exports = {
         return [
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
-                    customId: `TrackerActive${identifier}`,
-                    label: tracker.active ?
-                        Client.client.intlGet(guildId, 'activeCap') :
-                        Client.client.intlGet(guildId, 'inactiveCap'),
-                    style: tracker.active ? SUCCESS : DANGER
+                    customId: `TrackerAddPlayer${identifier}`,
+                    label: Client.client.intlGet(guildId, 'addPlayerCap'),
+                    style: SUCCESS
                 }),
                 module.exports.getButton({
-                    customId: `TrackerEveryone${identifier}`,
-                    label: '@everyone',
-                    style: tracker.everyone ? SUCCESS : DANGER
+                    customId: `TrackerRemovePlayer${identifier}`,
+                    label: Client.client.intlGet(guildId, 'removePlayerCap'),
+                    style: DANGER
                 }),
                 module.exports.getButton({
                     customId: `TrackerEdit${identifier}`,
@@ -427,41 +425,21 @@ module.exports = {
                 })),
             new Discord.ActionRowBuilder().addComponents(
                 module.exports.getButton({
-                    customId: `TrackerAddPlayer${identifier}`,
-                    label: Client.client.intlGet(guildId, 'addPlayerCap'),
-                    style: SUCCESS
-                }),
-                module.exports.getButton({
-                    customId: `TrackerRemovePlayer${identifier}`,
-                    label: Client.client.intlGet(guildId, 'removePlayerCap'),
-                    style: DANGER
-                }),
-                module.exports.getButton({
                     customId: `TrackerInGame${identifier}`,
                     label: Client.client.intlGet(guildId, 'inGameCap'),
                     style: tracker.inGame ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: `TrackerEveryone${identifier}`,
+                    label: '@everyone',
+                    style: tracker.everyone ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: `TrackerUpdate${identifier}`,
+                    label: Client.client.intlGet(guildId, 'updateCap'),
+                    style: PRIMARY
                 }))
         ];
-    },
-
-    getTrackerNotifyButtons: function (guildId, allOffline, anyOnline, inGameConnections) {
-        return new Discord.ActionRowBuilder().addComponents(
-            module.exports.getButton({
-                customId: 'TrackerNotifyAllOffline',
-                label: Client.client.intlGet(guildId, 'allOfflineCap'),
-                style: allOffline ? SUCCESS : DANGER
-            }),
-            module.exports.getButton({
-                customId: 'TrackerNotifyAnyOnline',
-                label: Client.client.intlGet(guildId, 'anyOnlineCap'),
-                style: anyOnline ? SUCCESS : DANGER
-            }),
-            module.exports.getButton({
-                customId: 'TrackerNotifyInGameConnections',
-                label: `${Client.client.intlGet(guildId, 'inGameCap')} ` +
-                    `${Client.client.intlGet(guildId, 'connectionsCap')}`,
-                style: inGameConnections ? SUCCESS : DANGER
-            }));
     },
 
     getNewsButton: function (guildId, body, validURL) {

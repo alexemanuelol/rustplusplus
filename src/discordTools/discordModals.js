@@ -311,8 +311,9 @@ module.exports = {
 
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
-                customId: 'TrackerAddPlayerSteamId',
-                label: Client.client.intlGet(guildId, 'steamId'),
+                customId: 'TrackerAddPlayerId',
+                label: `${Client.client.intlGet(guildId, 'steamId')} / ` +
+                    `${Client.client.intlGet(guildId, 'battlemetricsId')}`,
                 value: '',
                 style: Discord.TextInputStyle.Short
             }))
@@ -333,8 +334,9 @@ module.exports = {
 
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
-                customId: 'TrackerRemovePlayerSteamId',
-                label: Client.client.intlGet(guildId, 'steamId'),
+                customId: 'TrackerRemovePlayerId',
+                label: `${Client.client.intlGet(guildId, 'steamId')} / ` +
+                    `${Client.client.intlGet(guildId, 'battlemetricsId')}`,
                 value: '',
                 style: Discord.TextInputStyle.Short
             }))
