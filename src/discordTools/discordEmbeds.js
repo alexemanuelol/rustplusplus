@@ -78,9 +78,16 @@ module.exports = {
         if (server.battlemetricsId !== null) {
             const bmId = server.battlemetricsId;
             const bmIdLink = `[${bmId}](${Constants.BATTLEMETRICS_SERVER_URL}${bmId})`;
-            description += `**Battlemetrics ID:** ${bmIdLink}\n\n`;
+            description += `__**${Client.client.intlGet(guildId, 'battlemetricsId')}:**__ ${bmIdLink}\n`;
+
+            const bmInstance = Client.client.battlemetricsInstances[bmId];
+            if (bmInstance) {
+                description += `__**${Client.client.intlGet(guildId, 'streamerMode')}:**__ `;
+                description += (bmInstance.streamerMode ? Client.client.intlGet(guildId, 'onCap') :
+                    Client.client.intlGet(guildId, 'offCap')) + '\n';
+            }
         }
-        description += `${server.description}`;
+        description += `\n${server.description}`;
 
         return module.exports.getEmbed({
             title: `${server.title}`,
@@ -104,60 +111,90 @@ module.exports = {
     getTrackerEmbed: function (guildId, trackerId) {
         const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
-        const serverStatus = tracker.status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
+        const battlemetricsId = tracker.battlemetricsId;
+        const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
 
-        let playerName = '', playerSteamId = '', playerStatus = '';
+        const successful = bmInstance && bmInstance.lastUpdateSuccessful ? true : false;
+
+        const battlemetricsLink = `[${battlemetricsId}](${Constants.BATTLEMETRICS_SERVER_URL}${battlemetricsId})`;
+        const serverStatus = !successful ? Constants.NOT_FOUND_EMOJI :
+            (bmInstance.server_status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI);
+
+        let description = `__**Battlemetrics ID:**__ ${battlemetricsLink}\n`;
+        description += `__**${Client.client.intlGet(guildId, 'serverId')}:**__ ${tracker.serverId}\n`;
+        description += `__**${Client.client.intlGet(guildId, 'serverStatus')}:**__ ${serverStatus}\n`;
+        description += `__**${Client.client.intlGet(guildId, 'streamerMode')}:**__ `;
+        description += (!bmInstance ? Constants.NOT_FOUND_EMOJI : (bmInstance.streamerMode ?
+            Client.client.intlGet(guildId, 'onCap') : Client.client.intlGet(guildId, 'offCap'))) + '\n';
+        description += `__**${Client.client.intlGet(guildId, 'clanTag')}:**__ `;
+        description += tracker.clanTag !== '' ? `\`${tracker.clanTag}\`` : '';
+
+        let playerName = '', playerId = '', playerStatus = '';
+        const amountOfPlayers = tracker.players.length;
         for (const player of tracker.players) {
             playerName += `${player.name}\n`;
-            if (tracker.players.length < 12) {
-                playerSteamId += `[${player.steamId}](${Constants.STEAM_PROFILES_URL}${player.steamId})\n`;
-            }
-            else {
-                playerSteamId += `${player.steamId}\n`;
-            }
 
-            if (player.status === true) {
-                playerStatus += `${Constants.ONLINE_EMOJI} [${player.time}]\n`;
+            /**
+             * Max character per embed field is 1024, max length of playerId including links is 137 characters.
+             * 1024 / 137 = 7.4745 => If player are > 7, then don't show links.
+             **/
+
+            const steamIdLink = amountOfPlayers > 7 ? player.steamId :
+                Constants.GET_STEAM_PROFILE_LINK(player.steamId);
+            const bmIdLink = amountOfPlayers > 7 ? player.playerId :
+                Constants.GET_BATTLEMETRICS_PROFILE_LINK(player.playerId);
+
+            playerId += `${player.steamId !== null ? steamIdLink : ''}`;
+            playerId += `${player.steamId !== null && player.playerId !== null ? ' / ' : ''}`;
+            playerId += `${player.playerId !== null ? bmIdLink : ''}`;
+            playerId += `${player.steamId === null && player.playerId === null ?
+                Client.client.intlGet(guildId, 'empty') : ''}`;
+            playerId += '\n';
+
+            if (!bmInstance.players.hasOwnProperty(player.playerId) || !successful) {
+                playerStatus += `${Constants.NOT_FOUND_EMOJI}\n`;
             }
             else {
-                let offlineTime = player.offlineTime;
-                if (offlineTime === null) {
-                    playerStatus += `${Constants.OFFLINE_EMOJI}\n`;
+                let time = null;
+                if (bmInstance.players[player.playerId]['status']) {
+                    time = bmInstance.getOnlineTime(player.playerId);
+                    playerStatus += `${Constants.ONLINE_EMOJI}`;
                 }
                 else {
-                    let seconds = (new Date() - new Date(offlineTime)) / 1000;
-                    offlineTime = Timer.secondsToFullScale(seconds, 's');
-                    playerStatus += `${Constants.OFFLINE_EMOJI} [${offlineTime}]\n`;
+                    time = bmInstance.getOfflineTime(player.playerId);
+                    playerStatus += `${Constants.OFFLINE_EMOJI}`;
                 }
+                playerStatus += time !== null ? ` [${time[1]}]\n` : '\n';
             }
-        }
-
-        let nameChangeHistory = Client.client.intlGet(guildId, 'empty');
-        if (tracker.nameChangeHistory.length !== 0) {
-            nameChangeHistory = tracker.nameChangeHistory.join('\n');
         }
 
         if (playerName === '') playerName = Client.client.intlGet(guildId, 'empty');
-        if (playerSteamId === '') playerSteamId = Client.client.intlGet(guildId, 'empty');
+        if (playerId === '') playerId = Client.client.intlGet(guildId, 'empty');
         if (playerStatus === '') playerStatus = Client.client.intlGet(guildId, 'empty');
-
-        const bmId = tracker.battlemetricsId;
-        const bmIdLink = `[${bmId}](${Constants.BATTLEMETRICS_SERVER_URL}${bmId})`;
 
         return module.exports.getEmbed({
             title: `${tracker.name}`,
             color: Constants.COLOR_DEFAULT,
-            description: `**Battlemetrics ID:** ${bmIdLink}\n` +
-                `**${Client.client.intlGet(guildId, 'clanTag')}:** ` +
-                (tracker.clanTag !== '' ? `\`${tracker.clanTag}\`` : '') + '\n' +
-                `${Client.client.intlGet(guildId, 'serverStatus', { status: serverStatus })}`,
+            description: description,
             thumbnail: `${tracker.img}`,
             footer: { text: `${tracker.title}` },
             fields: [
-                { name: Client.client.intlGet(guildId, 'name'), value: playerName, inline: true },
-                { name: 'SteamID', value: playerSteamId, inline: true },
-                { name: Client.client.intlGet(guildId, 'status'), value: playerStatus, inline: true },
-                { name: Client.client.intlGet(guildId, 'nameChangeHistory'), value: nameChangeHistory }],
+                {
+                    name: `__${Client.client.intlGet(guildId, 'name')}__`,
+                    value: playerName,
+                    inline: true
+                },
+                {
+                    name: `__${Client.client.intlGet(guildId, 'steamId')} / ` +
+                        `${Client.client.intlGet(guildId, 'battlemetricsId')}__`,
+                    value: playerId,
+                    inline: true
+                },
+                {
+                    name: `__${Client.client.intlGet(guildId, 'status')}__`,
+                    value: playerStatus,
+                    inline: true
+                }],
             timestamp: true
         });
     },
@@ -479,36 +516,6 @@ module.exports = {
             description: `**ID** \`${entityId}\``,
             thumbnail: `attachment://${entity.image}`,
             footer: { text: `${entity.server}` },
-            timestamp: true
-        });
-    },
-
-    getTrackerAllOfflineEmbed: function (guildId, trackerId) {
-        const instance = Client.client.getInstance(guildId);
-        const tracker = instance.trackers[trackerId];
-
-        return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'allJustOfflineTracker', {
-                tracker: tracker.name
-            }),
-            color: Constants.COLOR_INACTIVE,
-            thumbnail: `${instance.trackers[trackerId].img}`,
-            footer: { text: `${instance.trackers[trackerId].title}` },
-            timestamp: true
-        });
-    },
-
-    getTrackerAnyOnlineEmbed: function (guildId, trackerId) {
-        const instance = Client.client.getInstance(guildId);
-        const tracker = instance.trackers[trackerId];
-
-        return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'anyJustOnlineTracker', {
-                tracker: tracker.name
-            }),
-            color: Constants.COLOR_ACTIVE,
-            thumbnail: `${instance.trackers[trackerId].img}`,
-            footer: { text: `${instance.trackers[trackerId].title}` },
             timestamp: true
         });
     },

@@ -23,6 +23,7 @@ const Discord = require('discord.js');
 const Fs = require('fs');
 const Path = require('path');
 
+const Battlemetrics = require('../structures/Battlemetrics');
 const Cctv = require('./Cctv');
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -62,7 +63,8 @@ class DiscordBot extends Discord.Client {
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 
-        this.battlemetricsOnlinePlayers = new Object();
+        this.battlemetricsInstances = new Object();
+
         this.battlemetricsIntervalId = null;
         this.battlemetricsIntervalCounter = 0;
 
@@ -364,6 +366,83 @@ class DiscordBot extends Discord.Client {
             if (!instance.serverList[serverId].switchGroups.hasOwnProperty(randomNumber)) {
                 return randomNumber;
             }
+        }
+    }
+
+    /**
+     *  Check if Battlemetrics instances are missing/not required/need update.
+     */
+    async updateBattlemetricsInstances() {
+        const activeInstances = [];
+
+        /* Check for instances that are missing or need update. */
+        for (const guild of this.guilds.cache) {
+            const guildId = guild[0];
+            const instance = this.getInstance(guildId);
+            const activeServer = instance.activeServer;
+            if (activeServer !== null && instance.serverList.hasOwnProperty(activeServer)) {
+                if (instance.serverList[activeServer].battlemetricsId !== null) {
+                    /* A Battlemetrics ID exist. */
+                    const battlemetricsId = instance.serverList[activeServer].battlemetricsId;
+                    if (!activeInstances.includes(battlemetricsId)) {
+                        activeInstances.push(battlemetricsId);
+                        if (this.battlemetricsInstances.hasOwnProperty(battlemetricsId)) {
+                            /* Update */
+                            await this.battlemetricsInstances[battlemetricsId].evaluation();
+                        }
+                        else {
+                            /* Add */
+                            const bmInstance = new Battlemetrics(battlemetricsId);
+                            await bmInstance.setup();
+                            this.battlemetricsInstances[battlemetricsId] = bmInstance;
+                        }
+                    }
+                }
+                else {
+                    /* Battlemetrics ID is missing, try with server name. */
+                    const name = instance.serverList[activeServer].title;
+                    const bmInstance = new Battlemetrics(null, name);
+                    await bmInstance.setup();
+                    if (bmInstance.lastUpdateSuccessful) {
+                        /* Found an Id, is it a new Id? */
+                        instance.serverList[activeServer].battlemetricsId = bmInstance.id;
+                        this.setInstance(guildId, instance);
+
+                        if (this.battlemetricsInstances.hasOwnProperty(bmInstance.id)) {
+                            if (!activeInstances.includes(bmInstance.id)) {
+                                activeInstances.push(bmInstance.id);
+                                await this.battlemetricsInstances[bmInstance.id].evaluation(bmInstance.data);
+                            }
+                        }
+                        else {
+                            activeInstances.push(bmInstance.id);
+                            this.battlemetricsInstances[bmInstance.id] = bmInstance;
+                        }
+                    }
+                }
+            }
+
+            for (const [trackerId, content] of Object.entries(instance.trackers)) {
+                if (!activeInstances.includes(content.battlemetricsId)) {
+                    activeInstances.push(content.battlemetricsId);
+                    if (this.battlemetricsInstances.hasOwnProperty(content.battlemetricsId)) {
+                        /* Update */
+                        await this.battlemetricsInstances[content.battlemetricsId].evaluation();
+                    }
+                    else {
+                        /* Add */
+                        const bmInstance = new Battlemetrics(content.battlemetricsId);
+                        await bmInstance.setup();
+                        this.battlemetricsInstances[content.battlemetricsId] = bmInstance;
+                    }
+                }
+            }
+        }
+
+        /* Find instances that are no longer required and delete them. */
+        const remove = Object.keys(this.battlemetricsInstances).filter(e => !activeInstances.includes(e));
+        for (const id of remove) {
+            delete this.battlemetricsInstances[id];
         }
     }
 

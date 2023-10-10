@@ -22,9 +22,15 @@ module.exports = {
     DEFAULT_SERVER_URL: 'https://rust.facepunch.com',
     DEFAULT_SERVER_IMG: 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg',
     STEAM_PROFILES_URL: 'https://steamcommunity.com/profiles/',
+    BATTLEMETRICS_PROFILE_URL: 'https://www.battlemetrics.com/players/',
     BATTLEMETRICS_SERVER_URL: 'https://www.battlemetrics.com/servers/rust/',
     AFK_TIME_SECONDS: 5 * 60, /* 5 min */
     MAX_LENGTH_TEAM_MESSAGE: 128,
+    STEAMID64_LENGTH: 17,
+
+    STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY: 29,
+    STORAGE_MONITOR_VENDING_MACHINE_CAPACITY: 30,
+    STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY: 48,
 
     /* Default timer times */
     DEFAULT_CARGO_SHIP_EGRESS_TIME_MS: 50 * 60 * 1000, /* 50 min */
@@ -71,5 +77,13 @@ module.exports = {
     COLOR_PATROL_HELICOPTER_TAKEN_DOWN: '#FFBF00',
     COLOR_PATROL_HELICOPTER_TRACER: '#00FF00',
     COLOR_SETTINGS: '#861C0C',
-    COLOR_TEAMCHAT_DEFAULT: '#CE412B'
+    COLOR_TEAMCHAT_DEFAULT: '#CE412B',
+
+    GET_STEAM_PROFILE_LINK: function (steamId) {
+        return `[${steamId}](${this.STEAM_PROFILES_URL}${steamId})`;
+    },
+
+    GET_BATTLEMETRICS_PROFILE_LINK: function (playerId) {
+        return `[${playerId}](${this.BATTLEMETRICS_PROFILE_URL}${playerId})`;
+    }
 }

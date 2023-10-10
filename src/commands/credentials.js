@@ -229,7 +229,14 @@ async function removeCredentials(client, interaction, verifyId) {
     }
 
     if (!steamId) {
-        steamId = Object.keys(credentials).find(e => credentials[e].discordUserId === interaction.member.user.id);
+        for (const credential of Object.keys(credentials)) {
+            if (credential === 'hoster') continue;
+
+            if (credentials[credential].discordUserId === interaction.member.user.id) {
+                steamId = credential;
+                break;
+            }
+        }
     }
 
     if (!(steamId in credentials)) {

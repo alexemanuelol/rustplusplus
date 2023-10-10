@@ -268,30 +268,6 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendTrackerAllOfflineMessage: async function (guildId, trackerId) {
-        const instance = Client.client.getInstance(guildId);
-        const tracker = instance.trackers[trackerId];
-
-        const content = {
-            embeds: [DiscordEmbeds.getTrackerAllOfflineEmbed(guildId, trackerId)],
-            content: tracker.everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
-    sendTrackerAnyOnlineMessage: async function (guildId, trackerId) {
-        const instance = Client.client.getInstance(guildId);
-        const tracker = instance.trackers[trackerId];
-
-        const content = {
-            embeds: [DiscordEmbeds.getTrackerAnyOnlineEmbed(guildId, trackerId)],
-            content: tracker.everyone ? '@everyone' : ''
-        }
-
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
-    },
-
     sendSmartAlarmTriggerMessage: async function (guildId, serverId, entityId) {
         const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].alarms[entityId];

@@ -289,19 +289,19 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         }
 
         if (instance.serverList[serverId].storageMonitors[body.entityId].reachable) {
-            if (info.entityInfo.payload.capacity === 28) {
+            if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
                 instance.serverList[serverId].storageMonitors[body.entityId].type = 'toolCupboard';
                 instance.serverList[serverId].storageMonitors[body.entityId].image = 'tool_cupboard.png';
                 if (info.entityInfo.payload.protectionExpiry === 0) {
                     instance.serverList[serverId].storageMonitors[body.entityId].decaying = true;
                 }
             }
-            else if (info.entityInfo.payload.capacity === 30) {
+            else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_VENDING_MACHINE_CAPACITY) {
                 instance.serverList[serverId].storageMonitors[body.entityId].type = 'vendingMachine';
                 instance.serverList[serverId].storageMonitors[body.entityId].image = 'vending_machine.png';
             }
-            else if (info.entityInfo.payload.capacity === 48) {
-                instance.serverList[serverId].storageMonitors[body.entityId].type = 'container';
+            else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
+                instance.serverList[serverId].storageMonitors[body.entityId].type = 'largeWoodBox';
                 instance.serverList[serverId].storageMonitors[body.entityId].image = 'large_wood_box.png';
             }
 

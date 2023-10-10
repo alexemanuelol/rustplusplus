@@ -18,6 +18,7 @@
 
 */
 
+const Constants = require('../util/constants.js');
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
@@ -54,7 +55,7 @@ module.exports = async (client, rustplus) => {
             }
 
             if (info.entityInfo.payload.capacity !== 0) {
-                if (info.entityInfo.payload.capacity === 28) {
+                if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
                     entity.type = 'toolCupboard';
                     if (info.entityInfo.payload.protectionExpiry === 0) {
                         entity.decaying = true;
@@ -63,11 +64,11 @@ module.exports = async (client, rustplus) => {
                         entity.decaying = false;
                     }
                 }
-                else if (info.entityInfo.payload.capacity === 30) {
+                else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_VENDING_MACHINE_CAPACITY) {
                     entity.type = 'vendingMachine';
                 }
-                else if (info.entityInfo.payload.capacity === 48) {
-                    entity.type = 'container';
+                else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
+                    entity.type = 'largeWoodBox';
                 }
                 client.setInstance(guildId, instance);
             }

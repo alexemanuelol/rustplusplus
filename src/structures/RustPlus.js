@@ -1836,16 +1836,17 @@ class RustPlus extends RustPlusLib {
         const commandPlayers = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxPlayers')}`;
         const commandPlayersEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxPlayers')}`;
 
-        if (!battlemetricsId) {
-            return Client.client.intlGet(this.guildId, 'serverUsingStreamerMode');
-        }
-        if (!Object.keys(Client.client.battlemetricsOnlinePlayers).includes(battlemetricsId)) {
-            return Client.client.intlGet(this.guildId, 'couldNotFindPlayersForThisServer');
+        const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
+
+        if (!bmInstance || !bmInstance.lastUpdateSuccessful) {
+            return Client.client.intlGet(this.guildId, 'battlemetricsInstanceCouldNotBeFound', {
+                id: battlemetricsId
+            });
         }
 
         let foundPlayers = [];
         if (command.toLowerCase() === `${commandPlayers}` || command.toLowerCase() === `${commandPlayersEn}`) {
-            foundPlayers = Client.client.battlemetricsOnlinePlayers[battlemetricsId].slice();
+            foundPlayers = bmInstance.getOnlinePlayerIdsOrderedByTime();
             if (foundPlayers.length === 0) {
                 return Client.client.intlGet(this.guildId, 'couldNotFindAnyPlayers');
             }
@@ -1861,9 +1862,10 @@ class RustPlus extends RustPlusLib {
                 name = command.slice(`${commandPlayerEn} `.length).trim();
             }
 
-            for (const player of Client.client.battlemetricsOnlinePlayers[battlemetricsId]) {
-                if (player.name.includes(name)) foundPlayers.push(player);
+            for (const playerId of bmInstance.getOnlinePlayerIdsOrderedByTime()) {
+                if (bmInstance.players[playerId]['name'].includes(name)) foundPlayers.push(playerId);
             }
+
             if (foundPlayers.length === 0) {
                 return Client.client.intlGet(this.guildId, 'couldNotFindPlayer', {
                     name: name
@@ -1879,8 +1881,9 @@ class RustPlus extends RustPlusLib {
 
         let string = '';
         let playerIndex = 0;
-        for (const player of foundPlayers) {
-            const playerString = `${player.name} [${player.time}], `;
+        for (const playerId of foundPlayers) {
+            const time = bmInstance.getOnlineTime(playerId);
+            const playerString = `${bmInstance.players[playerId]['name']} [${time[1]}], `;
 
             if ((string.length + playerString.length + leftLength) < messageMaxLength) {
                 string += playerString;
@@ -1905,6 +1908,8 @@ class RustPlus extends RustPlusLib {
                 return `${string}.`;
             }
         }
+
+        return null;
     }
 
     getCommandPop(isInfoChannel = false) {

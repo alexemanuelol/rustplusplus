@@ -20,10 +20,11 @@
 
 const Discord = require('discord.js');
 
-const BattlemetricsAPI = require('../util/battlemetricsAPI.js');
+const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Keywords = require('../util/keywords.js');
+const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -70,13 +71,25 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
         const battlemetricsId = interaction.fields.getTextInputValue('ServerBattlemetricsId');
 
-        if (battlemetricsId === '') {
-            server.battlemetricsId = null;
+        if (battlemetricsId !== server.battlemetricsId) {
+            if (battlemetricsId === '') {
+                server.battlemetricsId = null;
+            }
+            else if (client.battlemetricsInstances.hasOwnProperty(battlemetricsId)) {
+                const bmInstance = client.battlemetricsInstances[battlemetricsId];
+                server.battlemetricsId = battlemetricsId;
+                server.connect = `connect ${bmInstance.server_ip}:${bmInstance.server_port}`;
+            }
+            else {
+                const bmInstance = new Battlemetrics(battlemetricsId);
+                await bmInstance.setup();
+                if (bmInstance.lastUpdateSuccessful) {
+                    client.battlemetricsInstances[battlemetricsId] = bmInstance;
+                    server.battlemetricsId = battlemetricsId;
+                    server.connect = `connect ${bmInstance.server_ip}:${bmInstance.server_port}`;
+                }
+            }
         }
-        else {
-            server.battlemetricsId = battlemetricsId;
-        }
-
         client.setInstance(guildId, instance);
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
@@ -260,27 +273,31 @@ module.exports = async (client, interaction) => {
         }
 
         tracker.name = trackerName;
-
         if (trackerClanTag !== tracker.clanTag) {
             tracker.clanTag = trackerClanTag;
-            for (const player of tracker.players) {
-                player.name = '-';
-            }
+            client.battlemetricsIntervalCounter = 0;
         }
 
         if (trackerBattlemetricsId !== tracker.battlemetricsId) {
-            const info = await BattlemetricsAPI.getBattlemetricsServerInfo(client, trackerBattlemetricsId);
-            if (info === null) {
-                interaction.deferUpdate();
-                return;
+            if (client.battlemetricsInstances.hasOwnProperty(trackerBattlemetricsId)) {
+                const bmInstance = client.battlemetricsInstances[trackerBattlemetricsId];
+                tracker.battlemetricsId = trackerBattlemetricsId;
+                tracker.serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
+                tracker.img = Constants.DEFAULT_SERVER_IMG;
+                tracker.title = bmInstance.server_name;
             }
-
-            tracker.serverId = `${info.ip}-${info.port}`;
-            tracker.battlemetricsId = trackerBattlemetricsId;
-            tracker.img = Constants.DEFAULT_SERVER_IMG;
-            tracker.title = info.name;
+            else {
+                const bmInstance = new Battlemetrics(trackerBattlemetricsId);
+                await bmInstance.setup();
+                if (bmInstance.lastUpdateSuccessful) {
+                    client.battlemetricsInstances[trackerBattlemetricsId] = bmInstance;
+                    tracker.battlemetricsId = trackerBattlemetricsId;
+                    tracker.serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
+                    tracker.img = Constants.DEFAULT_SERVER_IMG;
+                    tracker.title = bmInstance.server_name;
+                }
+            }
         }
-
         client.setInstance(guildId, instance);
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
@@ -289,56 +306,86 @@ module.exports = async (client, interaction) => {
         }));
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
-
-        /* To force search of player name via scrape */
-        client.battlemetricsIntervalCounter = 0;
     }
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
         const tracker = instance.trackers[ids.trackerId];
-        const steamId = interaction.fields.getTextInputValue('TrackerAddPlayerSteamId');
+        const id = interaction.fields.getTextInputValue('TrackerAddPlayerId');
 
         if (!tracker) {
             interaction.deferUpdate();
             return;
         }
 
-        if (tracker.players.some(e => e.steamId === steamId)) {
+        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
+        const bmInstance = client.battlemetricsInstances[tracker.battlemetricsId];
+
+        if ((isSteamId64 && tracker.players.some(e => e.steamId === id)) ||
+            (!isSteamId64 && tracker.players.some(e => e.playerId === id && e.steamId === null))) {
             interaction.deferUpdate();
             return;
         }
 
+        let name = null;
+        let steamId = null;
+        let playerId = null;
+
+        if (isSteamId64) {
+            steamId = id;
+            name = await Scrape.scrapeSteamProfileName(client, id);
+
+            if (name && bmInstance) {
+                playerId = Object.keys(bmInstance.players).find(e => bmInstance.players[e]['name'] === name);
+                if (!playerId) playerId = null;
+            }
+        }
+        else {
+            playerId = id;
+            if (bmInstance.players.hasOwnProperty(id)) {
+                name = bmInstance.players[id]['name'];
+            }
+            else {
+                name = '-';
+            }
+        }
+
         tracker.players.push({
-            name: '-', steamId: steamId, playerId: null, status: false, time: null, offlineTime: null
+            name: name,
+            steamId: steamId,
+            playerId: playerId
         });
         client.setInstance(interaction.guildId, instance);
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
-            value: `${steamId}`
+            value: `${id}`
         }));
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
-
-        /* To force search of player name via scrape */
-        client.battlemetricsIntervalCounter = 0;
     }
     else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
         const tracker = instance.trackers[ids.trackerId];
-        const steamId = interaction.fields.getTextInputValue('TrackerRemovePlayerSteamId');
+        const id = interaction.fields.getTextInputValue('TrackerRemovePlayerId');
+
+        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
 
         if (!tracker) {
             interaction.deferUpdate();
             return;
         }
 
-        tracker.players = tracker.players.filter(e => e.steamId !== steamId);
+        if (isSteamId64) {
+            tracker.players = tracker.players.filter(e => e.steamId !== id);
+        }
+        else {
+            tracker.players = tracker.players.filter(e => e.playerId !== id || e.steamId !== null);
+        }
         client.setInstance(interaction.guildId, instance);
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
-            value: `${steamId}`
+            value: `${id}`
         }));
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);

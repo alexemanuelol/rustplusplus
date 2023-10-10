@@ -213,21 +213,6 @@ async function setupGeneralSettings(client, guildId, channel) {
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: Constants.COLOR_SETTINGS,
-            title: client.intlGet(guildId, 'whenTrackersNotifySetting'),
-            thumbnail: `attachment://settings_logo.png`
-        })],
-        components: [DiscordButtons.getTrackerNotifyButtons(
-            guildId,
-            instance.generalSettings.trackerNotifyAllOffline,
-            instance.generalSettings.trackerNotifyAnyOnline,
-            instance.generalSettings.trackerNotifyInGameConnections)],
-        files: [new Discord.AttachmentBuilder(
-            Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
-    });
-
-    await client.messageSend(channel, {
-        embeds: [DiscordEmbeds.getEmbed({
-            color: Constants.COLOR_SETTINGS,
             title: client.intlGet(guildId, 'mapWipeDetectedNotifySetting', { group: '@everyone' }),
             thumbnail: `attachment://settings_logo.png`
         })],
