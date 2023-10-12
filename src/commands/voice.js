@@ -20,7 +20,7 @@
 */
 
 const Builder = require('@discordjs/builders');
-const {joinVoiceChannel, getVoiceConnection} = require('@discordjs/voice');
+const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
@@ -48,7 +48,7 @@ module.exports = {
         client.logInteraction(interaction, verifyId, 'slashCommand');
 
         if (!await client.validatePermissions(interaction)) return;
-        await interaction.deferReply({ephemeral: true});
+        await interaction.deferReply({ ephemeral: true });
 
         switch (interaction.options.getSubcommand()) {
             case 'join': {
@@ -68,8 +68,7 @@ module.exports = {
                 } else {
                     await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
-            }
-                break;
+            } break;
 
             case 'leave': {
                 if (isUserInVoiceChannel(interaction)) {
@@ -88,16 +87,15 @@ module.exports = {
                 } else {
                     await DiscordMessages.sendVoiceMessage(interaction, client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
-            }
-                break;
+            } break;
 
             default: {
-            }
-                break;
+            } break;
         }
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
-            id: `${verifyId}`, value: `${interaction.options.getSubcommand()}`
+            id: `${verifyId}`, 
+            value: `${interaction.options.getSubcommand()}`
         }));
     },
 };
