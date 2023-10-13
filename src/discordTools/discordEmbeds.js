@@ -166,6 +166,18 @@ module.exports = {
                 }
                 playerStatus += time !== null ? ` [${time[1]}]\n` : '\n';
             }
+
+            let playerIdLength = 0;
+            playerIdLength += player.steamId !== null ? player.steamId.length : 0;
+            playerIdLength += player.steamId !== null && player.playerId !== null ? 3 : 0;
+            playerIdLength += player.playerId !== null ? player.playerId.length : 0;
+            playerIdLength += player.steamId === null && player.playerId === null ?
+                Client.client.intlGet(guildId, 'empty').length : 0;
+
+            if (playerIdLength > Constants.EMBED_FIELD_MAX_LENGTH_3) {
+                playerName += '\n';
+                playerStatus += '\n';
+            }
         }
 
         if (playerName === '') playerName = Client.client.intlGet(guildId, 'empty');
