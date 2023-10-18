@@ -151,13 +151,21 @@ Subcommand | Options | Description | Required
 
 ## **/players**
 
-> **Get player/players information based on Battlemetrics.** Calling the Slash command without any options will return the entire list of players on the server.
+> **Get player/players information based on Battlemetrics.** Calling the subcommand name without the name option will display all players depending on status option. By calling the subcommand playerid, you will get more specific information about a single player.
 
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
-&nbsp; | `name` | The name or part of the name of the player. | `False`
+`name` | &nbsp; | Search for a player on Battlemetrics based on player name. | &nbsp;
+&nbsp; | `status` | Search for players that are online/offline/any. | `True`
+&nbsp; | `name` | The name of the player. | `False`
+&nbsp; | `battlemetricsid` | The Battlemetrics ID of the server (default: The connected server). | `False`
+`playerid` | &nbsp; | Search for a player on Battlemetrics based on player id. | &nbsp;
+&nbsp; | `playerid` | The player id of the player. | `True`
+&nbsp; | `battlemetricsid` | The Battlemetrics ID of the server (default: The connected server). | `False`
 
 ![Discord Slash Command players Image](images/slash_commands/players.png)
+![Discord Slash Command players all players Image](images/slash_commands/players_all_players.png)
+![Discord Slash Command players specific user Image](images/slash_commands/players_specific_user.png)
 
 
 ## **/reset**

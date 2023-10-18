@@ -302,4 +302,8 @@ module.exports = {
             }
         }
     },
+
+    getDiscordFormattedDate: function (unixtime) {
+        return `<t:${unixtime}:d>`;
+    },
 }

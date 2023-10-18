@@ -174,7 +174,7 @@ module.exports = {
             playerIdLength += player.steamId === null && player.playerId === null ?
                 Client.client.intlGet(guildId, 'empty').length : 0;
 
-            if (playerIdLength > Constants.EMBED_FIELD_MAX_LENGTH_3) {
+            if (playerIdLength > Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3) {
                 playerName += '\n';
                 playerStatus += '\n';
             }
