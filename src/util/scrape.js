@@ -21,6 +21,7 @@
 const Axios = require('axios');
 
 const Constants = require('../util/constants.js');
+const Utils = require('../util/utils.js');
 
 module.exports = {
     scrape: async function (url) {
@@ -63,7 +64,7 @@ module.exports = {
         let regex = new RegExp(`class="actual_persona_name">(.+?)</span>`, 'gm');
         let data = regex.exec(response.data);
         if (data) {
-            return data[1];
+            return Utils.decodeHtml(data[1]);
         }
 
         return null;

@@ -22,6 +22,7 @@ const Axios = require('axios');
 
 const Client = require('../../index.ts');
 const RandomUsernames = require('../util/RandomUsernames.json');
+const Utils = require = require('../util/utils.js');
 
 const SERVER_LOG_SIZE = 1000;
 const CONNECTION_LOG_SIZE = 1000;
@@ -234,7 +235,7 @@ class Battlemetrics {
 
             const player = new Object();
             player['id'] = entity.id;
-            player['name'] = entity.attributes.name;
+            player['name'] = Utils.removeInvisibleCharacters(entity.attributes.name);
             player['time'] = entity.attributes.value;
             player['rank'] = entity.attributes.rank;
             player['url'] = this.GET_BATTLEMETRICS_PLAYER_URL(entity.id);
@@ -562,7 +563,10 @@ class Battlemetrics {
         const included = data.included;
         for (const entity of included) {
             if (entity.type !== 'player') continue;
-            if (!RandomUsernames.RandomUsernames.includes(entity.attributes.name)) this.streamerMode = false;
+
+            const name = Utils.removeInvisibleCharacters(entity.attributes.name);
+
+            if (!RandomUsernames.RandomUsernames.includes(name)) this.streamerMode = false;
 
             /**
              * Attributes description from Battlemetrics API Documentation
@@ -584,7 +588,7 @@ class Battlemetrics {
 
                 /* From Battlemetrics */
                 this.players[entity.id]['id'] = entity.id;
-                this.players[entity.id]['name'] = entity.attributes.name;
+                this.players[entity.id]['name'] = name;
                 this.players[entity.id]['private'] = entity.attributes.private;
                 this.players[entity.id]['positiveMatch'] = entity.attributes.positiveMatch;
                 this.players[entity.id]['createdAt'] = entity.attributes.createdAt;
@@ -606,18 +610,18 @@ class Battlemetrics {
             else {  /* Existing Player */
                 /* From Battlemetrics */
                 this.players[entity.id]['id'] = entity.id;
-                if (this.players[entity.id]['name'] !== entity.attributes.name) {
+                if (this.players[entity.id]['name'] !== name) {
                     this.nameChangedPlayers.push({
                         id: entity.id,
                         from: this.players[entity.id]['name'],
-                        to: entity.attributes.name
+                        to: name
                     });
                     this.#updateNameChangeHistory(entity.id, {
                         from: this.players[entity.id]['name'],
-                        to: entity.attributes.name,
+                        to: name,
                         time: time
                     });
-                    this.players[entity.id]['name'] = entity.attributes.name;
+                    this.players[entity.id]['name'] = name;
                 }
                 this.players[entity.id]['private'] = entity.attributes.private;
                 this.players[entity.id]['positiveMatch'] = entity.attributes.positiveMatch;

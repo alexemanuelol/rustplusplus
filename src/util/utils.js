@@ -18,6 +18,9 @@
 
 */
 
+const Fs = require('fs');
+const Path = require('path');
+
 module.exports = {
     parseArgs: function (str) {
         return str.trim().split(/[ ]+/);
@@ -42,5 +45,21 @@ module.exports = {
         }
 
         return newArgs;
+    },
+
+    decodeHtml: function (str) {
+        const htmlReservedSymbols = JSON.parse(Fs.readFileSync(
+            Path.join(__dirname, 'htmlReservedSymbols.json'), 'utf8'));
+
+        for (const [key, value] of Object.entries(htmlReservedSymbols)) {
+            str = str.replace(key, value);
+        }
+
+        return str;
+    },
+
+    removeInvisibleCharacters: function (str) {
+        str = str.replace(/[\u200B-\u200D\uFEFF]/g, '');
+        return str.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
     },
 }
