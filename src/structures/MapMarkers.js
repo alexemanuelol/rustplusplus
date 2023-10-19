@@ -62,6 +62,9 @@ class MapMarkers {
         this.timeSincePatrolHelicopterWasOnMap = null;
         this.timeSincePatrolHelicopterWasDestroyed = null;
 
+        /* Event location */
+        this.patrolHelicopterDestroyedLocation = null;
+
         /* Vending Machine variables */
         this.knownVendingMachines = [];
 
@@ -635,6 +638,8 @@ class MapMarkers {
 
                 this.timeSincePatrolHelicopterWasDestroyed = new Date();
                 this.timeSincePatrolHelicopterWasOnMap = new Date();
+
+                this.patrolHelicopterDestroyedLocation = Map.getGridPos(marker.x, marker.y, mapSize);
             }
 
             this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== marker.id);
@@ -758,6 +763,8 @@ class MapMarkers {
         this.timeSinceLargeOilRigWasTriggered = null;
         this.timeSincePatrolHelicopterWasOnMap = null;
         this.timeSincePatrolHelicopterWasDestroyed = null;
+
+        this.patrolHelicopterDestroyedLocation = null;
 
         this.knownVendingMachines = [];
         this.subscribedItemsId = [];

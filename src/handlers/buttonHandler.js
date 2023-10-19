@@ -235,6 +235,25 @@ module.exports = async (client, interaction) => {
                 instance.generalSettings.smartAlarmNotifyInGame)]
         });
     }
+    else if (interaction.customId === 'SmartSwitchNotifyInGameWhenChangedFromDiscord') {
+        instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord =
+            !instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord =
+            instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(
+                guildId,
+                instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord)]
+        });
+    }
     else if (interaction.customId === 'LeaderCommandEnabled') {
         instance.generalSettings.leaderCommandEnabled = !instance.generalSettings.leaderCommandEnabled;
         client.setInstance(guildId, instance);
@@ -566,6 +585,19 @@ module.exports = async (client, interaction) => {
             client.setInstance(guildId, instance);
         }
 
+        if (instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord) {
+            const user = interaction.user.username;
+            const name = server.switches[ids.entityId].name;
+            const status = active ? client.intlGet(guildId, 'onCap') : client.intlGet(guildId, 'offCap');
+            const str = client.intlGet(guildId, 'userTurnedOnOffSmartSwitchFromDiscord', {
+                user: user,
+                name: name,
+                status: status
+            });
+
+            await rustplus.sendTeamMessageAsync(str);
+        }
+
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${active}`
@@ -824,6 +856,19 @@ module.exports = async (client, interaction) => {
 
             if (rustplus.serverId === ids.serverId) {
                 const active = (interaction.customId.startsWith('GroupTurnOn') ? true : false);
+
+                if (instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord) {
+                    const user = interaction.user.username;
+                    const name = server.switchGroups[ids.groupId].name;
+                    const status = active ? client.intlGet(guildId, 'onCap') : client.intlGet(guildId, 'offCap');
+                    const str = client.intlGet(guildId, 'userTurnedOnOffSmartSwitchGroupFromDiscord', {
+                        user: user,
+                        name: name,
+                        status: status
+                    });
+
+                    await rustplus.sendTeamMessageAsync(str);
+                }
 
                 client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
                     id: `${verifyId}`,

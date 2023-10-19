@@ -1284,7 +1284,9 @@ class RustPlus extends RustPlusLib {
                     const timeSinceDestroyed = Timer.secondsToFullScale((new Date() - wasDestroyed) / 1000, 's');
                     return Client.client.intlGet(this.guildId, 'timeSinceLastSinceDestroyedShort', {
                         time1: timeSinceOnMap,
-                        time2: timeSinceDestroyed
+                        time2: timeSinceDestroyed,
+                        location: this.mapMarkers.patrolHelicopterDestroyedLocation === null ? '' :
+                            ` [${this.mapMarkers.patrolHelicopterDestroyedLocation}]`
                     });
                 }
                 else {
@@ -1292,7 +1294,9 @@ class RustPlus extends RustPlusLib {
                     const timeSinceDestroyed = Timer.secondsToFullScale((new Date() - wasDestroyed) / 1000);
                     return Client.client.intlGet(this.guildId, 'timeSinceLastSinceDestroyedLong', {
                         time1: timeSinceOnMap,
-                        time2: timeSinceDestroyed
+                        time2: timeSinceDestroyed,
+                        location: this.mapMarkers.patrolHelicopterDestroyedLocation === null ? '' :
+                            ` [${this.mapMarkers.patrolHelicopterDestroyedLocation}]`
                     });
                 }
             }
