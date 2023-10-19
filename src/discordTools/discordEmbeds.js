@@ -165,13 +165,6 @@ module.exports = {
                 status += time !== null ? ` [${time[1]}]\n` : '\n';
             }
 
-            let playerIdLength = 0;
-            playerIdLength += player.steamId !== null ? player.steamId.length : 0;
-            playerIdLength += player.steamId !== null && player.playerId !== null ? 3 : 0;
-            playerIdLength += player.playerId !== null ? player.playerId.length : 0;
-            playerIdLength += player.steamId === null && player.playerId === null ?
-                Client.client.intlGet(guildId, 'empty').length : 0;
-
             if (isNewLine) {
                 name += '\n';
                 status += '\n';
@@ -788,20 +781,21 @@ module.exports = {
         const guildId = rustplus.guildId;
         const instance = Client.client.getInstance(guildId);
 
+        const title = Client.client.intlGet(guildId, 'teamMemberInfo');
         const teamMemberFieldName = Client.client.intlGet(guildId, 'teamMember');
         const statusFieldName = Client.client.intlGet(guildId, 'status');
         const locationFieldName = Client.client.intlGet(guildId, 'location');
+        const footer = instance.serverList[rustplus.serverId].title;
 
-        let names = '';
-        let status = '';
-        let locations = '';
+        let totalCharacters = title.length + teamMemberFieldName.length + statusFieldName.length + locationFieldName.length + footer.length;
+        let fieldIndex = 0;
+        let teammateName = [''], teammateStatus = [''], teammateLocation = [''];
+        let teammateNameCharacters = 0, teammateStatusCharacters = 0, teammateLocationCharacters = 0;
         for (const player of rustplus.team.players) {
-            const backupName = player.name === '' ? '-' : player.name;
-            names += (rustplus.team.teamSize < 12) ?
-                `[${backupName}](${Constants.STEAM_PROFILES_URL}${player.steamId})` : backupName;
-
-            names += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
-            locations += (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
+            let name = player.name === '' ? '-' : `[${player.name}](${Constants.STEAM_PROFILES_URL}${player.steamId})`;
+            name += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
+            let status = '';
+            let location = (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
 
             if (player.isOnline) {
                 const isAfk = player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS;
@@ -823,17 +817,62 @@ module.exports = {
                 status += (offlineTime !== null) ? offlineTime : '';
                 status += '\n';
             }
+
+            if (totalCharacters + (name.length + status.length + location.length) >=
+                Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+                break;
+            }
+
+            if ((teammateNameCharacters + name.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (teammateStatusCharacters + status.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (teammateLocationCharacters + location.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                fieldIndex += 1;
+
+                teammateName.push('');
+                teammateStatus.push('');
+                teammateLocation.push('');
+
+                teammateNameCharacters = 0;
+                teammateStatusCharacters = 0;
+                teammateLocationCharacters = 0;
+            }
+
+            teammateNameCharacters += name.length;
+            teammateStatusCharacters += status.length;
+            teammateLocationCharacters += location.length;
+
+            totalCharacters += name.length + status.length + location.length;
+
+            teammateName[fieldIndex] += name;
+            teammateStatus[fieldIndex] += status;
+            teammateLocation[fieldIndex] += location;
+        }
+
+        const fields = [];
+        for (let i = 0; i < (fieldIndex + 1); i++) {
+            fields.push({
+                name: i === 0 ? teamMemberFieldName : '\u200B',
+                value: teammateName[i] !== '' ? teammateName[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
+            fields.push({
+                name: i === 0 ? statusFieldName : '\u200B',
+                value: teammateStatus[i] !== '' ? teammateStatus[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
+            fields.push({
+                name: i === 0 ? locationFieldName : '\u200B',
+                value: teammateLocation[i] !== '' ? teammateLocation[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
         }
 
         return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'teamMemberInfo'),
+            title: title,
             color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://team_info_logo.png',
-            footer: { text: instance.serverList[rustplus.serverId].title },
-            fields: [
-                { name: teamMemberFieldName, value: names, inline: true },
-                { name: statusFieldName, value: status, inline: true },
-                { name: locationFieldName, value: locations, inline: true }],
+            footer: { text: footer },
+            fields: fields,
             timestamp: true
         });
     },
