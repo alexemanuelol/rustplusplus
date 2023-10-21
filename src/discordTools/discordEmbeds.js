@@ -129,60 +129,95 @@ module.exports = {
         description += `__**${Client.client.intlGet(guildId, 'clanTag')}:**__ `;
         description += tracker.clanTag !== '' ? `\`${tracker.clanTag}\`` : '';
 
-        let playerName = '', playerId = '', playerStatus = '';
-        const amountOfPlayers = tracker.players.length;
+        let totalCharacters = description.length;
+        let fieldIndex = 0
+        let playerName = [''], playerId = [''], playerStatus = [''];
+        let playerNameCharacters = 0, playerIdCharacters = 0, playerStatusCharacters = 0;
         for (const player of tracker.players) {
-            playerName += `${player.name}\n`;
+            let name = `${player.name}\n`;
+            let id = '';
+            let status = '';
 
-            /**
-             * Max character per embed field is 1024, max length of playerId including links is 137 characters.
-             * 1024 / 137 = 7.4745 => If player are > 7, then don't show links.
-             **/
+            const steamIdLink = Constants.GET_STEAM_PROFILE_LINK(player.steamId);
+            const bmIdLink = Constants.GET_BATTLEMETRICS_PROFILE_LINK(player.playerId);
 
-            const steamIdLink = amountOfPlayers > 7 ? player.steamId :
-                Constants.GET_STEAM_PROFILE_LINK(player.steamId);
-            const bmIdLink = amountOfPlayers > 7 ? player.playerId :
-                Constants.GET_BATTLEMETRICS_PROFILE_LINK(player.playerId);
-
-            playerId += `${player.steamId !== null ? steamIdLink : ''}`;
-            playerId += `${player.steamId !== null && player.playerId !== null ? ' / ' : ''}`;
-            playerId += `${player.playerId !== null ? bmIdLink : ''}`;
-            playerId += `${player.steamId === null && player.playerId === null ?
+            const isNewLine = (player.steamId !== null && player.playerId !== null) ? true : false;
+            id += `${player.steamId !== null ? steamIdLink : ''}`;
+            id += `${player.steamId !== null && player.playerId !== null ? ' /\n' : ''}`;
+            id += `${player.playerId !== null ? bmIdLink : ''}`;
+            id += `${player.steamId === null && player.playerId === null ?
                 Client.client.intlGet(guildId, 'empty') : ''}`;
-            playerId += '\n';
+            id += '\n';
 
             if (!bmInstance.players.hasOwnProperty(player.playerId) || !successful) {
-                playerStatus += `${Constants.NOT_FOUND_EMOJI}\n`;
+                status += `${Constants.NOT_FOUND_EMOJI}\n`;
             }
             else {
                 let time = null;
                 if (bmInstance.players[player.playerId]['status']) {
                     time = bmInstance.getOnlineTime(player.playerId);
-                    playerStatus += `${Constants.ONLINE_EMOJI}`;
+                    status += `${Constants.ONLINE_EMOJI}`;
                 }
                 else {
                     time = bmInstance.getOfflineTime(player.playerId);
-                    playerStatus += `${Constants.OFFLINE_EMOJI}`;
+                    status += `${Constants.OFFLINE_EMOJI}`;
                 }
-                playerStatus += time !== null ? ` [${time[1]}]\n` : '\n';
+                status += time !== null ? ` [${time[1]}]\n` : '\n';
             }
 
-            let playerIdLength = 0;
-            playerIdLength += player.steamId !== null ? player.steamId.length : 0;
-            playerIdLength += player.steamId !== null && player.playerId !== null ? 3 : 0;
-            playerIdLength += player.playerId !== null ? player.playerId.length : 0;
-            playerIdLength += player.steamId === null && player.playerId === null ?
-                Client.client.intlGet(guildId, 'empty').length : 0;
-
-            if (playerIdLength > Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3) {
-                playerName += '\n';
-                playerStatus += '\n';
+            if (isNewLine) {
+                name += '\n';
+                status += '\n';
             }
+
+            if (totalCharacters + (name.length + id.length + status.length) >= Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+                break;
+            }
+
+            if ((playerNameCharacters + name.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (playerIdCharacters + id.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (playerStatusCharacters + status.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                fieldIndex += 1;
+
+                playerName.push('');
+                playerId.push('');
+                playerStatus.push('');
+
+                playerNameCharacters = 0;
+                playerIdCharacters = 0;
+                playerStatusCharacters = 0;
+            }
+
+            playerNameCharacters += name.length;
+            playerIdCharacters += id.length;
+            playerStatusCharacters += status.length;
+
+            totalCharacters += name.length + id.length + status.length;
+
+            playerName[fieldIndex] += name;
+            playerId[fieldIndex] += id;
+            playerStatus[fieldIndex] += status;
         }
 
-        if (playerName === '') playerName = Client.client.intlGet(guildId, 'empty');
-        if (playerId === '') playerId = Client.client.intlGet(guildId, 'empty');
-        if (playerStatus === '') playerStatus = Client.client.intlGet(guildId, 'empty');
+        const fields = [];
+        for (let i = 0; i < (fieldIndex + 1); i++) {
+            fields.push({
+                name: i === 0 ? `__${Client.client.intlGet(guildId, 'name')}__` : '\u200B',
+                value: playerName[i] !== '' ? playerName[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
+            fields.push({
+                name: i === 0 ? `__${Client.client.intlGet(guildId, 'steamId')} / ` +
+                    `${Client.client.intlGet(guildId, 'battlemetricsId')}__` : '\u200B',
+                value: playerId[i] !== '' ? playerId[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
+            fields.push({
+                name: i === 0 ? `__${Client.client.intlGet(guildId, 'status')}__` : '\u200B',
+                value: playerStatus[i] !== '' ? playerStatus[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
+        }
 
         return module.exports.getEmbed({
             title: `${tracker.name}`,
@@ -190,23 +225,7 @@ module.exports = {
             description: description,
             thumbnail: `${tracker.img}`,
             footer: { text: `${tracker.title}` },
-            fields: [
-                {
-                    name: `__${Client.client.intlGet(guildId, 'name')}__`,
-                    value: playerName,
-                    inline: true
-                },
-                {
-                    name: `__${Client.client.intlGet(guildId, 'steamId')} / ` +
-                        `${Client.client.intlGet(guildId, 'battlemetricsId')}__`,
-                    value: playerId,
-                    inline: true
-                },
-                {
-                    name: `__${Client.client.intlGet(guildId, 'status')}__`,
-                    value: playerStatus,
-                    inline: true
-                }],
+            fields: fields,
             timestamp: true
         });
     },
@@ -762,20 +781,21 @@ module.exports = {
         const guildId = rustplus.guildId;
         const instance = Client.client.getInstance(guildId);
 
+        const title = Client.client.intlGet(guildId, 'teamMemberInfo');
         const teamMemberFieldName = Client.client.intlGet(guildId, 'teamMember');
         const statusFieldName = Client.client.intlGet(guildId, 'status');
         const locationFieldName = Client.client.intlGet(guildId, 'location');
+        const footer = instance.serverList[rustplus.serverId].title;
 
-        let names = '';
-        let status = '';
-        let locations = '';
+        let totalCharacters = title.length + teamMemberFieldName.length + statusFieldName.length + locationFieldName.length + footer.length;
+        let fieldIndex = 0;
+        let teammateName = [''], teammateStatus = [''], teammateLocation = [''];
+        let teammateNameCharacters = 0, teammateStatusCharacters = 0, teammateLocationCharacters = 0;
         for (const player of rustplus.team.players) {
-            const backupName = player.name === '' ? '-' : player.name;
-            names += (rustplus.team.teamSize < 12) ?
-                `[${backupName}](${Constants.STEAM_PROFILES_URL}${player.steamId})` : backupName;
-
-            names += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
-            locations += (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
+            let name = player.name === '' ? '-' : `[${player.name}](${Constants.STEAM_PROFILES_URL}${player.steamId})`;
+            name += (player.teamLeader) ? `${Constants.LEADER_EMOJI}\n` : '\n';
+            let status = '';
+            let location = (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
 
             if (player.isOnline) {
                 const isAfk = player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS;
@@ -797,17 +817,62 @@ module.exports = {
                 status += (offlineTime !== null) ? offlineTime : '';
                 status += '\n';
             }
+
+            if (totalCharacters + (name.length + status.length + location.length) >=
+                Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+                break;
+            }
+
+            if ((teammateNameCharacters + name.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (teammateStatusCharacters + status.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (teammateLocationCharacters + location.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                fieldIndex += 1;
+
+                teammateName.push('');
+                teammateStatus.push('');
+                teammateLocation.push('');
+
+                teammateNameCharacters = 0;
+                teammateStatusCharacters = 0;
+                teammateLocationCharacters = 0;
+            }
+
+            teammateNameCharacters += name.length;
+            teammateStatusCharacters += status.length;
+            teammateLocationCharacters += location.length;
+
+            totalCharacters += name.length + status.length + location.length;
+
+            teammateName[fieldIndex] += name;
+            teammateStatus[fieldIndex] += status;
+            teammateLocation[fieldIndex] += location;
+        }
+
+        const fields = [];
+        for (let i = 0; i < (fieldIndex + 1); i++) {
+            fields.push({
+                name: i === 0 ? teamMemberFieldName : '\u200B',
+                value: teammateName[i] !== '' ? teammateName[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
+            fields.push({
+                name: i === 0 ? statusFieldName : '\u200B',
+                value: teammateStatus[i] !== '' ? teammateStatus[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
+            fields.push({
+                name: i === 0 ? locationFieldName : '\u200B',
+                value: teammateLocation[i] !== '' ? teammateLocation[i] : Client.client.intlGet(guildId, 'empty'),
+                inline: true
+            });
         }
 
         return module.exports.getEmbed({
-            title: Client.client.intlGet(guildId, 'teamMemberInfo'),
+            title: title,
             color: Constants.COLOR_DEFAULT,
             thumbnail: 'attachment://team_info_logo.png',
-            footer: { text: instance.serverList[rustplus.serverId].title },
-            fields: [
-                { name: teamMemberFieldName, value: names, inline: true },
-                { name: statusFieldName, value: status, inline: true },
-                { name: locationFieldName, value: locations, inline: true }],
+            footer: { text: footer },
+            fields: fields,
             timestamp: true
         });
     },

@@ -282,6 +282,66 @@ module.exports = {
                     changedSwitches.push(entityId);
                 }
             }
+            else if (content.autoDayNightOnOff === 7) { /* AUTO-ON-ANY-ONLINE */
+                let shouldBeOn = false;
+                for (const player of rustplus.team.players) {
+                    if (player.isOnline) shouldBeOn = true;
+                }
+
+                if ((shouldBeOn && !content.active) || (!shouldBeOn && content.active)) {
+                    instance.serverList[serverId].switches[entityId].active = shouldBeOn;
+                    client.setInstance(guildId, instance);
+
+                    rustplus.interactionSwitches.push(entityId);
+
+                    const response = await rustplus.turnSmartSwitchAsync(entityId, shouldBeOn);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        if (instance.serverList[serverId].switches[entityId].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                        }
+                        instance.serverList[serverId].switches[entityId].reachable = false;
+
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
+                    }
+                    else {
+                        instance.serverList[serverId].switches[entityId].reachable = true;
+                    }
+                    client.setInstance(guildId, instance);
+
+                    DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+                    changedSwitches.push(entityId);
+                }
+            }
+            else if (content.autoDayNightOnOff === 8) { /* AUTO-OFF-ANY-ONLINE */
+                let shouldBeOn = true;
+                for (const player of rustplus.team.players) {
+                    if (player.isOnline) shouldBeOn = false;
+                }
+
+                if ((shouldBeOn && !content.active) || (!shouldBeOn && content.active)) {
+                    instance.serverList[serverId].switches[entityId].active = shouldBeOn;
+                    client.setInstance(guildId, instance);
+
+                    rustplus.interactionSwitches.push(entityId);
+
+                    const response = await rustplus.turnSmartSwitchAsync(entityId, shouldBeOn);
+                    if (!(await rustplus.isResponseValid(response))) {
+                        if (instance.serverList[serverId].switches[entityId].reachable) {
+                            await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                        }
+                        instance.serverList[serverId].switches[entityId].reachable = false;
+
+                        rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
+                    }
+                    else {
+                        instance.serverList[serverId].switches[entityId].reachable = true;
+                    }
+                    client.setInstance(guildId, instance);
+
+                    DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+                    changedSwitches.push(entityId);
+                }
+            }
         }
 
         let groupsId = SmartSwitchGroupHandler.getGroupsFromSwitchList(

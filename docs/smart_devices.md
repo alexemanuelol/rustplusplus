@@ -21,8 +21,10 @@ There are a few auto settings for Smart Switches:
 - **AUTO-NIGHT** - Smart Switch will be active only during the night.
 - **AUTO-ON** - Smart Switch will automatically go active during update cycle.
 - **AUTO-OFF** - Smart Switch will automatically go inactive during update cycle.
-- **AUTO-ON-PROXIMITY** - Smart Switch will automatically go active if teammate is in proximity.
-- **AUTO-OFF-PROXIMITY** - Smart Switch will automatically go inactive if teammate is in proximity.
+- **AUTO-ON-PROXIMITY** - Smart Switch will automatically go active if teammate is in proximity, if outside proximity it will go inactive.
+- **AUTO-OFF-PROXIMITY** - Smart Switch will automatically go inactive if teammate is in proximity, if outside proximity it will go active.
+- **AUTO-ON-ANY-ONLINE** - Smart Switch will automatically go active if any teammate is online, if all offline it will go inactive.
+- **AUTO-OFF-ANY-ONLINE** - Smart Switch will automatically go inactive if any teammate is online, if all offline it will go active.
 
 <br>
 
