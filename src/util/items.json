@@ -1794,6 +1794,11 @@
         "name": "Egg Basket",
         "description": "An easter egg basket. Equip to pick up eggs during an easter egg hunt with left click. Use right click to throw"
     },
+    "1865253052": {
+        "shortname": "draculamask",
+        "name": "Dracula Mask",
+        "description": "A classic halloween costume mask which provides decent protection."
+    },
     "1873897110": {
         "shortname": "bearmeat.cooked",
         "name": "Cooked Bear Meat",
@@ -2408,6 +2413,11 @@
         "shortname": "door.key",
         "name": "Door Key",
         "description": "A key to a door, created from a Lock. Keep this item safe; if lost you'll be unable to open the door again!"
+    },
+    "-258574361": {
+        "shortname": "draculacape",
+        "name": "Dracula Cape",
+        "description": "A robustly thick outer garment providing ample protection to the wearer."
     },
     "-854270928": {
         "shortname": "dragondoorknocker",
@@ -3863,6 +3873,11 @@
         "shortname": "valve3",
         "name": "High Quality Valves",
         "description": "High quality poppet valves for a combustion engine. Valves control the intake and exhaust flow."
+    },
+    "-885833256": {
+        "shortname": "vampire.stake",
+        "name": "Vampire Stake",
+        "description": "A stake adorned with special properties making it able to release the soul of undead creatures with a single strike, as well as yield extra loot from their remains."
     },
     "-1501451746": {
         "shortname": "vehicle.1mod.cockpit",
