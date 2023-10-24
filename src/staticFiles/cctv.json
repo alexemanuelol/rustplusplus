@@ -1,0 +1,95 @@
+{
+   "Abandoned Military Base": {
+      "codes": [
+         "COMPOUND\\*\\*\\*\\*\\*\\*",
+         "OUTDOOR\\*\\*\\*\\*\\*\\*"
+      ],
+      "dynamic": true
+   },
+   "Airfield": {
+      "codes": [
+         "AIRFIELDHELIPAD"
+      ],
+      "dynamic": false
+   },
+   "Bandit Camp": {
+      "codes": [
+         "TOWNWEAPONS",
+         "CASINO"
+      ],
+      "dynamic": false
+   },
+   "Dome": {
+      "codes": [
+         "DOME1",
+         "DOMETOP"
+      ],
+      "dynamic": false
+   },
+   "Large Oil Rig": {
+      "codes": [
+         "OILRIG2HELI",
+         "OILRIG2DOCK",
+         "OILRIG2EXHAUST",
+         "OILRIG2L1",
+         "OILRIG2L2",
+         "OILRIG2L3A",
+         "OILRIG2L3B",
+         "OILRIG2L4",
+         "OILRIG2L5",
+         "OILRIG2L6A",
+         "OILRIG2L6B",
+         "OILRIG2L6C",
+         "OILRIG2L6D"
+      ],
+      "dynamic": false
+   },
+   "Missile Silo": {
+      "codes": [
+         "SILOTOWER",
+         "SILOEXIT1",
+         "SILOEXIT2",
+         "SILOSHIPPING",
+         "SILOMISSILE"
+      ],
+      "dynamic": false
+   },
+   "Outpost": {
+      "codes": [
+         "COMPOUNDSTREET",
+         "COMPOUNDMUSIC",
+         "COMPOUNDCRUDE",
+         "COMPOUNDCHILL"
+      ],
+      "dynamic": false
+   },
+   "Small Oil Rig": {
+      "codes": [
+         "OILRIG1HELI",
+         "OILRIG1DOCK",
+         "OILRIG1L1",
+         "OILRIG1L2",
+         "OILRIG1L3",
+         "OILRIG1L4"
+      ],
+      "dynamic": false
+   },
+   "Underwater Labs": {
+      "codes": [
+         "AUXPOWER\\*\\*\\*\\*",
+         "BRIG\\*\\*\\*\\*",
+         "CANTINA\\*\\*\\*\\*",
+         "CAPTAINQUARTER\\*\\*\\*\\*",
+         "CLASSIFIED\\*\\*\\*\\*",
+         "CREWQUARTERS\\*\\*\\*\\*",
+         "HALLWAY\\*\\*\\*\\*",
+         "INFIRMARY\\*\\*\\*\\*",
+         "LAB\\*\\*\\*\\*",
+         "LOCKERROOM\\*\\*\\*\\*",
+         "OPERATIONS\\*\\*\\*\\*",
+         "SECURITYHALL\\*\\*\\*\\*",
+         "TECHCABINET\\*\\*\\*\\*"
+      ],
+      "dynamic": true
+   }
+}

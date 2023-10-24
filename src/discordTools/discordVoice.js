@@ -19,7 +19,7 @@
 
 */
 const { getVoiceConnection, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
-const Actors = require('../util/actors.json');
+const Actors = require('../staticFiles/actors.json');
 const Client = require('../../index.ts');
 
 module.exports = {

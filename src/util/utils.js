@@ -49,7 +49,7 @@ module.exports = {
 
     decodeHtml: function (str) {
         const htmlReservedSymbols = JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, 'htmlReservedSymbols.json'), 'utf8'));
+            Path.join(__dirname, '..', 'staticFiles', 'htmlReservedSymbols.json'), 'utf8'));
 
         for (const [key, value] of Object.entries(htmlReservedSymbols)) {
             str = str.replace(key, value);
