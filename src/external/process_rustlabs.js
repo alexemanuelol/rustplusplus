@@ -47,7 +47,7 @@ const RUSTLABS_ITEM_RECYCLE_REGEX = /<a\shref.*?img\/.*?\/(.*?)\.png.*?alt="(.*?
 const RUSTLABS_ITEM_CRAFT_AREA_REGEX = /data-name="craft"\sclass="tab-page(\n|.)*?<\/thead(\n|.)*?<\/tr>/gm
 const RUSTLABS_ITEM_CRAFT_INGREDIENTS_REGEX =
     /<a\shref.*?img\/.*?\/(.*?)\.png.*?alt="(.*?)".*?text-in-icon">(.*?)<\/span><\/a>/gm
-const RUSTLABS_ITEM_CRAFT_TIME_REGEX = /^<td\sdata-value=".*?">(.*?)<\/td>$/gm
+const RUSTLABS_ITEM_CRAFT_TIME_REGEX = /^<td\sdata-value="(.*?)">(.*?)<\/td>$/gm
 
 const RUSTLABS_ITEM_RESEARCH_AREA_REGEX =
     /data-name="blueprint"\sclass="tab-page(\n|.)*?<table\sclass(\n|.)*?<\/table>/gm
@@ -261,6 +261,7 @@ function processItemCraft(rustlabsName, shortname, name, data) {
     content['ingredients'] = [];
     content['workbench'] = null;
     content['time'] = null;
+    content['timeString'] = null;
 
     const ingredientsMatches = data.matchAll(RUSTLABS_ITEM_CRAFT_INGREDIENTS_REGEX);
 
@@ -288,9 +289,10 @@ function processItemCraft(rustlabsName, shortname, name, data) {
 
     const timeMatches = data.matchAll(RUSTLABS_ITEM_CRAFT_TIME_REGEX)
     for (const match of timeMatches) {
-        if (match.length !== 2) exit();
+        if (match.length !== 3) exit();
 
-        content['time'] = match[1];
+        content['time'] = parseFloat(match[1]);
+        content['timeString'] = match[2];
         break;
     }
 
@@ -516,7 +518,6 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
             }
         }
         if (quantity === null) exit();
-
         let quantityTypeId = null;
         if (quantityTypeShortname !== null && quantityTypeName !== null) {
             quantityTypeId = Object.keys(ITEMS).find(e =>
@@ -531,7 +532,7 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
         if (timeMatches.length !== 0) {
             for (const timeMatch of timeMatches) {
                 if (timeMatch.length !== 3) exit();
-                time = timeMatch[1];
+                time = parseFloat(timeMatch[1]);
                 timeString = timeMatch[2];
                 break;
             }
@@ -544,6 +545,7 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
             for (const fuelMatch of fuelMatches) {
                 if (fuelMatch.length !== 2) exit();
                 fuel = fuelMatch[1].replace('×', '').replace(/,/g, '');
+                fuel = parseFloat(fuel);
                 break;
             }
         }
@@ -555,6 +557,7 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
             for (const sulfurMatch of sulfurMatches) {
                 if (sulfurMatch.length !== 2) exit();
                 sulfur = sulfurMatch[1].replace('×', '').replace(/,/g, '');
+                sulfur = parseFloat(sulfur);
                 break;
             }
         }
@@ -564,7 +567,7 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
             which: which,
             toolId: toolId,
             caption: captionInTool,
-            quantity: quantity,
+            quantity: parseFloat(quantity),
             quantityTypeId: quantityTypeId,
             time: time,
             timeString: timeString,
