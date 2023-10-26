@@ -307,6 +307,7 @@ class RustLabs {
         if (typeof (name) !== 'string') return null;
         if (group !== null && !this.durabilityGroups.includes(group)) return null;
         if (which !== null && !this.durabilityWhich.includes(which)) return null;
+        if (orderedBy !== null && !this.orderedBy.includes(orderedBy)) return null;
 
         let type = null;
 
@@ -355,6 +356,7 @@ class RustLabs {
         if (!this.durabilityData['items'].hasOwnProperty(id)) return null;
         if (group !== null && !this.durabilityGroups.includes(group)) return null;
         if (which !== null && !this.durabilityWhich.includes(which)) return null;
+        if (orderedBy !== null && !this.orderedBy.includes(orderedBy)) return null;
 
         let content = [];
         for (const item of this.durabilityData['items'][id]) {
