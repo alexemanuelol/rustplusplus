@@ -32,6 +32,7 @@ const InstanceUtils = require('../util/instanceUtils.js');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
+const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
 
 class DiscordBot extends Discord.Client {
@@ -59,6 +60,7 @@ class DiscordBot extends Discord.Client {
         this.uptimeBot = null;
 
         this.items = new Items();
+        this.rustlabs = new RustLabs();
         this.cctv = new Cctv();
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
