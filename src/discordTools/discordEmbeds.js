@@ -1000,4 +1000,36 @@ module.exports = {
             title: state
         });
     },
+
+    getCraftEmbed: function (guildId, craftDetails, quantity) {
+        let title = '';
+        let description = '';
+
+        if (quantity === 1) {
+            title = `${craftDetails[1].name}`;
+            description += `__**${Client.client.intlGet(guildId, 'time')}:**__ ${craftDetails[2].timeString}`;
+        }
+        else {
+            title = `${craftDetails[1].name} x${quantity}`;
+            const time = Timer.secondsToFullScale(craftDetails[2].time * quantity, '', true);
+            description += `__**${Client.client.intlGet(guildId, 'time')}:**__ ${time}`;
+        }
+
+        let items = '', quantities = '';
+        for (const item of craftDetails[2].ingredients) {
+            const itemName = Client.client.items.getName(item.id);
+            items += `${itemName}\n`;
+            quantities += `${item.quantity * quantity}\n`;
+        }
+
+        return module.exports.getEmbed({
+            title: title,
+            description: description,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            fields: [
+                { name: Client.client.intlGet(guildId, 'quantity'), value: items, inline: true },
+                { name: Client.client.intlGet(guildId, 'hoster'), value: quantities, inline: true }]
+        });
+    },
 }

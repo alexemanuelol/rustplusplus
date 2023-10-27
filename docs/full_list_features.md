@@ -4,6 +4,7 @@
 - **/alarm** - Change image of paired Smart Alarms.
 - **/blacklist** - Blacklist a user from using the bot.
 - **/cctv** - Get cctv camera codes for monuments.
+- **/craft** - Display the cost to craft an item.
 - **/credentials** - Setup FCM-Credentials.
 - **/help** - Get help message.
 - **/leader** - Transfer leadership.
@@ -23,6 +24,7 @@
 - **cargo** - Display information regarding Cargoship.
 - **chinook** - Display information regarding Chinook 47.
 - **connection/connections** - Display latest team connections.
+- **craft** - Display the cost to craft an item.
 - **death/deaths** - Display latest deaths.
 - **decay** - Get decay time of different wall-types.
 - **events** - Get recent events.

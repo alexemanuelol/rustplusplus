@@ -12,6 +12,7 @@ Slash Command | Description
 [**/alarm**](commands.md#alarm) | Operations on Smart Alarms.
 [**/blacklist**](commands.md#blacklist) | Blacklist a user from using the bot.
 [**/cctv**](commands.md#cctv) | Posts CCTV codes for a monument.
+[**/craft**](commands.md#craft) | Display the cost to craft an item.
 [**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
 [**/help**](commands.md#help) | Display help message.
 [**/leader**](commands.md#leader) | Give or take the leadership from/to a team member.
@@ -65,6 +66,19 @@ Subcommand | Options | Description | Required
 &nbsp; | `monument` | Rust monument. | `True`
 
 ![Discord Slash Command monument Image](images/slash_commands/cctv.png)
+
+
+## **/craft**
+
+> **Display the cost to craft an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to craft. | `False`
+&nbsp; | `id` | The id of the item to craft. | `True`
+&nbsp; | `quantity` | The quantity of items to craft. | `True`
+
+![Discord Slash Command craft Image](images/slash_commands/craft.png)
 
 
 ## **/credentials**
@@ -256,6 +270,7 @@ In-Game Command | Description
 [**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, time since last on map).
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
 [**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
+[**craft**](commands.md#craft-ingame) | Display the cost to craft an item.
 [**death/deaths**](commands.md#deathdeaths) | Get recent death events.
 [**decay**](commands.md#decay) | Get time before structure decay.
 [**events**](commands.md#events) | Get recent events.
@@ -327,6 +342,16 @@ In-Game Command | Description
 <br>Command: `!connection Alle`
 
 ![In-Game Command connection Image](images/ingame_commands/connection_ingame.png)
+
+
+## **craft ingame**
+
+> **Display the cost to craft an item (Quantity is optional).**
+<br>Command: `!craft <item-name> <quantity>`
+<br>Command: `!craft Assault Rifle 10`
+<br>Command: `!craft rocket 100`
+
+![In-Game Command craft Image](images/ingame_commands/craft_ingame.png)
 
 
 ## **death/deaths**
