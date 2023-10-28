@@ -21,7 +21,7 @@
 const Axios = require('axios');
 
 const Client = require('../../index.ts');
-const RandomUsernames = require('../util/RandomUsernames.json');
+const RandomUsernames = require('../staticFiles/RandomUsernames.json');
 const Utils = require = require('../util/utils.js');
 
 const SERVER_LOG_SIZE = 1000;
@@ -433,6 +433,7 @@ class Battlemetrics {
      *  @return {number|null} The id of the server.
      */
     async getServerIdFromName(name) {
+        const originalName = name;
         name = encodeURI(name).replace('\#', '\*');
         const search = this.SEARCH_SERVER_NAME_API_CALL(name);
         const response = await this.#request(search);
@@ -443,7 +444,14 @@ class Battlemetrics {
             return null;
         }
 
-        return response.data.data[0].attributes.id;
+        /* Find the correct server. */
+        for (const server of response.data.data) {
+            if (server.attributes.name === originalName) {
+                return server.id;
+            }
+        }
+
+        return null;
     }
 
     /**

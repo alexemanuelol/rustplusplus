@@ -18,7 +18,7 @@
 
 */
 
-const ItemRecycleInformation = require('./itemRecycleData.json');
+const ItemRecycleInformation = require('../staticFiles/rustlabsRecycleData.json');
 
 module.exports = {
     calculate: function (items) {

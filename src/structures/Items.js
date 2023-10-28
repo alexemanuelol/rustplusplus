@@ -26,7 +26,7 @@ const Fuse = require('fuse.js')
 class Items {
     constructor() {
         this._items = JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'util/items.json'), 'utf8'));
+            Path.join(__dirname, '..', 'staticFiles', 'items.json'), 'utf8'));
 
         const flattenedItems = Object.keys(this.items).map(id => ({ id, ...this.items[id] }));
         this._fuse = new Fuse(flattenedItems, {

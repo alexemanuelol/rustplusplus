@@ -25,7 +25,7 @@ const Path = require('path');
 class Cctv {
     constructor() {
         this._cctvs = JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'util/cctv.json'), 'utf8'));
+            Path.join(__dirname, '..', 'staticFiles', 'cctv.json'), 'utf8'));
     }
 
     /* Getters and Setters */
