@@ -19,6 +19,7 @@ Slash Command | Description
 [**/map**](commands.md#map) | Get the currently connected server map image.
 [**/market**](commands.md#market) | Operations for In-Game Vending Machines.
 [**/players**](commands.md#players) | Get player/players information based on battlemetrics.
+[**/recycle**](commands.md#recycle) | Display the output of recycling an item.
 [**/research**](commands.md#research) | Display the cost to research an item.
 [**/reset**](commands.md#reset) | Reset Discord channels.
 [**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustplusplus category content.
@@ -183,6 +184,19 @@ Subcommand | Options | Description | Required
 ![Discord Slash Command players specific user Image](images/slash_commands/players_specific_user.png)
 
 
+## **/recycle**
+
+> **Display the output of recycling an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to recycle. | `False`
+&nbsp; | `id` | The id of the item to recycle. | `False`
+&nbsp; | `quantity` | The quantity of items to recycle. | `False`
+
+![Discord Slash Command recycle Image](images/slash_commands/recycle.png)
+
+
 ## **/research**
 
 > **Display the cost to research an item.**
@@ -299,6 +313,7 @@ In-Game Command | Description
 [**player/players**](commands.md#playerplayers) | Get the names and playtime of the currently online players on the server (Based on Battlemetrics).
 [**pop**](commands.md#pop) | Get the current population of the server including queue size and max population.
 [**prox**](commands.md#prox) | Get the distance to the three closest teammates.
+[**recycle**](commands.md#recycle-ingame) | Display the output of recycling an item.
 [**research**](commands.md#research-ingame) | Display the cost to research an item.
 [**send**](commands.md#send) | Send a message to a discord user.
 [**small**](commands.md#small) | Get information about Small Oil Rig (Time till crate unlocks, time since last trigger).
@@ -515,6 +530,16 @@ Subcommand | Description | Required
 > **Get the distance to the three closest teammates.** To get the three closest teammates run `!prox`. To get the distance to a team member run `!prox <name or part of name>`.
 
 ![In-Game Command prox Image](images/ingame_commands/prox_ingame.png)
+
+
+## **recycle ingame**
+
+> **Display the output of recycling an item (Quantity is optional).**
+<br>Command: `!recycle <item-name> <quantity>`
+<br>Command: `!recycle Assault Rifle 10`
+<br>Command: `!recycle rocket 100`
+
+![In-Game Command recycle Image](images/ingame_commands/recycle_ingame.png)
 
 
 ## **research ingame**

@@ -548,4 +548,13 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
+
+    sendRecycleMessage: async function (interaction, recycleDetails, quantity) {
+        const content = {
+            embeds: [DiscordEmbeds.getRecycleEmbed(interaction.guildId, recycleDetails, quantity)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
 }

@@ -26,7 +26,6 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
-const Recycler = require('../util/recycler.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -801,7 +800,7 @@ module.exports = async (client, interaction) => {
         server.storageMonitors[ids.entityId].reachable = true;
         client.setInstance(guildId, instance);
 
-        const items = Recycler.calculate(entityInfo.entityInfo.payload.items);
+        const items = client.rustlabs.getRecycleDataFromArray(entityInfo.entityInfo.payload.items);
 
         const message = await DiscordMessages.sendStorageMonitorRecycleMessage(
             guildId, ids.serverId, ids.entityId, items);

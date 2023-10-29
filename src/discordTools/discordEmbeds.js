@@ -1055,4 +1055,36 @@ module.exports = {
                 { name: Client.client.intlGet(guildId, 'scrap'), value: scrapString, inline: true }]
         });
     },
+
+    getRecycleEmbed: function (guildId, recycleDetails, quantity) {
+        const title = quantity === 1 ? `${recycleDetails[1].name}` : `${recycleDetails[1].name} x${quantity}`;
+
+        const recycleData = Client.client.rustlabs.getRecycleDataFromArray([
+            { itemId: recycleDetails[0], quantity: quantity, itemIsBlueprint: false }
+        ]);
+
+        let items0 = '', quantities0 = '';
+        for (const item of recycleDetails[2]) {
+            items0 += `${Client.client.items.getName(item.id)}\n`;
+            quantities0 += (item.probability !== 1) ? `${parseInt(item.probability * 100)}%\n` : `${item.quantity}\n`;
+        }
+
+        let items1 = '', quantities1 = '';
+        for (const item of recycleData) {
+            items1 += `${Client.client.items.getName(item.itemId)}\n`;
+            quantities1 += `${item.quantity}\n`;
+        }
+
+        return module.exports.getEmbed({
+            title: title,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            fields: [
+                { name: Client.client.intlGet(guildId, 'yield'), value: items0, inline: true },
+                { name: '\u200B', value: quantities0, inline: true },
+                { name: '\u200B', value: '\u200B', inline: false },
+                { name: Client.client.intlGet(guildId, 'calculated'), value: items1, inline: true },
+                { name: '\u200B', value: quantities1, inline: true }]
+        });
+    },
 }
