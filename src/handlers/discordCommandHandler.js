@@ -124,6 +124,10 @@ module.exports = {
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxProx')}`)) {
             response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');
         }
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxResearch')}`) ||
+            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxResearch')}`)) {
+            response = rustplus.getCommandResearch(command);
+        }
         else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxSend')} `) ||
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxSend')} `)) {
             response = client.intlGet(rustplus.guildId, 'commandNotPossibleDiscord');

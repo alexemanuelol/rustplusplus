@@ -19,6 +19,7 @@ Slash Command | Description
 [**/map**](commands.md#map) | Get the currently connected server map image.
 [**/market**](commands.md#market) | Operations for In-Game Vending Machines.
 [**/players**](commands.md#players) | Get player/players information based on battlemetrics.
+[**/research**](commands.md#research) | Display the cost to research an item.
 [**/reset**](commands.md#reset) | Reset Discord channels.
 [**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustplusplus category content.
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
@@ -75,8 +76,8 @@ Subcommand | Options | Description | Required
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
 &nbsp; | `name` | The name of the item to craft. | `False`
-&nbsp; | `id` | The id of the item to craft. | `True`
-&nbsp; | `quantity` | The quantity of items to craft. | `True`
+&nbsp; | `id` | The id of the item to craft. | `False`
+&nbsp; | `quantity` | The quantity of items to craft. | `False`
 
 ![Discord Slash Command craft Image](images/slash_commands/craft.png)
 
@@ -180,6 +181,18 @@ Subcommand | Options | Description | Required
 ![Discord Slash Command players Image](images/slash_commands/players.png)
 ![Discord Slash Command players all players Image](images/slash_commands/players_all_players.png)
 ![Discord Slash Command players specific user Image](images/slash_commands/players_specific_user.png)
+
+
+## **/research**
+
+> **Display the cost to research an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to research. | `False`
+&nbsp; | `id` | The id of the item to research. | `False`
+
+![Discord Slash Command research Image](images/slash_commands/research.png)
 
 
 ## **/reset**
@@ -286,6 +299,7 @@ In-Game Command | Description
 [**player/players**](commands.md#playerplayers) | Get the names and playtime of the currently online players on the server (Based on Battlemetrics).
 [**pop**](commands.md#pop) | Get the current population of the server including queue size and max population.
 [**prox**](commands.md#prox) | Get the distance to the three closest teammates.
+[**research**](commands.md#research-ingame) | Display the cost to research an item.
 [**send**](commands.md#send) | Send a message to a discord user.
 [**small**](commands.md#small) | Get information about Small Oil Rig (Time till crate unlocks, time since last trigger).
 [**steamid**](commands.md#steamid) | Get the steamid of a teammate.
@@ -501,6 +515,16 @@ Subcommand | Description | Required
 > **Get the distance to the three closest teammates.** To get the three closest teammates run `!prox`. To get the distance to a team member run `!prox <name or part of name>`.
 
 ![In-Game Command prox Image](images/ingame_commands/prox_ingame.png)
+
+
+## **research ingame**
+
+> **Display the cost to research an item.**
+<br>Command: `!research <item-name>`
+<br>Command: `!research Assault Rifle`
+<br>Command: `!research rocket`
+
+![In-Game Command research Image](images/ingame_commands/research_ingame.png)
 
 
 ## **send**

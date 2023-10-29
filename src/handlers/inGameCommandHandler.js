@@ -132,6 +132,10 @@ module.exports = {
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxProx')}`)) {
             rustplus.printCommandOutput(await rustplus.getCommandProx(command, callerSteamId));
         }
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxResearch')}`) ||
+            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxResearch')}`)) {
+            rustplus.printCommandOutput(rustplus.getCommandResearch(command));
+        }
         else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxSend')} `) ||
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxSend')} `)) {
             rustplus.printCommandOutput(await rustplus.getCommandSend(command, callerName));

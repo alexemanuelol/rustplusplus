@@ -1032,4 +1032,27 @@ module.exports = {
                 { name: Client.client.intlGet(guildId, 'hoster'), value: quantities, inline: true }]
         });
     },
+
+    getResearchEmbed: function (guildId, researchDetails) {
+        let typeString = '', scrapString = '';
+        if (researchDetails[2].researchTable !== null) {
+            typeString += `${Client.client.intlGet(guildId, 'researchTable')}\n`;
+            scrapString += `${researchDetails[2].researchTable}\n`;
+        }
+        if (researchDetails[2].workbench !== null) {
+            typeString += `${Client.client.items.getName(researchDetails[2].workbench.type)}\n`;
+            const scrap = researchDetails[2].workbench.scrap;
+            const totalScrap = researchDetails[2].workbench.totalScrap;
+            scrapString += `${scrap} (${Client.client.intlGet(guildId, 'total')} ${totalScrap})`;
+        }
+
+        return module.exports.getEmbed({
+            title: `${researchDetails[1].name}`,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            fields: [
+                { name: Client.client.intlGet(guildId, 'type'), value: typeString, inline: true },
+                { name: Client.client.intlGet(guildId, 'scrap'), value: scrapString, inline: true }]
+        });
+    },
 }

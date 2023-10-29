@@ -539,4 +539,13 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
+
+    sendResearchMessage: async function (interaction, researchDetails) {
+        const content = {
+            embeds: [DiscordEmbeds.getResearchEmbed(interaction.guildId, researchDetails)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
 }

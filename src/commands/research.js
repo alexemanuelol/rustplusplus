@@ -23,23 +23,19 @@ const Builder = require('@discordjs/builders');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
-	name: 'craft',
+	name: 'research',
 
 	getData(client, guildId) {
 		return new Builder.SlashCommandBuilder()
-			.setName('craft')
-			.setDescription(client.intlGet(guildId, 'commandsCraftDesc'))
+			.setName('research')
+			.setDescription(client.intlGet(guildId, 'commandsResearchDesc'))
 			.addStringOption(option => option
 				.setName('name')
-				.setDescription(client.intlGet(guildId, 'commandsCraftNameDesc'))
+				.setDescription(client.intlGet(guildId, 'commandsResearchNameDesc'))
 				.setRequired(false))
 			.addStringOption(option => option
 				.setName('id')
-				.setDescription(client.intlGet(guildId, 'commandsCraftIdDesc'))
-				.setRequired(false))
-			.addIntegerOption(option => option
-				.setName('quantity')
-				.setDescription(client.intlGet(guildId, 'commandsCraftQuantityDesc'))
+				.setDescription(client.intlGet(guildId, 'commandsResearchIdDesc'))
 				.setRequired(false));
 	},
 
@@ -52,16 +48,15 @@ module.exports = {
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
 
-		const craftItemName = interaction.options.getString('name');
-		const craftItemId = interaction.options.getString('id');
-		const craftItemQuantity = interaction.options.getInteger('quantity');
+		const researchItemName = interaction.options.getString('name');
+		const researchItemId = interaction.options.getString('id');
 
 		let itemId = null;
-		if (craftItemName !== null) {
-			const item = client.items.getClosestItemIdByName(craftItemName)
+		if (researchItemName !== null) {
+			const item = client.items.getClosestItemIdByName(researchItemName)
 			if (item === undefined) {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
-					name: craftItemName
+					name: researchItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 				rustplus.log(client.intlGet(guildId, 'warningCap'), str);
@@ -71,20 +66,20 @@ module.exports = {
 				itemId = item;
 			}
 		}
-		else if (craftItemId !== null) {
-			if (client.items.itemExist(craftItemId)) {
-				itemId = craftItemId;
+		else if (researchItemId !== null) {
+			if (client.items.itemExist(researchItemId)) {
+				itemId = researchItemId;
 			}
 			else {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
-					id: craftItemId
+					id: researchItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 				rustplus.log(client.intlGet(guildId, 'warningCap'), str);
 				return;
 			}
 		}
-		else if (craftItemName === null && craftItemId === null) {
+		else if (researchItemName === null && researchItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			rustplus.log(client.intlGet(guildId, 'warningCap'), str);
@@ -92,8 +87,8 @@ module.exports = {
 		}
 		const itemName = client.items.getName(itemId);
 
-		const craftDetails = client.rustlabs.getCraftDetailsById(itemId);
-		if (craftDetails === null) {
+		const researchDetails = client.rustlabs.getResearchDetailsById(itemId);
+		if (researchDetails === null) {
 			const str = client.intlGet(guildId, 'couldNotFindCraftDetails', {
 				name: itemName
 			});
@@ -102,14 +97,12 @@ module.exports = {
 			return;
 		}
 
-		const quantity = craftItemQuantity === null ? 1 : craftItemQuantity;
-
 		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
-			value: `${craftItemName} ${craftItemId} ${craftItemQuantity}`
+			value: `${researchItemName} ${researchItemId}`
 		}));
 
-		await DiscordMessages.sendCraftMessage(interaction, craftDetails, quantity);
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsCraftDesc'));
+		await DiscordMessages.sendResearchMessage(interaction, researchDetails);
+		client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsResearchDesc'));
 	},
 };

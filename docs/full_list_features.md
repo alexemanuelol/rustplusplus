@@ -11,6 +11,7 @@
 - **/map** - Display the In-Game Map.
 - **/market** - Search for or subscribe to items in vending machines.
 - **/players** - Get Battlemetrics data on all connected players.
+- **/research** - Display the cost to research an item.
 - **/reset** - Reset Discord Channels.
 - **/role** - Setup a specific role to use rustplusplus.
 - **/storagemonitor** - Change image of paired Storage Monitors.
@@ -40,6 +41,7 @@
 - **player/players** - Get Battlemetrics information about players.
 - **pop** - Get population of the server.
 - **prox** - Display teammates that are nearby.
+- **research** - Display the cost to research an item.
 - **send** - Send a message through rustplusplus to a person on Discord.
 - **small** - Get information regarding Small Oil Rig.
 - **steamid** - Get teammate steamid.
