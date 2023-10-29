@@ -877,6 +877,85 @@ module.exports = {
         });
     },
 
+    getUpdateBattlemetricsOnlinePlayersInformationEmbed: function (rustplus, battlemetricsId) {
+        const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
+        const guildId = rustplus.guildId;
+
+        const playerIds = bmInstance.getOnlinePlayerIdsOrderedByTime();
+
+        let totalCharacters = 0;
+        let fieldCharacters = 0;
+
+        const title = Client.client.intlGet(guildId, 'battlemetricsOnlinePlayers');
+        const footer = { text: bmInstance.server_name };
+
+        totalCharacters += title.length;
+        totalCharacters += bmInstance.server_name.length;
+        totalCharacters += Client.client.intlGet(guildId, 'andMorePlayers', { number: 100 }).length;
+        totalCharacters += `${Client.client.intlGet(guildId, 'players')}`.length;
+
+        const fields = [''];
+        let fieldIndex = 0;
+        let isEmbedFull = false;
+        let playerCounter = 0;
+        for (const playerId of playerIds) {
+            playerCounter += 1;
+
+            const status = bmInstance.players[playerId]['status'];
+            const time = status ? bmInstance.getOnlineTime(playerId)[1] : bmInstance.getOfflineTime(playerId)[1];
+
+            let playerStr = status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
+            playerStr += ` [${time}] `;
+
+            const nameMaxLength = Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3 - (3 + time.length);
+
+            let name = bmInstance.players[playerId]['name'].replace('[', '(').replace(']', ')');
+            name = name.length <= nameMaxLength ? name : name.substring(0, nameMaxLength - 2) + '..';
+
+            playerStr += `[${name}](${Constants.BATTLEMETRICS_PROFILE_URL + `${playerId}`})\n`;
+
+            if (totalCharacters + playerStr.length >= Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+                isEmbedFull = true;
+                break;
+            }
+
+            if (fieldCharacters + playerStr.length >= Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                fieldCharacters = 0;
+                fieldIndex += 1;
+                fields.push('');
+            }
+
+            fields[fieldIndex] += playerStr;
+            totalCharacters += playerStr.length;
+            fieldCharacters += playerStr.length;
+        }
+
+        const embed = module.exports.getEmbed({
+            title: title,
+            color: Constants.COLOR_DEFAULT,
+            footer: footer,
+            timestamp: true
+        });
+
+        if (isEmbedFull) {
+            embed.setDescription(Client.client.intlGet(guildId, 'andMorePlayers', {
+                number: playerIds.length - playerCounter
+            }));
+        }
+
+        let fieldCounter = 0;
+        for (const field of fields) {
+            embed.addFields({
+                name: fieldCounter === 0 ? Client.client.intlGet(guildId, 'players') : '\u200B',
+                value: field,
+                inline: true
+            });
+            fieldCounter += 1;
+        }
+
+        return embed;
+    },
+
     getDiscordCommandResponseEmbed: function (rustplus, response) {
         const instance = Client.client.getInstance(rustplus.guildId);
 

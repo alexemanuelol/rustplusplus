@@ -325,6 +325,7 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 	let footer = { text: bmInstance.server_name };
 
 	totalCharacters += title.length;
+	totalCharacters += bmInstance.server_name.length;
 	totalCharacters += client.intlGet(interaction.guildId, 'andMorePlayers', { number: 100 }).length;
 	totalCharacters += `${client.intlGet(interaction.guildId, 'players')}`.length;
 
@@ -343,7 +344,7 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 
 		const nameMaxLength = Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3 - (3 + time.length);
 
-		let name = bmInstance.players[playerId]['name'];
+		let name = bmInstance.players[playerId]['name'].replace('[', '(').replace(']', ')');
 		name = name.length <= nameMaxLength ? name : name.substring(0, nameMaxLength - 2) + '..';
 
 		playerStr += `[${name}](${Constants.BATTLEMETRICS_PROFILE_URL + `${playerId}`})\n`;

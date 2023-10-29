@@ -322,6 +322,24 @@ module.exports = async (client, interaction) => {
                 instance.generalSettings.itemAvailableInVendingMachineNotifyInGame)]
         });
     }
+    else if (interaction.customId === 'DisplayInformationBattlemetricsAllOnlinePlayers') {
+        instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers =
+            !instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.displayInformationBattlemetricsAllOnlinePlayers =
+            instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
+                instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers)]
+        });
+    }
     else if (interaction.customId.startsWith('ServerConnect')) {
         const ids = JSON.parse(interaction.customId.replace('ServerConnect', ''));
         const server = instance.serverList[ids.serverId];

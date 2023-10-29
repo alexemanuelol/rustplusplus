@@ -465,6 +465,22 @@ module.exports = {
         }
     },
 
+    sendUpdateBattlemetricsOnlinePlayersInformationMessage: async function (rustplus, battlemetricsId) {
+        const instance = Client.client.getInstance(rustplus.guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getUpdateBattlemetricsOnlinePlayersInformationEmbed(rustplus, battlemetricsId)]
+        }
+
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
+            instance.informationMessageId.battlemetricsPlayers, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.battlemetricsPlayers) {
+            instance.informationMessageId.battlemetricsPlayers = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
+    },
+
     sendDiscordCommandResponseMessage: async function (rustplus, client, message, response) {
         const content = {
             embeds: [DiscordEmbeds.getDiscordCommandResponseEmbed(rustplus, response)]
