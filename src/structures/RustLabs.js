@@ -27,6 +27,10 @@ const ResearchData = require('../staticFiles/rustlabsResearchData.json');
 const RecycleData = require('../staticFiles/rustlabsRecycleData.json');
 const DurabilityData = require('../staticFiles/rustlabsDurabilityData.json');
 
+const IGNORED_RECYCLE_ITEMS = [
+    '-946369541' /* Low Grade Fuel */
+];
+
 
 class RustLabs {
 
@@ -214,6 +218,15 @@ class RustLabs {
      **********************************************************************************/
 
     /**
+     *  Check to see if itemId is part of craft details data.
+     *  @param {string} itemId The itemId of the item.
+     *  @return {boolean} true if exist, otherwise false.
+     */
+    hasCraftDetails(itemId) {
+        return this.craftData.hasOwnProperty(itemId);
+    }
+
+    /**
      *  Get craft details of an item.
      *  @param {string} name The name of the item.
      *  @return {array|null} null if something went wrong, otherwise [id, itemDetails, craftDetails]
@@ -231,7 +244,7 @@ class RustLabs {
      *  @return {array|null} null if something went wrong, otherwise [id, itemDetails, craftDetails]
      */
     getCraftDetailsById(id) {
-        if (!this.craftData.hasOwnProperty(id)) return null;
+        if (!this.hasCraftDetails(id)) return null;
         return [id, this.items.items[id], this.craftData[id]];
     }
 
@@ -239,6 +252,15 @@ class RustLabs {
     /***********************************************************************************
      *  Research functions
      **********************************************************************************/
+
+    /**
+     *  Check to see if itemId is part of research details data.
+     *  @param {string} itemId The itemId of the item.
+     *  @return {boolean} true if exist, otherwise false.
+     */
+    hasResearchDetails(itemId) {
+        return this.researchData.hasOwnProperty(itemId);
+    }
 
     /**
      *  Get research details of an item.
@@ -258,7 +280,7 @@ class RustLabs {
      *  @return {array|null} null if something went wrong, otherwise [id, itemDetails, researchDetails]
      */
     getResearchDetailsById(id) {
-        if (!this.researchData.hasOwnProperty(id)) return null;
+        if (!this.hasResearchDetails(id)) return null;
         return [id, this.items.items[id], this.researchData[id]];
     }
 
@@ -266,6 +288,15 @@ class RustLabs {
     /***********************************************************************************
      *  Recycle functions
      **********************************************************************************/
+
+    /**
+     *  Check to see if itemId is part of recycle details data.
+     *  @param {string} itemId The itemId of the item.
+     *  @return {boolean} true if exist, otherwise false.
+     */
+    hasRecycleDetails(itemId) {
+        return this.recycleData.hasOwnProperty(itemId);
+    }
 
     /**
      *  Get recycle details of an item.
@@ -286,14 +317,99 @@ class RustLabs {
      */
     getRecycleDetailsById(id) {
         if (typeof (id) !== 'string') return null;
-        if (!this.recycleData.hasOwnProperty(id)) return null;
+        if (!this.hasRecycleDetails(id)) return null;
         return [id, this.items.items[id], this.recycleData[id]];
+    }
+
+    /**
+     *  Get recycle data from an array of items.
+     *  @param {array} items The array of items (every item include itemId, quantity, itemIsBlueprint).
+     *  @return {array} An array of the output of recycling the items (every item include itemId, quantity,
+     *                  itemIsBlueprint).
+     */
+    getRecycleDataFromArray(items) {
+        /* Remove element duplicates */
+        const mergedItems = [];
+        for (const item of items) {
+            const itemId = (typeof (item.itemId) === 'string') ? item.itemId : item.itemId.toString();
+            const found = mergedItems.find(e => e.itemId === itemId && e.itemIsBlueprint === item.itemIsBlueprint);
+            if (found === undefined) {
+                mergedItems.push({ itemId: itemId, quantity: item.quantity, itemIsBlueprint: item.itemIsBlueprint });
+            }
+            else {
+                found.quantity += item.quantity;
+            }
+        }
+        items = mergedItems.slice();
+
+        let recycleData = items.slice();
+        while (true) {
+            let noMoreIterations = true;
+
+            const expandedItems = [];
+            for (const item of recycleData) {
+                if (!this.hasRecycleDetails(item.itemId)) {
+                    expandedItems.push(item);
+                    continue;
+                }
+
+                /* Can the item be recycled further? */
+                if (this.recycleData[item.itemId].length > 0 && !item.itemIsBlueprint &&
+                    !IGNORED_RECYCLE_ITEMS.includes(item.itemId)) {
+                    noMoreIterations = false;
+                    for (const recycleItem of this.recycleData[item.itemId]) {
+                        for (let i = 0; i < item.quantity; i++) {
+                            if (recycleItem.probability < 1 && Math.random() * 1 > recycleItem.probability) continue;
+
+                            const found = expandedItems.find(e => e.itemId === recycleItem.id);
+                            if (found === undefined) {
+                                expandedItems.push({
+                                    itemId: recycleItem.id,
+                                    quantity: recycleItem.quantity,
+                                    itemIsBlueprint: false
+                                });
+                            }
+                            else {
+                                found.quantity += recycleItem.quantity;
+                            }
+                        }
+                    }
+                }
+                else {
+                    const found = expandedItems.find(e => e.itemId === item.itemId &&
+                        e.itemIsBlueprint === item.itemIsBlueprint);
+                    if (found === undefined) {
+                        expandedItems.push(item);
+                    }
+                    else {
+                        found.quantity += item.quantity;
+                    }
+                }
+            }
+
+            recycleData = expandedItems.slice();
+
+            if (noMoreIterations) break;
+        }
+
+        return recycleData;
     }
 
 
     /***********************************************************************************
      *  Durability functions
      **********************************************************************************/
+
+    /**
+     *  Check to see if itemId or name is part of durability details data.
+     *  @param {string} itemIdOrName The itemId or name of the entity.
+     *  @return {boolean} true if exist, otherwise false.
+     */
+    hasDurabilityDetails(itemIdOrName) {
+        return this.durabilityData['items'].hasOwnProperty(itemIdOrName) ||
+            this.durabilityData['buildingBlocks'].hasOwnProperty(itemIdOrName) ||
+            this.durabilityData['other'].hasOwnProperty(itemIdOrName);
+    }
 
     /**
      *  Get durability details of an item, building block or other.
@@ -353,7 +469,7 @@ class RustLabs {
      */
     getDurabilityDetailsById(id, group = null, which = null, orderedBy = null) {
         if (typeof (id) !== 'string') return null;
-        if (!this.durabilityData['items'].hasOwnProperty(id)) return null;
+        if (!this.hasDurabilityDetails(id)) return null;
         if (group !== null && !this.durabilityGroups.includes(group)) return null;
         if (which !== null && !this.durabilityWhich.includes(which)) return null;
         if (orderedBy !== null && !this.orderedBy.includes(orderedBy)) return null;

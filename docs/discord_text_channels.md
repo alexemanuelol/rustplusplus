@@ -47,6 +47,8 @@
 
 ![Discord Text Channel Information](images/channels/information_channel.png)
 
+**Battlemetrics Online Players** shows all online players on the server.
+
 
 ## Servers Channel
 

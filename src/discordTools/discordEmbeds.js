@@ -877,6 +877,85 @@ module.exports = {
         });
     },
 
+    getUpdateBattlemetricsOnlinePlayersInformationEmbed: function (rustplus, battlemetricsId) {
+        const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
+        const guildId = rustplus.guildId;
+
+        const playerIds = bmInstance.getOnlinePlayerIdsOrderedByTime();
+
+        let totalCharacters = 0;
+        let fieldCharacters = 0;
+
+        const title = Client.client.intlGet(guildId, 'battlemetricsOnlinePlayers');
+        const footer = { text: bmInstance.server_name };
+
+        totalCharacters += title.length;
+        totalCharacters += bmInstance.server_name.length;
+        totalCharacters += Client.client.intlGet(guildId, 'andMorePlayers', { number: 100 }).length;
+        totalCharacters += `${Client.client.intlGet(guildId, 'players')}`.length;
+
+        const fields = [''];
+        let fieldIndex = 0;
+        let isEmbedFull = false;
+        let playerCounter = 0;
+        for (const playerId of playerIds) {
+            playerCounter += 1;
+
+            const status = bmInstance.players[playerId]['status'];
+            const time = status ? bmInstance.getOnlineTime(playerId)[1] : bmInstance.getOfflineTime(playerId)[1];
+
+            let playerStr = status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
+            playerStr += ` [${time}] `;
+
+            const nameMaxLength = Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3 - (3 + time.length);
+
+            let name = bmInstance.players[playerId]['name'].replace('[', '(').replace(']', ')');
+            name = name.length <= nameMaxLength ? name : name.substring(0, nameMaxLength - 2) + '..';
+
+            playerStr += `[${name}](${Constants.BATTLEMETRICS_PROFILE_URL + `${playerId}`})\n`;
+
+            if (totalCharacters + playerStr.length >= Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+                isEmbedFull = true;
+                break;
+            }
+
+            if (fieldCharacters + playerStr.length >= Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                fieldCharacters = 0;
+                fieldIndex += 1;
+                fields.push('');
+            }
+
+            fields[fieldIndex] += playerStr;
+            totalCharacters += playerStr.length;
+            fieldCharacters += playerStr.length;
+        }
+
+        const embed = module.exports.getEmbed({
+            title: title,
+            color: Constants.COLOR_DEFAULT,
+            footer: footer,
+            timestamp: true
+        });
+
+        if (isEmbedFull) {
+            embed.setDescription(Client.client.intlGet(guildId, 'andMorePlayers', {
+                number: playerIds.length - playerCounter
+            }));
+        }
+
+        let fieldCounter = 0;
+        for (const field of fields) {
+            embed.addFields({
+                name: fieldCounter === 0 ? Client.client.intlGet(guildId, 'players') : '\u200B',
+                value: field,
+                inline: true
+            });
+            fieldCounter += 1;
+        }
+
+        return embed;
+    },
+
     getDiscordCommandResponseEmbed: function (rustplus, response) {
         const instance = Client.client.getInstance(rustplus.guildId);
 
@@ -998,6 +1077,93 @@ module.exports = {
             color: Constants.COLOR_DEFAULT,
             timestamp: true,
             title: state
+        });
+    },
+
+    getCraftEmbed: function (guildId, craftDetails, quantity) {
+        let title = '';
+        let description = '';
+
+        if (quantity === 1) {
+            title = `${craftDetails[1].name}`;
+            description += `__**${Client.client.intlGet(guildId, 'time')}:**__ ${craftDetails[2].timeString}`;
+        }
+        else {
+            title = `${craftDetails[1].name} x${quantity}`;
+            const time = Timer.secondsToFullScale(craftDetails[2].time * quantity, '', true);
+            description += `__**${Client.client.intlGet(guildId, 'time')}:**__ ${time}`;
+        }
+
+        let items = '', quantities = '';
+        for (const item of craftDetails[2].ingredients) {
+            const itemName = Client.client.items.getName(item.id);
+            items += `${itemName}\n`;
+            quantities += `${item.quantity * quantity}\n`;
+        }
+
+        return module.exports.getEmbed({
+            title: title,
+            description: description,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            fields: [
+                { name: Client.client.intlGet(guildId, 'quantity'), value: items, inline: true },
+                { name: Client.client.intlGet(guildId, 'hoster'), value: quantities, inline: true }]
+        });
+    },
+
+    getResearchEmbed: function (guildId, researchDetails) {
+        let typeString = '', scrapString = '';
+        if (researchDetails[2].researchTable !== null) {
+            typeString += `${Client.client.intlGet(guildId, 'researchTable')}\n`;
+            scrapString += `${researchDetails[2].researchTable}\n`;
+        }
+        if (researchDetails[2].workbench !== null) {
+            typeString += `${Client.client.items.getName(researchDetails[2].workbench.type)}\n`;
+            const scrap = researchDetails[2].workbench.scrap;
+            const totalScrap = researchDetails[2].workbench.totalScrap;
+            scrapString += `${scrap} (${Client.client.intlGet(guildId, 'total')} ${totalScrap})`;
+        }
+
+        return module.exports.getEmbed({
+            title: `${researchDetails[1].name}`,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            fields: [
+                { name: Client.client.intlGet(guildId, 'type'), value: typeString, inline: true },
+                { name: Client.client.intlGet(guildId, 'scrap'), value: scrapString, inline: true }]
+        });
+    },
+
+    getRecycleEmbed: function (guildId, recycleDetails, quantity) {
+        const title = quantity === 1 ? `${recycleDetails[1].name}` : `${recycleDetails[1].name} x${quantity}`;
+
+        const recycleData = Client.client.rustlabs.getRecycleDataFromArray([
+            { itemId: recycleDetails[0], quantity: quantity, itemIsBlueprint: false }
+        ]);
+
+        let items0 = '', quantities0 = '';
+        for (const item of recycleDetails[2]) {
+            items0 += `${Client.client.items.getName(item.id)}\n`;
+            quantities0 += (item.probability !== 1) ? `${parseInt(item.probability * 100)}%\n` : `${item.quantity}\n`;
+        }
+
+        let items1 = '', quantities1 = '';
+        for (const item of recycleData) {
+            items1 += `${Client.client.items.getName(item.itemId)}\n`;
+            quantities1 += `${item.quantity}\n`;
+        }
+
+        return module.exports.getEmbed({
+            title: title,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            fields: [
+                { name: Client.client.intlGet(guildId, 'yield'), value: items0, inline: true },
+                { name: '\u200B', value: quantities0, inline: true },
+                { name: '\u200B', value: '\u200B', inline: false },
+                { name: Client.client.intlGet(guildId, 'calculated'), value: items1, inline: true },
+                { name: '\u200B', value: quantities1, inline: true }]
         });
     },
 }

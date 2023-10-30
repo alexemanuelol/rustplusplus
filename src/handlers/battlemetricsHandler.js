@@ -20,6 +20,7 @@
 
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = {
@@ -32,8 +33,31 @@ module.exports = {
         for (const guildItem of client.guilds.cache) {
             const guildId = guildItem[0];
             const instance = client.getInstance(guildId);
+            const rustplus = client.rustplusInstances[guildId];
 
             // TODO! Notifications for activeServer battlemetrics instance? Changes etc?
+
+            /* Update information channel battlemetrics players */
+            const bmId = instance.activeServer !== null ?
+                instance.serverList[instance.activeServer].battlemetricsId : null;
+            let condition = instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers;
+            condition &= instance.activeServer !== null;
+            condition &= bmId !== null;
+            condition &= client.battlemetricsInstances.hasOwnProperty(bmId);
+            condition &= rustplus && rustplus.isOperational;
+
+            if (condition) {
+                await DiscordMessages.sendUpdateBattlemetricsOnlinePlayersInformationMessage(rustplus, bmId);
+            }
+            else {
+                if (instance.informationMessageId.battlemetricsPlayers !== null) {
+                    await DiscordTools.deleteMessageById(guildId, instance.channelId.information,
+                        instance.informationMessageId.battlemetricsPlayers);
+
+                    instance.informationMessageId.battlemetricsPlayers = null;
+                    client.setInstance(guildId, instance);
+                }
+            }
 
             for (const [trackerId, content] of Object.entries(instance.trackers)) {
                 const battlemetricsId = content.battlemetricsId;
@@ -74,7 +98,6 @@ module.exports = {
                 }
 
                 const trackerPlayerIds = content.players.map(e => e.playerId);
-                const rustplus = client.rustplusInstances[guildId];
 
                 /* Check if Player just came online */
                 for (const playerId of trackerPlayerIds.filter(e => bmInstance.newPlayers.includes(e))) {

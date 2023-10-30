@@ -84,7 +84,7 @@ module.exports = {
         return null;
     },
 
-    secondsToFullScale: function (totSeconds, ignore = '') {
+    secondsToFullScale: function (totSeconds, ignore = '', longAbbr = false) {
         totSeconds = Math.floor(totSeconds);
 
         const day = 86400;
@@ -106,7 +106,7 @@ module.exports = {
 
         days += originalDays;
         if (days > 0 && !ignore.includes('d')) {
-            time += `${days}d `;
+            time += longAbbr ? `${days} days ` : `${days}d `;
         }
         else if (days > 0 && ignore.includes('d')) {
             hours += (day / hour) * days;
@@ -114,7 +114,7 @@ module.exports = {
 
         hours += originalHours;
         if (hours > 0 && !ignore.includes('h')) {
-            time += `${hours}h `;
+            time += longAbbr ? `${hours} hours ` : `${hours}h `;
         }
         else if (hours > 0 && ignore.includes('h')) {
             minutes += (hour / minute) * hours;
@@ -122,7 +122,7 @@ module.exports = {
 
         minutes += originalMinutes;
         if (minutes > 0 && !ignore.includes('m')) {
-            time += `${minutes}m `;
+            time += longAbbr ? `${minutes} min ` : `${minutes}m `;
         }
         else if (minutes > 0 && ignore.includes('m')) {
             seconds += (minute / second) * minutes;
@@ -130,26 +130,26 @@ module.exports = {
 
         seconds += originalSeconds;
         if (seconds > 0 && !ignore.includes('s')) {
-            time += `${seconds}s`;
+            time += longAbbr ? `${seconds} sec ` : `${seconds}s`;
         }
 
         time = time.trim();
 
         if (time === '') {
             if (!ignore.includes('s')) {
-                time = '0s';
+                time = longAbbr ? '0 sec' : '0s';
             }
             else if (!ignore.includes('m')) {
-                time = '0m';
+                time = longAbbr ? '0 min' : '0m';
             }
             else if (!ignore.includes('h')) {
-                time = '0h';
+                time = longAbbr ? '0 hours' : '0h';
             }
             else if (!ignore.includes('d')) {
-                time = '0d';
+                time = longAbbr ? '0 days' : '0d';
             }
             else {
-                time = '0s';
+                time = longAbbr ? '0 sec' : '0s';
             }
         }
         return time;

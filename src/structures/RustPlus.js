@@ -946,6 +946,72 @@ class RustPlus extends RustPlusLib {
         return null;
     }
 
+    getCommandCraft(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandCraft = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxCraft')}`;
+        const commandCraftEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxCraft')}`;
+
+        if (command.toLowerCase().startsWith(`${commandCraft} `)) {
+            command = command.slice(`${commandCraft} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandCraftEn} `.length).trim();
+        }
+
+        const words = command.split(' ');
+        const lastWord = words[words.length - 1];
+        const lastWordLength = lastWord.length;
+        const restString = command.slice(0, -(lastWordLength)).trim();
+
+        let itemSearchName = null, itemSearchQuantity = null;
+        if (isNaN(lastWord)) {
+            itemSearchName = command;
+            itemSearchQuantity = 1;
+        }
+        else {
+            itemSearchName = restString;
+            itemSearchQuantity = parseInt(lastWord);
+        }
+
+        const item = Client.client.items.getClosestItemIdByName(itemSearchName)
+        if (item === undefined || itemSearchName === '') {
+            const str = Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                name: itemSearchName
+            });
+            return str;
+        }
+
+        const itemId = item;
+        const itemName = Client.client.items.getName(itemId);
+        const quantity = itemSearchQuantity;
+
+        const craftDetails = Client.client.rustlabs.getCraftDetailsById(itemId);
+        if (craftDetails === null) {
+            const str = Client.client.intlGet(this.guildId, 'couldNotFindCraftDetails', {
+                name: itemName
+            });
+            return str;
+        }
+
+        let str = `${itemName} `;
+        if (quantity === 1) {
+            str += `(${craftDetails[2].timeString}): `;
+        }
+        else {
+            const time = Timer.secondsToFullScale(craftDetails[2].time * quantity, '', true);
+            str += `x${quantity} (${time}): `;
+        }
+
+        for (const ingredient of craftDetails[2].ingredients) {
+            const ingredientName = Client.client.items.getName(ingredient.id);
+            str += `${ingredientName} x${ingredient.quantity * quantity}, `;
+        }
+
+        str = str.slice(0, -2);
+
+        return str;
+    }
+
     async getCommandDeath(command, callerSteamId) {
         const prefix = this.generalSettings.prefix;
         const commandDeath = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxDeath')}`;
@@ -2007,6 +2073,117 @@ class RustPlus extends RustPlusLib {
         return Client.client.intlGet(this.guildId, 'couldNotIdentifyMember', {
             name: memberName
         });
+    }
+
+    getCommandRecycle(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandRecycle = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxRecycle')}`;
+        const commandRecycleEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxRecycle')}`;
+
+        if (command.toLowerCase().startsWith(`${commandRecycle} `)) {
+            command = command.slice(`${commandRecycle} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandRecycleEn} `.length).trim();
+        }
+
+        const words = command.split(' ');
+        const lastWord = words[words.length - 1];
+        const lastWordLength = lastWord.length;
+        const restString = command.slice(0, -(lastWordLength)).trim();
+
+        let itemSearchName = null, itemSearchQuantity = null;
+        if (isNaN(lastWord)) {
+            itemSearchName = command;
+            itemSearchQuantity = 1;
+        }
+        else {
+            itemSearchName = restString;
+            itemSearchQuantity = parseInt(lastWord);
+        }
+
+        const item = Client.client.items.getClosestItemIdByName(itemSearchName)
+        if (item === undefined || itemSearchName === '') {
+            const str = Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                name: itemSearchName
+            });
+            return str;
+        }
+
+        const itemId = item;
+        const itemName = Client.client.items.getName(itemId);
+        const quantity = itemSearchQuantity;
+
+        const recycleDetails = Client.client.rustlabs.getRecycleDetailsById(itemId);
+        if (recycleDetails === null) {
+            const str = Client.client.intlGet(this.guildId, 'couldNotFindRecycleDetails', {
+                name: itemName
+            });
+            return str;
+        }
+
+        const recycleData = Client.client.rustlabs.getRecycleDataFromArray([
+            { itemId: recycleDetails[0], quantity: quantity, itemIsBlueprint: false }
+        ]);
+
+        let str = `${itemName}: `;
+        for (const item of recycleData) {
+            str += `${Client.client.items.getName(item.itemId)} x${item.quantity}, `;
+        }
+        str = str.slice(0, -2);
+
+        return str;
+    }
+
+    getCommandResearch(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandResearch = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxResearch')}`;
+        const commandResearchEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxResearch')}`;
+
+        if (command.toLowerCase().startsWith(`${commandResearch} `)) {
+            command = command.slice(`${commandResearch} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandResearchEn} `.length).trim();
+        }
+        const itemResearchName = command;
+
+        const item = Client.client.items.getClosestItemIdByName(itemResearchName)
+        if (item === undefined || itemResearchName === '') {
+            const str = Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                name: itemResearchName
+            });
+            return str;
+        }
+
+        const itemId = item;
+        const itemName = Client.client.items.getName(itemId);
+
+        const researchDetails = Client.client.rustlabs.getResearchDetailsById(itemId);
+        if (researchDetails === null) {
+            const str = Client.client.intlGet(this.guildId, 'couldNotFindResearchDetails', {
+                name: itemName
+            });
+            return str;
+        }
+
+
+
+        let str = `${itemName}: `;
+        if (researchDetails[2].researchTable !== null) {
+            const researchTable = `${Client.client.intlGet(this.guildId, 'researchTable')}`;
+            const scrap = `${researchDetails[2].researchTable}`;
+            str += `${researchTable} (${scrap})`
+        }
+        if (researchDetails[2].workbench !== null) {
+            const type = `${Client.client.items.getName(researchDetails[2].workbench.type)}`;
+            const scrap = researchDetails[2].workbench.scrap;
+            const totalScrap = researchDetails[2].workbench.totalScrap;
+            str += `, ${type} (${scrap} (${totalScrap}))`;
+        }
+        str += '.';
+
+        return str;
     }
 
     async getCommandSend(command, callerName) {

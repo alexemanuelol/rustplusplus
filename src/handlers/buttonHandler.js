@@ -26,7 +26,6 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
-const Recycler = require('../util/recycler.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -321,6 +320,24 @@ module.exports = async (client, interaction) => {
         await client.interactionUpdate(interaction, {
             components: [DiscordButtons.getItemAvailableNotifyInGameButton(guildId,
                 instance.generalSettings.itemAvailableInVendingMachineNotifyInGame)]
+        });
+    }
+    else if (interaction.customId === 'DisplayInformationBattlemetricsAllOnlinePlayers') {
+        instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers =
+            !instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.displayInformationBattlemetricsAllOnlinePlayers =
+            instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
+                instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers)]
         });
     }
     else if (interaction.customId.startsWith('ServerConnect')) {
@@ -801,7 +818,7 @@ module.exports = async (client, interaction) => {
         server.storageMonitors[ids.entityId].reachable = true;
         client.setInstance(guildId, instance);
 
-        const items = Recycler.calculate(entityInfo.entityInfo.payload.items);
+        const items = client.rustlabs.getRecycleDataFromArray(entityInfo.entityInfo.payload.items);
 
         const message = await DiscordMessages.sendStorageMonitorRecycleMessage(
             guildId, ids.serverId, ids.entityId, items);

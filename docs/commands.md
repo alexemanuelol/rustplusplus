@@ -12,12 +12,15 @@ Slash Command | Description
 [**/alarm**](commands.md#alarm) | Operations on Smart Alarms.
 [**/blacklist**](commands.md#blacklist) | Blacklist a user from using the bot.
 [**/cctv**](commands.md#cctv) | Posts CCTV codes for a monument.
+[**/craft**](commands.md#craft) | Display the cost to craft an item.
 [**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
 [**/help**](commands.md#help) | Display help message.
 [**/leader**](commands.md#leader) | Give or take the leadership from/to a team member.
 [**/map**](commands.md#map) | Get the currently connected server map image.
 [**/market**](commands.md#market) | Operations for In-Game Vending Machines.
 [**/players**](commands.md#players) | Get player/players information based on battlemetrics.
+[**/recycle**](commands.md#recycle) | Display the output of recycling an item.
+[**/research**](commands.md#research) | Display the cost to research an item.
 [**/reset**](commands.md#reset) | Reset Discord channels.
 [**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustplusplus category content.
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
@@ -65,6 +68,19 @@ Subcommand | Options | Description | Required
 &nbsp; | `monument` | Rust monument. | `True`
 
 ![Discord Slash Command monument Image](images/slash_commands/cctv.png)
+
+
+## **/craft**
+
+> **Display the cost to craft an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to craft. | `False`
+&nbsp; | `id` | The id of the item to craft. | `False`
+&nbsp; | `quantity` | The quantity of items to craft. | `False`
+
+![Discord Slash Command craft Image](images/slash_commands/craft.png)
 
 
 ## **/credentials**
@@ -168,6 +184,31 @@ Subcommand | Options | Description | Required
 ![Discord Slash Command players specific user Image](images/slash_commands/players_specific_user.png)
 
 
+## **/recycle**
+
+> **Display the output of recycling an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to recycle. | `False`
+&nbsp; | `id` | The id of the item to recycle. | `False`
+&nbsp; | `quantity` | The quantity of items to recycle. | `False`
+
+![Discord Slash Command recycle Image](images/slash_commands/recycle.png)
+
+
+## **/research**
+
+> **Display the cost to research an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to research. | `False`
+&nbsp; | `id` | The id of the item to research. | `False`
+
+![Discord Slash Command research Image](images/slash_commands/research.png)
+
+
 ## **/reset**
 
 > **Reset Discord channels.**
@@ -256,6 +297,7 @@ In-Game Command | Description
 [**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, time since last on map).
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
 [**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
+[**craft**](commands.md#craft-ingame) | Display the cost to craft an item.
 [**death/deaths**](commands.md#deathdeaths) | Get recent death events.
 [**decay**](commands.md#decay) | Get time before structure decay.
 [**events**](commands.md#events) | Get recent events.
@@ -271,6 +313,8 @@ In-Game Command | Description
 [**player/players**](commands.md#playerplayers) | Get the names and playtime of the currently online players on the server (Based on Battlemetrics).
 [**pop**](commands.md#pop) | Get the current population of the server including queue size and max population.
 [**prox**](commands.md#prox) | Get the distance to the three closest teammates.
+[**recycle**](commands.md#recycle-ingame) | Display the output of recycling an item.
+[**research**](commands.md#research-ingame) | Display the cost to research an item.
 [**send**](commands.md#send) | Send a message to a discord user.
 [**small**](commands.md#small) | Get information about Small Oil Rig (Time till crate unlocks, time since last trigger).
 [**steamid**](commands.md#steamid) | Get the steamid of a teammate.
@@ -327,6 +371,16 @@ In-Game Command | Description
 <br>Command: `!connection Alle`
 
 ![In-Game Command connection Image](images/ingame_commands/connection_ingame.png)
+
+
+## **craft ingame**
+
+> **Display the cost to craft an item (Quantity is optional).**
+<br>Command: `!craft <item-name> <quantity>`
+<br>Command: `!craft Assault Rifle 10`
+<br>Command: `!craft rocket 100`
+
+![In-Game Command craft Image](images/ingame_commands/craft_ingame.png)
 
 
 ## **death/deaths**
@@ -476,6 +530,26 @@ Subcommand | Description | Required
 > **Get the distance to the three closest teammates.** To get the three closest teammates run `!prox`. To get the distance to a team member run `!prox <name or part of name>`.
 
 ![In-Game Command prox Image](images/ingame_commands/prox_ingame.png)
+
+
+## **recycle ingame**
+
+> **Display the output of recycling an item (Quantity is optional).**
+<br>Command: `!recycle <item-name> <quantity>`
+<br>Command: `!recycle Assault Rifle 10`
+<br>Command: `!recycle rocket 100`
+
+![In-Game Command recycle Image](images/ingame_commands/recycle_ingame.png)
+
+
+## **research ingame**
+
+> **Display the cost to research an item.**
+<br>Command: `!research <item-name>`
+<br>Command: `!research Assault Rifle`
+<br>Command: `!research rocket`
+
+![In-Game Command research Image](images/ingame_commands/research_ingame.png)
 
 
 ## **send**

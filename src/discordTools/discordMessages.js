@@ -465,6 +465,22 @@ module.exports = {
         }
     },
 
+    sendUpdateBattlemetricsOnlinePlayersInformationMessage: async function (rustplus, battlemetricsId) {
+        const instance = Client.client.getInstance(rustplus.guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getUpdateBattlemetricsOnlinePlayersInformationEmbed(rustplus, battlemetricsId)]
+        }
+
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
+            instance.informationMessageId.battlemetricsPlayers, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.battlemetricsPlayers) {
+            instance.informationMessageId.battlemetricsPlayers = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
+    },
+
     sendDiscordCommandResponseMessage: async function (rustplus, client, message, response) {
         const content = {
             embeds: [DiscordEmbeds.getDiscordCommandResponseEmbed(rustplus, response)]
@@ -525,6 +541,33 @@ module.exports = {
     sendVoiceMessage: async function (interaction, state) {
         const content = {
             embeds: [DiscordEmbeds.getVoiceEmbed(interaction.guildId, state)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
+
+    sendCraftMessage: async function (interaction, craftDetails, quantity) {
+        const content = {
+            embeds: [DiscordEmbeds.getCraftEmbed(interaction.guildId, craftDetails, quantity)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
+
+    sendResearchMessage: async function (interaction, researchDetails) {
+        const content = {
+            embeds: [DiscordEmbeds.getResearchEmbed(interaction.guildId, researchDetails)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
+
+    sendRecycleMessage: async function (interaction, recycleDetails, quantity) {
+        const content = {
+            embeds: [DiscordEmbeds.getRecycleEmbed(interaction.guildId, recycleDetails, quantity)],
             ephemeral: true
         }
 
