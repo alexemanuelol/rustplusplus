@@ -122,7 +122,7 @@ There are a few buttons for each server. The `CONNECT` button lets you start a c
 
 ## Activity Channel
 
-> The Activity Channel is used to display a bunch of different things such as team member joined/ left/ connected/ disconnected/ killed/ offline killed, Not found notifications from Smart Devices, Smart Alarm notifications, Decaying notifications, Tracker information, Server went down/up notifications, facepunch news etc...
+> The Activity Channel is used to display a bunch of different things such as team member joined/ left/ connected/ disconnected/ killed/ offline killed, Not found notifications from Smart Devices, Smart Alarm notifications, Decaying notifications, Tracker information, Server went down/up notifications, facepunch news, Battlemetrics notifications etc...
 
 ![Discord Text Channel Activity](images/channels/activity_channel.png)
 

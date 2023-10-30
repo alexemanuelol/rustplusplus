@@ -59,6 +59,8 @@ class Battlemetrics {
         this._onlinePlayers = [];       /* Players that are online, updates every evaluation call. (id) */
         this._offlinePlayers = [];      /* Player that are offline, updates every evaluation call. (id) */
 
+        this._serverEvaluation = new Object();
+
         /* Init API parameter variables */
 
         this.server_name = null;
@@ -149,6 +151,8 @@ class Battlemetrics {
     set onlinePlayers(onlinePlayers) { this._onlinePlayers = onlinePlayers; }
     get offlinePlayers() { return this._offlinePlayers; }
     set offlinePlayers(offlinePlayers) { this._offlinePlayers = offlinePlayers; }
+    get serverEvaluation() { return this._serverEvaluation; }
+    set serverEvaluation(serverEvaluation) { this._serverEvaluation = serverEvaluation; }
 
     /**
      *  Construct the Battlemetrics API call for searching servers by name.

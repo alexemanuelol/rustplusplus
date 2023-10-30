@@ -573,4 +573,14 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
+
+    sendBattlemetricsEventMessage: async function (guildId, battlemetricsId, title, description, fields = null) {
+        const instance = Client.client.getInstance(guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getBattlemetricsEventEmbed(guildId, battlemetricsId, title, description, fields)]
+        }
+
+        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+    },
 }

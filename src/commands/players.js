@@ -329,7 +329,7 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 	totalCharacters += client.intlGet(interaction.guildId, 'andMorePlayers', { number: 100 }).length;
 	totalCharacters += `${client.intlGet(interaction.guildId, 'players')}`.length;
 
-	let fields = [''];
+	const fields = [''];
 	let fieldIndex = 0;
 	let isEmbedFull = false;
 	let playerCounter = 0;
