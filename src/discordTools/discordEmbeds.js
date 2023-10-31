@@ -1166,4 +1166,33 @@ module.exports = {
                 { name: '\u200B', value: quantities1, inline: true }]
         });
     },
+
+    getBattlemetricsEventEmbed: function (guildId, battlemetricsId, title, description, fields = null) {
+        const instance = Client.client.getInstance(guildId);
+        const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
+
+        const serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
+
+        let thumbnail = '';
+        if (instance.serverList.hasOwnProperty(serverId)) {
+            thumbnail = instance.serverList[serverId].img
+        }
+        const embed = module.exports.getEmbed({
+            title: title,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            thumbnail: thumbnail,
+            footer: { text: bmInstance.server_name }
+        });
+
+        if (fields !== null) {
+            embed.addFields(fields);
+        }
+
+        if (description !== '') {
+            embed.setDescription(description);
+        }
+
+        return embed;
+    },
 }

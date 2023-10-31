@@ -531,4 +531,37 @@ module.exports = {
                 style: enabled ? SUCCESS : DANGER
             }));
     },
+
+    getSubscribeToChangesBattlemetricsButtons: function (guildId) {
+        const instance = Client.client.getInstance(guildId);
+
+        return [
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: 'BattlemetricsServerNameChanges',
+                    label: Client.client.intlGet(guildId, 'battlemetricsServerNameChangesCap'),
+                    style: instance.generalSettings.battlemetricsServerNameChanges ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'BattlemetricsTrackerNameChanges',
+                    label: Client.client.intlGet(guildId, 'battlemetricsTrackerNameChangesCap'),
+                    style: instance.generalSettings.battlemetricsTrackerNameChanges ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'BattlemetricsGlobalNameChanges',
+                    label: Client.client.intlGet(guildId, 'battlemetricsGlobalNameChangesCap'),
+                    style: instance.generalSettings.battlemetricsGlobalNameChanges ? SUCCESS : DANGER
+                })),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: 'BattlemetricsGlobalLogin',
+                    label: Client.client.intlGet(guildId, 'battlemetricsGlobalLoginCap'),
+                    style: instance.generalSettings.battlemetricsGlobalLogin ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'BattlemetricsGlobalLogout',
+                    label: Client.client.intlGet(guildId, 'battlemetricsGlobalLogoutCap'),
+                    style: instance.generalSettings.battlemetricsGlobalLogout ? SUCCESS : DANGER
+                }))];
+    },
 }
