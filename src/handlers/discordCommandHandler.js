@@ -20,6 +20,7 @@
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools');
+const DiscordVoice = require('../discordTools/discordVoice');
 
 module.exports = {
     discordCommandHandler: async function (rustplus, client, message) {
@@ -30,7 +31,10 @@ module.exports = {
         const guildId = rustplus.guildId;
 
         let response = null;
-        if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxAfk')}` ||
+        if (commandLowerCase === '.test') {
+            DiscordVoice.sendDiscordVoiceMessage(guildId, 'This is a test');
+        }
+        else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxAfk')}` ||
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxAfk')}`) {
             response = rustplus.getCommandAfk();
         }
