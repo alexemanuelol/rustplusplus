@@ -23,11 +23,17 @@ const DiscordTools = require('../discordTools/discordTools');
 
 module.exports = {
     discordCommandHandler: async function (rustplus, client, message) {
-        const command = message.cleanContent;
+        const guildId = rustplus.guildId;
+        const instance = client.getInstance(guildId);
+
+        let command = message.cleanContent;
+        for (const alias of instance.aliases) {
+            command = command.replace(alias.alias, alias.value);
+        }
+
         const callerName = message.author.username;
         const commandLowerCase = command.toLowerCase();
         const prefix = rustplus.generalSettings.prefix;
-        const guildId = rustplus.guildId;
 
         let response = null;
         if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxAfk')}` ||

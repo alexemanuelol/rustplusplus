@@ -2,6 +2,7 @@
 
 ## Discord Slash Commands
 - **/alarm** - Change image of paired Smart Alarms.
+- **/alias** - Create an alias for a command/sequence of characters.
 - **/blacklist** - Blacklist a user from using the bot.
 - **/cctv** - Get cctv camera codes for monuments.
 - **/craft** - Display the cost to craft an item.

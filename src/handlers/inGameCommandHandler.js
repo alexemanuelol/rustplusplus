@@ -24,13 +24,18 @@ const SmartSwitchHandler = require('./smartSwitchHandler.js');
 
 module.exports = {
     inGameCommandHandler: async function (rustplus, client, message) {
-        const command = message.broadcast.teamMessage.message.message;
+        const guildId = rustplus.guildId;
+        const instance = client.getInstance(guildId);
+
+        let command = message.broadcast.teamMessage.message.message;
+        for (const alias of instance.aliases) {
+            command = command.replace(alias.alias, alias.value);
+        }
+
         const callerSteamId = message.broadcast.teamMessage.message.steamId.toString();
         const callerName = message.broadcast.teamMessage.message.name;
-        const commandLowerCase = message.broadcast.teamMessage.message.message.toLowerCase();
+        const commandLowerCase = command.toLowerCase();
         const prefix = rustplus.generalSettings.prefix;
-        const guildId = rustplus.guildId;
-
 
         if (!rustplus.isOperational) {
             return false;

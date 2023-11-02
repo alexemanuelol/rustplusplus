@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -59,7 +60,7 @@ module.exports = {
 					name: researchItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+				client.log(client.intlGet(guildId, 'warningCap'), str);
 				return;
 			}
 			else {
@@ -75,25 +76,25 @@ module.exports = {
 					id: researchItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+				client.log(client.intlGet(guildId, 'warningCap'), str);
 				return;
 			}
 		}
 		else if (researchItemName === null && researchItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+			client.log(client.intlGet(guildId, 'warningCap'), str);
 			return;
 		}
 		const itemName = client.items.getName(itemId);
 
 		const researchDetails = client.rustlabs.getResearchDetailsById(itemId);
 		if (researchDetails === null) {
-			const str = client.intlGet(guildId, 'couldNotFindCraftDetails', {
+			const str = client.intlGet(guildId, 'couldNotFindResearchDetails', {
 				name: itemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+			client.log(client.intlGet(guildId, 'warningCap'), str);
 			return;
 		}
 

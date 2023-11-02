@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -64,7 +65,7 @@ module.exports = {
 					name: recycleItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+				client.log(client.intlGet(guildId, 'warningCap'), str);
 				return;
 			}
 			else {
@@ -80,14 +81,14 @@ module.exports = {
 					id: recycleItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+				client.log(client.intlGet(guildId, 'warningCap'), str);
 				return;
 			}
 		}
 		else if (recycleItemName === null && recycleItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+			client.log(client.intlGet(guildId, 'warningCap'), str);
 			return;
 		}
 		const itemName = client.items.getName(itemId);
@@ -98,7 +99,7 @@ module.exports = {
 				name: itemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			rustplus.log(client.intlGet(guildId, 'warningCap'), str);
+			client.log(client.intlGet(guildId, 'warningCap'), str);
 			return;
 		}
 

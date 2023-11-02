@@ -10,6 +10,7 @@
 Slash Command | Description
 ------------- | -----------
 [**/alarm**](commands.md#alarm) | Operations on Smart Alarms.
+[**/alias**](commands.md#alias) | Create an alias for a command/sequence of characters.
 [**/blacklist**](commands.md#blacklist) | Blacklist a user from using the bot.
 [**/cctv**](commands.md#cctv) | Posts CCTV codes for a monument.
 [**/craft**](commands.md#craft) | Display the cost to craft an item.
@@ -40,6 +41,22 @@ Subcommand | Options | Description | Required
 &nbsp; | `image` | Set the image that best represent the Smart Alarm. | `True`
 
 ![Discord Slash Command alarm Image](images/slash_commands/alarms_edit.png)
+
+
+## **/alias**
+
+> **Create an alias for a command/sequence of characters.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+`add` | &nbsp; | Add an alias. | &nbsp;
+&nbsp; | `alias` | The alias to use. | `True`
+&nbsp; | `value` | The command/sequence of characters. | `True`
+`remove` | &nbsp; | Remove an alias. | &nbsp;
+&nbsp; | `index` | The index of the alias to remove. | `True`
+`show` | &nbsp; | Show all registered aliases. | &nbsp;
+
+![Discord Slash Command alias Image](images/slash_commands/alias.png)
 
 
 ## **/blacklist**
