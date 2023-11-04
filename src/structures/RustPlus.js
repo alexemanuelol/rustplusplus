@@ -30,6 +30,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordVoice = require('../discordTools/discordVoice.js');
 const DiscordTools = require('../discordTools/discordTools.js');
+const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const InstanceUtils = require('../util/instanceUtils.js');
 const Languages = require('../util/languages.js');
 const Logger = require('./Logger.js');
@@ -75,6 +76,10 @@ class RustPlus extends RustPlusLib {
         this.smartAlarmIntervalCounter = 20;        /* Counter to decide when smart alarms should be updated */
         this.interactionSwitches = [];              /* Stores the ids of smart switches that are interacted in-game. */
 
+        /* Chat handler variables */
+        this.inGameChatQueue = [];
+        this.inGameChatTimeout = null;
+
         /* Stores found vending machine items that are subscribed to */
         this.foundSubscriptionItems = { all: [], buy: [], sell: [] };
 
@@ -102,26 +107,6 @@ class RustPlus extends RustPlusLib {
         this.time = null;           /* Stores the Time structure. */
         this.team = null;           /* Stores the Team structure. */
         this.mapMarkers = null;     /* Stores the MapMarkers structure. */
-
-        /* Retrieve the trademark string */
-        const instance = Client.client.getInstance(guildId);
-        const trademark = instance.generalSettings.trademark;
-        this.trademarkString = (trademark === 'NOT SHOWING') ? '' : `${trademark} | `;
-
-        /* Modify sendTeamMessageAsync function to allow trademark and splitting messages. */
-        this.oldSendTeamMessageAsync = this.sendTeamMessageAsync;
-        this.sendTeamMessageAsync = async function (message) {
-            const messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - this.trademarkString.length;
-            const strings = message.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
-
-            if (this.team === null || this.team.allOffline) return;
-
-            for (const msg of strings) {
-                if (!this.generalSettings.muteInGameBotMessages) {
-                    await this.oldSendTeamMessageAsync(`${this.trademarkString}${msg}`);
-                }
-            }
-        }
 
         this.loadRustPlusEvents();
     }
@@ -278,41 +263,8 @@ class RustPlus extends RustPlusLib {
         this.log(Client.client.intlGet(null, 'infoCap'), Client.client.intlGet(null, `logInGameCommand`, args));
     }
 
-    async printCommandOutput(str, type = 'COMMAND') {
-        if (str === null) return;
-
-        if (this.generalSettings.commandDelay === '0') {
-            if (Array.isArray(str)) {
-                for (const string of str) {
-                    await this.sendTeamMessageAsync(string);
-                }
-            }
-            else {
-                await this.sendTeamMessageAsync(str);
-            }
-        }
-        else {
-            const self = this;
-            setTimeout(function () {
-                if (Array.isArray(str)) {
-                    for (const string of str) {
-                        self.sendTeamMessageAsync(string);
-                    }
-                }
-                else {
-                    self.sendTeamMessageAsync(str);
-                }
-            }, parseInt(this.generalSettings.commandDelay) * 1000)
-
-        }
-        if (Array.isArray(str)) {
-            for (const string of str) {
-                this.log(type, string);
-            }
-        }
-        else {
-            this.log(type, str);
-        }
+    sendInGameMessage(message) {
+        InGameChatHandler.inGameChatHandler(this, Client.client, message);
     }
 
     async sendEvent(setting, text, event, embed_color, firstPoll = false, image = null) {
@@ -324,7 +276,7 @@ class RustPlus extends RustPlusLib {
             await DiscordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, img, embed_color);
         }
         if (!firstPoll && setting.inGame) {
-            await this.sendTeamMessageAsync(`${text}`);
+            await this.sendInGameMessage(`${text}`);
         }
         if (!firstPoll && setting.voice) {
             await DiscordVoice.sendDiscordVoiceMessage(this.guildId, text);
@@ -2395,7 +2347,7 @@ class RustPlus extends RustPlusLib {
                 this.timers[id] = {
                     timer: new Timer.timer(
                         () => {
-                            this.printCommandOutput(Client.client.intlGet(this.guildId, 'timer',
+                            this.sendInGameMessage(Client.client.intlGet(this.guildId, 'timer',
                                 { message: message }), 'TIMER');
                             delete this.timers[id]
                         },

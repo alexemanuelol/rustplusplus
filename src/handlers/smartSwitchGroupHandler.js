@@ -149,7 +149,7 @@ module.exports = {
             });
             const statusMessage = switchStatus.map(status =>
                 `${status.name}: ${status.reachable ? (status.active ? onCap : offCap) : notFoundCap}`).join(', ');
-            rustplus.printCommandOutput(`${client.intlGet(guildId, 'status')}: ${statusMessage}`);
+            rustplus.sendInGameMessage(`${client.intlGet(guildId, 'status')}: ${statusMessage}`);
             return true;
         }
         else {
@@ -173,7 +173,7 @@ module.exports = {
         }));
 
         if (timeSeconds === null) {
-            rustplus.printCommandOutput(str);
+            rustplus.sendInGameMessage(str);
             await module.exports.TurnOnOffGroup(client, rustplus, guildId, serverId, groupId, active);
             return true;
         }
@@ -195,12 +195,12 @@ module.exports = {
                 device: instance.serverList[serverId].switchGroups[groupId].name,
                 status: !active ? onCap : offCap
             });
-            rustplus.printCommandOutput(str);
+            rustplus.sendInGameMessage(str);
 
             await module.exports.TurnOnOffGroup(client, rustplus, guildId, serverId, groupId, !active);
         }, timeSeconds * 1000);
 
-        rustplus.printCommandOutput(str);
+        rustplus.sendInGameMessage(str);
         await module.exports.TurnOnOffGroup(client, rustplus, guildId, serverId, groupId, active);
         return true;
     },

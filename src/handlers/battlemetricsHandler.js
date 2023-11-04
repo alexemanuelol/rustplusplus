@@ -124,7 +124,7 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
-                            rustplus.sendTeamMessageAsync(str);
+                            rustplus.sendInGameMessage(str);
                         }
                     }
                 }
@@ -141,7 +141,7 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
-                            rustplus.sendTeamMessageAsync(str);
+                            rustplus.sendInGameMessage(str);
                         }
                     }
                 }
@@ -159,7 +159,7 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
-                            rustplus.sendTeamMessageAsync(str);
+                            rustplus.sendInGameMessage(str);
                         }
                     }
                 }

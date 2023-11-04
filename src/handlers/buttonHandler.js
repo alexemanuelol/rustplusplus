@@ -697,7 +697,7 @@ module.exports = async (client, interaction) => {
                 status: status
             });
 
-            await rustplus.sendTeamMessageAsync(str);
+            await rustplus.sendInGameMessage(str);
         }
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
@@ -969,7 +969,7 @@ module.exports = async (client, interaction) => {
                         status: status
                     });
 
-                    await rustplus.sendTeamMessageAsync(str);
+                    await rustplus.sendInGameMessage(str);
                 }
 
                 client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {

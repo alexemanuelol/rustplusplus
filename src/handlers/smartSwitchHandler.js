@@ -407,13 +407,13 @@ module.exports = {
                 DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
                 SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(client, guildId, serverId, entityId);
 
-                rustplus.printCommandOutput(client.intlGet(guildId, 'noCommunicationSmartSwitch', {
+                rustplus.sendInGameMessage(client.intlGet(guildId, 'noCommunicationSmartSwitch', {
                     name: switches[entityId].name
                 }));
                 return true;
             }
 
-            rustplus.printCommandOutput(client.intlGet(guildId, 'deviceIsCurrentlyOnOff', {
+            rustplus.sendInGameMessage(client.intlGet(guildId, 'deviceIsCurrentlyOnOff', {
                 device: switches[entityId].name,
                 status: info.entityInfo.payload.value ? onCap : offCap
             }));
@@ -447,7 +447,7 @@ module.exports = {
         });
 
         if (timeSeconds === null) {
-            rustplus.printCommandOutput(str);
+            rustplus.sendInGameMessage(str);
             return true;
         }
 
@@ -468,10 +468,10 @@ module.exports = {
                 status: !active ? onCap : offCap
             });
 
-            rustplus.printCommandOutput(str);
+            rustplus.sendInGameMessage(str);
         }, timeSeconds * 1000);
 
-        rustplus.printCommandOutput(str);
+        rustplus.sendInGameMessage(str);
         return true;
     },
 
@@ -489,7 +489,7 @@ module.exports = {
 
         const response = await rustplus.turnSmartSwitchAsync(entityId, active);
         if (!(await rustplus.isResponseValid(response))) {
-            rustplus.printCommandOutput(client.intlGet(guildId, 'noCommunicationSmartSwitch', {
+            rustplus.sendInGameMessage(client.intlGet(guildId, 'noCommunicationSmartSwitch', {
                 name: switches[entityId].name
             }));
             if (switches[entityId].reachable) {

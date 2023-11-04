@@ -54,7 +54,7 @@ module.exports = {
                 user: `${message.author.username} (${message.author.id})`,
                 message: message.cleanContent
             }));
-            await rustplus.sendTeamMessageAsync(`${message.author.username}: ${message.cleanContent}`);
+            await rustplus.sendInGameMessage(`${message.author.username}: ${message.cleanContent}`);
         }
     },
 }
