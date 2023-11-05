@@ -23,6 +23,7 @@ const Fs = require('fs');
 const Path = require('path');
 
 const Client = require('../../index.ts');
+const Constants = require('../util/constants.js');
 const Languages = require('../util/languages.js');
 
 module.exports = {
@@ -31,7 +32,12 @@ module.exports = {
 
         if (options.hasOwnProperty('customId')) selectMenu.setCustomId(options.customId);
         if (options.hasOwnProperty('placeholder')) selectMenu.setPlaceholder(options.placeholder);
-        if (options.hasOwnProperty('options')) selectMenu.setOptions(options.options);
+        if (options.hasOwnProperty('options')) {
+            for (const option of options.options) {
+                option.description = option.description.substring(0, Constants.SELECT_MENU_MAX_DESCRIPTION_CHARACTERS);
+            }
+            selectMenu.setOptions(options.options);
+        }
         if (options.hasOwnProperty('disabled')) selectMenu.setDisabled(options.disabled);
 
         return selectMenu;
