@@ -66,7 +66,8 @@ module.exports = (client, guild) => {
             blacklist: {
                 discordIds: [],
                 steamIds: []
-            }
+            },
+            aliases: []
         };
     }
     else {
@@ -183,6 +184,7 @@ module.exports = (client, guild) => {
         }
         if (!instance.blacklist.hasOwnProperty('discordIds')) instance.blacklist['discordIds'] = [];
         if (!instance.blacklist.hasOwnProperty('steamIds')) instance.blacklist['steamIds'] = [];
+        if (!instance.hasOwnProperty('aliases')) instance.aliases = [];
 
         for (const serverId of Object.keys(instance.serverList)) {
             if (!Object.keys(instance.serverListLite).includes(serverId)) {

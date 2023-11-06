@@ -189,6 +189,11 @@
         "name": "Kayak",
         "description": "An improvised wooden kayak. Seats two and requires a Paddle to operate."
     },
+    "192249897": {
+        "shortname": "rockingchair.rockingchair3",
+        "name": "Green",
+        "description": ""
+    },
     "196700171": {
         "shortname": "attire.hide.vest",
         "name": "Hide Vest",
@@ -214,6 +219,11 @@
         "name": "Wrapped Gift",
         "description": "A lazily wrapped gift."
     },
+    "209218760": {
+        "shortname": "head.bag",
+        "name": "Head Bag",
+        "description": "A sack containing the head of a defeated foe. Can be added to trophies."
+    },
     "215754713": {
         "shortname": "arrow.bone",
         "name": "Bone Arrow",
@@ -238,6 +248,16 @@
         "shortname": "gunrack_tall.horizontal",
         "name": "Tall Weapon Rack",
         "description": "Artfully display your arsenal with a handcrafted wall-mounted weapon rack."
+    },
+    "242421166": {
+        "shortname": "lightup.large",
+        "name": "Light-Up Frame Large",
+        "description": "A large light up frame"
+    },
+    "242933621": {
+        "shortname": "frontiermirror.large",
+        "name": "Frontier Mirror Large",
+        "description": "A large wooden frontier themed mirror"
     },
     "254522515": {
         "shortname": "largemedkit",
@@ -299,6 +319,11 @@
         "name": "Diving Fins",
         "description": "Diving Fins which greatly increase underwater movement"
     },
+    "301063058": {
+        "shortname": "wantedposter.wantedposter2",
+        "name": "Wanted Poster 2",
+        "description": "A poster that can be display a given player's face as wanted."
+    },
     "304481038": {
         "shortname": "flare",
         "name": "Flare",
@@ -308,6 +333,11 @@
         "shortname": "metal.refined",
         "name": "High Quality Metal",
         "description": "High quality metal suitable for armor and weapons construction."
+    },
+    "340210699": {
+        "shortname": "frontiermirror.small",
+        "name": "Frontier Mirror Small",
+        "description": "A small wooden frontier themed mirror"
     },
     "342438846": {
         "shortname": "fish.anchovy",
@@ -373,6 +403,16 @@
         "shortname": "fluid.switch",
         "name": "Fluid Switch & Pump",
         "description": "A simple switch that enables fluid to pass through. Can be switched on/off manually or via electricity. Can also pump water upwards to higher entities when powered."
+    },
+    "446206234": {
+        "shortname": "torchholder",
+        "name": "Torch Holder",
+        "description": "A wall mounted holder for torches."
+    },
+    "450531685": {
+        "shortname": "lightupmirror.large",
+        "name": "Light-Up Mirror Large",
+        "description": "A large light-up mirror"
     },
     "476066818": {
         "shortname": "cassette",
@@ -509,6 +549,11 @@
         "name": "Bota Bag",
         "description": "A canteen used to carry Water. Left click to drink, right click to fill from water sources, or to pour out."
     },
+    "615112838": {
+        "shortname": "rail.road.planter",
+        "name": "Rail Road Planter",
+        "description": "A large planter with enough room to plant 9 seeds."
+    },
     "621915341": {
         "shortname": "meat.boar",
         "name": "Raw Pork",
@@ -594,6 +639,11 @@
         "name": "Water Gun",
         "description": "A large water gun with pumpable pressure. Hold reload to pump!"
     },
+    "723407026": {
+        "shortname": "woodmirror.standing",
+        "name": "Wood Mirror Standing",
+        "description": "A standing wooden mirror"
+    },
     "742745918": {
         "shortname": "industrial.splitter",
         "name": "Industrial Splitter",
@@ -603,6 +653,11 @@
         "shortname": "bottle.vodka",
         "name": "Vodka Bottle",
         "description": "A bottle of Russian Vodka."
+    },
+    "756125481": {
+        "shortname": "woodmirror.medium",
+        "name": "Wood Mirror Medium",
+        "description": "A medium wood mirror"
     },
     "756517185": {
         "shortname": "xmas.present.medium",
@@ -719,6 +774,11 @@
         "name": "Blue Berry Clone",
         "description": "A clipping of a Blue Berry Plant."
     },
+    "839738457": {
+        "shortname": "scrapmirror.medium",
+        "name": "Scrap Mirror Medium",
+        "description": "A medium scrap mirror"
+    },
     "844440409": {
         "shortname": "easter.bronzeegg",
         "name": "Bronze Egg",
@@ -809,6 +869,11 @@
         "name": "Weapon flashlight",
         "description": "Attaches to a weapon. Provides user with a beam of light. Pressing F (default) to toggle light."
     },
+    "960673498": {
+        "shortname": "huntingtrophylarge",
+        "name": "Large Hunting Trophy",
+        "description": "A large trophy stand to mount the head of killed animals or enemies."
+    },
     "963906841": {
         "shortname": "rock",
         "name": "Rock",
@@ -873,6 +938,11 @@
         "shortname": "submarineduo",
         "name": "Duo Submarine",
         "description": "A small two-person submarine."
+    },
+    "1028889957": {
+        "shortname": "lightupmirror.medium",
+        "name": "Light-Up Mirror Medium",
+        "description": "A medium light-up mirror"
     },
     "1036321299": {
         "shortname": "bluedogtags",
@@ -1164,6 +1234,16 @@
         "name": "Small Neon Sign",
         "description": "A small neon sign!"
     },
+    "1307626005": {
+        "shortname": "storage_barrel_b",
+        "name": "Storage Barrel Vertical",
+        "description": "Keep your things in this wooden barrel. Stores up to 48 items. Cannot be locked."
+    },
+    "1312679249": {
+        "shortname": "woodmirror.large",
+        "name": "Wood Mirror Large",
+        "description": "A large wooden mirror"
+    },
     "1312843609": {
         "shortname": "skull",
         "name": "Skull",
@@ -1219,10 +1299,20 @@
         "name": "Snow Machine",
         "description": "A machine which will blanket the surrounding terrain in snow."
     },
+    "1361520181": {
+        "shortname": "minecart.planter",
+        "name": "Minecart Planter",
+        "description": "A small planter with enough room to plant 2 seeds."
+    },
     "1364514421": {
         "shortname": "blueidtag",
         "name": "Blue ID Tag",
         "description": "Blue ID Tag"
+    },
+    "1365234594": {
+        "shortname": "goldmirror.large",
+        "name": "Gold Mirror large",
+        "description": "A large gold mirror"
     },
     "1366282552": {
         "shortname": "burlap.gloves",
@@ -1343,6 +1433,11 @@
         "shortname": "wall.frame.fence.gate",
         "name": "Chainlink Fence Gate",
         "description": "A Chainlink Fence Gate."
+    },
+    "1463862472": {
+        "shortname": "wantedposter.wantedposter4",
+        "name": "Wanted Poster 4",
+        "description": "A poster that can be display a given player's face as wanted."
     },
     "1478091698": {
         "shortname": "weapon.mod.muzzlebrake",
@@ -1599,6 +1694,11 @@
         "name": "Decorative Gingerbread Men",
         "description": "Decorative Gingerbread Men you can hang on your Christmas tree"
     },
+    "1691223771": {
+        "shortname": "lightupframe.small",
+        "name": "Light-Up Frame Small",
+        "description": "A small light-up frame"
+    },
     "1696050067": {
         "shortname": "modularcarlift",
         "name": "Modular Car Lift",
@@ -1684,6 +1784,11 @@
         "name": "Silver Egg",
         "description": "A Silver Egg. Contains medium level loot, Collect 10 to upgrade to a gold Egg"
     },
+    "1758333838": {
+        "shortname": "rockingchair.rockingchair2",
+        "name": "Teal",
+        "description": ""
+    },
     "1762167092": {
         "shortname": "greenidtag",
         "name": "Green ID Tag",
@@ -1693,6 +1798,11 @@
         "shortname": "snowmobiletomaha",
         "name": "Tomaha Snowmobile",
         "description": "An old snowmobile from around 1980."
+    },
+    "1769475390": {
+        "shortname": "woodframe.standing",
+        "name": "Wood Frame Standing",
+        "description": "A standing wooden frame"
     },
     "1770475779": {
         "shortname": "worm",
@@ -1728,6 +1838,11 @@
         "shortname": "fun.tuba",
         "name": "Sousaphone",
         "description": "A collection of used piping that’s been converted into a Tuba. Probably not very hygienic."
+    },
+    "1787198294": {
+        "shortname": "frontiermirror.standing",
+        "name": "Frontier Mirror Standing",
+        "description": "A standing wooden frontier themed mirror"
     },
     "1789825282": {
         "shortname": "candycaneclub",
@@ -1879,6 +1994,11 @@
         "name": "Prototype 17",
         "description": "A burst fire prototype pistol"
     },
+    "1916016738": {
+        "shortname": "lightupmirror.standing",
+        "name": "Light-Up Mirror Standing",
+        "description": "A standing light-up mirror"
+    },
     "1917703890": {
         "shortname": "horsemeat.burned",
         "name": "Burnt Horse Meat",
@@ -1898,6 +2018,11 @@
         "shortname": "floor.ladder.hatch",
         "name": "Ladder Hatch",
         "description": "A hatch that opens and changes into a ladder."
+    },
+    "1950013766": {
+        "shortname": "lightupframe.standing",
+        "name": "Light-Up Frame Standing",
+        "description": "A standing light-up frame"
     },
     "1950721418": {
         "shortname": "shelves",
@@ -1928,6 +2053,11 @@
         "shortname": "chicken.burned",
         "name": "Burnt Chicken",
         "description": "Burned chicken. Eating it will damage your health."
+    },
+    "1973949960": {
+        "shortname": "gunrack.single.1.horizontal",
+        "name": "Frontier Bolts Single Item Rack",
+        "description": "Artfully display your weapon with a handcrafted wall-mounted single weapon rack."
     },
     "1975934948": {
         "shortname": "surveycharge",
@@ -2004,6 +2134,11 @@
         "name": "Factory Door",
         "description": "Medium strength door, vulnerable to explosives. Contains a bulletproof viewing portal"
     },
+    "2055695285": {
+        "shortname": "frontiermirror.medium",
+        "name": "Frontier Mirror Medium",
+        "description": "A medium wood frontier themed mirror"
+    },
     "2063916636": {
         "shortname": "oretea.advanced",
         "name": "Advanced Ore Tea",
@@ -2043,6 +2178,11 @@
         "shortname": "water.purifier",
         "name": "Water Purifier",
         "description": "A Water Purifier. Place overtop of a campfire. Will provide clean, drinkable water from salty, or stagnant water."
+    },
+    "2120241887": {
+        "shortname": "goldmirror.standing",
+        "name": "Gold Mirror Standing",
+        "description": "A standing gold mirror"
     },
     "2126889441": {
         "shortname": "santabeard",
@@ -2198,6 +2338,11 @@
         "shortname": "barricade.sandbags",
         "name": "Sandbag Barricade",
         "description": "A protective barricade made out of Sand Bags."
+    },
+    "-1274093662": {
+        "shortname": "bathtub.planter",
+        "name": "Bath Tub Planter",
+        "description": "A small planter with enough room to plant 3 seeds."
     },
     "-321431890": {
         "shortname": "beachchair",
@@ -2398,6 +2543,11 @@
         "shortname": "diving.wetsuit",
         "name": "Wetsuit",
         "description": "A Wetsuit providing protection from frigid waters."
+    },
+    "-1151332840": {
+        "shortname": "door.double.hinged.bardoors",
+        "name": "Wooden Frontier Bar Doors",
+        "description": "Hand-carved, rugged bar doors embody the spirit of the frontier. A must-have for any survivor."
     },
     "-1336109173": {
         "shortname": "door.double.hinged.wood",
@@ -2679,6 +2829,11 @@
         "name": "Fishing Tackle",
         "description": "Fishing Tackle"
     },
+    "-1913996738": {
+        "shortname": "fishtrophy",
+        "name": "Fish Trophy",
+        "description": "A wall mountable item to show off your greatest catches. Fish not included."
+    },
     "-1215753368": {
         "shortname": "flamethrower",
         "name": "Flame Thrower",
@@ -2819,6 +2974,36 @@
         "name": "Glue",
         "description": "A strong adhesive."
     },
+    "-996235148": {
+        "shortname": "goldframe.large",
+        "name": "Gold Frame large",
+        "description": "A large gold frame"
+    },
+    "-1901993050": {
+        "shortname": "goldframe.medium",
+        "name": "Gold Frame Medium",
+        "description": "A medium gold frame"
+    },
+    "-1836526520": {
+        "shortname": "goldframe.small",
+        "name": "Gold Frame Small",
+        "description": "A small gold frame"
+    },
+    "-1528767189": {
+        "shortname": "goldframe.standing",
+        "name": "Gold Frame Standing",
+        "description": "A standing gold frame"
+    },
+    "-1804515496": {
+        "shortname": "goldmirror.medium",
+        "name": "Gold Mirror Medium",
+        "description": "A medium gold mirror"
+    },
+    "-1444650226": {
+        "shortname": "goldmirror.small",
+        "name": "Gold Mirror Small",
+        "description": "A small gold mirror"
+    },
     "-746030907": {
         "shortname": "granolabar",
         "name": "Granola Bar",
@@ -2848,6 +3033,16 @@
         "shortname": "gunrack.horizontal",
         "name": "Horizontal Weapon Rack",
         "description": "Artfully display your arsenal with a handcrafted wall-mounted weapon rack."
+    },
+    "-849373693": {
+        "shortname": "gunrack.single.2.horizontal",
+        "name": "Frontier Horseshoe Single Item Rack",
+        "description": "Artfully display your weapon with a handcrafted wall-mounted single weapon rack."
+    },
+    "-52398594": {
+        "shortname": "gunrack.single.3.horizontal",
+        "name": "Frontier Horns Single Item Rack",
+        "description": "Artfully display your weapon with a handcrafted wall-mounted single weapon rack."
     },
     "-96256997": {
         "shortname": "gunrack_wide.horizontal",
@@ -3024,6 +3219,11 @@
         "name": "Raw Human Meat",
         "description": "Raw human meat. Consuming will damage your health."
     },
+    "-869598982": {
+        "shortname": "huntingtrophysmall",
+        "name": "Small Hunting Trophy",
+        "description": "A trophy stand to mount the head of killed animals or enemies."
+    },
     "-1780802565": {
         "shortname": "icepick.salvaged",
         "name": "Salvaged Icepick",
@@ -3074,6 +3274,11 @@
         "name": "Butcher Knife",
         "description": "A sharp butcher knife. Extremely good at harvesting flesh from both dead or alive bodies."
     },
+    "-2073432256": {
+        "shortname": "knife.skinning",
+        "name": "Skinning Knife",
+        "description": "A sharp skinning knife. Extremely good at harvesting flesh and can produce trophies that can be mounted on Hunting Trophies."
+    },
     "-316250604": {
         "shortname": "ladder.wooden.wall",
         "name": "Wooden Ladder",
@@ -3083,6 +3288,16 @@
         "shortname": "largecandles",
         "name": "Large Candle Set",
         "description": "Large Candles"
+    },
+    "-1294739579": {
+        "shortname": "lightupframe.medium",
+        "name": "Light-Up Frame Medium",
+        "description": "A medium Light-up frame"
+    },
+    "-389796733": {
+        "shortname": "lightupmirror.small",
+        "name": "Light-Up Mirror Small",
+        "description": "A small light-up mirror"
     },
     "-2069578888": {
         "shortname": "lmg.m249",
@@ -3399,6 +3614,11 @@
         "name": "Road Sign Jacket",
         "description": "A shoddy piece of body armor made from roadsigns."
     },
+    "-1863063690": {
+        "shortname": "rockingchair",
+        "name": "Rocking Chair",
+        "description": "A rocking chair that responds to your input. Don't fire whilst seated."
+    },
     "-1104881824": {
         "shortname": "rug.bear",
         "name": "Rug Bear Skin",
@@ -3463,6 +3683,41 @@
         "shortname": "scrap",
         "name": "Scrap",
         "description": "Scrap can be used in a Research table and Workbench to unlock and research items. Often used as a currency throughout the world."
+    },
+    "-1094453063": {
+        "shortname": "scrapframe.large",
+        "name": "Scrap Frame large",
+        "description": "A large scrap frame"
+    },
+    "-1060567807": {
+        "shortname": "scrapframe.medium",
+        "name": "Scrap Frame Medium",
+        "description": "A medium scrap frame"
+    },
+    "-498301781": {
+        "shortname": "scrapframe.small",
+        "name": "Scrap Frame Small",
+        "description": "A small scrap frame"
+    },
+    "-1774190142": {
+        "shortname": "scrapframe.standing",
+        "name": "Scrap Frame Standing",
+        "description": "A standing scrap frame"
+    },
+    "-82758111": {
+        "shortname": "scrapmirror.large",
+        "name": "Scrap Mirror Large",
+        "description": "A large scrap mirror"
+    },
+    "-1050697733": {
+        "shortname": "scrapmirror.small",
+        "name": "Scrap Mirror Small",
+        "description": "A small scrap mirror"
+    },
+    "-1380144986": {
+        "shortname": "scrapmirror.standing",
+        "name": "Scrap Mirror Standing",
+        "description": "A standing scrap mirror"
     },
     "-1884328185": {
         "shortname": "scraptransportheli.repair",
@@ -3769,6 +4024,16 @@
         "name": "Storage Adaptor",
         "description": "Attach to a storage container to allow industrial input/output connections."
     },
+    "-258457936": {
+        "shortname": "storage_barrel_a",
+        "name": "Unused Storage Barrel Vertical",
+        "description": "Keep your things in this wooden storage box. Stores up to 48 items."
+    },
+    "-1421257350": {
+        "shortname": "storage_barrel_c",
+        "name": "Storage Barrel Horizontal",
+        "description": "Keep your things in this wooden barrel. Stores up to 48 items. Cannot be locked."
+    },
     "-1671551935": {
         "shortname": "submarine.torpedo.straight",
         "name": "Torpedo",
@@ -3868,6 +4133,11 @@
         "shortname": "twitch.headset",
         "name": "Headset",
         "description": "Every gamer needs a headset! - Gained from Rust's first Twitch drop event."
+    },
+    "-1683726934": {
+        "shortname": "twowaymirror.window",
+        "name": "Two-Way Mirror",
+        "description": "A Two-Way mirror"
     },
     "-1802083073": {
         "shortname": "valve3",
@@ -3969,11 +4239,6 @@
         "name": "Graveyard Fence",
         "description": "A Spooky Fence"
     },
-    "-81700958": {
-        "shortname": "wall.window.bars.brickskin",
-        "name": "Brick Skin Window Bars",
-        "description": "Metal window bars made to fit a brick skin sized window."
-    },
     "-819720157": {
         "shortname": "wall.window.bars.metal",
         "name": "Metal Window Bars",
@@ -3988,6 +4253,16 @@
         "shortname": "wall.window.glass.reinforced",
         "name": "Strengthened Glass Window",
         "description": "Bulletproof glass insert"
+    },
+    "-1344017968": {
+        "shortname": "wantedposter",
+        "name": "Wanted Poster",
+        "description": "A poster that can display a given player's face as wanted."
+    },
+    "-1265020883": {
+        "shortname": "wantedposter.wantedposter3",
+        "name": "Wanted Poster 3",
+        "description": "A poster that can be display a given player's face as wanted."
     },
     "-463122489": {
         "shortname": "watchtower.wood",
@@ -4021,8 +4296,8 @@
     },
     "-119235651": {
         "shortname": "waterjug",
-        "name": "Water Jug - Charitable Rust 2023",
-        "description": "A large YELLOW jerry can. To support Charitable Rust 2023 we have turned the jerry can yellow for charity water, learn more at:  https://www.charitablerust.com/"
+        "name": "Water Jug",
+        "description": "A large jerry can for water."
     },
     "-1284169891": {
         "shortname": "waterpump",
@@ -4078,6 +4353,26 @@
         "shortname": "wood",
         "name": "Wood",
         "description": "Wood. Collected from trees and used in many crafting recipes. It's also needed to cook in camp-fires."
+    },
+    "-635951327": {
+        "shortname": "woodframe.large",
+        "name": "Wood Frame Large",
+        "description": "A large wooden frame"
+    },
+    "-1541706279": {
+        "shortname": "woodframe.medium",
+        "name": "Wood Frame Medium",
+        "description": "A medium wooden frame"
+    },
+    "-1476278729": {
+        "shortname": "woodframe.small",
+        "name": "Wood Frame Small",
+        "description": "A small wooden frame"
+    },
+    "-1497205569": {
+        "shortname": "woodmirror.small",
+        "name": "Wood Mirror Small",
+        "description": "A small wooden mirror"
     },
     "-541206665": {
         "shortname": "woodtea.advanced",

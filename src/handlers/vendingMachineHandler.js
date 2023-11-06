@@ -91,7 +91,7 @@ module.exports = {
                     await DiscordMessages.sendItemAvailableInVendingMachineMessage(rustplus, str);
 
                     if (rustplus.generalSettings.itemAvailableInVendingMachineNotifyInGame) {
-                        rustplus.sendTeamMessageAsync(str);
+                        rustplus.sendInGameMessage(str);
                     }
                     rustplus.log(client.intlGet(null, 'infoCap'), str);
                 }

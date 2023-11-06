@@ -463,7 +463,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
 
     if (rustplus && (serverId === rustplus.serverId)) {
         await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
-        rustplus.sendTeamMessageAsync(`${data.title}: ${data.message}`);
+        rustplus.sendInGameMessage(`${data.title}: ${data.message}`);
     }
 
     client.log(client.intlGet(null, 'infoCap'), `${data.title} ${data.message}`);

@@ -69,6 +69,14 @@ const RUSTLABS_ITEM_DURABILITY_TIME_REGEX = /<td\sdata-value="(.*?)">(.*?sec|.*?
 const RUSTLABS_ITEM_DURABILITY_FUEL_AMOUNT_REGEX = /alt="Fuel\sAmount">(.*?)<\/td>/gm
 const RUSTLABS_ITEM_DURABILITY_SULFUR_AMOUNT_REGEX = /alt="Sulfur\sAmount">(.*?)<\/td>/gm
 
+const RUSTLABS_ITEM_SMELTING_AREA_REGEX1 =
+    /data-name="smelting"\sclass="tab-page(\n|.)*?<table\sclass(\n|.)*?<thead><tr>\n<th>Process(\n|.)*?<\/table>/gm
+const RUSTLABS_ITEM_SMELTING_AREA_REGEX2 = /<tbody>(\n|.)*?<\/tbody>/gm
+const RUSTLABS_ITEM_SMELTING_AREA_REGEX3 = /<tr>(\n|.)*?<\/tr>/gm
+const RUSTLABS_ITEM_SMELTING_REGEX1 =
+    /<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?<\/a><a\shref="\/item\/(\n|.)*?img\/.*?\/wood\.png"(\n|.)*?text-in-icon">(.*?)<\/span(\n|.)*?<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?text-in-icon">(.*?)<(\n|.)*?<td>(.*?sec|.*?min)</gm
+const RUSTLABS_ITEM_SMELTING_REGEX2 = /<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?text-in-icon">(.*?)<\/span(\n|.)*?<td>(.*?sec|.*?min)</gm
+
 const RUSTLABS_ALL_BUILDING_BLOCKS_REGEX = /\/building\/(.*?)">(.*?)</gm
 
 const RUSTLABS_ALL_OTHER_REGEX = /\/entity\/(.*?)">(.*?)</gm
@@ -84,6 +92,7 @@ const rustlabsDurabilityData = new Object();
 rustlabsDurabilityData['items'] = new Object();
 rustlabsDurabilityData['buildingBlocks'] = new Object();
 rustlabsDurabilityData['other'] = new Object();
+const rustlabsSmeltingData = new Object();
 
 async function scrape(url) {
     try {
@@ -108,6 +117,40 @@ function exit(url = null) {
         console.error('Something went wrong. Exiting...');
     }
     process.exit(1);
+}
+
+function parseTime(time) {
+    let totalSeconds = 0;
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+    let matches = null;
+    let hoursFound = false;
+
+    matches = [...time.matchAll(/(\d+|\d+\.\d+) hours/gm)];
+    if (matches.length === 1) {
+        hoursFound = true;
+        hours = parseFloat(matches[0][1]);
+    }
+
+    matches = [...time.matchAll(/(\d+|\d+\.\d+) hour/gm)];
+    if (matches.length === 1 && !hoursFound) {
+        hours = parseFloat(matches[0][1]);
+    }
+
+    matches = [...time.matchAll(/(\d+|\d+\.\d+) min/gm)];
+    if (matches.length === 1) {
+        minutes = parseFloat(matches[0][1]);
+    }
+
+    matches = [...time.matchAll(/(\d+|\d+\.\d+) sec/gm)];
+    if (matches.length === 1) {
+        seconds = parseFloat(matches[0][1]);
+    }
+
+    totalSeconds = seconds + (minutes * 60) + (hours * 60 * 60);
+
+    return totalSeconds;
 }
 
 async function processAll() {
@@ -156,6 +199,7 @@ async function processAllItems() {
         processItemResearch(rustlabsName, shortname, name, data);
         processItemRecycle(rustlabsName, shortname, name, data);
         processItemDurability(rustlabsName, shortname, name, data);
+        processItemSmelting(rustlabsName, shortname, name, data);
         // Despawn time item?
         // stack size?
 
@@ -579,6 +623,118 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
     rustlabsDurabilityData[type][itemId] = durabilityItems;
 }
 
+function processItemSmelting(rustlabsName, shortname, name, data) {
+    const itemId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === shortname && ITEMS[e].name === name);
+    if (!itemId) return;
+
+    data = data.match(RUSTLABS_ITEM_SMELTING_AREA_REGEX1);
+    if (data === null || data.length !== 1) {
+        console.log('  - No smelting data found.');
+        return;
+    }
+    data = data[0];
+
+    data = data.match(RUSTLABS_ITEM_SMELTING_AREA_REGEX2);
+    if (data === null || data.length !== 1) {
+        console.log('  - No smelting data found.');
+        return;
+    }
+    data = data[0];
+
+    const content = [];
+
+    const smeltingMatches = [...data.matchAll(RUSTLABS_ITEM_SMELTING_AREA_REGEX3)];
+    for (const smeltingMatch of smeltingMatches) {
+        const area = smeltingMatch[0];
+
+        let fromShortname = null;
+        let fromName = null;
+        let woodQuantity = null;
+        let toShortname = null;
+        let toName = null;
+        let toQuantity = null;
+        let toProbability = null;
+        let time = null;
+        let timeString = null;
+
+        let matches = [...area.matchAll(RUSTLABS_ITEM_SMELTING_REGEX1)];
+        if (matches.length === 0) {
+            /* Try the second regex */
+            matches = [...area.matchAll(RUSTLABS_ITEM_SMELTING_REGEX2)];
+            if (matches.length === 1) {
+                matches = matches[0];
+                if (matches.length !== 12) exit();
+
+                fromShortname = matches[2];
+                fromName = Utils.decodeHtml(matches[3]);
+                woodQuantity = (fromShortname === 'wood' && fromName === 'Wood') ? 1 : 0;
+                toShortname = matches[6];
+                toName = Utils.decodeHtml(matches[7]);
+
+                toQuantity = matches[9];
+                toProbability = 1;
+                if (toQuantity === '') {
+                    toQuantity = 1;
+                }
+                else {
+                    toQuantity = toQuantity.replace('×', '').replace(/,/g, '');
+
+                    if (toQuantity.includes('%')) {
+                        toProbability = parseFloat(`0.${toQuantity.replace('%', '')}`);
+                        toQuantity = 1;
+                    }
+                    else {
+                        toQuantity = parseFloat(toQuantity);
+                    }
+                }
+
+                time = parseTime(matches[11]);
+                timeString = matches[11];
+            }
+            else {
+                console.log('  - No smelting data found.');
+                return;
+            }
+        }
+        else if (matches.length === 1) {
+            matches = matches[0];
+            if (matches.length !== 16) exit();
+
+            fromShortname = matches[2];
+            fromName = Utils.decodeHtml(matches[3]);
+            woodQuantity = parseFloat(matches[7].replace('×', '').replace(/,/g, ''));
+            toShortname = matches[10];
+            toName = Utils.decodeHtml(matches[11]);
+            toQuantity = matches[13] === '' ? 1 : parseFloat(matches[13].replace('×', '').replace(/,/g, ''));
+            toProbability = 1;
+            time = parseTime(matches[15]);
+            timeString = matches[15];
+        }
+        else {
+            console.log('  - No smelting data found.');
+            return;
+        }
+
+        const fromId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === fromShortname && ITEMS[e].name === fromName);
+        if (!fromId) exit();
+        const toId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === toShortname && ITEMS[e].name === toName);
+        if (!toId) exit();
+
+
+        content.push({
+            fromId: fromId,
+            woodQuantity: woodQuantity,
+            toId: toId,
+            toQuantity: toQuantity,
+            toProbability: toProbability,
+            time: time,
+            timeString: timeString
+        });
+    }
+
+    rustlabsSmeltingData[itemId] = content;
+}
+
 async function main() {
     await processAll();
 
@@ -587,6 +743,7 @@ async function main() {
     Fs.writeFileSync(`${__dirname}/rustlabsResearchData.json`, JSON.stringify(rustlabsResearchData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsRecycleData.json`, JSON.stringify(rustlabsRecycleData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsDurabilityData.json`, JSON.stringify(rustlabsDurabilityData, null, 2));
+    Fs.writeFileSync(`${__dirname}/rustlabsSmeltingData.json`, JSON.stringify(rustlabsSmeltingData, null, 2));
 }
 
 main();

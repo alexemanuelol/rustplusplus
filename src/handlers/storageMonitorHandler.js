@@ -79,7 +79,7 @@ module.exports = {
                                     guildId, serverId, entityId);
 
                                 if (instance.serverList[serverId].storageMonitors[entityId].inGame) {
-                                    rustplus.sendTeamMessageAsync(client.intlGet(rustplus.guildId, 'isDecaying', {
+                                    rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'isDecaying', {
                                         device: instance.serverList[serverId].storageMonitors[entityId].name
                                     }));
                                 }

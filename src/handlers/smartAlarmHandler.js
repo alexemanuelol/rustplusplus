@@ -74,7 +74,7 @@ module.exports = {
         if (!entityId) return false;
 
         if (alarms[entityId].lastTrigger === null) {
-            rustplus.printCommandOutput(client.intlGet(guildId, 'alarmHaveNotBeenTriggeredYet', {
+            rustplus.sendInGameMessage(client.intlGet(guildId, 'alarmHaveNotBeenTriggeredYet', {
                 alarm: alarms[entityId].name
             }));
             return true;
@@ -84,7 +84,7 @@ module.exports = {
         const timeSinceTriggerSeconds = Math.floor((new Date() - lastTriggerDate) / 1000);
         const time = Timer.secondsToFullScale(timeSinceTriggerSeconds);
 
-        rustplus.printCommandOutput(client.intlGet(guildId, 'timeSinceAlarmWasTriggered', {
+        rustplus.sendInGameMessage(client.intlGet(guildId, 'timeSinceAlarmWasTriggered', {
             alarm: alarms[entityId].name,
             time: time
         }));
