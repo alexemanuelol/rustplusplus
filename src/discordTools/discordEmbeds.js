@@ -134,7 +134,12 @@ module.exports = {
         let playerName = [''], playerId = [''], playerStatus = [''];
         let playerNameCharacters = 0, playerIdCharacters = 0, playerStatusCharacters = 0;
         for (const player of tracker.players) {
-            let name = `${player.name}\n`;
+            let name = `${player.name}`;
+
+            const nameMaxLength = Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3;
+            name = name.length <= nameMaxLength ? name : name.substring(0, nameMaxLength - 2) + '..';
+            name += '\n';
+
             let id = '';
             let status = '';
 
@@ -202,18 +207,18 @@ module.exports = {
         const fields = [];
         for (let i = 0; i < (fieldIndex + 1); i++) {
             fields.push({
-                name: i === 0 ? `__${Client.client.intlGet(guildId, 'name')}__` : '\u200B',
+                name: i === 0 ? `__${Client.client.intlGet(guildId, 'name')}__\n\u200B` : '\u200B',
                 value: playerName[i] !== '' ? playerName[i] : Client.client.intlGet(guildId, 'empty'),
                 inline: true
             });
             fields.push({
-                name: i === 0 ? `__${Client.client.intlGet(guildId, 'steamId')} / ` +
-                    `${Client.client.intlGet(guildId, 'battlemetricsId')}__` : '\u200B',
+                name: i === 0 ? `__${Client.client.intlGet(guildId, 'steamId')}__ /\n` +
+                    `__${Client.client.intlGet(guildId, 'battlemetricsId')}__` : '\u200B',
                 value: playerId[i] !== '' ? playerId[i] : Client.client.intlGet(guildId, 'empty'),
                 inline: true
             });
             fields.push({
-                name: i === 0 ? `__${Client.client.intlGet(guildId, 'status')}__` : '\u200B',
+                name: i === 0 ? `__${Client.client.intlGet(guildId, 'status')}__\n\u200B` : '\u200B',
                 value: playerStatus[i] !== '' ? playerStatus[i] : Client.client.intlGet(guildId, 'empty'),
                 inline: true
             });
