@@ -101,19 +101,24 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
         return;
     }
 
-    const startsWithTrademark = message.broadcast.teamMessage.message.message
-        .startsWith(instance.generalSettings.trademark);
+    const isMessageSentByBot = rustplus.messagesSentByBot.includes(message.broadcast.teamMessage.message.message);
+
+    if (isMessageSentByBot) {
+        return;
+    }
 
     const isCommand = await CommandHandler.inGameCommandHandler(rustplus, client, message);
 
-    if (!isCommand && !startsWithTrademark) {
-        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logInGameMessage`, {
-            message: message.broadcast.teamMessage.message.message,
-            user: `${message.broadcast.teamMessage.message.name} (${steamId})`
-        }));
-
-        TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
+    if (isCommand) {
+        return;
     }
+
+    rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logInGameMessage`, {
+        message: message.broadcast.teamMessage.message.message,
+        user: `${message.broadcast.teamMessage.message.name} (${steamId})`
+    }));
+
+    TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
 }
 
 async function messageBroadcastEntityChanged(rustplus, client, message) {
