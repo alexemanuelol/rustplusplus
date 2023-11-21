@@ -67,8 +67,29 @@ module.exports = {
                 if (player.steamId === playerUpdated.steamId.toString()) {
                     if (player.isGoneDead(playerUpdated)) {
                         const location = player.pos === null ? 'spawn' : player.pos.string;
+                        let offset = '';
+                        let number = '';
+                        if(player.pos){
+                            const base = 146;
+                            let x = (player.pos.x/base).toString();
+                            let y = (player.pos.y/base).toString();
+                            let xn = (x.split(".")[1] || '0').substring(0,3);
+                            let yn = (y.split(".")[1] || '0').substring(0,3);
+                            let xi = xn > 333 ? (xn > 666 ? 2 : 1) : 0;
+                            let yi = yn > 333 ? (yn > 666 ? 0 : 1) : 2;
+                            number = [[1,2,3],[4,5,6],[7,8,9]][yi][xi];
+                            xn = xn - (333*xi);
+                            yn = yn - (333*yi);
+                            let xOffset = xn > 222 ? ['右','E'] :( xn < 111 ? ['左','W']: ['','']);
+                            let yOffset =  yn > 222 ? ['上','N'] : ( yn < 111 ? ['下','S']: ['','']);
+                            
+                            offset = !xOffset[0] && !xOffset[0] ? '' : `偏${xOffset[0]}${yOffset[0]}(${yOffset[1]},${xOffset[1]})`;
+                        }
+                       
                         const str = client.intlGet(guildId, 'playerJustDied', {
                             name: player.name,
+                            number: number,
+                            offset: offset,
                             location: location
                         });
                         await DiscordMessages.sendActivityNotificationMessage(
