@@ -27,6 +27,8 @@ const Utils = require('../util/utils.js');
 
 /* Constants */
 
+const SLEEP_TIMEOUT_MS = 2000;
+
 const RUSTLABS_ALL_ITEMS_URL = 'https://rustlabs.com/group=itemlist';
 const RUSTLABS_ITEM_URL = 'https://rustlabs.com/item/';
 
@@ -77,6 +79,10 @@ const RUSTLABS_ITEM_SMELTING_REGEX1 =
     /<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?<\/a><a\shref="\/item\/(\n|.)*?img\/.*?\/wood\.png"(\n|.)*?text-in-icon">(.*?)<\/span(\n|.)*?<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?text-in-icon">(.*?)<(\n|.)*?<td>(.*?sec|.*?min)</gm
 const RUSTLABS_ITEM_SMELTING_REGEX2 = /<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?<a\shref="\/item\/(\n|.)*?img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?text-in-icon">(.*?)<\/span(\n|.)*?<td>(.*?sec|.*?min)</gm
 
+const RUSTLABS_ITEM_DESPAWN_REGEX = /<td>Despawn\stime<\/td>(\n|.)*?<td>(.*?)<\/td>/gm
+
+const RUSTLABS_ITEM_STACK_REGEX = /<td>Stack\sSize<\/td>(\n|.)*?<td>(.*?)<\/td>/gm
+
 const RUSTLABS_ALL_BUILDING_BLOCKS_REGEX = /\/building\/(.*?)">(.*?)</gm
 
 const RUSTLABS_ALL_OTHER_REGEX = /\/entity\/(.*?)">(.*?)</gm
@@ -93,6 +99,8 @@ rustlabsDurabilityData['items'] = new Object();
 rustlabsDurabilityData['buildingBlocks'] = new Object();
 rustlabsDurabilityData['other'] = new Object();
 const rustlabsSmeltingData = new Object();
+const rustlabsDespawnData = new Object();
+const rustlabsStackData = new Object();
 
 async function scrape(url) {
     try {
@@ -200,10 +208,10 @@ async function processAllItems() {
         processItemRecycle(rustlabsName, shortname, name, data);
         processItemDurability(rustlabsName, shortname, name, data);
         processItemSmelting(rustlabsName, shortname, name, data);
-        // Despawn time item?
-        // stack size?
+        processItemDespawn(rustlabsName, shortname, name, data);
+        processItemStack(rustlabsName, shortname, name, data);
 
-        await sleep(2000);
+        await sleep(SLEEP_TIMEOUT_MS);
     }
 }
 
@@ -246,7 +254,7 @@ async function processAllBuildingBlocks() {
 
         processItemDurability(rustlabsName, null, name, data, 'buildingBlocks');
 
-        await sleep(2000);
+        await sleep(SLEEP_TIMEOUT_MS);
     }
 }
 
@@ -286,7 +294,7 @@ async function processAllOther() {
 
         processItemDurability(rustlabsName, null, name, data, 'other');
 
-        await sleep(2000);
+        await sleep(SLEEP_TIMEOUT_MS);
     }
 }
 
@@ -735,6 +743,52 @@ function processItemSmelting(rustlabsName, shortname, name, data) {
     rustlabsSmeltingData[itemId] = content;
 }
 
+function processItemDespawn(rustlabsName, shortname, name, data) {
+    const itemId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === shortname && ITEMS[e].name === name);
+    if (!itemId) return;
+
+    let matches = [...data.matchAll(RUSTLABS_ITEM_DESPAWN_REGEX)];
+    if (matches.length !== 1) {
+        console.log('  - No despawn data found.');
+        return;
+    }
+
+    matches = matches[0];
+    if (matches.length !== 3) {
+        console.log('  - No despawn data found.');
+        return;
+    }
+
+    const string = matches[2].trim();
+    const seconds = parseTime(string);
+
+    rustlabsDespawnData[itemId] = new Object();
+    rustlabsDespawnData[itemId]["time"] = seconds;
+    rustlabsDespawnData[itemId]["timeString"] = string;
+}
+
+function processItemStack(rustlabsName, shortname, name, data) {
+    const itemId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === shortname && ITEMS[e].name === name);
+    if (!itemId) return;
+
+    let matches = [...data.matchAll(RUSTLABS_ITEM_STACK_REGEX)];
+    if (matches.length !== 1) {
+        console.log('  - No stack data found.');
+        return;
+    }
+
+    matches = matches[0];
+    if (matches.length !== 3) {
+        console.log('  - No stack data found.');
+        return;
+    }
+
+    const quantity = matches[2].trim().replace('×', '').replace(/,/g, '');
+
+    rustlabsStackData[itemId] = new Object();
+    rustlabsStackData[itemId]["quantity"] = quantity;
+}
+
 async function main() {
     await processAll();
 
@@ -744,6 +798,8 @@ async function main() {
     Fs.writeFileSync(`${__dirname}/rustlabsRecycleData.json`, JSON.stringify(rustlabsRecycleData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsDurabilityData.json`, JSON.stringify(rustlabsDurabilityData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsSmeltingData.json`, JSON.stringify(rustlabsSmeltingData, null, 2));
+    Fs.writeFileSync(`${__dirname}/rustlabsDespawnData.json`, JSON.stringify(rustlabsDespawnData, null, 2));
+    Fs.writeFileSync(`${__dirname}/rustlabsStackData.json`, JSON.stringify(rustlabsStackData, null, 2));
 }
 
 main();
