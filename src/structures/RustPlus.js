@@ -237,6 +237,13 @@ class RustPlus extends RustPlusLib {
         this.events[event].unshift(str);
     }
 
+    updateBotMessages(message) {
+        if (this.messagesSentByBot === Constants.BOT_MESSAGE_HISTORY_LIMIT) {
+            this.messagesSentByBot.pop();
+        }
+        this.messagesSentByBot.unshift(message);
+    }
+
     deleteThisRustplusInstance() {
         this.isDeleted = true;
         this.disconnect();

@@ -38,12 +38,7 @@ module.exports = {
                 const messageFromQueue = rustplus.inGameChatQueue[0];
                 rustplus.inGameChatQueue = rustplus.inGameChatQueue.slice(1);
 
-                rustplus.messagesSentByBot.push(messageFromQueue);
-
-                // Remove the first/oldest message in the list if past the history limit
-                if (rustplus.messagesSentByBot.length === Constants.BOT_MESSAGE_HISTORY_LIMIT + 1) {
-                    rustplus.messagesSentByBot.shift();
-                }
+                rustplus.updateBotMessages(messageFromQueue);
 
                 await rustplus.sendTeamMessageAsync(messageFromQueue);
                 rustplus.log(client.intlGet(guildId, 'messageCap'), messageFromQueue);
@@ -61,23 +56,13 @@ module.exports = {
                 return;
             }
 
-            function handleMessage(messageStr) {
-                const messageSegments = messageStr.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g'));
-
-                for (const messageSegment of messageSegments) {
-                    const finalMessage = `${trademarkString}${messageSegment}`;
-
-                    rustplus.inGameChatQueue.push(finalMessage);
-                }
-            }
-
             if (Array.isArray(message)) {
-                for (const messageStr of message) {
-                    handleMessage(messageStr)
+                for (const msg of message) {
+                    handleMessage(rustplus, msg, trademarkString, messageMaxLength)
                 }
             }
             else if (typeof message === 'string') {
-                handleMessage(message)
+                handleMessage(rustplus, message, trademarkString, messageMaxLength)
             }
         }
 
@@ -87,3 +72,13 @@ module.exports = {
         }
     },
 };
+
+function handleMessage(rustplus, message, trademarkString, maxLength) {
+    if (typeof message !== 'string') return;
+
+    const strings = message.match(new RegExp(`.{1,${maxLength}}(\\s|$)`, 'g'));
+
+    for (const str of strings) {
+        rustplus.inGameChatQueue.push(`${trademarkString}${str}`);
+    }
+}
