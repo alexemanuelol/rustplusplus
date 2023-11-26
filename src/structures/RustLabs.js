@@ -27,6 +27,8 @@ const ResearchData = require('../staticFiles/rustlabsResearchData.json');
 const RecycleData = require('../staticFiles/rustlabsRecycleData.json');
 const DurabilityData = require('../staticFiles/rustlabsDurabilityData.json');
 const SmeltingData = require('../staticFiles/rustlabsSmeltingData.json');
+const DespawnData = require('../staticFiles/rustlabsDespawnData.json');
+const StackData = require('../staticFiles/rustlabsStackData.json');
 
 const IGNORED_RECYCLE_ITEMS = [
     '-946369541' /* Low Grade Fuel */
@@ -45,6 +47,8 @@ class RustLabs {
         this._recycleData = RecycleData;
         this._durabilityData = DurabilityData;
         this._smeltingData = SmeltingData;
+        this._despawnData = DespawnData;
+        this._stackData = StackData;
 
         this._items = new Items();
 
@@ -91,6 +95,8 @@ class RustLabs {
     get recycleData() { return this._recycleData; }
     get durabilityData() { return this._durabilityData; }
     get smeltingData() { return this._smeltingData; }
+    get despawnData() { return this._despawnData; }
+    get stackData() { return this._stackData; }
     get items() { return this._items; }
     get durabilityGroups() { return this._durabilityGroups }
     get durabilityWhich() { return this._durabilityWhich; }
@@ -547,6 +553,78 @@ class RustLabs {
         }
 
         return fromParameterSmeltingDetails;
+    }
+
+
+    /***********************************************************************************
+     *  Despawn functions
+     **********************************************************************************/
+
+    /**
+     *  Check to see if itemId is part of despawn details data.
+     *  @param {string} itemId The itemId of the item.
+     *  @return {boolean} true if exist, otherwise false.
+     */
+    hasDespawnDetails(itemId) {
+        return this.despawnData.hasOwnProperty(itemId);
+    }
+
+    /**
+     *  Get despawn details of an item.
+     *  @param {string} name The name of the item.
+     *  @return {array|null} null if something went wrong, otherwise [id, itemDetails, despawnDetails]
+     */
+    getDespawnDetailsByName(name) {
+        if (typeof (name) !== 'string') return null;
+        const id = this.items.getClosestItemIdByName(name);
+        if (!id) return null;
+        return this.getDespawnDetailsById(id);
+    }
+
+    /**
+     *  Get despawn details of an item.
+     *  @param {string} id The id of the item.
+     *  @return {array|null} null if something went wrong, otherwise [id, itemDetails, despawnDetails]
+     */
+    getDespawnDetailsById(id) {
+        if (!this.hasDespawnDetails(id)) return null;
+        return [id, this.items.items[id], this.despawnData[id]];
+    }
+
+
+    /***********************************************************************************
+     *  Stack functions
+     **********************************************************************************/
+
+    /**
+     *  Check to see if itemId is part of stack details data.
+     *  @param {string} itemId The itemId of the item.
+     *  @return {boolean} true if exist, otherwise false.
+     */
+    hasStackDetails(itemId) {
+        return this.stackData.hasOwnProperty(itemId);
+    }
+
+    /**
+     *  Get stack details of an item.
+     *  @param {string} name The name of the item.
+     *  @return {array|null} null if something went wrong, otherwise [id, itemDetails, stackDetails]
+     */
+    getStackDetailsByName(name) {
+        if (typeof (name) !== 'string') return null;
+        const id = this.items.getClosestItemIdByName(name);
+        if (!id) return null;
+        return this.getStackDetailsById(id);
+    }
+
+    /**
+     *  Get stack details of an item.
+     *  @param {string} id The id of the item.
+     *  @return {array|null} null if something went wrong, otherwise [id, itemDetails, stackDetails]
+     */
+    getStackDetailsById(id) {
+        if (!this.hasStackDetails(id)) return null;
+        return [id, this.items.items[id], this.stackData[id]];
     }
 }
 
