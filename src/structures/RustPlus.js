@@ -1165,6 +1165,41 @@ class RustPlus extends RustPlusLib {
         }
     }
 
+    getCommandDespawn(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandDespawn = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxDespawn')}`;
+        const commandDespawnEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxDespawn')}`;
+
+        if (command.toLowerCase().startsWith(`${commandDespawn} `)) {
+            command = command.slice(`${commandDespawn} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandDespawnEn} `.length).trim();
+        }
+
+        const itemId = Client.client.items.getClosestItemIdByName(command);
+        if (itemId === undefined) {
+            return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                name: command
+            });
+        }
+
+        const itemName = Client.client.items.getName(itemId);
+        const despawnDetails = Client.client.rustlabs.getDespawnDetailsById(itemId);
+        if (despawnDetails === null) {
+            return Client.client.intlGet(this.guildId, 'couldNotFindDespawnDetails', {
+                name: itemName
+            });
+        }
+
+        const despawnTime = despawnDetails[2].timeString;
+
+        return Client.client.intlGet(this.guildId, 'despawnTimeOfItem', {
+            item: itemName,
+            time: despawnTime
+        });
+    }
+
     getCommandEvents(command) {
         const prefix = this.generalSettings.prefix;
         const commandEvents = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxEvents')}`;
@@ -2256,7 +2291,7 @@ class RustPlus extends RustPlusLib {
         const itemId = Client.client.items.getClosestItemIdByName(command);
         if (itemId === undefined) {
             return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
-                name: name
+                name: command
             });
         }
 
