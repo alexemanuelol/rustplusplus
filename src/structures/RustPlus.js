@@ -2241,6 +2241,41 @@ class RustPlus extends RustPlusLib {
         return strings;
     }
 
+    getCommandStack(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandStack = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxStack')}`;
+        const commandStackEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxStack')}`;
+
+        if (command.toLowerCase().startsWith(`${commandStack} `)) {
+            command = command.slice(`${commandStack} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandStackEn} `.length).trim();
+        }
+
+        const itemId = Client.client.items.getClosestItemIdByName(command);
+        if (itemId === undefined) {
+            return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                name: name
+            });
+        }
+
+        const itemName = Client.client.items.getName(itemId);
+        const stackDetails = Client.client.rustlabs.getStackDetailsById(itemId);
+        if (stackDetails === null) {
+            return Client.client.intlGet(this.guildId, 'couldNotFindStackDetails', {
+                name: itemName
+            });
+        }
+
+        const quantity = stackDetails[2].quantity;
+
+        return Client.client.intlGet(this.guildId, 'stackSizeOfItem', {
+            item: itemName,
+            quantity: quantity
+        });
+    }
+
     getCommandSteamId(command, callerSteamId, callerName) {
         const prefix = this.generalSettings.prefix;
         const commandSteamid = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxSteamid')}`;

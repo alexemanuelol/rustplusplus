@@ -44,7 +44,7 @@ module.exports = {
 						{ name: client.intlGet(guildId, 'any'), value: '2' }))
 				.addStringOption(option => option
 					.setName('name')
-					.setDescription(client.intlGet(guildId, 'commandsPlayersNameNameDesc'))
+					.setDescription(client.intlGet(guildId, 'theNameOfThePlayer'))
 					.setRequired(false))
 				.addStringOption(option => option
 					.setName('battlemetricsid')

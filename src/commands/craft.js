@@ -32,11 +32,11 @@ module.exports = {
 			.setDescription(client.intlGet(guildId, 'commandsCraftDesc'))
 			.addStringOption(option => option
 				.setName('name')
-				.setDescription(client.intlGet(guildId, 'commandsCraftNameDesc'))
+				.setDescription(client.intlGet(guildId, 'theNameOfTheItem'))
 				.setRequired(false))
 			.addStringOption(option => option
 				.setName('id')
-				.setDescription(client.intlGet(guildId, 'commandsCraftIdDesc'))
+				.setDescription(client.intlGet(guildId, 'theIdOfTheItem'))
 				.setRequired(false))
 			.addIntegerOption(option => option
 				.setName('quantity')
