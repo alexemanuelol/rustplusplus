@@ -83,6 +83,15 @@ const RUSTLABS_ITEM_DESPAWN_REGEX = /<td>Despawn\stime<\/td>(\n|.)*?<td>(.*?)<\/
 
 const RUSTLABS_ITEM_STACK_REGEX = /<td>Stack\sSize<\/td>(\n|.)*?<td>(.*?)<\/td>/gm
 
+const RUSTLABS_ITEM_DECAY_REGEX1 =
+    /<td>Decay<\/td>(\n|.){1,3}?<td>(.*?)<\/td>(\n|.)*?<td>HP<\/td>(\n|.){1,3}?<td>(.*?)<\/td>/gm
+const RUSTLABS_ITEM_DECAY_REGEX2 =
+    /<td>Decay\stime\soutside<\/td>(\n|.){1,3}?<td>(.*?)<\/td>(\n|.)*?<td>Decay\stime\sinside<\/td>(\n|.){1,3}?<td>(.*?)<\/td>(\n|.)*?<td>HP<\/td>(\n|.){1,3}?<td>(.*?)<\/td>/gm
+const RUSTLABS_ITEM_DECAY_REGEX3 =
+    /<td>Decay\stime\soutside<\/td>(\n|.){1,3}?<td>(.*?)<\/td>(\n|.)*?<td>Decay\stime\sunderwater<\/td>(\n|.){1,3}?<td>(.*?)<\/td>(\n|.)*?<td>HP<\/td>(\n|.){1,3}?<td>(.*?)<\/td>/gm
+const RUSTLABS_ITEM_DECAY_REGEX4 =
+    /<td>Decay\stime\soutside<\/td>(\n|.){1,3}?<td>(.*?)<\/td>(\n|.)*?<td>HP<\/td>(\n|.){1,3}?<td>(.*?)<\/td>/gm
+
 const RUSTLABS_ALL_BUILDING_BLOCKS_REGEX = /\/building\/(.*?)">(.*?)</gm
 
 const RUSTLABS_ALL_OTHER_REGEX = /\/entity\/(.*?)">(.*?)</gm
@@ -91,6 +100,11 @@ const RUSTLABS_ALL_OTHER_REGEX = /\/entity\/(.*?)">(.*?)</gm
 /* Global variables */
 
 const ITEMS = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'staticFiles', 'items.json'), 'utf8'));
+
+const rustlabsLootContainers = new Object();
+const rustlabsBuildingBlocks = new Object();
+const rustlabsOther = new Object();
+
 const rustlabsCraftData = new Object();
 const rustlabsResearchData = new Object();
 const rustlabsRecycleData = new Object();
@@ -101,6 +115,10 @@ rustlabsDurabilityData['other'] = new Object();
 const rustlabsSmeltingData = new Object();
 const rustlabsDespawnData = new Object();
 const rustlabsStackData = new Object();
+const rustlabsDecayData = new Object();
+rustlabsDecayData['items'] = new Object();
+rustlabsDecayData['buildingBlocks'] = new Object();
+rustlabsDecayData['other'] = new Object();
 
 async function scrape(url) {
     try {
@@ -169,7 +187,7 @@ async function processAll() {
 }
 
 async function processAllItems() {
-    const rustlabsItems = [];
+    const rustlabsItemNames = [];
     const response = await scrape(RUSTLABS_ALL_ITEMS_URL);
 
     if (response.status !== 200) exit(RUSTLABS_ALL_ITEMS_URL);
@@ -178,18 +196,18 @@ async function processAllItems() {
     for (const match of matches) {
         if (match.length !== 4) exit();
 
-        rustlabsItems.push([
+        rustlabsItemNames.push([
             Utils.decodeHtml(match[1]).replace('%20', ' '),
             Utils.decodeHtml(match[2]).replace('%20', ' '),
             Utils.decodeHtml(match[3]).replace('%20', ' ')
         ]);
     }
 
-    rustlabsItems.sort();
-    const rustlabsNumberOfItems = rustlabsItems.length;
+    rustlabsItemNames.sort();
+    const rustlabsNumberOfItems = rustlabsItemNames.length;
 
     let counter = 1;
-    for (const item of rustlabsItems) {
+    for (const item of rustlabsItemNames) {
         const rustlabsName = item[0];
         const shortname = item[1];
         const name = item[2];
@@ -210,6 +228,7 @@ async function processAllItems() {
         processItemSmelting(rustlabsName, shortname, name, data);
         processItemDespawn(rustlabsName, shortname, name, data);
         processItemStack(rustlabsName, shortname, name, data);
+        processItemDecay(rustlabsName, shortname, name, data);
 
         await sleep(SLEEP_TIMEOUT_MS);
     }
@@ -220,7 +239,7 @@ async function processAllLootContainers() {
 }
 
 async function processAllBuildingBlocks() {
-    const rustlabsBuildingBlocks = [];
+    const rustlabsBuildingBlockNames = [];
     const response = await scrape(RUSTLABS_ALL_BUILDING_BLOCKS_URL);
 
     if (response.status !== 200) exit(RUSTLABS_ALL_BUILDING_BLOCKS_URL);
@@ -229,19 +248,21 @@ async function processAllBuildingBlocks() {
     for (const match of matches) {
         if (match.length !== 3) exit();
 
-        rustlabsBuildingBlocks.push([
+        rustlabsBuildingBlockNames.push([
             Utils.decodeHtml(match[1]).replace('%20', ' '),
             Utils.decodeHtml(match[2]).replace('%20', ' ')
         ]);
     }
 
-    rustlabsBuildingBlocks.sort();
-    const rustlabsNumberOfBuildingBlocks = rustlabsBuildingBlocks.length;
+    rustlabsBuildingBlockNames.sort();
+    const rustlabsNumberOfBuildingBlocks = rustlabsBuildingBlockNames.length;
 
     let counter = 1;
-    for (const buildingBlock of rustlabsBuildingBlocks) {
+    for (const buildingBlock of rustlabsBuildingBlockNames) {
         const rustlabsName = buildingBlock[0];
         const name = buildingBlock[1];
+
+        rustlabsBuildingBlocks[name] = rustlabsName;
 
         console.log(`Building Block ${name} (${counter}/${rustlabsNumberOfBuildingBlocks})`);
         counter += 1;
@@ -253,13 +274,14 @@ async function processAllBuildingBlocks() {
         const data = itemResponse.data;
 
         processItemDurability(rustlabsName, null, name, data, 'buildingBlocks');
+        processItemDecay(rustlabsName, null, name, data, 'buildingBlocks');
 
         await sleep(SLEEP_TIMEOUT_MS);
     }
 }
 
 async function processAllOther() {
-    const rustlabsOther = [];
+    const rustlabsOtherNames = [];
 
     const response = await scrape(RUSTLABS_ALL_OTHER_URL);
 
@@ -269,19 +291,21 @@ async function processAllOther() {
     for (const match of matches) {
         if (match.length !== 3) exit();
 
-        rustlabsOther.push([
+        rustlabsOtherNames.push([
             Utils.decodeHtml(match[1]).replace('%20', ' '),
             Utils.decodeHtml(match[2]).replace('%20', ' ')
         ]);
     }
 
-    rustlabsOther.sort();
-    const rustlabsNumberOfOther = rustlabsOther.length;
+    rustlabsOtherNames.sort();
+    const rustlabsNumberOfOther = rustlabsOtherNames.length;
 
     let counter = 1;
-    for (const other of rustlabsOther) {
+    for (const other of rustlabsOtherNames) {
         const rustlabsName = other[0];
         const name = other[1];
+
+        rustlabsOther[name] = rustlabsName;
 
         console.log(`Other ${name} (${counter}/${rustlabsNumberOfOther})`);
         counter += 1;
@@ -293,6 +317,7 @@ async function processAllOther() {
         const data = itemResponse.data;
 
         processItemDurability(rustlabsName, null, name, data, 'other');
+        processItemDecay(rustlabsName, null, name, data, 'other');
 
         await sleep(SLEEP_TIMEOUT_MS);
     }
@@ -469,7 +494,7 @@ function processItemRecycle(rustlabsName, shortname, name, data) {
 }
 
 function processItemDurability(rustlabsName, shortname, name, data, type = 'items') {
-    let itemId = null
+    let itemId = null;
     if (type === 'items') {
         itemId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === shortname && ITEMS[e].name === name);
     }
@@ -789,10 +814,125 @@ function processItemStack(rustlabsName, shortname, name, data) {
     rustlabsStackData[itemId]["quantity"] = quantity;
 }
 
+function processItemDecay(rustlabsName, shortname, name, data, type = 'items') {
+    let itemId = null;
+    if (type === 'items') {
+        itemId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === shortname && ITEMS[e].name === name);
+    }
+    else if (type === 'buildingBlocks' || type === 'other') {
+        itemId = name;
+    }
+    if (!itemId) return;
+
+    let decay = null;
+    let decayString = null
+    let decayOutside = null;
+    let decayOutsideString = null;
+    let decayInside = null;
+    let decayInsideString = null;
+    let decayUnderwater = null;
+    let decayUnderwaterString = null;
+    let hp = null;
+    let hpString = null;
+
+    let matches = [...data.matchAll(RUSTLABS_ITEM_DECAY_REGEX1)];
+    if (matches.length !== 1) {
+        matches = [...data.matchAll(RUSTLABS_ITEM_DECAY_REGEX2)];
+        if (matches.length !== 1) {
+            matches = [...data.matchAll(RUSTLABS_ITEM_DECAY_REGEX3)];
+            if (matches.length !== 1) {
+                matches = [...data.matchAll(RUSTLABS_ITEM_DECAY_REGEX4)];
+                if (matches.length !== 1) {
+                    console.log('  - No decay data found.');
+                    return;
+                }
+                else {
+                    /* Decay time outside, HP */
+                    matches = matches[0];
+                    if (matches.length !== 6) {
+                        console.log('  - No decay data found.');
+                        return;
+                    }
+
+                    decayOutsideString = matches[2].trim();
+                    decayOutside = parseTime(decayOutsideString);
+
+                    hpString = matches[5].trim();
+                    hp = parseInt(hpString);
+                }
+            }
+            else {
+                /* Decay time outside, Decay time underwater, HP */
+                matches = matches[0];
+                if (matches.length !== 9) {
+                    console.log('  - No decay data found.');
+                    return;
+                }
+
+                decayOutsideString = matches[2].trim();
+                decayOutside = parseTime(decayOutsideString);
+
+                decayUnderwaterString = matches[5].trim();
+                decayUnderwater = parseTime(decayUnderwaterString);
+
+                hpString = matches[8].trim();
+                hp = parseInt(hpString);
+            }
+        }
+        else {
+            /* Decay time outside, Decay time inside, HP */
+            matches = matches[0];
+            if (matches.length !== 9) {
+                console.log('  - No decay data found.');
+                return;
+            }
+
+            decayOutsideString = matches[2].trim();
+            decayOutside = parseTime(decayOutsideString);
+
+            decayInsideString = matches[5].trim();
+            decayInside = parseTime(decayInsideString);
+
+            hpString = matches[8].trim();
+            hp = parseInt(hpString);
+        }
+    }
+    else {
+        /* Decay, HP */
+        matches = matches[0];
+        if (matches.length !== 6) {
+            console.log('  - No decay data found.');
+            return;
+        }
+
+        decayString = matches[2].trim();
+        decay = parseTime(decayString);
+
+        hpString = matches[5].trim();
+        hp = parseInt(hpString);
+    }
+
+    rustlabsDecayData[type][itemId] = {
+        decay: decay,
+        decayString: decayString,
+        decayOutside: decayOutside,
+        decayOutsideString: decayOutsideString,
+        decayInside: decayInside,
+        decayInsideString: decayInsideString,
+        decayUnderwater: decayUnderwater,
+        decayUnderwaterString: decayUnderwaterString,
+        hp: hp,
+        hpString: hpString
+    };
+}
+
 async function main() {
     await processAll();
 
     /* Populate the json files */
+    Fs.writeFileSync(`${__dirname}/rustlabsBuildingBlocks.json`, JSON.stringify(rustlabsBuildingBlocks, null, 2));
+    Fs.writeFileSync(`${__dirname}/rustlabsOther.json`, JSON.stringify(rustlabsOther, null, 2));
+
     Fs.writeFileSync(`${__dirname}/rustlabsCraftData.json`, JSON.stringify(rustlabsCraftData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsResearchData.json`, JSON.stringify(rustlabsResearchData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsRecycleData.json`, JSON.stringify(rustlabsRecycleData, null, 2));
@@ -800,6 +940,7 @@ async function main() {
     Fs.writeFileSync(`${__dirname}/rustlabsSmeltingData.json`, JSON.stringify(rustlabsSmeltingData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsDespawnData.json`, JSON.stringify(rustlabsDespawnData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsStackData.json`, JSON.stringify(rustlabsStackData, null, 2));
+    Fs.writeFileSync(`${__dirname}/rustlabsDecayData.json`, JSON.stringify(rustlabsDecayData, null, 2));
 }
 
 main();
