@@ -54,7 +54,7 @@ module.exports = {
 		let itemId = null;
 		if (stackItemName !== null) {
 			const item = client.items.getClosestItemIdByName(stackItemName)
-			if (item === undefined) {
+			if (item === null) {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: stackItemName
 				});

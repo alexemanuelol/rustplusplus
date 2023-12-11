@@ -60,7 +60,7 @@ module.exports = {
 		let itemId = null;
 		if (recycleItemName !== null) {
 			const item = client.items.getClosestItemIdByName(recycleItemName)
-			if (item === undefined) {
+			if (item === null) {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: recycleItemName
 				});

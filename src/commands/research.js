@@ -55,7 +55,7 @@ module.exports = {
 		let itemId = null;
 		if (researchItemName !== null) {
 			const item = client.items.getClosestItemIdByName(researchItemName)
-			if (item === undefined) {
+			if (item === null) {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: researchItemName
 				});

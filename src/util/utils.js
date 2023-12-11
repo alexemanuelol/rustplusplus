@@ -62,4 +62,57 @@ module.exports = {
         str = str.replace(/[\u200B-\u200D\uFEFF]/g, '');
         return str.replace(/[\u0000-\u001F\u007F-\u009F]/g, "");
     },
+
+    findClosestString: function (string, array, threshold = 2) {
+        let minDistance = Infinity;
+        let closestString = null;
+
+        for (let i = 0; i < array.length; i++) {
+            const currentString = array[i];
+            const distance = levenshteinDistance(string, currentString);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestString = currentString;
+            }
+
+            if (minDistance === 0) break;
+        }
+
+        return minDistance > threshold ? null : closestString;
+    },
+}
+
+/* Function to calculate Levenshtein distance between two strings */
+function levenshteinDistance(s1, s2) {
+    s1 = s1.toLowerCase();
+    s2 = s2.toLowerCase();
+
+    const m = s1.length;
+    const n = s2.length;
+    const dp = [];
+
+    for (let i = 0; i <= m; i++) {
+        dp[i] = [i];
+    }
+    for (let j = 0; j <= n; j++) {
+        dp[0][j] = j;
+    }
+
+    for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+            if (s1[i - 1] === s2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1];
+            }
+            else {
+                dp[i][j] = 1 + Math.min(
+                    dp[i - 1][j],
+                    dp[i][j - 1],
+                    dp[i - 1][j - 1]
+                );
+            }
+        }
+    }
+
+    return dp[m][n];
 }

@@ -54,7 +54,7 @@ module.exports = {
 		let itemId = null;
 		if (despawnItemName !== null) {
 			const item = client.items.getClosestItemIdByName(despawnItemName)
-			if (item === undefined) {
+			if (item === null) {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: despawnItemName
 				});

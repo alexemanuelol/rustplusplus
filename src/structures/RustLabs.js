@@ -18,8 +18,6 @@
 
 */
 
-const Fuse = require('fuse.js')
-
 const Items = require('./Items');
 const RustlabsBuildingBlocks = require('../staticFiles/rustlabsBuildingBlocks.json');
 const RustlabsOther = require('../staticFiles/rustlabsOther.json');
@@ -32,6 +30,7 @@ const SmeltingData = require('../staticFiles/rustlabsSmeltingData.json');
 const DespawnData = require('../staticFiles/rustlabsDespawnData.json');
 const StackData = require('../staticFiles/rustlabsStackData.json');
 const DecayData = require('../staticFiles/rustlabsDecayData.json');
+const Utils = require('../util/utils.js');
 
 const IGNORED_RECYCLE_ITEMS = [
     '-946369541' /* Low Grade Fuel */
@@ -85,11 +84,8 @@ class RustLabs {
             'sulfurLowFirst'
         ];
 
-        const flattenedBuildingBlocks = Object.keys(this.rustlabsBuildingBlocks).map(e => ({ ['name']: e }));
-        this._fuseBuildingBlocks = new Fuse(flattenedBuildingBlocks, { keys: [{ name: 'name', weight: 0.1 }] });
-
-        const flattenedOther = Object.keys(this.rustlabsOther).map(e => ({ ['name']: e }));
-        this._fuseOther = new Fuse(flattenedOther, { keys: [{ name: 'name', weight: 0.1 }] });
+        this._buildingBlocks = Object.keys(this.rustlabsBuildingBlocks);
+        this._other = Object.keys(this.rustlabsOther);
     }
 
 
@@ -111,8 +107,8 @@ class RustLabs {
     get durabilityGroups() { return this._durabilityGroups }
     get durabilityWhich() { return this._durabilityWhich; }
     get orderedBy() { return this._orderedBy; }
-    get fuseBuildingBlocks() { return this._fuseBuildingBlocks; }
-    get fuseOther() { return this._fuseOther; }
+    get buildingBlocks() { return this._buildingBlocks; }
+    get other() { return this._other; }
 
 
     /***********************************************************************************
@@ -146,27 +142,27 @@ class RustLabs {
     /**
      *  Get the closest building block name by name.
      *  @param {string} name The name of the building block.
-     *  @return {string|undefined} undefined if the building block couldnt be found, otherwise the closest name.
+     *  @return {string|null} null if the building block couldnt be found, otherwise the closest name.
      */
     getClosestBuildingBlockNameByName(name) {
-        const result = this.fuseBuildingBlocks.search(name);
-        if (result.length !== 0) {
-            return result[0].item.name;
+        const closestString = Utils.findClosestString(name, this.buildingBlocks);
+        if (closestString !== null) {
+            return closestString;
         }
-        return undefined;
+        return null;
     }
 
     /**
      *  Get the closest other name by name.
      *  @param {string} name The name of the other.
-     *  @return {string|undefined} undefined if the other couldnt be found, otherwise the closest name.
+     *  @return {string|null} null if the other couldnt be found, otherwise the closest name.
      */
     getClosestOtherNameByName(name) {
-        const result = this.fuseOther.search(name);
-        if (result.length !== 0) {
-            return result[0].item.name;
+        const closestString = Utils.findClosestString(name, this.other);
+        if (closestString !== null) {
+            return closestString;
         }
-        return undefined;
+        return null;
     }
 
     /**

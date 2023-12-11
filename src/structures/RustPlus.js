@@ -934,7 +934,7 @@ class RustPlus extends RustPlusLib {
         }
 
         const item = Client.client.items.getClosestItemIdByName(itemSearchName)
-        if (item === undefined || itemSearchName === '') {
+        if (item === null || itemSearchName === '') {
             const str = Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                 name: itemSearchName
             });
@@ -1178,7 +1178,7 @@ class RustPlus extends RustPlusLib {
         }
 
         const itemId = Client.client.items.getClosestItemIdByName(command);
-        if (itemId === undefined) {
+        if (itemId === null) {
             return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                 name: command
             });
@@ -1650,7 +1650,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 const itemId = Client.client.items.getClosestItemIdByName(name);
-                if (itemId === undefined) {
+                if (itemId === null) {
                     return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                         name: name
                     });
@@ -1696,7 +1696,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 const itemId = Client.client.items.getClosestItemIdByName(name);
-                if (itemId === undefined) {
+                if (itemId === null) {
                     return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                         name: name
                     });
@@ -1729,7 +1729,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 const itemId = Client.client.items.getClosestItemIdByName(name);
-                if (itemId === undefined) {
+                if (itemId === null) {
                     return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                         name: name
                     });
@@ -2100,7 +2100,7 @@ class RustPlus extends RustPlusLib {
         }
 
         const item = Client.client.items.getClosestItemIdByName(itemSearchName)
-        if (item === undefined || itemSearchName === '') {
+        if (item === null || itemSearchName === '') {
             const str = Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                 name: itemSearchName
             });
@@ -2146,7 +2146,7 @@ class RustPlus extends RustPlusLib {
         const itemResearchName = command;
 
         const item = Client.client.items.getClosestItemIdByName(itemResearchName)
-        if (item === undefined || itemResearchName === '') {
+        if (item === null || itemResearchName === '') {
             const str = Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                 name: itemResearchName
             });
@@ -2289,7 +2289,7 @@ class RustPlus extends RustPlusLib {
         }
 
         const itemId = Client.client.items.getClosestItemIdByName(command);
-        if (itemId === undefined) {
+        if (itemId === null) {
             return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
                 name: command
             });

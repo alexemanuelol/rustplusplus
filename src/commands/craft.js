@@ -60,7 +60,7 @@ module.exports = {
 		let itemId = null;
 		if (craftItemName !== null) {
 			const item = client.items.getClosestItemIdByName(craftItemName)
-			if (item === undefined) {
+			if (item === null) {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: craftItemName
 				});
