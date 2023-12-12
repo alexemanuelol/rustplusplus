@@ -8,6 +8,7 @@
 - **/craft** - Display the cost to craft an item.
 - **/credentials** - Setup FCM-Credentials.
 - **/help** - Get help message.
+- **/item** - Get the details of an item.
 - **/leader** - Transfer leadership.
 - **/map** - Display the In-Game Map.
 - **/market** - Search for or subscribe to items in vending machines.

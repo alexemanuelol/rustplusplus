@@ -16,6 +16,7 @@ Slash Command | Description
 [**/craft**](commands.md#craft) | Display the cost to craft an item.
 [**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
 [**/help**](commands.md#help) | Display help message.
+[**/item**](commands.md#item) | Get the details of an item.
 [**/leader**](commands.md#leader) | Give or take the leadership from/to a team member.
 [**/map**](commands.md#map) | Get the currently connected server map image.
 [**/market**](commands.md#market) | Operations for In-Game Vending Machines.
@@ -132,6 +133,18 @@ Subcommand | Options | Description | Required
 > Display help message.
 
 ![Discord Slash Command help Image](images/slash_commands/help.png)
+
+
+## **/item**
+
+> **Get the details of an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item. | `False`
+&nbsp; | `id` | The id of the item. | `False`
+
+![Discord Slash Command item Image](images/slash_commands/item.png)
 
 
 ## **/leader**
