@@ -484,6 +484,8 @@ class Battlemetrics {
 
         if (!data) {
             this.lastUpdateSuccessful = false;
+            Client.client.log(Client.client.intlGet(null, 'errorCap'),
+                Client.client.intlGet(null, 'battlemetricsFailedToUpdate', { server: this.id }), 'error');
             return false;
         }
 

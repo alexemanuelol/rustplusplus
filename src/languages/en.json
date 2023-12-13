@@ -43,6 +43,7 @@
     "baseIsUnderAttack": "Your base is under attack!",
     "battlemetricsApiRequestFailed": "Battlemetrics API Request Failed: {api_call}.",
     "battlemetricsCap": "BATTLEMETRICS",
+    "battlemetricsFailedToUpdate": "Battlemetrics Server {server} failed to update.",
     "battlemetricsGlobalLoginCap": "GLOBAL LOGIN",
     "battlemetricsGlobalLogoutCap": "GLOBAL LOGOUT",
     "battlemetricsGlobalNameChangesCap": "GLOBAL NAME CHANGES",

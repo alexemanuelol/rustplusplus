@@ -907,7 +907,8 @@ module.exports = {
             playerCounter += 1;
 
             const status = bmInstance.players[playerId]['status'];
-            const time = status ? bmInstance.getOnlineTime(playerId)[1] : bmInstance.getOfflineTime(playerId)[1];
+            let time = status ? bmInstance.getOnlineTime(playerId) : bmInstance.getOfflineTime(playerId);
+            time = time !== null ? time[1] : '';
 
             let playerStr = status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
             playerStr += ` [${time}] `;
