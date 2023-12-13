@@ -19,6 +19,7 @@
 - **/role** - Setup a specific role to use rustplusplus.
 - **/storagemonitor** - Change image of paired Storage Monitors.
 - **/switch** - Change image of paired Storage Monitors.
+- **/upkeep** - Get the upkeep cost of an item.
 - **/uptime** - Get the current uptime for rustplusplus.
 - **/voice** - Let rustplusplus join voicechat.
 

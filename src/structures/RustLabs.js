@@ -30,6 +30,7 @@ const SmeltingData = require('../staticFiles/rustlabsSmeltingData.json');
 const DespawnData = require('../staticFiles/rustlabsDespawnData.json');
 const StackData = require('../staticFiles/rustlabsStackData.json');
 const DecayData = require('../staticFiles/rustlabsDecayData.json');
+const UpkeepData = require('../staticFiles/rustlabsUpkeepData.json');
 const Utils = require('../util/utils.js');
 
 const IGNORED_RECYCLE_ITEMS = [
@@ -52,6 +53,7 @@ class RustLabs {
         this._despawnData = DespawnData;
         this._stackData = StackData;
         this._decayData = DecayData;
+        this._upkeepData = UpkeepData;
 
         this._items = new Items();
 
@@ -101,6 +103,7 @@ class RustLabs {
     get despawnData() { return this._despawnData; }
     get stackData() { return this._stackData; }
     get decayData() { return this._decayData; }
+    get upkeepData() { return this._upkeepData; }
     get items() { return this._items; }
     get rustlabsBuildingBlocks() { return this._rustlabsBuildingBlocks; }
     get rustlabsOther() { return this._rustlabsOther; }
@@ -731,6 +734,87 @@ class RustLabs {
         if (!this.hasDecayDetails(id)) return null;
 
         return ['items', id, this.items.items[id], this.decayData['items'][id]];
+    }
+
+
+    /***********************************************************************************
+     *  Upkeep functions
+     **********************************************************************************/
+
+    /**
+     *  Check to see if itemId or name is part of upkeep details data.
+     *  @param {string} itemIdOrName The itemId or name of the entity.
+     *  @return {boolean} true if exist, otherwise false.
+     */
+    hasUpkeepDetails(itemIdOrName) {
+        return this.upkeepData['items'].hasOwnProperty(itemIdOrName) ||
+            this.upkeepData['buildingBlocks'].hasOwnProperty(itemIdOrName) ||
+            this.upkeepData['other'].hasOwnProperty(itemIdOrName);
+    }
+
+    /**
+     *  Get upkeep details of an item, building block or other.
+     *  @param {string} name The name of the item, building block or other.
+     *  @return {array|null} null if something went wrong, otherwise
+     *      [type, id/name, itemDetails/name, upkeepDetails]
+     */
+    getUpkeepDetailsByName(name) {
+        if (typeof (name) !== 'string') return null;
+
+        let type = null;
+
+        let foundName = null;
+        if (!foundName) {
+            foundName = this.getClosestOtherNameByName(name);
+            if (foundName) {
+                if (this.upkeepData['other'].hasOwnProperty(foundName)) {
+                    type = 'other';
+                }
+                else {
+                    foundName = null;
+                }
+            }
+        }
+
+        if (!foundName) {
+            foundName = this.getClosestBuildingBlockNameByName(name);
+            if (foundName) {
+                if (this.upkeepData['buildingBlocks'].hasOwnProperty(foundName)) {
+                    type = 'buildingBlocks';
+                }
+                else {
+                    foundName = null;
+                }
+            }
+        }
+
+        if (!foundName) {
+            foundName = this.items.getClosestItemIdByName(name);
+            if (foundName) {
+                if (this.upkeepData['items'].hasOwnProperty(foundName)) {
+                    return this.getUpkeepDetailsById(foundName);
+                }
+                else {
+                    foundName = null;
+                }
+            }
+        }
+
+        if (!foundName) return null;
+
+        return [type, foundName, foundName, this.upkeepData[type][foundName]];
+    }
+
+    /**
+     *  Get upkeep details of an item.
+     *  @param {string} id The id of the item.
+     *  @return {array|null} null if something went wrong, otherwise [type, id, itemDetails, upkeepDetails]
+     */
+    getUpkeepDetailsById(id) {
+        if (typeof (id) !== 'string') return null;
+        if (!this.hasUpkeepDetails(id)) return null;
+
+        return ['items', id, this.items.items[id], this.upkeepData['items'][id]];
     }
 }
 

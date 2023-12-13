@@ -1273,15 +1273,23 @@ module.exports = {
             });
         }
 
-        //const upkeepDetails = Client.client.rustlabs.getUpkeepDetailsById(itemId);
-        //if (upkeepDetails !== null) {
-        //    const details = upkeepDetails[2];
-        //    fields.push({
-        //        name: Client.client.intlGet(guildId, 'upkeep'),
-        //        value: details.timeString,
-        //        inline: true
-        //    });
-        //}
+        const upkeepDetails = Client.client.rustlabs.getUpkeepDetailsById(itemId);
+        if (upkeepDetails !== null) {
+            const details = upkeepDetails[3];
+
+            let upkeepString = '';
+            for (const item of details) {
+                const name = Client.client.items.getName(item.id);
+                const quantity = item.quantity;
+                upkeepString += `${quantity} ${name}\n`;
+            }
+
+            fields.push({
+                name: Client.client.intlGet(guildId, 'upkeep'),
+                value: upkeepString,
+                inline: true
+            });
+        }
 
         const craftDetails = Client.client.rustlabs.getCraftDetailsById(itemId);
         if (craftDetails !== null) {

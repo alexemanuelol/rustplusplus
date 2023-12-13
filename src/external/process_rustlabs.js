@@ -92,6 +92,10 @@ const RUSTLABS_ITEM_DECAY_REGEX3 =
 const RUSTLABS_ITEM_DECAY_REGEX4 =
     /<td>Decay\stime\soutside<\/td>(\n|.){1,3}?<td>(.*?)<\/td>(\n|.)*?<td>HP<\/td>(\n|.){1,3}?<td>(.*?)<\/td>/gm
 
+const RUSTLABS_ITEM_UPKEEP_AREA_REGEX = /<td>Upkeep<\/td>(\n|.)*?<\/tr>/gm
+const RUSTLABS_ITEM_UPKEEP_REGEX =
+    /img\ssrc=".*?\/img\/.*?\/(.*?)\.png"\salt="(.*?)"(\n|.)*?class="icon-in-text">(.*?)</gm
+
 const RUSTLABS_ALL_BUILDING_BLOCKS_REGEX = /\/building\/(.*?)">(.*?)</gm
 
 const RUSTLABS_ALL_OTHER_REGEX = /\/entity\/(.*?)">(.*?)</gm
@@ -119,6 +123,10 @@ const rustlabsDecayData = new Object();
 rustlabsDecayData['items'] = new Object();
 rustlabsDecayData['buildingBlocks'] = new Object();
 rustlabsDecayData['other'] = new Object();
+const rustlabsUpkeepData = new Object();
+rustlabsUpkeepData['items'] = new Object();
+rustlabsUpkeepData['buildingBlocks'] = new Object();
+rustlabsUpkeepData['other'] = new Object();
 
 async function scrape(url) {
     try {
@@ -229,6 +237,7 @@ async function processAllItems() {
         processItemDespawn(rustlabsName, shortname, name, data);
         processItemStack(rustlabsName, shortname, name, data);
         processItemDecay(rustlabsName, shortname, name, data);
+        processItemUpkeep(rustlabsName, shortname, name, data);
 
         await sleep(SLEEP_TIMEOUT_MS);
     }
@@ -275,6 +284,7 @@ async function processAllBuildingBlocks() {
 
         processItemDurability(rustlabsName, null, name, data, 'buildingBlocks');
         processItemDecay(rustlabsName, null, name, data, 'buildingBlocks');
+        processItemUpkeep(rustlabsName, null, name, data, 'buildingBlocks');
 
         await sleep(SLEEP_TIMEOUT_MS);
     }
@@ -318,6 +328,7 @@ async function processAllOther() {
 
         processItemDurability(rustlabsName, null, name, data, 'other');
         processItemDecay(rustlabsName, null, name, data, 'other');
+        processItemUpkeep(rustlabsName, null, name, data, 'other');
 
         await sleep(SLEEP_TIMEOUT_MS);
     }
@@ -926,6 +937,54 @@ function processItemDecay(rustlabsName, shortname, name, data, type = 'items') {
     };
 }
 
+function processItemUpkeep(rustlabsName, shortname, name, data, type = 'items') {
+    let itemId = null;
+    if (type === 'items') {
+        itemId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === shortname && ITEMS[e].name === name);
+    }
+    else if (type === 'buildingBlocks' || type === 'other') {
+        itemId = name;
+    }
+    if (!itemId) return;
+
+    data = data.match(RUSTLABS_ITEM_UPKEEP_AREA_REGEX);
+    if (data === null || data.length !== 1) {
+        console.log('  - No upkeep data found.');
+        return;
+    }
+    data = data[0];
+
+    let matches = [...data.matchAll(RUSTLABS_ITEM_UPKEEP_REGEX)];
+    if (matches.length === 0) {
+        console.log('  - No upkeep data found.');
+        return;
+    }
+
+    const content = [];
+    for (const match of matches) {
+        if (match.length !== 5) {
+            console.log('  - No upkeep data found.');
+            return;
+        }
+
+        const upkeepItemShortname = match[1];
+        const upkeepItemName = Utils.decodeHtml(match[2]);
+        const upkeepQuantity = match[4];
+
+        const upkeepItemId = Object.keys(ITEMS).find(e =>
+            ITEMS[e].shortname === upkeepItemShortname && ITEMS[e].name === upkeepItemName);
+
+        if (!upkeepItemId) return;
+
+        content.push({
+            id: upkeepItemId,
+            quantity: upkeepQuantity
+        });
+    }
+
+    rustlabsUpkeepData[type][itemId] = content;
+}
+
 async function main() {
     await processAll();
 
@@ -941,6 +1000,7 @@ async function main() {
     Fs.writeFileSync(`${__dirname}/rustlabsDespawnData.json`, JSON.stringify(rustlabsDespawnData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsStackData.json`, JSON.stringify(rustlabsStackData, null, 2));
     Fs.writeFileSync(`${__dirname}/rustlabsDecayData.json`, JSON.stringify(rustlabsDecayData, null, 2));
+    Fs.writeFileSync(`${__dirname}/rustlabsUpkeepData.json`, JSON.stringify(rustlabsUpkeepData, null, 2));
 }
 
 main();

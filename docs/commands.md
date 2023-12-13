@@ -27,6 +27,7 @@ Slash Command | Description
 [**/role**](commands.md#role) | Set/Clear a specific role that will be able to see the rustplusplus category content.
 [**/storagemonitor**](commands.md#storagemonitors) | Operations on Storage Monitors.
 [**/switch**](commands.md#switch) | Operations on Smart Switches.
+[**/upkeep**](commands.md#upkeep) | Get the upkeep cost of an item.
 [**/uptime**](commands.md#uptime) | Display uptime of the bot and server.
 [**/voice**](commands.md#voice) | Operations on Voice Feature.
 
@@ -294,6 +295,19 @@ Subcommand | Options | Description | Required
 &nbsp; | `image` | Set the image that best represent the Smart Switch. | `True`
 
 ![Discord Slash Command switch Image](images/slash_commands/switch.png)
+
+
+## **/upkeep**
+
+> **Get the upkeep cost of an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item. | `False`
+&nbsp; | `id` | The id of the item. | `False`
+
+![Discord Slash Command upkeep Image](images/slash_commands/upkeep.png)
+
 
 ## **/uptime**
 
