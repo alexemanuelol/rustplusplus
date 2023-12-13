@@ -1201,7 +1201,7 @@ module.exports = {
         return embed;
     },
 
-    getItemEmbed: function (guildId, itemId, itemName) {
+    getItemEmbed: function (guildId, itemName, itemId, type) {
         const title = `${itemName} (${itemId})`;
 
         const fields = [];
@@ -1211,7 +1211,8 @@ module.exports = {
             timestamp: true
         });
 
-        const decayDetails = Client.client.rustlabs.getDecayDetailsById(itemId);
+        const decayDetails = type === 'items' ? Client.client.rustlabs.getDecayDetailsById(itemId) :
+            Client.client.rustlabs.getDecayDetailsByName(itemId);
         if (decayDetails !== null) {
             const details = decayDetails[3];
             const hp = details.hpString;
@@ -1253,7 +1254,7 @@ module.exports = {
             }
         }
 
-        const despawnDetails = Client.client.rustlabs.getDespawnDetailsById(itemId);
+        const despawnDetails = type === 'items' ? Client.client.rustlabs.getDespawnDetailsById(itemId) : null;
         if (despawnDetails !== null) {
             const details = despawnDetails[2];
             fields.push({
@@ -1263,7 +1264,7 @@ module.exports = {
             });
         }
 
-        const stackDetails = Client.client.rustlabs.getStackDetailsById(itemId);
+        const stackDetails = type === 'items' ? Client.client.rustlabs.getStackDetailsById(itemId) : null;
         if (stackDetails !== null) {
             const details = stackDetails[2];
             fields.push({
@@ -1273,7 +1274,9 @@ module.exports = {
             });
         }
 
-        const upkeepDetails = Client.client.rustlabs.getUpkeepDetailsById(itemId);
+
+        const upkeepDetails = type === 'items' ? Client.client.rustlabs.getUpkeepDetailsById(itemId) :
+            Client.client.rustlabs.getUpkeepDetailsByName(itemId);
         if (upkeepDetails !== null) {
             const details = upkeepDetails[3];
 
@@ -1291,7 +1294,7 @@ module.exports = {
             });
         }
 
-        const craftDetails = Client.client.rustlabs.getCraftDetailsById(itemId);
+        const craftDetails = type === 'items' ? Client.client.rustlabs.getCraftDetailsById(itemId) : null;
         if (craftDetails !== null) {
             const details = craftDetails[2];
             let workbenchString = '';
@@ -1329,7 +1332,7 @@ module.exports = {
             }
         }
 
-        const recycleDetails = Client.client.rustlabs.getRecycleDetailsById(itemId);
+        const recycleDetails = type === 'items' ? Client.client.rustlabs.getRecycleDetailsById(itemId) : null;
         if (recycleDetails !== null) {
             const details = recycleDetails[2];
 
@@ -1351,7 +1354,7 @@ module.exports = {
             }
         }
 
-        const researchDetails = Client.client.rustlabs.getResearchDetailsById(itemId);
+        const researchDetails = type === 'items' ? Client.client.rustlabs.getResearchDetailsById(itemId) : null;
         if (researchDetails !== null) {
             const details = researchDetails[2];
             let workbenchString = '';

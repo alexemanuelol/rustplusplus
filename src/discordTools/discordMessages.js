@@ -584,9 +584,9 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
     },
 
-    sendItemMessage: async function (interaction, itemId, itemName) {
+    sendItemMessage: async function (interaction, itemName, itemId, type) {
         const content = {
-            embeds: [DiscordEmbeds.getItemEmbed(interaction.guildId, itemId, itemName)],
+            embeds: [DiscordEmbeds.getItemEmbed(interaction.guildId, itemName, itemId, type)],
             ephemeral: true
         }
 

@@ -53,9 +53,32 @@ module.exports = {
 		const itemItemId = interaction.options.getString('id');
 
 		let itemId = null;
+		let type = null;
+
 		if (itemItemName !== null) {
-			const item = client.items.getClosestItemIdByName(itemItemName)
-			if (item === null) {
+			let foundName = null;
+			if (!foundName) {
+				foundName = client.rustlabs.getClosestOtherNameByName(itemItemName);
+				if (foundName) {
+					type = 'other';
+				}
+			}
+
+			if (!foundName) {
+				foundName = client.rustlabs.getClosestBuildingBlockNameByName(itemItemName);
+				if (foundName) {
+					type = 'buildingBlocks';
+				}
+			}
+
+			if (!foundName) {
+				foundName = client.items.getClosestItemIdByName(itemItemName);
+				if (foundName) {
+					type = 'items';
+				}
+			}
+
+			if (!foundName) {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: itemItemName
 				});
@@ -63,9 +86,7 @@ module.exports = {
 				client.log(client.intlGet(guildId, 'warningCap'), str);
 				return;
 			}
-			else {
-				itemId = item;
-			}
+			itemId = foundName;
 		}
 		else if (itemItemId !== null) {
 			if (client.items.itemExist(itemItemId)) {
@@ -86,14 +107,20 @@ module.exports = {
 			client.log(client.intlGet(guildId, 'warningCap'), str);
 			return;
 		}
-		const itemName = client.items.getName(itemId);
+		let itemName = null;
+		if (type === 'items') {
+			itemName = client.items.getName(itemId);
+		}
+		else {
+			itemName = itemId;
+		}
 
 		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${itemItemName} ${itemItemId}`
 		}));
 
-		await DiscordMessages.sendItemMessage(interaction, itemId, itemName);
+		await DiscordMessages.sendItemMessage(interaction, itemName, itemId, type);
 		client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsItemDesc'));
 	},
 };
