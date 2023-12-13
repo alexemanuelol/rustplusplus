@@ -322,7 +322,7 @@
     "301063058": {
         "shortname": "wantedposter.wantedposter2",
         "name": "Wanted Poster 2",
-        "description": "A poster that can be display a given player's face as wanted."
+        "description": "A poster that can display a given player's face as wanted."
     },
     "304481038": {
         "shortname": "flare",
@@ -413,6 +413,11 @@
         "shortname": "lightupmirror.large",
         "name": "Light-Up Mirror Large",
         "description": "A large light-up mirror"
+    },
+    "468313189": {
+        "shortname": "hazmatsuittwitch",
+        "name": "Twitch Rivals Hazmat Suit",
+        "description": "A purple hazmat suit made from radiation resistant rubber."
     },
     "476066818": {
         "shortname": "cassette",
@@ -534,6 +539,11 @@
         "name": "Incendiary 5.56 Rifle Ammo",
         "description": "Slower moving ammunition that deals fire damage. There's a small chance it will start a fire."
     },
+    "607400343": {
+        "shortname": "legacy.shelter.wood",
+        "name": "Legacy Wood Shelter",
+        "description": "The classic s*** shack. A great starter base for any fresh spawn."
+    },
     "609049394": {
         "shortname": "battery.small",
         "name": "Battery - Small",
@@ -613,6 +623,11 @@
         "shortname": "xmas.door.garland",
         "name": "Festive Doorway Garland",
         "description": "A Festive decoration to spruce up your  doorway during the holdiays!"
+    },
+    "678698219": {
+        "shortname": "shotgun.m4",
+        "name": "M4 Shotgun",
+        "description": "A semi automatic military issue shotgun"
     },
     "680234026": {
         "shortname": "fish.yellowperch",
@@ -1134,6 +1149,11 @@
         "name": "Armored Double Door",
         "description": "Extremely strong door with a hatch to see and shoot out of."
     },
+    "1223729384": {
+        "shortname": "lavenderidtag",
+        "name": "Lavender ID Tag",
+        "description": "Lavender ID Tag"
+    },
     "1223900335": {
         "shortname": "dogtagneutral",
         "name": "Dog Tag",
@@ -1437,7 +1457,7 @@
     "1463862472": {
         "shortname": "wantedposter.wantedposter4",
         "name": "Wanted Poster 4",
-        "description": "A poster that can be display a given player's face as wanted."
+        "description": "A poster that can display a given player's face as wanted."
     },
     "1478091698": {
         "shortname": "weapon.mod.muzzlebrake",
@@ -1584,6 +1604,11 @@
         "name": "Handmade Fishing Rod",
         "description": "Use [attack2] to cast out the line and wait for a bite. Requires bait."
     },
+    "1572152877": {
+        "shortname": "mintidtag",
+        "name": "Mint ID Tag",
+        "description": "Mint ID Tag"
+    },
     "1575635062": {
         "shortname": "frankensteintable",
         "name": "Frankenstein Table",
@@ -1613,6 +1638,11 @@
         "shortname": "spear.stone",
         "name": "Stone Spear",
         "description": "A stone-tipped wooden Spear. Slightly longer range."
+    },
+    "1603174987": {
+        "shortname": "confetticannon",
+        "name": "Confetti Cannon",
+        "description": "Blast a cloud of birthday themed confetti cheer."
     },
     "1608640313": {
         "shortname": "shirt.tanktop",
@@ -3289,6 +3319,16 @@
         "name": "Large Candle Set",
         "description": "Large Candles"
     },
+    "-73195037": {
+        "shortname": "legacy bow",
+        "name": "Legacy bow",
+        "description": "Legacy Bow, useful for short to medium range combat and hunting."
+    },
+    "-1310391395": {
+        "shortname": "legacyfurnace",
+        "name": "Legacy Furnace",
+        "description": "Legacy Furnace"
+    },
     "-1294739579": {
         "shortname": "lightupframe.medium",
         "name": "Light-Up Frame Medium",
@@ -3483,6 +3523,11 @@
         "shortname": "pickaxe",
         "name": "Pickaxe",
         "description": "A Pickaxe, useful for gathering ore from rocks."
+    },
+    "-1442496789": {
+        "shortname": "pinata",
+        "name": "Pinata",
+        "description": "Batter up!"
     },
     "-144513264": {
         "shortname": "pipetool",
@@ -4077,7 +4122,7 @@
     "-1003665711": {
         "shortname": "supertea",
         "name": "Super Serum",
-        "description": "Super Serum, more health, more ore, more wood, more scrap"
+        "description": "Super Serum,  more ore, more wood, more scrap"
     },
     "-1108136649": {
         "shortname": "tactical.gloves",
@@ -4119,6 +4164,11 @@
         "name": "Homemade Landmine",
         "description": "Homemade Landmine. If you stand on one, you can ask a friend to disarm it before it explodes."
     },
+    "-901370585": {
+        "shortname": "trophy2023",
+        "name": "Twitch Rivals Trophy 2023",
+        "description": "A trophy dedicated to the survivors of Rust Twitch Rivals 2023"
+    },
     "-561148628": {
         "shortname": "tugboat",
         "name": "Tugboat",
@@ -4133,6 +4183,11 @@
         "shortname": "twitch.headset",
         "name": "Headset",
         "description": "Every gamer needs a headset! - Gained from Rust's first Twitch drop event."
+    },
+    "-243540612": {
+        "shortname": "twitchrivals2023desk",
+        "name": "Twitch Rivals Desk",
+        "description": "Twitch Rivals Desk"
     },
     "-1683726934": {
         "shortname": "twowaymirror.window",
@@ -4262,7 +4317,7 @@
     "-1265020883": {
         "shortname": "wantedposter.wantedposter3",
         "name": "Wanted Poster 3",
-        "description": "A poster that can be display a given player's face as wanted."
+        "description": "A poster that can display a given player's face as wanted."
     },
     "-463122489": {
         "shortname": "watchtower.wood",
