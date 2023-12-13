@@ -120,6 +120,18 @@
       "hp": 300,
       "hpString": "300"
     },
+    "607400343": {
+      "decay": 21600,
+      "decayString": "6 hours",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 500,
+      "hpString": "500"
+    },
     "615112838": {
       "decay": 172800,
       "decayString": "48 hours",
@@ -527,6 +539,18 @@
       "decayUnderwaterString": null,
       "hp": 250,
       "hpString": "250"
+    },
+    "1603174987": {
+      "decay": 172800,
+      "decayString": "48 hours",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 100,
+      "hpString": "100"
     },
     "1629293099": {
       "decay": 345600,
