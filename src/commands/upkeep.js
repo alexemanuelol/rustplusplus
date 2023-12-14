@@ -101,7 +101,7 @@ module.exports = {
 		}
 		else if (upkeepItemId !== null) {
 			if (client.items.itemExist(upkeepItemId)) {
-				itemId = itemItemId;
+				itemId = upkeepItemId;
 			}
 			else {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
