@@ -760,5 +760,7 @@
     "wipeDetected": "Wipe tespit edildi!",
     "yield": "Yield",
     "youAreAlreadyLeader": "Zaten lidersin.",
-    "youAreNotPairedWithServer": "Sunucuyla eşleşmediğiniz için lider komutu çalışmıyor."
+    "youAreNotPairedWithServer": "Sunucuyla eşleşmediğiniz için lider komutu çalışmıyor.",
+    "commandSyntaxRaid":"raid",
+    "raidMessage":"Base is being raided!"
 }

@@ -760,5 +760,7 @@
     "wipeDetected": "Обнаружен Wipe!",
     "yield": "Урожай",
     "youAreAlreadyLeader": "Вы уже лидер.",
-    "youAreNotPairedWithServer": "Команда лидера не работает, потому что вы не подключены к серверу."
+    "youAreNotPairedWithServer": "Команда лидера не работает, потому что вы не подключены к серверу.",
+    "commandSyntaxRaid":"raid",
+    "raidMessage":"Base is being raided!"
 }

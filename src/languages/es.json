@@ -760,5 +760,7 @@
     "wipeDetected": "¡Wipe detectado!",
     "yield": "Yield",
     "youAreAlreadyLeader": "Ya eres líder.",
-    "youAreNotPairedWithServer": "El comando líder no funciona porque no está emparejado con el servidor."
+    "youAreNotPairedWithServer": "El comando líder no funciona porque no está emparejado con el servidor.",
+    "commandSyntaxRaid":"redada",
+    "raidMessage":"¡La base está siendo asaltada!"
 }

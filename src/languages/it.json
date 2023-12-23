@@ -760,5 +760,7 @@
     "wipeDetected": "Rilevato wipe!",
     "yield": "Yield",
     "youAreAlreadyLeader": "Sei già il leader.",
-    "youAreNotPairedWithServer": "Il comando del leader non funziona perché non sei associato al server."
+    "youAreNotPairedWithServer": "Il comando del leader non funziona perché non sei associato al server.",
+    "commandSyntaxRaid":"raid",
+    "raidingMessage":"Stanno raidando la base!"
 }

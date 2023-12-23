@@ -760,5 +760,7 @@
     "wipeDetected": "Rensning upptäcktes!",
     "yield": "Yield",
     "youAreAlreadyLeader": "Du är redan lagledare.",
-    "youAreNotPairedWithServer": "Leader-kommandot fungerar inte eftersom du inte är parad med servern."
+    "youAreNotPairedWithServer": "Leader-kommandot fungerar inte eftersom du inte är parad med servern.",
+    "commandSyntaxRaid":"raid",
+    "raidMessage":"Base is being raided!"
 }

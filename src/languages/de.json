@@ -760,5 +760,7 @@
     "wipeDetected": "Wipe erkannt!",
     "yield": "Ertrag",
     "youAreAlreadyLeader": "Du bist bereits Anführer.",
-    "youAreNotPairedWithServer": "Anführer-Befehl funktioniert nicht, weil du nicht mit dem Server gekoppelt bist."
+    "youAreNotPairedWithServer": "Anführer-Befehl funktioniert nicht, weil du nicht mit dem Server gekoppelt bist.",
+    "commandSyntaxRaid":"Überfall",
+    "raidingMessage":"Basis wird gestürmt!"
 }

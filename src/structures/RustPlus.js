@@ -2303,6 +2303,47 @@ class RustPlus extends RustPlusLib {
         });
     }
 
+    async getCommandRaid(command, callerName) {
+        const credentials = InstanceUtils.readCredentialsFile(this.guildId);
+        const prefix = this.generalSettings.prefix;
+        const commandSend = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxRaid')}`;
+        const commandSendEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxRaid')}`;
+        const instance = Client.client.getInstance(this.guildId);
+        const channel = DiscordTools.getTextChannelById(this.guildId, instance.channelId.teamchat);
+
+        if (command.toLowerCase().startsWith(`${commandSend} `)) {
+            command = command.slice(`${commandSend} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandSendEn} `.length).trim();
+        }
+
+        const message = Client.client.intlGet(this.guildId, 'raidingMessage');
+
+        for (let i = 0; i < 10; i++) {
+            const content = {
+                embeds: [DiscordEmbeds.getUserSendEmbed(this.guildId, this.serverId, callerName, message)]
+            }
+
+            for (const player of this.team.players) {
+                    if (!(player.steamId in credentials)) {
+                        continue;
+                    }
+
+                    const discordUserId = credentials[player.steamId].discordUserId??null;
+                    const user = await DiscordTools.getUserById(this.guildId, discordUserId);
+
+                    if (user) {                        
+                            await Client.client.messageSend(user, content);
+                    }
+            }
+            content.content="@everyone";
+            await Client.client.messageSend(channel, content);
+            
+        }
+        return Client.client.intlGet(this.guildId, 'messageWasSent');
+    }
+
     getCommandSmall(isInfoChannel = false) {
         const strings = [];
         if (this.mapMarkers.crateSmallOilRigTimer) {

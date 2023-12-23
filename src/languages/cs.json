@@ -760,5 +760,7 @@
     "wipeDetected": "Wipe byl detekován!",
     "yield": "Yield",
     "youAreAlreadyLeader": "Už jsi vůdce.",
-    "youAreNotPairedWithServer": "Příkaz na vůdce nefunguje, protože nejsi spárován se serverem."
+    "youAreNotPairedWithServer": "Příkaz na vůdce nefunguje, protože nejsi spárován se serverem.",
+    "commandSyntaxRaid":"nálet",
+    "raidingMessage":"Základna je přepadena!"
 }
