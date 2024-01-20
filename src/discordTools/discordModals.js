@@ -123,6 +123,17 @@ module.exports = {
             );
         }
 
+        if (entity.autoDayNightOnOff === 9 || entity.autoDayNightOnOff === 10) {
+            modal.addComponents(
+                new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                    customId: 'SmartSwitchOnOffTimer',
+                    label: Client.client.intlGet(guildId, 'smartSwitchEditOnOffTimerLabel'),
+                    value: `${entity.onOffTimer}`,
+                    style: Discord.TextInputStyle.Short
+                }))
+            );
+        }
+
         return modal;
     },
 

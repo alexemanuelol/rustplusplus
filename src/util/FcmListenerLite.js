@@ -165,6 +165,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         command: entityExist ? switches[body.entityId].command : body.entityId,
         image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
         autoDayNightOnOff: entityExist ? switches[body.entityId].autoDayNightOnOff : 0,
+        onOffTimer: entityExist ? switches[body.entityId].onOffTimer : Constants.ON_OFF_TIMER_SETTING_DEFAULT_TIME,
         location: entityExist ? switches[body.entityId].location : null,
         x: entityExist ? switches[body.entityId].x : null,
         y: entityExist ? switches[body.entityId].y : null,

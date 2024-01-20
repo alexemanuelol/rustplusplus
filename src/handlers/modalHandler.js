@@ -114,6 +114,7 @@ module.exports = async (client, interaction) => {
         catch (e) {
             smartSwitchProximity = null;
         }
+        let smartSwitchOnOffTimer = interaction.fields.getTextInputValue('SmartSwitchOnOffTimer');;
 
         if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
             interaction.deferUpdate();
@@ -130,6 +131,8 @@ module.exports = async (client, interaction) => {
         if (smartSwitchProximity !== null && smartSwitchProximity >= 0) {
             server.switches[ids.entityId].proximity = smartSwitchProximity;
         }
+
+        server.switches[ids.entityId].onOffTimer = smartSwitchOnOffTimer;
         client.setInstance(guildId, instance);
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
