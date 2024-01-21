@@ -346,7 +346,7 @@ module.exports = {
                 let shouldBeOn = true;
                 const timeSeconds = Timer.getSecondsFromStringTime(content.onOffTimer);
 
-                if (!rustplus.currentSwitchTimeouts[entityId] && ((shouldBeOn && !content.active) || (!shouldBeOn && content.active))) {
+                if (!rustplus.currentSwitchTimeouts.hasOwnProperty(entityId) && ((shouldBeOn && !content.active) || (!shouldBeOn && content.active))) {
                     rustplus.currentSwitchTimeouts[entityId] = setTimeout(async function () {
                         instance.serverList[serverId].switches[entityId].active = shouldBeOn;
                         client.setInstance(guildId, instance);
@@ -382,7 +382,7 @@ module.exports = {
                 let shouldBeOn = false;
                 const timeSeconds = Timer.getSecondsFromStringTime(content.onOffTimer);
 
-                if (!rustplus.currentSwitchTimeouts[entityId] && ((shouldBeOn && !content.active) || (!shouldBeOn && content.active))) {
+                if (!rustplus.currentSwitchTimeouts.hasOwnProperty(entityId) && ((shouldBeOn && !content.active) || (!shouldBeOn && content.active))) {
                     rustplus.currentSwitchTimeouts[entityId] = setTimeout(async function () {
                         instance.serverList[serverId].switches[entityId].active = shouldBeOn;
                         client.setInstance(guildId, instance);
