@@ -2718,7 +2718,7 @@ class RustPlus extends RustPlusLib {
             text = command.slice(`${commandSayEn} `.length).trim();
         }
         const str = `${callerName} ${Client.client.intlGet(this.guildId, 'says')} ${text}`
-        await DiscordVoice.sendDiscordVoiceMessage(this.guildId, str)
+        DiscordVoice.sendDiscordVoiceMessage(this.guildId, str)
         return Client.client.intlGet(this.guildId, 'sentVoiceSay');
     }
 }
