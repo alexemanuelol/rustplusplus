@@ -564,4 +564,59 @@ module.exports = {
                     style: instance.generalSettings.battlemetricsGlobalLogout ? SUCCESS : DANGER
                 }))];
     },
+
+    getSelectVoiceCalloutsButtons: function (guildId) { //TODO look for more Options
+        const instance = Client.client.getInstance(guildId);
+
+        return [
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: 'VoicePlayerConnection',
+                    label: Client.client.intlGet(guildId, 'voicePlayerConnectionCap'),
+                    style: instance.generalSettings.voicePlayerConnection ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'VoicePlayerAfk',
+                    label: Client.client.intlGet(guildId, 'voicePlayerAfkCap'),
+                    style: instance.generalSettings.voicePlayerAfk ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'VoicePlayerDeath',
+                    label: Client.client.intlGet(guildId, 'voicePlayerDeathCap'),
+                    style: instance.generalSettings.voicePlayerDeath ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'VoiceSmartAlarm',
+                    label: Client.client.intlGet(guildId, 'voiceSmartAlarmCap'),
+                    style: instance.generalSettings.voiceSmartAlarm ? SUCCESS : DANGER
+                })),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: 'VoiceTeamChanges',
+                    label: Client.client.intlGet(guildId, 'voiceTeamChangesCap'),
+                    style: instance.generalSettings.voiceTeamChanges ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'VoiceServerStatus',
+                    label: Client.client.intlGet(guildId, 'voiceServerStatusCap'),
+                    style: instance.generalSettings.voiceServerStatus ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'VoiceServerWiped',
+                    label: Client.client.intlGet(guildId, 'voiceServerWipedCap'),
+                    style: instance.generalSettings.voiceServerWiped ? SUCCESS : DANGER
+                }),
+                module.exports.getButton({
+                    customId: 'VoiceSmartDevice',
+                    label: Client.client.intlGet(guildId, 'voiceSmartDeviceCap'),
+                    style: instance.generalSettings.voiceSmartDevice ? SUCCESS : DANGER
+                })),
+            new Discord.ActionRowBuilder().addComponents(
+                module.exports.getButton({
+                    customId: 'VoiceSayCommand',
+                    label: Client.client.intlGet(guildId, 'voiceSayCommandCAP', 
+                        { prefix: instance.generalSettings.prefix }),
+                    style: instance.generalSettings.voiceSayCommand ? SUCCESS : DANGER
+                }))];
+    },
 }

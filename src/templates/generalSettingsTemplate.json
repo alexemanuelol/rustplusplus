@@ -22,5 +22,14 @@
     "battlemetricsTrackerNameChanges": true,
     "battlemetricsGlobalNameChanges": false,
     "battlemetricsGlobalLogin": false,
-    "battlemetricsGlobalLogout": false
+    "battlemetricsGlobalLogout": false,
+    "voicePlayerConnection": false,
+    "voicePlayerAfk": false,
+    "voicePlayerDeath": false,
+    "voiceSmartAlarm": false,
+    "voiceTeamChanges": false,
+    "voiceServerStatus": false,
+    "voiceServerWiped": false,
+    "voiceSmartDevice": false,
+    "voiceSayCommand": true
 }
