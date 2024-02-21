@@ -2705,7 +2705,7 @@ class RustPlus extends RustPlusLib {
         }
     }
 
-    getCommandSay(command, callerName) {
+    async getCommandSay(command, callerName) {
         const prefix = this.generalSettings.prefix;
         const commandSay = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxSay')}`;
         const commandSayEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxSay')}`;
@@ -2718,7 +2718,7 @@ class RustPlus extends RustPlusLib {
             text = command.slice(`${commandSayEn} `.length).trim();
         }
         const str = `${callerName} ${Client.client.intlGet(this.guildId, 'says')} ${text}`
-        DiscordVoice.sendDiscordVoiceMessage(this.guildId, str)
+        await DiscordVoice.sendDiscordVoiceMessage(this.guildId, str)
         return Client.client.intlGet(this.guildId, 'sentVoiceSay');
     }
 }
