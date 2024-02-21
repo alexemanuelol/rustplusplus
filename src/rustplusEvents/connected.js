@@ -22,6 +22,7 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
 const PollingHandler = require('../handlers/pollingHandler.js');
+const discordVoice = require('../discordTools/discordVoice.js');
 
 module.exports = {
     name: 'connected',
@@ -68,6 +69,8 @@ module.exports = {
 
                 await rustplus.map.writeMap(false, true);
                 await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
+                await discordVoice.sendDiscordVoiceMessage(guildId,
+                    client.intlGet(guildId, 'wipeDetected'));
                 await DiscordMessages.sendInformationMapMessage(guildId);
             }
             else {
@@ -93,6 +96,8 @@ module.exports = {
             }
 
             await DiscordMessages.sendServerChangeStateMessage(guildId, serverId, 0);
+            await discordVoice.sendDiscordVoiceMessage(guildId, 
+                client.intlGet(guildId, 'serverJustOnline'))
         }
 
         await DiscordMessages.sendServerMessage(guildId, serverId, null);
