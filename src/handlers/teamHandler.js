@@ -20,6 +20,7 @@
 
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordVoice = require('../discordTools/discordVoice.js');
 
 module.exports = {
     handler: async function (rustplus, client, teamInfo) {
@@ -44,6 +45,7 @@ module.exports = {
             await DiscordMessages.sendActivityNotificationMessage(
                 guildId, serverId, Constants.COLOR_GREY, str, steamId);
             if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
+            if (instance.generalSettings.voiceTeamChanges) await DiscordVoice.sendDiscordVoiceMessage(guildId, str);
             rustplus.log(client.intlGet(null, 'infoCap'), str);
             rustplus.updateConnections(steamId, str);
         }
@@ -55,6 +57,7 @@ module.exports = {
                     await DiscordMessages.sendActivityNotificationMessage(
                         guildId, serverId, Constants.COLOR_ACTIVE, str, steamId);
                     if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
+                    if (instance.generalSettings.voiceTeamChanges) await DiscordVoice.sendDiscordVoiceMessage(guildId, str);
                     rustplus.log(client.intlGet(null, 'infoCap'), str);
                     rustplus.updateConnections(steamId, str);
                 }
@@ -74,6 +77,7 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, serverId, Constants.COLOR_INACTIVE, str, player.steamId);
                         if (instance.generalSettings.deathNotify) rustplus.sendInGameMessage(str);
+                        if (instance.generalSettings.voicePlayerDeath) DiscordVoice.sendDiscordVoiceMessage(guildId, str);
                         rustplus.log(client.intlGet(null, 'infoCap'), str);
                         rustplus.updateDeaths(player.steamId, {
                             name: player.name,
@@ -82,23 +86,21 @@ module.exports = {
                     }
 
                     if (player.isGoneAfk(playerUpdated)) {
-                        if (instance.generalSettings.afkNotify) {
-                            const str = client.intlGet(guildId, 'playerJustWentAfk', { name: player.name });
-                            rustplus.sendInGameMessage(str);
-                            rustplus.log(client.intlGet(null, 'infoCap'), str);
-                        }
+                        const str = client.intlGet(guildId, 'playerJustWentAfk', { name: player.name });
+                        if (instance.generalSettings.afkNotify) rustplus.sendInGameMessage(str);
+                        if (instance.generalSettings.voicePlayerAfk) DiscordVoice.sendDiscordVoiceMessage(guildId, str);
+                        rustplus.log(client.intlGet(null, 'infoCap'), str);
                     }
 
                     if (player.isAfk() && player.isMoved(playerUpdated)) {
-                        if (instance.generalSettings.afkNotify) {
-                            const afkTime = player.getAfkTime('dhs');
-                            const str = client.intlGet(guildId, 'playerJustReturned', {
-                                name: player.name,
-                                time: afkTime
-                            });
-                            rustplus.sendInGameMessage(str);
-                            rustplus.log(client.intlGet(null, 'infoCap'), str);
-                        }
+                        const afkTime = player.getAfkTime('dhs');
+                        const str = client.intlGet(guildId, 'playerJustReturned', {
+                            name: player.name,
+                            time: afkTime
+                        });
+                        if (instance.generalSettings.afkNotify) rustplus.sendInGameMessage(str);
+                        if (instance.generalSettings.voicePlayerAfk) DiscordVoice.sendDiscordVoiceMessage(guildId, str);
+                        rustplus.log(client.intlGet(null, 'infoCap'), str);
                     }
 
                     if (player.isGoneOnline(playerUpdated)) {
@@ -106,6 +108,7 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, serverId, Constants.COLOR_ACTIVE, str, player.steamId);
                         if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
+                        if (instance.generalSettings.voicePlayerConnection) await DiscordVoice.sendDiscordVoiceMessage(guildId, str);
                         rustplus.log(client.intlGet(null, 'infoCap'),
                             client.intlGet(null, 'playerJustConnectedTo', {
                                 name: player.name,
@@ -119,6 +122,7 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, serverId, Constants.COLOR_INACTIVE, str, player.steamId);
                         if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
+                        if (instance.generalSettings.voicePlayerConnection) await DiscordVoice.sendDiscordVoiceMessage(guildId, str);
                         rustplus.log(client.intlGet(null, 'infoCap'),
                             client.intlGet(null, 'playerJustDisconnectedFrom', {
                                 name: player.name,
