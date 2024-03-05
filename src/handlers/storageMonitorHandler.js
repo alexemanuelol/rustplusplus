@@ -20,6 +20,7 @@
 
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordVoice = require('../discordTools/discordVoice.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -45,6 +46,10 @@ module.exports = {
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.serverList[serverId].storageMonitors[entityId].reachable) {
                         await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
+                        if (instance.generalSettings.voiceSmartDevice){
+                            DiscordVoice.sendDiscordVoiceMessage(guildId, 
+                                DiscordVoice.getSmartDeviceNotFoundVoice(guildId, serverId, entityId))
+                        }
                     }
                     instance.serverList[serverId].storageMonitors[entityId].reachable = false;
                 }
@@ -59,6 +64,10 @@ module.exports = {
                             info.entityInfo.payload.capacity === 0)) {
                         await DiscordMessages.sendStorageMonitorDisconnectNotificationMessage(
                             guildId, serverId, entityId);
+                            if (instance.generalSettings.voiceSmartDevice){
+                                DiscordVoice.sendDiscordVoiceMessage(guildId, 
+                                    DiscordVoice.getSmartDeviceDisconnectedVoice(guildId, serverId, entityId))
+                            }
                     }
 
                     rustplus.storageMonitors[entityId] = {
@@ -77,6 +86,11 @@ module.exports = {
 
                                 await DiscordMessages.sendDecayingNotificationMessage(
                                     guildId, serverId, entityId);
+                                
+                                if (instance.generalSettings.voiceSmartDevice){
+                                    DiscordVoice.sendDiscordVoiceMessage(guildId, 
+                                        DiscordVoice.getDecayingNotificationVoice(guildId, serverId, entityId))
+                                }
 
                                 if (instance.serverList[serverId].storageMonitors[entityId].inGame) {
                                     rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'isDecaying', {

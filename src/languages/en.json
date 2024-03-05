@@ -647,6 +647,7 @@
     "smartAlarm": "Smart Alarm",
     "smartAlarmEditSuccess": "Successfully edited Smart Alarm {name}.",
     "smartAlarmNotifyExtendSetting": "- These Alarm notifications will use the title and message given to the Smart Alarm in-game.\n- These Smart Alarms might not be available in the alarms text channel in discord.",
+    "smartAlarmTriggered": "A Smart alarm for {entity} in grid {grid} got activated",
     "smartDeviceNotFound": "{device} could not be found! Either it have been destroyed or {user} have lost tool cupboard access.",
     "smartSwitch": "Smart Switch",
     "smartSwitchAutoDay": "Smart Switch will be active only during the day.",
