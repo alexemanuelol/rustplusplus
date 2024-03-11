@@ -766,5 +766,9 @@
     "wipeDetected": "Wipe detected!",
     "yield": "Yield",
     "youAreAlreadyLeader": "You are already leader.",
-    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
+    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server.",
+    "battlemetricsUpcomingWipes":  "Battlemetrics Upcoming Wipes",
+    "andMoreWipes": "and more wipes",
+    "wipes":  "Wipes",
+    "displayInformationBattlemetricsUpcomingWipes": "Should all upcoming wipes from Battlemetrics be displayed in the information channel?"
 }
