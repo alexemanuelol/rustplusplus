@@ -106,6 +106,7 @@ class Battlemetrics {
         this.server_rust_last_wipe = null;
         this.server_rust_last_wipe_ent = null;
         this.server_serverSteamId = null;
+        this.server_rust_wipes = null;
         this.map_url = null;
         this.map_thumbnailUrl = null;
         this.map_monuments = null;
@@ -153,6 +154,7 @@ class Battlemetrics {
     set offlinePlayers(offlinePlayers) { this._offlinePlayers = offlinePlayers; }
     get serverEvaluation() { return this._serverEvaluation; }
     set serverEvaluation(serverEvaluation) { this._serverEvaluation = serverEvaluation; }
+    get rustWipes() { return this.server_rust_wipes; }
 
     /**
      *  Construct the Battlemetrics API call for searching servers by name.
@@ -725,6 +727,7 @@ class Battlemetrics {
         this.server_rust_last_wipe = details.rust_last_wipe;
         this.server_rust_last_wipe_ent = details.rust_last_wipe_ent;
         this.server_serverSteamId = details.serverSteamId;
+        this.server_rust_wipes = details.rust_wipes
 
         const rustMaps = details.rust_maps;
         if (rustMaps) {
@@ -799,6 +802,18 @@ class Battlemetrics {
         }
         let ordered = unordered.sort(function (a, b) { return a[0] - b[0] })
         return ordered.map(e => e[1]);
+    }
+
+    getUpcomingWipesOrderedByTime() {
+        const unordered = [];
+        for (const wipe of this.rustWipes) {
+            const timestampDate =  new Date(wipe.timestamp)
+            wipe.discordTimestamp = timestampDate.getTime() / 1000;
+            const timestampSplit = timestampDate.toISOString().split('T')
+            wipe.readableTimestamp = timestampSplit.length === 2 ?`${timestampSplit[0]} T ${timestampSplit[1]}`: timestampDate.toISOString()
+            unordered.push(wipe);
+        }
+        return unordered.sort(function (a, b) { return a.discordTimestamp - b.discordTimestamp })
     }
 
     /**
