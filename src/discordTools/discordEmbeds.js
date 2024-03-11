@@ -993,8 +993,8 @@ module.exports = {
             name = name.length <= nameMaxLength ? name : name.substring(0, nameMaxLength - 2) + '..';
 
             let wipeStr  = `${name}: `;
-            wipeStr += `<t:${wipe.discordTimestamp}:R>`;
-            wipeStr += `(${wipe.timestamp})\n`
+            wipeStr += `<t:${wipe.discordTimestamp}:R> `;
+            wipeStr += `(${wipe.readableTimestamp})\n`
 
 
             if (totalCharacters + wipeStr.length >= Constants.EMBED_MAX_TOTAL_CHARACTERS) {
