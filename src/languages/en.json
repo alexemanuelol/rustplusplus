@@ -766,5 +766,15 @@
     "wipeDetected": "Wipe detected!",
     "yield": "Yield",
     "youAreAlreadyLeader": "You are already leader.",
-    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
+    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server.",
+    "bradleyApcDestroyedSetting": "When Bradley APC is destroyed, send a notification.",
+    "bradleyApcShouldRespawnSetting": "When Bradley APC should respawn, send a notification.",
+    "lockedCrateSpawnCargoShipSetting": "When Locked Crate is spawned on Cargo Ship, send a notification.",
+    "lockedCrateRespawnOilRigSetting": "When Oil Rig Locked Crate is respawned, send a notification.",
+    "lockedCrateDroppedAtMonumentSetting": "When Locked Crate is dropped at monument, send a notification.",
+    "lockedCrateLeftCargoShipSetting": "When Locked Crate is looted on Cargo Ship, send a notification.",
+    "lockedCrateLootedOilRigSetting": "When Locked Crate is looted on Oil Rig, send a notification.",
+    "lockedCrateMonumentLeftSetting": "When Locked Crate is looted in monument, send a notification.",
+    "lockedCrateMonumentDespawnWarningSetting": "When Locked Crate in monument should despawn, send a notification.",
+    "lockedCrateOilRigRefreshedSetting": "When Oil Rig Locked Crate refresh, send a notification."
 }
