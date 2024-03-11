@@ -962,6 +962,83 @@ module.exports = {
         return embed;
     },
 
+
+    getUpdateBattlemetricsUpcomingWipesInformationEmbed: function (rustplus, battlemetricsId) {
+        const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
+        const guildId = rustplus.guildId;
+
+        const upcomingWipes = bmInstance.getUpcomingWipesOrderedByTime();
+
+        let totalCharacters = 0;
+        let fieldCharacters = 0;
+
+        const title = Client.client.intlGet(guildId, 'battlemetricsUpcomingWipes');
+        const footer = { text: bmInstance.server_name };
+
+        totalCharacters += title.length;
+        totalCharacters += bmInstance.server_name.length;
+        totalCharacters += Client.client.intlGet(guildId, 'andMoreWipes', { number: 100 }).length;
+        totalCharacters += `${Client.client.intlGet(guildId, 'wipes')}`.length;
+
+        const fields = [''];
+        let fieldIndex = 0;
+        let isEmbedFull = false;
+        let wipeCounter = 0;
+        for (const wipe of upcomingWipes) {
+            wipeCounter += 1;
+
+            const nameMaxLength = Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3;
+
+            let name = wipe.type.replace('[', '(').replace(']', ')');
+            name = name.length <= nameMaxLength ? name : name.substring(0, nameMaxLength - 2) + '..';
+
+            let wipeStr  = `${name}: `;
+            wipeStr += `<t:${wipe.discordTimestamp}:R>`;
+            wipeStr += `(${wipe.timestamp})\n`
+
+
+            if (totalCharacters + wipeStr.length >= Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+                isEmbedFull = true;
+                break;
+            }
+
+            if (fieldCharacters + wipeStr.length >= Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                fieldCharacters = 0;
+                fieldIndex += 1;
+                fields.push('');
+            }
+
+            fields[fieldIndex] += wipeStr;
+            totalCharacters += wipeStr.length;
+            fieldCharacters += wipeStr.length;
+        }
+
+        const embed = module.exports.getEmbed({
+            title: title,
+            color: Constants.COLOR_DEFAULT,
+            footer: footer,
+            timestamp: true
+        });
+
+        if (isEmbedFull) {
+            embed.setDescription(Client.client.intlGet(guildId, 'andMoreWipes', {
+                number: playerIds.length - wipeCounter
+            }));
+        }
+
+        let fieldCounter = 0;
+        for (const field of fields) {
+            embed.addFields({
+                name: fieldCounter === 0 ? Client.client.intlGet(guildId, 'wipes') : '\u200B',
+                value: field,
+                inline: true
+            });
+            fieldCounter += 1;
+        }
+
+        return embed;
+    },
+
     getDiscordCommandResponseEmbed: function (rustplus, response) {
         const instance = Client.client.getInstance(rustplus.guildId);
 
