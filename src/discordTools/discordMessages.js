@@ -481,6 +481,22 @@ module.exports = {
         }
     },
 
+    sendUpdateBattlemetricsUpcomingWipesInformationMessage: async function (rustplus, battlemetricsId) {
+        const instance = Client.client.getInstance(rustplus.guildId);
+
+        const content = {
+            embeds: [DiscordEmbeds.getUpdateBattlemetricsUpcomingWipesInformationEmbed(rustplus, battlemetricsId)]
+        }
+
+        const message = await module.exports.sendMessage(rustplus.guildId, content,
+            instance.informationMessageId.battlemetricsUpcomingWipes, instance.channelId.information);
+
+        if (message.id !== instance.informationMessageId.battlemetricsUpcomingWipes) {
+            instance.informationMessageId.battlemetricsUpcomingWipes = message.id;
+            Client.client.setInstance(rustplus.guildId, instance);
+        }
+    },
+
     sendDiscordCommandResponseMessage: async function (rustplus, client, message, response) {
         const content = {
             embeds: [DiscordEmbeds.getDiscordCommandResponseEmbed(rustplus, response)]
