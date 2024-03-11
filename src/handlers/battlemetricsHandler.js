@@ -37,16 +37,17 @@ module.exports = {
 
             if (!firstTime) await module.exports.handleBattlemetricsChanges(client, guildId);
 
-            /* Update information channel battlemetrics players */
+            //get condition to show battlematrics messagess
             const bmId = instance.activeServer !== null ?
                 instance.serverList[instance.activeServer].battlemetricsId : null;
-            let condition = instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers;
-            condition &= instance.activeServer !== null;
+
+            let condition = instance.activeServer !== null;
             condition &= bmId !== null;
             condition &= client.battlemetricsInstances.hasOwnProperty(bmId);
             condition &= rustplus && rustplus.isOperational;
 
-            if (condition) {
+            /* Update information channel - battlemetrics players */
+            if (condition && instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers) {
                 await DiscordMessages.sendUpdateBattlemetricsOnlinePlayersInformationMessage(rustplus, bmId);
             }
             else {
@@ -55,6 +56,19 @@ module.exports = {
                         instance.informationMessageId.battlemetricsPlayers);
 
                     instance.informationMessageId.battlemetricsPlayers = null;
+                    client.setInstance(guildId, instance);
+                }
+            }
+            /* Update information channel - battlemetrics upcoming wipes */
+            if (condition && instance.generalSettings.displayInformationBattlemetricsUpcomingWipes) {
+                await DiscordMessages.sendUpdateBattlemetricsUpcomingWipesInformationMessage(rustplus, bmId);
+            }
+            else {
+                if (instance.informationMessageId.battlemetricsUpcomingWipes !== null) {
+                    await DiscordTools.deleteMessageById(guildId, instance.channelId.information,
+                        instance.informationMessageId.battlemetricsUpcomingWipes);
+
+                    instance.informationMessageId.battlemetricsUpcomingWipes = null;
                     client.setInstance(guildId, instance);
                 }
             }
