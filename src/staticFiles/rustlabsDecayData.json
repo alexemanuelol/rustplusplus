@@ -120,18 +120,6 @@
       "hp": 300,
       "hpString": "300"
     },
-    "607400343": {
-      "decay": 21600,
-      "decayString": "6 hours",
-      "decayOutside": null,
-      "decayOutsideString": null,
-      "decayInside": null,
-      "decayInsideString": null,
-      "decayUnderwater": null,
-      "decayUnderwaterString": null,
-      "hp": 500,
-      "hpString": "500"
-    },
     "615112838": {
       "decay": 172800,
       "decayString": "48 hours",
@@ -829,6 +817,18 @@
       "hpString": "100"
     },
     "-1916473915": {
+      "decay": 172800,
+      "decayString": "48 hours",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 50,
+      "hpString": "50"
+    },
+    "-770304148": {
       "decay": 172800,
       "decayString": "48 hours",
       "decayOutside": null,
@@ -2839,10 +2839,10 @@
     "Tugboat": {
       "decay": null,
       "decayString": null,
-      "decayOutside": 216000,
-      "decayOutsideString": "60 hours",
-      "decayInside": 216000,
-      "decayInsideString": "60 hours",
+      "decayOutside": 129600,
+      "decayOutsideString": "36 hours",
+      "decayInside": null,
+      "decayInsideString": null,
       "decayUnderwater": null,
       "decayUnderwaterString": null,
       "hp": 3000,

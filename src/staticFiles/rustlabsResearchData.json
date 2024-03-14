@@ -555,6 +555,14 @@
     "researchTable": 10,
     "workbench": null
   },
+  "1168856825": {
+    "researchTable": 75,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 75,
+      "totalScrap": 190
+    }
+  },
   "1171735914": {
     "researchTable": 20,
     "workbench": {

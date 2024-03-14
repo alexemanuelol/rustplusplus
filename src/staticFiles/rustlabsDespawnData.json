@@ -755,6 +755,10 @@
     "time": 300,
     "timeString": "5 min"
   },
+  "1168856825": {
+    "time": 1200,
+    "timeString": "20 min"
+  },
   "1171735914": {
     "time": 300,
     "timeString": "5 min"
@@ -1491,6 +1495,10 @@
     "time": 2400,
     "timeString": "40 min"
   },
+  "2068884361": {
+    "time": 1200,
+    "timeString": "20 min"
+  },
   "2070189026": {
     "time": 2400,
     "timeString": "40 min"
@@ -1755,7 +1763,15 @@
     "time": 300,
     "timeString": "5 min"
   },
+  "-152332823": {
+    "time": 300,
+    "timeString": "5 min"
+  },
   "-1916473915": {
+    "time": 300,
+    "timeString": "5 min"
+  },
+  "-770304148": {
     "time": 300,
     "timeString": "5 min"
   },
@@ -2059,6 +2075,10 @@
     "time": 1200,
     "timeString": "20 min"
   },
+  "-1696379844": {
+    "time": 300,
+    "timeString": "5 min"
+  },
   "-1507239837": {
     "time": 1200,
     "timeString": "20 min"
@@ -2084,6 +2104,10 @@
     "timeString": "40 min"
   },
   "-1772746857": {
+    "time": 300,
+    "timeString": "5 min"
+  },
+  "-722629980": {
     "time": 300,
     "timeString": "5 min"
   },
@@ -2222,6 +2246,10 @@
   "-845557339": {
     "time": 1200,
     "timeString": "20 min"
+  },
+  "-907422733": {
+    "time": 2400,
+    "timeString": "40 min"
   },
   "-489848205": {
     "time": 300,
@@ -2712,6 +2740,10 @@
     "timeString": "5 min"
   },
   "-1695367501": {
+    "time": 300,
+    "timeString": "5 min"
+  },
+  "-1536855921": {
     "time": 300,
     "timeString": "5 min"
   },
