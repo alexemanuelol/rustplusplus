@@ -335,6 +335,7 @@
     "deleteUnreachableDevicesCap": "DELETE UNREACHABLE DEVICES",
     "despawnTime": "Despawn Time",
     "despawnTimeOfItem": "Despawn time of {item} is {time}.",
+    "deviceIsAlreadyOnOff": "{device} is already {status}.",
     "deviceIsCurrentlyOnOff": "{device} is currently {status}.",
     "deviceWasTurnedOnOff": "{device} was turned {status}.",
     "disabledCap": "DISABLED",
