@@ -13,7 +13,10 @@ It is possible to change the display image for all the different Smart Devices b
 
 The image above is what a paired Smart Switch looks like in Discord. In this case the Smart Switch is called `Switch` and is located at E16. All Smart Devices have an Entity Id which is used to identify it. The Custom Command for this switch is `!sw` which can be used from the in-game teamchat.
 <br><br>
-The Smart Switch can be turned ON/OFF by clicking the `TURN ON` / `TURN OFF` button at the bottom. By clicking on the `EDIT` button, you can edit things such as the `Name` and the `Custom Command` for the Smart Switch. If the `AUTO SETTING` is set to either `AUTO-ON-PROXIMITY` or `AUTO-OFF-PROXIMITY`, there will be a proximity setting available to edit. The proximity setting is used to turn the switch ON/OFF when a teammate is within the proximity of the Smart Switch. To remove the Smart Switch, just click the trashcan button.
+The Smart Switch can be turned ON/OFF by clicking the `TURN ON` / `TURN OFF` button at the bottom. By clicking on the `EDIT` button, you can edit things such as the `Name` and the `Custom Command` for the Smart Switch. 
+If the `AUTO SETTING` is set to either `AUTO-ON-PROXIMITY` or `AUTO-OFF-PROXIMITY`, there will be a proximity setting available to edit. The proximity setting is used to turn the switch ON/OFF when a teammate is within the proximity of the Smart Switch. To remove the Smart Switch, just click the trashcan button.
+If the `AUTO SETTING` is set to either `AUTO-ON-TIMER` or `AUTO-OFF-TIMER`, there will be a timer setting available to edit. The timer setting is used to turn the switch ON/OFF after the specified delay.
+To remove the Smart Switch, just click the trashcan button.
 <br><br>
 There are a few auto settings for Smart Switches:
 - **OFF** - Smart Switch work as normal.
@@ -25,6 +28,8 @@ There are a few auto settings for Smart Switches:
 - **AUTO-OFF-PROXIMITY** - Smart Switch will automatically go inactive if teammate is in proximity, if outside proximity it will go active.
 - **AUTO-ON-ANY-ONLINE** - Smart Switch will automatically go active if any teammate is online, if all offline it will go inactive.
 - **AUTO-OFF-ANY-ONLINE** - Smart Switch will automatically go inactive if any teammate is online, if all offline it will go active.
+- **AUTO-ON-TIMER** - Smart Switch will automatically go active after specified delay.
+- **AUTO-OFF-TIMER** - Smart Switch will automatically go inactive after specified delay.
 
 <br>
 
