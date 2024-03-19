@@ -29,7 +29,8 @@ module.exports = {
         const url = `https://api.streamelements.com/kappa/v2/speech?voice=${voice}&text=${encodeURIComponent(text)}`;
 
         if (connection) {
-            const resource = createAudioResource(url);
+            let stream = (await (await fetch(url)).blob()).stream()
+            const resource = createAudioResource(stream);
             const player = createAudioPlayer();
             connection.subscribe(player);
             player.play(resource);

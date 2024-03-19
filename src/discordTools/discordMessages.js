@@ -344,7 +344,7 @@ module.exports = {
         await module.exports.sendMessage(guildId, content, null, instance.channelId.events);
     },
 
-    sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId, title = null) {
+    sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId, title = null, everyone = false) {
         const instance = Client.client.getInstance(guildId);
 
         let png = null;
@@ -353,6 +353,10 @@ module.exports = {
         }
         const content = {
             embeds: [DiscordEmbeds.getActivityNotificationEmbed(guildId, serverId, color, text, steamId, png, title)]
+        }
+
+        if (everyone) {
+            content.content = '@everyone';
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
@@ -590,11 +594,15 @@ module.exports = {
         await Client.client.interactionEditReply(interaction, content);
     },
 
-    sendBattlemetricsEventMessage: async function (guildId, battlemetricsId, title, description, fields = null) {
+    sendBattlemetricsEventMessage: async function (guildId, battlemetricsId, title, description, fields = null, everyone = false) {
         const instance = Client.client.getInstance(guildId);
 
         const content = {
             embeds: [DiscordEmbeds.getBattlemetricsEventEmbed(guildId, battlemetricsId, title, description, fields)]
+        }
+
+        if (everyone) {
+            content.content = '@everyone';
         }
 
         await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
