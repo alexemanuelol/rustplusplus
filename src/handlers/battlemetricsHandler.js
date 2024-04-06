@@ -359,7 +359,7 @@ module.exports = {
                 for (const field of fields) {
                     outPutFields.push({
                         name: '\u200B',
-                        value: field,
+                        value: field === '' ? '\u200B' : field,
                         inline: true
                     });
                     fieldCounter += 1;
@@ -413,7 +413,7 @@ module.exports = {
                 for (const field of fields) {
                     outPutFields.push({
                         name: '\u200B',
-                        value: field,
+                        value: field === '' ? '\u200B' : field,
                         inline: true
                     });
                     fieldCounter += 1;

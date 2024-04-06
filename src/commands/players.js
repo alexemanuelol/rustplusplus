@@ -381,7 +381,7 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 	for (const field of fields) {
 		embed.addFields({
 			name: fieldCounter === 0 ? client.intlGet(interaction.guildId, 'players') : '\u200B',
-			value: field,
+			value: field === '' ? '\u200B' : field,
 			inline: true
 		});
 		fieldCounter += 1;
