@@ -713,7 +713,7 @@ module.exports = {
             if (upcomingWipes.length > 0){
                 const closestWipe = upcomingWipes[0];
                 if (closestWipe.type === 'map' || closestWipe.type === 'full') {
-                // try match next map or full wipe
+                /* try match next map or full wipe*/
                 const nextMapWipe = upcomingWipes.find((upcoming)=> upcoming.type === 'map')
                 if (nextMapWipe){
                     firstWipe = { name: Client.client.intlGet(guildId, 'nextMapWipe'), value: `<t:${nextMapWipe.discordTimestamp}:R>`, inline: true}
@@ -723,7 +723,7 @@ module.exports = {
                     secondWipe = { name: Client.client.intlGet(guildId, 'nextFullWipe'), value: `<t:${nextFullWipe.discordTimestamp}:R> `, inline: true }
                 }
                 } else {
-                    //if closest wipe is not matched type
+                    /*if closest wipe is not matched type*/
                     firstWipe = {
                         name: Client.client.intlGet(guildId, 'nextWipe'),
                         value: `<t:${closestWipe.discordTimestamp}:R> `,
