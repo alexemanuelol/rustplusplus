@@ -51,8 +51,7 @@ module.exports = (client, guild) => {
                 server: null,
                 event: null,
                 team: null,
-                battlemetricsPlayers: null,
-                battlemetricsUpcomingWipes:null
+                battlemetricsPlayers: null
             },
             activeServer: null,
             serverList: {},
@@ -154,8 +153,7 @@ module.exports = (client, guild) => {
                 server: null,
                 event: null,
                 team: null,
-                battlemetricsPlayers: null,
-                battlemetricsUpcomingWipes:null
+                battlemetricsPlayers: null
             }
         }
         else {
