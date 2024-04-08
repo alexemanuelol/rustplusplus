@@ -669,6 +669,11 @@ class Battlemetrics {
             if (content['status'] === false) this.offlinePlayers.push(playerId);
         }
 
+        const rustWipes = details.rust_wipes;
+        if (rustWipes) {
+            this.#evaluateServerParameter('server_rust_wipes', this.server_rust_wipes, rustWipes, firstTime);
+        }
+
         this.update(data);
         return true;
     }
