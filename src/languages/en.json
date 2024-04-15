@@ -769,5 +769,6 @@
     "wipe": "Wipe",
     "wipeDetected": "Wipe detected!",
     "yield": "Yield",
-    "youAreAlreadyLeader": "You are already leader."
+    "youAreAlreadyLeader": "You are already leader.",
+    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
 }
