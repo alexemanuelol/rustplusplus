@@ -23,7 +23,7 @@ const Gm = require('gm');
 const Jimp = require('jimp');
 const Path = require('path');
 
-const Constants = require('../util/constants.js');
+const Constants = require('../../dist/util/constants.js');
 const Client = require('../../index.ts');
 
 class Map {

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -102,11 +102,11 @@ module.exports = {
     COLOR_SETTINGS: '#861C0C',
     COLOR_TEAMCHAT_DEFAULT: '#CE412B',
 
-    GET_STEAM_PROFILE_LINK: function (steamId) {
+    GET_STEAM_PROFILE_LINK: function (steamId: string): string {
         return `[${steamId}](${this.STEAM_PROFILES_URL}${steamId})`;
     },
 
-    GET_BATTLEMETRICS_PROFILE_LINK: function (playerId) {
+    GET_BATTLEMETRICS_PROFILE_LINK: function (playerId: string): string {
         return `[${playerId}](${this.BATTLEMETRICS_PROFILE_URL}${playerId})`;
     }
 }

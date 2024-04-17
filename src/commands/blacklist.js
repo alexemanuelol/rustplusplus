@@ -20,7 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
-const Constants = require('../util/constants.js');
+const Constants = require('../../dist/util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');

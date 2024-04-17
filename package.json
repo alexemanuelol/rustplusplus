@@ -4,9 +4,9 @@
     "description": "A NodeJS Discord Bot that uses the rustplus.js library to utilize the power of the Rust+ Companion App with additional Quality-of-Life features.",
     "main": "index.ts",
     "scripts": {
-        "start": "ts-node .",
-        "preinstall": "npx npm-force-resolutions",
-        "test": "tsc --noEmit -p ."
+        "start": "tsc && ts-node index.ts",
+        "compile": "tsc",
+        "preinstall": "npx npm-force-resolutions"
     },
     "repository": {
         "type": "git",

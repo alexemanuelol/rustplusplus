@@ -23,7 +23,7 @@ const Fs = require('fs');
 const Path = require('path');
 
 const Client = require('../../index.ts');
-const Constants = require('../util/constants.js');
+const Constants = require('../../dist/util/constants.js');
 const Languages = require('../util/languages.js');
 
 module.exports = {
