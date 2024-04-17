@@ -24,7 +24,7 @@ const RustPlusLib = require('@liamcottle/rustplus.js');
 const Translate = require('translate');
 
 const Client = require('../../index.ts');
-const Constants = require('../util/constants.js');
+const Constants = require('../../dist/util/constants.js');
 const Decay = require('../util/decay.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');

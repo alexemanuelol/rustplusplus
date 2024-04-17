@@ -18,7 +18,7 @@
 
 */
 
-const Constants = require('../util/constants.js');
+const Constants = require('../../dist/util/constants.js');
 const Map = require('../util/map.js');
 const Timer = require('../util/timer');
 

@@ -20,7 +20,7 @@
 
 const Axios = require('axios');
 
-const Constants = require('../util/constants.js');
+const Constants = require('../../dist/util/constants.js');
 const Utils = require('../util/utils.js');
 
 module.exports = {

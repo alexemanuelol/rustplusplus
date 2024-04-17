@@ -19,7 +19,7 @@
 */
 
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
-const Constants = require('../util/constants.js');
+const Constants = require('../../dist/util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
