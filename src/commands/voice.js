@@ -61,9 +61,9 @@ module.exports = {
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
-                        {   name: voiceChannel.name ? voiceChannel.name : client.intlGet(interaction.guildId, 'unknownVoiceChannelId'), 
-                            id: voiceChannel.id ? voiceChannel.id : client.intlGet(interaction.guildId, 'unknownVoiceChannelName'), 
-                            guild: voiceChannel.guild.name ? voiceChannel.guild.name : client.intlGet(interaction.guildId, 'unknownVoiceGuildName')}
+                        {   name: voiceChannel && voiceChannel.name ? voiceChannel.name : client.intlGet(interaction.guildId, 'unknown'), 
+                            id: voiceChannel && voiceChannel.id ? voiceChannel.id : client.intlGet(interaction.guildId, 'unknown'), 
+                            guild: voiceChannel && voiceChannel.guild.name ? voiceChannel.guild.name : client.intlGet(interaction.guildId, 'unknown')}
                         ));
                 }
                 else {
