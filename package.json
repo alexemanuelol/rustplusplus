@@ -6,7 +6,8 @@
     "scripts": {
         "start": "tsc && ts-node index.ts",
         "compile": "tsc",
-        "preinstall": "npx npm-force-resolutions"
+        "preinstall": "npx npm-force-resolutions",
+        "test": "tsc --noEmit -p ."
     },
     "repository": {
         "type": "git",
