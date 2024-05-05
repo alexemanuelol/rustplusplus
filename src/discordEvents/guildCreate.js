@@ -18,11 +18,17 @@
 
 */
 
+const createCredentialsFile = require('../../dist/util/CreateCredentialsFile').default;
+const GuildInstance = require('../../dist/util/GuildInstance.js');
+
 module.exports = {
     name: 'guildCreate',
     async execute(client, guild) {
-        require('../util/CreateInstanceFile')(client, guild);
-        require('../util/CreateCredentialsFile')(client, guild);
+        GuildInstance.createGuildInstanceFile(guild.id);
+        const guildInstance = GuildInstance.readGuildInstanceFile(guild.id);
+        client.setInstance(guild.id, guildInstance); // TODO! TEMP
+        createCredentialsFile(guild);
+
         client.fcmListenersLite[guild.id] = new Object();
 
         client.loadGuildIntl(guild.id);

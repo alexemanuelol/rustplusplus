@@ -1,6 +1,6 @@
 node_modules
 .env
-instances
+guildInstances
 credentials
 maps
 logs

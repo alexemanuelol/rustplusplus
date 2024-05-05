@@ -93,7 +93,7 @@ module.exports = {
             title: `${server.title}`,
             color: Constants.COLOR_DEFAULT,
             description: description,
-            thumbnail: `${server.img}`,
+            thumbnail: `${server.image}`,
             fields: [{
                 name: Client.client.intlGet(guildId, 'connect'),
                 value: `\`${server.connect === null ?
@@ -228,7 +228,7 @@ module.exports = {
             title: `${tracker.name}`,
             color: Constants.COLOR_DEFAULT,
             description: description,
-            thumbnail: `${tracker.img}`,
+            thumbnail: `${tracker.image}`,
             footer: { text: `${tracker.title}` },
             fields: fields,
             timestamp: true
@@ -561,7 +561,7 @@ module.exports = {
             title: `${Client.client.intlGet(guildId, 'newsCap')}: ${data.title}`,
             color: Constants.COLOR_DEFAULT,
             description: `${data.message}`,
-            thumbnail: Constants.DEFAULT_SERVER_IMG,
+            thumbnail: Constants.DEFAULT_SERVER_IMAGE,
             timestamp: true
         });
     },
@@ -573,7 +573,7 @@ module.exports = {
             footer: { text: body.name },
             author: {
                 name: Client.client.intlGet(guildId, 'userJustConnected', { name: body.targetName }),
-                iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
+                iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMAGE,
                 url: `${Constants.STEAM_PROFILES_URL}${body.targetId}`
             }
         });
@@ -626,7 +626,7 @@ module.exports = {
             color: color,
             thumbnail: `attachment://${image}`,
             title: text,
-            footer: { text: server.title, iconURL: server.img },
+            footer: { text: server.title, iconURL: server.image },
             timestamp: true
         });
     },
@@ -650,7 +650,7 @@ module.exports = {
             title: state ?
                 Client.client.intlGet(guildId, 'serverJustOffline') :
                 Client.client.intlGet(guildId, 'serverJustOnline'),
-            thumbnail: server.img,
+            thumbnail: server.image,
             timestamp: true,
             footer: { text: server.title }
         });
@@ -674,7 +674,7 @@ module.exports = {
         return module.exports.getEmbed({
             color: Constants.COLOR_INACTIVE,
             title: Client.client.intlGet(guildId, 'serverInvalid'),
-            thumbnail: server.img,
+            thumbnail: server.image,
             timestamp: true,
             footer: { text: server.title }
         });
@@ -689,7 +689,7 @@ module.exports = {
             footer: { text: footerTitle },
             author: {
                 name: text,
-                iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMG,
+                iconURL: (png !== null) ? png : Constants.DEFAULT_SERVER_IMAGE,
                 url: `${Constants.STEAM_PROFILES_URL}${steamId}`
             }
         });
@@ -1182,7 +1182,7 @@ module.exports = {
 
         let thumbnail = '';
         if (instance.serverList.hasOwnProperty(serverId)) {
-            thumbnail = instance.serverList[serverId].img
+            thumbnail = instance.serverList[serverId].image;
         }
         const embed = module.exports.getEmbed({
             title: title,

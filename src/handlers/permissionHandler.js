@@ -32,7 +32,7 @@ module.exports = {
         const roleAllow = [];
         const roleDeny = [];
 
-        if (instance.role !== null) {
+        if (instance.roleId !== null) {
             if (permissionWrite) {
                 roleAllow.push(Discord.PermissionFlagsBits.SendMessages);
             }
@@ -75,9 +75,9 @@ module.exports = {
 
         const perms = [];
 
-        if (instance.role !== null) {
+        if (instance.roleId !== null) {
             perms.push({
-                id: instance.role,
+                id: instance.roleId,
                 deny: [Discord.PermissionFlagsBits.ViewChannel, Discord.PermissionFlagsBits.SendMessages]
             });
         }
@@ -93,9 +93,9 @@ module.exports = {
     resetPermissionsAllChannels: async function (client, guild) {
         const instance = client.getInstance(guild.id);
 
-        if (instance.channelId.category === null) return;
+        if (instance.channelIds.category === null) return;
 
-        const category = await DiscordTools.getCategoryById(guild.id, instance.channelId.category);
+        const category = await DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
         if (category) {
             const perms = module.exports.getPermissionsReset(client, guild);
             try {
@@ -106,7 +106,7 @@ module.exports = {
             }
         }
 
-        for (const [name, id] of Object.entries(instance.channelId)) {
+        for (const [name, id] of Object.entries(instance.channelIds)) {
             const writePerm = (name !== 'commands' && name !== 'teamchat') ? false : true;
 
             const channel = DiscordTools.getTextChannelById(guild.id, id);

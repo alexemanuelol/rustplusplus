@@ -197,7 +197,7 @@ async function pairingServer(client, guild, full, data, body) {
     const server = instance.serverList[serverId];
 
     let message = undefined;
-    if (server) message = await DiscordTools.getMessageById(guild.id, instance.channelId.servers, server.messageId);
+    if (server) message = await DiscordTools.getMessageById(guild.id, instance.channelIds.servers, server.messageId);
 
     let battlemetricsId = null;
     const bmInstance = new Battlemetrics(null, data.title);
@@ -216,7 +216,7 @@ async function pairingServer(client, guild, full, data, body) {
         steamId: body.playerId,
         playerToken: body.playerToken,
         description: body.desc.replace(/\\n/g, '\n').replace(/\\t/g, '\t'),
-        img: isValidUrl(body.img) ? body.img.replace(/ /g, '%20') : Constants.DEFAULT_SERVER_IMG,
+        image: isValidUrl(body.img) ? body.img.replace(/ /g, '%20') : Constants.DEFAULT_SERVER_IMAGE,
         url: isValidUrl(body.url) ? body.url.replace(/ /g, '%20') : Constants.DEFAULT_SERVER_URL,
         notes: server ? server.notes : {},
         switches: server ? server.switches : {},
@@ -462,7 +462,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
     }
 
     if (rustplus && (serverId === rustplus.serverId)) {
-        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
+        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
         rustplus.sendInGameMessage(`${data.title}: ${data.message}`);
     }
 
@@ -474,7 +474,7 @@ async function playerDeath(client, guild, full, data, body, discordUserId) {
 
     let png = null;
     if (body.targetId !== '') png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
-    if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMG;
+    if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMAGE;
 
     const content = {
         embeds: [DiscordEmbeds.getPlayerDeathEmbed(data, body, png)]
@@ -497,7 +497,7 @@ async function teamLogin(client, guild, full, data, body) {
     const serverId = `${body.ip}-${body.port}`;
 
     if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
-        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
+        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
         client.log(client.intlGet(null, 'infoCap'),
             client.intlGet(null, 'playerJustConnectedTo', {
                 name: body.targetName,
@@ -514,5 +514,5 @@ async function newsNews(client, guild, full, data, body) {
         components: [DiscordButtons.getNewsButton(guild.id, body, isValidUrl(body.url))]
     }
 
-    await DiscordMessages.sendMessage(guild.id, content, null, instance.channelId.activity);
+    await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
 }

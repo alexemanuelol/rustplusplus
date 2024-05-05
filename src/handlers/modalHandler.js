@@ -283,7 +283,7 @@ module.exports = async (client, interaction) => {
                 const bmInstance = client.battlemetricsInstances[trackerBattlemetricsId];
                 tracker.battlemetricsId = trackerBattlemetricsId;
                 tracker.serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
-                tracker.img = Constants.DEFAULT_SERVER_IMG;
+                tracker.image = Constants.DEFAULT_SERVER_IMAGE;
                 tracker.title = bmInstance.server_name;
             }
             else {
@@ -293,7 +293,7 @@ module.exports = async (client, interaction) => {
                     client.battlemetricsInstances[trackerBattlemetricsId] = bmInstance;
                     tracker.battlemetricsId = trackerBattlemetricsId;
                     tracker.serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
-                    tracker.img = Constants.DEFAULT_SERVER_IMG;
+                    tracker.image = Constants.DEFAULT_SERVER_IMAGE;
                     tracker.title = bmInstance.server_name;
                 }
             }

@@ -27,7 +27,7 @@ module.exports = {
         const instance = client.getInstance(guildId);
 
         let command = message.cleanContent;
-        for (const alias of instance.aliases) {
+        for (const alias of instance.commandAliases) {
             command = command.replace(alias.alias, alias.value);
         }
 

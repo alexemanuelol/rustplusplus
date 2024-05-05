@@ -27,7 +27,7 @@ module.exports = async (client, rustplus) => {
     const serverId = rustplus.serverId;
 
     if (rustplus.isNewConnection) {
-        await DiscordTools.clearTextChannel(guildId, instance.channelId.switches, 100);
+        await DiscordTools.clearTextChannel(guildId, instance.channelIds.switches, 100);
     }
 
     for (const entityId in instance.serverList[serverId].switches) {

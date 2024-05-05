@@ -10,7 +10,7 @@ RUN npm install
 COPY . /app
 
 VOLUME [ "/app/credentials" ]
-VOLUME [ "/app/instances" ]
+VOLUME [ "/app/guildInstances" ]
 VOLUME [ "/app/logs" ]
 VOLUME [ "/app/maps" ]
 
