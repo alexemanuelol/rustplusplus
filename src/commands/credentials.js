@@ -22,10 +22,10 @@ const _ = require('lodash');
 const Builder = require('@discordjs/builders');
 
 const Config = require('../../config');
+const Credentials = require('../../dist/util/Credentials.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const InstanceUtils = require('../util/instanceUtils.js');
 
 module.exports = {
     name: 'credentials',
@@ -112,11 +112,12 @@ module.exports = {
 
 async function addCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
-    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    const instance = client.getInstance(guildId);
+    const credentials = Credentials.readCredentialsFile();
     const steamId = interaction.options.getString('steam_id');
-    const isHoster = interaction.options.getBoolean('host') || Object.keys(credentials).length === 1;
+    const isHoster = interaction.options.getBoolean('host') || Object.keys(credentials).length === 0;
 
-    if (Object.keys(credentials) !== 1 && isHoster) {
+    if (Object.keys(credentials) !== 0 && isHoster) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -140,10 +141,11 @@ async function addCredentials(client, interaction, verifyId) {
     credentials[steamId].expire_date = interaction.options.getString('expire_date');
     credentials[steamId].discord_user_id = interaction.member.user.id;
 
-    const prevHoster = credentials.hoster;
-    if (isHoster) credentials.hoster = steamId;
+    Credentials.writeCredentialsFile(credentials);
 
-    InstanceUtils.writeCredentialsFile(guildId, credentials);
+    const prevHoster = instance.hoster;
+    if (isHoster) instance.hoster = steamId;
+    client.setInstance(guildId, instance);
 
     /* Start Fcm Listener */
     if (isHoster) {
@@ -179,7 +181,8 @@ async function addCredentials(client, interaction, verifyId) {
 
 async function removeCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
-    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    const instance = client.getInstance(guildId);
+    const credentials = Credentials.readCredentialsFile();
     let steamId = interaction.options.getString('steam_id');
 
     if (steamId && (steamId in credentials) && credentials[steamId].discord_user_id !== interaction.member.user.id) {
@@ -211,12 +214,12 @@ async function removeCredentials(client, interaction, verifyId) {
         return;
     }
 
-    if (steamId === credentials.hoster) {
+    if (steamId === instance.hoster) {
         if (client.fcmListeners[guildId]) {
             client.fcmListeners[guildId].destroy();
         }
         delete client.fcmListeners[guildId];
-        credentials.hoster = null;
+        instance.hoster = null;
     }
     else {
         if (client.fcmListenersLite[guildId][steamId]) {
@@ -226,7 +229,8 @@ async function removeCredentials(client, interaction, verifyId) {
     }
 
     delete credentials[steamId];
-    InstanceUtils.writeCredentialsFile(guildId, credentials);
+    Credentials.writeCredentialsFile(credentials);
+    client.setInstance(guildId, instance);
 
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
@@ -249,7 +253,8 @@ async function showCredentials(client, interaction, verifyId) {
 
 async function setHosterCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
-    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    const instance = client.getInstance(guildId);
+    const credentials = Credentials.readCredentialsFile();
     let steamId = interaction.options.getString('steam_id');
 
     if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
@@ -273,11 +278,11 @@ async function setHosterCredentials(client, interaction, verifyId) {
         return;
     }
 
-    const prevHoster = credentials.hoster;
-    credentials.hoster = steamId;
-    InstanceUtils.writeCredentialsFile(guildId, credentials);
+    const prevHoster = instance.hoster;
+    instance.hoster = steamId;
+    Credentials.writeCredentialsFile(credentials);
+    client.setInstance(guildId, instance);
 
-    const instance = client.getInstance(guildId);
     const rustplus = client.rustplusInstances[guildId];
     if (rustplus) {
         instance.activeServer = null;

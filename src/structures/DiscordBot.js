@@ -26,15 +26,15 @@ const Path = require('path');
 const Battlemetrics = require('../structures/Battlemetrics');
 const Cctv = require('./Cctv');
 const Config = require('../../config');
+const Credentials = require('../../dist/util/Credentials.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
-const InstanceUtils = require('../util/instanceUtils.js');
+const GuildInstance = require('../../dist/util/GuildInstance.js');
 const Items = require('./Items');
 const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
-const GuildInstance = require('../../dist/util/GuildInstance.js');
 
 class DiscordBot extends Discord.Client {
     constructor(props) {
@@ -228,9 +228,9 @@ class DiscordBot extends Discord.Client {
         }
 
         require('../util/FcmListener')(this, guild);
-        const credentials = InstanceUtils.readCredentialsFile(guild.id);
+        const credentials = Credentials.readCredentialsFile();
         for (const steamId of Object.keys(credentials)) {
-            if (steamId !== credentials.hoster && steamId !== 'hoster') {
+            if (steamId !== instance.hoster) {
                 require('../util/FcmListenerLite')(this, guild, steamId);
             }
         }
@@ -243,7 +243,8 @@ class DiscordBot extends Discord.Client {
     }
 
     async syncCredentialsWithUsers(guild) {
-        const credentials = InstanceUtils.readCredentialsFile(guild.id);
+        const instance = this.getInstance(guild.id);
+        const credentials = Credentials.readCredentialsFile();
 
         const members = await guild.members.fetch();
         const memberIds = [];
@@ -261,12 +262,12 @@ class DiscordBot extends Discord.Client {
         }
 
         for (const steamId of steamIdRemoveCredentials) {
-            if (steamId === credentials.hoster) {
+            if (steamId === instance.hoster) {
                 if (this.fcmListeners[guild.id]) {
                     this.fcmListeners[guild.id].destroy();
                 }
                 delete this.fcmListeners[guild.id];
-                credentials.hoster = null;
+                instance.hoster = null;
             }
             else {
                 if (this.fcmListenersLite[guild.id][steamId]) {
@@ -278,7 +279,8 @@ class DiscordBot extends Discord.Client {
             delete credentials[steamId];
         }
 
-        InstanceUtils.writeCredentialsFile(guild.id, credentials);
+        Credentials.writeCredentialsFile(credentials);
+        this.setInstance(guild.id, instance);
     }
 
     getInstance(guildId) {

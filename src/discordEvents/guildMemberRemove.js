@@ -18,7 +18,7 @@
 
 */
 
-const InstanceUtils = require('../util/instanceUtils.js');
+const Credentials = require('../../dist/util/Credentials.js');
 
 module.exports = {
     name: 'guildMemberRemove',
@@ -26,18 +26,19 @@ module.exports = {
         const guildId = member.guild.id;
         const userId = member.user.id;
 
-        const credentials = InstanceUtils.readCredentialsFile(guildId);
+        const instance = client.getInstance(guildId);
+        const credentials = Credentials.readCredentialsFile();
 
         const steamId = Object.keys(credentials).find(e => credentials[e] && credentials[e].discord_user_id === userId);
 
         if (!(steamId in credentials)) return;
 
-        if (steamId === credentials.hoster) {
+        if (steamId === instance.hoster) {
             if (client.fcmListeners[guildId]) {
                 client.fcmListeners[guildId].destroy();
             }
             delete client.fcmListeners[guildId];
-            credentials.hoster = null;
+            instance.hoster = null;
         }
         else {
             if (client.fcmListenersLite[guildId][steamId]) {
@@ -47,6 +48,7 @@ module.exports = {
         }
 
         delete credentials[steamId];
-        InstanceUtils.writeCredentialsFile(guildId, credentials);
+        Credentials.writeCredentialsFile(credentials);
+        client.setInstance(guildId, instance);
     },
 }

@@ -1,6 +1,6 @@
 # Pair and Connect to a Server
 
-1. Make sure that you've setup the Credentials and that the bot is currently running (`npm start run`).
+1. Make sure that you've setup the Credentials and that the bot is currently running (`npm start`).
 2. Login to the Rust server you want to play.
 3. Click `ESC` and then on `Rust+`.
 4. Click `PAIR WITH SERVER`.

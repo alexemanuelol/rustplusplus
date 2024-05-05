@@ -21,16 +21,17 @@
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
 const Constants = require('../../dist/util/constants.js');
+const Credentials = require('../../dist/util/Credentials.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const InstanceUtils = require('../util/instanceUtils.js');
 const Map = require('../util/map.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild, steamId) => {
-    const credentials = InstanceUtils.readCredentialsFile(guild.id);
-    const hoster = credentials.hoster;
+    const instance = client.getInstance(guild.id);
+    const credentials = Credentials.readCredentialsFile();
+    const hoster = instance.hoster;
 
     if (!Object.keys(credentials).includes(steamId)) {
         client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'credentialsNotRegistered', {

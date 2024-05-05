@@ -14,7 +14,7 @@
     "rootDir": "./src",
   },
   "include": [
-    "src/util/CreateCredentialsFile.ts",
+    "src/util/Credentials.ts",
     "src/util/GuildInstance.ts",
     "src/util/constants.ts",
     "src/util/languages.ts",

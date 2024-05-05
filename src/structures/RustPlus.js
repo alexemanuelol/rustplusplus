@@ -25,19 +25,18 @@ const Translate = require('translate');
 
 const Client = require('../../index.ts');
 const Constants = require('../../dist/util/constants.js');
-const Decay = require('../util/decay.js');
+const Credentials = require('../../dist/util/Credentials.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordVoice = require('../discordTools/discordVoice.js');
 const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordVoice = require('../discordTools/discordVoice.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
-const InstanceUtils = require('../util/instanceUtils.js');
-const { languageCodes } = require('../../dist/util/languages.js');
 const Logger = require('./Logger.js');
 const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
+const { languageCodes } = require('../../dist/util/languages.js');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */
@@ -2254,7 +2253,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandSend(command, callerName) {
-        const credentials = InstanceUtils.readCredentialsFile(this.guildId);
+        const credentials = Credentials.readCredentialsFile();
         const prefix = this.generalSettings.prefix;
         const commandSend = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxSend')}`;
         const commandSendEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxSend')}`;
