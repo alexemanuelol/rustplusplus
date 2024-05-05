@@ -228,7 +228,7 @@
     "commandsResetStorageMonitorsDesc": "보관 측정장치의 채널을 재설정 합니다.",
     "commandsResetSwitchesDesc": "스위치/스위치 그룹채널을 재설정 합니다.",
     "commandsResetTrackersDesc": "추적기 채널을 재설정 합니다.",
-    "commandsRoleClearDesc": "역할 지우기 (모든 사용자가 rustplusplus 카테고리안 채널들을 볼 수 있도록 허용)",
+    "commandsRoleClearDesc": "역할 지우기 (모든 사용자가 rustplusplus 카테고리 채널들을 볼 수 있도록 허용)",
     "commandsRoleDesc": "Rustplusplus 카테고리 및 채널 내용을 볼 수 있는 특정 역할을 설정/해제 합니다.",
     "commandsRoleSetDesc": "역할을 설정합니다.",
     "commandsRoleSetRoleDesc": "Rustplusplus 채널 역할을 볼 수 있습니다.",

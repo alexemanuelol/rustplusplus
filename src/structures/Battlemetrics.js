@@ -489,6 +489,7 @@ class Battlemetrics {
             return false;
         }
 
+        this.lastUpdateSuccessful = true;
         this.data = data;
 
         const time = new Date().toISOString();

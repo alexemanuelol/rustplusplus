@@ -953,7 +953,7 @@ module.exports = {
         for (const field of fields) {
             embed.addFields({
                 name: fieldCounter === 0 ? Client.client.intlGet(guildId, 'players') : '\u200B',
-                value: field,
+                value: field === '' ? '\u200B' : field,
                 inline: true
             });
             fieldCounter += 1;

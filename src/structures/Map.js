@@ -71,6 +71,11 @@ class Map {
             tunnels: {
                 image:
                     Path.join(__dirname, '..', 'resources/images/markers/tunnels.png'), size: 35, type: 9, jimp: null
+            },
+            tunnels_link: {
+                image:
+                    Path.join(__dirname, '..', 'resources/images/markers/tunnels_link.png'), size: 35, type: 10,
+                jimp: null
             }
         }
 
@@ -235,6 +240,11 @@ class Map {
                 map: '',
                 radius: 0
             },
+            train_tunnel_link_display_name: {
+                clean: '',
+                map: '',
+                radius: 0
+            },
             train_yard_display_name: {
                 clean: Client.client.intlGet(rustplus.guildId, 'trainYard'),
                 map: Client.client.intlGet(rustplus.guildId, 'trainYard').toUpperCase(),
@@ -340,6 +350,12 @@ class Map {
                     let size = this.mapMarkerImageMeta.tunnels.size;
                     this.mapMarkerImageMeta.map.jimp.composite(
                         this.mapMarkerImageMeta.tunnels.jimp, x - (size / 2), y - (size / 2)
+                    );
+                }
+                else if (monument.token === "train_tunnel_link_display_name") {
+                    let size = this.mapMarkerImageMeta.tunnels_link.size;
+                    this.mapMarkerImageMeta.map.jimp.composite(
+                        this.mapMarkerImageMeta.tunnels_link.jimp, x - (size / 2), y - (size / 2)
                     );
                 }
                 else {

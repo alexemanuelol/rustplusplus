@@ -122,7 +122,8 @@ module.exports = {
                             tracker: content.name
                         });
                         await DiscordMessages.sendActivityNotificationMessage(
-                            guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title);
+                            guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title,
+                            content.everyone);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
                             rustplus.sendInGameMessage(str);
                         }
@@ -139,7 +140,8 @@ module.exports = {
                             tracker: content.name
                         });
                         await DiscordMessages.sendActivityNotificationMessage(
-                            guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title);
+                            guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title,
+                            content.everyone);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
                             rustplus.sendInGameMessage(str);
                         }
@@ -157,7 +159,8 @@ module.exports = {
                         });
 
                         await DiscordMessages.sendActivityNotificationMessage(
-                            guildId, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title);
+                            guildId, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title,
+                            content.everyone);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
                             rustplus.sendInGameMessage(str);
                         }
@@ -356,7 +359,7 @@ module.exports = {
                 for (const field of fields) {
                     outPutFields.push({
                         name: '\u200B',
-                        value: field,
+                        value: field === '' ? '\u200B' : field,
                         inline: true
                     });
                     fieldCounter += 1;
@@ -410,7 +413,7 @@ module.exports = {
                 for (const field of fields) {
                     outPutFields.push({
                         name: '\u200B',
-                        value: field,
+                        value: field === '' ? '\u200B' : field,
                         inline: true
                     });
                     fieldCounter += 1;
@@ -431,6 +434,7 @@ module.exports = {
             `__**${client.intlGet(guildId, 'old')}:**__ ${oldName}\n` +
             `__**${client.intlGet(guildId, 'new')}:**__ ${newName}`;
 
-        await DiscordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title, description);
+        await DiscordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title, description, null,
+            instance.trackers[trackerId].everyone);
     },
 }

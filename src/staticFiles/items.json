@@ -57,7 +57,7 @@
     "39600618": {
         "shortname": "microphonestand",
         "name": "Microphone Stand",
-        "description": "A powered microphone that lets you broadcast your voice. Press [+reload] to change voice mode between high and low pitch."
+        "description": "A powered microphone that lets you broadcast your voice. Press [+attack2] to change voice mode between high and low pitch."
     },
     "42535890": {
         "shortname": "sign.neon.125x215.animated",
@@ -369,6 +369,11 @@
         "name": "Shotgun Trap",
         "description": "A shotgun trap triggered by movement, place near doorways and load with handmade shells."
     },
+    "355877490": {
+        "shortname": "minigunammopack",
+        "name": "Minigun Ammo Pack",
+        "description": "A backpack designed to store ammunition for a minigun."
+    },
     "359723196": {
         "shortname": "arcade.machine.chippy",
         "name": "Chippy Arcade Game",
@@ -542,7 +547,7 @@
     "607400343": {
         "shortname": "legacy.shelter.wood",
         "name": "Legacy Wood Shelter",
-        "description": "The classic s*** shack. A great starter base for any fresh spawn."
+        "description": "The classic s*** shack. A great starter base for any fresh spawn. There is a limit to how many you can place."
     },
     "609049394": {
         "shortname": "battery.small",
@@ -634,6 +639,11 @@
         "name": "Yellow Perch",
         "description": "A Yellow Perch, commonly found in freshwater rivers."
     },
+    "695450239": {
+        "shortname": "spear.cny",
+        "name": "Lunar New Year Spear",
+        "description": "A Chinese themed New Year themed metal Spear"
+    },
     "696029452": {
         "shortname": "map",
         "name": "Paper Map",
@@ -643,6 +653,11 @@
         "shortname": "woodcross",
         "name": "Wooden Cross",
         "description": "A wooden cross marking the remains of an unknown soul"
+    },
+    "703057617": {
+        "shortname": "military flamethrower",
+        "name": "Military Flame Thrower",
+        "description": "A Military grade flamethrower. Uses low grade fuel as ammunition."
     },
     "709206314": {
         "shortname": "hat.tigermask",
@@ -868,6 +883,11 @@
         "shortname": "valve2",
         "name": "Medium Quality Valves",
         "description": "Medium quality poppet valves for a combustion engine. Valves control the intake and exhaust flow."
+    },
+    "935606207": {
+        "shortname": "minigun",
+        "name": "Minigun",
+        "description": "A military issue belt-fed machine gun with that must be spun up to fire. Fires rapidly once spun up at the expense of movement speed."
     },
     "935692442": {
         "shortname": "tshirt.long",
@@ -1098,6 +1118,11 @@
         "shortname": "hitchtroughcombo",
         "name": "Hitch & Trough",
         "description": "A Hitching post and Trough. Dismounting your horses here will keep them healthy and fed as long as it is kept stocked with food."
+    },
+    "1168856825": {
+        "shortname": "metal.detector",
+        "name": "Metal Detector",
+        "description": "Detects metal objects which may otherwise be hidden. When the light flashes, or you hear a beep, aim to search for items. Increase the bar until a flag appears. Dig at the flag with a melee item to reveal what it is. Different areas yield different rewards"
     },
     "1171735914": {
         "shortname": "electric.andswitch",
@@ -1468,6 +1493,11 @@
         "shortname": "oretea",
         "name": "Basic Ore Tea",
         "description": "A tea that increases the amount of ore you receive."
+    },
+    "1488606552": {
+        "shortname": "cupboard.tool.retro",
+        "name": "Retro Tool Cupboard",
+        "description": "Transform your tool cupboard experience with this modified Hi-Fi cabinet. Complete with retro displays indicating vital base data as well as frosted glass doors allowing you to view its contents of tools and resources!"
     },
     "1488979457": {
         "shortname": "jackhammer",
@@ -2174,6 +2204,11 @@
         "name": "Advanced Ore Tea",
         "description": "A tea that increases the amount of ore you receive."
     },
+    "2068884361": {
+        "shortname": "smallbackpack",
+        "name": "Small Backpack",
+        "description": "A small, makeshift backpack"
+    },
     "2070189026": {
         "shortname": "sign.pole.banner.large",
         "name": "Large Banner on pole",
@@ -2474,6 +2509,11 @@
         "name": "Cooked Chicken",
         "description": "Cooked chicken. Eating it will restore some health, hunger, and thirst."
     },
+    "-152332823": {
+        "shortname": "chicken.costume",
+        "name": "Chicken Costume",
+        "description": "An inflatable chicken costume. Acting as a replacement for wooden pants, you can equip this item to look as silly as possible."
+    },
     "-1440987069": {
         "shortname": "chicken.raw",
         "name": "Raw Chicken Breast",
@@ -2488,6 +2528,11 @@
         "shortname": "chineselantern",
         "name": "Chinese Lantern",
         "description": "A decorative Paper lantern"
+    },
+    "-770304148": {
+        "shortname": "chineselanternwhite",
+        "name": "Chinese Lantern White",
+        "description": "A decorative White Paper lantern"
     },
     "-965336208": {
         "shortname": "chocolate",
@@ -3164,6 +3209,11 @@
         "name": "Scientist Suit",
         "description": "A hazmat suit made from radiation resistant rubber."
     },
+    "-1696379844": {
+        "shortname": "hazmatyoutooz",
+        "name": "Hazmat Youtooz",
+        "description": "Hazmat Youtooz"
+    },
     "-2123125470": {
         "shortname": "healingtea.advanced",
         "name": "Advanced Healing Tea",
@@ -3188,6 +3238,11 @@
         "shortname": "heavy.plate.pants",
         "name": "Heavy Plate Pants",
         "description": "Offers superior protection at the cost of reduced movement speed."
+    },
+    "-722629980": {
+        "shortname": "heavyscientistyoutooz",
+        "name": "Heavy Scientist Youtooz",
+        "description": "Heavy Scientist Youtooz"
     },
     "-1214542497": {
         "shortname": "hmlmg",
@@ -3313,6 +3368,11 @@
         "shortname": "ladder.wooden.wall",
         "name": "Wooden Ladder",
         "description": "A ladder will help you climb walls in any base."
+    },
+    "-907422733": {
+        "shortname": "largebackpack",
+        "name": "Large Backpack",
+        "description": "A larger military backpack that can hold items inside it"
     },
     "-489848205": {
         "shortname": "largecandles",
@@ -3532,7 +3592,7 @@
     "-144513264": {
         "shortname": "pipetool",
         "name": "Pipe Tool",
-        "description": "Now you're thinking with pipes!"
+        "description": "A tool used to make connections between industrial objects. Aim at an object and click on an input/output handle, then click on another object's input/output handle to form a connection. Holding right mouse will clear or cancel a connection."
     },
     "-75944661": {
         "shortname": "pistol.eoka",
@@ -3649,6 +3709,11 @@
         "name": "Semi-Automatic Rifle",
         "description": "A Semi Automatic Rifle."
     },
+    "-348232115": {
+        "shortname": "rifle.sks",
+        "name": "SKS",
+        "description": "A Semi Automatic Rifle."
+    },
     "-699558439": {
         "shortname": "roadsign.gloves",
         "name": "Roadsign Gloves",
@@ -3658,6 +3723,11 @@
         "shortname": "roadsign.jacket",
         "name": "Road Sign Jacket",
         "description": "A shoddy piece of body armor made from roadsigns."
+    },
+    "-1315992997": {
+        "shortname": "rocket.launcher.dragon",
+        "name": "Dragon Rocket Launcher",
+        "description": "Unmatched craftsmanship meets devastating firepower."
     },
     "-1863063690": {
         "shortname": "rockingchair",
@@ -3828,6 +3898,11 @@
         "shortname": "shotgun.waterpipe",
         "name": "Waterpipe Shotgun",
         "description": "A Shotgun. Fires a single round before reloading."
+    },
+    "-1536855921": {
+        "shortname": "shovel",
+        "name": "Shovel",
+        "description": "A shovel for digging up stuff"
     },
     "-1199897169": {
         "shortname": "shutter.metal.embrasure.a",
@@ -4249,6 +4324,11 @@
         "name": "Large Chassis",
         "description": "Four-socket vehicle chassis."
     },
+    "-1416322465": {
+        "shortname": "walkietalkie",
+        "name": "Walkie Talkie",
+        "description": "A walkie talkie set to an unknown channel"
+    },
     "-985781766": {
         "shortname": "wall.external.high.ice",
         "name": "High Ice Wall",
@@ -4387,7 +4467,7 @@
     "-144417939": {
         "shortname": "wiretool",
         "name": "Wire Tool",
-        "description": "A tool used to make connections between electrical objects. Aim at an object and click on an input/output handle. you can then click on another object's input/output handle to form a connection. holding right mouse will clear or cancel a connection."
+        "description": "A tool used to make connections between electrical objects. Aim at an object and click on an input/output handle, then click on another object's input/output handle to form a connection. Holding right mouse will clear or cancel a connection."
     },
     "-395377963": {
         "shortname": "wolfmeat.raw",
