@@ -22,7 +22,6 @@ const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const InstanceUtils = require('../util/instanceUtils.js');
 
 module.exports = {
 	name: 'storagemonitor',
@@ -65,7 +64,7 @@ module.exports = {
 				const entityId = interaction.options.getString('id');
 				const image = interaction.options.getString('image');
 
-				const device = InstanceUtils.getSmartDevice(guildId, entityId);
+				const device = client.getSmartDevice(guildId, entityId);
 				if (device === null) {
 					const str = client.intlGet(guildId, 'invalidId', { id: entityId });
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));

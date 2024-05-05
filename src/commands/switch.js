@@ -22,7 +22,6 @@ const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const InstanceUtils = require('../util/instanceUtils.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
 module.exports = {
@@ -79,7 +78,7 @@ module.exports = {
                 const entityId = interaction.options.getString('id');
                 const image = interaction.options.getString('image');
 
-                let device = InstanceUtils.getSmartDevice(guildId, entityId);
+                let device = client.getSmartDevice(guildId, entityId);
                 if (device === null) {
                     isSmartSwitchGroup = true;
                     for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {
