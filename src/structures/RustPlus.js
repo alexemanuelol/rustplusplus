@@ -32,7 +32,7 @@ const DiscordVoice = require('../discordTools/discordVoice.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const InstanceUtils = require('../util/instanceUtils.js');
-const Languages = require('../util/languages.js');
+const { languageCodes } = require('../../dist/util/languages.js');
 const Logger = require('./Logger.js');
 const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
@@ -276,12 +276,12 @@ class RustPlus extends RustPlusLib {
     }
 
     async sendEvent(setting, text, event, embed_color, firstPoll = false, image = null) {
-        const img = (image !== null) ? image : setting.image;
+        image = (image !== null) ? image : setting.image;
 
         this.updateEvents(event, text);
 
         if (!firstPoll && setting.discord) {
-            await DiscordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, img, embed_color);
+            await DiscordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, image, embed_color);
         }
         if (!firstPoll && setting.inGame) {
             await this.sendInGameMessage(`${text}`);
@@ -2548,9 +2548,9 @@ class RustPlus extends RustPlusLib {
                 language = command.slice(`${commandTrEn} ${commandLanguageEn} `.length).trim();
             }
 
-            if (language in Languages) {
+            if (language in languageCodes) {
                 return Client.client.intlGet(this.guildId, 'languageCode', {
-                    code: Languages[language]
+                    code: languageCodes[language]
                 });
             }
             else {

@@ -30,7 +30,7 @@ module.exports = {
         if (message.author.bot || !rustplus || (rustplus && !rustplus.isOperational)) return;
 
         if (instance.blacklist['discordIds'].includes(message.author.id) &&
-            Object.values(instance.channelId).includes(message.channelId)) {
+            Object.values(instance.channelIds).includes(message.channelId)) {
             const guild = DiscordTools.getGuild(message.guild.id);
             const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
             client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `userPartOfBlacklistDiscord`, {
@@ -42,10 +42,10 @@ module.exports = {
             return;
         }
 
-        if (message.channelId === instance.channelId.commands) {
+        if (message.channelId === instance.channelIds.commands) {
             await DiscordCommandHandler.discordCommandHandler(rustplus, client, message);
         }
-        else if (message.channelId === instance.channelId.teamchat) {
+        else if (message.channelId === instance.channelIds.teamchat) {
             const guild = DiscordTools.getGuild(message.guild.id);
             const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
             client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logDiscordMessage`, {

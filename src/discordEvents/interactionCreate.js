@@ -28,7 +28,7 @@ module.exports = {
         const instance = client.getInstance(interaction.guildId);
 
         /* Check so that the interaction comes from valid channels */
-        if (!Object.values(instance.channelId).includes(interaction.channelId) && !interaction.isCommand) {
+        if (!Object.values(instance.channelIds).includes(interaction.channelId) && !interaction.isCommand) {
             client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'interactionInvalidChannel'))
             if (interaction.isButton()) {
                 try {

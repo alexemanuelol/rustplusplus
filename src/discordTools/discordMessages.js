@@ -65,7 +65,7 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(guildId, content, server.messageId,
-            instance.channelId.servers, interaction);
+            instance.channelIds.servers, interaction);
 
         if (!interaction) {
             instance.serverList[serverId].messageId = message.id;
@@ -83,7 +83,7 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(guildId, content, tracker.messageId,
-            instance.channelId.trackers, interaction);
+            instance.channelIds.trackers, interaction);
 
         if (!interaction) {
             instance.trackers[trackerId].messageId = message.id;
@@ -109,7 +109,7 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
-            instance.channelId.switches, interaction);
+            instance.channelIds.switches, interaction);
 
         if (!interaction) {
             instance.serverList[serverId].switches[entityId].messageId = message.id;
@@ -131,7 +131,7 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
-            instance.channelId.alarms, interaction);
+            instance.channelIds.alarms, interaction);
 
         if (!interaction) {
             instance.serverList[serverId].alarms[entityId].messageId = message.id;
@@ -158,7 +158,7 @@ module.exports = {
         instance = Client.client.getInstance(guildId);
 
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
-            instance.channelId.storageMonitors, interaction);
+            instance.channelIds.storageMonitors, interaction);
 
         if (!interaction) {
             instance.serverList[serverId].storageMonitors[entityId].messageId = message.id;
@@ -178,7 +178,7 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(guildId, content, group.messageId,
-            instance.channelId.switchGroups, interaction);
+            instance.channelIds.switchGroups, interaction);
 
         if (!interaction) {
             instance.serverList[serverId].switchGroups[groupId].messageId = message.id;
@@ -196,7 +196,7 @@ module.exports = {
                 Path.join(__dirname, '..', 'resources/images/electrics/recycler.png'))]
         }
 
-        return await module.exports.sendMessage(guildId, content, null, instance.channelId.storageMonitors);
+        return await module.exports.sendMessage(guildId, content, null, instance.channelIds.storageMonitors);
     },
 
     sendDecayingNotificationMessage: async function (guildId, serverId, entityId) {
@@ -210,7 +210,7 @@ module.exports = {
             content: entity.everyone ? '@everyone' : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendStorageMonitorDisconnectNotificationMessage: async function (guildId, serverId, entityId) {
@@ -224,7 +224,7 @@ module.exports = {
             content: entity.everyone ? '@everyone' : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendStorageMonitorNotFoundMessage: async function (guildId, serverId, entityId) {
@@ -238,7 +238,7 @@ module.exports = {
             content: entity.everyone ? '@everyone' : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendSmartSwitchNotFoundMessage: async function (guildId, serverId, entityId) {
@@ -251,7 +251,7 @@ module.exports = {
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendSmartAlarmNotFoundMessage: async function (guildId, serverId, entityId) {
@@ -265,7 +265,7 @@ module.exports = {
             content: entity.everyone ? '@everyone' : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendSmartAlarmTriggerMessage: async function (guildId, serverId, entityId) {
@@ -279,7 +279,7 @@ module.exports = {
             content: entity.everyone ? '@everyone' : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendServerChangeStateMessage: async function (guildId, serverId, state) {
@@ -289,7 +289,7 @@ module.exports = {
             embeds: [DiscordEmbeds.getServerChangedStateEmbed(guildId, serverId, state)]
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendServerWipeDetectedMessage: async function (guildId, serverId) {
@@ -302,7 +302,7 @@ module.exports = {
             content: instance.generalSettings.mapWipeNotifyEveryone ? '@everyone' : ''
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendServerConnectionInvalidMessage: async function (guildId, serverId) {
@@ -312,7 +312,7 @@ module.exports = {
             embeds: [DiscordEmbeds.getServerConnectionInvalidEmbed(guildId, serverId)]
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendInformationMapMessage: async function (guildId) {
@@ -323,11 +323,11 @@ module.exports = {
                 Path.join(__dirname, '..', '..', `maps/${guildId}_map_full.png`))]
         }
 
-        const message = await module.exports.sendMessage(guildId, content, instance.informationMessageId.map,
-            instance.channelId.information);
+        const message = await module.exports.sendMessage(guildId, content, instance.informationChannelMessageIds.map,
+            instance.channelIds.information);
 
         if (message) {
-            instance.informationMessageId.map = message.id;
+            instance.informationChannelMessageIds.map = message.id;
             Client.client.setInstance(guildId, instance);
         }
     },
@@ -341,7 +341,7 @@ module.exports = {
                 Path.join(__dirname, '..', `resources/images/events/${image}`))]
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.events);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.events);
     },
 
     sendActivityNotificationMessage: async function (guildId, serverId, color, text, steamId, title = null, everyone = false) {
@@ -359,7 +359,7 @@ module.exports = {
             content.content = '@everyone';
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendTeamChatMessage: async function (guildId, message) {
@@ -381,7 +381,7 @@ module.exports = {
             content.content = '@everyone';
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.teamchat);
     },
 
     sendTTSMessage: async function (guildId, name, text) {
@@ -392,7 +392,7 @@ module.exports = {
             tts: true
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.teamchat);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.teamchat);
     },
 
     sendUpdateMapInformationMessage: async function (rustplus) {
@@ -404,10 +404,10 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(rustplus.guildId, content,
-            instance.informationMessageId.map, instance.channelId.information);
+            instance.informationChannelMessageIds.map, instance.channelIds.information);
 
-        if (message.id !== instance.informationMessageId.map) {
-            instance.informationMessageId.map = message.id;
+        if (message.id !== instance.informationChannelMessageIds.map) {
+            instance.informationChannelMessageIds.map = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
     },
@@ -423,10 +423,10 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(rustplus.guildId, content,
-            instance.informationMessageId.server, instance.channelId.information);
+            instance.informationChannelMessageIds.server, instance.channelIds.information);
 
-        if (message.id !== instance.informationMessageId.server) {
-            instance.informationMessageId.server = message.id;
+        if (message.id !== instance.informationChannelMessageIds.server) {
+            instance.informationChannelMessageIds.server = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
     },
@@ -442,10 +442,10 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(rustplus.guildId, content,
-            instance.informationMessageId.event, instance.channelId.information);
+            instance.informationChannelMessageIds.event, instance.channelIds.information);
 
-        if (message.id !== instance.informationMessageId.event) {
-            instance.informationMessageId.event = message.id;
+        if (message.id !== instance.informationChannelMessageIds.event) {
+            instance.informationChannelMessageIds.event = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
     },
@@ -461,10 +461,10 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(rustplus.guildId, content,
-            instance.informationMessageId.team, instance.channelId.information);
+            instance.informationChannelMessageIds.team, instance.channelIds.information);
 
-        if (message.id !== instance.informationMessageId.team) {
-            instance.informationMessageId.team = message.id;
+        if (message.id !== instance.informationChannelMessageIds.team) {
+            instance.informationChannelMessageIds.team = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
     },
@@ -477,10 +477,10 @@ module.exports = {
         }
 
         const message = await module.exports.sendMessage(rustplus.guildId, content,
-            instance.informationMessageId.battlemetricsPlayers, instance.channelId.information);
+            instance.informationChannelMessageIds.battlemetricsPlayers, instance.channelIds.information);
 
-        if (message.id !== instance.informationMessageId.battlemetricsPlayers) {
-            instance.informationMessageId.battlemetricsPlayers = message.id;
+        if (message.id !== instance.informationChannelMessageIds.battlemetricsPlayers) {
+            instance.informationChannelMessageIds.battlemetricsPlayers = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
     },
@@ -511,7 +511,7 @@ module.exports = {
             )]
         }
 
-        await module.exports.sendMessage(rustplus.guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(rustplus.guildId, content, null, instance.channelIds.activity);
     },
 
     sendHelpMessage: async function (interaction) {
@@ -589,7 +589,7 @@ module.exports = {
             content.content = '@everyone';
         }
 
-        await module.exports.sendMessage(guildId, content, null, instance.channelId.activity);
+        await module.exports.sendMessage(guildId, content, null, instance.channelIds.activity);
     },
 
     sendItemMessage: async function (interaction, itemName, itemId, type) {

@@ -3,7 +3,7 @@ services:
     app:
         volumes:
             - ./credentials:/app/credentials
-            - ./instances:/app/instances
+            - ./guildInstances:/app/guildInstances
             - ./logs:/app/logs
             - ./maps:/app/maps
         environment:

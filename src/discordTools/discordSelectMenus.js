@@ -24,7 +24,7 @@ const Path = require('path');
 
 const Client = require('../../index.ts');
 const Constants = require('../../dist/util/constants.js');
-const Languages = require('../util/languages.js');
+const { languageCodes } = require('../../dist/util/languages.js');
 
 module.exports = {
     getSelectMenu: function (options = {}) {
@@ -50,7 +50,7 @@ module.exports = {
         const options = [];
         for (const language of languageFiles) {
             const langShort = language.replace('.json', '')
-            let langLong = Object.keys(Languages).find(e => Languages[e] === langShort)
+            let langLong = Object.keys(languageCodes).find(e => languageCodes[e] === langShort)
             if (!langLong) langLong = Client.client.intlGet(guildId, 'unknown');
             options.push({
                 label: `${langLong} (${langShort})`,
@@ -61,7 +61,7 @@ module.exports = {
             });
         }
 
-        let currentLanguage = Object.keys(Languages).find(e => Languages[e] === language);
+        let currentLanguage = Object.keys(languageCodes).find(e => languageCodes[e] === language);
         if (!currentLanguage) currentLanguage = Client.client.intlGet(guildId, 'unknown');
 
         return new Discord.ActionRowBuilder().addComponents(

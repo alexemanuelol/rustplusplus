@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,12 +18,14 @@
 
 */
 
-const Fs = require('fs');
-const Path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
+import { Guild } from 'discord.js';
 
-module.exports = (client, guild) => {
-    if (!Fs.existsSync(Path.join(__dirname, '..', '..', 'credentials', `${guild.id}.json`))) {
-        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'credentials', `${guild.id}.json`),
-            JSON.stringify({ hoster: null }, null, 2));
+export default function createCredentialsFile(guild: Guild): void {
+    const credentialsPath = path.join(__dirname, '..', '..', 'credentials', `${guild.id}.json`);
+
+    if (!fs.existsSync(credentialsPath)) {
+        fs.writeFileSync(credentialsPath, JSON.stringify({ hoster: null }, null, 2));
     }
-};
+}

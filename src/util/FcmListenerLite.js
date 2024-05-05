@@ -352,7 +352,7 @@ async function playerDeath(client, guild, title, message, body, discordUserId) {
 
     let png = null;
     if (body.targetId !== '') png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
-    if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMG;
+    if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMAGE;
 
     const content = {
         embeds: [DiscordEmbeds.getPlayerDeathEmbed({ title: title }, body, png)]

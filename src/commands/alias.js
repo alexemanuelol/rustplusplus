@@ -92,7 +92,7 @@ async function addAlias(client, interaction) {
 	const aliasParameter = interaction.options.getString('alias');
 	const valueParameter = interaction.options.getString('value');
 
-	for (const alias of instance.aliases) {
+	for (const alias of instance.commandAliases) {
 		if (alias.alias === aliasParameter) {
 			const str = client.intlGet(guildId, 'aliasAlreadyExist');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -103,11 +103,11 @@ async function addAlias(client, interaction) {
 
 	let index = 0;
 	while (true) {
-		if (!instance.aliases.some(e => e.index === index)) break;
+		if (!instance.commandAliases.some(e => e.index === index)) break;
 		index += 1;
 	}
 
-	instance.aliases.push({ index: index, alias: aliasParameter, value: valueParameter });
+	instance.commandAliases.push({ index: index, alias: aliasParameter, value: valueParameter });
 	client.setInstance(guildId, instance);
 
 	const str = client.intlGet(guildId, 'aliasWasAdded');
@@ -122,14 +122,14 @@ async function removeAlias(client, interaction) {
 
 	const indexParameter = interaction.options.getInteger('index');
 
-	if (!instance.aliases.some(e => e.index === indexParameter)) {
+	if (!instance.commandAliases.some(e => e.index === indexParameter)) {
 		const str = client.intlGet(guildId, 'aliasIndexCouldNotBeFound');
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 		client.log(client.intlGet(guildId, 'warningCap'), str);
 		return;
 	}
 
-	instance.aliases = instance.aliases.filter(e => e.index !== indexParameter);
+	instance.commandAliases = instance.commandAliases.filter(e => e.index !== indexParameter);
 	client.setInstance(guildId, instance);
 
 	const str = client.intlGet(guildId, 'aliasWasRemoved');
@@ -151,7 +151,7 @@ async function showAlias(client, interaction) {
 	let fieldIndex = 0;
 	let indexStrings = [''], aliasStrings = [''], valueStrings = [''];
 	let indexStringsCharacters = 0, aliasStringsCharacters = 0, valueStringsCharacters = 0;
-	for (const alias of instance.aliases) {
+	for (const alias of instance.commandAliases) {
 		const indexString = `${alias.index}\n`;
 		const aliasString = `${alias.alias}\n`;
 		const valueString = `${alias.value}\n`;

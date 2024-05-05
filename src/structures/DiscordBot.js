@@ -34,6 +34,7 @@ const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
+const GuildInstance = require('../../dist/util/GuildInstance.js');
 
 class DiscordBot extends Discord.Client {
     constructor(props) {
@@ -130,7 +131,7 @@ class DiscordBot extends Discord.Client {
     }
 
     loadGuildIntl(guildId) {
-        const instance = InstanceUtils.readInstanceFile(guildId);
+        const instance = GuildInstance.readGuildInstanceFile(guildId);
         const language = instance.generalSettings.language;
         const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
         const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
@@ -286,17 +287,7 @@ class DiscordBot extends Discord.Client {
 
     setInstance(guildId, instance) {
         this.instances[guildId] = instance;
-        InstanceUtils.writeInstanceFile(guildId, instance);
-    }
-
-    readNotificationSettingsTemplate() {
-        return JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'templates/notificationSettingsTemplate.json'), 'utf8'));
-    }
-
-    readGeneralSettingsTemplate() {
-        return JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'templates/generalSettingsTemplate.json'), 'utf8'));
+        GuildInstance.writeGuildInstanceFile(guildId, instance);
     }
 
     createRustplusInstance(guildId, serverIp, appPort, steamId, playerToken) {
@@ -312,7 +303,7 @@ class DiscordBot extends Discord.Client {
     }
 
     createRustplusInstancesFromConfig() {
-        const files = Fs.readdirSync(Path.join(__dirname, '..', '..', 'instances'));
+        const files = Fs.readdirSync(Path.join(__dirname, '..', '..', 'guildInstances'));
 
         files.forEach(file => {
             if (!file.endsWith('.json')) return;
@@ -531,11 +522,11 @@ class DiscordBot extends Discord.Client {
         }
 
         /* If role isn't setup yet, validate as true */
-        if (instance.role === null) return true;
+        if (instance.roleId === null) return true;
 
         if (!interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator) &&
-            !interaction.member.roles.cache.has(instance.role)) {
-            let role = DiscordTools.getRole(interaction.guildId, instance.role);
+            !interaction.member.roles.cache.has(instance.roleId)) {
+            let role = DiscordTools.getRole(interaction.guildId, instance.roleId);
             const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
             await this.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             this.log(this.intlGet(null, 'warningCap'), str);

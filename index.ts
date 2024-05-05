@@ -45,8 +45,8 @@ function createMissingDirectories() {
         Fs.mkdirSync(Path.join(__dirname, 'logs'));
     }
 
-    if (!Fs.existsSync(Path.join(__dirname, 'instances'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'instances'));
+    if (!Fs.existsSync(Path.join(__dirname, 'guildInstances'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'guildInstances'));
     }
 
     if (!Fs.existsSync(Path.join(__dirname, 'credentials'))) {

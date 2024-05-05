@@ -64,13 +64,13 @@ module.exports = {
 		switch (interaction.options.getSubcommand()) {
 			case 'set': {
 				role = interaction.options.getRole('role');
-				instance.role = role.id;
+				instance.roleId = role.id;
 				client.setInstance(interaction.guildId, instance);
 
 			} break;
 
 			case 'clear': {
-				instance.role = null;
+				instance.roleId = null;
 				client.setInstance(interaction.guildId, instance);
 
 			} break;

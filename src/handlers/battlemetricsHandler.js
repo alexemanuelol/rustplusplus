@@ -50,11 +50,11 @@ module.exports = {
                 await DiscordMessages.sendUpdateBattlemetricsOnlinePlayersInformationMessage(rustplus, bmId);
             }
             else {
-                if (instance.informationMessageId.battlemetricsPlayers !== null) {
-                    await DiscordTools.deleteMessageById(guildId, instance.channelId.information,
-                        instance.informationMessageId.battlemetricsPlayers);
+                if (instance.informationChannelMessageIds.battlemetricsPlayers !== null) {
+                    await DiscordTools.deleteMessageById(guildId, instance.channelIds.information,
+                        instance.informationChannelMessageIds.battlemetricsPlayers);
 
-                    instance.informationMessageId.battlemetricsPlayers = null;
+                    instance.informationChannelMessageIds.battlemetricsPlayers = null;
                     client.setInstance(guildId, instance);
                 }
             }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,7 +18,11 @@
 
 */
 
-module.exports = {
+export interface LanguageCodes {
+    [key: string]: string;
+}
+
+export const languageCodes: LanguageCodes = {
     "afar": "aa",
     "abkhazian": "ab",
     "afrikaans": "af",
