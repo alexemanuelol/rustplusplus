@@ -801,12 +801,8 @@
   "596469572": {
     "ingredients": [
       {
-        "id": "317398316",
-        "quantity": 5
-      },
-      {
-        "id": "73681876",
-        "quantity": 1
+        "id": "69511070",
+        "quantity": 100
       }
     ],
     "workbench": "-41896755",
@@ -1294,11 +1290,7 @@
     "ingredients": [
       {
         "id": "69511070",
-        "quantity": 100
-      },
-      {
-        "id": "73681876",
-        "quantity": 1
+        "quantity": 150
       }
     ],
     "workbench": "-41896755",
@@ -1547,7 +1539,7 @@
       },
       {
         "id": "317398316",
-        "quantity": 25
+        "quantity": 18
       },
       {
         "id": "1234880403",
@@ -2581,10 +2573,6 @@
         "quantity": 200
       },
       {
-        "id": "73681876",
-        "quantity": 2
-      },
-      {
         "id": "634478325",
         "quantity": 1
       }
@@ -2657,15 +2645,11 @@
       },
       {
         "id": "-265876753",
-        "quantity": 250
+        "quantity": 150
       },
       {
         "id": "-946369541",
-        "quantity": 250
-      },
-      {
-        "id": "-592016202",
-        "quantity": 1
+        "quantity": 75
       }
     ],
     "workbench": "-41896755",
@@ -2792,7 +2776,7 @@
       },
       {
         "id": "-265876753",
-        "quantity": 20
+        "quantity": 10
       }
     ],
     "workbench": "-1607980696",
@@ -4775,7 +4759,7 @@
       },
       {
         "id": "479143914",
-        "quantity": 3
+        "quantity": 2
       }
     ],
     "workbench": "-1607980696",
@@ -4876,7 +4860,7 @@
       },
       {
         "id": "-265876753",
-        "quantity": 20
+        "quantity": 10
       }
     ],
     "workbench": "-41896755",
@@ -5746,11 +5730,7 @@
     "ingredients": [
       {
         "id": "69511070",
-        "quantity": 100
-      },
-      {
-        "id": "73681876",
-        "quantity": 1
+        "quantity": 150
       }
     ],
     "workbench": "-41896755",
@@ -5761,11 +5741,7 @@
     "ingredients": [
       {
         "id": "69511070",
-        "quantity": 50
-      },
-      {
-        "id": "73681876",
-        "quantity": 1
+        "quantity": 100
       }
     ],
     "workbench": "-41896755",

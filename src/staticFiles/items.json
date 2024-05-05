@@ -57,7 +57,7 @@
     "39600618": {
         "shortname": "microphonestand",
         "name": "Microphone Stand",
-        "description": "A powered microphone that lets you broadcast your voice. Press [+reload] to change voice mode between high and low pitch."
+        "description": "A powered microphone that lets you broadcast your voice. Press [+attack2] to change voice mode between high and low pitch."
     },
     "42535890": {
         "shortname": "sign.neon.125x215.animated",
@@ -369,6 +369,11 @@
         "name": "Shotgun Trap",
         "description": "A shotgun trap triggered by movement, place near doorways and load with handmade shells."
     },
+    "355877490": {
+        "shortname": "minigunammopack",
+        "name": "Minigun Ammo Pack",
+        "description": "A backpack designed to store ammunition for a minigun."
+    },
     "359723196": {
         "shortname": "arcade.machine.chippy",
         "name": "Chippy Arcade Game",
@@ -636,8 +641,8 @@
     },
     "695450239": {
         "shortname": "spear.cny",
-        "name": "Chinese new year spear",
-        "description": "A Chinese new year themed metal spear"
+        "name": "Lunar New Year Spear",
+        "description": "A Chinese themed New Year themed metal Spear"
     },
     "696029452": {
         "shortname": "map",
@@ -648,6 +653,11 @@
         "shortname": "woodcross",
         "name": "Wooden Cross",
         "description": "A wooden cross marking the remains of an unknown soul"
+    },
+    "703057617": {
+        "shortname": "military flamethrower",
+        "name": "Military Flame Thrower",
+        "description": "A Military grade flamethrower. Uses low grade fuel as ammunition."
     },
     "709206314": {
         "shortname": "hat.tigermask",
@@ -873,6 +883,11 @@
         "shortname": "valve2",
         "name": "Medium Quality Valves",
         "description": "Medium quality poppet valves for a combustion engine. Valves control the intake and exhaust flow."
+    },
+    "935606207": {
+        "shortname": "minigun",
+        "name": "Minigun",
+        "description": "A military issue belt-fed machine gun with that must be spun up to fire. Fires rapidly once spun up at the expense of movement speed."
     },
     "935692442": {
         "shortname": "tshirt.long",
@@ -1478,6 +1493,11 @@
         "shortname": "oretea",
         "name": "Basic Ore Tea",
         "description": "A tea that increases the amount of ore you receive."
+    },
+    "1488606552": {
+        "shortname": "cupboard.tool.retro",
+        "name": "Retro Tool Cupboard",
+        "description": "Transform your tool cupboard experience with this modified Hi-Fi cabinet. Complete with retro displays indicating vital base data as well as frosted glass doors allowing you to view its contents of tools and resources!"
     },
     "1488979457": {
         "shortname": "jackhammer",
@@ -3689,6 +3709,11 @@
         "name": "Semi-Automatic Rifle",
         "description": "A Semi Automatic Rifle."
     },
+    "-348232115": {
+        "shortname": "rifle.sks",
+        "name": "SKS",
+        "description": "A Semi Automatic Rifle."
+    },
     "-699558439": {
         "shortname": "roadsign.gloves",
         "name": "Roadsign Gloves",
@@ -3702,7 +3727,7 @@
     "-1315992997": {
         "shortname": "rocket.launcher.dragon",
         "name": "Dragon Rocket Launcher",
-        "description": "Shoots rockets slightly farther than North Korea."
+        "description": "Unmatched craftsmanship meets devastating firepower."
     },
     "-1863063690": {
         "shortname": "rockingchair",

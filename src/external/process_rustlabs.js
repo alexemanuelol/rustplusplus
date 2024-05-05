@@ -551,8 +551,8 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
         if (toolMatches.length !== 0) {
             for (const toolMatch of toolMatches) {
                 if (toolMatch.length !== 3) exit();
-                toolShortname = toolMatch[1];
-                toolName = toolMatch[2];
+                toolShortname = Utils.decodeHtml(toolMatch[1]).replace('%20', ' ');
+                toolName = Utils.decodeHtml(toolMatch[2]).replace('%20', ' ');
                 break;
             }
         }
