@@ -53,7 +53,7 @@ A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/r
 
 > To run the bot, simply open the terminal of your choice and run the following from repository root:
 
-    $ npm start run
+    $ npm start
 
 
 ## **How to update the repository**

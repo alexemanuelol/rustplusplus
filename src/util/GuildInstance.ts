@@ -30,6 +30,7 @@ export interface GuildInstance {
     commandAliases: CommandAlias[];
     firstTime: boolean;
     generalSettings: GeneralSettings;
+    hoster: string | null;
     informationChannelMessageIds: InformationChannelMessageIds;
     marketSubscriptionList: MarketSubscriptionList;
     notificationSettings: NotificationSettings;
@@ -118,7 +119,6 @@ export interface NotificationSettings {
         voice: boolean;
     };
 }
-
 export interface ServerInfo {
     alarms: { [id: string]: SmartAlarm }; // TODO! Change to smartAlarms
     appPort: string;
@@ -288,6 +288,7 @@ function getNewGuildInstance(): GuildInstance {
         commandAliases: [],
         firstTime: true,
         generalSettings: readGeneralSettingsTemplate(),
+        hoster: null,
         informationChannelMessageIds: {
             battlemetricsPlayers: null,
             event: null,
@@ -392,6 +393,11 @@ export function createGuildInstanceFile(guildId: string): void {
                     newGuildInstance.generalSettings[key] = oldGuildInstance.generalSettings[key];
                 }
             }
+        }
+
+        /* hoster */
+        if (oldGuildInstance.hasOwnProperty('hoster')) {
+            newGuildInstance.hoster = oldGuildInstance.hoster;
         }
 
         /* informationChannelMessageIds */

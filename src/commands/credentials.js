@@ -22,10 +22,10 @@ const _ = require('lodash');
 const Builder = require('@discordjs/builders');
 
 const Config = require('../../config');
+const Credentials = require('../../dist/util/Credentials.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const InstanceUtils = require('../util/instanceUtils.js');
 
 module.exports = {
     name: 'credentials',
@@ -132,11 +132,12 @@ module.exports = {
 
 async function addCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
-    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    const instance = client.getInstance(guildId);
+    const credentials = Credentials.readCredentialsFile();
     const steamId = interaction.options.getString('steam_id');
-    const isHoster = interaction.options.getBoolean('host') || Object.keys(credentials).length === 1;
+    const isHoster = interaction.options.getBoolean('host') || Object.keys(credentials).length === 0;
 
-    if (Object.keys(credentials) !== 1 && isHoster) {
+    if (Object.keys(credentials) !== 0 && isHoster) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -153,29 +154,30 @@ async function addCredentials(client, interaction, verifyId) {
     }
 
     credentials[steamId] = new Object();
-    credentials[steamId].fcm_credentials = new Object();
+    credentials[steamId].fcmCredentials = new Object();
 
-    credentials[steamId].fcm_credentials.keys = new Object();
-    credentials[steamId].fcm_credentials.keys.privateKey = interaction.options.getString('keys_private_key');
-    credentials[steamId].fcm_credentials.keys.publicKey = interaction.options.getString('keys_public_key');
-    credentials[steamId].fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
+    credentials[steamId].fcmCredentials.keys = new Object();
+    credentials[steamId].fcmCredentials.keys.privateKey = interaction.options.getString('keys_private_key');
+    credentials[steamId].fcmCredentials.keys.publicKey = interaction.options.getString('keys_public_key');
+    credentials[steamId].fcmCredentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
 
-    credentials[steamId].fcm_credentials.fcm = new Object();
-    credentials[steamId].fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
-    credentials[steamId].fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
+    credentials[steamId].fcmCredentials.fcm = new Object();
+    credentials[steamId].fcmCredentials.fcm.token = interaction.options.getString('fcm_token');
+    credentials[steamId].fcmCredentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
 
-    credentials[steamId].fcm_credentials.gcm = new Object();
-    credentials[steamId].fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
-    credentials[steamId].fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
-    credentials[steamId].fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
-    credentials[steamId].fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
+    credentials[steamId].fcmCredentials.gcm = new Object();
+    credentials[steamId].fcmCredentials.gcm.token = interaction.options.getString('gcm_token');
+    credentials[steamId].fcmCredentials.gcm.androidId = interaction.options.getString('gcm_android_id');
+    credentials[steamId].fcmCredentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
+    credentials[steamId].fcmCredentials.gcm.appId = interaction.options.getString('gcm_app_id');
 
     credentials[steamId].discordUserId = interaction.member.user.id;
 
-    const prevHoster = credentials.hoster;
-    if (isHoster) credentials.hoster = steamId;
+    Credentials.writeCredentialsFile(credentials);
 
-    InstanceUtils.writeCredentialsFile(guildId, credentials);
+    const prevHoster = instance.hoster;
+    if (isHoster) instance.hoster = steamId;
+    client.setInstance(guildId, instance);
 
     /* Start Fcm Listener */
     if (isHoster) {
@@ -198,15 +200,15 @@ async function addCredentials(client, interaction, verifyId) {
         value: `add, ${steamId}, ` +
             `${credentials[steamId].discordUserId}, ` +
             `${isHoster}, ` +
-            `${credentials[steamId].fcm_credentials.keys.privateKey}, ` +
-            `${credentials[steamId].fcm_credentials.keys.publicKey}, ` +
-            `${credentials[steamId].fcm_credentials.keys.authSecret}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.token}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.pushSet}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.token}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.androidId}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.securityToken}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.appId}`
+            `${credentials[steamId].fcmCredentials.keys.privateKey}, ` +
+            `${credentials[steamId].fcmCredentials.keys.publicKey}, ` +
+            `${credentials[steamId].fcmCredentials.keys.authSecret}, ` +
+            `${credentials[steamId].fcmCredentials.fcm.token}, ` +
+            `${credentials[steamId].fcmCredentials.fcm.pushSet}, ` +
+            `${credentials[steamId].fcmCredentials.gcm.token}, ` +
+            `${credentials[steamId].fcmCredentials.gcm.androidId}, ` +
+            `${credentials[steamId].fcmCredentials.gcm.securityToken}, ` +
+            `${credentials[steamId].fcmCredentials.gcm.appId}`
     }));
 
     const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });
@@ -216,7 +218,8 @@ async function addCredentials(client, interaction, verifyId) {
 
 async function removeCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
-    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    const instance = client.getInstance(guildId);
+    const credentials = Credentials.readCredentialsFile();
     let steamId = interaction.options.getString('steam_id');
 
     if (steamId && (steamId in credentials) && credentials[steamId].discordUserId !== interaction.member.user.id) {
@@ -230,8 +233,6 @@ async function removeCredentials(client, interaction, verifyId) {
 
     if (!steamId) {
         for (const credential of Object.keys(credentials)) {
-            if (credential === 'hoster') continue;
-
             if (credentials[credential].discordUserId === interaction.member.user.id) {
                 steamId = credential;
                 break;
@@ -248,12 +249,12 @@ async function removeCredentials(client, interaction, verifyId) {
         return;
     }
 
-    if (steamId === credentials.hoster) {
+    if (steamId === instance.hoster) {
         if (client.fcmListeners[guildId]) {
             client.fcmListeners[guildId].destroy();
         }
         delete client.fcmListeners[guildId];
-        credentials.hoster = null;
+        instance.hoster = null;
     }
     else {
         if (client.fcmListenersLite[guildId][steamId]) {
@@ -263,7 +264,8 @@ async function removeCredentials(client, interaction, verifyId) {
     }
 
     delete credentials[steamId];
-    InstanceUtils.writeCredentialsFile(guildId, credentials);
+    Credentials.writeCredentialsFile(credentials);
+    client.setInstance(guildId, instance);
 
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
@@ -286,7 +288,8 @@ async function showCredentials(client, interaction, verifyId) {
 
 async function setHosterCredentials(client, interaction, verifyId) {
     const guildId = interaction.guildId;
-    const credentials = InstanceUtils.readCredentialsFile(guildId);
+    const instance = client.getInstance(guildId);
+    const credentials = Credentials.readCredentialsFile();
     let steamId = interaction.options.getString('steam_id');
 
     if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
@@ -310,11 +313,11 @@ async function setHosterCredentials(client, interaction, verifyId) {
         return;
     }
 
-    const prevHoster = credentials.hoster;
-    credentials.hoster = steamId;
-    InstanceUtils.writeCredentialsFile(guildId, credentials);
+    const prevHoster = instance.hoster;
+    instance.hoster = steamId;
+    Credentials.writeCredentialsFile(credentials);
+    client.setInstance(guildId, instance);
 
-    const instance = client.getInstance(guildId);
     const rustplus = client.rustplusInstances[guildId];
     if (rustplus) {
         instance.activeServer = null;

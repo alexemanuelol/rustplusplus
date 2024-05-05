@@ -18,7 +18,6 @@
 
 */
 
-const createCredentialsFile = require('../../dist/util/CreateCredentialsFile').default;
 const GuildInstance = require('../../dist/util/GuildInstance.js');
 
 module.exports = {
@@ -27,7 +26,6 @@ module.exports = {
         GuildInstance.createGuildInstanceFile(guild.id);
         const guildInstance = GuildInstance.readGuildInstanceFile(guild.id);
         client.setInstance(guild.id, guildInstance); // TODO! TEMP
-        createCredentialsFile(guild);
 
         client.fcmListenersLite[guild.id] = new Object();
 

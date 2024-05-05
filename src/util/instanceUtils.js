@@ -41,14 +41,4 @@ module.exports = {
         }
         return null;
     },
-
-    readCredentialsFile: function (guildId) {
-        const path = Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`);
-        return JSON.parse(Fs.readFileSync(path, 'utf8'));
-    },
-
-    writeCredentialsFile: function (guildId, credentials) {
-        const path = Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`);
-        Fs.writeFileSync(path, JSON.stringify(credentials, null, 2));
-    },
 }

@@ -23,8 +23,8 @@ const Path = require('path');
 
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
 const Config = require('../../config');
+const Credentials = require('../../dist/util/Credentials.js');
 const GuildInstance = require('../../dist/util/GuildInstance.js');
-const createCredentialsFile = require('../../dist/util/CreateCredentialsFile').default;
 
 module.exports = {
     name: 'ready',
@@ -34,10 +34,11 @@ module.exports = {
             GuildInstance.createGuildInstanceFile(guild[1].id);
             const guildInstance = GuildInstance.readGuildInstanceFile(guild[1].id);
             client.setInstance(guild[1].id, guildInstance); // TODO! TEMP
-            createCredentialsFile(guild[1]);
 
             client.fcmListenersLite[guild[0]] = new Object();
         }
+
+        Credentials.createCredentialsFile();
 
         client.loadGuildsIntl();
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'loggedInAs', {
