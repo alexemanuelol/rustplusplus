@@ -342,6 +342,78 @@ module.exports = {
                     changedSwitches.push(entityId);
                 }
             }
+            else if (content.autoDayNightOnOff === 9) { /* AUTO-ON-TIMER */
+                let shouldBeOn = true;
+                const timeSeconds = Timer.getSecondsFromStringTime(content.onOffTimer);
+
+                if (!rustplus.currentSwitchTimeouts.hasOwnProperty(entityId) && ((shouldBeOn && !content.active) || (!shouldBeOn && content.active))) {
+                    rustplus.currentSwitchTimeouts[entityId] = setTimeout(async function () {
+                        instance.serverList[serverId].switches[entityId].active = shouldBeOn;
+                        client.setInstance(guildId, instance);
+
+                        rustplus.interactionSwitches.push(entityId);
+
+                        const response = await rustplus.turnSmartSwitchAsync(entityId, shouldBeOn);
+                        if (!(await rustplus.isResponseValid(response))) {
+                            if (instance.serverList[serverId].switches[entityId].reachable) {
+                                await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                            }
+                            instance.serverList[serverId].switches[entityId].reachable = false;
+
+                            rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
+                        }
+                        else {
+                            instance.serverList[serverId].switches[entityId].reachable = true;
+                        }
+                        client.setInstance(guildId, instance);
+
+                        DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+                        changedSwitches.push(entityId);
+                        const str = client.intlGet(guildId, 'automaticallyTurningBackOnOff', {
+                            device: instance.serverList[serverId].switches[entityId].name,
+                            status: client.intlGet(guildId, 'onCap')
+                        });
+            
+                        rustplus.sendInGameMessage(str);
+                    }, timeSeconds * 1000);
+                }
+            }
+            else if (content.autoDayNightOnOff === 10) { /* AUTO-OFF-TIMER */
+                let shouldBeOn = false;
+                const timeSeconds = Timer.getSecondsFromStringTime(content.onOffTimer);
+
+                if (!rustplus.currentSwitchTimeouts.hasOwnProperty(entityId) && ((shouldBeOn && !content.active) || (!shouldBeOn && content.active))) {
+                    rustplus.currentSwitchTimeouts[entityId] = setTimeout(async function () {
+                        instance.serverList[serverId].switches[entityId].active = shouldBeOn;
+                        client.setInstance(guildId, instance);
+
+                        rustplus.interactionSwitches.push(entityId);
+
+                        const response = await rustplus.turnSmartSwitchAsync(entityId, shouldBeOn);
+                        if (!(await rustplus.isResponseValid(response))) {
+                            if (instance.serverList[serverId].switches[entityId].reachable) {
+                                await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                            }
+                            instance.serverList[serverId].switches[entityId].reachable = false;
+
+                            rustplus.interactionSwitches = rustplus.interactionSwitches.filter(e => e !== entityId);
+                        }
+                        else {
+                            instance.serverList[serverId].switches[entityId].reachable = true;
+                        }
+                        client.setInstance(guildId, instance);
+
+                        DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+                        changedSwitches.push(entityId);
+                        const str = client.intlGet(guildId, 'automaticallyTurningBackOnOff', {
+                            device: instance.serverList[serverId].switches[entityId].name,
+                            status: client.intlGet(guildId, 'offCap')
+                        });
+            
+                        rustplus.sendInGameMessage(str);
+                    }, timeSeconds * 1000);
+                }
+            }
         }
 
         let groupsId = SmartSwitchGroupHandler.getGroupsFromSwitchList(

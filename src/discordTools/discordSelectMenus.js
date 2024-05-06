@@ -234,6 +234,8 @@ module.exports = {
         const autoOffProximity = Client.client.intlGet(guildId, 'autoOffProximityCap');
         const autoOnAnyOnline = Client.client.intlGet(guildId, 'autoOnAnyOnlineCap');
         const autoOffAnyOnline = Client.client.intlGet(guildId, 'autoOffAnyOnlineCap');
+        const autoOnTimer = Client.client.intlGet(guildId, 'autoOnTimerCap');
+        const autoOffTimer = Client.client.intlGet(guildId, 'autoOffTimerCap');
 
         let autoDayNightOnOffString = autoSetting;
         if (entity.autoDayNightOnOff === 0) autoDayNightOnOffString += off;
@@ -245,6 +247,8 @@ module.exports = {
         else if (entity.autoDayNightOnOff === 6) autoDayNightOnOffString += autoOffProximity;
         else if (entity.autoDayNightOnOff === 7) autoDayNightOnOffString += autoOnAnyOnline;
         else if (entity.autoDayNightOnOff === 8) autoDayNightOnOffString += autoOffAnyOnline;
+        else if (entity.autoDayNightOnOff === 9) autoDayNightOnOffString += autoOnTimer;
+        else if (entity.autoDayNightOnOff === 10) autoDayNightOnOffString += autoOffTimer;
 
         return new Discord.ActionRowBuilder().addComponents(
             module.exports.getSelectMenu({
@@ -295,6 +299,16 @@ module.exports = {
                         label: autoOffAnyOnline,
                         description: Client.client.intlGet(guildId, 'smartSwitchAutoOffAnyOnline'),
                         value: '8'
+                    },
+                    {
+                        label: autoOnTimer,
+                        description: Client.client.intlGet(guildId, 'smartSwitchAutoOnTimer'),
+                        value: '9'
+                    },
+                    {
+                        label: autoOffTimer,
+                        description: Client.client.intlGet(guildId, 'smartSwitchAutoOffTimer'),
+                        value: '10'
                     }]
             }));
     },
