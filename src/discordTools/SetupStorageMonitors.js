@@ -18,7 +18,7 @@
 
 */
 
-const Constants = require('../../dist/util/constants.js');
+const Constants = require('../../dist/src/util/constants.js');
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 

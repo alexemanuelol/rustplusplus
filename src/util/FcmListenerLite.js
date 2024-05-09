@@ -20,8 +20,8 @@
 
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
-const Constants = require('../../dist/util/constants.js');
-const Credentials = require('../../dist/util/Credentials.js');
+const Constants = require('../../dist/src/util/constants.js');
+const Credentials = require('../../dist/src/util/credentials.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');

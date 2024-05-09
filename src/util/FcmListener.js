@@ -23,8 +23,8 @@ const Path = require('path');
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
 const Battlemetrics = require('../structures/Battlemetrics');
-const Constants = require('../../dist/util/constants.js');
-const Credentials = require('../../dist/util/Credentials.js');
+const Constants = require('../../dist/src/util/constants.js');
+const Credentials = require('../../dist/src/util/credentials.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -286,6 +286,7 @@ async function pairingEntitySwitch(client, guild, title, message, body) {
         reachable: entityExist ? switches[body.entityId].reachable : true,
         name: entityExist ? switches[body.entityId].name : client.intlGet(guild.id, 'smartSwitch'),
         command: entityExist ? switches[body.entityId].command : body.entityId,
+        id: entityExist ? switches[body.entityId].id : body.entityId,
         image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
         autoDayNightOnOff: entityExist ? switches[body.entityId].autoDayNightOnOff : 0,
         location: entityExist ? switches[body.entityId].location : null,
@@ -342,6 +343,8 @@ async function pairingEntitySmartAlarm(client, guild, title, message, body) {
         id: entityExist ? alarms[body.entityId].id : body.entityId,
         image: entityExist ? alarms[body.entityId].image : 'smart_alarm.png',
         location: entityExist ? alarms[body.entityId].location : null,
+        x: entityExist ? alarms[body.entityId].x : null,
+        y: entityExist ? alarms[body.entityId].y : null,
         server: entityExist ? alarms[body.entityId].server : body.name,
         messageId: entityExist ? alarms[body.entityId].messageId : null
     };
@@ -360,6 +363,8 @@ async function pairingEntitySmartAlarm(client, guild, title, message, body) {
             if (player) {
                 const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
                 instance.serverList[serverId].alarms[body.entityId].location = location.location;
+                instance.serverList[serverId].alarms[body.entityId].x = location.x;
+                instance.serverList[serverId].alarms[body.entityId].y = location.y;
             }
         }
 
@@ -390,6 +395,8 @@ async function pairingEntityStorageMonitor(client, guild, title, message, body) 
         inGame: entityExist ? storageMonitors[body.entityId].inGame : true,
         image: entityExist ? storageMonitors[body.entityId].image : 'storage_monitor.png',
         location: entityExist ? storageMonitors[body.entityId].location : null,
+        x: entityExist ? storageMonitors[body.entityId].x : null,
+        y: entityExist ? storageMonitors[body.entityId].y : null,
         server: entityExist ? storageMonitors[body.entityId].server : body.name,
         messageId: entityExist ? storageMonitors[body.entityId].messageId : null
     };
@@ -408,6 +415,8 @@ async function pairingEntityStorageMonitor(client, guild, title, message, body) 
             if (player) {
                 const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
                 instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
+                instance.serverList[serverId].storageMonitors[body.entityId].x = location.x;
+                instance.serverList[serverId].storageMonitors[body.entityId].y = location.y;
             }
         }
 
