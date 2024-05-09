@@ -19,7 +19,7 @@
 */
 
 const Constants = require('../util/constants.ts');
-const Map = require('../util/map.js');
+const Map = require('../util/map.ts');
 const Time = require('../util/timer.js');
 
 class Player {
@@ -139,7 +139,8 @@ class Player {
 
     updatePos() {
         if (this.isAlive || this.isOnline) {
-            this.pos = Map.getPos(this.x, this.y, this.rustplus.info.mapSize, this.rustplus);
+            this.pos = Map.getPos(this.rustplus.generalSettings.language, this.x, this.y, this.rustplus.info.mapSize,
+                this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
         }
         else {
             this.pos = null;

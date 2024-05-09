@@ -29,7 +29,7 @@ const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const Map = require('../util/map.js');
+const Map = require('../util/map.ts');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, guild) => {
@@ -309,7 +309,8 @@ async function pairingEntitySwitch(client, guild, title, message, body) {
         if (await rustplus.isResponseValid(teamInfo)) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
-                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
+                const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
+                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
                 instance.serverList[serverId].switches[body.entityId].x = location.x;
                 instance.serverList[serverId].switches[body.entityId].y = location.y;
@@ -361,7 +362,8 @@ async function pairingEntitySmartAlarm(client, guild, title, message, body) {
         if (await rustplus.isResponseValid(teamInfo)) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
-                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
+                const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
+                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].alarms[body.entityId].location = location.location;
                 instance.serverList[serverId].alarms[body.entityId].x = location.x;
                 instance.serverList[serverId].alarms[body.entityId].y = location.y;
@@ -413,7 +415,8 @@ async function pairingEntityStorageMonitor(client, guild, title, message, body) 
         if (await rustplus.isResponseValid(teamInfo)) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
-                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
+                const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
+                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
                 instance.serverList[serverId].storageMonitors[body.entityId].x = location.x;
                 instance.serverList[serverId].storageMonitors[body.entityId].y = location.y;
