@@ -21,7 +21,7 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.ts');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
-const Timer = require('../util/timer');
+const Timer = require('../util/timer.ts');
 
 module.exports = {
     handler: async function (rustplus, client, time) {

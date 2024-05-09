@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const Timer = require('../util/timer.js');
+const Timer = require('../util/timer.ts');
 
 module.exports = {
 	name: 'uptime',

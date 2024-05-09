@@ -35,7 +35,7 @@ const Logger = require('./Logger.js');
 const Map = require('../util/map.ts');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
-const Timer = require('../util/timer.js');
+const Timer = require('../util/timer.ts');
 const { languageCodes } = require('../util/languages.ts');
 
 const TOKENS_LIMIT = 24;        /* Per player */
@@ -712,11 +712,11 @@ class RustPlus extends RustPlusLib {
         let unhandled = this.mapMarkers.cargoShips.map(e => e.id);
         for (const [id, timer] of Object.entries(this.mapMarkers.cargoShipEgressTimers)) {
             const cargoShip = this.mapMarkers.getMarkerByTypeId(this.mapMarkers.types.CargoShip, parseInt(id));
-            const time = Timer.getTimeLeftOfTimer(timer);
+            const time = Timer.secondsToFullScale(timer.getTimeLeft());
             if (time) {
                 if (isInfoChannel) {
                     return Client.client.intlGet(this.guildId, 'egressInTime', {
-                        time: Timer.getTimeLeftOfTimer(timer, 's'),
+                        time: Timer.secondsToFullScale(timer.getTimeLeft(), 's'),
                         location: cargoShip.location.string
                     });
                 }
@@ -1438,11 +1438,11 @@ class RustPlus extends RustPlusLib {
     getCommandLarge(isInfoChannel = false) {
         const strings = [];
         if (this.mapMarkers.crateLargeOilRigTimer) {
-            const time = Timer.getTimeLeftOfTimer(this.mapMarkers.crateLargeOilRigTimer);
+            const time = Timer.secondsToFullScale(this.mapMarkers.crateLargeOilRigTimer.getTimeLeft());
             if (time) {
                 if (isInfoChannel) {
                     return Client.client.intlGet(this.guildId, 'timeUntilUnlocksAt', {
-                        time: Timer.getTimeLeftOfTimer(this.mapMarkers.crateLargeOilRigTimer, 's'),
+                        time: Timer.secondsToFullScale(this.mapMarkers.crateLargeOilRigTimer.getTimeLeft(), 's'),
                         location: this.mapMarkers.crateLargeOilRigLocation
                     });
                 }
@@ -2306,11 +2306,11 @@ class RustPlus extends RustPlusLib {
     getCommandSmall(isInfoChannel = false) {
         const strings = [];
         if (this.mapMarkers.crateSmallOilRigTimer) {
-            const time = Timer.getTimeLeftOfTimer(this.mapMarkers.crateSmallOilRigTimer);
+            const time = Timer.secondsToFullScale(this.mapMarkers.crateSmallOilRigTimer.getTimeLeft());
             if (time) {
                 if (isInfoChannel) {
                     return Client.client.intlGet(this.guildId, 'timeUntilUnlocksAt', {
-                        time: Timer.getTimeLeftOfTimer(this.mapMarkers.crateSmallOilRigTimer, 's'),
+                        time: Timer.secondsToFullScale(this.mapMarkers.crateSmallOilRigTimer.getTimeLeft(), 's'),
                         location: this.mapMarkers.crateSmallOilRigLocation
                     });
                 }
@@ -2460,7 +2460,7 @@ class RustPlus extends RustPlusLib {
 
             const strings = [];
             for (const [id, content] of Object.entries(this.timers)) {
-                const timeLeft = Timer.getTimeLeftOfTimer(content.timer);
+                const timeLeft = Timer.secondsToFullScale(content.timer.getTimeLeft());
                 strings.push(Client.client.intlGet(this.guildId, 'timeLeftTimer', {
                     id: parseInt(id),
                     time: timeLeft,
@@ -2495,7 +2495,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 this.timers[id] = {
-                    timer: new Timer.timer(
+                    timer: new Timer.Timer(
                         () => {
                             this.sendInGameMessage(Client.client.intlGet(this.guildId, 'timer',
                                 { message: message }), 'TIMER');
