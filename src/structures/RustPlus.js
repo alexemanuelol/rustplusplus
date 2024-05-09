@@ -32,7 +32,7 @@ const DiscordTools = require('../discordTools/discordTools.js');
 const DiscordVoice = require('../discordTools/discordVoice.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const Logger = require('./Logger.js');
-const Map = require('../util/map.js');
+const Map = require('../util/map.ts');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
@@ -1616,7 +1616,8 @@ class RustPlus extends RustPlusLib {
                 for (const player of teamInfo.teamInfo.members) {
                     if (player.steamId.toString() === callerSteamId) {
                         const instance = Client.client.getInstance(this.guildId);
-                        const location = Map.getPos(player.x, player.y, this.info.correctedMapSize, this);
+                        const location = Map.getPos(this.generalSettings.language, player.x, player.y,
+                            this.info.mapSize, this.map.monuments, this.map.monumentInfo);
                         instance.serverList[this.serverId].markers[name] =
                             { x: player.x, y: player.y, location: location.location };
                         Client.client.setInstance(this.guildId, instance);

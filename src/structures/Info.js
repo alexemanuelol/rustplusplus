@@ -18,7 +18,7 @@
 
 */
 
-const Map = require('../util/map.js');
+const Map = require('../util/map.ts');
 const Timer = require('../util/timer');
 
 class Info {

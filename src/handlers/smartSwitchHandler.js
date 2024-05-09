@@ -19,7 +19,7 @@
 */
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const Map = require('../util/map.js');
+const Map = require('../util/map.ts');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const Timer = require('../util/timer');
 
