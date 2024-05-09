@@ -21,9 +21,9 @@
 const Discord = require('discord.js');
 
 const Battlemetrics = require('../structures/Battlemetrics');
-const Constants = require('../../dist/src/util/constants.js');
+const Constants = require('../util/constants.ts');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const Keywords = require('../../dist/src/util/keywords.js');
+const Keywords = require('../util/keywords.ts');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, interaction) => {

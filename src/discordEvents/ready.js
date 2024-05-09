@@ -23,8 +23,8 @@ const Path = require('path');
 
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
 const Config = require('../../config');
-const Credentials = require('../../dist/src/util/credentials.js');
-const GuildInstance = require('../../dist/src/util/guild-instance.js');
+const Credentials = require('../util/credentials.ts');
+const GuildInstance = require('../util/guild-instance.ts');
 
 module.exports = {
     name: 'ready',

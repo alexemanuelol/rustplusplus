@@ -24,8 +24,8 @@ const RustPlusLib = require('@liamcottle/rustplus.js');
 const Translate = require('translate');
 
 const Client = require('../../index.ts');
-const Constants = require('../../dist/src/util/constants.js');
-const Credentials = require('../../dist/src/util/credentials.js');
+const Constants = require('../util/constants.ts');
+const Credentials = require('../util/credentials.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -36,7 +36,7 @@ const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
-const { languageCodes } = require('../../dist/src/util/languages.js');
+const { languageCodes } = require('../util/languages.ts');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */

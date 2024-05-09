@@ -22,8 +22,6 @@ import * as formatjs from '@formatjs/intl';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const ROOT_DIR = path.join(__dirname, '..', '..');
-
 export interface Locales {
     [locale: string]: LocaleData;
 }
@@ -43,7 +41,7 @@ export class LocaleManager {
         this.intl = {};
 
         /* Check if defaultLanguage exist. */
-        const defaultLanguagePath = path.join(ROOT_DIR, 'src', 'languages', `${defaultLanguage}.json`);
+        const defaultLanguagePath = path.join(__dirname, '..', 'languages', `${defaultLanguage}.json`);
         if (!fs.existsSync(defaultLanguagePath)) {
             throw new Error(`Language file for ${defaultLanguage} does not exist.`);
         }
@@ -52,13 +50,13 @@ export class LocaleManager {
     }
 
     private setup() {
-        const languageFilesPath = path.join(ROOT_DIR, 'src', 'languages');
+        const languageFilesPath = path.join(__dirname, '..', 'languages');
         const fileList = fs.readdirSync(languageFilesPath);
 
         /* Store all language file phrases in locales. */
         for (const file of fileList) {
             const language: string = file.replace('.json', '');
-            const languageFilePath: string = path.join(ROOT_DIR, 'src', 'languages', file);
+            const languageFilePath: string = path.join(__dirname, '..', 'languages', file);
             const languageFileText: string = fs.readFileSync(languageFilePath, 'utf8');
             this.locales[language] = JSON.parse(languageFileText);
         }

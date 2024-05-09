@@ -21,8 +21,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const ROOT_DIR = path.join(__dirname, '..', '..', '..');
-
 export interface GuildInstance {
     activeServer: string | null;
     blacklist: Blacklist;
@@ -240,26 +238,25 @@ export interface TrackerPlayer {
 }
 
 function readGeneralSettingsTemplate(): GeneralSettings {
-    console.log(ROOT_DIR)
-    const templatePath: string = path.join(ROOT_DIR, 'src', 'templates', 'generalSettingsTemplate.json');
+    const templatePath: string = path.join(__dirname, '..', 'templates', 'generalSettingsTemplate.json');
     const templateContent: string = fs.readFileSync(templatePath, 'utf8');
     return JSON.parse(templateContent);
 }
 
 function readNotificationSettingsTemplate(): NotificationSettings {
-    const templatePath: string = path.join(ROOT_DIR, 'src', 'templates', 'notificationSettingsTemplate.json');
+    const templatePath: string = path.join(__dirname, '..', 'templates', 'notificationSettingsTemplate.json');
     const templateContent: string = fs.readFileSync(templatePath, 'utf8');
     return JSON.parse(templateContent);
 }
 
 export function readGuildInstanceFile(guildId: string): GuildInstance {
-    const guildInstanceFilePath: string = path.join(ROOT_DIR, 'guildInstances', `${guildId}.json`);
+    const guildInstanceFilePath: string = path.join(__dirname, '..', '..', 'guildInstances', `${guildId}.json`);
     const guildInstanceFileContent: string = fs.readFileSync(guildInstanceFilePath, 'utf8');
     return JSON.parse(guildInstanceFileContent);
 }
 
 export function writeGuildInstanceFile(guildId: string, guildInstance: GuildInstance): void {
-    const guildInstanceFilePath: string = path.join(ROOT_DIR, 'guildInstances', `${guildId}.json`);
+    const guildInstanceFilePath: string = path.join(__dirname, '..', '..', 'guildInstances', `${guildId}.json`);
     const guildInstanceString: string = JSON.stringify(guildInstance, null, 2);
     fs.writeFileSync(guildInstanceFilePath, guildInstanceString);
 }
@@ -314,7 +311,7 @@ function getNewGuildInstance(): GuildInstance {
 export function createGuildInstanceFile(guildId: string): void {
     const newGuildInstance: GuildInstance = getNewGuildInstance();
 
-    const guildInstancePath: string = path.join(ROOT_DIR, 'guildInstances', `${guildId}.json`);
+    const guildInstancePath: string = path.join(__dirname, '..', '..', 'guildInstances', `${guildId}.json`);
 
     if (fs.existsSync(guildInstancePath)) {
         const oldGuildInstance: GuildInstance = readGuildInstanceFile(guildId);

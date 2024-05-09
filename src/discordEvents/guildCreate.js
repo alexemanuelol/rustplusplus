@@ -18,7 +18,7 @@
 
 */
 
-const GuildInstance = require('../../dist/src/util/guild-instance.js');
+const GuildInstance = require('../util/guild-instance.ts');
 
 module.exports = {
     name: 'guildCreate',

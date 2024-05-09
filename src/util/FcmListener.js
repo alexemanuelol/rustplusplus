@@ -23,8 +23,8 @@ const Path = require('path');
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
 const Battlemetrics = require('../structures/Battlemetrics');
-const Constants = require('../../dist/src/util/constants.js');
-const Credentials = require('../../dist/src/util/credentials.js');
+const Constants = require('../util/constants.ts');
+const Credentials = require('../util/credentials.ts');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');

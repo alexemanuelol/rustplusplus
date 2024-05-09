@@ -21,8 +21,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const ROOT_DIR = path.join(__dirname, '..', '..', '..');
-
 export interface Credentials {
     [steamId: string]: UserData;
 }
@@ -57,19 +55,19 @@ export interface FCMGcm {
 }
 
 export function readCredentialsFile(): Credentials {
-    const credentialsFilePath: string = path.join(ROOT_DIR, 'credentials', 'credentials.json');
+    const credentialsFilePath: string = path.join(__dirname, '..', '..', 'credentials', 'credentials.json');
     const credentialsFileContent: string = fs.readFileSync(credentialsFilePath, 'utf8');
     return JSON.parse(credentialsFileContent);
 }
 
 export function writeCredentialsFile(credentials: Credentials): void {
-    const credentialsFilePath: string = path.join(ROOT_DIR, 'credentials', 'credentials.json');
+    const credentialsFilePath: string = path.join(__dirname, '..', '..', 'credentials', 'credentials.json');
     const credentialsString: string = JSON.stringify(credentials, null, 2);
     fs.writeFileSync(credentialsFilePath, credentialsString);
 }
 
 export function createCredentialsFile(): void {
-    const credentialsPath: string = path.join(ROOT_DIR, 'credentials', 'credentials.json');
+    const credentialsPath: string = path.join(__dirname, '..', '..', 'credentials', 'credentials.json');
 
     if (!fs.existsSync(credentialsPath)) {
         writeCredentialsFile({});
