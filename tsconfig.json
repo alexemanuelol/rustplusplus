@@ -11,12 +11,17 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "."
   },
+  "exclude": [
+    "index.ts"
+  ],
   "include": [
-    "src/util/Credentials.ts",
-    "src/util/GuildInstance.ts",
+    "src/structures/LocaleManager.ts",
     "src/util/constants.ts",
-    "src/util/languages.ts",
+    "src/util/credentials.ts",
+    "src/util/guild-instance.ts",
+    "src/util/keywords.ts",
+    "src/util/languages.ts"
   ]
 }

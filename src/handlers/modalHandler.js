@@ -21,9 +21,9 @@
 const Discord = require('discord.js');
 
 const Battlemetrics = require('../structures/Battlemetrics');
-const Constants = require('../../dist/util/constants.js');
+const Constants = require('../../dist/src/util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const Keywords = require('../util/keywords.js');
+const Keywords = require('../../dist/src/util/keywords.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = async (client, interaction) => {
@@ -123,7 +123,7 @@ module.exports = async (client, interaction) => {
         server.switches[ids.entityId].name = smartSwitchName;
 
         if (smartSwitchCommand !== server.switches[ids.entityId].command &&
-            !Keywords.getListOfUsedKeywords(client, guildId, ids.serverId).includes(smartSwitchCommand)) {
+            !Keywords.getListOfUsedKeywords(guildId, ids.serverId).includes(smartSwitchCommand)) {
             server.switches[ids.entityId].command = smartSwitchCommand;
         }
 
@@ -153,7 +153,7 @@ module.exports = async (client, interaction) => {
         server.switchGroups[ids.groupId].name = groupName;
 
         if (groupCommand !== server.switchGroups[ids.groupId].command &&
-            !Keywords.getListOfUsedKeywords(client, interaction.guildId, ids.serverId).includes(groupCommand)) {
+            !Keywords.getListOfUsedKeywords(interaction.guildId, ids.serverId).includes(groupCommand)) {
             server.switchGroups[ids.groupId].command = groupCommand;
         }
         client.setInstance(guildId, instance);
@@ -228,7 +228,7 @@ module.exports = async (client, interaction) => {
         server.alarms[ids.entityId].message = smartAlarmMessage;
 
         if (smartAlarmCommand !== server.alarms[ids.entityId].command &&
-            !Keywords.getListOfUsedKeywords(client, guildId, ids.serverId).includes(smartAlarmCommand)) {
+            !Keywords.getListOfUsedKeywords(guildId, ids.serverId).includes(smartAlarmCommand)) {
             server.alarms[ids.entityId].command = smartAlarmCommand;
         }
         client.setInstance(guildId, instance);

@@ -20,9 +20,8 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { Guild } from 'discord.js';
 
-const ROOT_DIR = path.join(__dirname, '..', '..');
+const ROOT_DIR = path.join(__dirname, '..', '..', '..');
 
 export interface Credentials {
     [steamId: string]: UserData;

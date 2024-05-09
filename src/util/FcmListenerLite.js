@@ -20,8 +20,8 @@
 
 const PushReceiver = require('push-receiver');
 
-const Constants = require('../../dist/util/constants.js');
-const Credentials = require('../../dist/util/Credentials.js');
+const Constants = require('../../dist/src/util/constants.js');
+const Credentials = require('../../dist/src/util/credentials.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -59,7 +59,7 @@ module.exports = async (client, guild, steamId) => {
 
     let startTime = new Date();
     client.fcmListenersLite[guild.id][steamId] =
-        await PushReceiver.listen(credentials[steamId].fcm_credentials, async ({ notification, persistentId }) => {
+        await PushReceiver.listen(credentials[steamId].fcmCredentials, async ({ notification, persistentId }) => {
             /* Create a delay so that buffered notifications are ignored. */
             if ((new Date() - startTime) < 10000) return;
 

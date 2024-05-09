@@ -18,7 +18,7 @@
 
 */
 
-const Credentials = require('../../dist/util/Credentials.js');
+const Credentials = require('../../dist/src/util/credentials.js');
 
 module.exports = {
     name: 'guildMemberRemove',

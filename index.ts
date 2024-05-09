@@ -22,7 +22,11 @@ const Discord = require('discord.js');
 const Fs = require('fs');
 const Path = require('path');
 
+console.log(__dirname)
+const Config = require('./config');
 const DiscordBot = require('./src/structures/DiscordBot');
+
+import { LocaleManager } from './src/structures/LocaleManager';
 
 createMissingDirectories();
 
@@ -39,6 +43,8 @@ const client = new DiscordBot({
 });
 
 client.build();
+
+export const localeManager = new LocaleManager(Config.general.language);
 
 function createMissingDirectories() {
     if (!Fs.existsSync(Path.join(__dirname, 'logs'))) {

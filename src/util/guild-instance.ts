@@ -21,7 +21,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const ROOT_DIR = path.join(__dirname, '..', '..');
+const ROOT_DIR = path.join(__dirname, '..', '..', '..');
 
 export interface GuildInstance {
     activeServer: string | null;
@@ -240,6 +240,7 @@ export interface TrackerPlayer {
 }
 
 function readGeneralSettingsTemplate(): GeneralSettings {
+    console.log(ROOT_DIR)
     const templatePath: string = path.join(ROOT_DIR, 'src', 'templates', 'generalSettingsTemplate.json');
     const templateContent: string = fs.readFileSync(templatePath, 'utf8');
     return JSON.parse(templateContent);

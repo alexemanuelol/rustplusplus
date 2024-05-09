@@ -23,8 +23,8 @@ const Fs = require('fs');
 const Path = require('path');
 
 const Client = require('../../index.ts');
-const Constants = require('../../dist/util/constants.js');
-const { languageCodes } = require('../../dist/util/languages.js');
+const Constants = require('../../dist/src/util/constants.js');
+const { languageCodes } = require('../../dist/src/util/languages.js');
 
 module.exports = {
     getSelectMenu: function (options = {}) {
