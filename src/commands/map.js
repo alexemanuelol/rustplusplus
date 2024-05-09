@@ -22,7 +22,7 @@ const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
 const Path = require('path');
 
-const Constants = require('../../dist/src/util/constants.js');
+const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {

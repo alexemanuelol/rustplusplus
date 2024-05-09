@@ -21,7 +21,7 @@
 const Discord = require('discord.js');
 const Path = require('path');
 
-const Constants = require('../../dist/src/util/constants.js');
+const Constants = require('../util/constants.ts');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
