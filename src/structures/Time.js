@@ -18,7 +18,7 @@
 
 */
 
-const TimeLib = require('../util/timer.js');
+const TimeLib = require('../util/timer.ts');
 
 class Time {
     constructor(time, rustplus, client) {

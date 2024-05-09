@@ -20,7 +20,7 @@
 
 const Constants = require('../util/constants.ts');
 const Map = require('../util/map.ts');
-const Timer = require('../util/timer');
+const Timer = require('../util/timer.ts');
 
 class MapMarkers {
     constructor(mapMarkers, rustplus, client) {
@@ -381,7 +381,7 @@ class MapMarkers {
                         }
 
                         let instance = this.client.getInstance(this.rustplus.guildId);
-                        this.crateSmallOilRigTimer = new Timer.timer(
+                        this.crateSmallOilRigTimer = new Timer.Timer(
                             this.notifyCrateSmallOilRigOpen.bind(this),
                             instance.serverList[this.rustplus.serverId].oilRigLockedCrateUnlockTimeMs,
                             oilRigLocation.location);
@@ -417,7 +417,7 @@ class MapMarkers {
                         }
 
                         let instance = this.client.getInstance(this.rustplus.guildId);
-                        this.crateLargeOilRigTimer = new Timer.timer(
+                        this.crateLargeOilRigTimer = new Timer.Timer(
                             this.notifyCrateLargeOilRigOpen.bind(this),
                             instance.serverList[this.rustplus.serverId].oilRigLockedCrateUnlockTimeMs,
                             oilRigLocation.location);
@@ -508,7 +508,7 @@ class MapMarkers {
                     Constants.COLOR_CARGO_SHIP_ENTERS_MAP);
 
                 let instance = this.client.getInstance(this.rustplus.guildId);
-                this.cargoShipEgressTimers[marker.id] = new Timer.timer(
+                this.cargoShipEgressTimers[marker.id] = new Timer.Timer(
                     this.notifyCargoShipEgress.bind(this),
                     instance.serverList[this.rustplus.serverId].cargoShipEgressTimeMs,
                     marker.id);

@@ -24,7 +24,7 @@ const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
 const DiscordTools = require('./discordTools.js');
-const Timer = require('../util/timer');
+const Timer = require('../util/timer.ts');
 
 module.exports = {
     getEmbed: function (options = {}) {

@@ -19,7 +19,7 @@
 */
 
 const Map = require('../util/map.ts');
-const Timer = require('../util/timer');
+const Timer = require('../util/timer.ts');
 
 class Info {
     constructor(info) {

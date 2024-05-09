@@ -20,7 +20,7 @@
 
 const Constants = require('../util/constants.ts');
 const Map = require('../util/map.ts');
-const Time = require('../util/timer.js');
+const Time = require('../util/timer.ts');
 
 class Player {
     constructor(player, rustplus) {

@@ -138,9 +138,9 @@ export function getGridPosLettersX(x: number, mapSize: number): string {
 export function getGridPosNumberY(y: number, mapSize: number): number {
     let counter: number = 1;
     let gridNumber: number = 0;
-    const numberOfGrids = Math.floor(mapSize / module.exports.gridDiameter);
-    for (let startGrid: number = 0; startGrid < mapSize; startGrid += module.exports.gridDiameter) {
-        if (y >= startGrid && y <= (startGrid + module.exports.gridDiameter)) {
+    const numberOfGrids = Math.floor(mapSize / GRID_DIAMETER);
+    for (let startGrid: number = 0; startGrid < mapSize; startGrid += GRID_DIAMETER) {
+        if (y >= startGrid && y <= (startGrid + GRID_DIAMETER)) {
             /* We're at the correct grid! */
             gridNumber = numberOfGrids - counter;
             break;
