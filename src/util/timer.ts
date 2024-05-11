@@ -48,7 +48,7 @@ export class Timer {
         this.startDate = new Date();
         this.remaining = this.timeout;
         this.running = true;
-        this.timeoutId = setTimeout(this.callback, this.remaining, ...this.args)
+        this.timeoutId = setTimeout(this.callback, this.remaining, this.args)
     }
 
     stop(): void {
@@ -73,7 +73,7 @@ export class Timer {
 
         this.startDate = new Date();
         this.running = true;
-        this.timeoutId = setTimeout(this.callback, this.remaining, ...this.args);
+        this.timeoutId = setTimeout(this.callback, this.remaining, this.args);
     }
 
     getTimeLeft(): number {

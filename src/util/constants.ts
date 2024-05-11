@@ -18,95 +18,93 @@
 
 */
 
-module.exports = {
-    DEFAULT_SERVER_URL: 'https://rust.facepunch.com',
-    DEFAULT_SERVER_IMAGE: 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg',
-    STEAM_PROFILES_URL: 'https://steamcommunity.com/profiles/',
-    BATTLEMETRICS_PROFILE_URL: 'https://www.battlemetrics.com/players/',
-    BATTLEMETRICS_SERVER_URL: 'https://www.battlemetrics.com/servers/rust/',
-    AFK_TIME_SECONDS: 5 * 60, /* 5 min */
-    MAX_LENGTH_TEAM_MESSAGE: 128,
-    STEAMID64_LENGTH: 17,
-    STEAM_PROFILE_NAME_MAX_LENGTH: 32,
-    BOT_MESSAGE_HISTORY_LIMIT: 16,
-    BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS: 10000,
+export const DEFAULT_SERVER_URL: string = 'https://rust.facepunch.com';
+export const DEFAULT_SERVER_IMAGE: string = 'https://files.facepunch.com/lewis/1b2411b1/og-image.jpg';
+export const STEAM_PROFILES_URL: string = 'https://steamcommunity.com/profiles/';
+export const BATTLEMETRICS_PROFILE_URL: string = 'https://www.battlemetrics.com/players/';
+export const BATTLEMETRICS_SERVER_URL: string = 'https://www.battlemetrics.com/servers/rust/';
+export const AFK_TIME_SECONDS: number = 5 * 60; /* 5 min */
+export const MAX_LENGTH_TEAM_MESSAGE: number = 128;
+export const STEAMID64_LENGTH: number = 17;
+export const STEAM_PROFILE_NAME_MAX_LENGTH: number = 32;
+export const BOT_MESSAGE_HISTORY_LIMIT: number = 16;
+export const BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS: number = 10000;
 
-    /* Embeds */
-    EMBED_MAX_TOTAL_CHARACTERS: 6000,
-    EMBED_MAX_TITLE_CHARACTERS: 256,
-    EMBED_MAX_DESCRIPTION_CHARACTERS: 4096,
-    EMBED_MAX_FIELDS: 25,
-    EMBED_MAX_FIELD_NAME_CHARACTERS: 256,
-    EMBED_MAX_FIELD_VALUE_CHARACTERS: 1024,
-    EMBED_MAX_FOOTER_CHARACTERS: 2048,
-    EMBED_MAX_AUTHOR_NAME_CHARACTERS: 256,
-    EMBED_MAX_EMBEDS_IN_MESSAGE: 10,
+/* Embeds */
+export const EMBED_MAX_TOTAL_CHARACTERS: number = 6000;
+export const EMBED_MAX_TITLE_CHARACTERS: number = 256;
+export const EMBED_MAX_DESCRIPTION_CHARACTERS: number = 4096;
+export const EMBED_MAX_FIELDS: number = 25;
+export const EMBED_MAX_FIELD_NAME_CHARACTERS: number = 256;
+export const EMBED_MAX_FIELD_VALUE_CHARACTERS: number = 1024;
+export const EMBED_MAX_FOOTER_CHARACTERS: number = 2048;
+export const EMBED_MAX_AUTHOR_NAME_CHARACTERS: number = 256;
+export const EMBED_MAX_EMBEDS_IN_MESSAGE: number = 10;
 
-    /* Select menus */
-    SELECT_MENU_MAX_DESCRIPTION_CHARACTERS: 100,
+/* Select menus */
+export const SELECT_MENU_MAX_DESCRIPTION_CHARACTERS: number = 100;
 
-    EMBED_FIELD_MAX_WIDTH_LENGTH_1: 54,
-    EMBED_FIELD_MAX_WIDTH_LENGTH_2: 26,
-    EMBED_FIELD_MAX_WIDTH_LENGTH_3: 20,
+export const EMBED_FIELD_MAX_WIDTH_LENGTH_1: number = 54;
+export const EMBED_FIELD_MAX_WIDTH_LENGTH_2: number = 26;
+export const EMBED_FIELD_MAX_WIDTH_LENGTH_3: number = 20;
 
-    STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY: 29,
-    STORAGE_MONITOR_VENDING_MACHINE_CAPACITY: 30,
-    STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY: 48,
+export const STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY: number = 29;
+export const STORAGE_MONITOR_VENDING_MACHINE_CAPACITY: number = 30;
+export const STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY: number = 48;
 
-    /* Default timer times */
-    DEFAULT_CARGO_SHIP_EGRESS_TIME_MS: 50 * 60 * 1000, /* 50 min */
-    DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS: 15 * 60 * 1000, /* 15 min */
+/* Default timer times */
+export const DEFAULT_CARGO_SHIP_EGRESS_TIME_MS: number = 50 * 60 * 1000; /* 50 min */
+export const DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS: number = 15 * 60 * 1000; /* 15 min */
 
-    /* Other constants */
-    PATROL_HELI_DOWNED_RADIUS: 400,
-    OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE: 550,
-    PROXIMITY_SETTING_DEFAULT_METERS: 500,
-    HARBOR_DOCK_DISTANCE: 100,
+/* Other constants */
+export const PATROL_HELI_DOWNED_RADIUS: number = 400;
+export const OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE: number = 550;
+export const PROXIMITY_SETTING_DEFAULT_METERS: number = 500;
+export const HARBOR_DOCK_DISTANCE: number = 100;
 
-    /* Emojis */
-    ONLINE_EMOJI: ':green_circle:',
-    OFFLINE_EMOJI: ':red_circle:',
-    NOT_FOUND_EMOJI: ':x:',
-    AFK_EMOJI: ':yellow_circle:',
-    ALIVE_EMOJI: ':nerd:',
-    SLEEPING_EMOJI: ':sleeping:',
-    DEAD_EMOJI: ':skull:',
-    LEADER_EMOJI: ':crown:',
-    DAY_EMOJI: ':sunny:',
-    NIGHT_EMOJI: ':crescent_moon:',
-    PAIRED_EMOJI: ':parking:',
+/* Emojis */
+export const ONLINE_EMOJI: string = ':green_circle:';
+export const OFFLINE_EMOJI: string = ':red_circle:';
+export const NOT_FOUND_EMOJI: string = ':x:';
+export const AFK_EMOJI: string = ':yellow_circle:';
+export const ALIVE_EMOJI: string = ':nerd:';
+export const SLEEPING_EMOJI: string = ':sleeping:';
+export const DEAD_EMOJI: string = ':skull:';
+export const LEADER_EMOJI: string = ':crown:';
+export const DAY_EMOJI: string = ':sunny:';
+export const NIGHT_EMOJI: string = ':crescent_moon:';
+export const PAIRED_EMOJI: string = ':parking:';
 
-    /* Colors */
-    COLOR_ACTIVE: '#00FF40',
-    COLOR_CARGO_SHIP_ENTERS_EGRESS_STAGE: '#4B0082',
-    COLOR_CARGO_SHIP_ENTERS_MAP: '#9932CC',
-    COLOR_CARGO_SHIP_DOCKED: '#4444C7',
-    COLOR_CARGO_SHIP_LEFT_MAP: '#8B008B',
-    COLOR_CARGO_SHIP_LOCATED: '#191970',
-    COLOR_CARGO_TRACER: '#FF0000',
-    COLOR_CHINOOK47_ENTERS_MAP: '#1E90FF',
-    COLOR_CHINOOK47_LOCATED: '#00FF00',
-    COLOR_DEFAULT: '#CE412B',
-    COLOR_GREY: '#606060',
-    COLOR_HEAVY_SCIENTISTS_CALLED_LARGE: '#DDA0DD',
-    COLOR_HEAVY_SCIENTISTS_CALLED_SMALL: '#FFC0CB',
-    COLOR_INACTIVE: '#FF0040',
-    COLOR_LOCKED_CRATE_LARGE_OILRIG_UNLOCKED: '#FF69B4',
-    COLOR_LOCKED_CRATE_SMALL_OILRIG_UNLOCKED: '#00FA9A',
-    COLOR_NEW_VENDING_MACHINE: '#F08080',
-    COLOR_PATROL_HELICOPTER_ENTERS_MAP: '#DC143C',
-    COLOR_PATROL_HELICOPTER_LEFT_MAP: '#FFD700',
-    COLOR_PATROL_HELICOPTER_LOCATED_AT: '#4169E1',
-    COLOR_PATROL_HELICOPTER_TAKEN_DOWN: '#FFBF00',
-    COLOR_PATROL_HELICOPTER_TRACER: '#00FF00',
-    COLOR_SETTINGS: '#861C0C',
-    COLOR_TEAMCHAT_DEFAULT: '#CE412B',
+/* Colors */
+export const COLOR_ACTIVE: string = '#00FF40';
+export const COLOR_CARGO_SHIP_ENTERS_EGRESS_STAGE: string = '#4B0082';
+export const COLOR_CARGO_SHIP_ENTERS_MAP: string = '#9932CC';
+export const COLOR_CARGO_SHIP_DOCKED: string = '#4444C7';
+export const COLOR_CARGO_SHIP_LEFT_MAP: string = '#8B008B';
+export const COLOR_CARGO_SHIP_LOCATED: string = '#191970';
+export const COLOR_CARGO_TRACER: string = '#FF0000';
+export const COLOR_CHINOOK47_ENTERS_MAP: string = '#1E90FF';
+export const COLOR_CHINOOK47_LOCATED: string = '#00FF00';
+export const COLOR_DEFAULT: string = '#CE412B';
+export const COLOR_GREY: string = '#606060';
+export const COLOR_HEAVY_SCIENTISTS_CALLED_LARGE: string = '#DDA0DD';
+export const COLOR_HEAVY_SCIENTISTS_CALLED_SMALL: string = '#FFC0CB';
+export const COLOR_INACTIVE: string = '#FF0040';
+export const COLOR_LOCKED_CRATE_LARGE_OILRIG_UNLOCKED: string = '#FF69B4';
+export const COLOR_LOCKED_CRATE_SMALL_OILRIG_UNLOCKED: string = '#00FA9A';
+export const COLOR_NEW_VENDING_MACHINE: string = '#F08080';
+export const COLOR_PATROL_HELICOPTER_ENTERS_MAP: string = '#DC143C';
+export const COLOR_PATROL_HELICOPTER_LEFT_MAP: string = '#FFD700';
+export const COLOR_PATROL_HELICOPTER_LOCATED_AT: string = '#4169E1';
+export const COLOR_PATROL_HELICOPTER_TAKEN_DOWN: string = '#FFBF00';
+export const COLOR_PATROL_HELICOPTER_TRACER: string = '#00FF00';
+export const COLOR_SETTINGS: string = '#861C0C';
+export const COLOR_TEAMCHAT_DEFAULT: string = '#CE412B';
 
-    GET_STEAM_PROFILE_LINK: function (steamId: string): string {
-        return `[${steamId}](${this.STEAM_PROFILES_URL}${steamId})`;
-    },
+export function GET_STEAM_PROFILE_LINK(steamId: string): string {
+    return `[${steamId}](${STEAM_PROFILES_URL}${steamId})`;
+}
 
-    GET_BATTLEMETRICS_PROFILE_LINK: function (playerId: string): string {
-        return `[${playerId}](${this.BATTLEMETRICS_PROFILE_URL}${playerId})`;
-    }
+export function GET_BATTLEMETRICS_PROFILE_LINK(playerId: string): string {
+    return `[${playerId}](${BATTLEMETRICS_PROFILE_URL}${playerId})`;
 }

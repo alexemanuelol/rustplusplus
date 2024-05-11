@@ -18,7 +18,7 @@
 
 */
 
-import { localeManager } from '../../index';
+import { localeManager as lm } from '../../index';
 
 export const GRID_DIAMETER: number = 146.25;
 
@@ -60,28 +60,28 @@ export function getPos(locale: string, x: number, y: number, mapSize: number,
     if (isOutsideGridSystem(x, y, correctedMapSize)) {
         if (isOutsideRowOrColumn(x, y, correctedMapSize)) {
             if (x < 0 && y > correctedMapSize) {
-                location.location = localeManager.getIntl(locale, 'northWest');
+                location.location = lm.getIntl(locale, 'northWest');
             }
             else if (x < 0 && y < 0) {
-                location.location = localeManager.getIntl(locale, 'southWest');
+                location.location = lm.getIntl(locale, 'southWest');
             }
             else if (x > correctedMapSize && y > correctedMapSize) {
-                location.location = localeManager.getIntl(locale, 'northEast');
+                location.location = lm.getIntl(locale, 'northEast');
             }
             else {
-                location.location = localeManager.getIntl(locale, 'southEast');
+                location.location = lm.getIntl(locale, 'southEast');
             }
         }
         else {
             let str = '';
             if (x < 0 || x > correctedMapSize) {
-                str += (x < 0) ? localeManager.getIntl(locale, 'westOfGrid') :
-                    localeManager.getIntl(locale, 'eastOfGrid');
+                str += (x < 0) ? lm.getIntl(locale, 'westOfGrid') :
+                    lm.getIntl(locale, 'eastOfGrid');
                 str += ` ${getGridPosNumberY(y, correctedMapSize)}`;
             }
             else {
-                str += (y < 0) ? localeManager.getIntl(locale, 'southOfGrid') :
-                    localeManager.getIntl(locale, 'northOfGrid');
+                str += (y < 0) ? lm.getIntl(locale, 'southOfGrid') :
+                    lm.getIntl(locale, 'northOfGrid');
                 str += ` ${getGridPosLettersX(x, correctedMapSize)}`;
             }
             location.location = str;

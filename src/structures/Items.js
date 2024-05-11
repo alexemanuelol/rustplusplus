@@ -21,7 +21,7 @@
 const Fs = require('fs');
 const Path = require('path');
 
-const Utils = require('../util/utils.js');
+const Utils = require('../util/utils.ts');
 
 class Items {
     constructor() {
