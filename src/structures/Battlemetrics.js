@@ -22,7 +22,7 @@ const Axios = require('axios');
 
 const Client = require('../../index.ts');
 const RandomUsernames = require('../staticFiles/RandomUsernames.json');
-const Utils = require = require('../util/utils.js');
+const Utils = require = require('../util/utils.ts');
 
 const SERVER_LOG_SIZE = 1000;
 const CONNECTION_LOG_SIZE = 1000;

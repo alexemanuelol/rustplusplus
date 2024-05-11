@@ -21,7 +21,7 @@
 const Constants = require('../util/constants.ts');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
-const Scrape = require('../util/scrape.js');
+const Request = require('../util/request.ts');
 
 module.exports = {
     handler: async function (client, firstTime = false) {
@@ -74,7 +74,7 @@ module.exports = {
                             name = calledSteamProfiles[player.steamId];
                         }
                         else {
-                            name = await Scrape.scrapeSteamProfileName(client, player.steamId);
+                            name = await Request.requestSteamProfileName(player.steamId);
                             calledSteamProfiles[player.steamId] = name;
                         }
                         if (name === null) continue;

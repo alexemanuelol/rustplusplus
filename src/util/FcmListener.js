@@ -30,7 +30,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.ts');
-const Scrape = require('../util/scrape.js');
+const Request = require('../util/request.ts');
 
 module.exports = async (client, guild) => {
     const instance = client.getInstance(guild.id);
@@ -511,7 +511,7 @@ async function playerDeath(client, guild, title, message, body, discordUserId) {
     const user = await DiscordTools.getUserById(guild.id, discordUserId);
 
     let png = null;
-    if (body.targetId !== '') png = await Scrape.scrapeSteamProfilePicture(client, body.targetId);
+    if (body.targetId !== '') png = await Request.requestSteamProfilePicture(body.targetId);
     if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMAGE;
 
     const content = {
@@ -528,7 +528,7 @@ async function teamLogin(client, guild, title, message, body) {
 
     const content = {
         embeds: [DiscordEmbeds.getTeamLoginEmbed(
-            guild.id, body, await Scrape.scrapeSteamProfilePicture(client, body.targetId))]
+            guild.id, body, await Request.requestSteamProfilePicture(body.targetId))]
     }
 
     const rustplus = client.rustplusInstances[guild.id];

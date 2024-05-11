@@ -73,7 +73,10 @@ export class LocaleManager {
         }
     }
 
-    getIntl(locale: string, phraseKey: string, parameters: { [key: string]: any } = {}): string {
+    getIntl(locale: string | null, phraseKey: string, parameters: { [key: string]: any } = {}): string {
+        if (locale === null) {
+            locale = this.defaultLanguage;
+        }
         if (!this.locales[locale]) {
             throw new Error(`Unsupported locale: ${locale}.`);
         }

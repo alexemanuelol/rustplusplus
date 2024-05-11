@@ -31,7 +31,7 @@ const DespawnData = require('../staticFiles/rustlabsDespawnData.json');
 const StackData = require('../staticFiles/rustlabsStackData.json');
 const DecayData = require('../staticFiles/rustlabsDecayData.json');
 const UpkeepData = require('../staticFiles/rustlabsUpkeepData.json');
-const Utils = require('../util/utils.js');
+const Utils = require('../util/utils.ts');
 
 const IGNORED_RECYCLE_ITEMS = [
     '-946369541' /* Low Grade Fuel */

@@ -24,7 +24,7 @@ const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
-const Scrape = require('../util/scrape.js');
+const Request = require('../util/request.ts');
 
 module.exports = {
 	name: 'blacklist',
@@ -116,7 +116,7 @@ module.exports = {
 
 				if (steamid !== null) {
 					let name = '';
-					const steamName = await Scrape.scrapeSteamProfileName(client, steamid);
+					const steamName = await Request.requestSteamProfileName(steamid);
 					if (steamName) name += `${steamName} (${steamid})`;
 					else name += `${steamid}`;
 
@@ -181,7 +181,7 @@ module.exports = {
 
 				if (steamid !== null) {
 					let name = '';
-					const steamName = await Scrape.scrapeSteamProfileName(client, steamid);
+					const steamName = await Request.requestSteamProfileName(steamid);
 					if (steamName) name += `${steamName} (${steamid})`;
 					else name += `${steamid}`;
 
@@ -226,7 +226,7 @@ module.exports = {
 
 				for (const steamId of instance.blacklist['steamIds']) {
 					let name = '';
-					const steamName = await Scrape.scrapeSteamProfileName(client, steamId);
+					const steamName = await Request.requestSteamProfileName(steamId);
 					if (steamName) name = `${steamName} (${steamId})`;
 					else name = `${steamId}`;
 

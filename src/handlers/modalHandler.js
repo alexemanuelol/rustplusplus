@@ -24,7 +24,7 @@ const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Keywords = require('../util/keywords.ts');
-const Scrape = require('../util/scrape.js');
+const Request = require('../util/request.ts');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -332,7 +332,7 @@ module.exports = async (client, interaction) => {
 
         if (isSteamId64) {
             steamId = id;
-            name = await Scrape.scrapeSteamProfileName(client, id);
+            name = await Request.requestSteamProfileName(id);
 
             if (name && bmInstance) {
                 playerId = Object.keys(bmInstance.players).find(e => bmInstance.players[e]['name'] === name);
