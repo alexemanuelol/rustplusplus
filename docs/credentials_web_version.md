@@ -12,6 +12,10 @@
    
 2. **Click the Install Extension button located at the top right corner of the page to install the extension, then refresh the page. (After installation, the Log In button should be visible)**
 
+> [rustPlusPlus-Credentials Chrome Extension](https://chromewebstore.google.com/detail/rustplusplus-credential-a/ooahmkklkanfgfmphpknpcgdpdcoikhe)
+
+> [rustPlusPlus-Credentials Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/rustplusplus-credential-app)
+
    ![rustplusplus Click Install Extension Image](images/bot_setup/click_install_extension.png)
    
    ![rustplusplus After Click Install Extension Image](images/bot_setup/after_click_install_extension.png)
