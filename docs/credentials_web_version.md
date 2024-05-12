@@ -54,3 +54,5 @@ FCM Credentials are necessary to enable the following features:
 Without these, the bot would not operate properly.
 
 > **Note**: This process requires Chrome or Firefox browsers for the web version. Ensure your browser is up to date for the best experience.
+
+> Rust Companion API returns a refreshed Steam Auth Token which expires after 2 weeks. You can visit the [rustplusplus-credentials display page](https://rustplusplus-credentials.netlify.app/display) at any time to check how much time is left on your token.
