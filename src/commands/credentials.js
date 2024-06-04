@@ -50,12 +50,24 @@ module.exports = {
                     .setDescription('Keys Auth Secret.')
                     .setRequired(true))
                 .addStringOption(option => option
+                    .setName('fcm_name')
+                    .setDescription('FCM Name.')
+                    .setRequired(true))
+                .addStringOption(option => option
                     .setName('fcm_token')
                     .setDescription('FCM Token.')
                     .setRequired(true))
                 .addStringOption(option => option
-                    .setName('fcm_push_set')
-                    .setDescription('FCM Push Set.')
+                    .setName('fcm_web_endpoint')
+                    .setDescription('FCM Web EndPoint.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('fcm_web_p256dh')
+                    .setDescription('FCM Web P256DH.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('fcm_web_auth')
+                    .setDescription('FCM Web Auth.')
                     .setRequired(true))
                 .addStringOption(option => option
                     .setName('gcm_token')
@@ -161,8 +173,12 @@ async function addCredentials(client, interaction, verifyId) {
     credentials[steamId].fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
 
     credentials[steamId].fcm_credentials.fcm = new Object();
+    credentials[steamId].fcm_credentials.fcm.name = interaction.options.getString('fcm_name');
     credentials[steamId].fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
-    credentials[steamId].fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
+    credentials[steamId].fcm_credentials.fcm.web = new Object();
+    credentials[steamId].fcm_credentials.fcm.web.endpoint = interaction.options.getString('fcm_web_endpoint');
+    credentials[steamId].fcm_credentials.fcm.web.p256dh = interaction.options.getString('fcm_web_p256dh');
+    credentials[steamId].fcm_credentials.fcm.web.auth = interaction.options.getString('fcm_web_auth');
 
     credentials[steamId].fcm_credentials.gcm = new Object();
     credentials[steamId].fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
@@ -201,8 +217,11 @@ async function addCredentials(client, interaction, verifyId) {
             `${credentials[steamId].fcm_credentials.keys.privateKey}, ` +
             `${credentials[steamId].fcm_credentials.keys.publicKey}, ` +
             `${credentials[steamId].fcm_credentials.keys.authSecret}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.name}, ` +
             `${credentials[steamId].fcm_credentials.fcm.token}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.pushSet}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.web.endpoint}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.web.p256dh}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.web.auth}, ` +
             `${credentials[steamId].fcm_credentials.gcm.token}, ` +
             `${credentials[steamId].fcm_credentials.gcm.androidId}, ` +
             `${credentials[steamId].fcm_credentials.gcm.securityToken}, ` +
