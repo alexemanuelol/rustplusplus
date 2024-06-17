@@ -2711,7 +2711,7 @@ class RustPlus extends RustPlusLib {
         const commandSayEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxSay')}`;
 
         let text = null;
-        if (command.toLowerCase().startsWith(`${commandTTS}`)) {
+        if (command.toLowerCase().startsWith(`${commandSay}`)) {
             text = command.slice(`${commandSay} `.length).trim();
         }
         else {
