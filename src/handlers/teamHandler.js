@@ -99,7 +99,7 @@ module.exports = {
                             time: afkTime
                         });
                         if (instance.generalSettings.afkNotify) rustplus.sendInGameMessage(str);
-                        if (instance.generalSettings.voicePlayerAfk) DiscordVoice.sendDiscordVoiceMessage(guildId, str);
+                        if (instance.generalSettings.voicePlayerAfk) DiscordVoice.sendDiscordVoiceMessage(guildId, str.replace(/(\d+)m/, '$1 Minutes'));
                         rustplus.log(client.intlGet(null, 'infoCap'), str);
                     }
 
