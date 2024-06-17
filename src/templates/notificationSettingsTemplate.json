@@ -17,6 +17,12 @@
         "inGame": false,
         "voice": true
     },
+    "cargoShipDockingAtHarborSetting": {
+        "image": "cargoship_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
     "patrolHelicopterDetectedSetting": {
         "image": "patrol_helicopter_logo.png",
         "discord": true,
