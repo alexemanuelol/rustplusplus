@@ -21,6 +21,7 @@
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordVoice = require('../discordTools/discordVoice.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 const TeamChatHandler = require("../handlers/teamChatHandler.js");
@@ -189,6 +190,10 @@ async function messageBroadcastEntityChangedSmartAlarm(rustplus, client, message
         if (instance.generalSettings.smartAlarmNotifyInGame) {
             rustplus.sendInGameMessage(`${server.alarms[entityId].name}: ${server.alarms[entityId].message}`);
         }
+        if (instance.generalSettings.voiceSmartAlarm){
+            await DiscordVoice.sendDiscordVoiceMessage(rustplus.guildId, 
+                DiscordVoice.getAlarmVoice(rustplus.guildId, rustplus.serverId, entityId))
+        }
     }
 
     DiscordMessages.sendSmartAlarmMessage(rustplus.guildId, rustplus.serverId, entityId);
@@ -256,6 +261,10 @@ async function updateToolCupboard(rustplus, client, message) {
             server.storageMonitors[entityId].decaying = true;
 
             await DiscordMessages.sendDecayingNotificationMessage(rustplus.guildId, rustplus.serverId, entityId);
+
+            if (instance.generalSettings.voiceSmartDevice){
+                await DiscordVoice.sendDiscordVoiceMessage(rustplus.guildId, DiscordVoice.getDecayingNotificationVoice(rustplus.guildId, rustplus.serverId, entityId))
+            }
 
             if (server.storageMonitors[entityId].inGame) {
                 rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'isDecaying', {

@@ -22,6 +22,8 @@ const { getVoiceConnection, createAudioPlayer, createAudioResource } = require('
 const Actors = require('../staticFiles/actors.json');
 const Client = require('../../index.ts');
 const voice = require('../commands/voice');
+const InstanceUtils = require('../util/instanceUtils.js');
+const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
     sendDiscordVoiceMessage: async function (guildId, text) {
@@ -54,11 +56,21 @@ module.exports = {
     getSmartDeviceNotFoundVoice: async function (guildId, serverId, entityId) {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
-        const entity = server.alarms[entityId];
+    
+        // Check each possible source for the entity
+        const entity =  (server.alarms[entityId] !== undefined && server.alarms[entityId] !== null) ? server.alarms[entityId] :
+                        (server.storageMonitors[entityId] !== undefined && server.storagemonitors[entityId] !== null) ? server.storagemonitors[entityId] :
+                        server.switches[entityId];
+    
+        if (!entity) {
+            console.error(`Entity with ID ${entityId} not found in alarms, storagemonitors, or switches.`);
+            return;
+        }
+    
         const credentials = InstanceUtils.readCredentialsFile(guildId);
         const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
-
+    
         let voice = Client.client.intlGet(guildId, 'smartDeviceNotFound', {
             device: `${entity.name}${grid}`,
             user: user.user.username
@@ -66,6 +78,7 @@ module.exports = {
         console.log(voice);
         return voice;
     },
+    
 
     getSmartDeviceDisconnectedVoice: function (guildId, serverId, entityId) {
         const instance = Client.client.getInstance(guildId);
@@ -83,6 +96,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const entity = instance.serverList[serverId].storageMonitors[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
+        console.log("logpoint 2")
 
         let voice = Client.client.intlGet(guildId, 'isDecaying', {
             device: `${entity.name}${grid}`
@@ -96,7 +110,7 @@ module.exports = {
         const entity = instance.serverList[serverId].alarms[entityId];
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
-        voice = Client.client.intlGet(guildId, 'smartAlarmTriggered', { entity, grid });
+        let voice = Client.client.intlGet(guildId, 'smartAlarmTriggered', { grid });
         console.log(voice);
         return voice;
     },

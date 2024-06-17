@@ -59,15 +59,11 @@ module.exports = {
                 client.setInstance(guildId, instance);
 
                 if (instance.serverList[serverId].storageMonitors[entityId].reachable) {
-                    if (rustplus.storageMonitors.hasOwnProperty(entityId) &&
-                        (rustplus.storageMonitors[entityId].capacity !== 0 &&
-                            info.entityInfo.payload.capacity === 0)) {
-                        await DiscordMessages.sendStorageMonitorDisconnectNotificationMessage(
-                            guildId, serverId, entityId);
-                            if (instance.generalSettings.voiceSmartDevice){
-                                DiscordVoice.sendDiscordVoiceMessage(guildId, 
-                                    DiscordVoice.getSmartDeviceDisconnectedVoice(guildId, serverId, entityId))
-                            }
+                    if (rustplus.storageMonitors.hasOwnProperty(entityId) && (rustplus.storageMonitors[entityId].capacity !== 0 && info.entityInfo.payload.capacity === 0)) {
+                        await DiscordMessages.sendStorageMonitorDisconnectNotificationMessage(guildId, serverId, entityId);
+                        if (instance.generalSettings.voiceSmartDevice){
+                            DiscordVoice.sendDiscordVoiceMessage(guildId, DiscordVoice.getSmartDeviceDisconnectedVoice(guildId, serverId, entityId))
+                        }
                     }
 
                     rustplus.storageMonitors[entityId] = {
@@ -80,18 +76,11 @@ module.exports = {
                     if (info.entityInfo.payload.capacity !== 0) {
                         if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
                             instance.serverList[serverId].storageMonitors[entityId].type = 'toolCupboard';
-                            if (info.entityInfo.payload.protectionExpiry === 0 &&
-                                instance.serverList[serverId].storageMonitors[entityId].decaying === false) {
+                            if (info.entityInfo.payload.protectionExpiry === 0 && instance.serverList[serverId].storageMonitors[entityId].decaying === false) {
                                 instance.serverList[serverId].storageMonitors[entityId].decaying = true;
-
-                                await DiscordMessages.sendDecayingNotificationMessage(
-                                    guildId, serverId, entityId);
                                 
-                                if (instance.generalSettings.voiceSmartDevice){
-                                    DiscordVoice.sendDiscordVoiceMessage(guildId, 
-                                        DiscordVoice.getDecayingNotificationVoice(guildId, serverId, entityId))
-                                }
-
+                                await DiscordMessages.sendDecayingNotificationMessage(guildId, serverId, entityId);
+                                
                                 if (instance.serverList[serverId].storageMonitors[entityId].inGame) {
                                     rustplus.sendInGameMessage(client.intlGet(rustplus.guildId, 'isDecaying', {
                                         device: instance.serverList[serverId].storageMonitors[entityId].name
@@ -113,7 +102,7 @@ module.exports = {
                         client.setInstance(guildId, instance);
                     }
                 }
-
+                
                 await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, entityId);
             }
         }
