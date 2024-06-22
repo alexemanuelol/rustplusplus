@@ -38,6 +38,5 @@ module.exports = {
 		if (!await client.validatePermissions(interaction)) return;
 
 		await DiscordMessages.sendInfoMessage(interaction);
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsInfoDesc'));
 	},
 };
