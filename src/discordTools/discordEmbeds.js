@@ -18,6 +18,8 @@
 
 */
 
+import os from "node:os";
+import { showTotalMemory, usagePercent } from "node-system-stats";
 const Discord = require('discord.js');
 
 const Client = require('../../index.ts');
@@ -1052,6 +1054,40 @@ module.exports = {
             title: `rustplusplus Help`,
             description: description
         });
+    },
+
+    getInfoEmbed: async function (guildId) {
+        const osInfo = `${os.type()} ${os.release()}`;
+        const osUptime = `${Math.floor(os.uptime() / 86400)} Days ${String(Math.floor((os.uptime() % 86400) / 3600)).padStart(2, '0')}h ${String(Math.floor((os.uptime() % 3600) / 60)).padStart(2, '0')}m ${String(Math.floor(os.uptime() % 60)).padStart(2, '0')}s`;
+        const osHostname = os.hostname();
+        const cpuInfo = `${os.arch()} (${os.cpus().length} cores)`;
+        const cpuUsed = (await usagePercent({ coreIndex: 0, sampleMs: 2000 })).percent;
+        const memTotal = showTotalMemory(true);
+        const memUsed = (process.memoryUsage().rss / 1024 ** 2).toFixed(2);
+        const nodeVersion = process.version;
+        const discordJsVersion = Discord.version;
+        const guilds = Client.client.guilds.cache.size;
+        const channels = Client.client.channels.cache.size;
+        const users = Client.client.users.cache.size;
+
+        const description =
+        `${Client.client.intlGet(guildId, 'commandsInfoOperationSystem')}: ${osInfo}\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoUptime')}: ${osUptime}\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoHostname')}: ${osHostname}\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoCPUArch')}: ${cpuInfo}\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoCPUUsage')}: ${cpuUsed}\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoMemoryUsage')}: ${memUsed}MB/${memTotal}MB\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoNodeVersion')}: ${nodeVersion}\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoDiscordVersion')}: ${discordJsVersion}\n` +
+        `${Client.client.intlGet(guildId, 'commandsInfoConnected', { guilds, channels, users })}\n`;
+
+        return module.exports.getEmbed({
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            title: `RustPlusPlus Server Status`,
+            description: description
+        });
+
     },
 
     getCctvEmbed: function (guildId, monument, cctvCodes, dynamic) {
