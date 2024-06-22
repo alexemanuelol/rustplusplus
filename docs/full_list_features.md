@@ -85,7 +85,7 @@
 > Receive notifications for In-Game Events such as:
 - **Cargo Ship** - When it spawns, despawns, how long before it enters egress stage. How long time since it was last out. step-trace.
 - **Patrol Helicopter** - When it spawns, despawns or gets taken down. How long time since it was last out and how long since it was taken down. step-trace.
-- **Oil Rig** - When Oil Rig calls in Heavy Scientists and how long till the Locked Crate unlocks.
+- **Oil Rigs** - When Heavy Scientists are called at each, and how long until the Locked Crates unlock.
 - **Chinook 47** - When it enters map and when it leaves.
 - **Vending Machines** - Whenever a new Vending Machine appears on the map.
 

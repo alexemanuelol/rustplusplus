@@ -35,14 +35,26 @@
         "inGame": false,
         "voice": true
     },
-    "lockedCrateOilRigUnlockedSetting": {
-        "image": "locked_crate_logo.png",
+    "heavyScientistsCalledSmallSetting": {
+        "image": "small_oil_rig_logo.png",
         "discord": true,
         "inGame": false,
         "voice": true
     },
-    "heavyScientistCalledSetting": {
-        "image": "oil_rig_logo.png",
+    "lockedCrateSmallOilRigUnlockedSetting": {
+        "image": "locked_crate_small_oil_rig_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
+    "heavyScientistsCalledLargeSetting": {
+        "image": "large_oil_rig_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
+    "lockedCrateLargeOilRigUnlockedSetting": {
+        "image": "locked_crate_large_oil_rig_logo.png",
         "discord": true,
         "inGame": false,
         "voice": true
