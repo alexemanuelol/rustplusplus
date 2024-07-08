@@ -1,0 +1,133 @@
+#To deploy this statefulset to your kubernetes cluster using kubectl:
+# kubectl apply -f kubernetes-sts.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rustplus
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rustplusplus-secret
+  namespace: rustplus
+type: Opaque
+data:
+  RPP_DISCORD_CLIENT_ID: MTEuLi4uMTExMQ== # base64 encoded default value of '111....1111'
+  RPP_DISCORD_TOKEN: dG9rZW4= # base64 encoded default value of 'token'
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: credentials-pvc
+  namespace: rustplus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: longhorn
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: instances-pvc
+  namespace: rustplus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: longhorn
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: logs-pvc
+  namespace: rustplus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: longhorn
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: maps-pvc
+  namespace: rustplus
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: longhorn
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rustplusplus
+  namespace: rustplus
+spec:
+  selector:
+    matchLabels:
+      app: rustplusplus
+  serviceName: "rustplusplus"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: rustplusplus
+    spec:
+      containers:
+      - name: rustplusplus
+        image: ghcr.io/alexemanuelol/rustplusplus
+        volumeMounts:
+        - name: credentials
+          mountPath: /app/credentials
+        - name: instances
+          mountPath: /app/instances
+        - name: logs
+          mountPath: /app/logs
+        - name: maps
+          mountPath: /app/maps
+        env:
+        - name: RPP_DISCORD_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: rustplusplus-secret
+              key: RPP_DISCORD_CLIENT_ID
+        - name: RPP_DISCORD_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: rustplusplus-secret
+              key: RPP_DISCORD_TOKEN
+        - name: RPP_DISCORD_USERNAME
+          value: "RustPlusPlus"
+      volumes:
+      - name: credentials
+        persistentVolumeClaim:
+          claimName: credentials-pvc
+      - name: instances
+        persistentVolumeClaim:
+          claimName: instances-pvc
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs-pvc
+      - name: maps
+        persistentVolumeClaim:
+          claimName: maps-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rustplusplus
+  namespace: rustplus
+spec:
+  clusterIP: None
+  selector:
+    app: rustplusplus
