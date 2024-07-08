@@ -1,3 +1,6 @@
+#first base64 encode the RPP_DISCORD_CLIENT_ID & RPP_DISCORD_TOKEN
+#obtain these following the original documentation
+#you can change the name of the bot under the statefulset configuration or via a kubectl exec into the pod and initiating a redeploy
 #To deploy this statefulset to your kubernetes cluster using kubectl:
 # kubectl apply -f kubernetes-sts.yaml
 apiVersion: v1
