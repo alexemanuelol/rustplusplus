@@ -362,7 +362,7 @@ class MapMarkers {
                         marker.ch47Type = 'smallOilRig';
 
                         this.rustplus.sendEvent(
-                            this.rustplus.notificationSettings.heavyScientistCalledSetting,
+                            this.rustplus.notificationSettings.heavyScientistsCalledSmallSetting,
                             this.client.intlGet(this.rustplus.guildId, 'heavyScientistsCalledSmall',
                                 { location: oilRigLocation.location }),
                             'small',
@@ -397,7 +397,7 @@ class MapMarkers {
                         marker.ch47Type = 'largeOilRig';
 
                         this.rustplus.sendEvent(
-                            this.rustplus.notificationSettings.heavyScientistCalledSetting,
+                            this.rustplus.notificationSettings.heavyScientistsCalledLargeSetting,
                             this.client.intlGet(this.rustplus.guildId, 'heavyScientistsCalledLarge',
                                 { location: oilRigLocation.location }),
                             'large',
@@ -688,7 +688,7 @@ class MapMarkers {
         let oilRigLocation = args[0];
 
         this.rustplus.sendEvent(
-            this.rustplus.notificationSettings.lockedCrateOilRigUnlockedSetting,
+            this.rustplus.notificationSettings.lockedCrateSmallOilRigUnlockedSetting,
             this.client.intlGet(this.rustplus.guildId, 'lockedCrateSmallOilRigUnlocked', {
                 location: oilRigLocation
             }),
@@ -706,7 +706,7 @@ class MapMarkers {
         let oilRigLocation = args[0];
 
         this.rustplus.sendEvent(
-            this.rustplus.notificationSettings.lockedCrateOilRigUnlockedSetting,
+            this.rustplus.notificationSettings.lockedCrateLargeOilRigUnlockedSetting,
             this.client.intlGet(this.rustplus.guildId, 'lockedCrateLargeOilRigUnlocked', {
                 location: oilRigLocation
             }),
