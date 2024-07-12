@@ -18,8 +18,8 @@
 
 */
 
-import os from "node:os";
-import { showTotalMemory, usagePercent } from "node-system-stats";
+const os = require('os');
+const { showTotalMemory, usagePercent } = require("node-system-stats");
 const Discord = require('discord.js');
 
 const Client = require('../../index.ts');
