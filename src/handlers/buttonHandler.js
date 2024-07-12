@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Edited by FaiThiX
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -441,6 +442,159 @@ module.exports = async (client, interaction) => {
 
         await client.interactionUpdate(interaction, {
             components: DiscordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoicePlayerConnection') {
+        instance.generalSettings.voicePlayerConnection =
+            !instance.generalSettings.voicePlayerConnection;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voicePlayerConnection =
+            instance.generalSettings.voicePlayerConnection;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voicePlayerConnection}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoicePlayerAfk') {
+        instance.generalSettings.voicePlayerAfk =
+            !instance.generalSettings.voicePlayerAfk;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voicePlayerAfk =
+            instance.generalSettings.voicePlayerAfk;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voicePlayerAfk}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoicePlayerDeath') {
+        instance.generalSettings.voicePlayerDeath =
+            !instance.generalSettings.voicePlayerDeath;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voicePlayerDeath =
+            instance.generalSettings.voicePlayerDeath;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voicePlayerDeath}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoiceSmartAlarm') {
+        instance.generalSettings.voiceSmartAlarm =
+            !instance.generalSettings.voiceSmartAlarm;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voiceSmartAlarm =
+            instance.generalSettings.voiceSmartAlarm;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voiceSmartAlarm}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoiceTeamChanges') {
+        instance.generalSettings.voiceTeamChanges =
+            !instance.generalSettings.voiceTeamChanges;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voiceTeamChanges =
+            instance.generalSettings.voiceTeamChanges;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voiceTeamChanges}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoiceServerStatus') {
+        instance.generalSettings.voiceServerStatus =
+            !instance.generalSettings.voiceServerStatus;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voiceServerStatus =
+            instance.generalSettings.voiceServerStatus;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voiceServerStatus}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoiceServerWiped') {
+        instance.generalSettings.voiceServerWiped =
+            !instance.generalSettings.voiceServerWiped;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voiceServerWiped =
+            instance.generalSettings.voiceServerWiped;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voiceServerWiped}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoiceSmartDevice') {
+        instance.generalSettings.voiceSmartDevice =
+            !instance.generalSettings.voiceSmartDevice;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voiceSmartDevice =
+            instance.generalSettings.voiceSmartDevice;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voiceSmartDevice}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
+        });
+    }
+    else if (interaction.customId === 'VoiceSayCommand') {
+        instance.generalSettings.voiceSayCommand =
+            !instance.generalSettings.voiceSayCommand;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.voiceSayCommand =
+            instance.generalSettings.voiceSayCommand;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.voiceSayCommand}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: DiscordButtons.getSelectVoiceCalloutsButtons(guildId)
         });
     }
     else if (interaction.customId.startsWith('ServerConnect')) {

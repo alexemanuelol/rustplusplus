@@ -23,6 +23,7 @@ const Builder = require('@discordjs/builders');
 const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const DiscordVoice = require('../discordTools/discordVoice.js');
 
 module.exports = {
     name: 'voice',
@@ -37,7 +38,13 @@ module.exports = {
             .addSubcommand(subcommand => subcommand
                 .setName('leave')
                 .setDescription(client.intlGet(guildId, 'commandsVoiceLeaveDesc')))
-
+            .addSubcommand(subcommand => subcommand
+                .setName('say')
+                .setDescription(client.intlGet(guildId, 'commandsVoiceSayDesc'))
+                .addStringOption(option => option
+                    .setName('text')
+                    .setDescription(client.intlGet(guildId, 'commandsVoiceSayText'))
+                    .setRequired(true)))
     },
 
     async execute(client, interaction) {
@@ -85,6 +92,16 @@ module.exports = {
                                 id: interaction.member.voice.channel.id,
                                 guild: interaction.member.guild.name
                             }));
+                }
+            } break;
+
+            case 'say': {
+                const connection = getVoiceConnection(interaction.guild.id);
+                if (connection) {
+                    const text = interaction.options.getString('text')
+                    await DiscordVoice.sendDiscordVoiceMessage(interaction.guild.id, text);
+                    await DiscordMessages.sendVoiceMessage(interaction,
+                        client.intlGet(interaction.guildId, 'commandsVoiceTTSSend'));
                 }
             } break;
 

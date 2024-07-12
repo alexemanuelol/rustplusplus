@@ -20,6 +20,7 @@
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Timer = require('../util/timer.js');
+const DiscordVoice = require('../discordTools/discordVoice.js')
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -49,6 +50,10 @@ module.exports = {
                         client.setInstance(guildId, instance);
 
                         await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
+                        if (instance.generalSettings.voiceSmartDevice){
+                            DiscordVoice.sendDiscordVoiceMessage(guildId, 
+                                DiscordVoice.getAlarmVoice(guildId, serverId, entityId))
+                        }
                     }
                 }
                 else {
@@ -57,6 +62,11 @@ module.exports = {
                         client.setInstance(guildId, instance);
 
                         await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
+
+                        if (instance.generalSettings.voiceSmartAlarm){
+                            DiscordVoice.sendDiscordVoiceMessage(guildId, 
+                                DiscordVoice.getAlarmVoice(guildId, serverId, entityId))
+                        }
                     }
                 }
             }

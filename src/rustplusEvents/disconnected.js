@@ -21,6 +21,7 @@
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 const Config = require('../../config');
+const discordVoice = require('../discordTools/discordVoice.js');
 
 module.exports = {
     name: 'disconnected',
@@ -61,6 +62,8 @@ module.exports = {
         if (client.activeRustplusInstances[guildId]) {
             if (!client.rustplusReconnecting[guildId]) {
                 await DiscordMessages.sendServerChangeStateMessage(guildId, serverId, 1);
+                await discordVoice.sendDiscordVoiceMessage(guildId, 
+                    client.intlGet(guildId, 'serverJustOffline'))
                 await DiscordMessages.sendServerMessage(guildId, serverId, 2);
             }
 

@@ -22,6 +22,7 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const Timer = require('../util/timer');
+const DiscordVoice = require('../discordTools/discordVoice.js')
 
 module.exports = {
     handler: async function (rustplus, client, time) {
@@ -46,6 +47,10 @@ module.exports = {
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.serverList[serverId].switches[entityId].reachable) {
                         await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                        if (instance.generalSettings.voiceSmartDevice){
+                            DiscordVoice.sendDiscordVoiceMessage(guildId, 
+                                DiscordVoice.getSmartDeviceNotFoundVoice(guildId, serverId, entityId))
+                        }
                         instance.serverList[serverId].switches[entityId].reachable = false;
                         client.setInstance(guildId, instance);
 
