@@ -75,7 +75,7 @@
     "cargoShipEgressSetting": "Уведомление когда Грузовой корабль начнёт уплывать.",
     "cargoShipEntersEgressStage": "Грузовой корабль ({location}) начинает покидать карту.",
     "cargoShipEntersMap": "Грузовой корабль появился на карте ({location}).",
-    "cargoShipLeftHarbor": "Грузовое судно только что покинуло Гавань в {местоположении}",
+    "cargoShipLeftHarbor": "Грузовое судно только что покинуло Гавань в {location}",
     "cargoShipLeftMap": "Грузовой корабль покинул карту ({location}).",
     "cargoShipLeftSetting": "Уведомление когда Грузовой корабль покинет карту.",
     "cargoShipLocated": "Грузовой корабль расположен ({location}).",
