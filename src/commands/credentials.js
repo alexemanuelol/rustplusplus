@@ -21,6 +21,7 @@
 const _ = require('lodash');
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -121,7 +122,7 @@ async function addCredentials(client, interaction, verifyId) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            client.log(client.intlGet(null, 'warningCap'), str);
+            log.warn(str);
             return;
         }
     }
@@ -129,7 +130,7 @@ async function addCredentials(client, interaction, verifyId) {
     if (steamId in credentials) {
         const str = client.intlGet(guildId, 'credentialsAlreadyRegistered', { steamId: steamId });
         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-        client.log(client.intlGet(null, 'warningCap'), str);
+        log.warn(str);
         return;
     }
 
@@ -163,7 +164,7 @@ async function addCredentials(client, interaction, verifyId) {
         }
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+    log.info(client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
         value: `add, ${steamId}, ` +
             `${credentials[steamId].discord_user_id}, ` +
@@ -176,7 +177,7 @@ async function addCredentials(client, interaction, verifyId) {
 
     const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(null, 'infoCap'), str);
+    log.info(str);
 }
 
 async function removeCredentials(client, interaction, verifyId) {
@@ -189,7 +190,7 @@ async function removeCredentials(client, interaction, verifyId) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            client.log(client.intlGet(null, 'warningCap'), str);
+            log.warn(str);
             return;
         }
     }
@@ -210,7 +211,7 @@ async function removeCredentials(client, interaction, verifyId) {
             steamId: steamId ? steamId : client.intlGet(guildId, 'unknown')
         });
         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-        client.log(client.intlGet(null, 'warningCap'), str);
+        log.warn(str);
         return;
     }
 
@@ -232,18 +233,18 @@ async function removeCredentials(client, interaction, verifyId) {
     Credentials.writeCredentialsFile(credentials);
     client.setInstance(guildId, instance);
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+    log.info(client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
         value: `remove, ${steamId}`
     }));
 
     const str = client.intlGet(guildId, 'credentialsRemovedSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(null, 'infoCap'), str);
+    log.info(str);
 }
 
 async function showCredentials(client, interaction, verifyId) {
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+    log.info(client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
         value: `show`
     }));
@@ -260,7 +261,7 @@ async function setHosterCredentials(client, interaction, verifyId) {
     if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
         const str = client.intlGet(interaction.guildId, 'missingPermission');
         client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-        client.log(client.intlGet(null, 'warningCap'), str);
+        log.warn(str);
         return;
     }
 
@@ -274,7 +275,7 @@ async function setHosterCredentials(client, interaction, verifyId) {
             steamId: steamId ? steamId : client.intlGet(guildId, 'unknown')
         });
         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-        client.log(client.intlGet(null, 'warningCap'), str);
+        log.warn(str);
         return;
     }
 
@@ -298,12 +299,12 @@ async function setHosterCredentials(client, interaction, verifyId) {
         require('../util/FcmListenerLite')(client, DiscordTools.getGuild(interaction.guildId), prevHoster);
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+    log.info(client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
         value: `setHoster, ${steamId}`
     }));
 
     const str = client.intlGet(guildId, 'credentialsSetHosterSuccessfully', { steamId: steamId });
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-    client.log(client.intlGet(null, 'infoCap'), str);
+    log.info(str);
 }

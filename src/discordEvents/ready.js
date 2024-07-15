@@ -21,6 +21,7 @@
 const Discord = require('discord.js');
 const Path = require('path');
 
+import { log } from '../../index';
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
@@ -41,22 +42,20 @@ module.exports = {
         Credentials.createCredentialsFile();
 
         client.loadGuildsIntl();
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'loggedInAs', {
-            name: client.user.tag
-        }));
+        log.info(client.intlGet(null, 'loggedInAs', { name: client.user.tag }));
 
         try {
             await client.user.setUsername(Config.discord.username);
         }
         catch (e) {
-            client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'ignoreSetUsername'));
+            log.warn(client.intlGet(null, 'ignoreSetUsername'));
         }
 
         try {
             await client.user.setAvatar(Path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
         }
         catch (e) {
-            client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'ignoreSetAvatar'));
+            log.warn(client.intlGet(null, 'ignoreSetAvatar'));
         }
 
         client.user.setPresence({
@@ -73,7 +72,7 @@ module.exports = {
                 await guild.members.me.setNickname(Config.discord.username);
             }
             catch (e) {
-                client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'ignoreSetNickname'));
+                log.warn(client.intlGet(null, 'ignoreSetNickname'));
             }
             await client.syncCredentialsWithUsers(guild);
             await client.setupGuild(guild);

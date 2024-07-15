@@ -21,6 +21,7 @@
 const Discord = require('discord.js');
 const Path = require('path');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
@@ -46,8 +47,7 @@ module.exports = {
             const channel = DiscordTools.getTextChannelById(guildId, channelId);
 
             if (!channel) {
-                Client.client.log(Client.client.intlGet(null, 'errorCap'),
-                    Client.client.intlGet(null, 'couldNotGetChannelWithId', { id: channelId }), 'error');
+                log.error(Client.client.intlGet(null, 'couldNotGetChannelWithId', { id: channelId }));
                 return;
             }
 

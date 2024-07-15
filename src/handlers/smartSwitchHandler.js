@@ -443,7 +443,7 @@ module.exports = {
 
         const timeSeconds = Timer.getSecondsFromStringTime(rest);
 
-        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logSmartSwitchValueChange`, {
+        rustplus.info(client.intlGet(null, `logSmartSwitchValueChange`, {
             value: active
         }));
 

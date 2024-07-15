@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordTools = require('../discordTools/discordTools');
 const PermissionHandler = require('../handlers/permissionHandler.js');
@@ -54,7 +55,7 @@ module.exports = {
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(interaction.guildId, 'missingPermission');
 			client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(null, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -79,7 +80,7 @@ module.exports = {
 			} break;
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${interaction.options.getSubcommand()}`
 		}));
@@ -94,12 +95,12 @@ module.exports = {
 		if (interaction.options.getSubcommand() === 'set') {
 			const str = client.intlGet(interaction.guildId, 'roleSet', { name: role.name });
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log(client.intlGet(null, 'infoCap'), str);
+			log.info(str);
 		}
 		else {
 			const str = client.intlGet(interaction.guildId, 'roleCleared');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-			client.log(client.intlGet(null, 'infoCap'), str);
+			log.info(str);
 		}
 	},
 };

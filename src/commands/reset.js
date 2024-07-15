@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -70,7 +71,7 @@ module.exports = {
 		if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
 			const str = client.intlGet(interaction.guildId, 'missingPermission');
 			client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(null, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 		await interaction.deferReply({ ephemeral: true });
@@ -117,7 +118,7 @@ module.exports = {
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `discord`
 				}));
@@ -132,7 +133,7 @@ module.exports = {
 					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `information`
 				}));
@@ -152,7 +153,7 @@ module.exports = {
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `servers`
 				}));
@@ -172,7 +173,7 @@ module.exports = {
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `settings`
 				}));
@@ -199,7 +200,7 @@ module.exports = {
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `switches`
 				}));
@@ -211,7 +212,7 @@ module.exports = {
 					await require('../discordTools/SetupAlarms')(client, rustplus);
 				}
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `alarms`
 				}));
@@ -236,7 +237,7 @@ module.exports = {
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `storagemonitors`
 				}));
@@ -256,7 +257,7 @@ module.exports = {
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `trackers`
 				}));
@@ -268,6 +269,6 @@ module.exports = {
 
 		const str = client.intlGet(interaction.guildId, 'resetSuccess');
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-		client.log(client.intlGet(null, 'infoCap'), str);
+		log.info(str);
 	},
 };

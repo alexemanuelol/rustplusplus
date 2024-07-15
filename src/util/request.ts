@@ -22,16 +22,14 @@ import * as axios from 'axios';
 
 import * as constants from '../util/constants';
 import { decodeHtml } from '../util/utils';
-import { localeManager as lm } from '../../index';
-
-// TODO! Make a logger module and use it here
+import { localeManager as lm, log } from '../../index';
 
 export async function request(url: string): Promise<axios.AxiosResponse<any>> {
     try {
         return await axios.default.get(url);
     }
     catch (error: any) {
-        console.error('Error requesting:', error.message);
+        log.error(`Error requesting: ${error.message}`)
 
         return {
             data: {},
@@ -48,7 +46,7 @@ export async function requestSteamProfilePicture(steamId: string): Promise<strin
     const response: axios.AxiosResponse<any> = await request(`${constants.STEAM_PROFILES_URL}${steamId}`);
 
     if (response.status !== 200) {
-        console.error(lm.getIntl(null, 'errorCap'), lm.getIntl(null, 'failedToScrapeProfilePicture', {
+        log.error(lm.getIntl(null, 'failedToScrapeProfilePicture', {
             link: `${constants.STEAM_PROFILES_URL}${steamId}`
         }));
         return null;
@@ -66,7 +64,7 @@ export async function requestSteamProfileName(steamId: string): Promise<string |
     const response: axios.AxiosResponse = await request(`${constants.STEAM_PROFILES_URL}${steamId}`);
 
     if (response.status !== 200) {
-        console.error(lm.getIntl(null, 'errorCap'), lm.getIntl(null, 'failedToScrapeProfileName', {
+        log.error(lm.getIntl(null, 'failedToScrapeProfileName', {
             link: `${constants.STEAM_PROFILES_URL}${steamId}`
         }));
         return null;

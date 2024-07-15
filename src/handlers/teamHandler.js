@@ -18,6 +18,7 @@
 
 */
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
@@ -44,7 +45,7 @@ module.exports = {
             await DiscordMessages.sendActivityNotificationMessage(
                 guildId, serverId, Constants.COLOR_GREY, str, steamId);
             if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
-            rustplus.log(client.intlGet(null, 'infoCap'), str);
+            rustplus.info(str);
             rustplus.updateConnections(steamId, str);
         }
 
@@ -55,7 +56,7 @@ module.exports = {
                     await DiscordMessages.sendActivityNotificationMessage(
                         guildId, serverId, Constants.COLOR_ACTIVE, str, steamId);
                     if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
-                    rustplus.log(client.intlGet(null, 'infoCap'), str);
+                    rustplus.info(str);
                     rustplus.updateConnections(steamId, str);
                 }
             }
@@ -74,7 +75,7 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, serverId, Constants.COLOR_INACTIVE, str, player.steamId);
                         if (instance.generalSettings.deathNotify) rustplus.sendInGameMessage(str);
-                        rustplus.log(client.intlGet(null, 'infoCap'), str);
+                        rustplus.info(str);
                         rustplus.updateDeaths(player.steamId, {
                             name: player.name,
                             location: player.pos
@@ -85,7 +86,7 @@ module.exports = {
                         if (instance.generalSettings.afkNotify) {
                             const str = client.intlGet(guildId, 'playerJustWentAfk', { name: player.name });
                             rustplus.sendInGameMessage(str);
-                            rustplus.log(client.intlGet(null, 'infoCap'), str);
+                            rustplus.info(str);
                         }
                     }
 
@@ -97,7 +98,7 @@ module.exports = {
                                 time: afkTime
                             });
                             rustplus.sendInGameMessage(str);
-                            rustplus.log(client.intlGet(null, 'infoCap'), str);
+                            rustplus.info(str);
                         }
                     }
 
@@ -106,11 +107,10 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, serverId, Constants.COLOR_ACTIVE, str, player.steamId);
                         if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
-                        rustplus.log(client.intlGet(null, 'infoCap'),
-                            client.intlGet(null, 'playerJustConnectedTo', {
-                                name: player.name,
-                                server: server.title
-                            }));
+                        rustplus.info(client.intlGet(null, 'playerJustConnectedTo', {
+                            name: player.name,
+                            server: server.title
+                        }));
                         rustplus.updateConnections(player.steamId, str);
                     }
 
@@ -119,11 +119,10 @@ module.exports = {
                         await DiscordMessages.sendActivityNotificationMessage(
                             guildId, serverId, Constants.COLOR_INACTIVE, str, player.steamId);
                         if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
-                        rustplus.log(client.intlGet(null, 'infoCap'),
-                            client.intlGet(null, 'playerJustDisconnectedFrom', {
-                                name: player.name,
-                                server: server.title
-                            }));
+                        rustplus.info(client.intlGet(null, 'playerJustDisconnectedFrom', {
+                            name: player.name,
+                            server: server.title
+                        }));
                         rustplus.updateConnections(player.steamId, str);
                     }
                     break;

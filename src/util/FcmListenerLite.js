@@ -20,6 +20,7 @@
 
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -34,17 +35,16 @@ module.exports = async (client, guild, steamId) => {
     const hoster = instance.hoster;
 
     if (!Object.keys(credentials).includes(steamId)) {
-        client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'credentialsNotRegistered', {
+        log.warn(client.intlGet(null, 'credentialsNotRegistered', {
             steamId: steamId
         }));
         return;
     }
 
     if (steamId === hoster) {
-        client.log(client.intlGet(null, 'warningCap'),
-            client.intlGet(null, 'credentialsCannotStartLiteAlreadyHoster', {
-                steamId: steamId
-            }));
+        log.warn(client.intlGet(null, 'credentialsCannotStartLiteAlreadyHoster', {
+            steamId: steamId
+        }));
         return;
     }
 
@@ -53,7 +53,7 @@ module.exports = async (client, guild, steamId) => {
         delete client.fcmListenersLite[guild.id][steamId];
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'fcmListenerStartLite', {
+    log.info(client.intlGet(null, 'fcmListenerStartLite', {
         guildId: guild.id,
         steamId: steamId
     }));
@@ -216,7 +216,7 @@ async function pairingEntitySwitch(client, guild, title, message, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === body.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
                 instance.serverList[serverId].switches[body.entityId].x = location.x;
                 instance.serverList[serverId].switches[body.entityId].y = location.y;
@@ -269,7 +269,7 @@ async function pairingEntitySmartAlarm(client, guild, title, message, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === body.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].alarms[body.entityId].location = location.location;
                 instance.serverList[serverId].alarms[body.entityId].x = location.x;
                 instance.serverList[serverId].alarms[body.entityId].y = location.y;
@@ -322,7 +322,7 @@ async function pairingEntityStorageMonitor(client, guild, title, message, body) 
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === body.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
                 instance.serverList[serverId].storageMonitors[body.entityId].x = location.x;
                 instance.serverList[serverId].storageMonitors[body.entityId].y = location.y;

@@ -25,25 +25,8 @@ const Path = require('path');
 const Config = require('./config');
 const DiscordBot = require('./src/structures/DiscordBot');
 
+import * as Logger from './src/structures/Logger';
 import { LocaleManager } from './src/structures/LocaleManager';
-
-createMissingDirectories();
-
-const client = new DiscordBot({
-    intents: [
-        Discord.GatewayIntentBits.Guilds,
-        Discord.GatewayIntentBits.GuildMessages,
-        Discord.GatewayIntentBits.MessageContent,
-        Discord.GatewayIntentBits.GuildMembers,
-        Discord.GatewayIntentBits.GuildVoiceStates],
-    retryLimit: 2,
-    restRequestTimeout: 60000,
-    disableEveryone: false
-});
-
-client.build();
-
-export const localeManager = new LocaleManager(Config.general.language);
 
 function createMissingDirectories() {
     if (!Fs.existsSync(Path.join(__dirname, 'logs'))) {
@@ -63,10 +46,29 @@ function createMissingDirectories() {
     }
 }
 
+createMissingDirectories();
+
+export const log = Logger.createLogger('logs/rustplusplus.log');
+export const localeManager = new LocaleManager(Config.general.language);
+
+const client = new DiscordBot({
+    intents: [
+        Discord.GatewayIntentBits.Guilds,
+        Discord.GatewayIntentBits.GuildMessages,
+        Discord.GatewayIntentBits.MessageContent,
+        Discord.GatewayIntentBits.GuildMembers,
+        Discord.GatewayIntentBits.GuildVoiceStates],
+    retryLimit: 2,
+    restRequestTimeout: 60000,
+    disableEveryone: false
+});
+
+client.build();
+
 process.on('unhandledRejection', error => {
-    client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'unhandledRejection', {
+    log.error(client.intlGet(null, 'unhandledRejection', {
         error: error
-    }), 'error');
+    }));
     console.log(error);
 });
 

@@ -18,10 +18,12 @@
 
 */
 
+import { log } from '../../index';
+
 module.exports = {
     name: 'error',
     async execute(client, error) {
-        client.log(client.intlGet(null, 'errorCap'), error, 'error');
+        log.error(error);
         process.exit(1);
     },
 }

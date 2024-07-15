@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -77,7 +78,7 @@ module.exports = {
 			if (!rustplus || (rustplus && !rustplus.isOperational)) {
 				const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(null, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 
@@ -86,7 +87,7 @@ module.exports = {
 			if (!server || (server && !server.battlemetricsId)) {
 				const str = client.intlGet(interaction.guildId, 'invalidBattlemetricsId');
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(null, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 
@@ -99,7 +100,7 @@ module.exports = {
 				id: battlemetricsId
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(null, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -116,7 +117,7 @@ module.exports = {
 			} break;
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${interaction.options.getSubcommand()} ` +
 				`${interaction.options.getString('name')} ` +
@@ -154,7 +155,7 @@ async function playersNameHandler(client, interaction, battlemetricsId) {
 	if (foundPlayers.length === 0) {
 		const str = client.intlGet(interaction.guildId, 'couldNotFindAnyPlayers');
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-		client.log(client.intlGet(null, 'warningCap'), str);
+		log.warn(str);
 		return;
 	}
 	else if (foundPlayers.length === 1) {
@@ -173,7 +174,7 @@ async function playersPlayerIdHandler(client, interaction, battlemetricsId) {
 	if (!bmInstance.players.hasOwnProperty(playerId)) {
 		const str = client.intlGet(interaction.guildId, 'couldNotFindPlayerId', { id: playerId });
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-		client.log(client.intlGet(null, 'warningCap'), str);
+		log.warn(str);
 		return;
 	}
 
@@ -310,8 +311,7 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 	embed.setFields(fields);
 
 	await client.interactionEditReply(interaction, { embeds: [embed] });
-	client.log(client.intlGet(interaction.guildId, 'infoCap'),
-		client.intlGet(interaction.guildId, 'displayingOnlinePlayers'));
+	log.info(client.intlGet(interaction.guildId, 'displayingOnlinePlayers'));
 }
 
 async function displaySeveralUsers(client, interaction, battlemetricsId, playerIds, search) {
@@ -388,6 +388,5 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 	}
 
 	await client.interactionEditReply(interaction, { embeds: [embed] });
-	client.log(client.intlGet(interaction.guildId, 'infoCap'),
-		client.intlGet(interaction.guildId, 'displayingOnlinePlayers'));
+	log.info(client.intlGet(interaction.guildId, 'displayingOnlinePlayers'));
 }

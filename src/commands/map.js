@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 const Discord = require('discord.js');
 const Path = require('path');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
@@ -59,7 +60,7 @@ module.exports = {
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
 			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(null, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -94,7 +95,7 @@ module.exports = {
 				Path.join(__dirname, '..', '..', `maps/${interaction.guildId}_map_full.png`));
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${interaction.options.getSubcommand()}`
 		}));
@@ -109,7 +110,6 @@ module.exports = {
 			files: [file],
 			ephemeral: true
 		});
-		rustplus.log(client.intlGet(interaction.guildId, 'infoCap'), client.intlGet(interaction.guildId,
-			'displayingMap', { mapName: fileName }));
+		rustplus.info(client.intlGet(interaction.guildId, 'displayingMap', { mapName: fileName }));
 	},
 };

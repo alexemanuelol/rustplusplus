@@ -29,7 +29,7 @@ module.exports = {
             rustplus.deleteThisRustplusInstance();
         }
 
-        rustplus.log(client.intlGet(null, 'disconnectedCap'), client.intlGet(null, 'disconnectedFromServer'));
+        rustplus.info(`${client.intlGet(null, 'disconnectedCap')}: ${client.intlGet(null, 'disconnectedFromServer')}`);
 
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;
@@ -66,7 +66,8 @@ module.exports = {
 
             client.rustplusReconnecting[guildId] = true;
 
-            rustplus.log(client.intlGet(null, 'reconnectingCap'), client.intlGet(null, 'reconnectingToServer'));
+            rustplus.info(`${client.intlGet(null, 'reconnectingCap')}: ` +
+                `${client.intlGet(null, 'reconnectingToServer')}`);
 
             delete client.rustplusInstances[guildId];
 

@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Timer = require('../util/timer.ts');
 
@@ -73,12 +74,12 @@ module.exports = {
 			} break;
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${interaction.options.getSubcommand()}`
 		}));
 
 		await DiscordMessages.sendUptimeMessage(interaction, string);
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsUptimeDesc'));
+		log.info(client.intlGet(interaction.guildId, 'commandsUptimeDesc'));
 	},
 };

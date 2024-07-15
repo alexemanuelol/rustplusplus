@@ -168,7 +168,7 @@ module.exports = {
             status: active ? onCap : offCap
         });
 
-        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logSmartSwitchGroupValueChange`, {
+        rustplus.info(client.intlGet(null, `logSmartSwitchGroupValueChange`, {
             value: active
         }));
 

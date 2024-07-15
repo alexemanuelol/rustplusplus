@@ -28,7 +28,7 @@ module.exports = {
     async execute(rustplus, client) {
         if (!rustplus.isServerAvailable()) return rustplus.deleteThisRustplusInstance();
 
-        rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'connectedToServer'));
+        rustplus.info(`${client.intlGet(null, 'connectedCap')}: ${client.intlGet(null, 'connectedToServer')}`);
 
         const instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
@@ -42,8 +42,7 @@ module.exports = {
         /* Request the map. Act as a check to see if connection is truly operational. */
         const map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
         if (!(await rustplus.isResponseValid(map))) {
-            rustplus.log(client.intlGet(null, 'errorCap'),
-                client.intlGet(null, 'somethingWrongWithConnection'), 'error');
+            rustplus.error(client.intlGet(null, 'somethingWrongWithConnection'));
 
             instance.activeServer = null;
             client.setInstance(guildId, instance);
@@ -57,10 +56,10 @@ module.exports = {
             delete client.rustplusInstances[guildId];
             return;
         }
-        rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'rustplusOperational'));
+        rustplus.info(`${client.intlGet(null, 'connectedCap')}: ${client.intlGet(null, 'rustplusOperational')}`);
 
         const info = await rustplus.getInfoAsync();
-        if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
+        if (await rustplus.isResponseValid(info)) rustplus.sInfo = new Info(info.info)
 
         if (client.rustplusMaps.hasOwnProperty(guildId)) {
             if (client.isJpgImageChanged(guildId, map.map)) {

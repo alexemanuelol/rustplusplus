@@ -273,7 +273,7 @@ class MapMarkers {
 
         /* Player markers that are new. */
         for (let marker of newMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
 
@@ -289,7 +289,7 @@ class MapMarkers {
 
         /* Player markers that still remains. */
         for (let marker of remainingMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
             let player = this.getMarkerByTypeId(this.types.Player, marker.id);
@@ -307,7 +307,7 @@ class MapMarkers {
 
         /* VendingMachine markers that are new. */
         for (let marker of newMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
 
@@ -334,7 +334,7 @@ class MapMarkers {
 
         /* VendingMachine markers that still remains. */
         for (let marker of remainingMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
             let vendingMachine = this.getMarkerByTypeXY(this.types.VendingMachine, marker.x, marker.y);
@@ -351,7 +351,7 @@ class MapMarkers {
 
         /* CH47 markers that are new. */
         for (let marker of newMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
 
@@ -469,8 +469,8 @@ class MapMarkers {
         for (let marker of leftMarkers) {
             if (marker.ch47Type === 'crate') {
                 this.timeSinceCH47WasOut = new Date();
-                this.rustplus.log(this.client.intlGet(null, 'eventCap'),
-                    this.client.intlGet(null, 'chinook47LeftMap', { location: marker.location.string }));
+                this.rustplus.info(`${this.client.intlGet(null, 'eventCap')}: ` +
+                    `${this.client.intlGet(null, 'chinook47LeftMap', { location: marker.location.string })}`);
             }
 
             this.ch47s = this.ch47s.filter(e => e.id !== marker.id);
@@ -478,7 +478,7 @@ class MapMarkers {
 
         /* CH47 markers that still remains. */
         for (let marker of remainingMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
             let ch47 = this.getMarkerByTypeId(this.types.CH47, marker.id);
@@ -496,7 +496,7 @@ class MapMarkers {
 
         /* CargoShip markers that are new. */
         for (let marker of newMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
 
@@ -556,7 +556,7 @@ class MapMarkers {
 
         /* CargoShip markers that still remains. */
         for (let marker of remainingMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
             let cargoShip = this.getMarkerByTypeId(this.types.CargoShip, marker.id);
@@ -640,7 +640,7 @@ class MapMarkers {
 
         /* PatrolHelicopter markers that are new. */
         for (let marker of newMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
 
@@ -676,7 +676,7 @@ class MapMarkers {
 
         /* PatrolHelicopter markers that have left. */
         for (let marker of leftMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
 
             if (Map.isOutsideGridSystem(marker.x, marker.y, mapSize)) {
                 this.rustplus.sendEvent(
@@ -710,7 +710,7 @@ class MapMarkers {
 
         /* PatrolHelicopter markers that still remains. */
         for (let marker of remainingMarkers) {
-            let mapSize = this.rustplus.info.correctedMapSize;
+            let mapSize = this.rustplus.sInfo.correctedMapSize;
             let pos = Map.getPos(this.rustplus.generalSettings.language, marker.x, marker.y, mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
             let patrolHelicopter = this.getMarkerByTypeId(this.types.PatrolHelicopter, marker.id);

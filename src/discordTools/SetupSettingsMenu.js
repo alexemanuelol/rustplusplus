@@ -21,6 +21,7 @@
 const Discord = require('discord.js');
 const Path = require('path');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
@@ -32,8 +33,7 @@ module.exports = async (client, guild, forced = false) => {
     const channel = DiscordTools.getTextChannelById(guild.id, instance.channelIds.settings);
 
     if (!channel) {
-        client.log(client.intlGet(null, 'errorCap'), 'SetupSettingsMenu: ' +
-            client.intlGet(null, 'invalidGuildOrChannel'), 'error');
+        log.error('SetupSettingsMenu: ' + client.intlGet(null, 'invalidGuildOrChannel'));
         return;
     }
 

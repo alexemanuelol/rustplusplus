@@ -18,11 +18,13 @@
 
 */
 
+import { log } from '../../index';
+
 module.exports = {
     name: 'rateLimited',
     async execute(client, info) {
-        client.log(
-            client.intlGet(null, 'ratelimited'),
+        log.warn(
+            `${client.intlGet(null, 'ratelimited')}: ` +
             `Timeout: ${info.timeToReset}, ` +
             `Limit: ${info.limit}, ` +
             `Method: ${info.method}, ` +

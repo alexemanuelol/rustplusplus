@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
@@ -105,7 +106,7 @@ module.exports = {
         if (!rustplus || (rustplus && !rustplus.isOperational)) {
             const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
             await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            client.log(client.intlGet(null, 'warningCap'), str);
+            log.warn(str);
             return;
         }
 
@@ -123,7 +124,7 @@ module.exports = {
                             name: searchItemName
                         });
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                        rustplus.warn(str);
                         return;
                     }
                     else {
@@ -139,14 +140,14 @@ module.exports = {
                             id: searchItemId
                         });
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                        rustplus.warn(str);
                         return;
                     }
                 }
                 else if (searchItemName === null && searchItemId === null) {
                     const str = client.intlGet(interaction.guildId, 'noNameIdGiven');
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                    rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    rustplus.warn(str);
                     return;
                 }
                 const itemName = client.items.getName(itemId);
@@ -211,7 +212,7 @@ module.exports = {
                     foundLines += '```'
                 }
 
-                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                log.info(client.intlGet(null, 'slashCommandValueChange', {
                     id: `${verifyId}`,
                     value: `search, ${searchItemName}, ${searchItemId}, ${orderType}`
                 }));
@@ -224,8 +225,7 @@ module.exports = {
                 });
 
                 await client.interactionEditReply(interaction, { embeds: [embed] });
-                rustplus.log(client.intlGet(interaction.guildId, 'infoCap'),
-                    client.intlGet(interaction.guildId, 'searchResult', { name: itemName }));
+                rustplus.info(client.intlGet(interaction.guildId, 'searchResult', { name: itemName }));
             } break;
 
             case 'subscribe': {
@@ -241,7 +241,7 @@ module.exports = {
                             name: subscribeItemName
                         });
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                        rustplus.warn(str);
                         return;
                     }
                     else {
@@ -257,14 +257,14 @@ module.exports = {
                             id: subscribeItemId
                         });
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                        rustplus.warn(str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     const str = client.intlGet(interaction.guildId, 'noNameIdGiven');
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                    rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    rustplus.warn(str);
                     return;
                 }
                 const itemName = client.items.getName(itemId);
@@ -275,7 +275,7 @@ module.exports = {
                     });
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
-                    rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    rustplus.warn(str);
                 }
                 else {
                     instance.marketSubscriptionList[orderType].push(itemId);
@@ -287,10 +287,10 @@ module.exports = {
                     });
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                         instance.serverList[rustplus.serverId].title));
-                    rustplus.log(client.intlGet(interaction.guildId, 'infoCap'), str);
+                    rustplus.info(str);
                 }
 
-                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                log.info(client.intlGet(null, 'slashCommandValueChange', {
                     id: `${verifyId}`,
                     value: `subscribe, ${subscribeItemName}, ${subscribeItemId}, ${orderType}`
                 }));
@@ -309,7 +309,7 @@ module.exports = {
                             name: subscribeItemName
                         });
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                        rustplus.warn(str);
                         return;
                     }
                     else {
@@ -325,14 +325,14 @@ module.exports = {
                             id: subscribeItemId
                         });
                         await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                        rustplus.warn(str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     const str = client.intlGet(interaction.guildId, 'noNameIdGiven');
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-                    rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    rustplus.warn(str);
                     return;
                 }
                 const itemName = client.items.getName(itemId);
@@ -347,7 +347,7 @@ module.exports = {
                     });
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
                         instance.serverList[rustplus.serverId].title));
-                    rustplus.log(client.intlGet(interaction.guildId, 'infoCap'), str);
+                    rustplus.info(str);
                 }
                 else {
                     const str = client.intlGet(interaction.guildId, 'notExistInSubscription', {
@@ -355,10 +355,10 @@ module.exports = {
                     });
                     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
-                    rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    rustplus.warn(str);
                 }
 
-                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                log.info(client.intlGet(null, 'slashCommandValueChange', {
                     id: `${verifyId}`,
                     value: `subscribe, ${subscribeItemName}, ${subscribeItemId}, ${orderType}`
                 }));
@@ -372,7 +372,7 @@ module.exports = {
                     }
                 }
 
-                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                log.info(client.intlGet(null, 'slashCommandValueChange', {
                     id: `${verifyId}`,
                     value: `list`
                 }));
@@ -402,8 +402,7 @@ module.exports = {
                     ephemeral: true
                 });
 
-                rustplus.log(client.intlGet(interaction.guildId, 'infoCap'),
-                    client.intlGet(interaction.guildId, 'showingSubscriptionList'));
+                rustplus.info(client.intlGet(interaction.guildId, 'showingSubscriptionList'));
             } break;
 
             default: {

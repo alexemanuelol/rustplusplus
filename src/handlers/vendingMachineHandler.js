@@ -76,7 +76,7 @@ module.exports = {
                     }
 
                     const location = Map.getPos(rustplus.generalSettings.language, x, y,
-                        rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                        rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                     const itemName = client.items.getName(itemId);
                     const currencyName = client.items.getName(currencyId);
 
@@ -94,7 +94,7 @@ module.exports = {
                     if (rustplus.generalSettings.itemAvailableInVendingMachineNotifyInGame) {
                         rustplus.sendInGameMessage(str);
                     }
-                    rustplus.log(client.intlGet(null, 'infoCap'), str);
+                    rustplus.info(str);
                 }
             }
         }

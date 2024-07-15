@@ -22,6 +22,7 @@
 const Builder = require('@discordjs/builders');
 const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
+import { log } from '../../index';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -60,11 +61,13 @@ module.exports = {
                     });
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
-                    client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
-                        {   name: voiceChannel && voiceChannel.name ? voiceChannel.name : client.intlGet(interaction.guildId, 'unknown'), 
-                            id: voiceChannel && voiceChannel.id ? voiceChannel.id : client.intlGet(interaction.guildId, 'unknown'), 
-                            guild: voiceChannel && voiceChannel.guild.name ? voiceChannel.guild.name : client.intlGet(interaction.guildId, 'unknown')}
-                        ));
+                    log.info(client.intlGet(interaction.guildId, 'commandsVoiceJoin',
+                        {
+                            name: voiceChannel && voiceChannel.name ? voiceChannel.name : client.intlGet(interaction.guildId, 'unknown'),
+                            id: voiceChannel && voiceChannel.id ? voiceChannel.id : client.intlGet(interaction.guildId, 'unknown'),
+                            guild: voiceChannel && voiceChannel.guild.name ? voiceChannel.guild.name : client.intlGet(interaction.guildId, 'unknown')
+                        }
+                    ));
                 }
                 else {
                     await DiscordMessages.sendVoiceMessage(interaction,
@@ -78,13 +81,12 @@ module.exports = {
                     connection.destroy();
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
-                    client.log(client.intlGet(null, 'infoCap'),
-                        client.intlGet(interaction.guildId, 'commandsVoiceLeave',
-                            {
-                                name: interaction.member.voice.channel.name,
-                                id: interaction.member.voice.channel.id,
-                                guild: interaction.member.guild.name
-                            }));
+                    log.info(client.intlGet(interaction.guildId, 'commandsVoiceLeave',
+                        {
+                            name: interaction.member.voice.channel.name,
+                            id: interaction.member.voice.channel.id,
+                            guild: interaction.member.guild.name
+                        }));
                 }
             } break;
 
@@ -92,7 +94,7 @@ module.exports = {
             } break;
         }
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+        log.info(client.intlGet(null, 'slashCommandValueChange', {
             id: `${verifyId}`,
             value: `${interaction.options.getSubcommand()}`
         }));

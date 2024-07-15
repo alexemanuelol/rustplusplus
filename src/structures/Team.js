@@ -63,7 +63,7 @@ class Team {
 
             player = this.getPlayer(team.leaderSteamId.toString());
             if (player !== null) {
-                this.rustplus.log(Client.client.intlGet(null, 'commandCap'),
+                this.rustplus.info(`${Client.client.intlGet(null, 'commandCap')}: ` +
                     Client.client.intlGet(null, 'leaderTransferred', {
                         name: `${player.name}:${player.steamId}`
                     }));

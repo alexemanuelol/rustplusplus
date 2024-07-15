@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -72,7 +73,7 @@ module.exports = {
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(guildId, 'missingPermission');
 			await client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(null, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -88,7 +89,7 @@ module.exports = {
 				if (discordUser === null && steamid === null) {
 					const str = client.intlGet(guildId, 'missingArguments');
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-					client.log(client.intlGet(null, 'warningCap'), str);
+					log.warn(str);
 					return;
 				}
 
@@ -135,13 +136,13 @@ module.exports = {
 					}
 				}
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `add, ${discordUser}, ${steamid}`
 				}));
 
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(successful, str));
-				client.log(client.intlGet(null, 'infoCap'), str);
+				log.info(str);
 				return;
 			} break;
 
@@ -152,7 +153,7 @@ module.exports = {
 				if (discordUser === null && steamid === null) {
 					const str = client.intlGet(guildId, 'missingArguments');
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-					client.log(client.intlGet(null, 'warningCap'), str);
+					log.warn(str);
 					return;
 				}
 
@@ -201,13 +202,13 @@ module.exports = {
 					}
 				}
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `remove, ${discordUser}, ${steamid}`
 				}));
 
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(successful, str));
-				client.log(client.intlGet(null, 'infoCap'), str);
+				log.info(str);
 				return;
 			} break;
 
@@ -252,7 +253,7 @@ module.exports = {
 					ephemeral: true
 				});
 
-				client.log(client.intlGet(guildId, 'infoCap'), client.intlGet(guildId, 'showingBlacklist'));
+				log.info(client.intlGet(guildId, 'showingBlacklist'));
 			} break;
 
 			default: {

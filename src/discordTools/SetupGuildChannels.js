@@ -18,6 +18,7 @@
 
 */
 
+import { log } from '../../index';
 const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
@@ -53,8 +54,7 @@ async function addTextChannel(name, idName, client, guild, parent, permissionWri
             channel.setParent(parent.id);
         }
         catch (e) {
-            client.log(client.intlGet(null, 'errorCap'),
-                client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }), 'error');
+            log.error(client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }));
         }
     }
 
@@ -63,8 +63,7 @@ async function addTextChannel(name, idName, client, guild, parent, permissionWri
             channel.setParent(parent.id);
         }
         catch (e) {
-            client.log(client.intlGet(null, 'errorCap'),
-                client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }), 'error');
+            log.error(client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }));
         }
     }
 

@@ -21,6 +21,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -57,12 +58,12 @@ module.exports = {
         const cctvCodes = client.cctv.getCodes(monument);
         const dynamic = client.cctv.isDynamic(monument);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+        log.info(client.intlGet(null, 'slashCommandValueChange', {
             id: `${verifyId}`,
             value: `${monument}`
         }));
 
         await DiscordMessages.sendCctvMessage(interaction, monument, cctvCodes, dynamic);
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsCctvDesc'));
+        log.info(client.intlGet(interaction.guildId, 'commandsCctvDesc'));
     },
 };

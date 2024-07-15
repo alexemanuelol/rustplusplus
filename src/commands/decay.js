@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const Timer = require('../util/timer.ts');
 
@@ -100,7 +101,7 @@ module.exports = {
 					name: decayItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 			itemId = foundName;
@@ -114,14 +115,14 @@ module.exports = {
 					id: decayItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 		}
 		else if (decayItemName === null && decayItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -141,7 +142,7 @@ module.exports = {
 				name: itemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -154,7 +155,7 @@ module.exports = {
 				max: details.hp
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -207,12 +208,12 @@ module.exports = {
 		}
 		decayString += `${decayStrings.join(', ')}.`;
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${decayItemName} ${decayItemId} ${decayItemHp}`
 		}));
 
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, decayString));
-		client.log(client.intlGet(null, 'infoCap'), decayString);
+		log.info(decayString);
 	},
 };

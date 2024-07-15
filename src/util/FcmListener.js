@@ -22,6 +22,7 @@ const Discord = require('discord.js');
 const Path = require('path');
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
+import { log } from '../../index';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
@@ -38,14 +39,12 @@ module.exports = async (client, guild) => {
     const hoster = instance.hoster;
 
     if (Object.keys(credentials).length === 0) {
-        client.log(client.intlGet(null, 'warningCap'),
-            client.intlGet(null, 'credentialsNotRegisteredForGuild', { id: guild.id }));
+        log.warn(client.intlGet(null, 'credentialsNotRegisteredForGuild', { id: guild.id }));
         return;
     }
 
     if (!hoster) {
-        client.log(client.intlGet(null, 'warningCap'),
-            client.intlGet(guild.id, 'credentialsHosterNotSetForGuild', { id: guild.id }));
+        log.warn(client.intlGet(guild.id, 'credentialsHosterNotSetForGuild', { id: guild.id }));
         return;
     }
 
@@ -56,7 +55,7 @@ module.exports = async (client, guild) => {
         delete client.fcmListenersLite[guild.id][hoster];
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'fcmListenerStartHost', {
+    log.info(client.intlGet(null, 'fcmListenerStartHost', {
         guildId: guild.id,
         steamId: hoster
     }));
@@ -310,7 +309,7 @@ async function pairingEntitySwitch(client, guild, title, message, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
                 instance.serverList[serverId].switches[body.entityId].x = location.x;
                 instance.serverList[serverId].switches[body.entityId].y = location.y;
@@ -363,7 +362,7 @@ async function pairingEntitySmartAlarm(client, guild, title, message, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].alarms[body.entityId].location = location.location;
                 instance.serverList[serverId].alarms[body.entityId].x = location.x;
                 instance.serverList[serverId].alarms[body.entityId].y = location.y;
@@ -416,7 +415,7 @@ async function pairingEntityStorageMonitor(client, guild, title, message, body) 
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
                 instance.serverList[serverId].storageMonitors[body.entityId].x = location.x;
                 instance.serverList[serverId].storageMonitors[body.entityId].y = location.y;
@@ -477,7 +476,7 @@ async function alarmAlarm(client, guild, title, message, body) {
         server.alarms[entityId].lastTrigger = Math.floor(new Date() / 1000);
         client.setInstance(guild.id, instance);
         await DiscordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
-        client.log(client.intlGet(null, 'infoCap'), `${title}: ${message}`);
+        log.info(`${title}: ${message}`);
     }
 }
 
@@ -504,7 +503,7 @@ async function alarmRaidAlarm(client, guild, title, message, body) {
         rustplus.sendInGameMessage(`${title}: ${message}`);
     }
 
-    client.log(client.intlGet(null, 'infoCap'), `${title} ${message}`);
+    log.info(`${title} ${message}`);
 }
 
 async function playerDeath(client, guild, title, message, body, discordUserId) {
@@ -536,11 +535,10 @@ async function teamLogin(client, guild, title, message, body) {
 
     if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
         await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
-        client.log(client.intlGet(null, 'infoCap'),
-            client.intlGet(null, 'playerJustConnectedTo', {
-                name: body.targetName,
-                server: body.name
-            }));
+        log.info(client.intlGet(null, 'playerJustConnectedTo', {
+            name: body.targetName,
+            server: body.name
+        }));
     }
 }
 

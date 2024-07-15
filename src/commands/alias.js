@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
@@ -77,7 +78,7 @@ module.exports = {
 			} break;
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${interaction.options.getSubcommand()} ${interaction.options.getString('alias')} ` +
 				`${interaction.options.getString('value')} ${interaction.options.getInteger('index')}`
@@ -96,7 +97,7 @@ async function addAlias(client, interaction) {
 		if (alias.alias === aliasParameter) {
 			const str = client.intlGet(guildId, 'aliasAlreadyExist');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 	}
@@ -112,7 +113,7 @@ async function addAlias(client, interaction) {
 
 	const str = client.intlGet(guildId, 'aliasWasAdded');
 	await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-	client.log(client.intlGet(guildId, 'infoCap'), str);
+	log.info(str);
 	return;
 }
 
@@ -125,7 +126,7 @@ async function removeAlias(client, interaction) {
 	if (!instance.commandAliases.some(e => e.index === indexParameter)) {
 		const str = client.intlGet(guildId, 'aliasIndexCouldNotBeFound');
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-		client.log(client.intlGet(guildId, 'warningCap'), str);
+		log.warn(str);
 		return;
 	}
 
@@ -134,7 +135,7 @@ async function removeAlias(client, interaction) {
 
 	const str = client.intlGet(guildId, 'aliasWasRemoved');
 	await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-	client.log(client.intlGet(guildId, 'infoCap'), str);
+	log.info(str);
 	return;
 }
 
@@ -213,5 +214,5 @@ async function showAlias(client, interaction) {
 	});
 
 	await client.interactionEditReply(interaction, { embeds: [embed] });
-	client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsAliasShowDesc'));
+	log.info(client.intlGet(guildId, 'commandsAliasShowDesc'));
 }

@@ -93,7 +93,7 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
     message.broadcast.teamMessage.message.message = tempMessage;
 
     if (instance.blacklist['steamIds'].includes(`${steamId}`)) {
-        rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `userPartOfBlacklistInGame`, {
+        rustplus.info(client.intlGet(null, `userPartOfBlacklistInGame`, {
             user: `${message.broadcast.teamMessage.message.name} (${steamId})`,
             message: message.broadcast.teamMessage.message.message
         }));
@@ -114,7 +114,7 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
     const isCommand = await CommandHandler.inGameCommandHandler(rustplus, client, message);
     if (isCommand) return;
 
-    rustplus.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logInGameMessage`, {
+    rustplus.info(client.intlGet(null, `logInGameMessage`, {
         message: message.broadcast.teamMessage.message.message,
         user: `${message.broadcast.teamMessage.message.name} (${steamId})`
     }));
