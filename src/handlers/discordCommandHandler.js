@@ -18,6 +18,7 @@
 
 */
 
+import { log } from '../../index';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools');
 
@@ -211,7 +212,7 @@ module.exports = {
 
         const guild = DiscordTools.getGuild(message.guild.id);
         const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logDiscordCommand`, {
+        log.info(client.intlGet(null, `logDiscordCommand`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,
             user: `${message.author.username} (${message.author.id})`,

@@ -20,6 +20,7 @@
 
 const Discord = require('discord.js');
 
+import { log } from '../../index';
 const Config = require('../../config');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -37,7 +38,7 @@ module.exports = async (client, interaction) => {
 
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userPartOfBlacklist', {
+        log.info(client.intlGet(null, 'userPartOfBlacklist', {
             id: `${verifyId}`,
             user: `${interaction.user.username} (${interaction.user.id})`
         }));
@@ -53,7 +54,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.notificationSettings[ids.setting].discord = setting.discord;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${setting.discord}`
         }));
@@ -72,7 +73,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.notificationSettings[ids.setting].inGame = setting.inGame;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${setting.inGame}`
         }));
@@ -91,7 +92,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.notificationSettings[ids.setting].voice = setting.voice;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${setting.voice}`
         }));
@@ -107,7 +108,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.inGameCommandsEnabled = instance.generalSettings.inGameCommandsEnabled;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.inGameCommandsEnabled}`
         }));
@@ -123,7 +124,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.muteInGameBotMessages = instance.generalSettings.muteInGameBotMessages;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.muteInGameBotMessages}`
         }));
@@ -139,7 +140,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.connectionNotify = instance.generalSettings.connectionNotify;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.connectionNotify}`
         }));
@@ -154,7 +155,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.afkNotify = instance.generalSettings.afkNotify;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.afkNotify}`
         }));
@@ -169,7 +170,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.deathNotify = instance.generalSettings.deathNotify;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.deathNotify}`
         }));
@@ -185,7 +186,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEnabled =
             instance.generalSettings.fcmAlarmNotificationEnabled;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.fcmAlarmNotificationEnabled}`
         }));
@@ -204,7 +205,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.fcmAlarmNotificationEveryone =
             instance.generalSettings.fcmAlarmNotificationEveryone;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.fcmAlarmNotificationEveryone}`
         }));
@@ -223,7 +224,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.smartAlarmNotifyInGame =
             instance.generalSettings.smartAlarmNotifyInGame;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.smartAlarmNotifyInGame}`
         }));
@@ -242,7 +243,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord =
             instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord}`
         }));
@@ -259,7 +260,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.leaderCommandEnabled = instance.generalSettings.leaderCommandEnabled;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.leaderCommandEnabled}`
         }));
@@ -277,7 +278,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.leaderCommandOnlyForPaired =
             instance.generalSettings.leaderCommandOnlyForPaired;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.leaderCommandOnlyForPaired}`
         }));
@@ -295,7 +296,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.mapWipeNotifyEveryone =
             instance.generalSettings.mapWipeNotifyEveryone;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.mapWipeNotifyEveryone}`
         }));
@@ -312,7 +313,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.itemAvailableInVendingMachineNotifyInGame =
             instance.generalSettings.itemAvailableInVendingMachineNotifyInGame;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.itemAvailableInVendingMachineNotifyInGame}`
         }));
@@ -330,7 +331,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.displayInformationBattlemetricsAllOnlinePlayers =
             instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers}`
         }));
@@ -348,7 +349,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.battlemetricsServerNameChanges =
             instance.generalSettings.battlemetricsServerNameChanges;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.battlemetricsServerNameChanges}`
         }));
@@ -365,7 +366,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.battlemetricsTrackerNameChanges =
             instance.generalSettings.battlemetricsTrackerNameChanges;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.battlemetricsTrackerNameChanges}`
         }));
@@ -382,7 +383,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.battlemetricsGlobalNameChanges =
             instance.generalSettings.battlemetricsGlobalNameChanges;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.battlemetricsGlobalNameChanges}`
         }));
@@ -399,7 +400,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.battlemetricsGlobalLogin =
             instance.generalSettings.battlemetricsGlobalLogin;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.battlemetricsGlobalLogin}`
         }));
@@ -416,7 +417,7 @@ module.exports = async (client, interaction) => {
         if (rustplus) rustplus.generalSettings.battlemetricsGlobalLogout =
             instance.generalSettings.battlemetricsGlobalLogout;
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.battlemetricsGlobalLogout}`
         }));
@@ -578,7 +579,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${groupId}`
         }));
@@ -700,7 +701,7 @@ module.exports = async (client, interaction) => {
             await rustplus.sendInGameMessage(str);
         }
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${active}`
         }));
@@ -766,7 +767,7 @@ module.exports = async (client, interaction) => {
         server.alarms[ids.entityId].everyone = !server.alarms[ids.entityId].everyone;
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${server.alarms[ids.entityId].everyone}`
         }));
@@ -817,7 +818,7 @@ module.exports = async (client, interaction) => {
         server.storageMonitors[ids.entityId].everyone = !server.storageMonitors[ids.entityId].everyone;
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${server.storageMonitors[ids.entityId].everyone}`
         }));
@@ -836,7 +837,7 @@ module.exports = async (client, interaction) => {
         server.storageMonitors[ids.entityId].inGame = !server.storageMonitors[ids.entityId].inGame;
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${server.storageMonitors[ids.entityId].inGame}`
         }));
@@ -972,7 +973,7 @@ module.exports = async (client, interaction) => {
                     await rustplus.sendInGameMessage(str);
                 }
 
-                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+                log.info(client.intlGet(null, 'buttonValueChange', {
                     id: `${verifyId}`,
                     value: `${active}`
                 }));
@@ -1057,7 +1058,7 @@ module.exports = async (client, interaction) => {
         tracker.everyone = !tracker.everyone;
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${tracker.everyone}`
         }));
@@ -1146,7 +1147,7 @@ module.exports = async (client, interaction) => {
         client.setInstance(guildId, instance);
 
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+        log.info(client.intlGet(null, 'buttonValueChange', {
             id: `${verifyId}`,
             value: `${tracker.inGame}`
         }));
@@ -1154,7 +1155,7 @@ module.exports = async (client, interaction) => {
         await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userButtonInteractionSuccess', {
+    log.info(client.intlGet(null, 'userButtonInteractionSuccess', {
         id: `${verifyId}`
     }));
 }

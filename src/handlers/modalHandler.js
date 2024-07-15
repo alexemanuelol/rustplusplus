@@ -20,6 +20,7 @@
 
 const Discord = require('discord.js');
 
+import { log } from '../../index';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -35,7 +36,7 @@ module.exports = async (client, interaction) => {
 
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userPartOfBlacklist', {
+        log.info(client.intlGet(null, 'userPartOfBlacklist', {
             id: `${verifyId}`,
             user: `${interaction.user.username} (${interaction.user.id})`
         }));
@@ -61,7 +62,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${server.cargoShipEgressTimeMs}, ${server.oilRigLockedCrateUnlockTimeMs}`
         }));
@@ -92,7 +93,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${server.battlemetricsId}`
         }));
@@ -132,7 +133,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${smartSwitchName}, ${server.switches[ids.entityId].command}`
         }));
@@ -158,7 +159,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${groupName}, ${server.switchGroups[ids.groupId].command}`
         }));
@@ -184,7 +185,7 @@ module.exports = async (client, interaction) => {
         server.switchGroups[ids.groupId].switches.push(switchId);
         client.setInstance(interaction.guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${switchId}`
         }));
@@ -205,7 +206,7 @@ module.exports = async (client, interaction) => {
             server.switchGroups[ids.groupId].switches.filter(e => e !== switchId);
         client.setInstance(interaction.guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${switchId}`
         }));
@@ -233,7 +234,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${smartAlarmName}, ${smartAlarmMessage}, ${server.alarms[ids.entityId].command}`
         }));
@@ -253,7 +254,7 @@ module.exports = async (client, interaction) => {
         server.storageMonitors[ids.entityId].name = storageMonitorName;
         client.setInstance(interaction.guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${storageMonitorName}`
         }));
@@ -300,7 +301,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${trackerName}, ${tracker.battlemetricsId}, ${tracker.clanTag}`
         }));
@@ -356,7 +357,7 @@ module.exports = async (client, interaction) => {
         });
         client.setInstance(interaction.guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${id}`
         }));
@@ -383,7 +384,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(interaction.guildId, instance);
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
+        log.info(client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${id}`
         }));
@@ -391,7 +392,7 @@ module.exports = async (client, interaction) => {
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userModalInteractionSuccess', {
+    log.info(client.intlGet(null, 'userModalInteractionSuccess', {
         id: `${verifyId}`
     }));
 

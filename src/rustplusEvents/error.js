@@ -25,7 +25,7 @@ module.exports = {
     async execute(rustplus, client, err) {
         if (!rustplus.isServerAvailable()) return rustplus.deleteThisRustplusInstance();
 
-        rustplus.log(client.intlGet(null, 'errorCap'), err, 'error');
+        rustplus.error(err);
 
         switch (err.code) {
             case 'ETIMEDOUT': {
@@ -49,29 +49,28 @@ module.exports = {
 
 function errorTimedOut(rustplus, client, err) {
     if (err.syscall === 'connect') {
-        rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'couldNotConnectTo', {
+        rustplus.error(client.intlGet(null, 'couldNotConnectTo', {
             id: rustplus.serverId
-        }), 'error');
+        }));
     }
 }
 
 function errorNotFound(rustplus, client, err) {
     if (err.syscall === 'getaddrinfo') {
-        rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'couldNotConnectTo', {
+        rustplus.error(client.intlGet(null, 'couldNotConnectTo', {
             id: rustplus.serverId
-        }), 'error');
+        }));
     }
 }
 
 async function errorConnRefused(rustplus, client, err) {
-    rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'connectionRefusedTo', {
+    rustplus.error(client.intlGet(null, 'connectionRefusedTo', {
         id: rustplus.serverId
-    }), 'error');
+    }));
 }
 
 function errorOther(rustplus, client, err) {
     if (err.toString() === 'Error: WebSocket was closed before the connection was established') {
-        rustplus.log(client.intlGet(null, 'errorCap'),
-            client.intlGet(null, 'websocketClosedBeforeConnection'), 'error');
+        rustplus.error(client.intlGet(null, 'websocketClosedBeforeConnection'));
     }
 }

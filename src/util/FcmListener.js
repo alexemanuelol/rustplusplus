@@ -22,6 +22,7 @@ const Discord = require('discord.js');
 const Path = require('path');
 const PushReceiver = require('push-receiver');
 
+import { log } from '../../index';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
@@ -38,14 +39,12 @@ module.exports = async (client, guild) => {
     const hoster = instance.hoster;
 
     if (Object.keys(credentials).length === 0) {
-        client.log(client.intlGet(null, 'warningCap'),
-            client.intlGet(null, 'credentialsNotRegisteredForGuild', { id: guild.id }));
+        log.warn(client.intlGet(null, 'credentialsNotRegisteredForGuild', { id: guild.id }));
         return;
     }
 
     if (!hoster) {
-        client.log(client.intlGet(null, 'warningCap'),
-            client.intlGet(guild.id, 'credentialsHosterNotSetForGuild', { id: guild.id }));
+        log.warn(client.intlGet(guild.id, 'credentialsHosterNotSetForGuild', { id: guild.id }));
         return;
     }
 
@@ -58,7 +57,7 @@ module.exports = async (client, guild) => {
         delete client.fcmListenersLite[guild.id][hoster];
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'fcmListenerStartHost', {
+    log.info(client.intlGet(null, 'fcmListenerStartHost', {
         guildId: guild.id,
         steamId: hoster
     }));
@@ -78,41 +77,40 @@ module.exports = async (client, guild) => {
                 case 'pairing': {
                     switch (body.type) {
                         case 'server': {
-                            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, pairing: server`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, pairing: server`);
                             pairingServer(client, guild, full, data, body);
                         } break;
 
                         case 'entity': {
                             switch (body.entityName) {
                                 case 'Smart Switch': {
-                                    client.log('FCM Host',
-                                        `GuildID: ${guild.id}, SteamID: ${hoster}, pairing: entity: Switch`);
+                                    log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                        `pairing: entity: Switch`);
                                     pairingEntitySwitch(client, guild, full, data, body);
                                 } break;
 
                                 case 'Smart Alarm': {
-                                    client.log('FCM Host',
-                                        `GuildID: ${guild.id}, SteamID: ${hoster}, pairing: entity: Smart Alarm`);
+                                    log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                        `pairing: entity: Smart Alarm`);
                                     pairingEntitySmartAlarm(client, guild, full, data, body);
                                 } break;
 
                                 case 'Storage Monitor': {
-                                    client.log('FCM Host',
-                                        `GuildID: ${guild.id}, SteamID: ${hoster}, pairing: entity: Storage Monitor`);
+                                    log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                        `pairing: entity: Storage Monitor`);
                                     pairingEntityStorageMonitor(client, guild, full, data, body);
                                 } break;
 
                                 default: {
-                                    client.log('FCM Host',
-                                        `GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                    log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
                                         `pairing: entity: other\n${JSON.stringify(full)}`);
                                 } break;
                             }
                         } break;
 
                         default: {
-                            client.log('FCM Host',
-                                `GuildID: ${guild.id}, SteamID: ${hoster}, pairing: other\n${JSON.stringify(full)}`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                `pairing: other\n${JSON.stringify(full)}`);
                         } break;
                     }
                 } break;
@@ -120,20 +118,19 @@ module.exports = async (client, guild) => {
                 case 'alarm': {
                     switch (body.type) {
                         case 'alarm': {
-                            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, alarm: alarm`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, alarm: alarm`);
                             alarmAlarm(client, guild, full, data, body);
                         } break;
 
                         default: {
                             if (data.title === 'You\'re getting raided!') {
                                 /* Custom alarm from plugin: https://umod.org/plugins/raid-alarm */
-                                client.log('FCM Host',
-                                    `GuildID: ${guild.id}, SteamID: ${hoster}, alarm: raid-alarm plugin`);
+                                log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, alarm: raid-alarm plugin`);
                                 alarmRaidAlarm(client, guild, full, data, body);
                                 break;
                             }
-                            client.log('FCM Host',
-                                `GuildID: ${guild.id}, SteamID: ${hoster}, alarm: other\n${JSON.stringify(full)}`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                `alarm: other\n${JSON.stringify(full)}`);
                         } break;
                     }
                 } break;
@@ -141,13 +138,13 @@ module.exports = async (client, guild) => {
                 case 'player': {
                     switch (body.type) {
                         case 'death': {
-                            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, player: death`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, player: death`);
                             playerDeath(client, guild, full, data, body, discordUserId);
                         } break;
 
                         default: {
-                            client.log('FCM Host',
-                                `GuildID: ${guild.id}, SteamID: ${hoster}, player: other\n${JSON.stringify(full)}`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                `player: other\n${JSON.stringify(full)}`);
                         } break;
                     }
                 } break;
@@ -155,13 +152,13 @@ module.exports = async (client, guild) => {
                 case 'team': {
                     switch (body.type) {
                         case 'login': {
-                            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, team: login`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, team: login`);
                             teamLogin(client, guild, full, data, body);
                         } break;
 
                         default: {
-                            client.log('FCM Host',
-                                `GuildID: ${guild.id}, SteamID: ${hoster}, team: other\n${JSON.stringify(full)}`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                `team: other\n${JSON.stringify(full)}`);
                         } break;
                     }
                 } break;
@@ -169,19 +166,19 @@ module.exports = async (client, guild) => {
                 case 'news': {
                     switch (body.type) {
                         case 'news': {
-                            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, news: news`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, news: news`);
                             newsNews(client, guild, full, data, body);
                         } break;
 
                         default: {
-                            client.log('FCM Host',
-                                `GuildID: ${guild.id}, SteamID: ${hoster}, news: other\n${JSON.stringify(full)}`);
+                            log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, ` +
+                                `news: other\n${JSON.stringify(full)}`);
                         } break;
                     }
                 } break;
 
                 default: {
-                    client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, other\n${JSON.stringify(full)}`);
+                    log.info(`FCM Host GuildID: ${guild.id}, SteamID: ${hoster}, other\n${JSON.stringify(full)}`);
                 } break;
             }
         });
@@ -285,7 +282,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
                 instance.serverList[serverId].switches[body.entityId].x = location.x;
                 instance.serverList[serverId].switches[body.entityId].y = location.y;
@@ -338,7 +335,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].alarms[body.entityId].location = location.location;
                 instance.serverList[serverId].alarms[body.entityId].x = location.x;
                 instance.serverList[serverId].alarms[body.entityId].y = location.y;
@@ -391,7 +388,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
                 instance.serverList[serverId].storageMonitors[body.entityId].x = location.x;
                 instance.serverList[serverId].storageMonitors[body.entityId].y = location.y;
@@ -452,7 +449,7 @@ async function alarmAlarm(client, guild, full, data, body) {
         server.alarms[entityId].lastTrigger = Math.floor(new Date() / 1000);
         client.setInstance(guild.id, instance);
         await DiscordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
-        client.log(client.intlGet(null, 'infoCap'), `${data.title}: ${data.message}`);
+        log.info(`${data.title}: ${data.message}`);
     }
 }
 
@@ -479,7 +476,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
         rustplus.sendInGameMessage(`${data.title}: ${data.message}`);
     }
 
-    client.log(client.intlGet(null, 'infoCap'), `${data.title} ${data.message}`);
+    log.info(`${data.title} ${data.message}`);
 }
 
 async function playerDeath(client, guild, full, data, body, discordUserId) {
@@ -511,11 +508,10 @@ async function teamLogin(client, guild, full, data, body) {
 
     if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
         await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
-        client.log(client.intlGet(null, 'infoCap'),
-            client.intlGet(null, 'playerJustConnectedTo', {
-                name: body.targetName,
-                server: body.name
-            }));
+        log.info(client.intlGet(null, 'playerJustConnectedTo', {
+            name: body.targetName,
+            server: body.name
+        }));
     }
 }
 

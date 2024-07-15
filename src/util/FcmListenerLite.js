@@ -20,6 +20,7 @@
 
 const PushReceiver = require('push-receiver');
 
+import { log } from '../../index';
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -34,17 +35,16 @@ module.exports = async (client, guild, steamId) => {
     const hoster = instance.hoster;
 
     if (!Object.keys(credentials).includes(steamId)) {
-        client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'credentialsNotRegistered', {
+        log.warn(client.intlGet(null, 'credentialsNotRegistered', {
             steamId: steamId
         }));
         return;
     }
 
     if (steamId === hoster) {
-        client.log(client.intlGet(null, 'warningCap'),
-            client.intlGet(null, 'credentialsCannotStartLiteAlreadyHoster', {
-                steamId: steamId
-            }));
+        log.warn(client.intlGet(null, 'credentialsCannotStartLiteAlreadyHoster', {
+            steamId: steamId
+        }));
         return;
     }
 
@@ -52,7 +52,7 @@ module.exports = async (client, guild, steamId) => {
 
     const discordUserId = credentials[steamId].discordUserId;
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'fcmListenerStartLite', {
+    log.info(client.intlGet(null, 'fcmListenerStartLite', {
         guildId: guild.id,
         steamId: steamId
     }));
@@ -72,33 +72,32 @@ module.exports = async (client, guild, steamId) => {
                 case 'pairing': {
                     switch (body.type) {
                         case 'server': {
-                            client.log('FCM LITE', `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: server`);
+                            log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, pairing: server`);
                             pairingServer(client, guild, steamId, full, data, body);
                         } break;
 
                         case 'entity': {
                             switch (body.entityName) {
                                 case 'Smart Switch': {
-                                    client.log('FCM LITE',
-                                        `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: entity: Switch`);
+                                    log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                        `pairing: entity: Switch`);
                                     pairingEntitySwitch(client, guild, full, data, body);
                                 } break;
 
                                 case 'Smart Alarm': {
-                                    client.log('FCM LITE',
-                                        `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: entity: Smart Alarm`);
+                                    log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                        `pairing: entity: Smart Alarm`);
                                     pairingEntitySmartAlarm(client, guild, full, data, body);
                                 } break;
 
                                 case 'Storage Monitor': {
-                                    client.log('FCM LITE',
-                                        `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: entity: Storage Monitor`);
+                                    log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                        `pairing: entity: Storage Monitor`);
                                     pairingEntityStorageMonitor(client, guild, full, data, body);
                                 } break;
 
                                 default: {
-                                    client.log('FCM LITE',
-                                        `GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                    log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
                                         `pairing: entity: other\n${JSON.stringify(full)}`);
                                 } break;
                             }
@@ -112,7 +111,7 @@ module.exports = async (client, guild, steamId) => {
                 case 'player': {
                     switch (body.type) {
                         case 'death': {
-                            client.log('FCM LITE', `GuildID: ${guild.id}, SteamID: ${steamId}, player: death`);
+                            log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, player: death`);
                             playerDeath(client, guild, full, data, body, discordUserId);
                         } break;
 
@@ -188,7 +187,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === body.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
                 instance.serverList[serverId].switches[body.entityId].x = location.x;
                 instance.serverList[serverId].switches[body.entityId].y = location.y;
@@ -241,7 +240,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === body.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].alarms[body.entityId].location = location.location;
                 instance.serverList[serverId].alarms[body.entityId].x = location.x;
                 instance.serverList[serverId].alarms[body.entityId].y = location.y;
@@ -294,7 +293,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === body.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.info.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
                 instance.serverList[serverId].storageMonitors[body.entityId].x = location.x;
                 instance.serverList[serverId].storageMonitors[body.entityId].y = location.y;

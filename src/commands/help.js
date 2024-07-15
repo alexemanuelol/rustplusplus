@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -38,6 +39,6 @@ module.exports = {
 		if (!await client.validatePermissions(interaction)) return;
 
 		await DiscordMessages.sendHelpMessage(interaction);
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsHelpDesc'));
+		log.info(client.intlGet(interaction.guildId, 'commandsHelpDesc'));
 	},
 };

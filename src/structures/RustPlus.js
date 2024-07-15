@@ -23,6 +23,7 @@ const Path = require('path');
 const RustPlusLib = require('@liamcottle/rustplus.js');
 const Translate = require('translate');
 
+import { log } from '../../index';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
@@ -31,7 +32,6 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const DiscordVoice = require('../discordTools/discordVoice.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
-const Logger = require('./Logger.js');
 const Map = require('../util/map.ts');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
@@ -47,6 +47,7 @@ class RustPlus extends RustPlusLib {
 
         this.serverId = `${this.server}-${this.port}`;
         this.guildId = guildId;
+        this.serverName = `${Client.client.intlGet(this.guildId, 'unknown')}`;
 
         this.leaderRustPlusInstance = null;
         this.uptimeServer = null;
@@ -103,12 +104,28 @@ class RustPlus extends RustPlusLib {
 
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
-        this.info = null;           /* Stores the Info structure. */
+        this.sInfo = null;           /* Stores the Info structure. */
         this.time = null;           /* Stores the Time structure. */
         this.team = null;           /* Stores the Team structure. */
         this.mapMarkers = null;     /* Stores the MapMarkers structure. */
 
         this.loadRustPlusEvents();
+    }
+
+    debug(message) {
+        log.debug(message, { guildId: this.guildId, serverName: this.serverName });
+    }
+
+    info(message) {
+        log.info(message, { guildId: this.guildId, serverName: this.serverName });
+    }
+
+    warn(message) {
+        log.warn(message, { guildId: this.guildId, serverName: this.serverName });
+    }
+
+    error(message) {
+        log.error(message, { guildId: this.guildId, serverName: this.serverName });
     }
 
     loadRustPlusEvents() {
@@ -131,10 +148,7 @@ class RustPlus extends RustPlusLib {
     build() {
         const instance = Client.client.getInstance(this.guildId);
 
-        /* Setup the logger */
-        this.logger = new Logger(Path.join(__dirname, '..', '..', `logs/${this.guildId}.log`), 'guild');
-        this.logger.setGuildId(this.guildId);
-        this.logger.serverName = instance.serverList[this.serverId].title;
+        this.serverName = instance.serverList[this.serverId].title;
 
         /* Setup settings */
         this.generalSettings = instance.generalSettings;
@@ -162,7 +176,6 @@ class RustPlus extends RustPlusLib {
 
         this.leaderRustPlusInstance = new RustPlusLite(
             this.guildId,
-            this.logger,
             this,
             serverLite.serverIp,
             serverLite.appPort,
@@ -256,10 +269,6 @@ class RustPlus extends RustPlusLib {
         return false;
     }
 
-    log(title, text, level = 'info') {
-        this.logger.log(title, text, level);
-    }
-
     logInGameCommand(type = 'Default', message) {
         const args = new Object();
         args['type'] = type;
@@ -267,7 +276,7 @@ class RustPlus extends RustPlusLib {
         args['user'] = `${message.broadcast.teamMessage.message.name}`;
         args['user'] += ` (${message.broadcast.teamMessage.message.steamId.toString()})`;
 
-        this.log(Client.client.intlGet(null, 'infoCap'), Client.client.intlGet(null, `logInGameCommand`, args));
+        this.info(Client.client.intlGet(null, `logInGameCommand`, args));
     }
 
     sendInGameMessage(message) {
@@ -288,7 +297,7 @@ class RustPlus extends RustPlusLib {
         if (!firstPoll && setting.voice) {
             await DiscordVoice.sendDiscordVoiceMessage(this.guildId, text);
         }
-        this.log(Client.client.intlGet(null, 'eventCap'), text);
+        this.info(`${Client.client.intlGet(null, 'eventCap')}: ${text}`);
     }
 
     replenishTokens() {
@@ -632,24 +641,21 @@ class RustPlus extends RustPlusLib {
 
     async isResponseValid(response) {
         if (response === undefined) {
-            this.log(Client.client.intlGet(null, 'errorCap'),
-                Client.client.intlGet(null, 'responseIsUndefined'), 'error');
+            this.error(Client.client.intlGet(null, 'responseIsUndefined'));
             return false;
         }
         else if (response.toString() === 'Error: Timeout reached while waiting for response') {
-            this.log(Client.client.intlGet(null, 'errorCap'),
-                Client.client.intlGet(null, 'responseTimeout'), 'error');
+            this.error(Client.client.intlGet(null, 'responseTimeout'));
             return false;
         }
         else if (response.hasOwnProperty('error')) {
-            this.log(Client.client.intlGet(null, 'errorCap'), Client.client.intlGet(null, 'responseContainError', {
+            this.error(Client.client.intlGet(null, 'responseContainError', {
                 error: response.error
             }), 'error');
             return false;
         }
         else if (Object.keys(response).length === 0) {
-            this.log(Client.client.intlGet(null, 'errorCap'),
-                Client.client.intlGet(null, 'responseIsEmpty'), 'error');
+            this.error(Client.client.intlGet(null, 'responseIsEmpty'), 'error');
             clearInterval(this.pollingTaskId);
             return false;
         }
@@ -1617,7 +1623,7 @@ class RustPlus extends RustPlusLib {
                     if (player.steamId.toString() === callerSteamId) {
                         const instance = Client.client.getInstance(this.guildId);
                         const location = Map.getPos(this.generalSettings.language, player.x, player.y,
-                            this.info.mapSize, this.map.monuments, this.map.monumentInfo);
+                            this.sInfo.mapSize, this.map.monuments, this.map.monumentInfo);
                         instance.serverList[this.serverId].markers[name] =
                             { x: player.x, y: player.y, location: location.location };
                         Client.client.setInstance(this.guildId, instance);
@@ -1667,7 +1673,6 @@ class RustPlus extends RustPlusLib {
                             this.markers[command].y);
                         const distance = Math.floor(Map.getDistance(player.x, player.y, this.markers[command].x,
                             this.markers[command].y));
-                        console.log(this.markers[command])
 
                         return Client.client.intlGet(this.guildId, 'markerLocation', {
                             name: command,
@@ -2051,16 +2056,16 @@ class RustPlus extends RustPlusLib {
 
     getCommandPop(isInfoChannel = false) {
         if (isInfoChannel) {
-            return `${this.info.players}${this.info.isQueue() ? `(${this.info.queuedPlayers})` : ''}` +
-                `/${this.info.maxPlayers}`;
+            return `${this.sInfo.players}${this.sInfo.isQueue() ? `(${this.sInfo.queuedPlayers})` : ''}` +
+                `/${this.sInfo.maxPlayers}`;
         }
         else {
             const string = Client.client.intlGet(this.guildId, 'populationPlayers', {
-                current: this.info.players,
-                max: this.info.maxPlayers
+                current: this.sInfo.players,
+                max: this.sInfo.maxPlayers
             });
-            const queuedPlayers = this.info.isQueue() ?
-                ` ${Client.client.intlGet(this.guildId, 'populationQueue', { number: this.info.queuedPlayers })}` : '';
+            const queuedPlayers = this.sInfo.isQueue() ?
+                ` ${Client.client.intlGet(this.guildId, 'populationQueue', { number: this.sInfo.queuedPlayers })}` : '';
 
             return `${string}${queuedPlayers}`;
         }
@@ -2695,12 +2700,12 @@ class RustPlus extends RustPlusLib {
     getCommandWipe(isInfoChannel = false) {
         if (isInfoChannel) {
             return Client.client.intlGet(this.guildId, 'dayOfWipe', {
-                day: Math.ceil(this.info.getSecondsSinceWipe() / (60 * 60 * 24))
+                day: Math.ceil(this.sInfo.getSecondsSinceWipe() / (60 * 60 * 24))
             });
         }
         else {
             return Client.client.intlGet(this.guildId, 'timeSinceWipe', {
-                time: this.info.getTimeSinceWipe()
+                time: this.sInfo.getTimeSinceWipe()
             });
         }
     }

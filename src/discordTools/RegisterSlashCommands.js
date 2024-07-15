@@ -23,6 +23,7 @@ const Path = require('path');
 const Rest = require('@discordjs/rest');
 const Types = require('discord-api-types/v9');
 
+import { log } from '../../index';
 const Config = require('../../config');
 
 module.exports = async (client, guild) => {
@@ -40,14 +41,9 @@ module.exports = async (client, guild) => {
         await rest.put(Types.Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
     }
     catch (e) {
-        client.log(
-            client.intlGet(null, 'errorCap'),
-            client.intlGet(null, 'couldNotRegisterSlashCommands', { guildId: guild.id }) +
-            client.intlGet(null, 'makeSureApplicationsCommandsEnabled'),
-            'error'
-        );
+        log.error(client.intlGet(null, 'couldNotRegisterSlashCommands', { guildId: guild.id }) +
+            client.intlGet(null, 'makeSureApplicationsCommandsEnabled'));
         process.exit(1);
     }
-    client.log(client.intlGet(null, 'infoCap'),
-        client.intlGet(null, 'slashCommandsSuccessRegister', { guildId: guild.id }));
+    log.info(client.intlGet(null, 'slashCommandsSuccessRegister', { guildId: guild.id }));
 };

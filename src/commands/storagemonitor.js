@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
@@ -68,7 +69,7 @@ module.exports = {
 				if (device === null) {
 					const str = client.intlGet(guildId, 'invalidId', { id: entityId });
 					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-					client.log(client.intlGet(null, 'warningCap'), str);
+					log.warn(str);
 					return;
 				}
 
@@ -79,7 +80,7 @@ module.exports = {
 				}
 				client.setInstance(guildId, instance);
 
-				client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
 					value: `edit, ${entityId}, ${image}.png`
 				}));
@@ -91,7 +92,7 @@ module.exports = {
 				const str = client.intlGet(guildId, 'storageMonitorEditSuccess', { name: entity.name });
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
 					instance.serverList[device.serverId].title));
-				client.log(client.intlGet(null, 'infoCap'), str);
+				log.info(str);
 			} break;
 
 			default: {

@@ -20,6 +20,7 @@
 
 const Axios = require('axios');
 
+import { log } from '../../index';
 const Client = require('../../index.ts');
 const RandomUsernames = require('../staticFiles/RandomUsernames.json');
 const Utils = require = require('../util/utils.ts');
@@ -384,8 +385,7 @@ class Battlemetrics {
         const response = await this.#request(api_call);
 
         if (response.status !== 200) {
-            Client.client.log(Client.client.intlGet(null, 'errorCap'),
-                Client.client.intlGet(null, 'battlemetricsApiRequestFailed', { api_call: api_call }), 'error');
+            log.error(Client.client.intlGet(null, 'battlemetricsApiRequestFailed', { api_call: api_call }));
             return null;
         }
 
@@ -399,8 +399,7 @@ class Battlemetrics {
      */
     async setup() {
         if (this.id === null && this.name === null) {
-            Client.client.log(Client.client.intlGet(null, 'errorCap'),
-                Client.client.intlGet(null, 'battlemetricsIdAndNameMissing'), 'error');
+            log.error(Client.client.intlGet(null, 'battlemetricsIdAndNameMissing'));
             return;
         }
 
@@ -443,8 +442,7 @@ class Battlemetrics {
         const response = await this.#request(search);
 
         if (response.status !== 200) {
-            Client.client.log(Client.client.intlGet(null, 'errorCap'),
-                Client.client.intlGet(null, 'battlemetricsApiRequestFailed', { api_call: search }), 'error');
+            log.error(Client.client.intlGet(null, 'battlemetricsApiRequestFailed', { api_call: search }));
             return null;
         }
 
@@ -484,8 +482,7 @@ class Battlemetrics {
 
         if (!data) {
             this.lastUpdateSuccessful = false;
-            Client.client.log(Client.client.intlGet(null, 'errorCap'),
-                Client.client.intlGet(null, 'battlemetricsFailedToUpdate', { server: this.id }), 'error');
+            log.error(Client.client.intlGet(null, 'battlemetricsFailedToUpdate', { server: this.id }));
             return false;
         }
 

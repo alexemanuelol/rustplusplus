@@ -334,16 +334,15 @@ class Map {
     }
 
     async mapAppendMonuments() {
-        if (this.rustplus.info === null) {
-            this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
-                Client.client.intlGet(null, 'couldNotAppendMapMonuments'));
+        if (this.rustplus.sInfo === null) {
+            this.rustplus.warn(Client.client.intlGet(null, 'couldNotAppendMapMonuments'));
             return;
         }
 
         for (let monument of this.monuments) {
-            let x = monument.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.info.mapSize) + this.oceanMargin;
+            let x = monument.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.sInfo.mapSize) + this.oceanMargin;
             let n = this.height - 2 * this.oceanMargin;
-            let y = this.height - (monument.y * (n / this.rustplus.info.mapSize) + this.oceanMargin);
+            let y = this.height - (monument.y * (n / this.rustplus.sInfo.mapSize) + this.oceanMargin);
 
             try {
                 if (monument.token === "train_tunnel_display_name") {
@@ -376,9 +375,8 @@ class Map {
     }
 
     async mapAppendMarkers() {
-        if (this.rustplus.info === null) {
-            this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
-                Client.client.intlGet(null, 'couldNotAppendMapMarkers'));
+        if (this.rustplus.sInfo === null) {
+            this.rustplus.warn(Client.client.intlGet(null, 'couldNotAppendMapMarkers'));
             return;
         }
 
@@ -386,9 +384,9 @@ class Map {
         if (!(await this.rustplus.isResponseValid(mapMarkers))) return;
 
         for (let marker of mapMarkers.mapMarkers.markers) {
-            let x = marker.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.info.mapSize) + this.oceanMargin;
+            let x = marker.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.sInfo.mapSize) + this.oceanMargin;
             let n = this.height - 2 * this.oceanMargin;
-            let y = this.height - (marker.y * (n / this.rustplus.info.mapSize) + this.oceanMargin);
+            let y = this.height - (marker.y * (n / this.rustplus.sInfo.mapSize) + this.oceanMargin);
 
             /* Compensate rotations */
             if (marker.type === this.rustplus.mapMarkers.types.CargoShip) {
@@ -429,9 +427,8 @@ class Map {
         try {
             const image = Gm(this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
 
-            if (this.rustplus.info === null) {
-                this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
-                    Client.client.intlGet(null, 'couldNotAppendMapTracers'));
+            if (this.rustplus.sInfo === null) {
+                this.rustplus.warn(Client.client.intlGet(null, 'couldNotAppendMapTracers'));
                 return;
             }
 
@@ -472,8 +469,7 @@ class Map {
             await this.gmWriteAsync(image, this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
         }
         catch (error) {
-            this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
-                Client.client.intlGet(null, 'couldNotAddStepTracers'));
+            this.rustplus.warn(Client.client.intlGet(null, 'couldNotAddStepTracers'));
         }
     }
 
@@ -497,9 +493,9 @@ class Map {
     }
 
     calculateImageXY(coords) {
-        const x = coords.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.info.mapSize) + this.oceanMargin;
+        const x = coords.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.sInfo.mapSize) + this.oceanMargin;
         const n = this.height - 2 * this.oceanMargin;
-        const y = this.height - (coords.y * (n / this.rustplus.info.mapSize) + this.oceanMargin);
+        const y = this.height - (coords.y * (n / this.rustplus.sInfo.mapSize) + this.oceanMargin);
         return { x: x, y: y };
     }
 

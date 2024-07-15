@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
@@ -74,7 +75,7 @@ module.exports = {
 					name: recycleItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 			else {
@@ -90,14 +91,14 @@ module.exports = {
 					id: recycleItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 		}
 		else if (recycleItemName === null && recycleItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 		const itemName = client.items.getName(itemId);
@@ -108,19 +109,19 @@ module.exports = {
 				name: itemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
 		const quantity = recycleItemQuantity === null ? 1 : recycleItemQuantity;
 		const recyclerType = recycleItemRecyclerType === null ? 'recycler' : recycleItemRecyclerType;
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${recycleItemName} ${recycleItemId} ${recycleItemQuantity} ${recycleItemRecyclerType}`
 		}));
 
 		await DiscordMessages.sendRecycleMessage(interaction, recycleDetails, quantity, recyclerType);
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsRecycleDesc'));
+		log.info(client.intlGet(guildId, 'commandsRecycleDesc'));
 	},
 };

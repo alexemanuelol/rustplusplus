@@ -23,6 +23,7 @@ const Discord = require('discord.js');
 const Fs = require('fs');
 const Path = require('path');
 
+import { log } from '../../index';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Cctv = require('./Cctv');
 const Config = require('../../config');
@@ -31,7 +32,6 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
 const GuildInstance = require('../util/guild-instance.ts');
 const Items = require('./Items');
-const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
@@ -39,8 +39,6 @@ const RustPlus = require('../structures/RustPlus');
 class DiscordBot extends Discord.Client {
     constructor(props) {
         super(props);
-
-        this.logger = new Logger(Path.join(__dirname, '..', '..', 'logs/discordBot.log'), 'default');
 
         this.commands = new Discord.Collection();
         this.fcmListeners = new Object();
@@ -173,24 +171,18 @@ class DiscordBot extends Discord.Client {
         this.login(Config.discord.token).catch(error => {
             switch (error.code) {
                 case 502: {
-                    this.log(this.intlGet(null, 'errorCap'),
-                        this.intlGet(null, 'badGateway', { error: JSON.stringify(error) }), 'error')
+                    log.error(this.intlGet(null, 'badGateway', { error: JSON.stringify(error) }));
                 } break;
 
                 case 503: {
-                    this.log(this.intlGet(null, 'errorCap'),
-                        this.intlGet(null, 'serviceUnavailable', { error: JSON.stringify(error) }), 'error')
+                    log.error(this.intlGet(null, 'serviceUnavailable', { error: JSON.stringify(error) }));
                 } break;
 
                 default: {
-                    this.log(this.intlGet(null, 'errorCap'), `${JSON.stringify(error)}`, 'error');
+                    log.error(`${JSON.stringify(error)}`);
                 } break;
             }
         });
-    }
-
-    log(title, text, level = 'info') {
-        this.logger.log(title, text, level);
     }
 
     logInteraction(interaction, verifyId, type) {
@@ -203,7 +195,7 @@ class DiscordBot extends Discord.Client {
             `${interaction.commandName}` : `${interaction.customId}`;
         args['id'] = `${verifyId}`;
 
-        this.log(this.intlGet(null, 'infoCap'), this.intlGet(null, `${type}Interaction`, args));
+        log.info(this.intlGet(null, `${type}Interaction`, args));
     }
 
     async setupGuild(guild) {
@@ -464,8 +456,7 @@ class DiscordBot extends Discord.Client {
             return await interaction.reply(content);
         }
         catch (e) {
-            this.log(this.intlGet(null, 'errorCap'),
-                this.intlGet(null, 'interactionReplyFailed', { error: e }), 'error');
+            log.error(this.intlGet(null, 'interactionReplyFailed', { error: e }));
         }
 
         return undefined;
@@ -476,8 +467,7 @@ class DiscordBot extends Discord.Client {
             return await interaction.editReply(content);
         }
         catch (e) {
-            this.log(this.intlGet(null, 'errorCap'),
-                this.intlGet(null, 'interactionEditReplyFailed', { error: e }), 'error');
+            log.error(this.intlGet(null, 'interactionEditReplyFailed', { error: e }));
         }
 
         return undefined;
@@ -488,8 +478,7 @@ class DiscordBot extends Discord.Client {
             return await interaction.update(content);
         }
         catch (e) {
-            this.log(this.intlGet(null, 'errorCap'),
-                this.intlGet(null, 'interactionUpdateFailed', { error: e }), 'error');
+            log.error(this.intlGet(null, 'interactionUpdateFailed', { error: e }));
         }
 
         return undefined;
@@ -500,8 +489,7 @@ class DiscordBot extends Discord.Client {
             return await message.edit(content);
         }
         catch (e) {
-            this.log(this.intlGet(null, 'errorCap'),
-                this.intlGet(null, 'messageEditFailed', { error: e }), 'error');
+            log.error(this.intlGet(null, 'messageEditFailed', { error: e }));
         }
 
         return undefined;
@@ -512,8 +500,7 @@ class DiscordBot extends Discord.Client {
             return await channel.send(content);
         }
         catch (e) {
-            this.log(this.intlGet(null, 'errorCap'),
-                this.intlGet(null, 'messageSendFailed', { error: e }), 'error');
+            log.error(this.intlGet(null, 'messageSendFailed', { error: e }));
         }
 
         return undefined;
@@ -524,8 +511,7 @@ class DiscordBot extends Discord.Client {
             return await message.reply(content);
         }
         catch (e) {
-            this.log(this.intlGet(null, 'errorCap'),
-                this.intlGet(null, 'messageReplyFailed', { error: e }), 'error');
+            log.error(this.intlGet(null, 'messageReplyFailed', { error: e }));
         }
 
         return undefined;
@@ -547,7 +533,7 @@ class DiscordBot extends Discord.Client {
             let role = DiscordTools.getRole(interaction.guildId, instance.roleId);
             const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
             await this.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-            this.log(this.intlGet(null, 'warningCap'), str);
+            log.warn(str);
             return false;
         }
         return true;

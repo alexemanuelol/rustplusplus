@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
@@ -65,7 +66,7 @@ module.exports = {
 					name: craftItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 			else {
@@ -81,14 +82,14 @@ module.exports = {
 					id: craftItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 		}
 		else if (craftItemName === null && craftItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 		const itemName = client.items.getName(itemId);
@@ -99,18 +100,18 @@ module.exports = {
 				name: itemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
 		const quantity = craftItemQuantity === null ? 1 : craftItemQuantity;
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${craftItemName} ${craftItemId} ${craftItemQuantity}`
 		}));
 
 		await DiscordMessages.sendCraftMessage(interaction, craftDetails, quantity);
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsCraftDesc'));
+		log.info(client.intlGet(guildId, 'commandsCraftDesc'));
 	},
 };

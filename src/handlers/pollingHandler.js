@@ -43,7 +43,7 @@ module.exports = {
         if (!(await rustplus.isResponseValid(time))) return;
 
         if (rustplus.isFirstPoll) {
-            rustplus.info = new Info(info.info);
+            rustplus.sInfo = new Info(info.info);
             rustplus.time = new Time(time.time, rustplus, client);
             rustplus.team = new Team(teamInfo.teamInfo, rustplus);
             rustplus.mapMarkers = new MapMarkers(mapMarkers.mapMarkers, rustplus, client);
@@ -62,7 +62,7 @@ module.exports = {
         await VendingMachines.handler(rustplus, client, mapMarkers.mapMarkers);
 
         rustplus.time.updateTime(time.time);
-        rustplus.info.updateInfo(info.info);
+        rustplus.sInfo.updateInfo(info.info);
         rustplus.mapMarkers.updateMapMarkers(mapMarkers.mapMarkers);
 
         await InformationHandler.handler(rustplus);

@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
@@ -60,7 +61,7 @@ module.exports = {
 					name: researchItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 			else {
@@ -76,14 +77,14 @@ module.exports = {
 					id: researchItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 		}
 		else if (researchItemName === null && researchItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 		const itemName = client.items.getName(itemId);
@@ -94,16 +95,16 @@ module.exports = {
 				name: itemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${researchItemName} ${researchItemId}`
 		}));
 
 		await DiscordMessages.sendResearchMessage(interaction, researchDetails);
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsResearchDesc'));
+		log.info(client.intlGet(guildId, 'commandsResearchDesc'));
 	},
 };

@@ -20,6 +20,7 @@
 
 const Builder = require('@discordjs/builders');
 
+import { log } from '../../index';
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 
 module.exports = {
@@ -94,7 +95,7 @@ module.exports = {
 					name: upkeepItemName
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 			itemId = foundName;
@@ -108,14 +109,14 @@ module.exports = {
 					id: upkeepItemId
 				});
 				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
+				log.warn(str);
 				return;
 			}
 		}
 		else if (upkeepItemName === null && upkeepItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -135,7 +136,7 @@ module.exports = {
 				name: itemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
+			log.warn(str);
 			return;
 		}
 
@@ -148,7 +149,7 @@ module.exports = {
 			items.push(`${quantity} ${name}`);
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+		log.info(client.intlGet(null, 'slashCommandValueChange', {
 			id: `${verifyId}`,
 			value: `${upkeepItemName} ${upkeepItemId}`
 		}));
@@ -159,6 +160,6 @@ module.exports = {
 		});
 
 		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
-		client.log(client.intlGet(null, 'infoCap'), str);
+		log.info(str);
 	},
 };

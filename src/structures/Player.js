@@ -139,7 +139,7 @@ class Player {
 
     updatePos() {
         if (this.isAlive || this.isOnline) {
-            this.pos = Map.getPos(this.rustplus.generalSettings.language, this.x, this.y, this.rustplus.info.mapSize,
+            this.pos = Map.getPos(this.rustplus.generalSettings.language, this.x, this.y, this.rustplus.sInfo.mapSize,
                 this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
         }
         else {

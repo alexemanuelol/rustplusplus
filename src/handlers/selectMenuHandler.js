@@ -20,6 +20,7 @@
 
 const Discord = require('discord.js');
 
+import { log } from '../../index';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -34,7 +35,7 @@ module.exports = async (client, interaction) => {
 
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userPartOfBlacklist', {
+        log.info(client.intlGet(null, 'userPartOfBlacklist', {
             id: `${verifyId}`,
             user: `${interaction.user.username} (${interaction.user.id})`
         }));
@@ -47,7 +48,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.language = interaction.values[0];
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+        log.info(client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.language}`
         }));
@@ -69,7 +70,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.prefix = interaction.values[0];
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+        log.info(client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.prefix}`
         }));
@@ -88,7 +89,7 @@ module.exports = async (client, interaction) => {
                 '' : `${instance.generalSettings.trademark} | `;
         }
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+        log.info(client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.trademark}`
         }));
@@ -103,7 +104,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.commandDelay = interaction.values[0];
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+        log.info(client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.commandDelay}`
         }));
@@ -118,7 +119,7 @@ module.exports = async (client, interaction) => {
 
         if (rustplus) rustplus.generalSettings.voiceGender = interaction.values[0];
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+        log.info(client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.voiceGender}`
         }));
@@ -143,7 +144,7 @@ module.exports = async (client, interaction) => {
             client.setInstance(guildId, instance);
         }
 
-        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+        log.info(client.intlGet(null, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${server.switches[ids.entityId].autoDayNightOnOff}`
         }));
@@ -151,7 +152,7 @@ module.exports = async (client, interaction) => {
         DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
 
-    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userSelectMenuInteractionSuccess', {
+    log.info(client.intlGet(null, 'userSelectMenuInteractionSuccess', {
         id: `${verifyId}`
     }));
 }

@@ -18,6 +18,7 @@
 
 */
 
+import { log } from '../../index';
 const DiscordCommandHandler = require('../handlers/discordCommandHandler.js');
 const DiscordTools = require('../discordTools/discordTools');
 
@@ -33,7 +34,7 @@ module.exports = {
             Object.values(instance.channelIds).includes(message.channelId)) {
             const guild = DiscordTools.getGuild(message.guild.id);
             const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
-            client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `userPartOfBlacklistDiscord`, {
+            log.info(client.intlGet(null, `userPartOfBlacklistDiscord`, {
                 guild: `${guild.name} (${guild.id})`,
                 channel: `${channel.name} (${channel.id})`,
                 user: `${message.author.username} (${message.author.id})`,
@@ -48,7 +49,7 @@ module.exports = {
         else if (message.channelId === instance.channelIds.teamchat) {
             const guild = DiscordTools.getGuild(message.guild.id);
             const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
-            client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, `logDiscordMessage`, {
+            log.info(client.intlGet(null, `logDiscordMessage`, {
                 guild: `${guild.name} (${guild.id})`,
                 channel: `${channel.name} (${channel.id})`,
                 user: `${message.author.username} (${message.author.id})`,
