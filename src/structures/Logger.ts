@@ -18,7 +18,7 @@
 
 */
 
-import * as Winston from 'winston';
+import * as winston from 'winston';
 import 'colors';
 
 function colorizeLevel(level: string): string {
@@ -36,11 +36,11 @@ function colorizeLevel(level: string): string {
     }
 }
 
-export function createLogger(logFilePath: string): Winston.Logger {
+export function createLogger(logFilePath: string): winston.Logger {
     /* Custom format to include additional metadata */
-    const customFormatConsole = Winston.format.combine(
-        Winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        Winston.format.printf(({ timestamp, level, message, ...metadata }) => {
+    const customFormatConsole = winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.printf(({ timestamp, level, message, ...metadata }) => {
             const coloredTimestamp = `${timestamp} `.green;
             const coloredLevel = `${level[colorizeLevel(level) as keyof String]} `;
             const coloredMessage = `${message} `.yellow;
@@ -51,9 +51,9 @@ export function createLogger(logFilePath: string): Winston.Logger {
         })
     );
 
-    const customFormatFile = Winston.format.combine(
-        Winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        Winston.format.printf(({ timestamp, level, message, ...metadata }) => {
+    const customFormatFile = winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.printf(({ timestamp, level, message, ...metadata }) => {
             const coloredTimestamp = `${timestamp} `;
             const coloredLevel = `${level} `;
             const coloredMessage = `${message} `;
@@ -64,15 +64,15 @@ export function createLogger(logFilePath: string): Winston.Logger {
         })
     );
 
-    const logger = Winston.createLogger({
+    const logger = winston.createLogger({
         level: 'debug', /* Log level */
         transports: [
             /* Console transport */
-            new Winston.transports.Console({
+            new winston.transports.Console({
                 format: customFormatConsole
             }),
             /* File transport */
-            new Winston.transports.File({
+            new winston.transports.File({
                 filename: logFilePath,
                 maxsize: 10 * 1024 * 1024, /* 10MB in bytes */
                 maxFiles: 5, /* Keep the last 5 log files */
