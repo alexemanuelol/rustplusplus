@@ -18,7 +18,7 @@
 
 */
 
-const Items = require('./Items');
+import { Items } from './Items';
 const RustlabsBuildingBlocks = require('../staticFiles/rustlabsBuildingBlocks.json');
 const RustlabsOther = require('../staticFiles/rustlabsOther.json');
 

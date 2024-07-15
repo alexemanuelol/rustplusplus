@@ -25,13 +25,13 @@ const Path = require('path');
 
 import { log } from '../../index';
 import { Cctv } from './Cctv';
+import { Items } from './Items';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
 const GuildInstance = require('../util/guild-instance.ts');
-const Items = require('./Items');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
