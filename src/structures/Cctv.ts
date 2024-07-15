@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
     Copyright (C) 2023 Squidysquid1
 
     This program is free software: you can redistribute it and/or modify
@@ -19,31 +19,35 @@
 
 */
 
-const Fs = require('fs');
-const Path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 
-class Cctv {
+export interface CctvData {
+    [monument: string]: {
+        dynamic: boolean;
+        codes: string[];
+    };
+}
+
+export class Cctv {
+    cctvs: CctvData;
+
     constructor() {
-        this._cctvs = JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'staticFiles', 'cctv.json'), 'utf8'));
+        const filePath = path.join(__dirname, '..', 'staticFiles', 'cctv.json');
+        this.cctvs = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     }
 
-    /* Getters and Setters */
-    get cctvs() { return this._cctvs; }
-    set cctvs(cctvs) { this._cctvs = cctvs; }
+    cctvExist(monument: string): boolean {
+        return monument in this.cctvs;
+    }
 
-    cctvExist(monument) { return (monument in this.cctvs) ? true : false; }
-
-    isDynamic(monument) {
-        if (!this.cctvExist(monument)) return undefined;
+    isDynamic(monument: string): boolean | null {
+        if (!this.cctvExist(monument)) return null;
         return this.cctvs[monument].dynamic;
     }
 
-    getCodes(monument) {
-        if (!this.cctvExist(monument)) return undefined;
+    getCodes(monument: string): string[] | null {
+        if (!this.cctvExist(monument)) return null;
         return this.cctvs[monument].codes;
     }
-
 }
-
-module.exports = Cctv;

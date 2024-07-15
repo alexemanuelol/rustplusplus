@@ -24,8 +24,8 @@ const Fs = require('fs');
 const Path = require('path');
 
 import { log } from '../../index';
+import { Cctv } from './Cctv';
 const Battlemetrics = require('../structures/Battlemetrics');
-const Cctv = require('./Cctv');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
