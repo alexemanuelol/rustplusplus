@@ -23,6 +23,7 @@ module.exports = {
 			embeds: [client.discordEmbeds.getActionInfoEmbed(0, str)]
 		});
 		client.log(client.intlGet(null, 'infoCap'), str);
+		rustplus.log(client.intlGet(null, 'infoCap'), str);
 
 		// Завершение процесса Node.js
 		process.exit(0);
