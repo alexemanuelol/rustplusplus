@@ -59,7 +59,7 @@ module.exports = {
             return;
         }
         rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'rustplusOperational'));
-
+        client.intlGet(interaction.guildId, 'rustplusOperational'));
         const info = await rustplus.getInfoAsync();
         if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
 
