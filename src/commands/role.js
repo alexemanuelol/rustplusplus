@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
+import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordTools = require('../discordTools/discordTools');
 const PermissionHandler = require('../handlers/permissionHandler.js');
@@ -89,7 +90,7 @@ module.exports = {
 		const guild = DiscordTools.getGuild(interaction.guildId);
 		if (guild) {
 			const category = await setupGuildCategory(client, guild);
-			await require('../discordTools/SetupGuildChannels')(client, guild, category);
+			await setupGuildChannels(client, guild, category);
 			await PermissionHandler.resetPermissionsAllChannels(client, guild);
 		}
 
