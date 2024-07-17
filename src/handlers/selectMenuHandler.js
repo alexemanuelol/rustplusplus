@@ -21,6 +21,7 @@
 const Discord = require('discord.js');
 
 import { log } from '../../index';
+import { registerSlashCommands } from '../discordTools/register-slash-commands';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -62,7 +63,7 @@ module.exports = async (client, interaction) => {
         });
 
         const guild = DiscordTools.getGuild(guildId);
-        await require('../discordTools/RegisterSlashCommands')(client, guild);
+        await registerSlashCommands(client, guild);
     }
     else if (interaction.customId === 'Prefix') {
         instance.generalSettings.prefix = interaction.values[0];

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,32 +18,36 @@
 
 */
 
-const Fs = require("fs");
-const Path = require('path');
-const Rest = require('@discordjs/rest');
-const Types = require('discord-api-types/v9');
+import * as fs from 'fs';
+import * as path from 'path';
+import { Guild } from 'discord.js';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
 
 import { log } from '../../index';
 const Config = require('../../config');
+const { DiscordBot } = require('../structures/DiscordBot.js');
 
-module.exports = async (client, guild) => {
+export async function registerSlashCommands(client: typeof DiscordBot, guild: Guild) {
+    const guildId = guild.id;
     const commands = [];
-    const commandFiles = Fs.readdirSync(Path.join(__dirname, '..', 'commands')).filter(file => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync(path.join(__dirname, '..', 'commands')).filter(file =>
+        file.endsWith('.js') || file.endsWith('.ts'));
 
     for (const file of commandFiles) {
         const command = require(`../commands/${file}`);
-        commands.push(command.getData(client, guild.id).toJSON());
+        commands.push(command.getData(client, guildId).toJSON());
     }
 
-    const rest = new Rest.REST({ version: '9' }).setToken(Config.discord.token);
+    const rest = new REST({ version: '9' }).setToken(Config.discord.token);
 
     try {
-        await rest.put(Types.Routes.applicationGuildCommands(Config.discord.clientId, guild.id), { body: commands });
+        await rest.put(Routes.applicationGuildCommands(Config.discord.clientId, guildId), { body: commands });
     }
     catch (e) {
-        log.error(client.intlGet(null, 'couldNotRegisterSlashCommands', { guildId: guild.id }) +
+        log.error(client.intlGet(null, 'couldNotRegisterSlashCommands', { guildId: guildId }) +
             client.intlGet(null, 'makeSureApplicationsCommandsEnabled'));
         process.exit(1);
     }
-    log.info(client.intlGet(null, 'slashCommandsSuccessRegister', { guildId: guild.id }));
-};
+    log.info(client.intlGet(null, 'slashCommandsSuccessRegister', { guildId: guildId }));
+}
