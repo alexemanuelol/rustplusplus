@@ -18,6 +18,10 @@
 
 */
 
+import { setupAlarms } from '../discordTools/setup-alarms';
+import { setupSwitches } from '../discordTools/setup-switches';
+import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
+import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
@@ -97,10 +101,11 @@ module.exports = {
         await DiscordMessages.sendServerMessage(guildId, serverId, null);
 
         /* Setup Smart Devices */
-        await require('../discordTools/SetupSwitches')(client, rustplus);
-        await require('../discordTools/SetupSwitchGroups')(client, rustplus);
-        await require('../discordTools/SetupAlarms')(client, rustplus);
-        await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+        await setupSwitches(client, rustplus);
+        await setupSwitchGroups(client, rustplus);
+        await setupAlarms(client, rustplus);
+        await setupStorageMonitors(client, rustplus);
+
         rustplus.isNewConnection = false;
         rustplus.loadMarkers();
 

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,24 +19,21 @@
 */
 
 const DiscordMessages = require('./discordMessages.js');
-const DiscordTools = require('./discordTools.js');
+const { DiscordBot } = require('../structures/DiscordBot.js');
+const { RustPlus } = require('../structures/RustPlus.js');
 
-module.exports = async (client, rustplus) => {
-    const instance = client.getInstance(rustplus.guildId);
+export async function setupAlarms(client: typeof DiscordBot, rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
+    const instance = client.getInstance(guildId);
     const serverId = rustplus.serverId;
 
-    if (rustplus.isNewConnection) {
-        await DiscordTools.clearTextChannel(guildId, instance.channelIds.switches, 100);
-    }
-
-    for (const entityId in instance.serverList[serverId].switches) {
-        const entity = instance.serverList[serverId].switches[entityId];
+    for (const entityId in instance.serverList[serverId].alarms) {
+        const entity = instance.serverList[serverId].alarms[entityId];
         const info = await rustplus.getEntityInfoAsync(entityId);
 
         if (!(await rustplus.isResponseValid(info))) {
             if (entity.reachable === true) {
-                await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                await DiscordMessages.sendSmartAlarmNotFoundMessage(guildId, serverId, entityId);
             }
             entity.reachable = false;
         }
@@ -48,6 +45,6 @@ module.exports = async (client, rustplus) => {
 
         client.setInstance(guildId, instance);
 
-        await DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+        await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
     }
-};
+}

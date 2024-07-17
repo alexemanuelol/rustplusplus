@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,16 +20,18 @@
 
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
+const { DiscordBot } = require('../structures/DiscordBot.js');
+const { RustPlus } = require('../structures/RustPlus.js');
 
-module.exports = async (client, rustplus) => {
-    const instance = client.getInstance(rustplus.guildId);
+export async function setupSwitchGroups(client: typeof DiscordBot, rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
+    const instance = client.getInstance(guildId);
 
     if (rustplus.isNewConnection) {
         await DiscordTools.clearTextChannel(guildId, instance.channelIds.switchGroups, 100);
     }
 
     for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {
-        await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, rustplus.serverId, groupId);
+        await DiscordMessages.sendSmartSwitchGroupMessage(guildId, rustplus.serverId, groupId);
     }
-};
+}
