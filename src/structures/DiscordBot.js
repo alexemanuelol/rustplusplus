@@ -88,7 +88,7 @@ class DiscordBot extends Discord.Client {
 
     loadDiscordEvents() {
         const eventFiles = Fs.readdirSync(Path.join(__dirname, '..', 'discordEvents'))
-            .filter(file => file.endsWith('.js'));
+            .filter(file => file.endsWith('.ts'));
         for (const file of eventFiles) {
             const event = require(`../discordEvents/${file}`);
 

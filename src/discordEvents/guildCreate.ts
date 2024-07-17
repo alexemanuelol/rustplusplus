@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,12 +18,21 @@
 
 */
 
-import { log } from '../../index';
+import { Guild } from 'discord.js';
 
-module.exports = {
-    name: 'error',
-    async execute(client, error) {
-        log.error(error);
-        process.exit(1);
-    },
+import * as guildInstance from '../util/guild-instance';
+const { DiscordBot } = require('../structures/DiscordBot.js');
+
+export const name = 'guildCreate';
+
+export async function execute(client: typeof DiscordBot, guild: Guild) {
+    guildInstance.createGuildInstanceFile(guild.id);
+    const gi = guildInstance.readGuildInstanceFile(guild.id);
+    client.setInstance(guild.id, gi); // TODO! TEMP
+
+    client.fcmListenersLite[guild.id] = new Object();
+
+    client.loadGuildIntl(guild.id);
+
+    await client.setupGuild(guild);
 }

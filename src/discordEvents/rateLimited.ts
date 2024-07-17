@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,19 +17,21 @@
     https://github.com/alexemanuelol/rustplusplus
 
 */
+import { RateLimitData } from '@discordjs/rest';
 
 import { log } from '../../index';
+const { DiscordBot } = require('../structures/DiscordBot.js');
 
-module.exports = {
-    name: 'rateLimited',
-    async execute(client, info) {
-        log.warn(
-            `${client.intlGet(null, 'ratelimited')}: ` +
-            `Timeout: ${info.timeToReset}, ` +
-            `Limit: ${info.limit}, ` +
-            `Method: ${info.method}, ` +
-            `Path: ${info.url}, ` +
-            `Route: ${info.route}, ` +
-            `Global: ${info.global}`);
-    },
+export const name = 'rateLimited';
+
+export async function execute(client: typeof DiscordBot, info: RateLimitData) {
+    log.warn(
+        `${client.intlGet(null, 'ratelimited')}: ` +
+        `Timeout: ${info.timeToReset}, ` +
+        `Limit: ${info.limit}, ` +
+        `Method: ${info.method}, ` +
+        `Path: ${info.url}, ` +
+        `Route: ${info.route}, ` +
+        `Global: ${info.global}`
+    );
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2023 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,19 +17,15 @@
     https://github.com/alexemanuelol/rustplusplus
 
 */
+import { VoiceState } from 'discord.js';
+import { getVoiceConnection } from '@discordjs/voice';
 
-const { getVoiceConnection } = require('@discordjs/voice');
+import * as constants from '../util/constants';
+const { DiscordBot } = require('../structures/DiscordBot.js');
 
-const Constants = require('../util/constants');
+export const name = 'voiceStateUpdate';
 
-module.exports = {
-    name: 'voiceStateUpdate',
-    async execute(client, oldState, newState) {
-        checkBotLeaveVoice(client, oldState, newState);
-    },
-}
-
-async function checkBotLeaveVoice(client, oldState, newState) {
+export async function execute(client: typeof DiscordBot, oldState: VoiceState, newState: VoiceState) {
     const guildId = oldState.guild.id;
 
     if (!client.voiceLeaveTimeouts.hasOwnProperty(guildId)) client.voiceLeaveTimeouts[guildId] = null;
@@ -41,6 +37,7 @@ async function checkBotLeaveVoice(client, oldState, newState) {
     if (!connection) return; /* Bot is not in any voice channel. */
 
     const botChannelId = connection.joinConfig.channelId;
+    if (!oldState.member) return; /* is member null? */
     const memberId = oldState.member.id;
 
     /* If user join same channel as bot */
@@ -65,14 +62,11 @@ async function checkBotLeaveVoice(client, oldState, newState) {
     }
 
     if (condition && channel && channel.members.size === 1) {
-        client.voiceLeaveTimeouts[guildId] = setTimeout(botLeaveVoiceTimeout.bind(null, guildId),
-            Constants.BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS);
-    }
-}
-
-function botLeaveVoiceTimeout(guildId) {
-    const connection = getVoiceConnection(guildId);
-    if (connection) {
-        connection.destroy();
+        client.voiceLeaveTimeouts[guildId] = setTimeout(() => {
+            const connection = getVoiceConnection(guildId);
+            if (connection) {
+                connection.destroy();
+            }
+        }, constants.BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS);
     }
 }
