@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,15 +18,19 @@
 
 */
 
+import { Guild } from 'discord.js';
+
+const { DiscordBot } = require('../structures/DiscordBot.js');
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
 
-module.exports = async (client, guild) => {
-    const instance = client.getInstance(guild.id);
+export async function setupServerList(client: typeof DiscordBot, guild: Guild) {
+    const guildId = guild.id;
+    const instance = client.getInstance(guildId);
 
-    await DiscordTools.clearTextChannel(guild.id, instance.channelIds.servers, 100);
+    await DiscordTools.clearTextChannel(guildId, instance.channelIds.servers, 100);
 
     for (const serverId in instance.serverList) {
-        await DiscordMessages.sendServerMessage(guild.id, serverId);
+        await DiscordMessages.sendServerMessage(guildId, serverId);
     }
-};
+}
