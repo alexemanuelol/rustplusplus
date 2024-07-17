@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,20 +18,24 @@
 
 */
 
+import { Guild, CategoryChannel } from 'discord.js';
+
 const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
+const { DiscordBot } = require('../structures/DiscordBot.js');
 
-module.exports = async (client, guild) => {
-    const instance = client.getInstance(guild.id);
+export async function setupGuildCategory(client: typeof DiscordBot, guild: Guild): Promise<CategoryChannel> {
+    const guildId = guild.id;
+    const instance = client.getInstance(guildId);
 
     let category = undefined;
     if (instance.channelIds.category !== null) {
-        category = DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
+        category = DiscordTools.getCategoryById(guildId, instance.channelIds.category);
     }
     if (category === undefined) {
-        category = await DiscordTools.addCategory(guild.id, 'rustplusplus');
+        category = await DiscordTools.addCategory(guildId, 'rustplusplus');
         instance.channelIds.category = category.id;
-        client.setInstance(guild.id, instance);
+        client.setInstance(guildId, instance);
     }
 
     const perms = PermissionHandler.getPermissionsReset(client, guild, false);
@@ -44,4 +48,4 @@ module.exports = async (client, guild) => {
     }
 
     return category;
-};
+}
