@@ -25,6 +25,8 @@ import { removeGuildChannels } from '../discordTools/remove-guild-channels';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 import { setupServerList } from '../discordTools/setup-server-list';
+import { setupSettingsMenu } from '../discordTools/setup-settings-menu';
+import { setupTrackers } from '../discordTools/setup-trackers';
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -109,7 +111,7 @@ module.exports = {
 				}
 
 				await setupServerList(client, guild);
-				await require('../discordTools/SetupSettingsMenu')(client, guild, true);
+				await setupSettingsMenu(client, guild, true);
 
 				if (rustplus && rustplus.isOperational) {
 					await require('../discordTools/SetupSwitches')(client, rustplus);
@@ -118,7 +120,7 @@ module.exports = {
 					await require('../discordTools/SetupStorageMonitors')(client, rustplus);
 				}
 
-				await require('../discordTools/SetupTrackers')(client, guild);
+				await setupTrackers(client, guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
@@ -173,7 +175,7 @@ module.exports = {
 					/* Ignore */
 				}
 
-				await require('../discordTools/SetupSettingsMenu')(client, guild, true);
+				await setupSettingsMenu(client, guild, true);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
@@ -257,7 +259,7 @@ module.exports = {
 					/* Ignore */
 				}
 
-				await require('../discordTools/SetupTrackers')(client, guild);
+				await setupTrackers(client, guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
