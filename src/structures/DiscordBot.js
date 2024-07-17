@@ -29,6 +29,7 @@ import { Items } from './Items';
 import { registerSlashCommands } from '../discordTools/register-slash-commands';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
+import { setupSettingsMenu } from '../discordTools/setup-settings-menu';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
@@ -230,7 +231,7 @@ class DiscordBot extends Discord.Client {
             }
         }
 
-        await require('../discordTools/SetupSettingsMenu')(this, guild);
+        await setupSettingsMenu(this, guild);
 
         if (firstTime) await PermissionHandler.resetPermissionsAllChannels(this, guild);
 
