@@ -28,6 +28,7 @@ import { Cctv } from './Cctv';
 import { Items } from './Items';
 import { registerSlashCommands } from '../discordTools/register-slash-commands';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
+import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
@@ -207,7 +208,7 @@ class DiscordBot extends Discord.Client {
         await registerSlashCommands(this, guild);
 
         const category = await setupGuildCategory(this, guild);
-        await require('../discordTools/SetupGuildChannels')(this, guild, category);
+        await setupGuildChannels(this, guild, category);
         if (firstTime) {
             const perms = PermissionHandler.getPermissionsRemoved(this, guild);
             try {

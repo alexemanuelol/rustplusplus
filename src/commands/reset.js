@@ -23,6 +23,7 @@ const Builder = require('@discordjs/builders');
 import { log } from '../../index';
 import { removeGuildChannels } from '../discordTools/remove-guild-channels';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
+import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -85,7 +86,7 @@ module.exports = {
 				await removeGuildChannels(client, guild);
 
 				const category = await setupGuildCategory(client, guild);
-				await require('../discordTools/SetupGuildChannels')(client, guild, category);
+				await setupGuildChannels(client, guild, category);
 
 				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
 				try {
