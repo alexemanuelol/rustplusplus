@@ -64,10 +64,20 @@ const str = client.intlGet(guildId, 'rustplusOperational');
 		
         
         client.log(client.intlGet(null, 'infoCap'), str);
-		rustplus.log(client.intlGet(null, 'infoCap'), str);
+		rustplus.log(client.intlGet(null, 'eventCap'), str);
 		
+
+	
+
+	
+rustplus.log(client.intlGet(null, 'messageCap'), str);
+
+                    
+	
+
+	
         
-        client.intlGet(interaction.guildId, 'rustplusOperational'));
+        //client.intlGet(guildId, 'rustplusOperational'));
         const info = await rustplus.getInfoAsync();
         if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
 
