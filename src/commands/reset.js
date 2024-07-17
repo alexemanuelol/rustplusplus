@@ -21,6 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
+import { removeGuildChannels } from '../discordTools/remove-guild-channels';
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -80,7 +81,7 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'discord': {
-				await require('../discordTools/RemoveGuildChannels')(client, guild);
+				await removeGuildChannels(client, guild);
 
 				const category = await require('../discordTools/SetupGuildCategory')(client, guild);
 				await require('../discordTools/SetupGuildChannels')(client, guild, category);

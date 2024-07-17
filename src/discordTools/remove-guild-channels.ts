@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,10 +18,14 @@
 
 */
 
+import { Guild } from 'discord.js';
+
+const { DiscordBot } = require('../structures/DiscordBot.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 
-module.exports = async (client, guild) => {
-    const instance = client.getInstance(guild.id);
+export async function removeGuildChannels(client: typeof DiscordBot, guild: Guild) {
+    const guildId = guild.id;
+    const instance = client.getInstance(guildId);
 
     let categoryId = null;
     for (const [channelName, channelId] of Object.entries(instance.channelIds)) {
@@ -30,12 +34,12 @@ module.exports = async (client, guild) => {
             continue;
         }
 
-        await DiscordTools.removeTextChannel(guild.id, channelId);
+        await DiscordTools.removeTextChannel(guildId, channelId);
         instance.channelIds[channelName] = null;
     }
 
-    await DiscordTools.removeCategory(guild.id, categoryId);
+    await DiscordTools.removeCategory(guildId, categoryId);
     instance.channelIds['category'] = null;
 
-    client.setInstance(guild.id, instance);
-};
+    client.setInstance(guildId, instance);
+}
