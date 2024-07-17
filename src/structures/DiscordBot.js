@@ -26,6 +26,7 @@ const Path = require('path');
 import { log } from '../../index';
 import { Cctv } from './Cctv';
 import { Items } from './Items';
+import { registerSlashCommands } from '../discordTools/register-slash-commands';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
@@ -202,7 +203,7 @@ class DiscordBot extends Discord.Client {
         const instance = this.getInstance(guild.id);
         const firstTime = instance.firstTime;
 
-        await require('../discordTools/RegisterSlashCommands')(this, guild);
+        await registerSlashCommands(this, guild);
 
         let category = await require('../discordTools/SetupGuildCategory')(this, guild);
         await require('../discordTools/SetupGuildChannels')(this, guild, category);
