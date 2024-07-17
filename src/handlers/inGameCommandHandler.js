@@ -47,6 +47,10 @@ module.exports = {
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxAfk')}`) {
             rustplus.sendInGameMessage(rustplus.getCommandAfk());
         }
+       else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandRestart')}` ||
+            commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandRestart')}`) {
+            rustplus.sendInGameMessage(rustplus.getCommandAfk());
+        }
         else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxAlive')}`) ||
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxAlive')}`)) {
             rustplus.sendInGameMessage(rustplus.getCommandAlive(command));
