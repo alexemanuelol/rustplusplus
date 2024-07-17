@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,13 +18,15 @@
 
 */
 
-const Constants = require('../util/constants.ts');
+import * as constants from '../util/constants';
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
+const { DiscordBot } = require('../structures/DiscordBot.js');
+const { RustPlus } = require('../structures/RustPlus.js');
 
-module.exports = async (client, rustplus) => {
-    const instance = client.getInstance(rustplus.guildId);
+export async function setupStorageMonitors(client: typeof DiscordBot, rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
+    const instance = client.getInstance(guildId);
     const serverId = rustplus.serverId;
 
     if (rustplus.isNewConnection) {
@@ -55,7 +57,7 @@ module.exports = async (client, rustplus) => {
             }
 
             if (info.entityInfo.payload.capacity !== 0) {
-                if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
+                if (info.entityInfo.payload.capacity === constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
                     entity.type = 'toolCupboard';
                     if (info.entityInfo.payload.protectionExpiry === 0) {
                         entity.decaying = true;
@@ -64,10 +66,10 @@ module.exports = async (client, rustplus) => {
                         entity.decaying = false;
                     }
                 }
-                else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_VENDING_MACHINE_CAPACITY) {
+                else if (info.entityInfo.payload.capacity === constants.STORAGE_MONITOR_VENDING_MACHINE_CAPACITY) {
                     entity.type = 'vendingMachine';
                 }
-                else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
+                else if (info.entityInfo.payload.capacity === constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
                     entity.type = 'largeWoodBox';
                 }
                 client.setInstance(guildId, instance);
@@ -76,4 +78,4 @@ module.exports = async (client, rustplus) => {
 
         await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, entityId);
     }
-};
+}

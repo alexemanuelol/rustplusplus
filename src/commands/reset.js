@@ -27,6 +27,10 @@ import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 import { setupServerList } from '../discordTools/setup-server-list';
 import { setupSettingsMenu } from '../discordTools/setup-settings-menu';
 import { setupTrackers } from '../discordTools/setup-trackers';
+import { setupAlarms } from '../discordTools/setup-alarms';
+import { setupSwitches } from '../discordTools/setup-switches';
+import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
+import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -114,10 +118,10 @@ module.exports = {
 				await setupSettingsMenu(client, guild, true);
 
 				if (rustplus && rustplus.isOperational) {
-					await require('../discordTools/SetupSwitches')(client, rustplus);
-					await require('../discordTools/SetupSwitchGroups')(client, rustplus);
-					await require('../discordTools/SetupAlarms')(client, rustplus);
-					await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+					await setupSwitches(client, rustplus);
+					await setupSwitchGroups(client, rustplus);
+					await setupAlarms(client, rustplus);
+					await setupStorageMonitors(client, rustplus);
 				}
 
 				await setupTrackers(client, guild);
@@ -200,8 +204,8 @@ module.exports = {
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await require('../discordTools/SetupSwitches')(client, rustplus);
-					await require('../discordTools/SetupSwitchGroups')(client, rustplus);
+					await setupSwitches(client, rustplus);
+					await setupSwitchGroups(client, rustplus);
 				}
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
@@ -215,7 +219,7 @@ module.exports = {
 			case 'alarms': {
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await require('../discordTools/SetupAlarms')(client, rustplus);
+					await setupAlarms(client, rustplus);
 				}
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
@@ -238,7 +242,7 @@ module.exports = {
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+					await setupStorageMonitors(client, rustplus);
 				}
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
