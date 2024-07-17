@@ -24,6 +24,7 @@ import { log } from '../../index';
 import { removeGuildChannels } from '../discordTools/remove-guild-channels';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
+import { setupServerList } from '../discordTools/setup-server-list';
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -107,7 +108,7 @@ module.exports = {
 					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
 
-				await require('../discordTools/SetupServerList')(client, guild);
+				await setupServerList(client, guild);
 				await require('../discordTools/SetupSettingsMenu')(client, guild, true);
 
 				if (rustplus && rustplus.isOperational) {
@@ -152,7 +153,7 @@ module.exports = {
 					/* Ignore */
 				}
 
-				await require('../discordTools/SetupServerList')(client, guild);
+				await setupServerList(client, guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
