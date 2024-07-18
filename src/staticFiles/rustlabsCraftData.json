@@ -1003,8 +1003,8 @@
       }
     ],
     "workbench": "-1607980696",
-    "time": 30,
-    "timeString": "30 sec"
+    "time": 15,
+    "timeString": "15 sec"
   },
   "674734128": {
     "ingredients": [
@@ -4561,6 +4561,17 @@
     "time": 1.25,
     "timeString": "1–2 sec"
   },
+  "-839576748": {
+    "ingredients": [
+      {
+        "id": "69511070",
+        "quantity": 70
+      }
+    ],
+    "workbench": "-41896755",
+    "time": 11.25,
+    "timeString": "7–15 sec"
+  },
   "-1252059217": {
     "ingredients": [
       {
@@ -5315,8 +5326,8 @@
       }
     ],
     "workbench": "1524187186",
-    "time": 18.75,
-    "timeString": "7–30 sec"
+    "time": 9.375,
+    "timeString": "3–15 sec"
   },
   "-1539025626": {
     "ingredients": [
@@ -5616,6 +5627,17 @@
     "workbench": "-41896755",
     "time": 22.5,
     "timeString": "15–30 sec"
+  },
+  "-892718768": {
+    "ingredients": [
+      {
+        "id": "-858312878",
+        "quantity": 20
+      }
+    ],
+    "workbench": "1524187186",
+    "time": 9.375,
+    "timeString": "3–15 sec"
   },
   "-986782031": {
     "ingredients": [
@@ -6023,6 +6045,21 @@
     "workbench": "1524187186",
     "time": 3.125,
     "timeString": "1–5 sec"
+  },
+  "-948291630": {
+    "ingredients": [
+      {
+        "id": "317398316",
+        "quantity": 3
+      },
+      {
+        "id": "73681876",
+        "quantity": 1
+      }
+    ],
+    "workbench": "-41896755",
+    "time": 22.5,
+    "timeString": "15–30 sec"
   },
   "-904863145": {
     "ingredients": [
@@ -6504,8 +6541,8 @@
       }
     ],
     "workbench": "-41896755",
-    "time": 22.5,
-    "timeString": "15–30 sec"
+    "time": 11.25,
+    "timeString": "7–15 sec"
   },
   "-1785231475": {
     "ingredients": [
@@ -6875,8 +6912,8 @@
       }
     ],
     "workbench": null,
-    "time": 18.75,
-    "timeString": "7–30 sec"
+    "time": 9.375,
+    "timeString": "3–15 sec"
   },
   "-180129657": {
     "ingredients": [
@@ -6949,8 +6986,8 @@
       }
     ],
     "workbench": null,
-    "time": 18.75,
-    "timeString": "7–30 sec"
+    "time": 9.375,
+    "timeString": "3–15 sec"
   },
   "-41896755": {
     "ingredients": [
