@@ -64,8 +64,6 @@ class MapMarkers {
 
         /* Event location */
         this.patrolHelicopterDestroyedLocation = null;
-        this.oldCargoShipLocation = null;
-        this.isCargoShipDocked = null;
 
         /* Vending Machine variables */
         this.knownVendingMachines = [];
@@ -487,6 +485,7 @@ class MapMarkers {
 
             marker.location = pos;
             marker.onItsWayOut = false;
+            marker.isDocked = false;
 
             /* Offset that is used to determine if CargoShip just spawned */
             let offset = 4 * Map.gridDiameter;
@@ -541,56 +540,52 @@ class MapMarkers {
             let mapSize = this.rustplus.info.correctedMapSize;
             let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
             let cargoShip = this.getMarkerByTypeId(this.types.CargoShip, marker.id);
-            
-            let harbors = [];
-            for (let monument of this.rustplus.map.monuments) {
+
+            this.rustplus.cargoShipTracers[marker.id].push({ x: marker.x, y: marker.y });
+
+            const harbors = [];
+            for (const monument of this.rustplus.map.monuments) {
                 if (/harbor/.test(monument.token)) {
                     harbors.push({ x: monument.x, y: monument.y })
                 }
             }
 
-            this.rustplus.cargoShipTracers[marker.id].push({ x: marker.x, y: marker.y });
+            /* If CargoShip is docked at Harbor */
+            if (!this.rustplus.isFirstPoll && !cargoShip.isDocked) {
+                for (const harbor of harbors) {
+                    if (Map.getDistance(marker.x, marker.y, harbor.x, harbor.y) <= Constants.HARBOR_DOCK_DISTANCE) {
+                        if (marker.x === cargoShip.x && marker.y === cargoShip.y) {
+                            /* CargoShip is now docked. */
+                            const harborLocation = Map.getPos(harbor.x, harbor.y, mapSize, this.rustplus);
+                            cargoShip.isDocked = true;
+                            this.rustplus.sendEvent(
+                                this.rustplus.notificationSettings.cargoShipDockingAtHarborSetting,
+                                this.client.intlGet(this.rustplus.guildId, 'cargoShipDockingAtHarbor',
+                                    { location: harborLocation.location }), 'cargo', Constants.COLOR_CARGO_SHIP_DOCKED
+                            );
+                        }
+                    }
+                }
+            }
+            else if (!this.rustplus.isFirstPoll && cargoShip.isDocked) {
+                for (const harbor of harbors) {
+                    if (Map.getDistance(marker.x, marker.y, harbor.x, harbor.y) <= Constants.HARBOR_DOCK_DISTANCE) {
+                        if (marker.x !== cargoShip.x || marker.y !== cargoShip.y) {
+                            const harborLocation = Map.getPos(harbor.x, harbor.y, mapSize, this.rustplus);
+                            cargoShip.isDocked = false;
+                            this.rustplus.sendEvent(
+                                this.rustplus.notificationSettings.cargoShipDockingAtHarborSetting,
+                                this.client.intlGet(this.rustplus.guildId, 'cargoShipLeftHarbor',
+                                    { location: harborLocation.location }), 'cargo', Constants.COLOR_CARGO_SHIP_DOCKED
+                            );
+                        }
+                    }
+                }
+            }
 
             cargoShip.x = marker.x;
             cargoShip.y = marker.y;
             cargoShip.location = pos;
-            
-            /* If CargoShip is docked at Harbor */
-            if(!this.rustplus.isFirstPoll && !this.isCargoShipDocked) {
-                for(let harbor of harbors){
-                    if(Map.getDistance(cargoShip.x, cargoShip.y, harbor.x, harbor.y) <= Constants.HARBOR_DOCK_DISTANCE){
-                        if(cargoShip.x === this.oldCargoShipLocation.x && cargoShip.y === this.oldCargoShipLocation.y){
-                            let harborLocation = Map.getPos(harbor.x, harbor.y, mapSize, this.rustplus);
-                            this.isCargoShipDocked = true;
-                            this.rustplus.sendEvent(
-                                this.rustplus.notificationSettings.cargoShipDockingAtHarborSetting,
-                                this.client.intlGet(this.rustplus.guildId, 'cargoShipDockingAtHarbor', 
-                                    { location: harborLocation.location }),
-                                'cargo',
-                                Constants.COLOR_CARGO_SHIP_DOCKED
-                        );
-                        }
-                    }
-                }
-            }
-            else if(!this.rustplus.isFirstPoll && this.isCargoShipDocked){
-                for (let harbor of harbors) {
-                    if(Map.getDistance(cargoShip.x, cargoShip.y, harbor.x, harbor.y) <= Constants.HARBOR_DOCK_DISTANCE){
-                        if(cargoShip.x !== this.oldCargoShipLocation.x && cargoShip.y !== this.oldCargoShipLocation.y){
-                            let harborLocation = Map.getPos(harbor.x, harbor.y, mapSize, this.rustplus);
-                            this.isCargoShipDocked = false;
-                            this.rustplus.sendEvent(
-                                this.rustplus.notificationSettings.cargoShipDockingAtHarborSetting,
-                                this.client.intlGet(this.rustplus.guildId, 'cargoShipLeftHarbor', 
-                                    { location: harborLocation.location }),
-                                'cargo',
-                                Constants.COLOR_CARGO_SHIP_DOCKED
-                        );
-                        }
-                    }
-                }
-            }
-            this.oldCargoShipLocation = { x: cargoShip.x, y: cargoShip.y };
         }
     }
 
