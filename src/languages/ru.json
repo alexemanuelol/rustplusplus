@@ -463,7 +463,7 @@
     "linkCap": "ССЫЛКА",
     "location": "Местоположение",
     "lockedCrateLargeOilRigUnlocked": "Запертый ящик на большой нефтяной вышке ({location}) был разблокирован.",
-    "lockedCrateLargeOilRigUnlockedSetting": "When a Locked Crate at Large Oil Rig is unlocked, send a notification.",
+    "lockedCrateLargeOilRigUnlockedSetting": "Когда запертый ящик на Большой нефтяной вышке будет разблокирован, отправьте уведомление.",
     "lockedCrateOilRigUnlockedSetting": "Уведомление при открытии запертого ящика на Нефтяной вышке.",
     "lockedCrateSmallOilRigUnlocked": "Запертый ящик на Маленькой Нефтяной Вышке ({location}) был разблокирован.",
     "logDiscordCommand": "Discord  Command - Guild: {guild}, Канал: {channel}, Пользователь: {user}, Сообщение: {message}.",
