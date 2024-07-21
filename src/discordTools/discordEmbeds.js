@@ -699,6 +699,40 @@ module.exports = {
         const guildId = rustplus.guildId;
         const instance = Client.client.getInstance(guildId);
 
+        const emptyFieldValue = { name: '\u200B', value: '\u200B', inline: true };
+        let firstWipe = emptyFieldValue;
+        let secondWipe = emptyFieldValue;
+
+        const battlemetricsId = instance.activeServer !== null ?
+            instance.serverList[instance.activeServer].battlemetricsId : null;
+
+        if (battlemetricsId && instance.generalSettings.displayInformationBattlemetricsUpcomingWipes){
+            const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
+            const upcomingWipes = bmInstance.getUpcomingWipesOrderedByTime();
+
+            if (upcomingWipes.length > 0){
+                const closestWipe = upcomingWipes[0];
+                if (closestWipe.type === 'map' || closestWipe.type === 'full') {
+                /* try match next map or full wipe*/
+                const nextMapWipe = upcomingWipes.find((upcoming)=> upcoming.type === 'map')
+                if (nextMapWipe){
+                    firstWipe = { name: Client.client.intlGet(guildId, 'nextMapWipe'), value: `<t:${nextMapWipe.discordTimestamp}:R>`, inline: true}
+                }
+                const nextFullWipe = upcomingWipes.find((upcoming)=> upcoming.type === 'full')
+                if (nextFullWipe){
+                    secondWipe = { name: Client.client.intlGet(guildId, 'nextFullWipe'), value: `<t:${nextFullWipe.discordTimestamp}:R> `, inline: true }
+                }
+                } else {
+                    /*if closest wipe is not matched type*/
+                    firstWipe = {
+                        name: Client.client.intlGet(guildId, 'nextWipe'),
+                        value: `<t:${closestWipe.discordTimestamp}:R> `,
+                        inline: true
+                    }
+                }
+            }
+        }
+
         const time = rustplus.getCommandTime(true);
         const timeLeftTitle = Client.client.intlGet(rustplus.guildId, 'timeTill', {
             event: rustplus.time.isDay() ? Constants.NIGHT_EMOJI : Constants.DAY_EMOJI
@@ -719,18 +753,20 @@ module.exports = {
             fields: [
                 { name: playersFieldName, value: `\`${rustplus.getCommandPop(true)}\``, inline: true },
                 { name: timeFieldName, value: `\`${time[0]}\``, inline: true },
-                { name: wipeFieldName, value: `\`${rustplus.getCommandWipe(true)}\``, inline: true }],
+                time[1] ? { name: timeLeftTitle, value: `\`${time[1]}\``, inline: true } : emptyFieldValue,
+            ],
             timestamp: true
         });
 
         if (time[1] !== null) {
             embed.addFields(
-                { name: timeLeftTitle, value: `\`${time[1]}\``, inline: true },
-                { name: '\u200B', value: '\u200B', inline: true },
-                { name: '\u200B', value: '\u200B', inline: true });
+                { name: wipeFieldName, value: `\`${rustplus.getCommandWipe(true)}\``, inline: true },
+                firstWipe,
+                secondWipe,
+                );
         }
         else {
-            embed.addFields({ name: '\u200B', value: '\u200B', inline: false });
+            embed.addFields(emptyFieldValue);
         }
 
         embed.addFields(
