@@ -24,6 +24,17 @@ const { DiscordBot } = require('../structures/DiscordBot.js');
 export const name = 'error';
 
 export async function execute(client: typeof DiscordBot, error: Error) {
-    log.error(error);
+    const errorString = formatError(error);
+    const errorLineArray = errorString.split('\n');
+    for (const line of errorLineArray) {
+        log.error(line)
+    }
     process.exit(1);
+}
+
+function formatError(error: Error): string {
+    return `Error: ${error.message}\n` +
+        `Stack Trace:\n${error.stack}\n` +
+        `Code: ${(<any>error).code}\n` +
+        `Require Stack: ${JSON.stringify((<any>error).requireStack, null, 2)}`;
 }

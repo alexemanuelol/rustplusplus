@@ -21,7 +21,7 @@
 const Discord = require('discord.js');
 
 const Client = require('../../index.ts');
-const TextInput = require('./discordTextInputs.js');
+const TextInput = require('./discord-text-inputs.ts');
 
 module.exports = {
     getModal: function (options = {}) {
