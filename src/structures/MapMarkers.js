@@ -566,7 +566,8 @@ class MapMarkers {
                     if (Map.getDistance(marker.x, marker.y, harbor.x, harbor.y) <= Constants.HARBOR_DOCK_DISTANCE) {
                         if (marker.x === cargoShip.x && marker.y === cargoShip.y) {
                             /* CargoShip is now docked. */
-                            const harborLocation = Map.getPos(harbor.x, harbor.y, mapSize, this.rustplus);
+                            const harborLocation = Map.getPos(this.rustplus.generalSettings.language, harbor.x,
+                                harbor.y, mapSize, this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
                             cargoShip.isDocked = true;
                             this.rustplus.sendEvent(
                                 this.rustplus.notificationSettings.cargoShipDockingAtHarborSetting,
@@ -581,7 +582,8 @@ class MapMarkers {
                 for (const harbor of harbors) {
                     if (Map.getDistance(marker.x, marker.y, harbor.x, harbor.y) <= Constants.HARBOR_DOCK_DISTANCE) {
                         if (marker.x !== cargoShip.x || marker.y !== cargoShip.y) {
-                            const harborLocation = Map.getPos(harbor.x, harbor.y, mapSize, this.rustplus);
+                            const harborLocation = Map.getPos(this.rustplus.generalSettings.language, harbor.x,
+                                harbor.y, mapSize, this.rustplus.map.monuments, this.rustplus.map.monumentInfo);
                             cargoShip.isDocked = false;
                             this.rustplus.sendEvent(
                                 this.rustplus.notificationSettings.cargoShipDockingAtHarborSetting,
