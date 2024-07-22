@@ -10,14 +10,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/alexemanuelol/rustplusplus.git"
+        "url": "https://github.com/MrFiNka/rustplusplus.git"
     },
     "author": "Alexemanuelol",
     "license": "SEE LICENSE IN LICENSE",
     "bugs": {
-        "url": "https://github.com/alexemanuelol/rustplusplus/issues"
+        "url": "https://github.com/MrFiNka/rustplusplus/issues"
     },
-    "homepage": "https://github.com/alexemanuelol/rustplusplus#readme",
+    "homepage": "https://github.com/MrFiNka/rustplusplus#readme",
     "dependencies": {
         "@discordjs/rest": "^1.6.0",
         "@discordjs/voice": "^0.16.0",
