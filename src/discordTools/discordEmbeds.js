@@ -1074,7 +1074,7 @@ module.exports = {
     },
 
     getHelpEmbed: function (guildId) {
-        const repository = 'https://github.com/alexemanuelol/rustplusplus';
+        const repository = 'https://github.com/MrFiNka/rustplusplus';
         const credentials = `${repository}/blob/master/docs/credentials.md`;
         const pairServer = `${repository}/blob/master/docs/pair_and_connect_to_server.md`;
         const commands = `${repository}/blob/master/docs/commands.md`;
