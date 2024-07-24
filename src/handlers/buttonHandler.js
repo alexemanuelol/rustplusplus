@@ -21,9 +21,9 @@
 const Discord = require('discord.js');
 
 import { log } from '../../index';
+import { deleteMessage, clearTextChannel } from '../discordTools/discord-tools';
 const Config = require('../../config');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
@@ -34,7 +34,7 @@ module.exports = async (client, interaction) => {
     const rustplus = client.rustplusInstances[guildId];
 
     const verifyId = Math.floor(100000 + Math.random() * 900000);
-    client.logInteraction(interaction, verifyId, 'userButton');
+    await client.logInteraction(interaction, verifyId, 'userButton');
 
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
@@ -484,7 +484,7 @@ module.exports = async (client, interaction) => {
         const groupsToUpdate = [];
         for (const [entityId, content] of Object.entries(server.switches)) {
             if (!content.reachable) {
-                await DiscordTools.deleteMessageById(guildId, instance.channelIds.switches, content.messageId);
+                await deleteMessage(client, guildId, instance.channelIds.switches, content.messageId);
                 delete server.switches[entityId];
 
                 for (const [groupId, groupContent] of Object.entries(server.switchGroups)) {
@@ -501,14 +501,14 @@ module.exports = async (client, interaction) => {
 
         for (const [entityId, content] of Object.entries(server.alarms)) {
             if (!content.reachable) {
-                await DiscordTools.deleteMessageById(guildId, instance.channelIds.alarms, content.messageId)
+                await deleteMessage(client, guildId, instance.channelIds.alarms, content.messageId)
                 delete server.alarms[entityId];
             }
         }
 
         for (const [entityId, content] of Object.entries(server.storageMonitors)) {
             if (!content.reachable) {
-                await DiscordTools.deleteMessageById(guildId, instance.channelIds.storageMonitors, content.messageId)
+                await deleteMessage(client, guildId, instance.channelIds.storageMonitors, content.messageId)
                 delete server.storageMonitors[entityId];
             }
         }
@@ -624,9 +624,9 @@ module.exports = async (client, interaction) => {
         }
 
         if (rustplus && (rustplus.serverId === ids.serverId || rustplus.serverId === instance.activeServer)) {
-            await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelIds.switches, 100);
-            await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelIds.switchGroups, 100);
-            await DiscordTools.clearTextChannel(rustplus.guildId, instance.channelIds.storageMonitors, 100);
+            await clearTextChannel(client, rustplus.guildId, instance.channelIds.switches, 100);
+            await clearTextChannel(client, rustplus.guildId, instance.channelIds.switchGroups, 100);
+            await clearTextChannel(client, rustplus.guildId, instance.channelIds.storageMonitors, 100);
 
             instance.activeServer = null;
             client.setInstance(guildId, instance);
@@ -639,10 +639,10 @@ module.exports = async (client, interaction) => {
         }
 
         for (const [entityId, content] of Object.entries(server.alarms)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelIds.alarms, content.messageId);
+            await deleteMessage(client, guildId, instance.channelIds.alarms, content.messageId);
         }
 
-        await DiscordTools.deleteMessageById(guildId, instance.channelIds.servers, server.messageId);
+        await deleteMessage(client, guildId, instance.channelIds.servers, server.messageId);
 
         delete instance.serverList[ids.serverId];
         client.setInstance(guildId, instance);
@@ -735,7 +735,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await DiscordTools.deleteMessageById(guildId, instance.channelIds.switches,
+        await deleteMessage(client, guildId, instance.channelIds.switches,
             server.switches[ids.entityId].messageId);
 
         delete server.switches[ids.entityId];
@@ -788,7 +788,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await DiscordTools.deleteMessageById(guildId, instance.channelIds.alarms,
+        await deleteMessage(client, guildId, instance.channelIds.alarms,
             server.alarms[ids.entityId].messageId);
 
         delete server.alarms[ids.entityId];
@@ -870,7 +870,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await DiscordTools.deleteMessageById(guildId, instance.channelIds.storageMonitors,
+        await deleteMessage(client, guildId, instance.channelIds.storageMonitors,
             server.storageMonitors[ids.entityId].messageId);
 
         delete server.storageMonitors[ids.entityId];
@@ -910,7 +910,7 @@ module.exports = async (client, interaction) => {
             guildId, ids.serverId, ids.entityId, items);
 
         setTimeout(async () => {
-            await DiscordTools.deleteMessageById(guildId, instance.channelIds.storageMonitors, message.id);
+            await deleteMessage(client, guildId, instance.channelIds.storageMonitors, message.id);
         }, 30000);
     }
     else if (interaction.customId.startsWith('StorageMonitorContainerDelete')) {
@@ -927,7 +927,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await DiscordTools.deleteMessageById(guildId, instance.channelIds.storageMonitors,
+        await deleteMessage(client, guildId, instance.channelIds.storageMonitors,
             server.storageMonitors[ids.entityId].messageId);
 
         delete server.storageMonitors[ids.entityId];
@@ -1015,7 +1015,7 @@ module.exports = async (client, interaction) => {
         }
 
         if (server.switchGroups.hasOwnProperty(ids.groupId)) {
-            await DiscordTools.deleteMessageById(guildId, instance.channelIds.switchGroups,
+            await deleteMessage(client, guildId, instance.channelIds.switchGroups,
                 server.switchGroups[ids.groupId].messageId);
 
             delete server.switchGroups[ids.groupId];
@@ -1104,8 +1104,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await DiscordTools.deleteMessageById(guildId, instance.channelIds.trackers,
-            tracker.messageId);
+        await deleteMessage(client, guildId, instance.channelIds.trackers, tracker.messageId);
 
         delete instance.trackers[ids.trackerId];
         client.setInstance(guildId, instance);

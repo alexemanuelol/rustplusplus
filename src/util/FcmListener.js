@@ -23,13 +23,13 @@ const Path = require('path');
 const PushReceiver = require('push-receiver');
 
 import { log } from '../../index';
+import { getMember, getMessage } from '../discordTools/discord-tools';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
 const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const Map = require('../util/map.ts');
 const Request = require('../util/request.ts');
 
@@ -195,7 +195,7 @@ async function pairingServer(client, guild, full, data, body) {
     const server = instance.serverList[serverId];
 
     let message = undefined;
-    if (server) message = await DiscordTools.getMessageById(guild.id, instance.channelIds.servers, server.messageId);
+    if (server) message = await getMessage(client, guild.id, instance.channelIds.servers, server.messageId);
 
     let battlemetricsId = null;
     const bmInstance = new Battlemetrics(null, data.title);
@@ -480,7 +480,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
 }
 
 async function playerDeath(client, guild, full, data, body, discordUserId) {
-    const user = await DiscordTools.getUserById(guild.id, discordUserId);
+    const user = await getMember(client, guild.id, discordUserId);
 
     let png = null;
     if (body.targetId !== '') png = await Request.requestSteamProfilePicture(body.targetId);

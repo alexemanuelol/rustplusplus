@@ -31,10 +31,10 @@ import { setupAlarms } from '../discordTools/setup-alarms';
 import { setupSwitches } from '../discordTools/setup-switches';
 import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
 import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
+import { getGuild, getCategory, clearTextChannel } from '../discordTools/discord-tools';
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
 module.exports = {
@@ -74,7 +74,7 @@ module.exports = {
 		const instance = client.getInstance(interaction.guildId);
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
-		client.logInteraction(interaction, verifyId, 'slashCommand');
+		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 
@@ -86,7 +86,7 @@ module.exports = {
 		}
 		await interaction.deferReply({ ephemeral: true });
 
-		const guild = DiscordTools.getGuild(interaction.guildId);
+		const guild = await getGuild(client, interaction.guildId);
 
 		switch (interaction.options.getSubcommand()) {
 			case 'discord': {
@@ -103,10 +103,10 @@ module.exports = {
 					/* Ignore */
 				}
 
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.information, 100);
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.switches, 100);
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.switchGroups, 100);
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.storageMonitors, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.information, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.switches, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.switchGroups, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.storageMonitors, 100);
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
@@ -135,7 +135,7 @@ module.exports = {
 			} break;
 
 			case 'information': {
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.information, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.information, 100);
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
@@ -152,7 +152,7 @@ module.exports = {
 			case 'servers': {
 				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
 				try {
-					const category = await DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
+					const category = await getCategory(client, guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
 				}
 				catch (e) {
@@ -172,7 +172,7 @@ module.exports = {
 			case 'settings': {
 				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
 				try {
-					const category = await DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
+					const category = await getCategory(client, guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
 				}
 				catch (e) {
@@ -190,12 +190,12 @@ module.exports = {
 			} break;
 
 			case 'switches': {
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.switches, 100);
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.switchGroups, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.switches, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.switchGroups, 100);
 
 				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
 				try {
-					const category = await DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
+					const category = await getCategory(client, guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
 				}
 				catch (e) {
@@ -229,11 +229,11 @@ module.exports = {
 			} break;
 
 			case 'storagemonitors': {
-				await DiscordTools.clearTextChannel(guild.id, instance.channelIds.storageMonitors, 100);
+				await clearTextChannel(client, guild.id, instance.channelIds.storageMonitors, 100);
 
 				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
 				try {
-					const category = await DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
+					const category = await getCategory(client, guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
 				}
 				catch (e) {
@@ -256,7 +256,7 @@ module.exports = {
 			case 'trackers': {
 				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
 				try {
-					const category = await DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
+					const category = await getCategory(client, guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
 				}
 				catch (e) {

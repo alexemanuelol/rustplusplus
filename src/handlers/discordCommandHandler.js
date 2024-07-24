@@ -19,8 +19,8 @@
 */
 
 import { log } from '../../index';
+import { getGuild, getTextChannel } from '../discordTools/discord-tools';
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools');
 
 module.exports = {
     discordCommandHandler: async function (rustplus, client, message) {
@@ -210,8 +210,8 @@ module.exports = {
             await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, message, response);
         }
 
-        const guild = DiscordTools.getGuild(message.guild.id);
-        const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
+        const guild = await getGuild(client, message.guild.id);
+        const channel = await getTextChannel(client, guild.id, message.channelId)
         log.info(client.intlGet(null, `logDiscordCommand`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,

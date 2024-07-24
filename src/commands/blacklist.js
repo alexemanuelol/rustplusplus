@@ -21,9 +21,9 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
+import { getGuild, getMember } from '../discordTools/discord-tools';
 const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const Request = require('../util/request.ts');
 
@@ -66,7 +66,7 @@ module.exports = {
 		const instance = client.getInstance(guildId);
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
-		client.logInteraction(interaction, verifyId, 'slashCommand');
+		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 
@@ -79,7 +79,7 @@ module.exports = {
 
 		await interaction.deferReply({ ephemeral: true });
 
-		const guild = DiscordTools.getGuild(guildId);
+		const guild = await getGuild(client, guildId);
 
 		switch (interaction.options.getSubcommand()) {
 			case 'add': {
@@ -217,7 +217,7 @@ module.exports = {
 				let steamIds = '';
 
 				for (const discordId of instance.blacklist['discordIds']) {
-					const user = await DiscordTools.getUserById(guildId, discordId);
+					const user = await getMember(client, guildId, discordId)
 					let name = '';
 					if (user) name = `${user.user.username} (${user.id})`;
 					else name = `${discordId}`;

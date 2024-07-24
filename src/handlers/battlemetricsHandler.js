@@ -18,9 +18,9 @@
 
 */
 
+import { deleteMessage } from '../discordTools/discord-tools';
 const Constants = require('../util/constants.ts');
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const Request = require('../util/request.ts');
 
 module.exports = {
@@ -51,7 +51,7 @@ module.exports = {
             }
             else {
                 if (instance.informationChannelMessageIds.battlemetricsPlayers !== null) {
-                    await DiscordTools.deleteMessageById(guildId, instance.channelIds.information,
+                    await deleteMessage(client, guildId, instance.channelIds.information,
                         instance.informationChannelMessageIds.battlemetricsPlayers);
 
                     instance.informationChannelMessageIds.battlemetricsPlayers = null;

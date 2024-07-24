@@ -56,7 +56,7 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
-		client.logInteraction(interaction, verifyId, 'slashCommand');
+		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });

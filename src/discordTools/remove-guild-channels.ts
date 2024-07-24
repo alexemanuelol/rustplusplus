@@ -20,8 +20,8 @@
 
 import { Guild } from 'discord.js';
 
+import { deleteChannel } from './discord-tools';
 const { DiscordBot } = require('../structures/DiscordBot.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 export async function removeGuildChannels(client: typeof DiscordBot, guild: Guild) {
     const guildId = guild.id;
@@ -34,12 +34,12 @@ export async function removeGuildChannels(client: typeof DiscordBot, guild: Guil
             continue;
         }
 
-        await DiscordTools.removeTextChannel(guildId, channelId);
+        await deleteChannel(client, guildId, channelId as string);
         instance.channelIds[channelName] = null;
     }
 
-    await DiscordTools.removeCategory(guildId, categoryId);
-    instance.channelIds['category'] = null;
+    await deleteChannel(client, guildId, categoryId as string);
 
+    instance.channelIds['category'] = null;
     client.setInstance(guildId, instance);
 }

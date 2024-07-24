@@ -18,11 +18,11 @@
 
 */
 
-import { Guild, CategoryChannel } from 'discord.js';
+import { Guild, CategoryChannel, ChannelType, TextChannel } from 'discord.js';
 
 import { log } from '../../index';
+import { getTextChannel, createChannel } from './discord-tools';
 const { DiscordBot } = require('../structures/DiscordBot.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
 export async function setupGuildChannels(client: typeof DiscordBot, guild: Guild, category: CategoryChannel) {
@@ -49,10 +49,11 @@ async function addTextChannel(name: string, idName: string, client: typeof Disco
 
     let channel = undefined;
     if (instance.channelIds[idName] !== null) {
-        channel = DiscordTools.getTextChannelById(guildId, instance.channelIds[idName]);
+        channel = await getTextChannel(client, guildId, instance.channelIds[idName]);
     }
     if (channel === undefined) {
-        channel = await DiscordTools.addTextChannel(guildId, name);
+        channel = await createChannel(client, guildId, name, ChannelType.GuildText) as TextChannel;
+        if (!channel) return undefined;
         instance.channelIds[idName] = channel.id;
         client.setInstance(guildId, instance);
 

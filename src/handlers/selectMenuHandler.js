@@ -22,9 +22,9 @@ const Discord = require('discord.js');
 
 import { log } from '../../index';
 import { registerSlashCommands } from '../discordTools/register-slash-commands';
+import { getGuild } from '../discordTools/discord-tools';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -32,7 +32,7 @@ module.exports = async (client, interaction) => {
     const rustplus = client.rustplusInstances[guildId];
 
     const verifyId = Math.floor(100000 + Math.random() * 900000);
-    client.logInteraction(interaction, verifyId, 'userSelectMenu');
+    await client.logInteraction(interaction, verifyId, 'userSelectMenu');
 
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
@@ -62,7 +62,7 @@ module.exports = async (client, interaction) => {
             components: [DiscordSelectMenus.getLanguageSelectMenu(guildId, interaction.values[0])]
         });
 
-        const guild = DiscordTools.getGuild(guildId);
+        const guild = await getGuild(client, guildId);
         await registerSlashCommands(client, guild);
     }
     else if (interaction.customId === 'Prefix') {
