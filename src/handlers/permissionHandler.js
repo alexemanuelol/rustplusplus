@@ -20,7 +20,7 @@
 
 const Discord = require('discord.js');
 
-const DiscordTools = require('../discordTools/discordTools.js');
+import { getTextChannel, getCategory } from '../discordTools/discord-tools';
 
 module.exports = {
     getPermissionsReset: function (client, guild, permissionWrite = false) {
@@ -95,7 +95,7 @@ module.exports = {
 
         if (instance.channelIds.category === null) return;
 
-        const category = await DiscordTools.getCategoryById(guild.id, instance.channelIds.category);
+        const category = await getCategory(client, guild.id, instance.channelIds.category);
         if (category) {
             const perms = module.exports.getPermissionsReset(client, guild);
             try {
@@ -109,7 +109,7 @@ module.exports = {
         for (const [name, id] of Object.entries(instance.channelIds)) {
             const writePerm = (name !== 'commands' && name !== 'teamchat') ? false : true;
 
-            const channel = DiscordTools.getTextChannelById(guild.id, id);
+            const channel = await getTextChannel(client, guild.id, id);
             if (channel) {
                 const perms = module.exports.getPermissionsReset(client, guild, writePerm);
                 try {

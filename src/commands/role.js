@@ -23,8 +23,8 @@ const Builder = require('@discordjs/builders');
 import { log } from '../../index';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
+import { getGuild } from '../discordTools/discord-tools';
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
-const DiscordTools = require('../discordTools/discordTools');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
 module.exports = {
@@ -50,7 +50,7 @@ module.exports = {
 		const instance = client.getInstance(interaction.guildId);
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
-		client.logInteraction(interaction, verifyId, 'slashCommand');
+		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 
@@ -87,7 +87,7 @@ module.exports = {
 			value: `${interaction.options.getSubcommand()}`
 		}));
 
-		const guild = DiscordTools.getGuild(interaction.guildId);
+		const guild = await getGuild(client, interaction.guildId);
 		if (guild) {
 			const category = await setupGuildCategory(client, guild);
 			await setupGuildChannels(client, guild, category);

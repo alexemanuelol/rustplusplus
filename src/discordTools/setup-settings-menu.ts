@@ -23,17 +23,17 @@ import { Guild, AttachmentBuilder, Channel } from 'discord.js';
 
 import { log } from '../../index';
 import * as constants from '../util/constants';
+import { getTextChannel, clearTextChannel } from './discord-tools';
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
-const DiscordTools = require('./discordTools.js');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
 
 export async function setupSettingsMenu(client: typeof DiscordBot, guild: Guild, forced: boolean = false) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
-    const channel = DiscordTools.getTextChannelById(guildId, instance.channelIds.settings);
+    const channel = await getTextChannel(client, guildId, instance.channelIds.settings);
 
     if (!channel) {
         log.error('SetupSettingsMenu: ' + client.intlGet(null, 'invalidGuildOrChannel'));
@@ -41,7 +41,7 @@ export async function setupSettingsMenu(client: typeof DiscordBot, guild: Guild,
     }
 
     if (instance.firstTime || forced) {
-        await DiscordTools.clearTextChannel(guildId, instance.channelIds.settings, 100);
+        await clearTextChannel(client, guildId, instance.channelIds.settings, 100);
 
         await setupGeneralSettings(client, guildId, channel);
         await setupNotificationSettings(client, guildId, channel);

@@ -21,9 +21,9 @@
 import { Message } from 'discord.js';
 
 import { log } from '../../index';
+import { getGuild, getTextChannel } from '../discordTools/discord-tools';
 const { DiscordBot } = require('../structures/DiscordBot.js');
 const DiscordCommandHandler = require('../handlers/discordCommandHandler.js');
-const DiscordTools = require('../discordTools/discordTools');
 
 export const name = 'messageCreate';
 
@@ -38,8 +38,10 @@ export async function execute(client: typeof DiscordBot, message: Message) {
 
     if (instance.blacklist['discordIds'].includes(message.author.id) &&
         Object.values(instance.channelIds).includes(message.channelId)) {
-        const guild = DiscordTools.getGuild(guildId);
-        const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
+        const guild = await getGuild(client, guildId);
+        if (!guild) return;
+        const channel = await getTextChannel(client, guild.id, message.channelId);
+        if (!channel) return;
         log.info(client.intlGet(null, `userPartOfBlacklistDiscord`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,
@@ -53,8 +55,10 @@ export async function execute(client: typeof DiscordBot, message: Message) {
         await DiscordCommandHandler.discordCommandHandler(rustplus, client, message);
     }
     else if (message.channelId === instance.channelIds.teamchat) {
-        const guild = DiscordTools.getGuild(guildId);
-        const channel = DiscordTools.getTextChannelById(guild.id, message.channelId);
+        const guild = await getGuild(client, guildId);
+        if (!guild) return;
+        const channel = await getTextChannel(client, guild.id, message.channelId);
+        if (!channel) return;
         log.info(client.intlGet(null, `logDiscordMessage`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,

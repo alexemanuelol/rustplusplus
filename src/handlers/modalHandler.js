@@ -32,7 +32,7 @@ module.exports = async (client, interaction) => {
     const guildId = interaction.guildId;
 
     const verifyId = Math.floor(100000 + Math.random() * 900000);
-    client.logInteraction(interaction, verifyId, 'userModal');
+    await client.logInteraction(interaction, verifyId, 'userModal');
 
     if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
         !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {

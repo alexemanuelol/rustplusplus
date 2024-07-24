@@ -20,10 +20,10 @@
 
 const Discord = require('discord.js');
 
+import { getMember } from './discord-tools';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordTools = require('./discordTools.js');
 const Timer = require('../util/timer.ts');
 
 module.exports = {
@@ -70,7 +70,7 @@ module.exports = {
         const server = instance.serverList[serverId];
         let hoster = Client.client.intlGet(guildId, 'unknown');
         if (credentials.hasOwnProperty(server.steamId)) {
-            hoster = await DiscordTools.getUserById(guildId, credentials[server.steamId].discord_user_id);
+            hoster = await getMember(Client.client, guildId, credentials[server.steamId].discord_user_id);
             hoster = hoster.user.username;
         }
 
@@ -498,7 +498,7 @@ module.exports = {
         const server = instance.serverList[serverId];
         const entity = server.storageMonitors[entityId];
         const credentials = Credentials.readCredentialsFile();
-        const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discord_user_id);
+        const user = await getMember(Client.client, guildId, credentials[server.steamId].discord_user_id);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
@@ -519,7 +519,7 @@ module.exports = {
         const server = instance.serverList[serverId];
         const entity = instance.serverList[serverId].switches[entityId];
         const credentials = Credentials.readCredentialsFile();
-        const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discord_user_id);
+        const user = await getMember(Client.client, guildId, credentials[server.steamId].discord_user_id);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
@@ -540,7 +540,7 @@ module.exports = {
         const server = instance.serverList[serverId];
         const entity = server.alarms[entityId];
         const credentials = Credentials.readCredentialsFile();
-        const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discord_user_id);
+        const user = await getMember(Client.client, guildId, credentials[server.steamId].discord_user_id);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
@@ -995,7 +995,7 @@ module.exports = {
         for (const credential in credentials) {
             if (credential === 'hoster') continue;
 
-            const user = await DiscordTools.getUserById(guildId, credentials[credential].discord_user_id);
+            const user = await getMember(Client.client, guildId, credentials[credential].discord_user_id);
             names += `${user.user.username}\n`;
             steamIds += `${credential}\n`;
             hoster += `${credential === instance.hoster ? `${Constants.LEADER_EMOJI}\n` : '\u200B\n'}`;

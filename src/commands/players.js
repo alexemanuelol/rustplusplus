@@ -21,9 +21,9 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
+import { getDiscordFormattedDate } from '../discordTools/discord-tools';
 const Constants = require('../util/constants.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
-const DiscordTools = require('../discordTools/discordTools.js');
 
 module.exports = {
 	name: 'players',
@@ -66,7 +66,7 @@ module.exports = {
 
 	async execute(client, interaction) {
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
-		client.logInteraction(interaction, verifyId, 'slashCommand');
+		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
@@ -240,7 +240,7 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 		}
 		else {
 			const unixTime = Math.floor(new Date(entity.lastSeen).getTime() / 1000);
-			time = `${DiscordTools.getDiscordFormattedDate(unixTime)}\n`;
+			time = `${getDiscordFormattedDate(unixTime)}\n`;
 		}
 
 		if ((nameChangeHistoryNameCharacters + name.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
@@ -261,7 +261,7 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 			client.intlGet(guildId, 'disconnected')) + '\n';
 
 		const unixTime = Math.floor(new Date(connection.time).getTime() / 1000);
-		const time = `${DiscordTools.getDiscordFormattedDate(unixTime)}\n`;
+		const time = `${getDiscordFormattedDate(unixTime)}\n`;
 
 		if ((connectionStringCharacters + str.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
 			(connectionTimeCharacters + time.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {

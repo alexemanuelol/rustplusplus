@@ -20,15 +20,15 @@
 
 import { Guild } from 'discord.js';
 
+import { clearTextChannel } from './discord-tools';
 const DiscordMessages = require('./discordMessages.js');
-const DiscordTools = require('./discordTools.js');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export async function setupTrackers(client: typeof DiscordBot, guild: Guild) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
 
-    await DiscordTools.clearTextChannel(guildId, instance.channelIds.trackers, 100);
+    await clearTextChannel(client, guildId, instance.channelIds.trackers, 100);
 
     for (const trackerId in instance.trackers) {
         await DiscordMessages.sendTrackerMessage(guildId, trackerId);

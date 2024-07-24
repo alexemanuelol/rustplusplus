@@ -22,12 +22,12 @@ const Discord = require('discord.js');
 const Path = require('path');
 
 import { log } from '../../index';
+import { getTextChannel, getMessage } from './discord-tools';
 const Constants = require('../util/constants.ts');
 const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
-const DiscordTools = require('./discordTools.js');
 const Request = require('../util/request.ts');
 
 module.exports = {
@@ -38,13 +38,13 @@ module.exports = {
         }
 
         let message = messageId !== null ?
-            await DiscordTools.getMessageById(guildId, channelId, messageId) : undefined;
+            await getMessage(Client.client, guildId, channelId, messageId) : undefined;
 
         if (message !== undefined) {
             return await Client.client.messageEdit(message, content);
         }
         else {
-            const channel = DiscordTools.getTextChannelById(guildId, channelId);
+            const channel = await getTextChannel(Client.client, guildId, channelId);
 
             if (!channel) {
                 log.error(Client.client.intlGet(null, 'couldNotGetChannelWithId', { id: channelId }));
