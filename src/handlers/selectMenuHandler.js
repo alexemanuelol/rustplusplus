@@ -23,8 +23,8 @@ const Discord = require('discord.js');
 import { log } from '../../index';
 import { registerSlashCommands } from '../discordTools/register-slash-commands';
 import { getGuild } from '../discordTools/discord-tools';
+import { getLanguageSelectMenu, getPrefixSelectMenu, getTrademarkSelectMenu, getCommandDelaySelectMenu, getVoiceGenderSelectMenu } from '../discordTools/discord-select-menus';
 const DiscordMessages = require('../discordTools/discordMessages.js');
-const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -59,7 +59,7 @@ module.exports = async (client, interaction) => {
         client.loadGuildIntl(guildId);
 
         await client.interactionEditReply(interaction, {
-            components: [DiscordSelectMenus.getLanguageSelectMenu(guildId, interaction.values[0])]
+            components: [getLanguageSelectMenu(guildId, interaction.values[0])]
         });
 
         const guild = await getGuild(client, guildId);
@@ -77,7 +77,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordSelectMenus.getPrefixSelectMenu(guildId, interaction.values[0])]
+            components: [getPrefixSelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId === 'Trademark') {
@@ -96,7 +96,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordSelectMenus.getTrademarkSelectMenu(guildId, interaction.values[0])]
+            components: [getTrademarkSelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId === 'CommandDelay') {
@@ -111,7 +111,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordSelectMenus.getCommandDelaySelectMenu(guildId, interaction.values[0])]
+            components: [getCommandDelaySelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId === 'VoiceGender') {
@@ -126,7 +126,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordSelectMenus.getVoiceGenderSelectMenu(guildId, interaction.values[0])]
+            components: [getVoiceGenderSelectMenu(guildId, interaction.values[0])]
         });
     }
     else if (interaction.customId.startsWith('AutoDayNightOnOff')) {

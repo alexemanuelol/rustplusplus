@@ -24,9 +24,9 @@ import { Guild, AttachmentBuilder, Channel } from 'discord.js';
 import { log } from '../../index';
 import * as constants from '../util/constants';
 import { getTextChannel, clearTextChannel } from './discord-tools';
+import { getLanguageSelectMenu, getPrefixSelectMenu, getTrademarkSelectMenu, getCommandDelaySelectMenu, getVoiceGenderSelectMenu } from './discord-select-menus';
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
-const DiscordSelectMenus = require('./discordSelectMenus.js');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
 
@@ -72,7 +72,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
                     inline: true
                 }]
         })],
-        components: [DiscordSelectMenus.getLanguageSelectMenu(guildId, instance.generalSettings.language)],
+        components: [getLanguageSelectMenu(guildId, instance.generalSettings.language)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -83,7 +83,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'commandsVoiceGenderDesc'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getVoiceGenderSelectMenu(guildId, instance.generalSettings.voiceGender)],
+        components: [getVoiceGenderSelectMenu(guildId, instance.generalSettings.voiceGender)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -94,7 +94,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'selectInGamePrefixSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getPrefixSelectMenu(guildId, instance.generalSettings.prefix)],
+        components: [getPrefixSelectMenu(guildId, instance.generalSettings.prefix)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -105,7 +105,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'selectTrademarkSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getTrademarkSelectMenu(guildId, instance.generalSettings.trademark)],
+        components: [getTrademarkSelectMenu(guildId, instance.generalSettings.trademark)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -150,7 +150,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'commandDelaySetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordSelectMenus.getCommandDelaySelectMenu(guildId, instance.generalSettings.commandDelay)],
+        components: [getCommandDelaySelectMenu(guildId, instance.generalSettings.commandDelay)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
