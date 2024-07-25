@@ -23,11 +23,11 @@ const Path = require('path');
 
 import { log } from '../../index';
 import { getTextChannel, getMessage } from './discord-tools';
+import { getSmartSwitchSelectMenu } from './discord-select-menus';
 const Constants = require('../util/constants.ts');
 const Client = require('../../index.ts');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
-const DiscordSelectMenus = require('./discordSelectMenus.js');
 const Request = require('../util/request.ts');
 
 module.exports = {
@@ -100,7 +100,7 @@ module.exports = {
                 DiscordEmbeds.getSmartSwitchEmbed(guildId, serverId, entityId) :
                 DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'switches')],
             components: [
-                DiscordSelectMenus.getSmartSwitchSelectMenu(guildId, serverId, entityId),
+                getSmartSwitchSelectMenu(guildId, serverId, entityId),
                 DiscordButtons.getSmartSwitchButtons(guildId, serverId, entityId)
             ],
             files: [
