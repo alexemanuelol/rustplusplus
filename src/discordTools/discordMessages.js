@@ -24,9 +24,19 @@ const Path = require('path');
 import { log } from '../../index';
 import { getTextChannel, getMessage } from './discord-tools';
 import { getSmartSwitchSelectMenu } from './discord-select-menus';
+import {
+    getServerButtons,
+    getSmartSwitchButtons,
+    getSmartSwitchGroupButtons,
+    getSmartAlarmButtons,
+    getStorageMonitorToolCupboardButtons,
+    getStorageMonitorContainerButton,
+    getRecycleDeleteButton,
+    getTrackerButtons,
+    getHelpButtons
+} from './discord-buttons';
 const Constants = require('../util/constants.ts');
 const Client = require('../../index.ts');
-const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const Request = require('../util/request.ts');
 
@@ -61,7 +71,7 @@ module.exports = {
 
         const content = {
             embeds: [await DiscordEmbeds.getServerEmbed(guildId, serverId)],
-            components: DiscordButtons.getServerButtons(guildId, serverId, state)
+            components: getServerButtons(Client.client, guildId, serverId, state)
         }
 
         const message = await module.exports.sendMessage(guildId, content, server.messageId,
@@ -79,7 +89,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getTrackerEmbed(guildId, trackerId)],
-            components: DiscordButtons.getTrackerButtons(guildId, trackerId)
+            components: getTrackerButtons(guildId, trackerId)
         }
 
         const message = await module.exports.sendMessage(guildId, content, tracker.messageId,
@@ -101,7 +111,7 @@ module.exports = {
                 DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'switches')],
             components: [
                 getSmartSwitchSelectMenu(guildId, serverId, entityId),
-                DiscordButtons.getSmartSwitchButtons(guildId, serverId, entityId)
+                getSmartSwitchButtons(guildId, serverId, entityId)
             ],
             files: [
                 new Discord.AttachmentBuilder(Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))
@@ -125,7 +135,7 @@ module.exports = {
             embeds: [entity.reachable ?
                 DiscordEmbeds.getSmartAlarmEmbed(guildId, serverId, entityId) :
                 DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'alarms')],
-            components: [DiscordButtons.getSmartAlarmButtons(guildId, serverId, entityId)],
+            components: [getSmartAlarmButtons(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
@@ -148,8 +158,8 @@ module.exports = {
                 DiscordEmbeds.getStorageMonitorEmbed(guildId, serverId, entityId) :
                 DiscordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'storageMonitors')],
             components: [entity.type === 'toolCupboard' ?
-                DiscordButtons.getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
-                DiscordButtons.getStorageMonitorContainerButton(guildId, serverId, entityId)],
+                getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
+                getStorageMonitorContainerButton(guildId, serverId, entityId)],
             files: [
                 new Discord.AttachmentBuilder(
                     Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
@@ -172,7 +182,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getSmartSwitchGroupEmbed(guildId, serverId, groupId)],
-            components: DiscordButtons.getSmartSwitchGroupButtons(guildId, serverId, groupId),
+            components: getSmartSwitchGroupButtons(guildId, serverId, groupId),
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${group.image}`))]
         }
@@ -191,7 +201,7 @@ module.exports = {
 
         const content = {
             embeds: [DiscordEmbeds.getStorageMonitorRecycleEmbed(guildId, serverId, entityId, items)],
-            components: [DiscordButtons.getRecycleDeleteButton()],
+            components: [getRecycleDeleteButton()],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', 'resources/images/electrics/recycler.png'))]
         }
@@ -517,7 +527,7 @@ module.exports = {
     sendHelpMessage: async function (interaction) {
         const content = {
             embeds: [DiscordEmbeds.getHelpEmbed(interaction.guildId)],
-            components: DiscordButtons.getHelpButtons(),
+            components: getHelpButtons(),
             ephemeral: true
         }
 
