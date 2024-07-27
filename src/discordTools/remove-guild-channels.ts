@@ -20,7 +20,7 @@
 
 import { Guild } from 'discord.js';
 
-import { deleteChannel } from './discord-tools';
+import * as discordTools from './discord-tools';
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export async function removeGuildChannels(client: typeof DiscordBot, guild: Guild) {
@@ -34,11 +34,11 @@ export async function removeGuildChannels(client: typeof DiscordBot, guild: Guil
             continue;
         }
 
-        await deleteChannel(client, guildId, channelId as string);
+        await discordTools.deleteChannel(client, guildId, channelId as string);
         instance.channelIds[channelName] = null;
     }
 
-    await deleteChannel(client, guildId, categoryId as string);
+    await discordTools.deleteChannel(client, guildId, categoryId as string);
 
     instance.channelIds['category'] = null;
     client.setInstance(guildId, instance);

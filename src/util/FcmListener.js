@@ -23,8 +23,8 @@ const Path = require('path');
 const PushReceiver = require('push-receiver');
 
 import { log } from '../../index';
-import { getMember, getMessage } from '../discordTools/discord-tools';
-import { getNewsButton } from '../discordTools/discord-buttons';
+import * as discordTools from '../discordTools/discord-tools';
+import * as discordButtons from '../discordTools/discord-buttons';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
@@ -195,7 +195,8 @@ async function pairingServer(client, guild, full, data, body) {
     const server = instance.serverList[serverId];
 
     let message = undefined;
-    if (server) message = await getMessage(client, guild.id, instance.channelIds.servers, server.messageId);
+    if (server) message = await discordTools.getMessage(client, guild.id,
+        instance.channelIds.servers, server.messageId);
 
     let battlemetricsId = null;
     const bmInstance = new Battlemetrics(null, data.title);
@@ -480,7 +481,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
 }
 
 async function playerDeath(client, guild, full, data, body, discordUserId) {
-    const user = await getMember(client, guild.id, discordUserId);
+    const user = await discordTools.getMember(client, guild.id, discordUserId);
 
     let png = null;
     if (body.targetId !== '') png = await Request.requestSteamProfilePicture(body.targetId);
@@ -520,7 +521,7 @@ async function newsNews(client, guild, full, data, body) {
 
     const content = {
         embeds: [DiscordEmbeds.getNewsEmbed(guild.id, data)],
-        components: [getNewsButton(guild.id, body.url, isValidUrl(body.url))]
+        components: [discordButtons.getNewsButton(guild.id, body.url, isValidUrl(body.url))]
     }
 
     await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);

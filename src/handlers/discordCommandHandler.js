@@ -19,7 +19,7 @@
 */
 
 import { log } from '../../index';
-import { getGuild, getTextChannel } from '../discordTools/discord-tools';
+import * as discordTools from '../discordTools/discord-tools';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -210,8 +210,8 @@ module.exports = {
             await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, message, response);
         }
 
-        const guild = await getGuild(client, message.guild.id);
-        const channel = await getTextChannel(client, guild.id, message.channelId)
+        const guild = await discordTools.getGuild(client, message.guild.id);
+        const channel = await discordTools.getTextChannel(client, guild.id, message.channelId)
         log.info(client.intlGet(null, `logDiscordCommand`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,

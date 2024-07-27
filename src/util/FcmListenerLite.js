@@ -21,7 +21,7 @@
 const PushReceiver = require('push-receiver');
 
 import { log } from '../../index';
-import { getMember } from '../discordTools/discord-tools';
+import * as discordTools from '../discordTools/discord-tools';
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -331,7 +331,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
 }
 
 async function playerDeath(client, guild, full, data, body, discordUserId) {
-    const user = await getMember(client, guild.id, discordUserId);
+    const user = await discordTools.getMember(client, guild.id, discordUserId);
     if (!user) return;
 
     let png = null;

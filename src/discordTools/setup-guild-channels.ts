@@ -21,7 +21,7 @@
 import { Guild, CategoryChannel, ChannelType, TextChannel } from 'discord.js';
 
 import { log } from '../../index';
-import { getTextChannel, createChannel } from './discord-tools';
+import * as discordTools from './discord-tools';
 const { DiscordBot } = require('../structures/DiscordBot.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
@@ -49,10 +49,10 @@ async function addTextChannel(name: string, idName: string, client: typeof Disco
 
     let channel = undefined;
     if (instance.channelIds[idName] !== null) {
-        channel = await getTextChannel(client, guildId, instance.channelIds[idName]);
+        channel = await discordTools.getTextChannel(client, guildId, instance.channelIds[idName]);
     }
     if (channel === undefined) {
-        channel = await createChannel(client, guildId, name, ChannelType.GuildText) as TextChannel;
+        channel = await discordTools.createChannel(client, guildId, name, ChannelType.GuildText) as TextChannel;
         if (!channel) return undefined;
         instance.channelIds[idName] = channel.id;
         client.setInstance(guildId, instance);

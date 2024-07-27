@@ -20,7 +20,7 @@
 
 import { Guild, CategoryChannel, ChannelType } from 'discord.js';
 
-import { getCategory, createChannel } from './discord-tools';
+import * as discordTools from './discord-tools';
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
@@ -31,10 +31,10 @@ export async function setupGuildCategory(client: typeof DiscordBot, guild: Guild
 
     let category = undefined;
     if (instance.channelIds.category !== null) {
-        category = await getCategory(client, guildId, instance.channelIds.category);
+        category = await discordTools.getCategory(client, guildId, instance.channelIds.category);
     }
     if (category === undefined) {
-        category = await createChannel(client, guildId, 'rustplusplus', ChannelType.GuildCategory) as CategoryChannel;
+        category = await discordTools.createChannel(client, guildId, 'rustplusplus', ChannelType.GuildCategory) as CategoryChannel;
         if (!category) return undefined;
         instance.channelIds.category = category.id;
         client.setInstance(guildId, instance);

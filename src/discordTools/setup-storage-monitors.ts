@@ -19,7 +19,7 @@
 */
 
 import * as constants from '../util/constants';
-import { clearTextChannel } from './discord-tools';
+import * as discordTools from './discord-tools';
 const DiscordMessages = require('./discordMessages.js');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 const { RustPlus } = require('../structures/RustPlus.js');
@@ -30,7 +30,7 @@ export async function setupStorageMonitors(client: typeof DiscordBot, rustplus: 
     const serverId = rustplus.serverId;
 
     if (rustplus.isNewConnection) {
-        await clearTextChannel(client, guildId, instance.channelIds.storageMonitors, 100);
+        await discordTools.clearTextChannel(client, guildId, instance.channelIds.storageMonitors, 100);
     }
 
     for (const entityId in instance.serverList[serverId].storageMonitors) {
