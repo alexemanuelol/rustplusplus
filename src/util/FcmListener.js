@@ -23,8 +23,8 @@ const Path = require('path');
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
 import { log } from '../../index';
-import { getMember, getMessage } from '../discordTools/discord-tools';
-import { getNewsButton } from '../discordTools/discord-buttons';
+import * as discordTools from '../discordTools/discord-tools';
+import * as discordButtons from '../discordTools/discord-buttons';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
@@ -222,7 +222,8 @@ async function pairingServer(client, guild, title, message, body) {
     const server = instance.serverList[serverId];
 
     let messageObj = undefined;
-    if (server) messageObj = await getMessage(client, guild.id, instance.channelIds.servers, server.messageId);
+    if (server) messageObj = await discordTools.getMessage(client, guild.id,
+        instance.channelIds.servers, server.messageId);
 
     let battlemetricsId = null;
     const bmInstance = new Battlemetrics(null, title);
@@ -507,7 +508,7 @@ async function alarmRaidAlarm(client, guild, title, message, body) {
 }
 
 async function playerDeath(client, guild, title, message, body, discordUserId) {
-    const user = await getMember(client, guild.id, discordUserId);
+    const user = await discordTools.getMember(client, guild.id, discordUserId);
 
     let png = null;
     if (body.targetId !== '') png = await Request.requestSteamProfilePicture(body.targetId);

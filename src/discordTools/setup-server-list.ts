@@ -20,7 +20,7 @@
 
 import { Guild } from 'discord.js';
 
-import { clearTextChannel } from './discord-tools';
+import * as discordTools from './discord-tools';
 const { DiscordBot } = require('../structures/DiscordBot.js');
 const DiscordMessages = require('./discordMessages.js');
 
@@ -28,7 +28,7 @@ export async function setupServerList(client: typeof DiscordBot, guild: Guild) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
 
-    await clearTextChannel(client, guildId, instance.channelIds.servers, 100);
+    await discordTools.clearTextChannel(client, guildId, instance.channelIds.servers, 100);
 
     for (const serverId in instance.serverList) {
         await DiscordMessages.sendServerMessage(guildId, serverId);

@@ -21,22 +21,8 @@
 const Discord = require('discord.js');
 
 import { log } from '../../index';
-import { deleteMessage, clearTextChannel } from '../discordTools/discord-tools';
-import {
-    getNotificationButtons,
-    getInGameCommandsEnabledButton,
-    getInGameTeammateNotificationsButtons,
-    getFcmAlarmNotificationButtons,
-    getSmartAlarmNotifyInGameButton,
-    getSmartSwitchNotifyInGameWhenChangedFromDiscordButton,
-    getLeaderCommandEnabledButton,
-    getLeaderCommandOnlyForPairedButton,
-    getBotMutedInGameButton,
-    getMapWipeNotifyEveryoneButton,
-    getItemAvailableNotifyInGameButton,
-    getDisplayInformationBattlemetricsAllOnlinePlayersButton,
-    getSubscribeToChangesBattlemetricsButtons
-} from '../discordTools/discord-buttons';
+import * as discordTools from '../discordTools/discord-tools';
+import * as discordButtons from '../discordTools/discord-buttons';
 const Config = require('../../config');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
@@ -74,7 +60,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getNotificationButtons(
+            components: [discordButtons.getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
     }
@@ -93,7 +79,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getNotificationButtons(
+            components: [discordButtons.getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
     }
@@ -112,7 +98,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getNotificationButtons(
+            components: [discordButtons.getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
     }
@@ -128,7 +114,8 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getInGameCommandsEnabledButton(guildId, instance.generalSettings.inGameCommandsEnabled)]
+            components: [discordButtons.getInGameCommandsEnabledButton(guildId,
+                instance.generalSettings.inGameCommandsEnabled)]
         });
     }
     else if (interaction.customId === 'BotMutedInGame') {
@@ -143,7 +130,8 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getBotMutedInGameButton(guildId, instance.generalSettings.muteInGameBotMessages)]
+            components: [discordButtons.getBotMutedInGameButton(guildId,
+                instance.generalSettings.muteInGameBotMessages)]
         });
     }
     else if (interaction.customId === 'InGameTeammateConnection') {
@@ -158,7 +146,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getInGameTeammateNotificationsButtons(guildId)]
+            components: [discordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateAfk') {
@@ -173,7 +161,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getInGameTeammateNotificationsButtons(guildId)]
+            components: [discordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateDeath') {
@@ -188,7 +176,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getInGameTeammateNotificationsButtons(guildId)]
+            components: [discordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'FcmAlarmNotification') {
@@ -204,7 +192,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getFcmAlarmNotificationButtons(
+            components: [discordButtons.getFcmAlarmNotificationButtons(
                 guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)]
@@ -223,7 +211,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getFcmAlarmNotificationButtons(
+            components: [discordButtons.getFcmAlarmNotificationButtons(
                 guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)]
@@ -242,7 +230,8 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getSmartAlarmNotifyInGameButton(guildId, instance.generalSettings.smartAlarmNotifyInGame)]
+            components: [discordButtons.getSmartAlarmNotifyInGameButton(guildId,
+                instance.generalSettings.smartAlarmNotifyInGame)]
         });
     }
     else if (interaction.customId === 'SmartSwitchNotifyInGameWhenChangedFromDiscord') {
@@ -259,7 +248,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId,
+            components: [discordButtons.getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId,
                 instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord)]
         });
     }
@@ -275,7 +264,8 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getLeaderCommandEnabledButton(guildId, instance.generalSettings.leaderCommandEnabled)]
+            components: [discordButtons.getLeaderCommandEnabledButton(guildId,
+                instance.generalSettings.leaderCommandEnabled)]
         });
     }
     else if (interaction.customId === 'LeaderCommandOnlyForPaired') {
@@ -291,7 +281,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getLeaderCommandOnlyForPairedButton(guildId,
+            components: [discordButtons.getLeaderCommandOnlyForPairedButton(guildId,
                 instance.generalSettings.leaderCommandOnlyForPaired)]
         });
     }
@@ -308,7 +298,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)]
+            components: [discordButtonsgetMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)]
         });
     }
     else if (interaction.customId === 'ItemAvailableNotifyInGame') {
@@ -325,7 +315,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getItemAvailableNotifyInGameButton(guildId,
+            components: [discordButtons.getItemAvailableNotifyInGameButton(guildId,
                 instance.generalSettings.itemAvailableInVendingMachineNotifyInGame)]
         });
     }
@@ -343,7 +333,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
+            components: [discordButtons.getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
                 instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers)]
         });
     }
@@ -361,7 +351,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsTrackerNameChanges') {
@@ -378,7 +368,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsGlobalNameChanges') {
@@ -395,7 +385,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsGlobalLogin') {
@@ -412,7 +402,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsGlobalLogout') {
@@ -429,7 +419,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId.startsWith('ServerConnect')) {
@@ -490,7 +480,7 @@ module.exports = async (client, interaction) => {
         const groupsToUpdate = [];
         for (const [entityId, content] of Object.entries(server.switches)) {
             if (!content.reachable) {
-                await deleteMessage(client, guildId, instance.channelIds.switches, content.messageId);
+                await discordTools.deleteMessage(client, guildId, instance.channelIds.switches, content.messageId);
                 delete server.switches[entityId];
 
                 for (const [groupId, groupContent] of Object.entries(server.switchGroups)) {
@@ -507,14 +497,15 @@ module.exports = async (client, interaction) => {
 
         for (const [entityId, content] of Object.entries(server.alarms)) {
             if (!content.reachable) {
-                await deleteMessage(client, guildId, instance.channelIds.alarms, content.messageId)
+                await discordTools.deleteMessage(client, guildId, instance.channelIds.alarms, content.messageId)
                 delete server.alarms[entityId];
             }
         }
 
         for (const [entityId, content] of Object.entries(server.storageMonitors)) {
             if (!content.reachable) {
-                await deleteMessage(client, guildId, instance.channelIds.storageMonitors, content.messageId)
+                await discordTools.deleteMessage(client, guildId, instance.channelIds.storageMonitors,
+                    content.messageId)
                 delete server.storageMonitors[entityId];
             }
         }
@@ -630,9 +621,9 @@ module.exports = async (client, interaction) => {
         }
 
         if (rustplus && (rustplus.serverId === ids.serverId || rustplus.serverId === instance.activeServer)) {
-            await clearTextChannel(client, rustplus.guildId, instance.channelIds.switches, 100);
-            await clearTextChannel(client, rustplus.guildId, instance.channelIds.switchGroups, 100);
-            await clearTextChannel(client, rustplus.guildId, instance.channelIds.storageMonitors, 100);
+            await discordTools.clearTextChannel(client, rustplus.guildId, instance.channelIds.switches, 100);
+            await discordTools.clearTextChannel(client, rustplus.guildId, instance.channelIds.switchGroups, 100);
+            await discordTools.clearTextChannel(client, rustplus.guildId, instance.channelIds.storageMonitors, 100);
 
             instance.activeServer = null;
             client.setInstance(guildId, instance);
@@ -645,10 +636,10 @@ module.exports = async (client, interaction) => {
         }
 
         for (const [entityId, content] of Object.entries(server.alarms)) {
-            await deleteMessage(client, guildId, instance.channelIds.alarms, content.messageId);
+            await discordTools.deleteMessage(client, guildId, instance.channelIds.alarms, content.messageId);
         }
 
-        await deleteMessage(client, guildId, instance.channelIds.servers, server.messageId);
+        await discordTools.deleteMessage(client, guildId, instance.channelIds.servers, server.messageId);
 
         delete instance.serverList[ids.serverId];
         client.setInstance(guildId, instance);
@@ -741,7 +732,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await deleteMessage(client, guildId, instance.channelIds.switches,
+        await discordTools.deleteMessage(client, guildId, instance.channelIds.switches,
             server.switches[ids.entityId].messageId);
 
         delete server.switches[ids.entityId];
@@ -794,7 +785,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await deleteMessage(client, guildId, instance.channelIds.alarms,
+        await discordTools.deleteMessage(client, guildId, instance.channelIds.alarms,
             server.alarms[ids.entityId].messageId);
 
         delete server.alarms[ids.entityId];
@@ -876,7 +867,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await deleteMessage(client, guildId, instance.channelIds.storageMonitors,
+        await discordTools.deleteMessage(client, guildId, instance.channelIds.storageMonitors,
             server.storageMonitors[ids.entityId].messageId);
 
         delete server.storageMonitors[ids.entityId];
@@ -916,7 +907,7 @@ module.exports = async (client, interaction) => {
             guildId, ids.serverId, ids.entityId, items);
 
         setTimeout(async () => {
-            await deleteMessage(client, guildId, instance.channelIds.storageMonitors, message.id);
+            await discordTools.deleteMessage(client, guildId, instance.channelIds.storageMonitors, message.id);
         }, 30000);
     }
     else if (interaction.customId.startsWith('StorageMonitorContainerDelete')) {
@@ -933,7 +924,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await deleteMessage(client, guildId, instance.channelIds.storageMonitors,
+        await discordTools.deleteMessage(client, guildId, instance.channelIds.storageMonitors,
             server.storageMonitors[ids.entityId].messageId);
 
         delete server.storageMonitors[ids.entityId];
@@ -1021,7 +1012,7 @@ module.exports = async (client, interaction) => {
         }
 
         if (server.switchGroups.hasOwnProperty(ids.groupId)) {
-            await deleteMessage(client, guildId, instance.channelIds.switchGroups,
+            await discordTools.deleteMessage(client, guildId, instance.channelIds.switchGroups,
                 server.switchGroups[ids.groupId].messageId);
 
             delete server.switchGroups[ids.groupId];
@@ -1110,7 +1101,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        await deleteMessage(client, guildId, instance.channelIds.trackers, tracker.messageId);
+        await discordTools.deleteMessage(client, guildId, instance.channelIds.trackers, tracker.messageId);
 
         delete instance.trackers[ids.trackerId];
         client.setInstance(guildId, instance);

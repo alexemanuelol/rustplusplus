@@ -24,7 +24,7 @@ const RustPlusLib = require('@liamcottle/rustplus.js');
 const Translate = require('translate');
 
 import { log } from '../../index';
-import { getMember } from '../discordTools/discord-tools';
+import * as discordTools from '../discordTools/discord-tools';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
@@ -2286,7 +2286,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 const discordUserId = credentials[player.steamId].discord_user_id;
-                const user = await getMember(Client.client, this.guildId, discordUserId);
+                const user = await discordTools.getMember(Client.client, this.guildId, discordUserId);
 
                 const content = {
                     embeds: [DiscordEmbeds.getUserSendEmbed(this.guildId, this.serverId, callerName, message)]

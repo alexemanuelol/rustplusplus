@@ -30,7 +30,7 @@ import { registerSlashCommands } from '../discordTools/register-slash-commands';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 import { setupSettingsMenu } from '../discordTools/setup-settings-menu';
-import { getRole, getTextChannel } from '../discordTools/discord-tools';
+import * as discordTools from '../discordTools/discord-tools';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
@@ -190,7 +190,7 @@ class DiscordBot extends Discord.Client {
     }
 
     async logInteraction(interaction, verifyId, type) {
-        const channel = await getTextChannel(this, interaction.guildId, interaction.channelId);
+        const channel = await discordTools.getTextChannel(this, interaction.guildId, interaction.channelId);
         const args = new Object();
         args['guild'] = `${interaction.member.guild.name} (${interaction.member.guild.id})`;
         args['channel'] = `${channel.name} (${interaction.channelId})`;
@@ -536,7 +536,7 @@ class DiscordBot extends Discord.Client {
 
         if (!interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator) &&
             !interaction.member.roles.cache.has(instance.roleId)) {
-            const role = await getRole(this, interaction.guildId, instance.roleId);
+            const role = await discordTools.getRole(this, interaction.guildId, instance.roleId);
             const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
             await this.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
             log.warn(str);

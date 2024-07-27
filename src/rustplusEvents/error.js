@@ -18,8 +18,6 @@
 
 */
 
-const DiscordMessages = require('../discordTools/discordMessages.js');
-
 module.exports = {
     name: 'error',
     async execute(rustplus, client, err) {

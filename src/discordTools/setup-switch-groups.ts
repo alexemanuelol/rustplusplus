@@ -18,7 +18,7 @@
 
 */
 
-import { clearTextChannel } from "./discord-tools";
+import * as discordTools from './discord-tools';
 const DiscordMessages = require('./discordMessages.js');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 const { RustPlus } = require('../structures/RustPlus.js');
@@ -28,7 +28,7 @@ export async function setupSwitchGroups(client: typeof DiscordBot, rustplus: typ
     const instance = client.getInstance(guildId);
 
     if (rustplus.isNewConnection) {
-        await clearTextChannel(client, guildId, instance.channelIds.switchGroups, 100);
+        await discordTools.clearTextChannel(client, guildId, instance.channelIds.switchGroups, 100);
     }
 
     for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {

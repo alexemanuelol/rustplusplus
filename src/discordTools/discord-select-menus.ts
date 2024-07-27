@@ -25,7 +25,7 @@ import * as path from 'path';
 import * as guildInstance from '../util/guild-instance';
 import { localeManager as lm } from "../../index";
 import { languageCodes } from "../util/languages";
-import * as Constants from '../util/constants';
+import * as constants from '../util/constants';
 
 
 export interface SelectMenuOptions {
@@ -53,7 +53,7 @@ export function getSelectMenu(guildId: string, options: SelectMenuOptions = {}):
                 option.description = lm.getIntl(instance.generalSettings.language, 'empty');
                 continue;
             }
-            option.description = option.description.substring(0, Constants.SELECT_MENU_MAX_DESCRIPTION_CHARACTERS);
+            option.description = option.description.substring(0, constants.SELECT_MENU_MAX_DESCRIPTION_CHARACTERS);
         }
         selectMenu.setOptions(options.options);
     }
