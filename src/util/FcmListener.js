@@ -24,10 +24,10 @@ const PushReceiver = require('push-receiver');
 
 import { log } from '../../index';
 import { getMember, getMessage } from '../discordTools/discord-tools';
+import { getNewsButton } from '../discordTools/discord-buttons';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.ts');
@@ -520,7 +520,7 @@ async function newsNews(client, guild, full, data, body) {
 
     const content = {
         embeds: [DiscordEmbeds.getNewsEmbed(guild.id, data)],
-        components: [DiscordButtons.getNewsButton(guild.id, body, isValidUrl(body.url))]
+        components: [getNewsButton(guild.id, body.url, isValidUrl(body.url))]
     }
 
     await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);

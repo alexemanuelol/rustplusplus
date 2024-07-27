@@ -22,10 +22,24 @@ const Discord = require('discord.js');
 
 import { log } from '../../index';
 import { deleteMessage, clearTextChannel } from '../discordTools/discord-tools';
+import {
+    getNotificationButtons,
+    getInGameCommandsEnabledButton,
+    getInGameTeammateNotificationsButtons,
+    getFcmAlarmNotificationButtons,
+    getSmartAlarmNotifyInGameButton,
+    getSmartSwitchNotifyInGameWhenChangedFromDiscordButton,
+    getLeaderCommandEnabledButton,
+    getLeaderCommandOnlyForPairedButton,
+    getBotMutedInGameButton,
+    getMapWipeNotifyEveryoneButton,
+    getItemAvailableNotifyInGameButton,
+    getDisplayInformationBattlemetricsAllOnlinePlayersButton,
+    getSubscribeToChangesBattlemetricsButtons
+} from '../discordTools/discord-buttons';
 const Config = require('../../config');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
-const DiscordButtons = require('../discordTools/discordButtons.js');
 const DiscordModals = require('../discordTools/discordModals.js');
 
 module.exports = async (client, interaction) => {
@@ -60,7 +74,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getNotificationButtons(
+            components: [getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
     }
@@ -79,7 +93,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getNotificationButtons(
+            components: [getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
     }
@@ -98,7 +112,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getNotificationButtons(
+            components: [getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
     }
@@ -114,8 +128,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameCommandsEnabledButton(guildId,
-                instance.generalSettings.inGameCommandsEnabled)]
+            components: [getInGameCommandsEnabledButton(guildId, instance.generalSettings.inGameCommandsEnabled)]
         });
     }
     else if (interaction.customId === 'BotMutedInGame') {
@@ -130,8 +143,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getBotMutedInGameButton(guildId,
-                instance.generalSettings.muteInGameBotMessages)]
+            components: [getBotMutedInGameButton(guildId, instance.generalSettings.muteInGameBotMessages)]
         });
     }
     else if (interaction.customId === 'InGameTeammateConnection') {
@@ -146,7 +158,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
+            components: [getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateAfk') {
@@ -161,7 +173,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
+            components: [getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'InGameTeammateDeath') {
@@ -176,7 +188,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)]
+            components: [getInGameTeammateNotificationsButtons(guildId)]
         });
     }
     else if (interaction.customId === 'FcmAlarmNotification') {
@@ -192,7 +204,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getFcmAlarmNotificationButtons(
+            components: [getFcmAlarmNotificationButtons(
                 guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)]
@@ -211,7 +223,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getFcmAlarmNotificationButtons(
+            components: [getFcmAlarmNotificationButtons(
                 guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)]
@@ -230,9 +242,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getSmartAlarmNotifyInGameButton(
-                guildId,
-                instance.generalSettings.smartAlarmNotifyInGame)]
+            components: [getSmartAlarmNotifyInGameButton(guildId, instance.generalSettings.smartAlarmNotifyInGame)]
         });
     }
     else if (interaction.customId === 'SmartSwitchNotifyInGameWhenChangedFromDiscord') {
@@ -249,8 +259,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(
-                guildId,
+            components: [getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId,
                 instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord)]
         });
     }
@@ -266,9 +275,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getLeaderCommandEnabledButton(
-                guildId,
-                instance.generalSettings.leaderCommandEnabled)]
+            components: [getLeaderCommandEnabledButton(guildId, instance.generalSettings.leaderCommandEnabled)]
         });
     }
     else if (interaction.customId === 'LeaderCommandOnlyForPaired') {
@@ -284,8 +291,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getLeaderCommandOnlyForPairedButton(
-                guildId,
+            components: [getLeaderCommandOnlyForPairedButton(guildId,
                 instance.generalSettings.leaderCommandOnlyForPaired)]
         });
     }
@@ -302,7 +308,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)]
+            components: [getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)]
         });
     }
     else if (interaction.customId === 'ItemAvailableNotifyInGame') {
@@ -319,7 +325,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getItemAvailableNotifyInGameButton(guildId,
+            components: [getItemAvailableNotifyInGameButton(guildId,
                 instance.generalSettings.itemAvailableInVendingMachineNotifyInGame)]
         });
     }
@@ -337,7 +343,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: [DiscordButtons.getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
+            components: [getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
                 instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers)]
         });
     }
@@ -355,7 +361,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: DiscordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsTrackerNameChanges') {
@@ -372,7 +378,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: DiscordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsGlobalNameChanges') {
@@ -389,7 +395,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: DiscordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsGlobalLogin') {
@@ -406,7 +412,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: DiscordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId === 'BattlemetricsGlobalLogout') {
@@ -423,7 +429,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await client.interactionUpdate(interaction, {
-            components: DiscordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
+            components: getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
     else if (interaction.customId.startsWith('ServerConnect')) {

@@ -25,7 +25,21 @@ import { log } from '../../index';
 import * as constants from '../util/constants';
 import { getTextChannel, clearTextChannel } from './discord-tools';
 import { getLanguageSelectMenu, getPrefixSelectMenu, getTrademarkSelectMenu, getCommandDelaySelectMenu, getVoiceGenderSelectMenu } from './discord-select-menus';
-const DiscordButtons = require('./discordButtons.js');
+import {
+    getNotificationButtons,
+    getInGameCommandsEnabledButton,
+    getInGameTeammateNotificationsButtons,
+    getFcmAlarmNotificationButtons,
+    getSmartAlarmNotifyInGameButton,
+    getSmartSwitchNotifyInGameWhenChangedFromDiscordButton,
+    getLeaderCommandEnabledButton,
+    getLeaderCommandOnlyForPairedButton,
+    getBotMutedInGameButton,
+    getMapWipeNotifyEveryoneButton,
+    getItemAvailableNotifyInGameButton,
+    getDisplayInformationBattlemetricsAllOnlinePlayersButton,
+    getSubscribeToChangesBattlemetricsButtons
+} from './discord-buttons';
 const DiscordEmbeds = require('./discordEmbeds.js');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
@@ -116,8 +130,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'shouldCommandsEnabledSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getInGameCommandsEnabledButton(guildId,
-            instance.generalSettings.inGameCommandsEnabled)],
+        components: [getInGameCommandsEnabledButton(guildId, instance.generalSettings.inGameCommandsEnabled)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -128,7 +141,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'shouldBotBeMutedSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getBotMutedInGameButton(guildId, instance.generalSettings.muteInGameBotMessages)],
+        components: [getBotMutedInGameButton(guildId, instance.generalSettings.muteInGameBotMessages)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -139,7 +152,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'inGameTeamNotificationsSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getInGameTeammateNotificationsButtons(guildId)],
+        components: [getInGameTeammateNotificationsButtons(guildId)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -168,7 +181,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
                 }]
         })],
         components: [
-            DiscordButtons.getFcmAlarmNotificationButtons(
+            getFcmAlarmNotificationButtons(
                 guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
                 instance.generalSettings.fcmAlarmNotificationEveryone)],
@@ -182,8 +195,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'shouldSmartAlarmsNotifyInGameSetting'),
             thumbnail: `attachment://settings_logo.png`,
         })],
-        components: [DiscordButtons.getSmartAlarmNotifyInGameButton(guildId,
-            instance.generalSettings.smartAlarmNotifyInGame)],
+        components: [getSmartAlarmNotifyInGameButton(guildId, instance.generalSettings.smartAlarmNotifyInGame)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -194,7 +206,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'shouldSmartSwitchNotifyInGameWhenChangedFromDiscord'),
             thumbnail: `attachment://settings_logo.png`,
         })],
-        components: [DiscordButtons.getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId,
+        components: [getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId,
             instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
@@ -206,8 +218,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'shouldLeaderCommandEnabledSetting'),
             thumbnail: `attachment://settings_logo.png`,
         })],
-        components: [DiscordButtons.getLeaderCommandEnabledButton(guildId,
-            instance.generalSettings.leaderCommandEnabled)],
+        components: [getLeaderCommandEnabledButton(guildId, instance.generalSettings.leaderCommandEnabled)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -218,7 +229,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'shouldLeaderCommandOnlyForPairedSetting'),
             thumbnail: `attachment://settings_logo.png`,
         })],
-        components: [DiscordButtons.getLeaderCommandOnlyForPairedButton(guildId,
+        components: [getLeaderCommandOnlyForPairedButton(guildId,
             instance.generalSettings.leaderCommandOnlyForPaired)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
@@ -230,7 +241,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'mapWipeDetectedNotifySetting', { group: '@everyone' }),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)],
+        components: [getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -241,7 +252,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'itemAvailableNotifyInGameSetting'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getItemAvailableNotifyInGameButton(guildId,
+        components: [getItemAvailableNotifyInGameButton(guildId,
             instance.generalSettings.itemAvailableInVendingMachineNotifyInGame)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
@@ -253,7 +264,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'displayInformationBattlemetricsAllOnlinePlayers'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: [DiscordButtons.getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
+        components: [getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
             instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers)],
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
@@ -265,7 +276,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
             title: client.intlGet(guildId, 'subscribeToChangesBattlemetrics'),
             thumbnail: `attachment://settings_logo.png`
         })],
-        components: DiscordButtons.getSubscribeToChangesBattlemetricsButtons(guildId),
+        components: getSubscribeToChangesBattlemetricsButtons(guildId),
         files: [new AttachmentBuilder(
             path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
@@ -288,7 +299,7 @@ async function setupNotificationSettings(client: typeof DiscordBot, guildId: str
                 thumbnail: `attachment://${instance.notificationSettings[setting].image}`
             })],
             components: [
-                DiscordButtons.getNotificationButtons(
+                getNotificationButtons(
                     guildId, setting,
                     instance.notificationSettings[setting].discord,
                     instance.notificationSettings[setting].inGame,
