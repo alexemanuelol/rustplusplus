@@ -23,10 +23,10 @@ const Discord = require('discord.js');
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordButtons from '../discordTools/discord-buttons';
+import * as discordModals from '../discordTools/discord-modals';
 const Config = require('../../config');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
-const DiscordModals = require('../discordTools/discordModals.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -463,7 +463,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getServerEditModal(guildId, ids.serverId);
+        const modal = discordModals.getServerEditModal(guildId, ids.serverId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('DeleteUnreachableDevices')) {
@@ -521,7 +521,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getCustomTimersEditModal(guildId, ids.serverId);
+        const modal = discordModals.getCustomTimersEditModal(guildId, ids.serverId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('CreateTracker')) {
@@ -715,7 +715,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getSmartSwitchEditModal(guildId, ids.serverId, ids.entityId);
+        const modal = discordModals.getSmartSwitchEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('SmartSwitchDelete')) {
@@ -800,7 +800,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getSmartAlarmEditModal(guildId, ids.serverId, ids.entityId);
+        const modal = discordModals.getSmartAlarmEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardEveryone')) {
@@ -850,7 +850,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getStorageMonitorEditModal(guildId, ids.serverId, ids.entityId);
+        const modal = discordModals.getStorageMonitorEditModal(guildId, ids.serverId, ids.entityId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardDelete')) {
@@ -989,7 +989,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getGroupEditModal(guildId, ids.serverId, ids.groupId);
+        const modal = discordModals.getGroupEditModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('GroupDelete')) {
@@ -1028,7 +1028,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getGroupAddSwitchModal(guildId, ids.serverId, ids.groupId);
+        const modal = discordModals.getGroupAddSwitchModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
@@ -1040,7 +1040,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getGroupRemoveSwitchModal(guildId, ids.serverId, ids.groupId);
+        const modal = discordModals.getGroupRemoveSwitchModal(guildId, ids.serverId, ids.groupId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerEveryone')) {
@@ -1084,7 +1084,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getTrackerEditModal(guildId, ids.trackerId);
+        const modal = discordModals.getTrackerEditModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerDelete')) {
@@ -1115,7 +1115,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getTrackerAddPlayerModal(guildId, ids.trackerId);
+        const modal = discordModals.getTrackerAddPlayerModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
@@ -1127,7 +1127,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        const modal = DiscordModals.getTrackerRemovePlayerModal(guildId, ids.trackerId);
+        const modal = discordModals.getTrackerRemovePlayerModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
     }
     else if (interaction.customId.startsWith('TrackerInGame')) {
