@@ -41,12 +41,15 @@ export const EMBED_MAX_FOOTER_CHARACTERS: number = 2048;
 export const EMBED_MAX_AUTHOR_NAME_CHARACTERS: number = 256;
 export const EMBED_MAX_EMBEDS_IN_MESSAGE: number = 10;
 
-/* Select menus */
-export const SELECT_MENU_MAX_DESCRIPTION_CHARACTERS: number = 100;
-
 export const EMBED_FIELD_MAX_WIDTH_LENGTH_1: number = 54;
 export const EMBED_FIELD_MAX_WIDTH_LENGTH_2: number = 26;
 export const EMBED_FIELD_MAX_WIDTH_LENGTH_3: number = 20;
+
+/* Select menus */
+export const SELECT_MENU_MAX_DESCRIPTION_CHARACTERS: number = 100;
+
+/* Modals */
+export const MODAL_MAX_TITLE_CHARACTERS: number = 45;
 
 export const STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY: number = 29;
 export const STORAGE_MONITOR_VENDING_MACHINE_CAPACITY: number = 30;
