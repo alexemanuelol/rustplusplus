@@ -20,6 +20,7 @@
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.js');
+const notificationManager = require('../external/notification_handler.js');
 
 module.exports = {
     handler: async function (rustplus, client, mapMarkers) {
@@ -87,6 +88,11 @@ module.exports = {
                         items: items.join(', '),
                         location: location.location
                     });
+
+                     notificationManager.sendNotification('vendingMachine', {
+                        location: location,
+                        items: items,
+                     });
 
                     await DiscordMessages.sendItemAvailableInVendingMachineMessage(rustplus, str);
 
