@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
 
 module.exports = {
 	name: 'despawn',
@@ -59,7 +59,7 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: despawnItemName
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -75,14 +75,14 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
 					id: despawnItemId
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
 		}
 		else if (despawnItemName === null && despawnItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -93,7 +93,7 @@ module.exports = {
 			const str = client.intlGet(guildId, 'couldNotFindDespawnDetails', {
 				name: itemName
 			});
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -110,7 +110,7 @@ module.exports = {
 			time: despawnTime
 		});
 
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 		log.info(str);
 	},
 };

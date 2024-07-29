@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Timer = require('../util/timer.ts');
 
 module.exports = {
@@ -100,7 +100,7 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: decayItemName
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -114,14 +114,14 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
 					id: decayItemId
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
 		}
 		else if (decayItemName === null && decayItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -141,7 +141,7 @@ module.exports = {
 			const str = client.intlGet(guildId, 'couldNotFindDecayDetails', {
 				name: itemName
 			});
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -154,7 +154,7 @@ module.exports = {
 				hp: hp,
 				max: details.hp
 			});
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -213,7 +213,7 @@ module.exports = {
 			value: `${decayItemName} ${decayItemId} ${decayItemHp}`
 		}));
 
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, decayString));
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, decayString));
 		log.info(decayString);
 	},
 };

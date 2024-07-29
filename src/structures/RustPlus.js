@@ -25,10 +25,10 @@ const Translate = require('translate');
 
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordVoice = require('../discordTools/discordVoice.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
@@ -2289,7 +2289,7 @@ class RustPlus extends RustPlusLib {
                 const user = await discordTools.getMember(Client.client, this.guildId, discordUserId);
 
                 const content = {
-                    embeds: [DiscordEmbeds.getUserSendEmbed(this.guildId, this.serverId, callerName, message)]
+                    embeds: [discordEmbeds.getUserSendEmbed(this.guildId, this.serverId, callerName, message)]
                 }
 
                 if (user) {

@@ -23,8 +23,8 @@ const Discord = require('discord.js');
 const Path = require('path');
 
 import { log } from '../../index';
-const Constants = require('../util/constants.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as constants from '../util/constants';
 
 module.exports = {
 	name: 'map',
@@ -59,7 +59,7 @@ module.exports = {
 
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
 			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -102,9 +102,9 @@ module.exports = {
 
 		const fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';
 		await client.interactionEditReply(interaction, {
-			embeds: [DiscordEmbeds.getEmbed({
-				color: Constants.COLOR_DEFAULT,
-				image: `attachment://${interaction.guildId}_map_${fileName}.png`,
+			embeds: [discordEmbeds.getEmbed({
+				color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
+				image: { url: `attachment://${interaction.guildId}_map_${fileName}.png` },
 				footer: { text: instance.serverList[rustplus.serverId].title }
 			})],
 			files: [file],

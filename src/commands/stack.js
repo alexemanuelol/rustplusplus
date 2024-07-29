@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
 
 module.exports = {
 	name: 'stack',
@@ -59,7 +59,7 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: stackItemName
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -75,14 +75,14 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
 					id: stackItemId
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
 		}
 		else if (stackItemName === null && stackItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -93,7 +93,7 @@ module.exports = {
 			const str = client.intlGet(guildId, 'couldNotFindStackDetails', {
 				name: itemName
 			});
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -110,7 +110,7 @@ module.exports = {
 			quantity: quantity
 		});
 
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 		log.info(str);
 	},
 };

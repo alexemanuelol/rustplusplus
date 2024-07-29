@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordEmbeds = require('../discordTools/discordEmbeds');
+import * as discordEmbeds from '../discordTools/discord-embeds';
 
 module.exports = {
 	name: 'leader',
@@ -55,14 +55,14 @@ module.exports = {
 
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
 			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
 
 		if (!rustplus.generalSettings.leaderCommandEnabled) {
 			const str = client.intlGet(interaction.guildId, 'leaderCommandIsDisabled');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
 				instance.serverList[rustplus.serverId].title));
 			rustplus.warn(str);
 			return;
@@ -78,7 +78,7 @@ module.exports = {
 			names = names.slice(0, -2);
 
 			const str = client.intlGet(rustplus.guildId, 'leaderCommandOnlyWorks', { name: names });
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
 				instance.serverList[rustplus.serverId].title));
 			rustplus.warn(str);
 			return;
@@ -90,7 +90,7 @@ module.exports = {
 					const str = client.intlGet(interaction.guildId, 'leaderAlreadyLeader', {
 						name: player.name
 					});
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+					await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.warn(str);
 				}
@@ -100,7 +100,7 @@ module.exports = {
 							const str = client.intlGet(rustplus.guildId, 'playerNotPairedWithServer', {
 								name: player.name
 							});
-							await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+							await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
 								instance.serverList[rustplus.serverId].title));
 							rustplus.warn(str);
 							return;
@@ -117,7 +117,7 @@ module.exports = {
 					const str = client.intlGet(interaction.guildId, 'leaderTransferred', {
 						name: player.name
 					});
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str,
+					await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
 						instance.serverList[rustplus.serverId].title));
 					rustplus.info(str);
 				}
@@ -126,7 +126,7 @@ module.exports = {
 		}
 
 		const str = client.intlGet(interaction.guildId, 'couldNotIdentifyMember', { name: member });
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str,
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
 			instance.serverList[rustplus.serverId].title));
 		rustplus.warn(str);
 	},

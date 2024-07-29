@@ -23,9 +23,9 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import { getGuild } from '../discordTools/discord-tools';
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -141,7 +141,7 @@ async function addCredentials(client, interaction, verifyId) {
     if (Object.keys(credentials) !== 0 && isHoster) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
-            client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.warn(str);
             return;
         }
@@ -149,7 +149,7 @@ async function addCredentials(client, interaction, verifyId) {
 
     if (steamId in credentials) {
         const str = client.intlGet(guildId, 'credentialsAlreadyRegistered', { steamId: steamId });
-        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
         log.warn(str);
         return;
     }
@@ -213,7 +213,7 @@ async function addCredentials(client, interaction, verifyId) {
     }));
 
     const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });
-    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
     log.info(str);
 }
 
@@ -226,7 +226,7 @@ async function removeCredentials(client, interaction, verifyId) {
     if (steamId && (steamId in credentials) && credentials[steamId].discordUserId !== interaction.member.user.id) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
-            client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.warn(str);
             return;
         }
@@ -245,7 +245,7 @@ async function removeCredentials(client, interaction, verifyId) {
         const str = client.intlGet(guildId, 'credentialsDoNotExist', {
             steamId: steamId ? steamId : client.intlGet(guildId, 'unknown')
         });
-        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
         log.warn(str);
         return;
     }
@@ -274,7 +274,7 @@ async function removeCredentials(client, interaction, verifyId) {
     }));
 
     const str = client.intlGet(guildId, 'credentialsRemovedSuccessfully', { steamId: steamId });
-    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
     log.info(str);
 }
 
@@ -295,7 +295,7 @@ async function setHosterCredentials(client, interaction, verifyId) {
 
     if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
         const str = client.intlGet(interaction.guildId, 'missingPermission');
-        client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
         log.warn(str);
         return;
     }
@@ -309,7 +309,7 @@ async function setHosterCredentials(client, interaction, verifyId) {
         const str = client.intlGet(guildId, 'credentialsDoNotExist', {
             steamId: steamId ? steamId : client.intlGet(guildId, 'unknown')
         });
-        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
         log.warn(str);
         return;
     }
@@ -340,6 +340,6 @@ async function setHosterCredentials(client, interaction, verifyId) {
     }));
 
     const str = client.intlGet(guildId, 'credentialsSetHosterSuccessfully', { steamId: steamId });
-    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
     log.info(str);
 }

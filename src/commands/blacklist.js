@@ -22,8 +22,8 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import { getGuild, getMember } from '../discordTools/discord-tools';
-const Constants = require('../util/constants.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as constants from '../util/constants';
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const Request = require('../util/request.ts');
 
@@ -72,7 +72,7 @@ module.exports = {
 
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(guildId, 'missingPermission');
-			await client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -88,7 +88,7 @@ module.exports = {
 
 				if (discordUser === null && steamid === null) {
 					const str = client.intlGet(guildId, 'missingArguments');
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+					await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 					log.warn(str);
 					return;
 				}
@@ -141,7 +141,7 @@ module.exports = {
 					value: `add, ${discordUser}, ${steamid}`
 				}));
 
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(successful, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(successful, str));
 				log.info(str);
 				return;
 			} break;
@@ -152,7 +152,7 @@ module.exports = {
 
 				if (discordUser === null && steamid === null) {
 					const str = client.intlGet(guildId, 'missingArguments');
-					await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+					await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 					log.warn(str);
 					return;
 				}
@@ -207,7 +207,7 @@ module.exports = {
 					value: `remove, ${discordUser}, ${steamid}`
 				}));
 
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(successful, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(successful, str));
 				log.info(str);
 				return;
 			} break;
@@ -235,8 +235,8 @@ module.exports = {
 				}
 
 				await client.interactionEditReply(interaction, {
-					embeds: [DiscordEmbeds.getEmbed({
-						color: Constants.COLOR_DEFAULT,
+					embeds: [discordEmbeds.getEmbed({
+						color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
 						title: client.intlGet(guildId, 'blacklist'),
 						fields: [
 							{

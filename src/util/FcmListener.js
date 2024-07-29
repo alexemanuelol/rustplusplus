@@ -25,10 +25,10 @@ const PushReceiver = require('push-receiver');
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordButtons from '../discordTools/discord-buttons';
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.ts');
 const Request = require('../util/request.ts');
@@ -467,7 +467,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
     }
 
     const content = {
-        embeds: [DiscordEmbeds.getAlarmRaidAlarmEmbed(data, body)],
+        embeds: [discordEmbeds.getAlarmRaidAlarmEmbed(data.title, data.message, body.name, body.img)],
         content: '@everyone',
         files: files
     }
@@ -488,7 +488,7 @@ async function playerDeath(client, guild, full, data, body, discordUserId) {
     if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMAGE;
 
     const content = {
-        embeds: [DiscordEmbeds.getPlayerDeathEmbed(data, body, png)]
+        embeds: [discordEmbeds.getPlayerDeathEmbed(data.title, body.name, body.targetId, png)]
     }
 
     if (user) {
@@ -500,8 +500,9 @@ async function teamLogin(client, guild, full, data, body) {
     const instance = client.getInstance(guild.id);
 
     const content = {
-        embeds: [DiscordEmbeds.getTeamLoginEmbed(
-            guild.id, body, await Request.requestSteamProfilePicture(body.targetId))]
+        embeds: [discordEmbeds.getTeamLoginEmbed(
+            guild.id, body.name, body.targetName, body.targetId,
+            await Request.requestSteamProfilePicture(body.targetId))]
     }
 
     const rustplus = client.rustplusInstances[guild.id];
@@ -520,7 +521,7 @@ async function newsNews(client, guild, full, data, body) {
     const instance = client.getInstance(guild.id);
 
     const content = {
-        embeds: [DiscordEmbeds.getNewsEmbed(guild.id, data)],
+        embeds: [discordEmbeds.getNewsEmbed(guild.id, data.title, data.message)],
         components: [discordButtons.getNewsButton(guild.id, body.url, isValidUrl(body.url))]
     }
 
