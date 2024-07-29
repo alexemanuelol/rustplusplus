@@ -31,10 +31,10 @@ import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 import { setupSettingsMenu } from '../discordTools/setup-settings-menu';
 import * as discordTools from '../discordTools/discord-tools';
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const GuildInstance = require('../util/guild-instance.ts');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
@@ -538,7 +538,7 @@ class DiscordBot extends Discord.Client {
             !interaction.member.roles.cache.has(instance.roleId)) {
             const role = await discordTools.getRole(this, interaction.guildId, instance.roleId);
             const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
-            await this.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            await this.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.warn(str);
             return false;
         }

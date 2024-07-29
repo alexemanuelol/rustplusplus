@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -60,7 +60,7 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: researchItemName
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -76,14 +76,14 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
 					id: researchItemId
 				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
 		}
 		else if (researchItemName === null && researchItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -94,7 +94,7 @@ module.exports = {
 			const str = client.intlGet(guildId, 'couldNotFindResearchDetails', {
 				name: itemName
 			});
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}

@@ -21,8 +21,8 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const Constants = require('../util/constants.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as constants from '../util/constants';
 
 module.exports = {
 	name: 'alias',
@@ -96,7 +96,7 @@ async function addAlias(client, interaction) {
 	for (const alias of instance.commandAliases) {
 		if (alias.alias === aliasParameter) {
 			const str = client.intlGet(guildId, 'aliasAlreadyExist');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -112,7 +112,7 @@ async function addAlias(client, interaction) {
 	client.setInstance(guildId, instance);
 
 	const str = client.intlGet(guildId, 'aliasWasAdded');
-	await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+	await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 	log.info(str);
 	return;
 }
@@ -125,7 +125,7 @@ async function removeAlias(client, interaction) {
 
 	if (!instance.commandAliases.some(e => e.index === indexParameter)) {
 		const str = client.intlGet(guildId, 'aliasIndexCouldNotBeFound');
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 		log.warn(str);
 		return;
 	}
@@ -134,7 +134,7 @@ async function removeAlias(client, interaction) {
 	client.setInstance(guildId, instance);
 
 	const str = client.intlGet(guildId, 'aliasWasRemoved');
-	await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+	await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 	log.info(str);
 	return;
 }
@@ -158,13 +158,13 @@ async function showAlias(client, interaction) {
 		const valueString = `${alias.value}\n`;
 
 		if (totalCharacters + (indexString.length + aliasString.length + valueString.length) >=
-			Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+			constants.EMBED_MAX_TOTAL_CHARACTERS) {
 			break;
 		}
 
-		if ((indexStringsCharacters + indexString.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
-			(aliasStringsCharacters + aliasString.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
-			(valueStringsCharacters + valueString.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+		if ((indexStringsCharacters + indexString.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+			(aliasStringsCharacters + aliasString.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+			(valueStringsCharacters + valueString.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
 			fieldIndex += 1;
 
 			indexStrings.push('');
@@ -206,11 +206,11 @@ async function showAlias(client, interaction) {
 		});
 	}
 
-	const embed = DiscordEmbeds.getEmbed({
+	const embed = discordEmbeds.getEmbed({
 		title: title,
-		color: Constants.COLOR_DEFAULT,
+		color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
 		fields: fields,
-		timestamp: true
+		timestamp: new Date()
 	});
 
 	await client.interactionEditReply(interaction, { embeds: [embed] });

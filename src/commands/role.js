@@ -24,7 +24,7 @@ import { log } from '../../index';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 import { getGuild } from '../discordTools/discord-tools';
-const DiscordEmbeds = require('../discordTools/discordEmbeds');
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
 module.exports = {
@@ -56,7 +56,7 @@ module.exports = {
 
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(interaction.guildId, 'missingPermission');
-			client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			client.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -96,12 +96,12 @@ module.exports = {
 
 		if (interaction.options.getSubcommand() === 'set') {
 			const str = client.intlGet(interaction.guildId, 'roleSet', { name: role.name });
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 			log.info(str);
 		}
 		else {
 			const str = client.intlGet(interaction.guildId, 'roleCleared');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 			log.info(str);
 		}
 	},

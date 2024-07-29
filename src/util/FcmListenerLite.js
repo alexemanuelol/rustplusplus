@@ -22,9 +22,9 @@ const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.ts');
 const Request = require('../util/request.ts');
@@ -368,7 +368,7 @@ async function playerDeath(client, guild, title, message, body, discordUserId) {
     if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMAGE;
 
     const content = {
-        embeds: [DiscordEmbeds.getPlayerDeathEmbed({ title: title }, body, png)]
+        embeds: [discordEmbeds.getPlayerDeathEmbed(title, body.name, body.targetId, png)]
     }
 
     await client.messageSend(user, content);

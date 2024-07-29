@@ -22,8 +22,8 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import { getDiscordFormattedDate } from '../discordTools/discord-tools';
-const Constants = require('../util/constants.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as constants from '../util/constants';
 
 module.exports = {
 	name: 'players',
@@ -77,7 +77,7 @@ module.exports = {
 			const rustplus = client.rustplusInstances[interaction.guildId];
 			if (!rustplus || (rustplus && !rustplus.isOperational)) {
 				const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -86,7 +86,7 @@ module.exports = {
 			const server = instance.serverList[rustplus.serverId];
 			if (!server || (server && !server.battlemetricsId)) {
 				const str = client.intlGet(interaction.guildId, 'invalidBattlemetricsId');
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -99,7 +99,7 @@ module.exports = {
 			const str = client.intlGet(interaction.guildId, 'battlemetricsInstanceCouldNotBeFound', {
 				id: battlemetricsId
 			});
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -154,7 +154,7 @@ async function playersNameHandler(client, interaction, battlemetricsId) {
 
 	if (foundPlayers.length === 0) {
 		const str = client.intlGet(interaction.guildId, 'couldNotFindAnyPlayers');
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 		log.warn(str);
 		return;
 	}
@@ -173,7 +173,7 @@ async function playersPlayerIdHandler(client, interaction, battlemetricsId) {
 
 	if (!bmInstance.players.hasOwnProperty(playerId)) {
 		const str = client.intlGet(interaction.guildId, 'couldNotFindPlayerId', { id: playerId });
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 		log.warn(str);
 		return;
 	}
@@ -207,10 +207,10 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 		profileNames.unshift({ name: userName, lastSeen: null });
 	}
 
-	const profileLink = `[${playerId}](${Constants.BATTLEMETRICS_PROFILE_URL}${playerId})`;
-	const battlemetricsLink = `[${bmInstance.id}](${Constants.BATTLEMETRICS_SERVER_URL}${bmInstance.id})`;
+	const profileLink = `[${playerId}](${constants.BATTLEMETRICS_PROFILE_URL}${playerId})`;
+	const battlemetricsLink = `[${bmInstance.id}](${constants.BATTLEMETRICS_SERVER_URL}${bmInstance.id})`;
 	const isOnline = bmInstance.players[playerId]['status'];
-	const status = isOnline ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
+	const status = isOnline ? constants.ONLINE_EMOJI : constants.OFFLINE_EMOJI;
 	const onOffString = isOnline ? client.intlGet(guildId, 'onlineTime') :
 		client.intlGet(guildId, 'offlineTime');
 	const time = isOnline ? bmInstance.getOnlineTime(playerId) : bmInstance.getOfflineTime(playerId);
@@ -220,9 +220,9 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 	description += `__**${client.intlGet(guildId, 'status')}:**__ ${status}\n`;
 	description += `__**${onOffString}:**__ ${time !== null ? `[${time[1]}]` : ''}\n`;
 
-	const embed = DiscordEmbeds.getEmbed({
+	const embed = discordEmbeds.getEmbed({
 		title: `${client.intlGet(interaction.guildId, 'playersSearch')}: ${userName}`,
-		color: Constants.COLOR_DEFAULT,
+		color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
 		description: description,
 		footer: { text: bmInstance.server_name }
 	});
@@ -243,8 +243,8 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 			time = `${getDiscordFormattedDate(unixTime)}\n`;
 		}
 
-		if ((nameChangeHistoryNameCharacters + name.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
-			(nameChangeHistoryTimeCharacters + time.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+		if ((nameChangeHistoryNameCharacters + name.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+			(nameChangeHistoryTimeCharacters + time.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
 			break;
 		}
 
@@ -263,8 +263,8 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 		const unixTime = Math.floor(new Date(connection.time).getTime() / 1000);
 		const time = `${getDiscordFormattedDate(unixTime)}\n`;
 
-		if ((connectionStringCharacters + str.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
-			(connectionTimeCharacters + time.length) > Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+		if ((connectionStringCharacters + str.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+			(connectionTimeCharacters + time.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
 			break;
 		}
 
@@ -339,22 +339,22 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 		const status = bmInstance.players[playerId]['status'];
 		const time = status ? bmInstance.getOnlineTime(playerId)[1] : bmInstance.getOfflineTime(playerId)[1];
 
-		let playerStr = status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
+		let playerStr = status ? constants.ONLINE_EMOJI : constants.OFFLINE_EMOJI;
 		playerStr += ` [${time}] `;
 
-		const nameMaxLength = Constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3 - (3 + time.length);
+		const nameMaxLength = constants.EMBED_FIELD_MAX_WIDTH_LENGTH_3 - (3 + time.length);
 
 		let name = bmInstance.players[playerId]['name'].replace('[', '(').replace(']', ')');
 		name = name.length <= nameMaxLength ? name : name.substring(0, nameMaxLength - 2) + '..';
 
-		playerStr += `[${name}](${Constants.BATTLEMETRICS_PROFILE_URL + `${playerId}`})\n`;
+		playerStr += `[${name}](${constants.BATTLEMETRICS_PROFILE_URL + `${playerId}`})\n`;
 
-		if (totalCharacters + playerStr.length >= Constants.EMBED_MAX_TOTAL_CHARACTERS) {
+		if (totalCharacters + playerStr.length >= constants.EMBED_MAX_TOTAL_CHARACTERS) {
 			isEmbedFull = true;
 			break;
 		}
 
-		if (fieldCharacters + playerStr.length >= Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+		if (fieldCharacters + playerStr.length >= constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
 			fieldCharacters = 0;
 			fieldIndex += 1;
 			fields.push('');
@@ -365,9 +365,9 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 		fieldCharacters += playerStr.length;
 	}
 
-	const embed = DiscordEmbeds.getEmbed({
+	const embed = discordEmbeds.getEmbed({
 		title: title,
-		color: Constants.COLOR_DEFAULT,
+		color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
 		footer: footer
 	});
 

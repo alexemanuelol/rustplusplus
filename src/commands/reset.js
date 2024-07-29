@@ -32,8 +32,8 @@ import { setupSwitches } from '../discordTools/setup-switches';
 import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
 import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
 import { getGuild, getCategory, clearTextChannel } from '../discordTools/discord-tools';
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Config = require('../../config');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
@@ -80,7 +80,7 @@ module.exports = {
 
 		if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
 			const str = client.intlGet(interaction.guildId, 'missingPermission');
-			client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			client.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -278,7 +278,7 @@ module.exports = {
 		}
 
 		const str = client.intlGet(interaction.guildId, 'resetSuccess');
-		await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 		log.info(str);
 	},
 };

@@ -25,10 +25,10 @@ const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordButtons from '../discordTools/discord-buttons';
+import * as discordEmbeds from '../discordTools/discord-embeds';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.ts');
 const Request = require('../util/request.ts');
@@ -494,7 +494,7 @@ async function alarmRaidAlarm(client, guild, title, message, body) {
     }
 
     const content = {
-        embeds: [DiscordEmbeds.getAlarmRaidAlarmEmbed({ title: title, message: message }, body)],
+        embeds: [discordEmbeds.getAlarmRaidAlarmEmbed(title, message, body.name, body.img)],
         content: '@everyone',
         files: files
     }
@@ -515,7 +515,7 @@ async function playerDeath(client, guild, title, message, body, discordUserId) {
     if (png === null) png = isValidUrl(body.img) ? body.img : Constants.DEFAULT_SERVER_IMAGE;
 
     const content = {
-        embeds: [DiscordEmbeds.getPlayerDeathEmbed({ title: title }, body, png)]
+        embeds: [discordEmbeds.getPlayerDeathEmbed(title, body.name, body.targetId, png)]
     }
 
     if (user) {
@@ -527,8 +527,9 @@ async function teamLogin(client, guild, title, message, body) {
     const instance = client.getInstance(guild.id);
 
     const content = {
-        embeds: [DiscordEmbeds.getTeamLoginEmbed(
-            guild.id, body, await Request.requestSteamProfilePicture(body.targetId))]
+        embeds: [discordEmbeds.getTeamLoginEmbed(
+            guild.id, body.name, body.targetName, body.targetId,
+            await Request.requestSteamProfilePicture(body.targetId))]
     }
 
     const rustplus = client.rustplusInstances[guild.id];
