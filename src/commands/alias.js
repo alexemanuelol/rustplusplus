@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 import * as constants from '../util/constants';
 
 module.exports = {
@@ -96,7 +97,7 @@ async function addAlias(client, interaction) {
 	for (const alias of instance.commandAliases) {
 		if (alias.alias === aliasParameter) {
 			const str = client.intlGet(guildId, 'aliasAlreadyExist');
-			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -112,7 +113,7 @@ async function addAlias(client, interaction) {
 	client.setInstance(guildId, instance);
 
 	const str = client.intlGet(guildId, 'aliasWasAdded');
-	await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
+	await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 	log.info(str);
 	return;
 }
@@ -125,7 +126,7 @@ async function removeAlias(client, interaction) {
 
 	if (!instance.commandAliases.some(e => e.index === indexParameter)) {
 		const str = client.intlGet(guildId, 'aliasIndexCouldNotBeFound');
-		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+		await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 		log.warn(str);
 		return;
 	}
@@ -134,7 +135,7 @@ async function removeAlias(client, interaction) {
 	client.setInstance(guildId, instance);
 
 	const str = client.intlGet(guildId, 'aliasWasRemoved');
-	await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
+	await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 	log.info(str);
 	return;
 }
@@ -213,6 +214,6 @@ async function showAlias(client, interaction) {
 		timestamp: new Date()
 	});
 
-	await client.interactionEditReply(interaction, { embeds: [embed] });
+	await discordTools.interactionEditReply(interaction, { embeds: [embed] });
 	log.info(client.intlGet(guildId, 'commandsAliasShowDesc'));
 }

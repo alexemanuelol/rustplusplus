@@ -371,5 +371,5 @@ async function playerDeath(client, guild, title, message, body, discordUserId) {
         embeds: [discordEmbeds.getPlayerDeathEmbed(title, body.name, body.targetId, png)]
     }
 
-    await client.messageSend(user, content);
+    await discordTools.messageSend(user, content);
 }

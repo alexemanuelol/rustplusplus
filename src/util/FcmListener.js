@@ -519,7 +519,7 @@ async function playerDeath(client, guild, title, message, body, discordUserId) {
     }
 
     if (user) {
-        await client.messageSend(user, content);
+        await discordTools.messageSend(user, content);
     }
 }
 

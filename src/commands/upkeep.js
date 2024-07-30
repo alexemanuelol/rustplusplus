@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 
 module.exports = {
 	name: 'upkeep',
@@ -94,7 +95,7 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: upkeepItemName
 				});
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -108,14 +109,14 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
 					id: upkeepItemId
 				});
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
 		}
 		else if (upkeepItemName === null && upkeepItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
-			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -135,7 +136,7 @@ module.exports = {
 			const str = client.intlGet(guildId, 'couldNotFindUpkeepDetails', {
 				name: itemName
 			});
-			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -159,7 +160,7 @@ module.exports = {
 			cost: items.join(', ')
 		});
 
-		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
+		await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str));
 		log.info(str);
 	},
 };

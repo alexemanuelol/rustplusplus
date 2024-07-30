@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
@@ -83,7 +84,7 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithNameFound', {
 					name: itemItemName
 				});
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -97,14 +98,14 @@ module.exports = {
 				const str = client.intlGet(guildId, 'noItemWithIdFound', {
 					id: itemItemId
 				});
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
 		}
 		else if (itemItemName === null && itemItemId === null) {
 			const str = client.intlGet(guildId, 'noNameIdGiven');
-			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}

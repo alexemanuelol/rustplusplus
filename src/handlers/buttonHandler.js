@@ -59,7 +59,7 @@ module.exports = async (client, interaction) => {
             value: `${setting.discord}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
@@ -78,7 +78,7 @@ module.exports = async (client, interaction) => {
             value: `${setting.inGame}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
@@ -97,7 +97,7 @@ module.exports = async (client, interaction) => {
             value: `${setting.voice}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getNotificationButtons(
                 guildId, ids.setting, setting.discord, setting.inGame, setting.voice)]
         });
@@ -113,7 +113,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.inGameCommandsEnabled}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getInGameCommandsEnabledButton(guildId,
                 instance.generalSettings.inGameCommandsEnabled)]
         });
@@ -129,7 +129,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.muteInGameBotMessages}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getBotMutedInGameButton(guildId,
                 instance.generalSettings.muteInGameBotMessages)]
         });
@@ -145,7 +145,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.connectionNotify}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
@@ -160,7 +160,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.afkNotify}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
@@ -175,7 +175,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.deathNotify}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getInGameTeammateNotificationsButtons(guildId)]
         });
     }
@@ -191,7 +191,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.fcmAlarmNotificationEnabled}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getFcmAlarmNotificationButtons(
                 guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
@@ -210,7 +210,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.fcmAlarmNotificationEveryone}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getFcmAlarmNotificationButtons(
                 guildId,
                 instance.generalSettings.fcmAlarmNotificationEnabled,
@@ -229,7 +229,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.smartAlarmNotifyInGame}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getSmartAlarmNotifyInGameButton(guildId,
                 instance.generalSettings.smartAlarmNotifyInGame)]
         });
@@ -247,7 +247,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId,
                 instance.generalSettings.smartSwitchNotifyInGameWhenChangedFromDiscord)]
         });
@@ -263,7 +263,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.leaderCommandEnabled}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getLeaderCommandEnabledButton(guildId,
                 instance.generalSettings.leaderCommandEnabled)]
         });
@@ -280,7 +280,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.leaderCommandOnlyForPaired}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getLeaderCommandOnlyForPairedButton(guildId,
                 instance.generalSettings.leaderCommandOnlyForPaired)]
         });
@@ -297,7 +297,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.mapWipeNotifyEveryone}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtonsgetMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)]
         });
     }
@@ -314,7 +314,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.itemAvailableInVendingMachineNotifyInGame}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getItemAvailableNotifyInGameButton(guildId,
                 instance.generalSettings.itemAvailableInVendingMachineNotifyInGame)]
         });
@@ -332,7 +332,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordButtons.getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
                 instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers)]
         });
@@ -350,7 +350,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.battlemetricsServerNameChanges}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
@@ -367,7 +367,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.battlemetricsTrackerNameChanges}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
@@ -384,7 +384,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.battlemetricsGlobalNameChanges}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
@@ -401,7 +401,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.battlemetricsGlobalLogin}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }
@@ -418,7 +418,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.battlemetricsGlobalLogout}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId)
         });
     }

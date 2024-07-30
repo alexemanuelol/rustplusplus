@@ -457,72 +457,6 @@ class DiscordBot extends Discord.Client {
         }
     }
 
-    async interactionReply(interaction, content) {
-        try {
-            return await interaction.reply(content);
-        }
-        catch (e) {
-            log.error(this.intlGet(null, 'interactionReplyFailed', { error: e }));
-        }
-
-        return undefined;
-    }
-
-    async interactionEditReply(interaction, content) {
-        try {
-            return await interaction.editReply(content);
-        }
-        catch (e) {
-            log.error(this.intlGet(null, 'interactionEditReplyFailed', { error: e }));
-        }
-
-        return undefined;
-    }
-
-    async interactionUpdate(interaction, content) {
-        try {
-            return await interaction.update(content);
-        }
-        catch (e) {
-            log.error(this.intlGet(null, 'interactionUpdateFailed', { error: e }));
-        }
-
-        return undefined;
-    }
-
-    async messageEdit(message, content) {
-        try {
-            return await message.edit(content);
-        }
-        catch (e) {
-            log.error(this.intlGet(null, 'messageEditFailed', { error: e }));
-        }
-
-        return undefined;
-    }
-
-    async messageSend(channel, content) {
-        try {
-            return await channel.send(content);
-        }
-        catch (e) {
-            log.error(this.intlGet(null, 'messageSendFailed', { error: e }));
-        }
-
-        return undefined;
-    }
-
-    async messageReply(message, content) {
-        try {
-            return await message.reply(content);
-        }
-        catch (e) {
-            log.error(this.intlGet(null, 'messageReplyFailed', { error: e }));
-        }
-
-        return undefined;
-    }
-
     async validatePermissions(interaction) {
         const instance = this.getInstance(interaction.guildId);
 
@@ -538,7 +472,7 @@ class DiscordBot extends Discord.Client {
             !interaction.member.roles.cache.has(instance.roleId)) {
             const role = await discordTools.getRole(this, interaction.guildId, instance.roleId);
             const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
-            await this.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+            await discordTools.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.warn(str);
             return false;
         }
