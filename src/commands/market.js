@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 import * as constants from '../util/constants';
 
 module.exports = {
@@ -105,7 +106,7 @@ module.exports = {
 
         if (!rustplus || (rustplus && !rustplus.isOperational)) {
             const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
-            await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+            await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.warn(str);
             return;
         }
@@ -123,7 +124,7 @@ module.exports = {
                         const str = client.intlGet(interaction.guildId, 'noItemWithNameFound', {
                             name: searchItemName
                         });
-                        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                        await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.warn(str);
                         return;
                     }
@@ -139,14 +140,14 @@ module.exports = {
                         const str = client.intlGet(interaction.guildId, 'noItemWithIdFound', {
                             id: searchItemId
                         });
-                        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                        await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.warn(str);
                         return;
                     }
                 }
                 else if (searchItemName === null && searchItemId === null) {
                     const str = client.intlGet(interaction.guildId, 'noNameIdGiven');
-                    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                    await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.warn(str);
                     return;
                 }
@@ -224,7 +225,7 @@ module.exports = {
                     footer: { text: `${instance.serverList[rustplus.serverId].title}` }
                 });
 
-                await client.interactionEditReply(interaction, { embeds: [embed] });
+                await discordTools.interactionEditReply(interaction, { embeds: [embed] });
                 rustplus.info(client.intlGet(interaction.guildId, 'searchResult', { name: itemName }));
             } break;
 
@@ -240,7 +241,7 @@ module.exports = {
                         const str = client.intlGet(interaction.guildId, 'noItemWithNameFound', {
                             name: subscribeItemName
                         });
-                        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                        await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.warn(str);
                         return;
                     }
@@ -256,14 +257,14 @@ module.exports = {
                         const str = client.intlGet(interaction.guildId, 'noItemWithIdFound', {
                             id: subscribeItemId
                         });
-                        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                        await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.warn(str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     const str = client.intlGet(interaction.guildId, 'noNameIdGiven');
-                    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                    await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.warn(str);
                     return;
                 }
@@ -273,7 +274,7 @@ module.exports = {
                     const str = client.intlGet(interaction.guildId, 'alreadySubscribedToItem', {
                         name: itemName
                     });
-                    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
+                    await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.warn(str);
                 }
@@ -285,7 +286,7 @@ module.exports = {
                     const str = client.intlGet(interaction.guildId, 'justSubscribedToItem', {
                         name: itemName
                     });
-                    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
+                    await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.info(str);
                 }
@@ -308,7 +309,7 @@ module.exports = {
                         const str = client.intlGet(interaction.guildId, 'noItemWithNameFound', {
                             name: subscribeItemName
                         });
-                        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                        await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.warn(str);
                         return;
                     }
@@ -324,14 +325,14 @@ module.exports = {
                         const str = client.intlGet(interaction.guildId, 'noItemWithIdFound', {
                             id: subscribeItemId
                         });
-                        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                        await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                         rustplus.warn(str);
                         return;
                     }
                 }
                 else if (subscribeItemName === null && subscribeItemId === null) {
                     const str = client.intlGet(interaction.guildId, 'noNameIdGiven');
-                    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+                    await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
                     rustplus.warn(str);
                     return;
                 }
@@ -345,7 +346,7 @@ module.exports = {
                     const str = client.intlGet(interaction.guildId, 'removedSubscribeItem', {
                         name: itemName
                     });
-                    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
+                    await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.info(str);
                 }
@@ -353,7 +354,7 @@ module.exports = {
                     const str = client.intlGet(interaction.guildId, 'notExistInSubscription', {
                         name: itemName
                     });
-                    await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
+                    await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
                         instance.serverList[rustplus.serverId].title));
                     rustplus.warn(str);
                 }
@@ -377,7 +378,7 @@ module.exports = {
                     value: `list`
                 }));
 
-                await client.interactionEditReply(interaction, {
+                await discordTools.interactionEditReply(interaction, {
                     embeds: [discordEmbeds.getEmbed({
                         color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
                         title: client.intlGet(interaction.guildId, 'subscriptionList'),

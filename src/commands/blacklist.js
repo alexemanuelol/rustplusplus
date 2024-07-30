@@ -21,8 +21,8 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-import { getGuild, getMember } from '../discordTools/discord-tools';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 import * as constants from '../util/constants';
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const Request = require('../util/request.ts');
@@ -73,12 +73,12 @@ module.exports = {
 
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(guildId, 'missingPermission');
-			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
 
-		const guild = await getGuild(client, guildId);
+		const guild = await discordToolsgetGuild(client, guildId);
 
 		switch (interaction.options.getSubcommand()) {
 			case 'add': {
@@ -87,7 +87,7 @@ module.exports = {
 
 				if (discordUser === null && steamid === null) {
 					const str = client.intlGet(guildId, 'missingArguments');
-					await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+					await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 					log.warn(str);
 					return;
 				}
@@ -140,7 +140,7 @@ module.exports = {
 					value: `add, ${discordUser}, ${steamid}`
 				}));
 
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(successful, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(successful, str));
 				log.info(str);
 				return;
 			} break;
@@ -151,7 +151,7 @@ module.exports = {
 
 				if (discordUser === null && steamid === null) {
 					const str = client.intlGet(guildId, 'missingArguments');
-					await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+					await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 					log.warn(str);
 					return;
 				}
@@ -206,7 +206,7 @@ module.exports = {
 					value: `remove, ${discordUser}, ${steamid}`
 				}));
 
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(successful, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(successful, str));
 				log.info(str);
 				return;
 			} break;
@@ -216,7 +216,7 @@ module.exports = {
 				let steamIds = '';
 
 				for (const discordId of instance.blacklist['discordIds']) {
-					const user = await getMember(client, guildId, discordId)
+					const user = await discordToolsgetMember(client, guildId, discordId)
 					let name = '';
 					if (user) name = `${user.user.username} (${user.id})`;
 					else name = `${discordId}`;
@@ -233,7 +233,7 @@ module.exports = {
 					steamIds += `${name}\n`;
 				}
 
-				await client.interactionEditReply(interaction, {
+				await discordTools.interactionEditReply(interaction, {
 					embeds: [discordEmbeds.getEmbed({
 						color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
 						title: client.intlGet(guildId, 'blacklist'),

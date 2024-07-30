@@ -24,6 +24,7 @@ const Path = require('path');
 
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 import * as constants from '../util/constants';
 
 module.exports = {
@@ -59,7 +60,7 @@ module.exports = {
 
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
 			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
-			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -101,7 +102,7 @@ module.exports = {
 		}));
 
 		const fileName = (interaction.options.getSubcommand() === 'clean') ? 'clean' : 'full';
-		await client.interactionEditReply(interaction, {
+		await discordTools.interactionEditReply(interaction, {
 			embeds: [discordEmbeds.getEmbed({
 				color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
 				image: { url: `attachment://${interaction.guildId}_map_${fileName}.png` },

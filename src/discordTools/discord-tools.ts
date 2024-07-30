@@ -275,10 +275,10 @@ export async function interactionUpdate(interaction: discordjs.Interaction, cont
 }
 
 /* Used to create new messages. */
-export async function messageSend(channel: discordjs.TextChannel, content: discordjs.MessageCreateOptions):
-    Promise<discordjs.Message | undefined> {
+export async function messageSend(medium: discordjs.TextChannel | discordjs.GuildMember,
+    content: discordjs.MessageCreateOptions): Promise<discordjs.Message | undefined> {
     try {
-        return await channel.send(content);
+        return await medium.send(content);
     }
     catch (e) {
         log.error(lm.getIntl(Config.general.language, 'messageSendFailed', { error: e }));

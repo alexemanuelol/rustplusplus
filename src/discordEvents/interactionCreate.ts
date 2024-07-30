@@ -22,6 +22,7 @@ import { Interaction, InteractionType } from 'discord.js';
 
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export const name = 'interactionCreate';
@@ -61,7 +62,7 @@ export async function execute(client: typeof DiscordBot, interaction: Interactio
             log.error(e);
 
             const str = client.intlGet(interaction.guildId, 'errorExecutingCommand');
-            await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+            await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.error(str);
         }
     }

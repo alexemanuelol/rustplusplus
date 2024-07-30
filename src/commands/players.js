@@ -21,8 +21,8 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-import { getDiscordFormattedDate } from '../discordTools/discord-tools';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 import * as constants from '../util/constants';
 
 module.exports = {
@@ -77,7 +77,7 @@ module.exports = {
 			const rustplus = client.rustplusInstances[interaction.guildId];
 			if (!rustplus || (rustplus && !rustplus.isOperational)) {
 				const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -86,7 +86,7 @@ module.exports = {
 			const server = instance.serverList[rustplus.serverId];
 			if (!server || (server && !server.battlemetricsId)) {
 				const str = client.intlGet(interaction.guildId, 'invalidBattlemetricsId');
-				await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 				log.warn(str);
 				return;
 			}
@@ -99,7 +99,7 @@ module.exports = {
 			const str = client.intlGet(interaction.guildId, 'battlemetricsInstanceCouldNotBeFound', {
 				id: battlemetricsId
 			});
-			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
@@ -154,7 +154,7 @@ async function playersNameHandler(client, interaction, battlemetricsId) {
 
 	if (foundPlayers.length === 0) {
 		const str = client.intlGet(interaction.guildId, 'couldNotFindAnyPlayers');
-		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+		await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 		log.warn(str);
 		return;
 	}
@@ -173,7 +173,7 @@ async function playersPlayerIdHandler(client, interaction, battlemetricsId) {
 
 	if (!bmInstance.players.hasOwnProperty(playerId)) {
 		const str = client.intlGet(interaction.guildId, 'couldNotFindPlayerId', { id: playerId });
-		await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+		await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 		log.warn(str);
 		return;
 	}
@@ -240,7 +240,7 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 		}
 		else {
 			const unixTime = Math.floor(new Date(entity.lastSeen).getTime() / 1000);
-			time = `${getDiscordFormattedDate(unixTime)}\n`;
+			time = `${discordTools.getDiscordFormattedDate(unixTime)}\n`;
 		}
 
 		if ((nameChangeHistoryNameCharacters + name.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
@@ -261,7 +261,7 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 			client.intlGet(guildId, 'disconnected')) + '\n';
 
 		const unixTime = Math.floor(new Date(connection.time).getTime() / 1000);
-		const time = `${getDiscordFormattedDate(unixTime)}\n`;
+		const time = `${discordTools.getDiscordFormattedDate(unixTime)}\n`;
 
 		if ((connectionStringCharacters + str.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
 			(connectionTimeCharacters + time.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
@@ -310,7 +310,7 @@ async function displaySpecificUser(client, interaction, battlemetricsId, playerI
 
 	embed.setFields(fields);
 
-	await client.interactionEditReply(interaction, { embeds: [embed] });
+	await discordTools.interactionEditReply(interaction, { embeds: [embed] });
 	log.info(client.intlGet(interaction.guildId, 'displayingOnlinePlayers'));
 }
 
@@ -387,6 +387,6 @@ async function displaySeveralUsers(client, interaction, battlemetricsId, playerI
 		fieldCounter += 1;
 	}
 
-	await client.interactionEditReply(interaction, { embeds: [embed] });
+	await discordTools.interactionEditReply(interaction, { embeds: [embed] });
 	log.info(client.intlGet(interaction.guildId, 'displayingOnlinePlayers'));
 }

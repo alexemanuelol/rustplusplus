@@ -33,7 +33,7 @@ const Request = require('../util/request.ts');
 module.exports = {
     sendMessage: async function (guildId, content, messageId, channelId, interaction = null) {
         if (interaction) {
-            await Client.client.interactionUpdate(interaction, content);
+            await discordTools.interactionUpdate(interaction, content);
             return;
         }
 
@@ -41,7 +41,7 @@ module.exports = {
             await discordTools.getMessage(Client.client, guildId, channelId, messageId) : undefined;
 
         if (message !== undefined) {
-            return await Client.client.messageEdit(message, content);
+            return await discordTools.messageEdit(message, content);
         }
         else {
             const channel = await discordTools.getTextChannel(Client.client, guildId, channelId);
@@ -51,7 +51,7 @@ module.exports = {
                 return;
             }
 
-            return await Client.client.messageSend(channel, content);
+            return await discordTools.messageSend(channel, content);
         }
     },
 
@@ -491,7 +491,7 @@ module.exports = {
             embeds: [discordEmbeds.getDiscordCommandResponseEmbed(rustplus, response)]
         }
 
-        await client.messageReply(message, content);
+        await discordTools.messageReply(message, content);
     },
 
     sendCredentialsShowMessage: async function (interaction) {
@@ -500,7 +500,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendItemAvailableInVendingMachineMessage: async function (rustplus, str) {
@@ -522,7 +522,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendCctvMessage: async function (interaction, monument, cctvCodes, dynamic) {
@@ -531,7 +531,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendUptimeMessage: async function (interaction, uptime) {
@@ -540,7 +540,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendVoiceMessage: async function (interaction, state) {
@@ -549,7 +549,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendCraftMessage: async function (interaction, craftDetails, quantity) {
@@ -558,7 +558,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendResearchMessage: async function (interaction, researchDetails) {
@@ -567,7 +567,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendRecycleMessage: async function (interaction, recycleDetails, quantity, recyclerType) {
@@ -577,7 +577,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 
     sendBattlemetricsEventMessage: async function (guildId, battlemetricsId, title, description, fields = null, everyone = false) {
@@ -601,6 +601,6 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionEditReply(interaction, content);
+        await discordTools.interactionEditReply(interaction, content);
     },
 }

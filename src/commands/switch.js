@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordTools from '../discordTools/discord-tools';
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
@@ -91,7 +92,7 @@ module.exports = {
 
                     if (device === null) {
                         const str = client.intlGet(guildId, 'invalidId', { id: entityId });
-                        await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
+                        await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
                             instance.serverList[rustplus.serverId].title));
                         log.warn(str);
                         return;
@@ -130,7 +131,7 @@ module.exports = {
                 const str = client.intlGet(guildId, 'smartSwitchEditSuccess', {
                     name: entity.name
                 });
-                await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
+                await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
                     instance.serverList[device.serverId].title));
                 log.info(str);
             } break;

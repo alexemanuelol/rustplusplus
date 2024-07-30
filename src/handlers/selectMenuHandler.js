@@ -58,7 +58,7 @@ module.exports = async (client, interaction) => {
 
         client.loadGuildIntl(guildId);
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordSelectMenus.getLanguageSelectMenu(guildId, interaction.values[0])]
         });
 
@@ -76,7 +76,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.prefix}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordSelectMenus.getPrefixSelectMenu(guildId, interaction.values[0])]
         });
     }
@@ -95,7 +95,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.trademark}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordSelectMenus.getTrademarkSelectMenu(guildId, interaction.values[0])]
         });
     }
@@ -110,7 +110,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.commandDelay}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordSelectMenus.getCommandDelaySelectMenu(guildId, interaction.values[0])]
         });
     }
@@ -125,7 +125,7 @@ module.exports = async (client, interaction) => {
             value: `${instance.generalSettings.voiceGender}`
         }));
 
-        await client.interactionUpdate(interaction, {
+        await discordTools.interactionUpdate(interaction, {
             components: [discordSelectMenus.getVoiceGenderSelectMenu(guildId, interaction.values[0])]
         });
     }

@@ -2293,7 +2293,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 if (user) {
-                    await Client.client.messageSend(user, content);
+                    await discordTools.messageSend(user, content);
                     return Client.client.intlGet(this.guildId, 'messageWasSent');
                 }
 
