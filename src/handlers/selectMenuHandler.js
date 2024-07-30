@@ -58,7 +58,7 @@ module.exports = async (client, interaction) => {
 
         client.loadGuildIntl(guildId);
 
-        await client.interactionEditReply(interaction, {
+        await client.interactionUpdate(interaction, {
             components: [discordSelectMenus.getLanguageSelectMenu(guildId, interaction.values[0])]
         });
 

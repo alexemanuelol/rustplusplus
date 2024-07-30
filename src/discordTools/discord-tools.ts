@@ -220,3 +220,95 @@ export async function clearTextChannel(client: typeof DiscordBot, guildId: strin
 export function getDiscordFormattedDate(unixtime: string): string {
     return `<t:${unixtime}:d>`;
 }
+
+/* Currently only used for validatePermissions function. */
+export async function interactionReply(interaction: discordjs.Interaction,
+    content: discordjs.InteractionReplyOptions): Promise<boolean> {
+    try {
+        if (interaction.isCommand()) {
+            const commandInteraction = interaction as discordjs.CommandInteraction;
+            await commandInteraction.reply(content);
+            return true;
+        }
+    }
+    catch (e) {
+        log.error(lm.getIntl(Config.general.language, 'interactionReplyFailed', { error: e }));
+    }
+
+    return false;
+}
+
+/* Currently only used for application commands. */
+export async function interactionEditReply(interaction: discordjs.Interaction, content: discordjs.InteractionEditReplyOptions): Promise<boolean> {
+    try {
+        if (interaction.isCommand()) {
+            const commandInteraction = interaction as discordjs.CommandInteraction;
+            await commandInteraction.editReply(content);
+            return true;
+        }
+    }
+    catch (e) {
+        log.error(lm.getIntl(Config.general.language, 'interactionEditReplyFailed', { error: e }));
+    }
+
+    return false;
+}
+
+/* Currently only used for button and selectMenu interactions. */
+export async function interactionUpdate(interaction: discordjs.Interaction, content: discordjs.InteractionUpdateOptions): Promise<boolean> {
+    try {
+        if (interaction.isButton()) {
+            const buttonInteraction = interaction as discordjs.ButtonInteraction;
+            await buttonInteraction.update(content);
+        }
+        else if (interaction.isStringSelectMenu()) {
+            const stringSelectMenuInteraction = interaction as discordjs.StringSelectMenuInteraction;
+            await stringSelectMenuInteraction.update(content);
+        }
+        return true;
+    }
+    catch (e) {
+        log.error(lm.getIntl(Config.general.language, 'interactionUpdateFailed', { error: e }));
+    }
+
+    return false;
+}
+
+/* Used to create new messages. */
+export async function messageSend(channel: discordjs.TextChannel, content: discordjs.MessageCreateOptions):
+    Promise<discordjs.Message | undefined> {
+    try {
+        return await channel.send(content);
+    }
+    catch (e) {
+        log.error(lm.getIntl(Config.general.language, 'messageSendFailed', { error: e }));
+    }
+
+    return undefined;
+}
+
+/* Used for prefix commands from discord (commands channel). */
+export async function messageReply(message: discordjs.Message, content: discordjs.MessageReplyOptions):
+    Promise<discordjs.Message | undefined> {
+    try {
+        return await message.reply(content);
+    }
+    catch (e) {
+        log.error(lm.getIntl(Config.general.language, 'messageReplyFailed', { error: e }));
+    }
+
+    return undefined;
+}
+
+/* If a message already exist, you use this function. */
+export async function messageEdit(message: discordjs.Message, content: discordjs.MessageEditOptions):
+    Promise<discordjs.Message | undefined> {
+    try {
+        return await message.edit(content);
+    }
+    catch (e) {
+        log.error(lm.getIntl(Config.general.language, 'messageEditFailed', { error: e }));
+    }
+
+    return undefined;
+}
