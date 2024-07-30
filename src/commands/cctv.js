@@ -53,6 +53,7 @@ module.exports = {
         await client.logInteraction(interaction, verifyId, 'slashCommand');
 
         if (!await client.validatePermissions(interaction)) return;
+        await interaction.deferReply({ ephemeral: true });
 
         const monument = interaction.options.getString('monument');
         const cctvCodes = client.cctv.getCodes(monument);

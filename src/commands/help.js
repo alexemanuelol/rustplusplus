@@ -37,6 +37,7 @@ module.exports = {
 		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
+		await interaction.deferReply({ ephemeral: true });
 
 		await DiscordMessages.sendHelpMessage(interaction);
 		log.info(client.intlGet(interaction.guildId, 'commandsHelpDesc'));

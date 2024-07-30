@@ -69,15 +69,14 @@ module.exports = {
 		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
+		await interaction.deferReply({ ephemeral: true });
 
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(guildId, 'missingPermission');
-			await client.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
-
-		await interaction.deferReply({ ephemeral: true });
 
 		const guild = await getGuild(client, guildId);
 

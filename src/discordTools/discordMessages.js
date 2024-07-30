@@ -522,7 +522,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionReply(interaction, content);
+        await Client.client.interactionEditReply(interaction, content);
     },
 
     sendCctvMessage: async function (interaction, monument, cctvCodes, dynamic) {
@@ -531,7 +531,7 @@ module.exports = {
             ephemeral: true
         }
 
-        await Client.client.interactionReply(interaction, content);
+        await Client.client.interactionEditReply(interaction, content);
     },
 
     sendUptimeMessage: async function (interaction, uptime) {

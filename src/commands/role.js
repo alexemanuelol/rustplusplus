@@ -53,15 +53,14 @@ module.exports = {
 		await client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
+		await interaction.deferReply({ ephemeral: true });
 
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(interaction.guildId, 'missingPermission');
-			client.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
+			client.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
 			log.warn(str);
 			return;
 		}
-
-		await interaction.deferReply({ ephemeral: true });
 
 		let role = null;
 		switch (interaction.options.getSubcommand()) {
