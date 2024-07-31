@@ -27,7 +27,6 @@ import { localeManager as lm } from "../../index";
 import { languageCodes } from "../util/languages";
 import * as constants from '../util/constants';
 
-
 export interface SelectMenuOptions {
     customId?: string;
     placeholder?: string;

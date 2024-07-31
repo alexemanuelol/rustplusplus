@@ -20,12 +20,12 @@
 import { VoiceState } from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
 
+import { client } from '../../index';
 import * as constants from '../util/constants';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export const name = 'voiceStateUpdate';
 
-export async function execute(client: typeof DiscordBot, oldState: VoiceState, newState: VoiceState) {
+export async function execute(oldState: VoiceState, newState: VoiceState) {
     const guildId = oldState.guild.id;
 
     if (!client.voiceLeaveTimeouts.hasOwnProperty(guildId)) client.voiceLeaveTimeouts[guildId] = null;

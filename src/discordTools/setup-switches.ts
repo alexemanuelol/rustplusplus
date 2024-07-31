@@ -18,12 +18,12 @@
 
 */
 
+import { client } from '../../index';
 import * as discordTools from './discord-tools';
 const DiscordMessages = require('./discordMessages.js');
-const { DiscordBot } = require('../structures/DiscordBot.js');
 const { RustPlus } = require('../structures/RustPlus.js');
 
-export async function setupSwitches(client: typeof DiscordBot, rustplus: typeof RustPlus) {
+export async function setupSwitches(rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
     const instance = client.getInstance(guildId);
     const serverId = rustplus.serverId;

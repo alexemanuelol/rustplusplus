@@ -22,11 +22,10 @@ import { EmbedBuilder, EmbedData, InteractionReplyOptions, EmbedField } from 'di
 
 import * as guildInstance from '../util/guild-instance';
 import * as credentials from '../util/credentials';
-import { localeManager as lm } from '../../index';
+import { client, localeManager as lm } from '../../index';
 import * as constants from '../util/constants';
 import { secondsToFullScale } from '../util/timer';
 import * as discordTools from './discord-tools';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 const { RustPlus } = require('../structures/RustPlus.js');
 
 /* Convert hexadecimal color string (with #) to a number. */
@@ -105,7 +104,7 @@ export function getSmartSwitchEmbed(guildId: string, serverId: string, entityId:
     });
 }
 
-export async function getServerEmbed(client: typeof DiscordBot, guildId: string, serverId: string):
+export async function getServerEmbed(guildId: string, serverId: string):
     Promise<EmbedBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -154,7 +153,7 @@ export async function getServerEmbed(client: typeof DiscordBot, guildId: string,
     });
 }
 
-export function getTrackerEmbed(client: typeof DiscordBot, guildId: string, trackerId: string):
+export function getTrackerEmbed(guildId: string, trackerId: string):
     EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -317,7 +316,7 @@ export function getSmartAlarmEmbed(guildId: string, serverId: string, entityId: 
     });
 }
 
-export function getStorageMonitorEmbed(client: typeof DiscordBot, guildId: string, serverId: string, entityId: string):
+export function getStorageMonitorEmbed(guildId: string, serverId: string, entityId: string):
     EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -480,7 +479,7 @@ export function getNotFoundSmartDeviceEmbed(guildId: string, serverId: string, e
     });
 }
 
-export function getStorageMonitorRecycleEmbed(client: typeof DiscordBot, guildId: string, serverId: string,
+export function getStorageMonitorRecycleEmbed(guildId: string, serverId: string,
     entityId: string, items: any): EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -548,7 +547,7 @@ export function getStorageMonitorDisconnectNotificationEmbed(guildId: string, se
     });
 }
 
-export async function getStorageMonitorNotFoundEmbed(client: typeof DiscordBot, guildId: string, serverId: string,
+export async function getStorageMonitorNotFoundEmbed(guildId: string, serverId: string,
     entityId: string): Promise<EmbedBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -571,7 +570,7 @@ export async function getStorageMonitorNotFoundEmbed(client: typeof DiscordBot, 
     });
 }
 
-export async function getSmartSwitchNotFoundEmbed(client: typeof DiscordBot, guildId: string, serverId: string,
+export async function getSmartSwitchNotFoundEmbed(guildId: string, serverId: string,
     entityId: string): Promise<EmbedBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -594,7 +593,7 @@ export async function getSmartSwitchNotFoundEmbed(client: typeof DiscordBot, gui
     });
 }
 
-export async function getSmartAlarmNotFoundEmbed(client: typeof DiscordBot, guildId: string, serverId: string,
+export async function getSmartAlarmNotFoundEmbed(guildId: string, serverId: string,
     entityId: string): Promise<EmbedBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -959,8 +958,8 @@ export function getUpdateTeamInformationEmbed(rustplus: typeof RustPlus): EmbedB
     });
 }
 
-export function getUpdateBattlemetricsOnlinePlayersInformationEmbed(client: typeof DiscordBot,
-    rustplus: typeof RustPlus, battlemetricsId: string): EmbedBuilder {
+export function getUpdateBattlemetricsOnlinePlayersInformationEmbed(rustplus: typeof RustPlus,
+    battlemetricsId: string): EmbedBuilder {
     const guildId = rustplus.guildId;
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
@@ -1063,7 +1062,7 @@ export function getDiscordCommandResponseEmbed(rustplus: typeof RustPlus, respon
     });
 }
 
-export async function getCredentialsShowEmbed(client: typeof DiscordBot, guildId: string): Promise<EmbedBuilder> {
+export async function getCredentialsShowEmbed(guildId: string): Promise<EmbedBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const creds = credentials.readCredentialsFile();
@@ -1174,8 +1173,7 @@ export function getVoiceEmbed(state: string): EmbedBuilder {
     });
 }
 
-export function getCraftEmbed(client: typeof DiscordBot, guildId: string, craftDetails: any, quantity: number):
-    EmbedBuilder {
+export function getCraftEmbed(guildId: string, craftDetails: any, quantity: number): EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
@@ -1210,7 +1208,7 @@ export function getCraftEmbed(client: typeof DiscordBot, guildId: string, craftD
     });
 }
 
-export function getResearchEmbed(client: typeof DiscordBot, guildId: string, researchDetails: any): EmbedBuilder {
+export function getResearchEmbed(guildId: string, researchDetails: any): EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
@@ -1236,8 +1234,8 @@ export function getResearchEmbed(client: typeof DiscordBot, guildId: string, res
     });
 }
 
-export function getRecycleEmbed(client: typeof DiscordBot, guildId: string, recycleDetails: any, quantity: number,
-    recyclerType: string): EmbedBuilder {
+export function getRecycleEmbed(guildId: string, recycleDetails: any, quantity: number, recyclerType: string):
+    EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
@@ -1273,7 +1271,7 @@ export function getRecycleEmbed(client: typeof DiscordBot, guildId: string, recy
     });
 }
 
-export function getBattlemetricsEventEmbed(client: typeof DiscordBot, guildId: string, battlemetricsId: string,
+export function getBattlemetricsEventEmbed(guildId: string, battlemetricsId: string,
     title: string, description: string, fields: EmbedField[] | null = null): EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const bmInstance = client.battlemetricsInstances[battlemetricsId];
@@ -1303,8 +1301,7 @@ export function getBattlemetricsEventEmbed(client: typeof DiscordBot, guildId: s
     return embed;
 }
 
-export function getItemEmbed(client: typeof DiscordBot, guildId: string, itemName: string, itemId: string,
-    type: string): EmbedBuilder {
+export function getItemEmbed(guildId: string, itemName: string, itemId: string, type: string): EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 

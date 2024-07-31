@@ -20,14 +20,13 @@
 
 import { Interaction, InteractionType } from 'discord.js';
 
-import { log } from '../../index';
+import { log, client } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export const name = 'interactionCreate';
 
-export async function execute(client: typeof DiscordBot, interaction: Interaction) {
+export async function execute(interaction: Interaction) {
     const instance = client.getInstance(interaction.guildId);
 
     /* Check so that the interaction comes from valid channels */

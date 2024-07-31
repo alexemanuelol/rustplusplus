@@ -20,14 +20,13 @@
 
 import { Message } from 'discord.js';
 
-import { log } from '../../index';
+import { log, client } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 const DiscordCommandHandler = require('../handlers/discordCommandHandler.js');
 
 export const name = 'messageCreate';
 
-export async function execute(client: typeof DiscordBot, message: Message) {
+export async function execute(message: Message) {
     if (!message.guild) return;
 
     const guildId = message.guild.id;

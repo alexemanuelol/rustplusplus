@@ -23,7 +23,6 @@ import * as discordjs from 'discord.js';
 import { log, client } from '../../index';
 import { localeManager as lm } from '../../index';
 const Config = require('../../config');
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export async function getGuild(guildId: string): Promise<discordjs.Guild | undefined> {
     try {

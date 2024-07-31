@@ -20,30 +20,29 @@
 
 import { Guild, CategoryChannel, ChannelType, TextChannel } from 'discord.js';
 
-import { log } from '../../index';
+import { log, client } from '../../index';
 import * as discordTools from './discord-tools';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
-export async function setupGuildChannels(client: typeof DiscordBot, guild: Guild, category: CategoryChannel) {
+export async function setupGuildChannels(guild: Guild, category: CategoryChannel) {
     const guildId = guild.id;
-    await addTextChannel(client.intlGet(guildId, 'channelNameInformation'), 'information', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameServers'), 'servers', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameSettings'), 'settings', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameCommands'), 'commands', client, guild, category, true);
-    await addTextChannel(client.intlGet(guildId, 'channelNameEvents'), 'events', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameTeamchat'), 'teamchat', client, guild, category, true);
-    await addTextChannel(client.intlGet(guildId, 'channelNameSwitches'), 'switches', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameSwitchGroups'), 'switchGroups', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameAlarms'), 'alarms', client, guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameInformation'), 'information', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameServers'), 'servers', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameSettings'), 'settings', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameCommands'), 'commands', guild, category, true);
+    await addTextChannel(client.intlGet(guildId, 'channelNameEvents'), 'events', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameTeamchat'), 'teamchat', guild, category, true);
+    await addTextChannel(client.intlGet(guildId, 'channelNameSwitches'), 'switches', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameSwitchGroups'), 'switchGroups', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameAlarms'), 'alarms', guild, category);
     await addTextChannel(client.intlGet(guildId, 'channelNameStorageMonitors'),
-        'storageMonitors', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameActivity'), 'activity', client, guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameTrackers'), 'trackers', client, guild, category);
+        'storageMonitors', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameActivity'), 'activity', guild, category);
+    await addTextChannel(client.intlGet(guildId, 'channelNameTrackers'), 'trackers', guild, category);
 }
 
-async function addTextChannel(name: string, idName: string, client: typeof DiscordBot, guild: Guild,
-    parent: CategoryChannel, permissionWrite: boolean = false) {
+async function addTextChannel(name: string, idName: string, guild: Guild, parent: CategoryChannel,
+    permissionWrite: boolean = false) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
 

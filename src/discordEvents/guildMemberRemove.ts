@@ -20,12 +20,12 @@
 
 import { GuildMember } from 'discord.js';
 
+import { client } from '../../index';
 import * as credentials from '../util/credentials';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export const name = 'guildMemberRemove';
 
-export async function execute(client: typeof DiscordBot, member: GuildMember) {
+export async function execute(member: GuildMember) {
     const guildId = member.guild.id;
     const userId = member.user.id;
 

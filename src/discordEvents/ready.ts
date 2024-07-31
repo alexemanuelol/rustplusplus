@@ -21,17 +21,16 @@
 import { ActivityType } from 'discord.js';
 import * as path from 'path';
 
-import { log } from '../../index';
+import { log, client } from '../../index';
 import * as guildInstance from '../util/guild-instance';
 import * as credentials from '../util/credentials';
 const Config = require('../../config');
-const { DiscordBot } = require('../structures/DiscordBot.js');
 const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
 
 export const name = 'ready';
 export const once = true;
 
-export async function execute(client: typeof DiscordBot) {
+export async function execute() {
     for (const guild of client.guilds.cache) {
         const guildId = guild[0];
         guildInstance.createGuildInstanceFile(guildId);

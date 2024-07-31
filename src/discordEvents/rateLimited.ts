@@ -19,12 +19,11 @@
 */
 import { RateLimitData } from '@discordjs/rest';
 
-import { log } from '../../index';
-const { DiscordBot } = require('../structures/DiscordBot.js');
+import { log, client } from '../../index';
 
 export const name = 'rateLimited';
 
-export async function execute(client: typeof DiscordBot, info: RateLimitData) {
+export async function execute(info: RateLimitData) {
     log.warn(
         `${client.intlGet(null, 'ratelimited')}: ` +
         `Timeout: ${info.timeToReset}, ` +

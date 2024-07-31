@@ -97,13 +97,13 @@ class DiscordBot extends Discord.Client {
             const event = require(`../discordEvents/${file}`);
 
             if (event.name === 'rateLimited') {
-                this.rest.on(event.name, (...args) => event.execute(this, ...args));
+                this.rest.on(event.name, (...args) => event.execute(...args));
             }
             else if (event.once) {
-                this.once(event.name, (...args) => event.execute(this, ...args));
+                this.once(event.name, (...args) => event.execute(...args));
             }
             else {
-                this.on(event.name, (...args) => event.execute(this, ...args));
+                this.on(event.name, (...args) => event.execute(...args));
             }
         }
     }
@@ -206,10 +206,10 @@ class DiscordBot extends Discord.Client {
         const instance = this.getInstance(guild.id);
         const firstTime = instance.firstTime;
 
-        await registerSlashCommands(this, guild);
+        await registerSlashCommands(guild);
 
-        const category = await setupGuildCategory(this, guild);
-        await setupGuildChannels(this, guild, category);
+        const category = await setupGuildCategory(guild);
+        await setupGuildChannels(guild, category);
         if (firstTime) {
             const perms = PermissionHandler.getPermissionsRemoved(this, guild);
             try {
@@ -231,7 +231,7 @@ class DiscordBot extends Discord.Client {
             }
         }
 
-        await setupSettingsMenu(this, guild);
+        await setupSettingsMenu(guild);
 
         if (firstTime) await PermissionHandler.resetPermissionsAllChannels(this, guild);
 

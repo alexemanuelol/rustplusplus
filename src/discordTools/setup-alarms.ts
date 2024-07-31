@@ -18,11 +18,11 @@
 
 */
 
+import { client } from "../../index";
 const DiscordMessages = require('./discordMessages.js');
-const { DiscordBot } = require('../structures/DiscordBot.js');
 const { RustPlus } = require('../structures/RustPlus.js');
 
-export async function setupAlarms(client: typeof DiscordBot, rustplus: typeof RustPlus) {
+export async function setupAlarms(rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
     const instance = client.getInstance(guildId);
     const serverId = rustplus.serverId;

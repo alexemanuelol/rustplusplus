@@ -21,15 +21,14 @@
 import { Guild, AttachmentBuilder, TextChannel } from 'discord.js';
 import * as path from 'path';
 
-import { log } from '../../index';
+import { log, client } from '../../index';
 import * as constants from '../util/constants';
 import * as discordTools from './discord-tools';
 import * as discordSelectMenus from './discord-select-menus';
 import * as discordButtons from './discord-buttons';
 import * as discordEmbeds from './discord-embeds';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
-export async function setupSettingsMenu(client: typeof DiscordBot, guild: Guild, forced: boolean = false) {
+export async function setupSettingsMenu(guild: Guild, forced: boolean = false) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
     const channel = await discordTools.getTextChannel(guildId, instance.channelIds.settings);
@@ -42,15 +41,15 @@ export async function setupSettingsMenu(client: typeof DiscordBot, guild: Guild,
     if (instance.firstTime || forced) {
         await discordTools.clearTextChannel(guildId, instance.channelIds.settings, 100);
 
-        await setupGeneralSettings(client, guildId, channel);
-        await setupNotificationSettings(client, guildId, channel);
+        await setupGeneralSettings(guildId, channel);
+        await setupNotificationSettings(guildId, channel);
 
         instance.firstTime = false;
         client.setInstance(guildId, instance);
     }
 }
 
-async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, channel: TextChannel) {
+async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     const instance = client.getInstance(guildId);
 
     await discordTools.messageSend(channel, {
@@ -270,7 +269,7 @@ async function setupGeneralSettings(client: typeof DiscordBot, guildId: string, 
     });
 }
 
-async function setupNotificationSettings(client: typeof DiscordBot, guildId: string, channel: TextChannel) {
+async function setupNotificationSettings(guildId: string, channel: TextChannel) {
     const instance = client.getInstance(guildId);
 
     await discordTools.messageSend(channel, {
