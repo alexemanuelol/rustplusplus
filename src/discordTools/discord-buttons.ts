@@ -18,26 +18,18 @@
 
 */
 
-import { ButtonBuilder, ButtonStyle, ActionRowBuilder } from "discord.js";
+import * as discordjs from 'discord.js';
 
 import * as guildInstance from '../util/guild-instance';
 import { client, localeManager as lm } from '../../index';
 import * as constants from '../util/constants';
 
-export interface ButtonOptions {
-    customId?: string;
-    label?: string;
-    style?: ButtonStyle;
-    url?: string;
-    emoji?: string;
-    disabled?: boolean;
-}
+export function getButton(options: discordjs.ButtonComponentData): discordjs.ButtonBuilder {
+    const button = new discordjs.ButtonBuilder();
 
-export function getButton(options: ButtonOptions): ButtonBuilder {
-    const button = new ButtonBuilder();
-
-    if (options.hasOwnProperty('customId') && options.customId !== undefined) {
-        button.setCustomId(options.customId);
+    if (options.hasOwnProperty('customId') &&
+        (options as discordjs.InteractionButtonComponentData).customId !== undefined) {
+        button.setCustomId((options as discordjs.InteractionButtonComponentData).customId);
     }
 
     if (options.hasOwnProperty('label') && options.label !== undefined) {
@@ -48,8 +40,9 @@ export function getButton(options: ButtonOptions): ButtonBuilder {
         button.setStyle(options.style);
     }
 
-    if (options.hasOwnProperty('url') && options.url !== undefined && options.url !== '') {
-        button.setURL(options.url);
+    if (options.hasOwnProperty('url') && (options as discordjs.LinkButtonComponentData).url !== undefined &&
+        (options as discordjs.LinkButtonComponentData).url !== '') {
+        button.setURL((options as discordjs.LinkButtonComponentData).url);
     }
 
     if (options.hasOwnProperty('emoji') && options.emoji !== undefined) {
@@ -63,8 +56,8 @@ export function getButton(options: ButtonOptions): ButtonBuilder {
     return button;
 }
 
-export function getServerButtons(guildId: string, serverId: string,
-    state: number | null = null): ActionRowBuilder<ButtonBuilder>[] {
+export function getServerButtons(guildId: string, serverId: string, state: number | null = null):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const server = instance.serverList[serverId];
@@ -82,87 +75,98 @@ export function getServerButtons(guildId: string, serverId: string,
     let connectionButton = getButton({
         customId: `ServerConnect${identifier}`,
         label: lm.getIntl(language, 'connectCap'),
-        style: ButtonStyle.Primary
+        style: discordjs.ButtonStyle.Primary,
+        type: discordjs.ComponentType.Button
     });
 
     if (state === 1) {
         connectionButton = getButton({
             customId: `ServerDisconnect${identifier}`,
             label: lm.getIntl(language, 'disconnectCap'),
-            style: ButtonStyle.Danger
+            style: discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         });
     }
     else if (state === 2) {
         connectionButton = getButton({
             customId: `ServerReconnecting${identifier}`,
             label: lm.getIntl(language, 'reconnectingCap'),
-            style: ButtonStyle.Danger
+            style: discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         });
     }
 
     const deleteUnreachableDevicesButton = getButton({
         customId: `DeleteUnreachableDevices${identifier}`,
         label: lm.getIntl(language, 'deleteUnreachableDevicesCap'),
-        style: ButtonStyle.Primary
+        style: discordjs.ButtonStyle.Primary,
+        type: discordjs.ComponentType.Button
     });
     const customTimersButton = getButton({
         customId: `CustomTimersEdit${identifier}`,
         label: lm.getIntl(language, 'customTimersCap'),
-        style: ButtonStyle.Primary
+        style: discordjs.ButtonStyle.Primary,
+        type: discordjs.ComponentType.Button
     });
     const trackerButton = getButton({
         customId: `CreateTracker${identifier}`,
         label: lm.getIntl(language, 'createTrackerCap'),
-        style: ButtonStyle.Primary
+        style: discordjs.ButtonStyle.Primary,
+        type: discordjs.ComponentType.Button
     });
     const groupButton = getButton({
         customId: `CreateGroup${identifier}`,
         label: lm.getIntl(language, 'createGroupCap'),
-        style: ButtonStyle.Primary
+        style: discordjs.ButtonStyle.Primary,
+        type: discordjs.ComponentType.Button
     });
     const linkButton = getButton({
         label: lm.getIntl(language, 'websiteCap'),
-        style: ButtonStyle.Link,
-        url: server.url
+        style: discordjs.ButtonStyle.Link,
+        url: server.url,
+        type: discordjs.ComponentType.Button
     });
     const battlemetricsButton = getButton({
         label: lm.getIntl(language, 'battlemetricsCap'),
-        style: ButtonStyle.Link,
-        url: `${constants.BATTLEMETRICS_SERVER_URL}${server.battlemetricsId}`
+        style: discordjs.ButtonStyle.Link,
+        url: `${constants.BATTLEMETRICS_SERVER_URL}${server.battlemetricsId}`,
+        type: discordjs.ComponentType.Button
     });
     const editButton = getButton({
         customId: `ServerEdit${identifier}`,
         label: lm.getIntl(language, 'editCap'),
-        style: ButtonStyle.Primary
+        style: discordjs.ButtonStyle.Primary,
+        type: discordjs.ComponentType.Button
     });
     const deleteButton = getButton({
         customId: `ServerDelete${identifier}`,
-        style: ButtonStyle.Secondary,
-        emoji: '🗑️'
+        style: discordjs.ButtonStyle.Secondary,
+        emoji: '🗑️',
+        type: discordjs.ComponentType.Button
     });
 
     if (server.battlemetricsId !== null) {
         return [
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
                 connectionButton, linkButton, battlemetricsButton, editButton, deleteButton
             ),
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
                 customTimersButton, trackerButton, groupButton
             ),
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
                 deleteUnreachableDevicesButton
             )
         ];
     }
     else {
         return [
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
                 connectionButton, linkButton, editButton, deleteButton
             ),
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
                 customTimersButton, groupButton
             ),
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
+            new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
                 deleteUnreachableDevicesButton
             )
         ];
@@ -170,462 +174,519 @@ export function getServerButtons(guildId: string, serverId: string,
 }
 
 export function getSmartSwitchButtons(guildId: string, serverId: string, entityId: string):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const entity = instance.serverList[serverId].switches[entityId];
     const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: `SmartSwitch${entity.active ? 'Off' : 'On'}${identifier}`,
             label: entity.active ? lm.getIntl(language, 'turnOffCap') : lm.getIntl(language, 'turnOnCap'),
-            style: entity.active ? ButtonStyle.Danger : ButtonStyle.Success
+            style: entity.active ? discordjs.ButtonStyle.Danger : discordjs.ButtonStyle.Success,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `SmartSwitchEdit${identifier}`,
             label: lm.getIntl(language, 'editCap'),
-            style: ButtonStyle.Primary
+            style: discordjs.ButtonStyle.Primary,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `SmartSwitchDelete${identifier}`,
-            style: ButtonStyle.Secondary,
-            emoji: '🗑️'
+            style: discordjs.ButtonStyle.Secondary,
+            emoji: '🗑️',
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getSmartSwitchGroupButtons(guildId: string, serverId: string, groupId: string):
-    ActionRowBuilder<ButtonBuilder>[] {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const identifier = JSON.stringify({ "serverId": serverId, "groupId": groupId });
 
     return [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
                 customId: `GroupTurnOn${identifier}`,
                 label: lm.getIntl(language, 'turnOnCap'),
-                style: ButtonStyle.Primary
+                style: discordjs.ButtonStyle.Primary,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `GroupTurnOff${identifier}`,
                 label: lm.getIntl(language, 'turnOffCap'),
-                style: ButtonStyle.Primary
+                style: discordjs.ButtonStyle.Primary,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `GroupEdit${identifier}`,
                 label: lm.getIntl(language, 'editCap'),
-                style: ButtonStyle.Primary
+                style: discordjs.ButtonStyle.Primary,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `GroupDelete${identifier}`,
-                style: ButtonStyle.Secondary,
-                emoji: '🗑️'
+                style: discordjs.ButtonStyle.Secondary,
+                emoji: '🗑️',
+                type: discordjs.ComponentType.Button
             })),
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
                 customId: `GroupAddSwitch${identifier}`,
                 label: lm.getIntl(language, 'addSwitchCap'),
-                style: ButtonStyle.Success
+                style: discordjs.ButtonStyle.Success,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `GroupRemoveSwitch${identifier}`,
                 label: lm.getIntl(language, 'removeSwitchCap'),
-                style: ButtonStyle.Danger
+                style: discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }))
     ];
 }
 
 export function getSmartAlarmButtons(guildId: string, serverId: string, entityId: string):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const entity = instance.serverList[serverId].alarms[entityId];
     const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: `SmartAlarmEveryone${identifier}`,
             label: '@everyone',
-            style: entity.everyone ? ButtonStyle.Success : ButtonStyle.Danger
+            style: entity.everyone ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `SmartAlarmEdit${identifier}`,
             label: lm.getIntl(language, 'editCap'),
-            style: ButtonStyle.Primary
+            style: discordjs.ButtonStyle.Primary,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `SmartAlarmDelete${identifier}`,
-            style: ButtonStyle.Secondary,
-            emoji: '🗑️'
+            style: discordjs.ButtonStyle.Secondary,
+            emoji: '🗑️',
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getStorageMonitorToolCupboardButtons(guildId: string, serverId: string, entityId: string):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const entity = instance.serverList[serverId].storageMonitors[entityId];
     const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: `StorageMonitorToolCupboardEveryone${identifier}`,
             label: '@everyone',
-            style: entity.everyone ? ButtonStyle.Success : ButtonStyle.Danger
+            style: entity.everyone ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `StorageMonitorToolCupboardInGame${identifier}`,
             label: lm.getIntl(language, 'inGameCap'),
-            style: entity.inGame ? ButtonStyle.Success : ButtonStyle.Danger
+            style: entity.inGame ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `StorageMonitorEdit${identifier}`,
             label: lm.getIntl(language, 'editCap'),
-            style: ButtonStyle.Primary,
+            style: discordjs.ButtonStyle.Primary,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `StorageMonitorToolCupboardDelete${identifier}`,
-            style: ButtonStyle.Secondary,
-            emoji: '🗑️'
+            style: discordjs.ButtonStyle.Secondary,
+            emoji: '🗑️',
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getStorageMonitorContainerButton(guildId: string, serverId: string, entityId: string):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: `StorageMonitorEdit${identifier}`,
             label: lm.getIntl(language, 'editCap'),
-            style: ButtonStyle.Primary,
+            style: discordjs.ButtonStyle.Primary,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `StorageMonitorRecycle${identifier}`,
             label: lm.getIntl(language, 'recycleCap'),
-            style: ButtonStyle.Primary,
+            style: discordjs.ButtonStyle.Primary,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `StorageMonitorContainerDelete${identifier}`,
-            style: ButtonStyle.Secondary,
-            emoji: '🗑️'
+            style: discordjs.ButtonStyle.Secondary,
+            emoji: '🗑️',
+            type: discordjs.ComponentType.Button
         }));
 
 }
 
-export function getRecycleDeleteButton(): ActionRowBuilder<ButtonBuilder> {
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+export function getRecycleDeleteButton(): discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'RecycleDelete',
-            style: ButtonStyle.Secondary,
-            emoji: '🗑️'
+            style: discordjs.ButtonStyle.Secondary,
+            emoji: '🗑️',
+            type: discordjs.ComponentType.Button
         }));
 }
 
-export function getNotificationButtons(guildId: string, setting: string, discordActive: boolean,
-    inGameActive: boolean, voiceActive: boolean): ActionRowBuilder<ButtonBuilder> {
+export function getNotificationButtons(guildId: string, setting: string, discordActive: boolean, inGameActive: boolean,
+    voiceActive: boolean): discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const identifier = JSON.stringify({ "setting": setting });
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: `DiscordNotification${identifier}`,
             label: lm.getIntl(language, 'discordCap'),
-            style: discordActive ? ButtonStyle.Success : ButtonStyle.Danger
+            style: discordActive ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `InGameNotification${identifier}`,
             label: lm.getIntl(language, 'inGameCap'),
-            style: inGameActive ? ButtonStyle.Success : ButtonStyle.Danger
+            style: inGameActive ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: `VoiceNotification${identifier}`,
             label: lm.getIntl(language, 'voiceCap'),
-            style: voiceActive ? ButtonStyle.Success : ButtonStyle.Danger
+            style: voiceActive ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getInGameCommandsEnabledButton(guildId: string, enabled: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'AllowInGameCommands',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
-export function getInGameTeammateNotificationsButtons(guildId: string): ActionRowBuilder<ButtonBuilder> {
+export function getInGameTeammateNotificationsButtons(guildId: string):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'InGameTeammateConnection',
             label: lm.getIntl(language, 'connectionsCap'),
-            style: instance.generalSettings.connectionNotify ? ButtonStyle.Success : ButtonStyle.Danger
+            style: instance.generalSettings.connectionNotify ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: 'InGameTeammateAfk',
             label: lm.getIntl(language, 'afkCap'),
-            style: instance.generalSettings.afkNotify ? ButtonStyle.Success : ButtonStyle.Danger
+            style: instance.generalSettings.afkNotify ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: 'InGameTeammateDeath',
             label: lm.getIntl(language, 'deathCap'),
-            style: instance.generalSettings.deathNotify ? ButtonStyle.Success : ButtonStyle.Danger
+            style: instance.generalSettings.deathNotify ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getFcmAlarmNotificationButtons(guildId: string, enabled: boolean, everyone: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'FcmAlarmNotification',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }),
         getButton({
             customId: 'FcmAlarmNotificationEveryone',
             label: '@everyone',
-            style: everyone ? ButtonStyle.Success : ButtonStyle.Danger
+            style: everyone ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getSmartAlarmNotifyInGameButton(guildId: string, enabled: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'SmartAlarmNotifyInGame',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId: string, enabled: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'SmartSwitchNotifyInGameWhenChangedFromDiscord',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getLeaderCommandEnabledButton(guildId: string, enabled: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'LeaderCommandEnabled',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getLeaderCommandOnlyForPairedButton(guildId: string, enabled: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'LeaderCommandOnlyForPaired',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getTrackerButtons(guildId: string, trackerId: string):
-    ActionRowBuilder<ButtonBuilder>[] {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const tracker = instance.trackers[trackerId];
     const identifier = JSON.stringify({ "trackerId": trackerId });
 
     return [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
                 customId: `TrackerAddPlayer${identifier}`,
                 label: lm.getIntl(language, 'addPlayerCap'),
-                style: ButtonStyle.Success
+                style: discordjs.ButtonStyle.Success,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `TrackerRemovePlayer${identifier}`,
                 label: lm.getIntl(language, 'removePlayerCap'),
-                style: ButtonStyle.Danger
+                style: discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `TrackerEdit${identifier}`,
                 label: lm.getIntl(language, 'editCap'),
-                style: ButtonStyle.Primary
+                style: discordjs.ButtonStyle.Primary,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `TrackerDelete${identifier}`,
-                style: ButtonStyle.Secondary,
-                emoji: '🗑️'
+                style: discordjs.ButtonStyle.Secondary,
+                emoji: '🗑️',
+                type: discordjs.ComponentType.Button
             })),
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
                 customId: `TrackerInGame${identifier}`,
                 label: lm.getIntl(language, 'inGameCap'),
-                style: tracker.inGame ? ButtonStyle.Success : ButtonStyle.Danger
+                style: tracker.inGame ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `TrackerEveryone${identifier}`,
                 label: '@everyone',
-                style: tracker.everyone ? ButtonStyle.Success : ButtonStyle.Danger
+                style: tracker.everyone ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: `TrackerUpdate${identifier}`,
                 label: lm.getIntl(language, 'updateCap'),
-                style: ButtonStyle.Primary
+                style: discordjs.ButtonStyle.Primary,
+                type: discordjs.ComponentType.Button
             }))
     ];
 }
 
 export function getNewsButton(guildId: string, url: string, validUrl: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
-            style: ButtonStyle.Link,
+            style: discordjs.ButtonStyle.Link,
             label: lm.getIntl(language, 'linkCap'),
-            url: validUrl ? url : constants.DEFAULT_SERVER_URL
+            url: validUrl ? url : constants.DEFAULT_SERVER_URL,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getBotMutedInGameButton(guildId: string, isMuted: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'BotMutedInGame',
             label: isMuted ? lm.getIntl(language, 'mutedCap') : lm.getIntl(language, 'unmutedCap'),
-            style: isMuted ? ButtonStyle.Danger : ButtonStyle.Success
+            style: isMuted ? discordjs.ButtonStyle.Danger : discordjs.ButtonStyle.Success,
+            type: discordjs.ComponentType.Button
         }));
 }
 
-export function getMapWipeNotifyEveryoneButton(everyone: boolean): ActionRowBuilder<ButtonBuilder> {
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+export function getMapWipeNotifyEveryoneButton(everyone: boolean): discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'MapWipeNotifyEveryone',
             label: '@everyone',
-            style: everyone ? ButtonStyle.Success : ButtonStyle.Danger
+            style: everyone ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
 export function getItemAvailableNotifyInGameButton(guildId: string, enabled: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'ItemAvailableNotifyInGame',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
-export function getHelpButtons(): ActionRowBuilder<ButtonBuilder>[] {
+export function getHelpButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     return [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
-                style: ButtonStyle.Link,
+                style: discordjs.ButtonStyle.Link,
                 label: 'DEVELOPER',
-                url: 'https://github.com/alexemanuelol'
+                url: 'https://github.com/alexemanuelol',
+                type: discordjs.ComponentType.Button
             }),
             getButton({
-                style: ButtonStyle.Link,
+                style: discordjs.ButtonStyle.Link,
                 label: 'REPOSITORY',
-                url: 'https://github.com/alexemanuelol/rustplusplus'
+                url: 'https://github.com/alexemanuelol/rustplusplus',
+                type: discordjs.ComponentType.Button
             })
         ),
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
-                style: ButtonStyle.Link,
+                style: discordjs.ButtonStyle.Link,
                 label: 'DOCUMENTATION',
-                url: 'https://github.com/alexemanuelol/rustplusplus/blob/master/docs/documentation.md'
+                url: 'https://github.com/alexemanuelol/rustplusplus/blob/master/docs/documentation.md',
+                type: discordjs.ComponentType.Button
             }),
             getButton({
-                style: ButtonStyle.Link,
+                style: discordjs.ButtonStyle.Link,
                 label: 'CREDENTIALS',
-                url: 'https://github.com/alexemanuelol/rustplusplus-Credential-Application/releases/v1.1.0'
+                url: 'https://github.com/alexemanuelol/rustplusplus-Credential-Application/releases/v1.1.0',
+                type: discordjs.ComponentType.Button
             })
         )];
 }
 
 export function getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId: string, enabled: boolean):
-    ActionRowBuilder<ButtonBuilder> {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
-    return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: 'DisplayInformationBattlemetricsAllOnlinePlayers',
             label: enabled ? lm.getIntl(language, 'enabledCap') : lm.getIntl(language, 'disabledCap'),
-            style: enabled ? ButtonStyle.Success : ButtonStyle.Danger
+            style: enabled ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
         }));
 }
 
-export function getSubscribeToChangesBattlemetricsButtons(guildId: string): ActionRowBuilder<ButtonBuilder>[] {
+export function getSubscribeToChangesBattlemetricsButtons(guildId: string):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
     return [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
                 customId: 'BattlemetricsServerNameChanges',
                 label: lm.getIntl(language, 'battlemetricsServerNameChangesCap'),
-                style: instance.generalSettings.battlemetricsServerNameChanges ? ButtonStyle.Success :
-                    ButtonStyle.Danger
+                style: instance.generalSettings.battlemetricsServerNameChanges ? discordjs.ButtonStyle.Success :
+                    discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: 'BattlemetricsTrackerNameChanges',
                 label: lm.getIntl(language, 'battlemetricsTrackerNameChangesCap'),
-                style: instance.generalSettings.battlemetricsTrackerNameChanges ? ButtonStyle.Success :
-                    ButtonStyle.Danger
+                style: instance.generalSettings.battlemetricsTrackerNameChanges ? discordjs.ButtonStyle.Success :
+                    discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: 'BattlemetricsGlobalNameChanges',
                 label: lm.getIntl(language, 'battlemetricsGlobalNameChangesCap'),
-                style: instance.generalSettings.battlemetricsGlobalNameChanges ? ButtonStyle.Success :
-                    ButtonStyle.Danger
+                style: instance.generalSettings.battlemetricsGlobalNameChanges ? discordjs.ButtonStyle.Success :
+                    discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             })),
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
             getButton({
                 customId: 'BattlemetricsGlobalLogin',
                 label: lm.getIntl(language, 'battlemetricsGlobalLoginCap'),
-                style: instance.generalSettings.battlemetricsGlobalLogin ? ButtonStyle.Success :
-                    ButtonStyle.Danger
+                style: instance.generalSettings.battlemetricsGlobalLogin ? discordjs.ButtonStyle.Success :
+                    discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }),
             getButton({
                 customId: 'BattlemetricsGlobalLogout',
                 label: lm.getIntl(language, 'battlemetricsGlobalLogoutCap'),
-                style: instance.generalSettings.battlemetricsGlobalLogout ? ButtonStyle.Success :
-                    ButtonStyle.Danger
+                style: instance.generalSettings.battlemetricsGlobalLogout ? discordjs.ButtonStyle.Success :
+                    discordjs.ButtonStyle.Danger,
+                type: discordjs.ComponentType.Button
             }))];
 }
