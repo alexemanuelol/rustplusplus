@@ -27,10 +27,10 @@ import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordMessages from '../discordTools/discord-messages';
+import * as discordVoice from '../discordTools/discord-voice';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordVoice = require('../discordTools/discordVoice.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const Map = require('../util/map.ts');
 const RustPlusLite = require('../structures/RustPlusLite');
@@ -295,7 +295,7 @@ class RustPlus extends RustPlusLib {
             await this.sendInGameMessage(`${text}`);
         }
         if (!firstPoll && setting.voice) {
-            await DiscordVoice.sendDiscordVoiceMessage(this.guildId, text);
+            await discordVoice.sendDiscordVoiceMessage(this.guildId, text);
         }
         this.info(`${Client.client.intlGet(null, 'eventCap')}: ${text}`);
     }
