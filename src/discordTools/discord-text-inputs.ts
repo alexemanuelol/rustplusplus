@@ -18,30 +18,44 @@
 
 */
 
-import { TextInputBuilder, TextInputStyle } from 'discord.js';
+import * as discordjs from 'discord.js';
 
-export interface TextInputOptions {
-    customId?: string;
-    label?: string;
-    value?: string;
-    style?: TextInputStyle;
-    minLength?: number;
-    maxLength?: number;
-    placeholder?: string;
-    required?: boolean;
-}
+export function getTextInput(options: discordjs.TextInputComponentData): discordjs.TextInputBuilder {
+    const textInput = new discordjs.TextInputBuilder();
 
-export function getTextInput(options: TextInputOptions = {}): TextInputBuilder {
-    const textInput = new TextInputBuilder();
+    options.type = discordjs.ComponentType.TextInput;
 
-    if (options.customId !== undefined) textInput.setCustomId(options.customId);
-    if (options.label !== undefined) textInput.setLabel(options.label.slice(0, 45));
-    if (options.value !== undefined) textInput.setValue(options.value);
-    if (options.style !== undefined) textInput.setStyle(options.style);
-    if (options.minLength !== undefined) textInput.setMinLength(options.minLength);
-    if (options.maxLength !== undefined) textInput.setMaxLength(options.maxLength);
-    if (options.placeholder !== undefined) textInput.setPlaceholder(options.placeholder);
-    if (options.required !== undefined) textInput.setRequired(options.required);
+    if (options.hasOwnProperty('customId') && options.customId !== undefined) {
+        textInput.setCustomId(options.customId);
+    }
+
+    if (options.hasOwnProperty('label') && options.label !== undefined) {
+        textInput.setLabel(options.label.slice(0, 45));
+    }
+
+    if (options.hasOwnProperty('value') && options.value !== undefined) {
+        textInput.setValue(options.value);
+    }
+
+    if (options.hasOwnProperty('style') && options.style !== undefined) {
+        textInput.setStyle(options.style);
+    }
+
+    if (options.hasOwnProperty('minLength') && options.minLength !== undefined) {
+        textInput.setMinLength(options.minLength);
+    }
+
+    if (options.hasOwnProperty('maxLength') && options.maxLength !== undefined) {
+        textInput.setMaxLength(options.maxLength);
+    }
+
+    if (options.hasOwnProperty('placeholder') && options.placeholder !== undefined) {
+        textInput.setPlaceholder(options.placeholder);
+    }
+
+    if (options.hasOwnProperty('required') && options.required !== undefined) {
+        textInput.setRequired(options.required);
+    }
 
     return textInput;
 }

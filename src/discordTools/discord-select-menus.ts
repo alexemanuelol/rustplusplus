@@ -18,7 +18,7 @@
 
 */
 
-import { StringSelectMenuBuilder, ActionRowBuilder, SelectMenuComponentOptionData } from "discord.js";
+import * as discordjs from 'discord.js';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -27,19 +27,25 @@ import { localeManager as lm } from "../../index";
 import { languageCodes } from "../util/languages";
 import * as constants from '../util/constants';
 
-export interface SelectMenuOptions {
-    customId?: string;
-    placeholder?: string;
-    options?: SelectMenuComponentOptionData[];
-    disabled?: boolean;
-}
-
-export function getSelectMenu(guildId: string, options: SelectMenuOptions = {}): StringSelectMenuBuilder {
+export function getSelectMenu(guildId: string, options: discordjs.StringSelectMenuComponentData):
+    discordjs.StringSelectMenuBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
-    const selectMenu = new StringSelectMenuBuilder();
+    const selectMenu = new discordjs.StringSelectMenuBuilder();
 
     if (options.hasOwnProperty('customId') && options.customId !== undefined) {
         selectMenu.setCustomId(options.customId);
+    }
+
+    if (options.hasOwnProperty('disabled') && options.disabled !== undefined) {
+        selectMenu.setDisabled(options.disabled);
+    }
+
+    if (options.hasOwnProperty('maxValues') && options.maxValues !== undefined) {
+        selectMenu.setMaxValues(options.maxValues)
+    }
+
+    if (options.hasOwnProperty('minValues') && options.minValues !== undefined) {
+        selectMenu.setMinValues(options.minValues)
     }
 
     if (options.hasOwnProperty('placeholder') && options.placeholder !== undefined) {
@@ -57,20 +63,16 @@ export function getSelectMenu(guildId: string, options: SelectMenuOptions = {}):
         selectMenu.setOptions(options.options);
     }
 
-    if (options.hasOwnProperty('disabled') && options.disabled !== undefined) {
-        selectMenu.setDisabled(options.disabled);
-    }
-
     return selectMenu;
 }
 
 export function getLanguageSelectMenu(guildId: string, language: string):
-    ActionRowBuilder<StringSelectMenuBuilder> {
+    discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const languageFiles: string[] = fs.readdirSync(path.join(__dirname, '..', 'languages'))
         .filter((file: string) => file.endsWith('.json'));
 
-    const options: SelectMenuComponentOptionData[] = [];
+    const options: discordjs.SelectMenuComponentOptionData[] = [];
     for (const languageFile of languageFiles) {
         const languageCode = languageFile.replace('.json', '');
         let lang = Object.keys(languageCodes).find(e => languageCodes[e] === languageCode);
@@ -87,20 +89,21 @@ export function getLanguageSelectMenu(guildId: string, language: string):
     let currentLanguage = Object.keys(languageCodes).find(e => languageCodes[e] === language);
     if (!currentLanguage) currentLanguage = lm.getIntl(instance.generalSettings.language, 'unknown');
 
-    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getSelectMenu(guildId, {
             customId: 'language',
             placeholder: `${currentLanguage} (${language})`,
-            options: options
+            options: options,
+            type: discordjs.ComponentType.StringSelect
         })
     );
 }
 
 export function getPrefixSelectMenu(guildId: string, prefix: string):
-    ActionRowBuilder<StringSelectMenuBuilder> {
+    discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
-    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getSelectMenu(guildId, {
             customId: 'Prefix',
             placeholder: lm.getIntl(language, 'currentPrefixPlaceholder', { prefix: prefix }),
@@ -129,16 +132,17 @@ export function getPrefixSelectMenu(guildId: string, prefix: string):
                 { label: '^', description: lm.getIntl(language, 'circumflex'), value: '^' },
                 { label: '♥', description: lm.getIntl(language, 'heart'), value: '♥' },
                 { label: '☺', description: lm.getIntl(language, 'smilyFace'), value: '☺' },
-                { label: '/', description: lm.getIntl(language, 'slash'), value: '/' }]
+                { label: '/', description: lm.getIntl(language, 'slash'), value: '/' }],
+            type: discordjs.ComponentType.StringSelect
         })
     );
 }
 
 export function getTrademarkSelectMenu(guildId: string, trademark: string):
-    ActionRowBuilder<StringSelectMenuBuilder> {
+    discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
-    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getSelectMenu(guildId, {
             customId: 'Trademark',
             placeholder: `${trademark === 'NOT SHOWING' ? lm.getIntl(language, 'notShowingCap') : trademark}`,
@@ -175,16 +179,17 @@ export function getTrademarkSelectMenu(guildId: string, trademark: string):
                     label: lm.getIntl(language, 'notShowingCap'),
                     description: lm.getIntl(language, 'hideTrademark'),
                     value: 'NOT SHOWING'
-                }]
+                }],
+            type: discordjs.ComponentType.StringSelect
         })
     );
 }
 
 export function getCommandDelaySelectMenu(guildId: string, delay: string):
-    ActionRowBuilder<StringSelectMenuBuilder> {
+    discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
-    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getSelectMenu(guildId, {
             customId: 'CommandDelay',
             placeholder: lm.getIntl(language, 'currentCommandDelay', { delay: delay }),
@@ -249,13 +254,14 @@ export function getCommandDelaySelectMenu(guildId: string, delay: string):
                         seconds: lm.getIntl(language, 'eight')
                     }),
                     value: '8'
-                }]
+                }],
+            type: discordjs.ComponentType.StringSelect
         })
     );
 }
 
 export function getSmartSwitchSelectMenu(guildId: string, serverId: string, entityId: string):
-    ActionRowBuilder<StringSelectMenuBuilder> {
+    discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
 
@@ -284,7 +290,7 @@ export function getSmartSwitchSelectMenu(guildId: string, serverId: string, enti
     else if (entity.autoDayNightOnOff === 7) autoDayNightOnOffString += autoOnAnyOnline;
     else if (entity.autoDayNightOnOff === 8) autoDayNightOnOffString += autoOffAnyOnline;
 
-    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getSelectMenu(guildId, {
             customId: `AutoDayNightOnOff${identifier}`,
             placeholder: `${autoDayNightOnOffString}`,
@@ -303,16 +309,17 @@ export function getSmartSwitchSelectMenu(guildId: string, serverId: string, enti
                 {
                     label: autoOffAnyOnline, description: lm.getIntl(language, 'smartSwitchAutoOffAnyOnline'),
                     value: '8'
-                }]
+                }],
+            type: discordjs.ComponentType.StringSelect
         })
     );
 }
 
 export function getVoiceGenderSelectMenu(guildId: string, gender: string):
-    ActionRowBuilder<StringSelectMenuBuilder> {
+    discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
-    return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(
+    return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getSelectMenu(guildId, {
             customId: 'VoiceGender',
             placeholder: `${gender === 'male' ? lm.getIntl(language, 'commandsVoiceMale') :
@@ -327,7 +334,8 @@ export function getVoiceGenderSelectMenu(guildId: string, gender: string):
                     label: lm.getIntl(language, 'commandsVoiceFemale'),
                     description: lm.getIntl(language, 'commandsVoiceFemaleDescription'),
                     value: 'female'
-                }]
+                }],
+            type: discordjs.ComponentType.StringSelect
         })
     );
 }

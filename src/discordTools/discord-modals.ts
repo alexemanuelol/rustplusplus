@@ -18,20 +18,15 @@
 
 */
 
-import { ModalBuilder, ActionRowBuilder, TextInputStyle, TextInputBuilder } from "discord.js";
+import * as discordjs from 'discord.js';
 
 import * as guildInstance from '../util/guild-instance';
 import { localeManager as lm } from '../../index';
 import * as constants from '../util/constants';
 import { getTextInput } from "./discord-text-inputs";
 
-export interface ModalOptions {
-    customId?: string;
-    title?: string;
-}
-
-export function getModal(options: ModalOptions): ModalBuilder {
-    const modal = new ModalBuilder();
+export function getModal(options: discordjs.ModalComponentData): discordjs.ModalBuilder {
+    const modal = new discordjs.ModalBuilder();
 
     if (options.hasOwnProperty('customId') && options.customId !== undefined) {
         modal.setCustomId(options.customId);
@@ -41,10 +36,14 @@ export function getModal(options: ModalOptions): ModalBuilder {
         modal.setTitle(options.title.slice(0, constants.MODAL_MAX_TITLE_CHARACTERS));
     }
 
+    if (options.hasOwnProperty('components') && Array.isArray(options.components) && options.components.length !== 0) {
+        modal.addComponents(...options.components as discordjs.ActionRowBuilder<discordjs.TextInputBuilder>[]);
+    }
+
     return modal;
 }
 
-export function getServerEditModal(guildId: string, serverId: string): ModalBuilder {
+export function getServerEditModal(guildId: string, serverId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const server = instance.serverList[serverId];
@@ -52,24 +51,23 @@ export function getServerEditModal(guildId: string, serverId: string): ModalBuil
 
     const modal = getModal({
         customId: `ServerEdit${identifier}`,
-        title: lm.getIntl(language, 'editing')
+        title: lm.getIntl(language, 'editing'),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'ServerBattlemetricsId',
+                label: lm.getIntl(language, 'battlemetricsId'),
+                value: server.battlemetricsId === null ? '' : server.battlemetricsId,
+                style: discordjs.TextInputStyle.Short,
+                required: false,
+                minLength: 0,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'ServerBattlemetricsId',
-            label: lm.getIntl(language, 'battlemetricsId'),
-            value: server.battlemetricsId === null ? '' : server.battlemetricsId,
-            style: TextInputStyle.Short,
-            required: false,
-            minLength: 0
-        }))
-    );
 
     return modal;
 }
 
-export function getCustomTimersEditModal(guildId: string, serverId: string): ModalBuilder {
+export function getCustomTimersEditModal(guildId: string, serverId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const server = instance.serverList[serverId];
@@ -77,28 +75,28 @@ export function getCustomTimersEditModal(guildId: string, serverId: string): Mod
 
     const modal = getModal({
         customId: `CustomTimersEdit${identifier}`,
-        title: lm.getIntl(language, 'customTimerEditDesc')
+        title: lm.getIntl(language, 'customTimerEditDesc'),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'CargoShipEgressTime',
+                label: lm.getIntl(language, 'customTimerEditCargoShipEgressLabel'),
+                value: `${server.cargoShipEgressTimeMs / 1000}`,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            })),
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'OilRigCrateUnlockTime',
+                label: lm.getIntl(language, 'customTimerEditCrateOilRigUnlockLabel'),
+                value: `${server.oilRigLockedCrateUnlockTimeMs / 1000}`,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'CargoShipEgressTime',
-            label: lm.getIntl(language, 'customTimerEditCargoShipEgressLabel'),
-            value: `${server.cargoShipEgressTimeMs / 1000}`,
-            style: TextInputStyle.Short
-        })),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'OilRigCrateUnlockTime',
-            label: lm.getIntl(language, 'customTimerEditCrateOilRigUnlockLabel'),
-            value: `${server.oilRigLockedCrateUnlockTimeMs / 1000}`,
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
 
-export function getSmartSwitchEditModal(guildId: string, serverId: string, entityId: string): ModalBuilder {
+export function getSmartSwitchEditModal(guildId: string, serverId: string, entityId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const entity = instance.serverList[serverId].switches[entityId];
@@ -108,31 +106,33 @@ export function getSmartSwitchEditModal(guildId: string, serverId: string, entit
         customId: `SmartSwitchEdit${identifier}`,
         title: lm.getIntl(language, 'editingOf', {
             entity: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
-        })
+        }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'SmartSwitchName',
+                label: lm.getIntl(language, 'name'),
+                value: entity.name,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            })),
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'SmartSwitchCommand',
+                label: lm.getIntl(language, 'customCommand'),
+                value: entity.command,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))
+        ]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'SmartSwitchName',
-            label: lm.getIntl(language, 'name'),
-            value: entity.name,
-            style: TextInputStyle.Short
-        })),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'SmartSwitchCommand',
-            label: lm.getIntl(language, 'customCommand'),
-            value: entity.command,
-            style: TextInputStyle.Short
-        }))
-    );
 
     if (entity.autoDayNightOnOff === 5 || entity.autoDayNightOnOff === 6) {
         modal.addComponents(
-            new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
                 customId: 'SmartSwitchProximity',
                 label: lm.getIntl(language, 'smartSwitchEditProximityLabel'),
                 value: `${entity.proximity}`,
-                style: TextInputStyle.Short
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
             }))
         );
     }
@@ -140,7 +140,7 @@ export function getSmartSwitchEditModal(guildId: string, serverId: string, entit
     return modal;
 }
 
-export function getGroupEditModal(guildId: string, serverId: string, groupId: string): ModalBuilder {
+export function getGroupEditModal(guildId: string, serverId: string, groupId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const group = instance.serverList[serverId].switchGroups[groupId];
@@ -150,28 +150,28 @@ export function getGroupEditModal(guildId: string, serverId: string, groupId: st
         customId: `GroupEdit${identifier}`,
         title: lm.getIntl(language, 'editingOf', {
             entity: group.name.length > 18 ? `${group.name.slice(0, 18)}..` : group.name
-        })
+        }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'GroupName',
+                label: lm.getIntl(language, 'name'),
+                value: group.name,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            })),
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'GroupCommand',
+                label: lm.getIntl(language, 'customCommand'),
+                value: group.command,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'GroupName',
-            label: lm.getIntl(language, 'name'),
-            value: group.name,
-            style: TextInputStyle.Short
-        })),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'GroupCommand',
-            label: lm.getIntl(language, 'customCommand'),
-            value: group.command,
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
 
-export function getGroupAddSwitchModal(guildId: string, serverId: string, groupId: string): ModalBuilder {
+export function getGroupAddSwitchModal(guildId: string, serverId: string, groupId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const group = instance.serverList[serverId].switchGroups[groupId];
@@ -179,22 +179,21 @@ export function getGroupAddSwitchModal(guildId: string, serverId: string, groupI
 
     const modal = getModal({
         customId: `GroupAddSwitch${identifier}`,
-        title: lm.getIntl(language, 'groupAddSwitchDesc', { group: group.name })
+        title: lm.getIntl(language, 'groupAddSwitchDesc', { group: group.name }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'GroupAddSwitchId',
+                label: lm.getIntl(language, 'entityId'),
+                value: '',
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'GroupAddSwitchId',
-            label: lm.getIntl(language, 'entityId'),
-            value: '',
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
 
-export function getGroupRemoveSwitchModal(guildId: string, serverId: string, groupId: string): ModalBuilder {
+export function getGroupRemoveSwitchModal(guildId: string, serverId: string, groupId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const group = instance.serverList[serverId].switchGroups[groupId];
@@ -202,22 +201,21 @@ export function getGroupRemoveSwitchModal(guildId: string, serverId: string, gro
 
     const modal = getModal({
         customId: `GroupRemoveSwitch${identifier}`,
-        title: lm.getIntl(language, 'groupRemoveSwitchDesc', { group: group.name })
+        title: lm.getIntl(language, 'groupRemoveSwitchDesc', { group: group.name }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'GroupRemoveSwitchId',
+                label: lm.getIntl(language, 'entityId'),
+                value: '',
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'GroupRemoveSwitchId',
-            label: lm.getIntl(language, 'entityId'),
-            value: '',
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
 
-export function getSmartAlarmEditModal(guildId: string, serverId: string, entityId: string): ModalBuilder {
+export function getSmartAlarmEditModal(guildId: string, serverId: string, entityId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const entity = instance.serverList[serverId].alarms[entityId];
@@ -227,34 +225,36 @@ export function getSmartAlarmEditModal(guildId: string, serverId: string, entity
         customId: `SmartAlarmEdit${identifier}`,
         title: lm.getIntl(language, 'editingOf', {
             entity: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
-        })
+        }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'SmartAlarmName',
+                label: lm.getIntl(language, 'name'),
+                value: entity.name,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            })),
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'SmartAlarmMessage',
+                label: lm.getIntl(language, 'message'),
+                value: entity.message,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            })),
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'SmartAlarmCommand',
+                label: lm.getIntl(language, 'customCommand'),
+                value: entity.command,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'SmartAlarmName',
-            label: lm.getIntl(language, 'name'),
-            value: entity.name,
-            style: TextInputStyle.Short
-        })),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'SmartAlarmMessage',
-            label: lm.getIntl(language, 'message'),
-            value: entity.message,
-            style: TextInputStyle.Short
-        })),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'SmartAlarmCommand',
-            label: lm.getIntl(language, 'customCommand'),
-            value: entity.command,
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
 
-export function getStorageMonitorEditModal(guildId: string, serverId: string, entityId: string): ModalBuilder {
+export function getStorageMonitorEditModal(guildId: string, serverId: string, entityId: string):
+    discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const entity = instance.serverList[serverId].storageMonitors[entityId];
@@ -264,22 +264,21 @@ export function getStorageMonitorEditModal(guildId: string, serverId: string, en
         customId: `StorageMonitorEdit${identifier}`,
         title: lm.getIntl(language, 'editingOf', {
             entity: entity.name.length > 18 ? `${entity.name.slice(0, 18)}..` : entity.name
-        })
+        }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'StorageMonitorName',
+                label: lm.getIntl(language, 'name'),
+                value: entity.name,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'StorageMonitorName',
-            label: lm.getIntl(language, 'name'),
-            value: entity.name,
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
 
-export function getTrackerEditModal(guildId: string, trackerId: string): ModalBuilder {
+export function getTrackerEditModal(guildId: string, trackerId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const tracker = instance.trackers[trackerId];
@@ -289,36 +288,37 @@ export function getTrackerEditModal(guildId: string, trackerId: string): ModalBu
         customId: `TrackerEdit${identifier}`,
         title: lm.getIntl(language, 'editingOf', {
             entity: tracker.name.length > 18 ? `${tracker.name.slice(0, 18)}..` : tracker.name
-        })
+        }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'TrackerName',
+                label: lm.getIntl(language, 'name'),
+                value: tracker.name,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            })),
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'TrackerBattlemetricsId',
+                label: lm.getIntl(language, 'battlemetricsId'),
+                value: tracker.battlemetricsId,
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            })),
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'TrackerClanTag',
+                label: lm.getIntl(language, 'clanTag'),
+                value: tracker.clanTag,
+                style: discordjs.TextInputStyle.Short,
+                required: false,
+                minLength: 0,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'TrackerName',
-            label: lm.getIntl(language, 'name'),
-            value: tracker.name,
-            style: TextInputStyle.Short
-        })),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'TrackerBattlemetricsId',
-            label: lm.getIntl(language, 'battlemetricsId'),
-            value: tracker.battlemetricsId,
-            style: TextInputStyle.Short
-        })),
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'TrackerClanTag',
-            label: lm.getIntl(language, 'clanTag'),
-            value: tracker.clanTag,
-            style: TextInputStyle.Short,
-            required: false,
-            minLength: 0
-        }))
-    );
 
     return modal;
 }
 
-export function getTrackerAddPlayerModal(guildId: string, trackerId: string): ModalBuilder {
+export function getTrackerAddPlayerModal(guildId: string, trackerId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const tracker = instance.trackers[trackerId];
@@ -326,24 +326,22 @@ export function getTrackerAddPlayerModal(guildId: string, trackerId: string): Mo
 
     const modal = getModal({
         customId: `TrackerAddPlayer${identifier}`,
-        title: lm.getIntl(language, 'trackerAddPlayerDesc', { tracker: tracker.name })
+        title: lm.getIntl(language, 'trackerAddPlayerDesc', { tracker: tracker.name }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'TrackerAddPlayerId',
+                label: `${lm.getIntl(language, 'steamId')} / ` +
+                    `${lm.getIntl(language, 'battlemetricsId')}`,
+                value: '',
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'TrackerAddPlayerId',
-            label: `${lm.getIntl(language, 'steamId')} / ` +
-                `${lm.getIntl(language, 'battlemetricsId')}`,
-            value: '',
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
 
-export function getTrackerRemovePlayerModal(guildId: string, trackerId: string): ModalBuilder {
+export function getTrackerRemovePlayerModal(guildId: string, trackerId: string): discordjs.ModalBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const tracker = instance.trackers[trackerId];
@@ -351,18 +349,17 @@ export function getTrackerRemovePlayerModal(guildId: string, trackerId: string):
 
     const modal = getModal({
         customId: `TrackerRemovePlayer${identifier}`,
-        title: lm.getIntl(language, 'trackerRemovePlayerDesc', { tracker: tracker.name })
+        title: lm.getIntl(language, 'trackerRemovePlayerDesc', { tracker: tracker.name }),
+        components: [
+            new discordjs.ActionRowBuilder<discordjs.TextInputBuilder>().addComponents(getTextInput({
+                customId: 'TrackerRemovePlayerId',
+                label: `${lm.getIntl(language, 'steamId')} / ` +
+                    `${lm.getIntl(language, 'battlemetricsId')}`,
+                value: '',
+                style: discordjs.TextInputStyle.Short,
+                type: discordjs.ComponentType.TextInput
+            }))]
     });
-
-    modal.addComponents(
-        new ActionRowBuilder<TextInputBuilder>().addComponents(getTextInput({
-            customId: 'TrackerRemovePlayerId',
-            label: `${lm.getIntl(language, 'steamId')} / ` +
-                `${lm.getIntl(language, 'battlemetricsId')}`,
-            value: '',
-            style: TextInputStyle.Short
-        }))
-    );
 
     return modal;
 }
