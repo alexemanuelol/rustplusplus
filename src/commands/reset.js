@@ -33,8 +33,8 @@ import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
 import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
+import * as discordMessages from '../discordTools/discord-messages';
 const Config = require('../../config');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
 module.exports = {
@@ -111,7 +111,7 @@ module.exports = {
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
 					await rustplus.map.writeMap(false, true);
-					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
+					await discordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
 
 				await setupServerList(guild);
@@ -140,7 +140,7 @@ module.exports = {
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
 					await rustplus.map.writeMap(false, true);
-					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
+					await discordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {

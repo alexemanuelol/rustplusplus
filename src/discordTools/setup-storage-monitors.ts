@@ -21,7 +21,7 @@
 import { client } from '../../index';
 import * as constants from '../util/constants';
 import * as discordTools from './discord-tools';
-const DiscordMessages = require('./discordMessages.js');
+import * as discordMessages from './discord-messages';
 const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupStorageMonitors(rustplus: typeof RustPlus) {
@@ -39,7 +39,7 @@ export async function setupStorageMonitors(rustplus: typeof RustPlus) {
 
         if (!(await rustplus.isResponseValid(info))) {
             if (entity.reachable === true) {
-                await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
+                await discordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
             }
             entity.reachable = false;
         }
@@ -76,6 +76,6 @@ export async function setupStorageMonitors(rustplus: typeof RustPlus) {
             }
         }
 
-        await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, entityId);
+        await discordMessages.sendStorageMonitorMessage(guildId, serverId, entityId);
     }
 }

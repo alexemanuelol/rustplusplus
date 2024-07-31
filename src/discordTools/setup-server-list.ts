@@ -22,7 +22,7 @@ import { Guild } from 'discord.js';
 
 import { client } from '../../index';
 import * as discordTools from './discord-tools';
-const DiscordMessages = require('./discordMessages.js');
+import * as discordMessages from './discord-messages';
 
 export async function setupServerList(guild: Guild) {
     const guildId = guild.id;
@@ -31,6 +31,6 @@ export async function setupServerList(guild: Guild) {
     await discordTools.clearTextChannel(guildId, instance.channelIds.servers, 100);
 
     for (const serverId in instance.serverList) {
-        await DiscordMessages.sendServerMessage(guildId, serverId);
+        await discordMessages.sendServerMessage(guildId, serverId);
     }
 }

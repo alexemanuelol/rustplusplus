@@ -313,7 +313,8 @@ export async function messageEdit(message: discordjs.Message, content: discordjs
 
 /* Only used for messages/interactions to a guild text channel message, not member PM. */
 export async function sendUpdateMessage(guildId: string, content: discordjs.MessageCreateOptions |
-    discordjs.MessageEditOptions, channelId: string | null, messageId: string | null, interaction: discordjs.Interaction | null = null):
+    discordjs.MessageEditOptions, channelId: string | null, messageId: string | null = null,
+    interaction: discordjs.Interaction | null = null):
     Promise<discordjs.Message | undefined> {
     if (interaction !== null) {
         await interactionUpdate(interaction, content as discordjs.InteractionUpdateOptions);

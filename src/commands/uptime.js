@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 const Timer = require('../util/timer.ts');
 
 module.exports = {
@@ -79,7 +79,7 @@ module.exports = {
 			value: `${interaction.options.getSubcommand()}`
 		}));
 
-		await DiscordMessages.sendUptimeMessage(interaction, string);
+		await discordMessages.sendUptimeMessage(interaction, string);
 		log.info(client.intlGet(interaction.guildId, 'commandsUptimeDesc'));
 	},
 };

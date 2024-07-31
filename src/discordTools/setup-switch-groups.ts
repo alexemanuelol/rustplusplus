@@ -20,7 +20,7 @@
 
 import { client } from '../../index';
 import * as discordTools from './discord-tools';
-const DiscordMessages = require('./discordMessages.js');
+import * as discordMessages from './discord-messages';
 const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupSwitchGroups(rustplus: typeof RustPlus) {
@@ -32,6 +32,6 @@ export async function setupSwitchGroups(rustplus: typeof RustPlus) {
     }
 
     for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {
-        await DiscordMessages.sendSmartSwitchGroupMessage(guildId, rustplus.serverId, groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(guildId, rustplus.serverId, groupId);
     }
 }

@@ -18,8 +18,8 @@
 
 */
 
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = async function (rustplus, client, message) {
-    await DiscordMessages.sendTeamChatMessage(rustplus.guildId, message);
+    await discordMessages.sendTeamChatMessage(rustplus.guildId, message);
 }

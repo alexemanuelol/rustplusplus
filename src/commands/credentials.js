@@ -24,9 +24,9 @@ const Builder = require('@discordjs/builders');
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
+import * as discordMessages from '../discordTools/discord-messages';
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
     name: 'credentials',
@@ -249,7 +249,7 @@ async function showCredentials(client, interaction, verifyId) {
         value: `show`
     }));
 
-    await DiscordMessages.sendCredentialsShowMessage(interaction);
+    await discordMessages.sendCredentialsShowMessage(interaction);
 }
 
 async function setHosterCredentials(client, interaction, verifyId) {
@@ -291,7 +291,7 @@ async function setHosterCredentials(client, interaction, verifyId) {
         client.resetRustplusVariables(guildId);
         rustplus.disconnect();
         delete client.rustplusInstances[guildId];
-        await DiscordMessages.sendServerMessage(guildId, rustplus.serverId);
+        await discordMessages.sendServerMessage(guildId, rustplus.serverId);
     }
 
     require('../util/FcmListener')(client, await discordTools.getGuild(interaction.guildId));

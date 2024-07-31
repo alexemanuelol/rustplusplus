@@ -22,7 +22,7 @@ import { Guild } from 'discord.js';
 
 import { client } from '../../index';
 import * as discordTools from './discord-tools';
-const DiscordMessages = require('./discordMessages.js');
+import * as discordMessages from './discord-messages';
 
 export async function setupTrackers(guild: Guild) {
     const guildId = guild.id;
@@ -31,6 +31,6 @@ export async function setupTrackers(guild: Guild) {
     await discordTools.clearTextChannel(guildId, instance.channelIds.trackers, 100);
 
     for (const trackerId in instance.trackers) {
-        await DiscordMessages.sendTrackerMessage(guildId, trackerId);
+        await discordMessages.sendTrackerMessage(guildId, trackerId);
     }
 }

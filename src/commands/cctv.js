@@ -22,7 +22,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = {
     name: 'cctv',
@@ -64,7 +64,7 @@ module.exports = {
             value: `${monument}`
         }));
 
-        await DiscordMessages.sendCctvMessage(interaction, monument, cctvCodes, dynamic);
+        await discordMessages.sendCctvMessage(interaction, monument, cctvCodes, dynamic);
         log.info(client.intlGet(interaction.guildId, 'commandsCctvDesc'));
     },
 };

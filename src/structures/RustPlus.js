@@ -26,10 +26,10 @@ const Translate = require('translate');
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordMessages from '../discordTools/discord-messages';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordVoice = require('../discordTools/discordVoice.js');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const Map = require('../util/map.ts');
@@ -289,7 +289,7 @@ class RustPlus extends RustPlusLib {
         this.updateEvents(event, text);
 
         if (!firstPoll && setting.discord) {
-            await DiscordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, image, embed_color);
+            await discordMessages.sendDiscordEventMessage(this.guildId, this.serverId, text, image, embed_color);
         }
         if (!firstPoll && setting.inGame) {
             await this.sendInGameMessage(`${text}`);
@@ -2639,7 +2639,7 @@ class RustPlus extends RustPlusLib {
             text = command.slice(`${commandTTSEn} `.length).trim();
         }
 
-        await DiscordMessages.sendTTSMessage(this.guildId, callerName, text);
+        await discordMessages.sendTTSMessage(this.guildId, callerName, text);
         return Client.client.intlGet(this.guildId, 'sentTextToSpeech');
     }
 

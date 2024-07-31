@@ -23,7 +23,7 @@ const Builder = require('@discordjs/builders');
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = {
 	name: 'alarm',
@@ -95,7 +95,7 @@ module.exports = {
 					value: `edit, ${entityId}, ${image}.png`
 				}));
 
-				await DiscordMessages.sendSmartAlarmMessage(guildId, device.serverId, entityId);
+				await discordMessages.sendSmartAlarmMessage(guildId, device.serverId, entityId);
 
 				const str = client.intlGet(guildId, 'smartAlarmEditSuccess', { name: entity.name });
 				await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,

@@ -18,7 +18,7 @@
 
 */
 
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 const Config = require('../../config');
 
@@ -60,8 +60,8 @@ module.exports = {
         /* Was the disconnection unexpected? */
         if (client.activeRustplusInstances[guildId]) {
             if (!client.rustplusReconnecting[guildId]) {
-                await DiscordMessages.sendServerChangeStateMessage(guildId, serverId, 1);
-                await DiscordMessages.sendServerMessage(guildId, serverId, 2);
+                await discordMessages.sendServerChangeStateMessage(guildId, serverId, 1);
+                await discordMessages.sendServerMessage(guildId, serverId, 2);
             }
 
             client.rustplusReconnecting[guildId] = true;

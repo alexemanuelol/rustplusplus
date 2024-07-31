@@ -24,8 +24,8 @@ import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordButtons from '../discordTools/discord-buttons';
 import * as discordModals from '../discordTools/discord-modals';
+import * as discordMessages from '../discordTools/discord-messages';
 const Config = require('../../config');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = async (client, interaction) => {
@@ -434,7 +434,7 @@ module.exports = async (client, interaction) => {
         client.resetRustplusVariables(guildId);
 
         if (instance.activeServer !== null) {
-            await DiscordMessages.sendServerMessage(guildId, instance.activeServer, null);
+            await discordMessages.sendServerMessage(guildId, instance.activeServer, null);
         }
 
         instance.activeServer = ids.serverId;
@@ -450,7 +450,7 @@ module.exports = async (client, interaction) => {
         const newRustplus = client.createRustplusInstance(
             guildId, server.serverIp, server.appPort, server.steamId, server.playerToken);
 
-        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
+        await discordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
 
         newRustplus.isNewConnection = true;
     }
@@ -492,7 +492,7 @@ module.exports = async (client, interaction) => {
         }
 
         for (const groupId of groupsToUpdate) {
-            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
+            await discordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
         }
 
         for (const [entityId, content] of Object.entries(server.alarms)) {
@@ -552,7 +552,7 @@ module.exports = async (client, interaction) => {
         }
         client.setInstance(guildId, instance);
 
-        await DiscordMessages.sendTrackerMessage(guildId, trackerId);
+        await discordMessages.sendTrackerMessage(guildId, trackerId);
     }
     else if (interaction.customId.startsWith('CreateGroup')) {
         const ids = JSON.parse(interaction.customId.replace('CreateGroup', ''));
@@ -581,7 +581,7 @@ module.exports = async (client, interaction) => {
             value: `${groupId}`
         }));
 
-        await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
     }
     else if (interaction.customId.startsWith('ServerDisconnect') ||
         interaction.customId.startsWith('ServerReconnecting')) {
@@ -604,7 +604,7 @@ module.exports = async (client, interaction) => {
             delete client.rustplusInstances[guildId];
         }
 
-        await DiscordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
+        await discordMessages.sendServerMessage(guildId, ids.serverId, null, interaction);
     }
     else if (interaction.customId.startsWith('ServerDelete')) {
         const ids = JSON.parse(interaction.customId.replace('ServerDelete', ''));
@@ -672,7 +672,7 @@ module.exports = async (client, interaction) => {
         const response = await rustplus.turnSmartSwitchAsync(ids.entityId, active);
         if (!(await rustplus.isResponseValid(response))) {
             if (server.switches[ids.entityId].reachable) {
-                await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, ids.serverId, ids.entityId);
+                await discordMessages.sendSmartSwitchNotFoundMessage(guildId, ids.serverId, ids.entityId);
             }
             server.switches[ids.entityId].reachable = false;
             server.switches[ids.entityId].active = prevActive;
@@ -703,7 +703,7 @@ module.exports = async (client, interaction) => {
             value: `${active}`
         }));
 
-        DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
+        await discordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(client, guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('SmartSwitchEdit')) {
@@ -747,7 +747,7 @@ module.exports = async (client, interaction) => {
             if (content.switches.includes(ids.entityId.toString())) {
                 server.switchGroups[groupId].switches = content.switches.filter(e => e !== ids.entityId.toString());
                 client.setInstance(guildId, instance);
-                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
+                await discordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, groupId);
             }
         }
         client.setInstance(guildId, instance);
@@ -769,7 +769,7 @@ module.exports = async (client, interaction) => {
             value: `${server.alarms[ids.entityId].everyone}`
         }));
 
-        await DiscordMessages.sendSmartAlarmMessage(guildId, ids.serverId, ids.entityId, interaction);
+        await discordMessages.sendSmartAlarmMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
     else if (interaction.customId.startsWith('SmartAlarmDelete')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmDelete', ''));
@@ -820,7 +820,7 @@ module.exports = async (client, interaction) => {
             value: `${server.storageMonitors[ids.entityId].everyone}`
         }));
 
-        await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
+        await discordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
     else if (interaction.customId.startsWith('StorageMonitorToolCupboardInGame')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorToolCupboardInGame', ''));
@@ -839,7 +839,7 @@ module.exports = async (client, interaction) => {
             value: `${server.storageMonitors[ids.entityId].inGame}`
         }));
 
-        await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
+        await discordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
     else if (interaction.customId.startsWith('StorageMonitorEdit')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
@@ -889,12 +889,12 @@ module.exports = async (client, interaction) => {
         const entityInfo = await rustplus.getEntityInfoAsync(ids.entityId);
         if (!(await rustplus.isResponseValid(entityInfo))) {
             if (server.storageMonitors[ids.entityId].reachable) {
-                await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, ids.serverId, ids.entityId);
+                await discordMessages.sendStorageMonitorNotFoundMessage(guildId, ids.serverId, ids.entityId);
             }
             server.storageMonitors[ids.entityId].reachable = false;
             client.setInstance(guildId, instance);
 
-            await DiscordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId);
+            await discordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId);
             return;
         }
 
@@ -903,7 +903,7 @@ module.exports = async (client, interaction) => {
 
         const items = client.rustlabs.getRecycleDataFromArray(entityInfo.entityInfo.payload.items);
 
-        const message = await DiscordMessages.sendStorageMonitorRecycleMessage(
+        const message = await discordMessages.sendStorageMonitorRecycleMessage(
             guildId, ids.serverId, ids.entityId, items);
 
         setTimeout(async () => {
@@ -1060,7 +1060,7 @@ module.exports = async (client, interaction) => {
             value: `${tracker.everyone}`
         }));
 
-        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
+        await discordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
     else if (interaction.customId.startsWith('TrackerUpdate')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerUpdate', ''));
@@ -1073,7 +1073,7 @@ module.exports = async (client, interaction) => {
 
         // TODO! Remove name change icon from status
 
-        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
+        await discordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
     else if (interaction.customId.startsWith('TrackerEdit')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
@@ -1148,7 +1148,7 @@ module.exports = async (client, interaction) => {
             value: `${tracker.inGame}`
         }));
 
-        await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
+        await discordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
     }
 
     log.info(client.intlGet(null, 'userButtonInteractionSuccess', {
