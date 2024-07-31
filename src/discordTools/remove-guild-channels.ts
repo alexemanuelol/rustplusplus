@@ -20,10 +20,10 @@
 
 import { Guild } from 'discord.js';
 
+import { client } from '../../index';
 import * as discordTools from './discord-tools';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
-export async function removeGuildChannels(client: typeof DiscordBot, guild: Guild) {
+export async function removeGuildChannels(guild: Guild) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
 

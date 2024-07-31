@@ -21,9 +21,8 @@
 import { ButtonBuilder, ButtonStyle, ActionRowBuilder } from "discord.js";
 
 import * as guildInstance from '../util/guild-instance';
-import { localeManager as lm } from '../../index';
+import { client, localeManager as lm } from '../../index';
 import * as constants from '../util/constants';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export interface ButtonOptions {
     customId?: string;
@@ -64,7 +63,7 @@ export function getButton(options: ButtonOptions): ButtonBuilder {
     return button;
 }
 
-export function getServerButtons(client: typeof DiscordBot, guildId: string, serverId: string,
+export function getServerButtons(guildId: string, serverId: string,
     state: number | null = null): ActionRowBuilder<ButtonBuilder>[] {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;

@@ -88,8 +88,8 @@ module.exports = {
 
 		const guild = await discordTools.getGuild(interaction.guildId);
 		if (guild) {
-			const category = await setupGuildCategory(client, guild);
-			await setupGuildChannels(client, guild, category);
+			const category = await setupGuildCategory(guild);
+			await setupGuildChannels(guild, category);
 			await PermissionHandler.resetPermissionsAllChannels(client, guild);
 		}
 

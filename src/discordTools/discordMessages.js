@@ -60,8 +60,8 @@ module.exports = {
         const server = instance.serverList[serverId];
 
         const content = {
-            embeds: [await discordEmbeds.getServerEmbed(Client.client, guildId, serverId)],
-            components: discordButtons.getServerButtons(Client.client, guildId, serverId, state)
+            embeds: [await discordEmbeds.getServerEmbed(guildId, serverId)],
+            components: discordButtons.getServerButtons(guildId, serverId, state)
         }
 
         const message = await module.exports.sendMessage(guildId, content, server.messageId,
@@ -78,7 +78,7 @@ module.exports = {
         const tracker = instance.trackers[trackerId];
 
         const content = {
-            embeds: [discordEmbeds.getTrackerEmbed(Client.client, guildId, trackerId)],
+            embeds: [discordEmbeds.getTrackerEmbed(guildId, trackerId)],
             components: discordButtons.getTrackerButtons(guildId, trackerId)
         }
 
@@ -145,7 +145,7 @@ module.exports = {
 
         const content = {
             embeds: [entity.reachable ?
-                discordEmbeds.getStorageMonitorEmbed(Client.client, guildId, serverId, entityId) :
+                discordEmbeds.getStorageMonitorEmbed(guildId, serverId, entityId) :
                 discordEmbeds.getNotFoundSmartDeviceEmbed(guildId, serverId, entityId, 'storageMonitors')],
             components: [entity.type === 'toolCupboard' ?
                 discordButtons.getStorageMonitorToolCupboardButtons(guildId, serverId, entityId) :
@@ -190,7 +190,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         const content = {
-            embeds: [discordEmbeds.getStorageMonitorRecycleEmbed(Client.client, guildId, serverId, entityId, items)],
+            embeds: [discordEmbeds.getStorageMonitorRecycleEmbed(guildId, serverId, entityId, items)],
             components: [discordButtons.getRecycleDeleteButton()],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', 'resources/images/electrics/recycler.png'))]
@@ -232,7 +232,7 @@ module.exports = {
         const entity = instance.serverList[serverId].storageMonitors[entityId];
 
         const content = {
-            embeds: [await discordEmbeds.getStorageMonitorNotFoundEmbed(Client.client, guildId, serverId, entityId)],
+            embeds: [await discordEmbeds.getStorageMonitorNotFoundEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
@@ -246,7 +246,7 @@ module.exports = {
         const entity = instance.serverList[serverId].switches[entityId];
 
         const content = {
-            embeds: [await discordEmbeds.getSmartSwitchNotFoundEmbed(Client.client, guildId, serverId, entityId)],
+            embeds: [await discordEmbeds.getSmartSwitchNotFoundEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))]
         }
@@ -259,7 +259,7 @@ module.exports = {
         const entity = instance.serverList[serverId].alarms[entityId];
 
         const content = {
-            embeds: [await discordEmbeds.getSmartAlarmNotFoundEmbed(Client.client, guildId, serverId, entityId)],
+            embeds: [await discordEmbeds.getSmartAlarmNotFoundEmbed(guildId, serverId, entityId)],
             files: [new Discord.AttachmentBuilder(
                 Path.join(__dirname, '..', `resources/images/electrics/${entity.image}`))],
             content: entity.everyone ? '@everyone' : ''
@@ -473,8 +473,7 @@ module.exports = {
         const instance = Client.client.getInstance(rustplus.guildId);
 
         const content = {
-            embeds: [discordEmbeds.getUpdateBattlemetricsOnlinePlayersInformationEmbed(Client.client, rustplus,
-                battlemetricsId)]
+            embeds: [discordEmbeds.getUpdateBattlemetricsOnlinePlayersInformationEmbed(rustplus, battlemetricsId)]
         }
 
         const message = await module.exports.sendMessage(rustplus.guildId, content,
@@ -496,7 +495,7 @@ module.exports = {
 
     sendCredentialsShowMessage: async function (interaction) {
         const content = {
-            embeds: [await discordEmbeds.getCredentialsShowEmbed(Client.client, interaction.guildId)],
+            embeds: [await discordEmbeds.getCredentialsShowEmbed(interaction.guildId)],
             ephemeral: true
         }
 
@@ -554,7 +553,7 @@ module.exports = {
 
     sendCraftMessage: async function (interaction, craftDetails, quantity) {
         const content = {
-            embeds: [discordEmbeds.getCraftEmbed(Client.client, interaction.guildId, craftDetails, quantity)],
+            embeds: [discordEmbeds.getCraftEmbed(interaction.guildId, craftDetails, quantity)],
             ephemeral: true
         }
 
@@ -563,7 +562,7 @@ module.exports = {
 
     sendResearchMessage: async function (interaction, researchDetails) {
         const content = {
-            embeds: [discordEmbeds.getResearchEmbed(Client.client, interaction.guildId, researchDetails)],
+            embeds: [discordEmbeds.getResearchEmbed(interaction.guildId, researchDetails)],
             ephemeral: true
         }
 
@@ -572,7 +571,7 @@ module.exports = {
 
     sendRecycleMessage: async function (interaction, recycleDetails, quantity, recyclerType) {
         const content = {
-            embeds: [discordEmbeds.getRecycleEmbed(Client.client, interaction.guildId, recycleDetails, quantity,
+            embeds: [discordEmbeds.getRecycleEmbed(interaction.guildId, recycleDetails, quantity,
                 recyclerType)],
             ephemeral: true
         }
@@ -584,7 +583,7 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
 
         const content = {
-            embeds: [discordEmbeds.getBattlemetricsEventEmbed(Client.client, guildId, battlemetricsId, title,
+            embeds: [discordEmbeds.getBattlemetricsEventEmbed(guildId, battlemetricsId, title,
                 description, fields)]
         }
 
@@ -597,7 +596,7 @@ module.exports = {
 
     sendItemMessage: async function (interaction, itemName, itemId, type) {
         const content = {
-            embeds: [discordEmbeds.getItemEmbed(Client.client, interaction.guildId, itemName, itemId, type)],
+            embeds: [discordEmbeds.getItemEmbed(interaction.guildId, itemName, itemId, type)],
             ephemeral: true
         }
 

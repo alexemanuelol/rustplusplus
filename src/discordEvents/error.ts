@@ -19,11 +19,10 @@
 */
 
 import { log } from '../../index';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export const name = 'error';
 
-export async function execute(client: typeof DiscordBot, error: Error) {
+export async function execute(error: Error) {
     const errorString = formatError(error);
     const errorLineArray = errorString.split('\n');
     for (const line of errorLineArray) {

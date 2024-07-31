@@ -90,10 +90,10 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'discord': {
-				await removeGuildChannels(client, guild);
+				await removeGuildChannels(guild);
 
-				const category = await setupGuildCategory(client, guild);
-				await setupGuildChannels(client, guild, category);
+				const category = await setupGuildCategory(guild);
+				await setupGuildChannels(guild, category);
 
 				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
 				try {
@@ -114,17 +114,17 @@ module.exports = {
 					await DiscordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
 
-				await setupServerList(client, guild);
-				await setupSettingsMenu(client, guild, true);
+				await setupServerList(guild);
+				await setupSettingsMenu(guild, true);
 
 				if (rustplus && rustplus.isOperational) {
-					await setupSwitches(client, rustplus);
-					await setupSwitchGroups(client, rustplus);
-					await setupAlarms(client, rustplus);
-					await setupStorageMonitors(client, rustplus);
+					await setupSwitches(rustplus);
+					await setupSwitchGroups(rustplus);
+					await setupAlarms(rustplus);
+					await setupStorageMonitors(rustplus);
 				}
 
-				await setupTrackers(client, guild);
+				await setupTrackers(guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
@@ -159,7 +159,7 @@ module.exports = {
 					/* Ignore */
 				}
 
-				await setupServerList(client, guild);
+				await setupServerList(guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
@@ -179,7 +179,7 @@ module.exports = {
 					/* Ignore */
 				}
 
-				await setupSettingsMenu(client, guild, true);
+				await setupSettingsMenu(guild, true);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 
@@ -204,8 +204,8 @@ module.exports = {
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await setupSwitches(client, rustplus);
-					await setupSwitchGroups(client, rustplus);
+					await setupSwitches(rustplus);
+					await setupSwitchGroups(rustplus);
 				}
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
@@ -219,7 +219,7 @@ module.exports = {
 			case 'alarms': {
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await setupAlarms(client, rustplus);
+					await setupAlarms(rustplus);
 				}
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
@@ -242,7 +242,7 @@ module.exports = {
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await setupStorageMonitors(client, rustplus);
+					await setupStorageMonitors(rustplus);
 				}
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
@@ -263,7 +263,7 @@ module.exports = {
 					/* Ignore */
 				}
 
-				await setupTrackers(client, guild);
+				await setupTrackers(guild);
 
 				await PermissionHandler.resetPermissionsAllChannels(client, guild);
 

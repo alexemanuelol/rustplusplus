@@ -24,11 +24,10 @@ import { Guild } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 
-import { log } from '../../index';
+import { log, client } from '../../index';
 const Config = require('../../config');
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
-export async function registerSlashCommands(client: typeof DiscordBot, guild: Guild) {
+export async function registerSlashCommands(guild: Guild) {
     const guildId = guild.id;
     const commands = [];
     const commandFiles = fs.readdirSync(path.join(__dirname, '..', 'commands')).filter(file =>

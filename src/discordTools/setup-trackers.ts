@@ -20,11 +20,11 @@
 
 import { Guild } from 'discord.js';
 
+import { client } from '../../index';
 import * as discordTools from './discord-tools';
 const DiscordMessages = require('./discordMessages.js');
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
-export async function setupTrackers(client: typeof DiscordBot, guild: Guild) {
+export async function setupTrackers(guild: Guild) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
 

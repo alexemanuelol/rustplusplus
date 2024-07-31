@@ -63,7 +63,7 @@ module.exports = async (client, interaction) => {
         });
 
         const guild = await discordTools.getGuild(guildId);
-        await registerSlashCommands(client, guild);
+        await registerSlashCommands(guild);
     }
     else if (interaction.customId === 'Prefix') {
         instance.generalSettings.prefix = interaction.values[0];

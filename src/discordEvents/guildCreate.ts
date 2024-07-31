@@ -20,12 +20,12 @@
 
 import { Guild } from 'discord.js';
 
+import { client } from '../../index';
 import * as guildInstance from '../util/guild-instance';
-const { DiscordBot } = require('../structures/DiscordBot.js');
 
 export const name = 'guildCreate';
 
-export async function execute(client: typeof DiscordBot, guild: Guild) {
+export async function execute(guild: Guild) {
     guildInstance.createGuildInstanceFile(guild.id);
     const gi = guildInstance.readGuildInstanceFile(guild.id);
     client.setInstance(guild.id, gi); // TODO! TEMP

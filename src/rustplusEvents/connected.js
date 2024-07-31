@@ -101,10 +101,10 @@ module.exports = {
         await DiscordMessages.sendServerMessage(guildId, serverId, null);
 
         /* Setup Smart Devices */
-        await setupSwitches(client, rustplus);
-        await setupSwitchGroups(client, rustplus);
-        await setupAlarms(client, rustplus);
-        await setupStorageMonitors(client, rustplus);
+        await setupSwitches(rustplus);
+        await setupSwitchGroups(rustplus);
+        await setupAlarms(rustplus);
+        await setupStorageMonitors(rustplus);
 
         rustplus.isNewConnection = false;
         rustplus.loadMarkers();
