@@ -28,7 +28,7 @@ export async function setupServerList(client: typeof DiscordBot, guild: Guild) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
 
-    await discordTools.clearTextChannel(client, guildId, instance.channelIds.servers, 100);
+    await discordTools.clearTextChannel(guildId, instance.channelIds.servers, 100);
 
     for (const serverId in instance.serverList) {
         await DiscordMessages.sendServerMessage(guildId, serverId);

@@ -28,7 +28,7 @@ export async function setupSwitchGroups(client: typeof DiscordBot, rustplus: typ
     const instance = client.getInstance(guildId);
 
     if (rustplus.isNewConnection) {
-        await discordTools.clearTextChannel(client, guildId, instance.channelIds.switchGroups, 100);
+        await discordTools.clearTextChannel(guildId, instance.channelIds.switchGroups, 100);
     }
 
     for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {

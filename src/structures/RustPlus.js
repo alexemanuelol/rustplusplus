@@ -2286,7 +2286,7 @@ class RustPlus extends RustPlusLib {
                 }
 
                 const discordUserId = credentials[player.steamId].discord_user_id;
-                const user = await discordTools.getMember(Client.client, this.guildId, discordUserId);
+                const user = await discordTools.getMember(this.guildId, discordUserId);
 
                 const content = {
                     embeds: [discordEmbeds.getUserSendEmbed(this.guildId, this.serverId, callerName, message)]

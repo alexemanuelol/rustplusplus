@@ -51,7 +51,7 @@ module.exports = {
             }
             else {
                 if (instance.informationChannelMessageIds.battlemetricsPlayers !== null) {
-                    await discordTools.deleteMessage(client, guildId, instance.channelIds.information,
+                    await discordTools.deleteMessage(guildId, instance.channelIds.information,
                         instance.informationChannelMessageIds.battlemetricsPlayers);
 
                     instance.informationChannelMessageIds.battlemetricsPlayers = null;

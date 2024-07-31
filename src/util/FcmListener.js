@@ -222,8 +222,7 @@ async function pairingServer(client, guild, title, message, body) {
     const server = instance.serverList[serverId];
 
     let messageObj = undefined;
-    if (server) messageObj = await discordTools.getMessage(client, guild.id,
-        instance.channelIds.servers, server.messageId);
+    if (server) messageObj = await discordTools.getMessage(guild.id, instance.channelIds.servers, server.messageId);
 
     let battlemetricsId = null;
     const bmInstance = new Battlemetrics(null, title);
@@ -508,7 +507,7 @@ async function alarmRaidAlarm(client, guild, title, message, body) {
 }
 
 async function playerDeath(client, guild, title, message, body, discordUserId) {
-    const user = await discordTools.getMember(client, guild.id, discordUserId);
+    const user = await discordTools.getMember(guild.id, discordUserId);
 
     let png = null;
     if (body.targetId !== '') png = await Request.requestSteamProfilePicture(body.targetId);

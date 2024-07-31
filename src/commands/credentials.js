@@ -150,13 +150,13 @@ async function addCredentials(client, interaction, verifyId) {
 
     /* Start Fcm Listener */
     if (isHoster) {
-        require('../util/FcmListener')(client, await discordTools.getGuild(client, interaction.guildId));
+        require('../util/FcmListener')(client, await discordTools.getGuild(interaction.guildId));
         if (prevHoster !== null) {
-            require('../util/FcmListenerLite')(client, await discordTools.getGuild(client, interaction.guildId), prevHoster);
+            require('../util/FcmListenerLite')(client, await discordTools.getGuild(interaction.guildId), prevHoster);
         }
     }
     else {
-        require('../util/FcmListenerLite')(client, await discordTools.getGuild(client, interaction.guildId), steamId);
+        require('../util/FcmListenerLite')(client, await discordTools.getGuild(interaction.guildId), steamId);
 
         const rustplus = client.rustplusInstances[guildId];
         if (rustplus && rustplus.team.leaderSteamId === steamId) {
@@ -294,9 +294,9 @@ async function setHosterCredentials(client, interaction, verifyId) {
         await DiscordMessages.sendServerMessage(guildId, rustplus.serverId);
     }
 
-    require('../util/FcmListener')(client, await discordTools.getGuild(client, interaction.guildId));
+    require('../util/FcmListener')(client, await discordTools.getGuild(interaction.guildId));
     if (prevHoster !== null) {
-        require('../util/FcmListenerLite')(client, await discordTools.getGuild(client, interaction.guildId), prevHoster);
+        require('../util/FcmListenerLite')(client, await discordTools.getGuild(interaction.guildId), prevHoster);
     }
 
     log.info(client.intlGet(null, 'slashCommandValueChange', {

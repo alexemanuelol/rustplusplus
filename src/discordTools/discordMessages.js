@@ -38,13 +38,13 @@ module.exports = {
         }
 
         let message = messageId !== null ?
-            await discordTools.getMessage(Client.client, guildId, channelId, messageId) : undefined;
+            await discordTools.getMessage(guildId, channelId, messageId) : undefined;
 
         if (message !== undefined) {
             return await discordTools.messageEdit(message, content);
         }
         else {
-            const channel = await discordTools.getTextChannel(Client.client, guildId, channelId);
+            const channel = await discordTools.getTextChannel(guildId, channelId);
 
             if (!channel) {
                 log.error(Client.client.intlGet(null, 'couldNotGetChannelWithId', { id: channelId }));

@@ -20,12 +20,12 @@
 
 import * as discordjs from 'discord.js';
 
-import { log } from '../../index';
+import { log, client } from '../../index';
 import { localeManager as lm } from '../../index';
 const Config = require('../../config');
 const { DiscordBot } = require('../structures/DiscordBot.js');
 
-export async function getGuild(client: typeof DiscordBot, guildId: string): Promise<discordjs.Guild | undefined> {
+export async function getGuild(guildId: string): Promise<discordjs.Guild | undefined> {
     try {
         if (!Config.discord.useCache) {
             await client.guilds.fetch();
@@ -38,9 +38,9 @@ export async function getGuild(client: typeof DiscordBot, guildId: string): Prom
     return undefined;
 }
 
-export async function getRole(client: typeof DiscordBot, guildId: string, role: string, isRoleId: boolean = true):
+export async function getRole(guildId: string, role: string, isRoleId: boolean = true):
     Promise<discordjs.Role | undefined> {
-    const guild = await getGuild(client, guildId);
+    const guild = await getGuild(guildId);
 
     if (guild instanceof discordjs.Guild) {
         try {
@@ -61,9 +61,9 @@ export async function getRole(client: typeof DiscordBot, guildId: string, role: 
     return undefined;
 }
 
-export async function getMember(client: typeof DiscordBot, guildId: string, member: string, isMemberId: boolean = true):
+export async function getMember(guildId: string, member: string, isMemberId: boolean = true):
     Promise<discordjs.GuildMember | undefined> {
-    const guild = await getGuild(client, guildId);
+    const guild = await getGuild(guildId);
 
     if (guild instanceof discordjs.Guild) {
         try {
@@ -84,9 +84,9 @@ export async function getMember(client: typeof DiscordBot, guildId: string, memb
     return undefined;
 }
 
-async function getChannel(client: typeof DiscordBot, guildId: string, channel: string, isChannelId: boolean = true):
+async function getChannel(guildId: string, channel: string, isChannelId: boolean = true):
     Promise<discordjs.GuildBasedChannel | undefined> {
-    const guild = await getGuild(client, guildId);
+    const guild = await getGuild(guildId);
 
     if (guild instanceof discordjs.Guild) {
         try {
@@ -107,30 +107,30 @@ async function getChannel(client: typeof DiscordBot, guildId: string, channel: s
     return undefined;
 }
 
-export async function getTextChannel(client: typeof DiscordBot, guildId: string, channel: string,
+export async function getTextChannel(guildId: string, channel: string,
     isChannelId: boolean = true): Promise<discordjs.TextChannel | undefined> {
-    const ch = await getChannel(client, guildId, channel, isChannelId);
+    const ch = await getChannel(guildId, channel, isChannelId);
     if (ch && ch.type === discordjs.ChannelType.GuildText) {
         return ch as discordjs.TextChannel;
     }
     return undefined;
 }
 
-export async function getCategory(client: typeof DiscordBot, guildId: string, category: string,
+export async function getCategory(guildId: string, category: string,
     isCategoryId: boolean = true): Promise<discordjs.CategoryChannel | undefined> {
-    const categoryChannel = await getChannel(client, guildId, category, isCategoryId);
+    const categoryChannel = await getChannel(guildId, category, isCategoryId);
     if (categoryChannel && categoryChannel.type === discordjs.ChannelType.GuildCategory) {
         return categoryChannel as discordjs.CategoryChannel;
     }
     return undefined;
 }
 
-export async function getMessage(client: typeof DiscordBot, guildId: string, channelId: string, messageId: string):
+export async function getMessage(guildId: string, channelId: string, messageId: string):
     Promise<discordjs.Message | undefined> {
-    const guild = await getGuild(client, guildId);
+    const guild = await getGuild(guildId);
 
     if (guild instanceof discordjs.Guild) {
-        const channel = await getTextChannel(client, guildId, channelId);
+        const channel = await getTextChannel(guildId, channelId);
 
         if (channel instanceof discordjs.TextChannel) {
             try {
@@ -145,9 +145,8 @@ export async function getMessage(client: typeof DiscordBot, guildId: string, cha
     return undefined;
 }
 
-export async function deleteMessage(client: typeof DiscordBot, guildId: string, channelId: string, messageId: string):
-    Promise<boolean> {
-    const message = await getMessage(client, guildId, channelId, messageId);
+export async function deleteMessage(guildId: string, channelId: string, messageId: string): Promise<boolean> {
+    const message = await getMessage(guildId, channelId, messageId);
     if (message instanceof discordjs.Message) {
         try {
             await message.delete();
@@ -159,10 +158,10 @@ export async function deleteMessage(client: typeof DiscordBot, guildId: string, 
     return false;
 }
 
-export async function createChannel(client: typeof DiscordBot, guildId: string, name: string,
+export async function createChannel(guildId: string, name: string,
     type: discordjs.ChannelType.GuildCategory | discordjs.ChannelType.GuildText):
     Promise<discordjs.CategoryChannel | discordjs.TextChannel | undefined> {
-    const guild = await getGuild(client, guildId);
+    const guild = await getGuild(guildId);
 
     if (guild instanceof discordjs.Guild) {
         try {
@@ -187,9 +186,9 @@ export async function createChannel(client: typeof DiscordBot, guildId: string, 
     return undefined;
 }
 
-export async function deleteChannel(client: typeof DiscordBot, guildId: string, channel: string,
+export async function deleteChannel(guildId: string, channel: string,
     isChannelId: boolean = true): Promise<boolean> {
-    const ch = await getChannel(client, guildId, channel, isChannelId);
+    const ch = await getChannel(guildId, channel, isChannelId);
     if (ch) {
         try {
             await ch.delete();
@@ -201,9 +200,9 @@ export async function deleteChannel(client: typeof DiscordBot, guildId: string, 
     return false;
 }
 
-export async function clearTextChannel(client: typeof DiscordBot, guildId: string, channelId: string,
+export async function clearTextChannel(guildId: string, channelId: string,
     numberOfMessages: number): Promise<boolean> {
-    const channel = await getTextChannel(client, guildId, channelId);
+    const channel = await getTextChannel(guildId, channelId);
 
     if (channel instanceof discordjs.TextChannel) {
         try {
@@ -311,4 +310,36 @@ export async function messageEdit(message: discordjs.Message, content: discordjs
     }
 
     return undefined;
+}
+
+/* Only used for messages/interactions to a guild text channel message, not member PM. */
+export async function sendUpdateMessage(guildId: string, content: discordjs.MessageCreateOptions |
+    discordjs.MessageEditOptions, channelId: string | null, messageId: string | null, interaction: discordjs.Interaction | null = null):
+    Promise<discordjs.Message | undefined> {
+    if (interaction !== null) {
+        await interactionUpdate(interaction, content as discordjs.InteractionUpdateOptions);
+        return undefined;
+    }
+
+    if (channelId === null) {
+        return undefined;
+    }
+
+    const message = messageId !== null ? await getMessage(guildId, channelId, messageId) : undefined;
+    if (message !== undefined) {
+        /* Message already exist, so update it. */
+        return await messageEdit(message, content as discordjs.MessageEditOptions);
+    }
+    else {
+        /* Message does not exist, so create it. */
+        const channel = await getTextChannel(guildId, channelId);
+
+        if (channel instanceof discordjs.TextChannel) {
+            return await messageSend(channel, content as discordjs.MessageCreateOptions);
+        }
+        else {
+            log.error(lm.getIntl(Config.general.language, 'couldNotGetChannelWithId', { id: channelId }));
+            return undefined;
+        }
+    }
 }

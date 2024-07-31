@@ -190,7 +190,7 @@ class DiscordBot extends Discord.Client {
     }
 
     async logInteraction(interaction, verifyId, type) {
-        const channel = await discordTools.getTextChannel(this, interaction.guildId, interaction.channelId);
+        const channel = await discordTools.getTextChannel(interaction.guildId, interaction.channelId);
         const args = new Object();
         args['guild'] = `${interaction.member.guild.name} (${interaction.member.guild.id})`;
         args['channel'] = `${channel.name} (${interaction.channelId})`;
@@ -470,7 +470,7 @@ class DiscordBot extends Discord.Client {
 
         if (!interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator) &&
             !interaction.member.roles.cache.has(instance.roleId)) {
-            const role = await discordTools.getRole(this, interaction.guildId, instance.roleId);
+            const role = await discordTools.getRole(interaction.guildId, instance.roleId);
             const str = this.intlGet(interaction.guildId, 'notPartOfRole', { role: role.name });
             await discordTools.interactionReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.warn(str);

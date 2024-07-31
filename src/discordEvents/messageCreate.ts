@@ -38,9 +38,9 @@ export async function execute(client: typeof DiscordBot, message: Message) {
 
     if (instance.blacklist['discordIds'].includes(message.author.id) &&
         Object.values(instance.channelIds).includes(message.channelId)) {
-        const guild = await discordTools.getGuild(client, guildId);
+        const guild = await discordTools.getGuild(guildId);
         if (!guild) return;
-        const channel = await discordTools.getTextChannel(client, guild.id, message.channelId);
+        const channel = await discordTools.getTextChannel(guild.id, message.channelId);
         if (!channel) return;
         log.info(client.intlGet(null, `userPartOfBlacklistDiscord`, {
             guild: `${guild.name} (${guild.id})`,
@@ -55,9 +55,9 @@ export async function execute(client: typeof DiscordBot, message: Message) {
         await DiscordCommandHandler.discordCommandHandler(rustplus, client, message);
     }
     else if (message.channelId === instance.channelIds.teamchat) {
-        const guild = await discordTools.getGuild(client, guildId);
+        const guild = await discordTools.getGuild(guildId);
         if (!guild) return;
-        const channel = await discordTools.getTextChannel(client, guild.id, message.channelId);
+        const channel = await discordTools.getTextChannel(guild.id, message.channelId);
         if (!channel) return;
         log.info(client.intlGet(null, `logDiscordMessage`, {
             guild: `${guild.name} (${guild.id})`,

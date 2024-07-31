@@ -360,7 +360,7 @@ async function pairingEntityStorageMonitor(client, guild, title, message, body) 
 }
 
 async function playerDeath(client, guild, title, message, body, discordUserId) {
-    const user = await discordTools.getMember(client, guild.id, discordUserId);
+    const user = await discordTools.getMember(guild.id, discordUserId);
     if (!user) return;
 
     let png = null;
