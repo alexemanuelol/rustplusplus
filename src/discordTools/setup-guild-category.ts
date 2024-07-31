@@ -31,10 +31,11 @@ export async function setupGuildCategory(client: typeof DiscordBot, guild: Guild
 
     let category = undefined;
     if (instance.channelIds.category !== null) {
-        category = await discordTools.getCategory(client, guildId, instance.channelIds.category);
+        category = await discordTools.getCategory(guildId, instance.channelIds.category);
     }
     if (category === undefined) {
-        category = await discordTools.createChannel(client, guildId, 'rustplusplus', ChannelType.GuildCategory) as CategoryChannel;
+        category = await discordTools.createChannel(guildId, 'rustplusplus',
+            ChannelType.GuildCategory) as CategoryChannel;
         if (!category) return undefined;
         instance.channelIds.category = category.id;
         client.setInstance(guildId, instance);

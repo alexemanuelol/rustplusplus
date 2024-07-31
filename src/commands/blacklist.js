@@ -78,7 +78,7 @@ module.exports = {
 			return;
 		}
 
-		const guild = await discordToolsgetGuild(client, guildId);
+		const guild = await discordTools.getGuild(guildId);
 
 		switch (interaction.options.getSubcommand()) {
 			case 'add': {
@@ -216,7 +216,7 @@ module.exports = {
 				let steamIds = '';
 
 				for (const discordId of instance.blacklist['discordIds']) {
-					const user = await discordToolsgetMember(client, guildId, discordId)
+					const user = await discordTools.getMember(guildId, discordId)
 					let name = '';
 					if (user) name = `${user.user.username} (${user.id})`;
 					else name = `${discordId}`;

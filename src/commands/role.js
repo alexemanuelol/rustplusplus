@@ -86,7 +86,7 @@ module.exports = {
 			value: `${interaction.options.getSubcommand()}`
 		}));
 
-		const guild = await discordTools.getGuild(client, interaction.guildId);
+		const guild = await discordTools.getGuild(interaction.guildId);
 		if (guild) {
 			const category = await setupGuildCategory(client, guild);
 			await setupGuildChannels(client, guild, category);

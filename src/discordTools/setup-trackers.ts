@@ -28,7 +28,7 @@ export async function setupTrackers(client: typeof DiscordBot, guild: Guild) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
 
-    await discordTools.clearTextChannel(client, guildId, instance.channelIds.trackers, 100);
+    await discordTools.clearTextChannel(guildId, instance.channelIds.trackers, 100);
 
     for (const trackerId in instance.trackers) {
         await DiscordMessages.sendTrackerMessage(guildId, trackerId);

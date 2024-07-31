@@ -30,7 +30,7 @@ export async function setupStorageMonitors(client: typeof DiscordBot, rustplus: 
     const serverId = rustplus.serverId;
 
     if (rustplus.isNewConnection) {
-        await discordTools.clearTextChannel(client, guildId, instance.channelIds.storageMonitors, 100);
+        await discordTools.clearTextChannel(guildId, instance.channelIds.storageMonitors, 100);
     }
 
     for (const entityId in instance.serverList[serverId].storageMonitors) {

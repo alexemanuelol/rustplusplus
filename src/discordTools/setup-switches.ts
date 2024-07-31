@@ -29,7 +29,7 @@ export async function setupSwitches(client: typeof DiscordBot, rustplus: typeof 
     const serverId = rustplus.serverId;
 
     if (rustplus.isNewConnection) {
-        await discordTools.clearTextChannel(client, guildId, instance.channelIds.switches, 100);
+        await discordTools.clearTextChannel(guildId, instance.channelIds.switches, 100);
     }
 
     for (const entityId in instance.serverList[serverId].switches) {

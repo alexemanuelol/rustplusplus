@@ -32,7 +32,7 @@ const { DiscordBot } = require('../structures/DiscordBot.js');
 export async function setupSettingsMenu(client: typeof DiscordBot, guild: Guild, forced: boolean = false) {
     const guildId = guild.id;
     const instance = client.getInstance(guildId);
-    const channel = await discordTools.getTextChannel(client, guildId, instance.channelIds.settings);
+    const channel = await discordTools.getTextChannel(guildId, instance.channelIds.settings);
 
     if (!channel) {
         log.error('SetupSettingsMenu: ' + client.intlGet(null, 'invalidGuildOrChannel'));
@@ -40,7 +40,7 @@ export async function setupSettingsMenu(client: typeof DiscordBot, guild: Guild,
     }
 
     if (instance.firstTime || forced) {
-        await discordTools.clearTextChannel(client, guildId, instance.channelIds.settings, 100);
+        await discordTools.clearTextChannel(guildId, instance.channelIds.settings, 100);
 
         await setupGeneralSettings(client, guildId, channel);
         await setupNotificationSettings(client, guildId, channel);

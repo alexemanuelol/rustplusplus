@@ -49,10 +49,10 @@ async function addTextChannel(name: string, idName: string, client: typeof Disco
 
     let channel = undefined;
     if (instance.channelIds[idName] !== null) {
-        channel = await discordTools.getTextChannel(client, guildId, instance.channelIds[idName]);
+        channel = await discordTools.getTextChannel(guildId, instance.channelIds[idName]);
     }
     if (channel === undefined) {
-        channel = await discordTools.createChannel(client, guildId, name, ChannelType.GuildText) as TextChannel;
+        channel = await discordTools.createChannel(guildId, name, ChannelType.GuildText) as TextChannel;
         if (!channel) return undefined;
         instance.channelIds[idName] = channel.id;
         client.setInstance(guildId, instance);

@@ -114,7 +114,7 @@ export async function getServerEmbed(client: typeof DiscordBot, guildId: string,
 
     let hoster = lm.getIntl(language, 'unknown');
     if (creds.hasOwnProperty(server.steamId)) {
-        const member = await discordTools.getMember(client, guildId, creds[server.steamId].discordUserId);
+        const member = await discordTools.getMember(guildId, creds[server.steamId].discordUserId);
         if (member !== undefined) {
             hoster = member.user.username;
         }
@@ -555,7 +555,7 @@ export async function getStorageMonitorNotFoundEmbed(client: typeof DiscordBot, 
     const server = instance.serverList[serverId];
     const entity = server.storageMonitors[entityId];
     const creds = credentials.readCredentialsFile();
-    const user = await discordTools.getMember(client, guildId, creds[server.steamId].discordUserId);
+    const user = await discordTools.getMember(guildId, creds[server.steamId].discordUserId);
     const grid = entity.location !== null ? ` (${entity.location})` : '';
 
     return getEmbed({
@@ -578,7 +578,7 @@ export async function getSmartSwitchNotFoundEmbed(client: typeof DiscordBot, gui
     const server = instance.serverList[serverId];
     const entity = instance.serverList[serverId].switches[entityId];
     const creds = credentials.readCredentialsFile();
-    const user = await discordTools.getMember(client, guildId, creds[server.steamId].discordUserId);
+    const user = await discordTools.getMember(guildId, creds[server.steamId].discordUserId);
     const grid = entity.location !== null ? ` (${entity.location})` : '';
 
     return getEmbed({
@@ -601,7 +601,7 @@ export async function getSmartAlarmNotFoundEmbed(client: typeof DiscordBot, guil
     const server = instance.serverList[serverId];
     const entity = server.alarms[entityId];
     const creds = credentials.readCredentialsFile();
-    const user = await discordTools.getMember(client, guildId, creds[server.steamId].discordUserId);
+    const user = await discordTools.getMember(guildId, creds[server.steamId].discordUserId);
     const grid = entity.location !== null ? ` (${entity.location})` : '';
 
     return getEmbed({
@@ -1073,7 +1073,7 @@ export async function getCredentialsShowEmbed(client: typeof DiscordBot, guildId
     let hoster = '';
 
     for (const credential in creds) {
-        const user = await discordTools.getMember(client, guildId, creds[credential].discordUserId);
+        const user = await discordTools.getMember(guildId, creds[credential].discordUserId);
         names += `${user !== undefined ? user.user.username : lm.getIntl(language, 'unknown')}\n`;
         steamIds += `${credential}\n`;
         hoster += `${credential === instance.hoster ? `${constants.LEADER_EMOJI}\n` : '\u200B\n'}`;

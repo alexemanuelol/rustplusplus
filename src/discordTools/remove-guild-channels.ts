@@ -34,11 +34,11 @@ export async function removeGuildChannels(client: typeof DiscordBot, guild: Guil
             continue;
         }
 
-        await discordTools.deleteChannel(client, guildId, channelId as string);
+        await discordTools.deleteChannel(guildId, channelId as string);
         instance.channelIds[channelName] = null;
     }
 
-    await discordTools.deleteChannel(client, guildId, categoryId as string);
+    await discordTools.deleteChannel(guildId, categoryId as string);
 
     instance.channelIds['category'] = null;
     client.setInstance(guildId, instance);

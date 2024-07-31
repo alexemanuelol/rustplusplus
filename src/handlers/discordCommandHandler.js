@@ -210,8 +210,8 @@ module.exports = {
             await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, message, response);
         }
 
-        const guild = await discordTools.getGuild(client, message.guild.id);
-        const channel = await discordTools.getTextChannel(client, guild.id, message.channelId)
+        const guild = await discordTools.getGuild(message.guild.id);
+        const channel = await discordTools.getTextChannel(guild.id, message.channelId)
         log.info(client.intlGet(null, `logDiscordCommand`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,

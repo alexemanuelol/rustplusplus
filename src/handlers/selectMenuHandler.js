@@ -62,7 +62,7 @@ module.exports = async (client, interaction) => {
             components: [discordSelectMenus.getLanguageSelectMenu(guildId, interaction.values[0])]
         });
 
-        const guild = await discordTools.getGuild(client, guildId);
+        const guild = await discordTools.getGuild(guildId);
         await registerSlashCommands(client, guild);
     }
     else if (interaction.customId === 'Prefix') {

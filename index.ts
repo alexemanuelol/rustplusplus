@@ -51,7 +51,7 @@ createMissingDirectories();
 export const log = Logger.createLogger('logs/rustplusplus.log');
 export const localeManager = new LocaleManager(Config.general.language);
 
-const client = new DiscordBot({
+export const client = new DiscordBot({
     intents: [
         Discord.GatewayIntentBits.Guilds,
         Discord.GatewayIntentBits.GuildMessages,
