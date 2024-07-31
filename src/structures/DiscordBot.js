@@ -278,6 +278,7 @@ class DiscordBot extends Discord.Client {
     }
 
     getInstance(guildId) {
+        this.instances[guildId] = GuildInstance.readGuildInstanceFile(guildId);
         return this.instances[guildId];
     }
 

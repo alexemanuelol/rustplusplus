@@ -23,9 +23,9 @@ const PushReceiver = require('push-receiver');
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordMessages from '../discordTools/discord-messages';
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.ts');
 const Request = require('../util/request.ts');
 
@@ -199,7 +199,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         }
         client.setInstance(guild.id, instance);
 
-        await DiscordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
+        await discordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
     }
 }
 
@@ -253,7 +253,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         client.setInstance(guild.id, instance);
     }
 
-    await DiscordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
+    await discordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
@@ -326,7 +326,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         }
         client.setInstance(guild.id, instance);
 
-        await DiscordMessages.sendStorageMonitorMessage(guild.id, serverId, body.entityId);
+        await discordMessages.sendStorageMonitorMessage(guild.id, serverId, body.entityId);
     }
 }
 

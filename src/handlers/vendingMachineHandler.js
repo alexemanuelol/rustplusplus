@@ -18,7 +18,7 @@
 
 */
 
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 const Map = require('../util/map.ts');
 
 module.exports = {
@@ -89,7 +89,7 @@ module.exports = {
                         location: location.location
                     });
 
-                    await DiscordMessages.sendItemAvailableInVendingMachineMessage(rustplus, str);
+                    await discordMessages.sendItemAvailableInVendingMachineMessage(rustplus, str);
 
                     if (rustplus.generalSettings.itemAvailableInVendingMachineNotifyInGame) {
                         rustplus.sendInGameMessage(str);

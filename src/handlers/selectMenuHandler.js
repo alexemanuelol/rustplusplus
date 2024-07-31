@@ -24,7 +24,7 @@ import { log } from '../../index';
 import { registerSlashCommands } from '../discordTools/register-slash-commands';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordSelectMenus from '../discordTools/discord-select-menus';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -150,7 +150,7 @@ module.exports = async (client, interaction) => {
             value: `${server.switches[ids.entityId].autoDayNightOnOff}`
         }));
 
-        DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
+        await discordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
 
     log.info(client.intlGet(null, 'userSelectMenuInteractionSuccess', {

@@ -21,9 +21,9 @@
 const Discord = require('discord.js');
 
 import { log } from '../../index';
+import * as discordMessages from '../discordTools/discord-messages';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 const Keywords = require('../util/keywords.ts');
 const Request = require('../util/request.ts');
 
@@ -98,7 +98,7 @@ module.exports = async (client, interaction) => {
             value: `${server.battlemetricsId}`
         }));
 
-        await DiscordMessages.sendServerMessage(interaction.guildId, ids.serverId);
+        await discordMessages.sendServerMessage(interaction.guildId, ids.serverId);
 
         /* To force search of player name via scrape */
         client.battlemetricsIntervalCounter = 0;
@@ -138,7 +138,7 @@ module.exports = async (client, interaction) => {
             value: `${smartSwitchName}, ${server.switches[ids.entityId].command}`
         }));
 
-        await DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId);
+        await discordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('GroupEdit')) {
         const ids = JSON.parse(interaction.customId.replace('GroupEdit', ''));
@@ -164,7 +164,7 @@ module.exports = async (client, interaction) => {
             value: `${groupName}, ${server.switchGroups[ids.groupId].command}`
         }));
 
-        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('GroupAddSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
@@ -190,7 +190,7 @@ module.exports = async (client, interaction) => {
             value: `${switchId}`
         }));
 
-        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
@@ -211,7 +211,7 @@ module.exports = async (client, interaction) => {
             value: `${switchId}`
         }));
 
-        await DiscordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
@@ -239,7 +239,7 @@ module.exports = async (client, interaction) => {
             value: `${smartAlarmName}, ${smartAlarmMessage}, ${server.alarms[ids.entityId].command}`
         }));
 
-        await DiscordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
+        await discordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('StorageMonitorEdit')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
@@ -259,7 +259,7 @@ module.exports = async (client, interaction) => {
             value: `${storageMonitorName}`
         }));
 
-        await DiscordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId, ids.entityId);
+        await discordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('TrackerEdit')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
@@ -306,7 +306,7 @@ module.exports = async (client, interaction) => {
             value: `${trackerName}, ${tracker.battlemetricsId}, ${tracker.clanTag}`
         }));
 
-        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+        await discordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
@@ -362,7 +362,7 @@ module.exports = async (client, interaction) => {
             value: `${id}`
         }));
 
-        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+        await discordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
     else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
@@ -389,7 +389,7 @@ module.exports = async (client, interaction) => {
             value: `${id}`
         }));
 
-        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+        await discordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
 
     log.info(client.intlGet(null, 'userModalInteractionSuccess', {

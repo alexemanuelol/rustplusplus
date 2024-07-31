@@ -18,14 +18,14 @@
 
 */
 
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = {
     handler: async function (rustplus) {
         if (rustplus.informationIntervalCounter === 0) {
-            await DiscordMessages.sendUpdateServerInformationMessage(rustplus);
-            await DiscordMessages.sendUpdateEventInformationMessage(rustplus);
-            await DiscordMessages.sendUpdateTeamInformationMessage(rustplus);
+            await discordMessages.sendUpdateServerInformationMessage(rustplus);
+            await discordMessages.sendUpdateEventInformationMessage(rustplus);
+            await discordMessages.sendUpdateTeamInformationMessage(rustplus);
         }
 
         if (rustplus.informationIntervalCounter === 5) {

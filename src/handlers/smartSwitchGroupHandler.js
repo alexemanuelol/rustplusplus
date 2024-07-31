@@ -18,7 +18,7 @@
 
 */
 
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 const Timer = require('../util/timer.ts');
 
 module.exports = {
@@ -30,7 +30,7 @@ module.exports = {
 
         for (const [groupId, content] of Object.entries(instance.serverList[serverId].switchGroups)) {
             if (content.switches.includes(`${switchId}`)) {
-                await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
+                await discordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
             }
         }
 
@@ -83,7 +83,7 @@ module.exports = {
             const response = await rustplus.turnSmartSwitchAsync(entityId, value);
             if (!(await rustplus.isResponseValid(response))) {
                 if (instance.serverList[serverId].switches[entityId].reachable) {
-                    await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                    await discordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
                 }
                 instance.serverList[serverId].switches[entityId].reachable = false;
                 instance.serverList[serverId].switches[entityId].active = prevActive;
@@ -96,11 +96,11 @@ module.exports = {
                 client.setInstance(guildId, instance);
             }
 
-            DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+            await discordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
         }
 
         if (actionSwitches.length !== 0) {
-            await DiscordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
+            await discordMessages.sendSmartSwitchGroupMessage(guildId, serverId, groupId);
         }
     },
 

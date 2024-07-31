@@ -20,7 +20,7 @@
 
 import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = {
     discordCommandHandler: async function (rustplus, client, message) {
@@ -207,7 +207,7 @@ module.exports = {
         }
 
         if (response !== null) {
-            await DiscordMessages.sendDiscordCommandResponseMessage(rustplus, client, message, response);
+            await discordMessages.sendDiscordCommandResponseMessage(rustplus, message, response);
         }
 
         const guild = await discordTools.getGuild(message.guild.id);

@@ -18,7 +18,7 @@
 
 */
 
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 const Timer = require('../util/timer.ts');
 
 module.exports = {
@@ -43,12 +43,12 @@ module.exports = {
                 const info = await rustplus.getEntityInfoAsync(entityId);
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.serverList[serverId].alarms[entityId].reachable) {
-                        await DiscordMessages.sendSmartAlarmNotFoundMessage(guildId, serverId, entityId);
+                        await discordMessages.sendSmartAlarmNotFoundMessage(guildId, serverId, entityId);
 
                         instance.serverList[serverId].alarms[entityId].reachable = false;
                         client.setInstance(guildId, instance);
 
-                        await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
+                        await discordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
                     }
                 }
                 else {
@@ -56,7 +56,7 @@ module.exports = {
                         instance.serverList[serverId].alarms[entityId].reachable = true;
                         client.setInstance(guildId, instance);
 
-                        await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
+                        await discordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
                     }
                 }
             }

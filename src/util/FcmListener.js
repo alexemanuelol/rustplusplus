@@ -26,10 +26,10 @@ import { log } from '../../index';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordButtons from '../discordTools/discord-buttons';
 import * as discordEmbeds from '../discordTools/discord-embeds';
+import * as discordMessages from '../discordTools/discord-messages';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.ts');
 const Request = require('../util/request.ts');
 
@@ -243,7 +243,7 @@ async function pairingServer(client, guild, full, data, body) {
     };
     client.setInstance(guild.id, instance);
 
-    await DiscordMessages.sendServerMessage(guild.id, serverId, null);
+    await discordMessages.sendServerMessage(guild.id, serverId, null);
 }
 
 async function pairingEntitySwitch(client, guild, full, data, body) {
@@ -294,7 +294,7 @@ async function pairingEntitySwitch(client, guild, full, data, body) {
         }
         client.setInstance(guild.id, instance);
 
-        await DiscordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
+        await discordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
     }
 }
 
@@ -348,7 +348,7 @@ async function pairingEntitySmartAlarm(client, guild, full, data, body) {
         client.setInstance(guild.id, instance);
     }
 
-    await DiscordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
+    await discordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
 }
 
 async function pairingEntityStorageMonitor(client, guild, full, data, body) {
@@ -421,7 +421,7 @@ async function pairingEntityStorageMonitor(client, guild, full, data, body) {
         }
         client.setInstance(guild.id, instance);
 
-        await DiscordMessages.sendStorageMonitorMessage(guild.id, serverId, body.entityId);
+        await discordMessages.sendStorageMonitorMessage(guild.id, serverId, body.entityId);
     }
 }
 
@@ -448,7 +448,7 @@ async function alarmAlarm(client, guild, full, data, body) {
         instance.generalSettings.fcmAlarmNotificationEnabled) {
         server.alarms[entityId].lastTrigger = Math.floor(new Date() / 1000);
         client.setInstance(guild.id, instance);
-        await DiscordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
+        await discordMessages.sendSmartAlarmTriggerMessage(guild.id, serverId, entityId);
         log.info(`${data.title}: ${data.message}`);
     }
 }
@@ -472,7 +472,7 @@ async function alarmRaidAlarm(client, guild, full, data, body) {
     }
 
     if (rustplus && (serverId === rustplus.serverId)) {
-        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
+        await discordTools.sendUpdateMessage(guild.id, content, instance.channelIds.activity)
         rustplus.sendInGameMessage(`${data.title}: ${data.message}`);
     }
 
@@ -508,7 +508,7 @@ async function teamLogin(client, guild, full, data, body) {
     const serverId = `${body.ip}-${body.port}`;
 
     if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
-        await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
+        await discordTools.sendUpdateMessage(guild.id, content, instance.channelIds.activity)
         log.info(client.intlGet(null, 'playerJustConnectedTo', {
             name: body.targetName,
             server: body.name
@@ -524,5 +524,5 @@ async function newsNews(client, guild, full, data, body) {
         components: [discordButtons.getNewsButton(guild.id, body.url, isValidUrl(body.url))]
     }
 
-    await DiscordMessages.sendMessage(guild.id, content, null, instance.channelIds.activity);
+    await discordTools.sendUpdateMessage(guild.id, content, instance.channelIds.activity)
 }

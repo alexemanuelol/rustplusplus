@@ -19,7 +19,7 @@
 */
 
 import { client } from "../../index";
-const DiscordMessages = require('./discordMessages.js');
+import * as discordMessages from './discord-messages';
 const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupAlarms(rustplus: typeof RustPlus) {
@@ -33,7 +33,7 @@ export async function setupAlarms(rustplus: typeof RustPlus) {
 
         if (!(await rustplus.isResponseValid(info))) {
             if (entity.reachable === true) {
-                await DiscordMessages.sendSmartAlarmNotFoundMessage(guildId, serverId, entityId);
+                await discordMessages.sendSmartAlarmNotFoundMessage(guildId, serverId, entityId);
             }
             entity.reachable = false;
         }
@@ -45,6 +45,6 @@ export async function setupAlarms(rustplus: typeof RustPlus) {
 
         client.setInstance(guildId, instance);
 
-        await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
+        await discordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
     }
 }

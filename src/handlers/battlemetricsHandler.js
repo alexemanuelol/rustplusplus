@@ -19,8 +19,8 @@
 */
 
 import * as discordTools from '../discordTools/discord-tools';
+import * as discordMessages from '../discordTools/discord-messages';
 const Constants = require('../util/constants.ts');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 const Request = require('../util/request.ts');
 
 module.exports = {
@@ -47,7 +47,7 @@ module.exports = {
             condition &= rustplus && rustplus.isOperational;
 
             if (condition) {
-                await DiscordMessages.sendUpdateBattlemetricsOnlinePlayersInformationMessage(rustplus, bmId);
+                await discordMessages.sendUpdateBattlemetricsOnlinePlayersInformationMessage(rustplus, bmId);
             }
             else {
                 if (instance.informationChannelMessageIds.battlemetricsPlayers !== null) {
@@ -95,7 +95,7 @@ module.exports = {
                     client.setInstance(guildId, instance);
 
                     if (firstTime) {
-                        await DiscordMessages.sendTrackerMessage(guildId, trackerId);
+                        await discordMessages.sendTrackerMessage(guildId, trackerId);
                         continue;
                     }
                 }
@@ -121,7 +121,7 @@ module.exports = {
                             name: player.name,
                             tracker: content.name
                         });
-                        await DiscordMessages.sendActivityNotificationMessage(
+                        await discordMessages.sendActivityNotificationMessage(
                             guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title,
                             content.everyone);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
@@ -139,7 +139,7 @@ module.exports = {
                             name: player.name,
                             tracker: content.name
                         });
-                        await DiscordMessages.sendActivityNotificationMessage(
+                        await discordMessages.sendActivityNotificationMessage(
                             guildId, content.serverId, Constants.COLOR_ACTIVE, str, null, content.title,
                             content.everyone);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
@@ -158,7 +158,7 @@ module.exports = {
                             tracker: content.name
                         });
 
-                        await DiscordMessages.sendActivityNotificationMessage(
+                        await discordMessages.sendActivityNotificationMessage(
                             guildId, content.serverId, Constants.COLOR_INACTIVE, str, null, content.title,
                             content.everyone);
                         if (rustplus && (rustplus.serverId === content.serverId) && content.inGame) {
@@ -169,7 +169,7 @@ module.exports = {
 
                 client.setInstance(guildId, instance);
 
-                await DiscordMessages.sendTrackerMessage(guildId, trackerId);
+                await discordMessages.sendTrackerMessage(guildId, trackerId);
             }
         }
 
@@ -218,7 +218,7 @@ module.exports = {
                 const description = `__**${client.intlGet(guildId, 'old')}:**__ ${oldName}\n` +
                     `__**${client.intlGet(guildId, 'new')}:**__ ${newName}`;
 
-                await DiscordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title, description);
+                await discordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title, description);
             }
 
             /* Players whos name have changed */
@@ -309,7 +309,7 @@ module.exports = {
                     });
                 }
 
-                await DiscordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title,
+                await discordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title,
                     description, fields);
             }
 
@@ -365,7 +365,7 @@ module.exports = {
                     fieldCounter += 1;
                 }
 
-                await DiscordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title,
+                await discordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title,
                     description, outPutFields);
             }
 
@@ -419,7 +419,7 @@ module.exports = {
                     fieldCounter += 1;
                 }
 
-                await DiscordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title,
+                await discordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title,
                     description, outPutFields);
             }
         }
@@ -434,7 +434,7 @@ module.exports = {
             `__**${client.intlGet(guildId, 'old')}:**__ ${oldName}\n` +
             `__**${client.intlGet(guildId, 'new')}:**__ ${newName}`;
 
-        await DiscordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title, description, null,
+        await discordMessages.sendBattlemetricsEventMessage(guildId, battlemetricsId, title, description, null,
             instance.trackers[trackerId].everyone);
     },
 }

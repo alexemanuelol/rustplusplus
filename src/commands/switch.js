@@ -23,7 +23,7 @@ const Builder = require('@discordjs/builders');
 import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
 module.exports = {
@@ -119,10 +119,10 @@ module.exports = {
 
                 if (rustplus && rustplus.serverId === device.serverId) {
                     if (isSmartSwitchGroup) {
-                        DiscordMessages.sendSmartSwitchGroupMessage(guildId, device.serverId, entityId);
+                        await discordMessages.sendSmartSwitchGroupMessage(guildId, device.serverId, entityId);
                     }
                     else {
-                        DiscordMessages.sendSmartSwitchMessage(guildId, device.serverId, entityId);
+                        await discordMessages.sendSmartSwitchMessage(guildId, device.serverId, entityId);
                         SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
                             client, guildId, device.serverId, entityId);
                     }

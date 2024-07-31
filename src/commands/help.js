@@ -21,7 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 import { log } from '../../index';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = {
 	name: 'help',
@@ -39,7 +39,7 @@ module.exports = {
 		if (!await client.validatePermissions(interaction)) return;
 		await interaction.deferReply({ ephemeral: true });
 
-		await DiscordMessages.sendHelpMessage(interaction);
+		await discordMessages.sendHelpMessage(interaction);
 		log.info(client.intlGet(interaction.guildId, 'commandsHelpDesc'));
 	},
 };

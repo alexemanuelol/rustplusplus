@@ -18,8 +18,8 @@
 
 */
 
+import * as discordMessages from '../discordTools/discord-messages';
 const Constants = require('../util/constants.ts');
-const DiscordMessages = require('../discordTools/discordMessages.js');
 
 module.exports = {
     handler: async function (rustplus, client) {
@@ -44,7 +44,7 @@ module.exports = {
                 const info = await rustplus.getEntityInfoAsync(entityId);
                 if (!(await rustplus.isResponseValid(info))) {
                     if (instance.serverList[serverId].storageMonitors[entityId].reachable) {
-                        await DiscordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
+                        await discordMessages.sendStorageMonitorNotFoundMessage(guildId, serverId, entityId);
                     }
                     instance.serverList[serverId].storageMonitors[entityId].reachable = false;
                 }
@@ -57,7 +57,7 @@ module.exports = {
                     if (rustplus.storageMonitors.hasOwnProperty(entityId) &&
                         (rustplus.storageMonitors[entityId].capacity !== 0 &&
                             info.entityInfo.payload.capacity === 0)) {
-                        await DiscordMessages.sendStorageMonitorDisconnectNotificationMessage(
+                        await discordMessages.sendStorageMonitorDisconnectNotificationMessage(
                             guildId, serverId, entityId);
                     }
 
@@ -75,7 +75,7 @@ module.exports = {
                                 instance.serverList[serverId].storageMonitors[entityId].decaying === false) {
                                 instance.serverList[serverId].storageMonitors[entityId].decaying = true;
 
-                                await DiscordMessages.sendDecayingNotificationMessage(
+                                await discordMessages.sendDecayingNotificationMessage(
                                     guildId, serverId, entityId);
 
                                 if (instance.serverList[serverId].storageMonitors[entityId].inGame) {
@@ -100,7 +100,7 @@ module.exports = {
                     }
                 }
 
-                await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, entityId);
+                await discordMessages.sendStorageMonitorMessage(guildId, serverId, entityId);
             }
         }
     },

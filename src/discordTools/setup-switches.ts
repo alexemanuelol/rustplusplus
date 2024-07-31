@@ -20,7 +20,7 @@
 
 import { client } from '../../index';
 import * as discordTools from './discord-tools';
-const DiscordMessages = require('./discordMessages.js');
+import * as discordMessages from './discord-messages';
 const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupSwitches(rustplus: typeof RustPlus) {
@@ -38,7 +38,7 @@ export async function setupSwitches(rustplus: typeof RustPlus) {
 
         if (!(await rustplus.isResponseValid(info))) {
             if (entity.reachable === true) {
-                await DiscordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
+                await discordMessages.sendSmartSwitchNotFoundMessage(guildId, serverId, entityId);
             }
             entity.reachable = false;
         }
@@ -50,6 +50,6 @@ export async function setupSwitches(rustplus: typeof RustPlus) {
 
         client.setInstance(guildId, instance);
 
-        await DiscordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
+        await discordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
     }
 }

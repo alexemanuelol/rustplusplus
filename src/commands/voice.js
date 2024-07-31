@@ -23,7 +23,7 @@ const Builder = require('@discordjs/builders');
 const { joinVoiceChannel, getVoiceConnection } = require('@discordjs/voice');
 
 import { log } from '../../index';
-const DiscordMessages = require('../discordTools/discordMessages.js');
+import * as discordMessages from '../discordTools/discord-messages';
 
 module.exports = {
     name: 'voice',
@@ -59,7 +59,7 @@ module.exports = {
                         guildId: interaction.guild.id,
                         adapterCreator: interaction.guild.voiceAdapterCreator,
                     });
-                    await DiscordMessages.sendVoiceMessage(interaction,
+                    await discordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
                     log.info(client.intlGet(interaction.guildId, 'commandsVoiceJoin',
                         {
@@ -70,7 +70,7 @@ module.exports = {
                     ));
                 }
                 else {
-                    await DiscordMessages.sendVoiceMessage(interaction,
+                    await discordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceNotInVoice'));
                 }
             } break;
@@ -79,7 +79,7 @@ module.exports = {
                 const connection = getVoiceConnection(interaction.guild.id);
                 if (connection) {
                     connection.destroy();
-                    await DiscordMessages.sendVoiceMessage(interaction,
+                    await discordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotLeftVoice'));
                     log.info(client.intlGet(interaction.guildId, 'commandsVoiceLeave',
                         {
