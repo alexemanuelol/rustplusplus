@@ -329,7 +329,7 @@ export async function sendDiscordEventMessage(guildId: string, serverId: string,
 }
 
 export async function sendActivityNotificationMessage(guildId: string, serverId: string, color: string, text: string,
-    steamId: string, title: string | null, everyone: boolean = false) {
+    steamId: string, title: string | null = null, everyone: boolean = false) {
     const instance = guildInstance.readGuildInstanceFile(guildId);
 
     let png = null;
