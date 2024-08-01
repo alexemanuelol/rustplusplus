@@ -20,15 +20,17 @@
 
 import { Guild } from 'discord.js';
 
-import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
 import * as discordMessages from './discord-messages';
 
 export async function setupServerList(guild: Guild) {
     const guildId = guild.id;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
 
-    await discordTools.clearTextChannel(guildId, instance.channelIds.servers, 100);
+    if (instance.channelIds.servers !== null) {
+        await discordTools.clearTextChannel(guildId, instance.channelIds.servers, 100);
+    }
 
     for (const serverId in instance.serverList) {
         await discordMessages.sendServerMessage(guildId, serverId);

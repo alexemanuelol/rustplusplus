@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,20 +19,19 @@
 */
 
 import * as discordMessages from '../discordTools/discord-messages';
+const { RustPlus } = require('../structures/RustPlus');
 
-module.exports = {
-    handler: async function (rustplus) {
-        if (rustplus.informationIntervalCounter === 0) {
-            await discordMessages.sendUpdateServerInformationMessage(rustplus);
-            await discordMessages.sendUpdateEventInformationMessage(rustplus);
-            await discordMessages.sendUpdateTeamInformationMessage(rustplus);
-        }
+export async function informationHandler(rustplus: typeof RustPlus) {
+    if (rustplus.informationIntervalCounter === 0) {
+        await discordMessages.sendUpdateServerInformationMessage(rustplus);
+        await discordMessages.sendUpdateEventInformationMessage(rustplus);
+        await discordMessages.sendUpdateTeamInformationMessage(rustplus);
+    }
 
-        if (rustplus.informationIntervalCounter === 5) {
-            rustplus.informationIntervalCounter = 0;
-        }
-        else {
-            rustplus.informationIntervalCounter += 1;
-        }
-    },
+    if (rustplus.informationIntervalCounter === 5) {
+        rustplus.informationIntervalCounter = 0;
+    }
+    else {
+        rustplus.informationIntervalCounter += 1;
+    }
 }

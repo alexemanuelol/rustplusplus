@@ -20,12 +20,12 @@
 
 import { Guild } from 'discord.js';
 
-import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
 
 export async function removeGuildChannels(guild: Guild) {
     const guildId = guild.id;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
 
     let categoryId = null;
     for (const [channelName, channelId] of Object.entries(instance.channelIds)) {
@@ -35,11 +35,11 @@ export async function removeGuildChannels(guild: Guild) {
         }
 
         await discordTools.deleteChannel(guildId, channelId as string);
-        instance.channelIds[channelName] = null;
+        instance.channelIds[channelName as keyof guildInstance.ChannelIds] = null;
     }
 
     await discordTools.deleteChannel(guildId, categoryId as string);
 
     instance.channelIds['category'] = null;
-    client.setInstance(guildId, instance);
+    guildInstance.writeGuildInstanceFile(guildId, instance);
 }

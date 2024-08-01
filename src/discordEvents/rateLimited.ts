@@ -19,13 +19,14 @@
 */
 import { RateLimitData } from '@discordjs/rest';
 
-import { log, client } from '../../index';
+import { log, localeManager as lm } from '../../index';
+const Config = require('../../config');
 
 export const name = 'rateLimited';
 
 export async function execute(info: RateLimitData) {
     log.warn(
-        `${client.intlGet(null, 'ratelimited')}: ` +
+        `${lm.getIntl(Config.general.language, 'ratelimited')}: ` +
         `Timeout: ${info.timeToReset}, ` +
         `Limit: ${info.limit}, ` +
         `Method: ${info.method}, ` +

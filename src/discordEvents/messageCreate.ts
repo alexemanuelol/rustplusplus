@@ -20,9 +20,11 @@
 
 import { Message } from 'discord.js';
 
-import { log, client } from '../../index';
+import { log, client, localeManager as lm } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from '../discordTools/discord-tools';
 const DiscordCommandHandler = require('../handlers/discordCommandHandler.js');
+const Config = require('../../config');
 
 export const name = 'messageCreate';
 
@@ -30,7 +32,7 @@ export async function execute(message: Message) {
     if (!message.guild) return;
 
     const guildId = message.guild.id;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
     const rustplus = client.rustplusInstances[guildId];
 
     if (message.author.bot || !rustplus || (rustplus && !rustplus.isOperational)) return;
@@ -41,7 +43,7 @@ export async function execute(message: Message) {
         if (!guild) return;
         const channel = await discordTools.getTextChannel(guild.id, message.channelId);
         if (!channel) return;
-        log.info(client.intlGet(null, `userPartOfBlacklistDiscord`, {
+        log.info(lm.getIntl(Config.general.language, `userPartOfBlacklistDiscord`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,
             user: `${message.author.username} (${message.author.id})`,
@@ -58,7 +60,7 @@ export async function execute(message: Message) {
         if (!guild) return;
         const channel = await discordTools.getTextChannel(guild.id, message.channelId);
         if (!channel) return;
-        log.info(client.intlGet(null, `logDiscordMessage`, {
+        log.info(lm.getIntl(Config.general.language, `logDiscordMessage`, {
             guild: `${guild.name} (${guild.id})`,
             channel: `${channel.name} (${channel.id})`,
             user: `${message.author.username} (${message.author.id})`,

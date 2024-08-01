@@ -18,7 +18,7 @@
 
 */
 
-import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as constants from '../util/constants';
 import * as discordTools from './discord-tools';
 import * as discordMessages from './discord-messages';
@@ -26,10 +26,10 @@ const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupStorageMonitors(rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
     const serverId = rustplus.serverId;
 
-    if (rustplus.isNewConnection) {
+    if (rustplus.isNewConnection && instance.channelIds.storageMonitors !== null) {
         await discordTools.clearTextChannel(guildId, instance.channelIds.storageMonitors, 100);
     }
 
@@ -46,7 +46,7 @@ export async function setupStorageMonitors(rustplus: typeof RustPlus) {
         else {
             entity.reachable = true;
         }
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         if (entity.reachable) {
             rustplus.storageMonitors[entityId] = {
@@ -72,7 +72,7 @@ export async function setupStorageMonitors(rustplus: typeof RustPlus) {
                 else if (info.entityInfo.payload.capacity === constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
                     entity.type = 'largeWoodBox';
                 }
-                client.setInstance(guildId, instance);
+                guildInstance.writeGuildInstanceFile(guildId, instance);
             }
         }
 

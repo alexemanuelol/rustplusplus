@@ -21,36 +21,42 @@
 import { Guild, AttachmentBuilder, TextChannel } from 'discord.js';
 import * as path from 'path';
 
-import { log, client } from '../../index';
+import { log, localeManager as lm } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as constants from '../util/constants';
 import * as discordTools from './discord-tools';
 import * as discordSelectMenus from './discord-select-menus';
 import * as discordButtons from './discord-buttons';
 import * as discordEmbeds from './discord-embeds';
+const Config = require('../../config');
 
 export async function setupSettingsMenu(guild: Guild, forced: boolean = false) {
     const guildId = guild.id;
-    const instance = client.getInstance(guildId);
-    const channel = await discordTools.getTextChannel(guildId, instance.channelIds.settings);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
+    const channel = instance.channelIds.settings !== null ?
+        await discordTools.getTextChannel(guildId, instance.channelIds.settings) : null;
 
     if (!channel) {
-        log.error('SetupSettingsMenu: ' + client.intlGet(null, 'invalidGuildOrChannel'));
+        log.error('SetupSettingsMenu: ' + lm.getIntl(Config.general.language, 'invalidGuildOrChannel'));
         return;
     }
 
     if (instance.firstTime || forced) {
-        await discordTools.clearTextChannel(guildId, instance.channelIds.settings, 100);
+        if (instance.channelIds.settings !== null) {
+            await discordTools.clearTextChannel(guildId, instance.channelIds.settings, 100);
+        }
 
         await setupGeneralSettings(guildId, channel);
         await setupNotificationSettings(guildId, channel);
 
         instance.firstTime = false;
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
     }
 }
 
 async function setupGeneralSettings(guildId: string, channel: TextChannel) {
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
+    const language = instance.generalSettings.language;
 
     await discordTools.messageSend(channel, {
         files: [new AttachmentBuilder(
@@ -61,12 +67,12 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'selectLanguageSetting'),
+            title: lm.getIntl(language, 'selectLanguageSetting'),
             thumbnail: { url: `attachment://settings_logo.png` },
             fields: [
                 {
-                    name: client.intlGet(guildId, 'noteCap'),
-                    value: client.intlGet(guildId, 'selectLanguageExtendSetting'),
+                    name: lm.getIntl(language, 'noteCap'),
+                    value: lm.getIntl(language, 'selectLanguageExtendSetting'),
                     inline: true
                 }]
         })],
@@ -78,7 +84,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'commandsVoiceGenderDesc'),
+            title: lm.getIntl(language, 'commandsVoiceGenderDesc'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordSelectMenus.getVoiceGenderSelectMenu(guildId, instance.generalSettings.voiceGender)],
@@ -89,7 +95,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'selectInGamePrefixSetting'),
+            title: lm.getIntl(language, 'selectInGamePrefixSetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordSelectMenus.getPrefixSelectMenu(guildId, instance.generalSettings.prefix)],
@@ -100,7 +106,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'selectTrademarkSetting'),
+            title: lm.getIntl(language, 'selectTrademarkSetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordSelectMenus.getTrademarkSelectMenu(guildId, instance.generalSettings.trademark)],
@@ -111,7 +117,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'shouldCommandsEnabledSetting'),
+            title: lm.getIntl(language, 'shouldCommandsEnabledSetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordButtons.getInGameCommandsEnabledButton(guildId,
@@ -123,7 +129,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'shouldBotBeMutedSetting'),
+            title: lm.getIntl(language, 'shouldBotBeMutedSetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordButtons.getBotMutedInGameButton(guildId, instance.generalSettings.muteInGameBotMessages)],
@@ -134,7 +140,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'inGameTeamNotificationsSetting'),
+            title: lm.getIntl(language, 'inGameTeamNotificationsSetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordButtons.getInGameTeammateNotificationsButtons(guildId)],
@@ -145,7 +151,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'commandDelaySetting'),
+            title: lm.getIntl(language, 'commandDelaySetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordSelectMenus.getCommandDelaySelectMenu(guildId, instance.generalSettings.commandDelay)],
@@ -156,12 +162,12 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'shouldSmartAlarmNotifyNotConnectedSetting'),
+            title: lm.getIntl(language, 'shouldSmartAlarmNotifyNotConnectedSetting'),
             thumbnail: { url: `attachment://settings_logo.png` },
             fields: [
                 {
-                    name: client.intlGet(guildId, 'noteCap'),
-                    value: client.intlGet(guildId, 'smartAlarmNotifyExtendSetting'),
+                    name: lm.getIntl(language, 'noteCap'),
+                    value: lm.getIntl(language, 'smartAlarmNotifyExtendSetting'),
                     inline: true
                 }]
         })],
@@ -177,7 +183,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'shouldSmartAlarmsNotifyInGameSetting'),
+            title: lm.getIntl(language, 'shouldSmartAlarmsNotifyInGameSetting'),
             thumbnail: { url: `attachment://settings_logo.png` },
         })],
         components: [discordButtons.getSmartAlarmNotifyInGameButton(guildId,
@@ -189,7 +195,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'shouldSmartSwitchNotifyInGameWhenChangedFromDiscord'),
+            title: lm.getIntl(language, 'shouldSmartSwitchNotifyInGameWhenChangedFromDiscord'),
             thumbnail: { url: `attachment://settings_logo.png` },
         })],
         components: [discordButtons.getSmartSwitchNotifyInGameWhenChangedFromDiscordButton(guildId,
@@ -201,7 +207,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'shouldLeaderCommandEnabledSetting'),
+            title: lm.getIntl(language, 'shouldLeaderCommandEnabledSetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordButtons.getLeaderCommandEnabledButton(guildId,
@@ -213,7 +219,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'shouldLeaderCommandOnlyForPairedSetting'),
+            title: lm.getIntl(language, 'shouldLeaderCommandOnlyForPairedSetting'),
             thumbnail: { url: `attachment://settings_logo.png` },
         })],
         components: [discordButtons.getLeaderCommandOnlyForPairedButton(guildId,
@@ -225,7 +231,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'mapWipeDetectedNotifySetting', { group: '@everyone' }),
+            title: lm.getIntl(language, 'mapWipeDetectedNotifySetting', { group: '@everyone' }),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordButtons.getMapWipeNotifyEveryoneButton(instance.generalSettings.mapWipeNotifyEveryone)],
@@ -236,7 +242,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'itemAvailableNotifyInGameSetting'),
+            title: lm.getIntl(language, 'itemAvailableNotifyInGameSetting'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordButtons.getItemAvailableNotifyInGameButton(guildId,
@@ -248,7 +254,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'displayInformationBattlemetricsAllOnlinePlayers'),
+            title: lm.getIntl(language, 'displayInformationBattlemetricsAllOnlinePlayers'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: [discordButtons.getDisplayInformationBattlemetricsAllOnlinePlayersButton(guildId,
@@ -260,7 +266,7 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
     await discordTools.messageSend(channel, {
         embeds: [discordEmbeds.getEmbed({
             color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-            title: client.intlGet(guildId, 'subscribeToChangesBattlemetrics'),
+            title: lm.getIntl(language, 'subscribeToChangesBattlemetrics'),
             thumbnail: { url: `attachment://settings_logo.png` }
         })],
         components: discordButtons.getSubscribeToChangesBattlemetricsButtons(guildId),
@@ -270,7 +276,8 @@ async function setupGeneralSettings(guildId: string, channel: TextChannel) {
 }
 
 async function setupNotificationSettings(guildId: string, channel: TextChannel) {
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
+    const language = instance.generalSettings.language;
 
     await discordTools.messageSend(channel, {
         files: [new AttachmentBuilder(
@@ -282,7 +289,7 @@ async function setupNotificationSettings(guildId: string, channel: TextChannel) 
         await discordTools.messageSend(channel, {
             embeds: [discordEmbeds.getEmbed({
                 color: discordEmbeds.colorHexToNumber(constants.COLOR_SETTINGS),
-                title: client.intlGet(guildId, setting),
+                title: lm.getIntl(language, setting),
                 thumbnail: { url: `attachment://${instance.notificationSettings[setting].image}` }
             })],
             components: [

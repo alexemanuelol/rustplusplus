@@ -21,13 +21,14 @@
 import { Guild, CategoryChannel, ChannelType } from 'discord.js';
 
 import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
 const PermissionHandler = require('../handlers/permissionHandler.js');
 
 export async function setupGuildCategory(guild: Guild):
     Promise<CategoryChannel | undefined> {
     const guildId = guild.id;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
 
     let category = undefined;
     if (instance.channelIds.category !== null) {
@@ -38,7 +39,7 @@ export async function setupGuildCategory(guild: Guild):
             ChannelType.GuildCategory) as CategoryChannel;
         if (!category) return undefined;
         instance.channelIds.category = category.id;
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
     }
 
     const perms = PermissionHandler.getPermissionsReset(client, guild, false);

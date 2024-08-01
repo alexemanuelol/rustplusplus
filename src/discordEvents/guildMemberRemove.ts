@@ -21,6 +21,7 @@
 import { GuildMember } from 'discord.js';
 
 import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as credentials from '../util/credentials';
 
 export const name = 'guildMemberRemove';
@@ -29,7 +30,7 @@ export async function execute(member: GuildMember) {
     const guildId = member.guild.id;
     const userId = member.user.id;
 
-    const instance = client.getInstance(guildId); //! TODO Replace with guild-instance
+    const instance = guildInstance.readGuildInstanceFile(guildId);
     const creds = credentials.readCredentialsFile();
 
     const steamId = Object.keys(creds).find(e => creds[e] && creds[e].discordUserId === userId);
@@ -51,5 +52,5 @@ export async function execute(member: GuildMember) {
 
     delete creds[steamId];
     credentials.writeCredentialsFile(creds);
-    client.setInstance(guildId, instance);
+    guildInstance.writeGuildInstanceFile(guildId, instance);
 }

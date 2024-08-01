@@ -20,24 +20,28 @@
 
 import { Interaction, InteractionType } from 'discord.js';
 
-import { log, client } from '../../index';
+import { log, client, localeManager as lm } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
+const Config = require('../../config');
+
 
 export const name = 'interactionCreate';
 
 export async function execute(interaction: Interaction) {
-    const instance = client.getInstance(interaction.guildId);
+    const instance = guildInstance.readGuildInstanceFile(interaction.guildId as string);
+    const language = instance.generalSettings.language;
 
     /* Check so that the interaction comes from valid channels */
     if (!Object.values(instance.channelIds).includes(interaction.channelId) && !interaction.isCommand) {
-        log.warn(client.intlGet(null, 'interactionInvalidChannel'))
+        log.warn(lm.getIntl(Config.general.language, 'interactionInvalidChannel'))
         if (interaction.isButton()) {
             try {
                 interaction.deferUpdate();
             }
             catch (e) {
-                log.error(client.intlGet(null, 'couldNotDeferInteraction'));
+                log.error(lm.getIntl(Config.general.language, 'couldNotDeferInteraction'));
             }
         }
     }
@@ -60,7 +64,7 @@ export async function execute(interaction: Interaction) {
         catch (e) {
             log.error(e);
 
-            const str = client.intlGet(interaction.guildId, 'errorExecutingCommand');
+            const str = lm.getIntl(language, 'errorExecutingCommand');
             await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
             log.error(str);
         }
@@ -69,6 +73,6 @@ export async function execute(interaction: Interaction) {
         require('../handlers/modalHandler')(client, interaction);
     }
     else {
-        log.error(client.intlGet(null, 'unknownInteraction'));
+        log.error(lm.getIntl(Config.general.language, 'unknownInteraction'));
     }
 }

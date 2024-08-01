@@ -18,17 +18,17 @@
 
 */
 
-import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
 import * as discordMessages from './discord-messages';
 const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupSwitches(rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
     const serverId = rustplus.serverId;
 
-    if (rustplus.isNewConnection) {
+    if (rustplus.isNewConnection && instance.channelIds.switches !== null) {
         await discordTools.clearTextChannel(guildId, instance.channelIds.switches, 100);
     }
 
@@ -48,7 +48,7 @@ export async function setupSwitches(rustplus: typeof RustPlus) {
 
         if (entity.reachable) entity.active = info.entityInfo.payload.value;
 
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         await discordMessages.sendSmartSwitchMessage(guildId, serverId, entityId);
     }

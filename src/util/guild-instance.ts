@@ -74,7 +74,7 @@ export interface GeneralSettings {
     battlemetricsGlobalNameChanges: boolean;
     battlemetricsServerNameChanges: boolean;
     battlemetricsTrackerNameChanges: boolean;
-    commandDelay: number;
+    commandDelay: string;
     connectionNotify: boolean;
     deathNotify: boolean;
     displayInformationBattlemetricsAllOnlinePlayers: boolean;

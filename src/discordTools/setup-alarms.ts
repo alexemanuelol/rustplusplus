@@ -18,13 +18,13 @@
 
 */
 
-import { client } from "../../index";
 import * as discordMessages from './discord-messages';
+import * as guildInstance from '../util/guild-instance';
 const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupAlarms(rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
     const serverId = rustplus.serverId;
 
     for (const entityId in instance.serverList[serverId].alarms) {
@@ -43,7 +43,7 @@ export async function setupAlarms(rustplus: typeof RustPlus) {
 
         if (entity.reachable) entity.active = info.entityInfo.payload.value;
 
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         await discordMessages.sendSmartAlarmMessage(guildId, serverId, entityId);
     }
