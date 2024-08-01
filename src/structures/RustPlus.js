@@ -28,13 +28,13 @@ import * as discordTools from '../discordTools/discord-tools';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordMessages from '../discordTools/discord-messages';
 import * as discordVoice from '../discordTools/discord-voice';
+import { teamHandler } from '../handlers/team-handler';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const Map = require('../util/map.ts');
 const RustPlusLite = require('../structures/RustPlusLite');
-const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.ts');
 const { languageCodes } = require('../util/languages.ts');
 
@@ -986,7 +986,7 @@ class RustPlus extends RustPlusLib {
 
         const teamInfo = await this.getTeamInfoAsync();
         if (!(await this.isResponseValid(teamInfo))) return null;
-        TeamHandler.handler(this, Client.client, teamInfo.teamInfo);
+        await teamHandler(this, teamInfo.teamInfo);
         this.team.updateTeam(teamInfo.teamInfo);
 
         const caller = this.team.getPlayer(callerSteamId);
@@ -2084,7 +2084,7 @@ class RustPlus extends RustPlusLib {
 
         const teamInfo = await this.getTeamInfoAsync();
         if (!(await this.isResponseValid(teamInfo))) return null;
-        TeamHandler.handler(this, Client.client, teamInfo.teamInfo);
+        await teamHandler(this, teamInfo.teamInfo);
         this.team.updateTeam(teamInfo.teamInfo);
 
         if (command.toLowerCase() === `${commandProx}` || command.toLowerCase() === `${commandProxEn}`) {

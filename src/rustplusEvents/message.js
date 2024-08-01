@@ -20,11 +20,11 @@
 
 import * as discordMessages from '../discordTools/discord-messages';
 import { teamChatHandler } from '../handlers/team-chat-handler';
+import { teamHandler } from '../handlers/team-handler';
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
 const Constants = require('../util/constants.ts');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
-const TeamHandler = require('../handlers/teamHandler.js');
 
 module.exports = {
     name: 'message',
@@ -62,7 +62,7 @@ async function messageBroadcast(rustplus, client, message) {
 }
 
 async function messageBroadcastTeamChanged(rustplus, client, message) {
-    TeamHandler.handler(rustplus, client, message.broadcast.teamChanged.teamInfo);
+    await teamHandler(rustplus, message.broadcast.teamChanged.teamInfo);
     const changed = rustplus.team.isLeaderSteamIdChanged(message.broadcast.teamChanged.teamInfo);
     rustplus.team.updateTeam(message.broadcast.teamChanged.teamInfo);
     if (changed) rustplus.updateLeaderRustPlusLiteInstance();
