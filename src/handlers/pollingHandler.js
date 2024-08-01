@@ -22,11 +22,11 @@ import { informationHandler } from './information-handler';
 import { timeHandler } from './time-handler';
 import { teamHandler } from './team-handler';
 import { vendingMachineHandler } from './vending-machine-handler';
+import { storageMonitorHandler } from './storage-monitor-handler';
 const Info = require('../structures/Info');
 const MapMarkers = require('../structures/MapMarkers.js');
 const SmartAlarmHandler = require('../handlers/smartAlarmHandler.js');
 const SmartSwitchHandler = require('../handlers/smartSwitchHandler.js');
-const StorageMonitorHandler = require('../handlers/storageMonitorHandler.js');
 const Team = require('../structures/Team');
 const Time = require('../structures/Time');
 
@@ -66,7 +66,7 @@ module.exports = {
         rustplus.mapMarkers.updateMapMarkers(mapMarkers.mapMarkers);
 
         await informationHandler(rustplus);
-        await StorageMonitorHandler.handler(rustplus, client);
+        await storageMonitorHandler(rustplus);
         await SmartAlarmHandler.handler(rustplus, client);
     },
 };
