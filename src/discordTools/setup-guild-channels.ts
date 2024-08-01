@@ -20,47 +20,51 @@
 
 import { Guild, CategoryChannel, ChannelType, TextChannel } from 'discord.js';
 
-import { log, client } from '../../index';
+import { log, client, localeManager as lm } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
 const PermissionHandler = require('../handlers/permissionHandler.js');
+const Config = require('../../config');
 
 export async function setupGuildChannels(guild: Guild, category: CategoryChannel) {
     const guildId = guild.id;
-    await addTextChannel(client.intlGet(guildId, 'channelNameInformation'), 'information', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameServers'), 'servers', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameSettings'), 'settings', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameCommands'), 'commands', guild, category, true);
-    await addTextChannel(client.intlGet(guildId, 'channelNameEvents'), 'events', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameTeamchat'), 'teamchat', guild, category, true);
-    await addTextChannel(client.intlGet(guildId, 'channelNameSwitches'), 'switches', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameSwitchGroups'), 'switchGroups', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameAlarms'), 'alarms', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameStorageMonitors'),
-        'storageMonitors', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameActivity'), 'activity', guild, category);
-    await addTextChannel(client.intlGet(guildId, 'channelNameTrackers'), 'trackers', guild, category);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
+    const language = instance.generalSettings.language;
+    await addTextChannel(lm.getIntl(language, 'channelNameInformation'), 'information', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameServers'), 'servers', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameSettings'), 'settings', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameCommands'), 'commands', guild, category, true);
+    await addTextChannel(lm.getIntl(language, 'channelNameEvents'), 'events', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameTeamchat'), 'teamchat', guild, category, true);
+    await addTextChannel(lm.getIntl(language, 'channelNameSwitches'), 'switches', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameSwitchGroups'), 'switchGroups', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameAlarms'), 'alarms', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameStorageMonitors'), 'storageMonitors', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameActivity'), 'activity', guild, category);
+    await addTextChannel(lm.getIntl(language, 'channelNameTrackers'), 'trackers', guild, category);
 }
 
 async function addTextChannel(name: string, idName: string, guild: Guild, parent: CategoryChannel,
     permissionWrite: boolean = false) {
     const guildId = guild.id;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
 
     let channel = undefined;
-    if (instance.channelIds[idName] !== null) {
-        channel = await discordTools.getTextChannel(guildId, instance.channelIds[idName]);
+    if (instance.channelIds[idName as keyof guildInstance.ChannelIds] !== null) {
+        channel = await discordTools.getTextChannel(guildId,
+            instance.channelIds[idName as keyof guildInstance.ChannelIds] as string);
     }
     if (channel === undefined) {
         channel = await discordTools.createChannel(guildId, name, ChannelType.GuildText) as TextChannel;
         if (!channel) return undefined;
-        instance.channelIds[idName] = channel.id;
-        client.setInstance(guildId, instance);
+        instance.channelIds[idName as keyof guildInstance.ChannelIds] = channel.id;
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         try {
             channel.setParent(parent.id);
         }
         catch (e) {
-            log.error(client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }));
+            log.error(lm.getIntl(Config.general.language, 'couldNotSetParent', { channelId: channel.id }));
         }
     }
 
@@ -69,7 +73,7 @@ async function addTextChannel(name: string, idName: string, guild: Guild, parent
             channel.setParent(parent.id);
         }
         catch (e) {
-            log.error(client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }));
+            log.error(lm.getIntl(Config.general.language, 'couldNotSetParent', { channelId: channel.id }));
         }
     }
 

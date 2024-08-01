@@ -21,14 +21,17 @@
 import { Guild } from 'discord.js';
 
 import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
 import * as discordMessages from './discord-messages';
 
 export async function setupTrackers(guild: Guild) {
     const guildId = guild.id;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
 
-    await discordTools.clearTextChannel(guildId, instance.channelIds.trackers, 100);
+    if (instance.channelIds.trackers !== null) {
+        await discordTools.clearTextChannel(guildId, instance.channelIds.trackers, 100);
+    }
 
     for (const trackerId in instance.trackers) {
         await discordMessages.sendTrackerMessage(guildId, trackerId);

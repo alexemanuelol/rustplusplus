@@ -24,7 +24,7 @@ import { Guild } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
 
-import { log, client } from '../../index';
+import { log, client, localeManager as lm } from '../../index';
 const Config = require('../../config');
 
 export async function registerSlashCommands(guild: Guild) {
@@ -44,9 +44,9 @@ export async function registerSlashCommands(guild: Guild) {
         await rest.put(Routes.applicationGuildCommands(Config.discord.clientId, guildId), { body: commands });
     }
     catch (e) {
-        log.error(client.intlGet(null, 'couldNotRegisterSlashCommands', { guildId: guildId }) +
-            client.intlGet(null, 'makeSureApplicationsCommandsEnabled'));
+        log.error(lm.getIntl(Config.general.language, 'couldNotRegisterSlashCommands', { guildId: guildId }) +
+            lm.getIntl(Config.general.language, 'makeSureApplicationsCommandsEnabled'));
         process.exit(1);
     }
-    log.info(client.intlGet(null, 'slashCommandsSuccessRegister', { guildId: guildId }));
+    log.info(lm.getIntl(Config.general.language, 'slashCommandsSuccessRegister', { guildId: guildId }));
 }

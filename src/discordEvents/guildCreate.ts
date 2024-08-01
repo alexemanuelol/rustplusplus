@@ -27,8 +27,6 @@ export const name = 'guildCreate';
 
 export async function execute(guild: Guild) {
     guildInstance.createGuildInstanceFile(guild.id);
-    const gi = guildInstance.readGuildInstanceFile(guild.id);
-    client.setInstance(guild.id, gi); // TODO! TEMP
 
     client.fcmListenersLite[guild.id] = new Object();
 

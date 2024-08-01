@@ -66,7 +66,7 @@ export const client = new DiscordBot({
 client.build();
 
 process.on('unhandledRejection', error => {
-    log.error(client.intlGet(null, 'unhandledRejection', {
+    log.error(localeManager.getIntl(Config.general.language, 'unhandledRejection', {
         error: error
     }));
     console.log(error);

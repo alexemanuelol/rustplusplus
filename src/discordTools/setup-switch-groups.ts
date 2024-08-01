@@ -18,16 +18,16 @@
 
 */
 
-import { client } from '../../index';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
 import * as discordMessages from './discord-messages';
 const { RustPlus } = require('../structures/RustPlus.js');
 
 export async function setupSwitchGroups(rustplus: typeof RustPlus) {
     const guildId = rustplus.guildId;
-    const instance = client.getInstance(guildId);
+    const instance = guildInstance.readGuildInstanceFile(guildId);
 
-    if (rustplus.isNewConnection) {
+    if (rustplus.isNewConnection && instance.channelIds.switchGroups !== null) {
         await discordTools.clearTextChannel(guildId, instance.channelIds.switchGroups, 100);
     }
 

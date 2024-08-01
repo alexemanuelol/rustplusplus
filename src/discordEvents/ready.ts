@@ -21,7 +21,7 @@
 import { ActivityType } from 'discord.js';
 import * as path from 'path';
 
-import { log, client } from '../../index';
+import { log, client, localeManager as lm } from '../../index';
 import * as guildInstance from '../util/guild-instance';
 import * as credentials from '../util/credentials';
 const Config = require('../../config');
@@ -34,8 +34,6 @@ export async function execute() {
     for (const guild of client.guilds.cache) {
         const guildId = guild[0];
         guildInstance.createGuildInstanceFile(guildId);
-        const gInstance = guildInstance.readGuildInstanceFile(guildId);
-        client.setInstance(guildId, gInstance); // TODO! TEMP
 
         client.fcmListenersLite[guildId] = new Object();
     }
@@ -43,20 +41,20 @@ export async function execute() {
     credentials.createCredentialsFile();
 
     client.loadGuildsIntl();
-    log.info(client.intlGet(null, 'loggedInAs', { name: client.user.tag }));
+    log.info(lm.getIntl(Config.general.language, 'loggedInAs', { name: client.user.tag }));
 
     try {
         await client.user.setUsername(Config.discord.username);
     }
     catch (e) {
-        log.warn(client.intlGet(null, 'ignoreSetUsername'));
+        log.warn(lm.getIntl(Config.general.language, 'ignoreSetUsername'));
     }
 
     try {
         await client.user.setAvatar(path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
     }
     catch (e) {
-        log.warn(client.intlGet(null, 'ignoreSetAvatar'));
+        log.warn(lm.getIntl(Config.general.language, 'ignoreSetAvatar'));
     }
 
     client.user.setPresence({
@@ -73,7 +71,7 @@ export async function execute() {
             await guild.members.me.setNickname(Config.discord.username);
         }
         catch (e) {
-            log.warn(client.intlGet(null, 'ignoreSetNickname'));
+            log.warn(lm.getIntl(Config.general.language, 'ignoreSetNickname'));
         }
         await client.syncCredentialsWithUsers(guild);
         await client.setupGuild(guild);

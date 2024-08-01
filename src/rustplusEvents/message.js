@@ -19,11 +19,11 @@
 */
 
 import * as discordMessages from '../discordTools/discord-messages';
+import { teamChatHandler } from '../handlers/team-chat-handler';
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
 const Constants = require('../util/constants.ts');
 const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
-const TeamChatHandler = require("../handlers/teamChatHandler.js");
 const TeamHandler = require('../handlers/teamHandler.js');
 
 module.exports = {
@@ -97,7 +97,7 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
             user: `${message.broadcast.teamMessage.message.name} (${steamId})`,
             message: message.broadcast.teamMessage.message.message
         }));
-        TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
+        teamChatHandler(rustplus, message.broadcast.teamMessage.message);
         return;
     }
 
@@ -119,7 +119,7 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
         user: `${message.broadcast.teamMessage.message.name} (${steamId})`
     }));
 
-    TeamChatHandler(rustplus, client, message.broadcast.teamMessage.message);
+    teamChatHandler(rustplus, message.broadcast.teamMessage.message);
 }
 
 async function messageBroadcastEntityChanged(rustplus, client, message) {
