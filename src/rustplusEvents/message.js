@@ -20,10 +20,10 @@
 
 import * as discordMessages from '../discordTools/discord-messages';
 import { teamChatHandler } from '../handlers/team-chat-handler';
-import { teamHandler } from '../handlers/team-handler';
+import { teamHandler } from '../handlers/team-handler'
+import { inGameChatHandler } from '../handlers/in-game-chat-handler';
 const CommandHandler = require('../handlers/inGameCommandHandler.js');
 const Constants = require('../util/constants.ts');
-const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
 module.exports = {
@@ -76,8 +76,7 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
         /* Delay inGameChatHandler */
         clearTimeout(rustplus.inGameChatTimeout);
         const commandDelayMs = parseInt(rustplus.generalSettings.commandDelay) * 1000;
-        rustplus.inGameChatTimeout = setTimeout(
-            InGameChatHandler.inGameChatHandler, commandDelayMs, rustplus, client);
+        rustplus.inGameChatTimeout = setTimeout(inGameChatHandler, commandDelayMs, rustplus);
     }
 
     let tempName = message.broadcast.teamMessage.message.name;
