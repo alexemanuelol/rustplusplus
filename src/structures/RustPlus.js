@@ -29,10 +29,10 @@ import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordMessages from '../discordTools/discord-messages';
 import * as discordVoice from '../discordTools/discord-voice';
 import { teamHandler } from '../handlers/team-handler';
+import { inGameChatHandler } from '../handlers/in-game-chat-handler';
 const Client = require('../../index.ts');
 const Constants = require('../util/constants.ts');
 const Credentials = require('../util/credentials.ts');
-const InGameChatHandler = require('../handlers/inGameChatHandler.js');
 const Map = require('../util/map.ts');
 const RustPlusLite = require('../structures/RustPlusLite');
 const Timer = require('../util/timer.ts');
@@ -280,7 +280,7 @@ class RustPlus extends RustPlusLib {
     }
 
     sendInGameMessage(message) {
-        InGameChatHandler.inGameChatHandler(this, Client.client, message);
+        inGameChatHandler(this, message);
     }
 
     async sendEvent(setting, text, event, embed_color, firstPoll = false, image = null) {
