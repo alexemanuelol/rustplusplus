@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,25 +18,28 @@
 
 */
 
-const Discord = require('discord.js');
+import * as discordjs from 'discord.js';
 
-import { log } from '../../index';
+import { log, client, localeManager as lm } from '../../index';
 import { registerSlashCommands } from '../discordTools/register-slash-commands';
+import * as guildInstance from '../util/guild-instance';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordSelectMenus from '../discordTools/discord-select-menus';
 import * as discordMessages from '../discordTools/discord-messages';
+const Config = require('../../config');
 
-module.exports = async (client, interaction) => {
-    const instance = client.getInstance(interaction.guildId);
-    const guildId = interaction.guildId;
+export async function selectMenuHandler(interaction: discordjs.StringSelectMenuInteraction) {
+    const guildId = interaction.guildId as string;
+    const instance = guildInstance.readGuildInstanceFile(guildId);
     const rustplus = client.rustplusInstances[guildId];
 
     const verifyId = Math.floor(100000 + Math.random() * 900000);
     await client.logInteraction(interaction, verifyId, 'userSelectMenu');
 
-    if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
-        !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-        log.info(client.intlGet(null, 'userPartOfBlacklist', {
+    if (instance.blacklist['discordIds'].includes(interaction.user.id) && interaction.member !== null &&
+        !(interaction.member.permissions as discordjs.PermissionsBitField).has(
+            discordjs.PermissionsBitField.Flags.Administrator)) {
+        log.info(lm.getIntl(Config.general.language, 'userPartOfBlacklist', {
             id: `${verifyId}`,
             user: `${interaction.user.username} (${interaction.user.id})`
         }));
@@ -45,11 +48,11 @@ module.exports = async (client, interaction) => {
 
     if (interaction.customId === 'language') {
         instance.generalSettings.language = interaction.values[0];
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.language = interaction.values[0];
 
-        log.info(client.intlGet(null, 'selectMenuValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.language}`
         }));
@@ -63,15 +66,17 @@ module.exports = async (client, interaction) => {
         });
 
         const guild = await discordTools.getGuild(guildId);
-        await registerSlashCommands(guild);
+        if (guild instanceof discordjs.Guild) {
+            await registerSlashCommands(guild);
+        }
     }
     else if (interaction.customId === 'Prefix') {
         instance.generalSettings.prefix = interaction.values[0];
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.prefix = interaction.values[0];
 
-        log.info(client.intlGet(null, 'selectMenuValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.prefix}`
         }));
@@ -82,7 +87,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'Trademark') {
         instance.generalSettings.trademark = interaction.values[0];
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         if (rustplus) {
             rustplus.generalSettings.trademark = interaction.values[0];
@@ -90,7 +95,7 @@ module.exports = async (client, interaction) => {
                 '' : `${instance.generalSettings.trademark} | `;
         }
 
-        log.info(client.intlGet(null, 'selectMenuValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.trademark}`
         }));
@@ -101,11 +106,11 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'CommandDelay') {
         instance.generalSettings.commandDelay = interaction.values[0];
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.commandDelay = interaction.values[0];
 
-        log.info(client.intlGet(null, 'selectMenuValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.commandDelay}`
         }));
@@ -116,11 +121,11 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'VoiceGender') {
         instance.generalSettings.voiceGender = interaction.values[0];
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
         if (rustplus) rustplus.generalSettings.voiceGender = interaction.values[0];
 
-        log.info(client.intlGet(null, 'selectMenuValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${instance.generalSettings.voiceGender}`
         }));
@@ -142,10 +147,10 @@ module.exports = async (client, interaction) => {
         if ((value !== 5 && value !== 6) ||
             ((value === 5 || value === 6) && server.switches[ids.entityId].location !== null)) {
             server.switches[ids.entityId].autoDayNightOnOff = value;
-            client.setInstance(guildId, instance);
+            guildInstance.writeGuildInstanceFile(guildId, instance);
         }
 
-        log.info(client.intlGet(null, 'selectMenuValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'selectMenuValueChange', {
             id: `${verifyId}`,
             value: `${server.switches[ids.entityId].autoDayNightOnOff}`
         }));
@@ -153,7 +158,7 @@ module.exports = async (client, interaction) => {
         await discordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
 
-    log.info(client.intlGet(null, 'userSelectMenuInteractionSuccess', {
+    log.info(lm.getIntl(Config.general.language, 'userSelectMenuInteractionSuccess', {
         id: `${verifyId}`
     }));
 }

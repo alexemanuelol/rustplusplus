@@ -24,6 +24,7 @@ import { log, client, localeManager as lm } from '../../index';
 import * as guildInstance from '../util/guild-instance';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
+import { selectMenuHandler } from '../handlers/select-menu-handler';
 const Config = require('../../config');
 
 
@@ -50,7 +51,7 @@ export async function execute(interaction: Interaction) {
         require('../handlers/buttonHandler')(client, interaction); //! TODO Needs to be refactored for typescript
     }
     else if (interaction.isStringSelectMenu()) {
-        require('../handlers/selectMenuHandler')(client, interaction);
+        await selectMenuHandler(interaction);
     }
     else if (interaction.type === InteractionType.ApplicationCommand) {
         const command = client.commands.get(interaction.commandName);
