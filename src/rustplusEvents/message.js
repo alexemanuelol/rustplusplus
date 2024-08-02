@@ -22,7 +22,7 @@ import * as discordMessages from '../discordTools/discord-messages';
 import { teamChatHandler } from '../handlers/team-chat-handler';
 import { teamHandler } from '../handlers/team-handler'
 import { inGameChatHandler } from '../handlers/in-game-chat-handler';
-const CommandHandler = require('../handlers/inGameCommandHandler.js');
+import { inGameCommandHandler } from '../handlers/in-game-command-handler';
 const Constants = require('../util/constants.ts');
 const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
@@ -110,7 +110,7 @@ async function messageBroadcastTeamMessage(rustplus, client, message) {
         return;
     }
 
-    const isCommand = await CommandHandler.inGameCommandHandler(rustplus, client, message);
+    const isCommand = await inGameCommandHandler(rustplus, message);
     if (isCommand) return;
 
     rustplus.info(client.intlGet(null, `logInGameMessage`, {
