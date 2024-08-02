@@ -23,9 +23,9 @@ const Builder = require('@discordjs/builders');
 import { log } from '../../index';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
+import { resetPermissionsAllChannels } from '../handlers/permission-handler';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
-const PermissionHandler = require('../handlers/permissionHandler.js');
 
 module.exports = {
 	name: 'role',
@@ -90,7 +90,7 @@ module.exports = {
 		if (guild) {
 			const category = await setupGuildCategory(guild);
 			await setupGuildChannels(guild, category);
-			await PermissionHandler.resetPermissionsAllChannels(client, guild);
+			await resetPermissionsAllChannels(guild);
 		}
 
 		if (interaction.options.getSubcommand() === 'set') {

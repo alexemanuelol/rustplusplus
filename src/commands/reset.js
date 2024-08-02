@@ -31,11 +31,11 @@ import { setupAlarms } from '../discordTools/setup-alarms';
 import { setupSwitches } from '../discordTools/setup-switches';
 import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
 import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
+import { getPermissionsRemoved, resetPermissionsAllChannels } from '../handlers/permission-handler';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordMessages from '../discordTools/discord-messages';
 const Config = require('../../config');
-const PermissionHandler = require('../handlers/permissionHandler.js');
 
 module.exports = {
 	name: 'reset',
@@ -95,7 +95,7 @@ module.exports = {
 				const category = await setupGuildCategory(guild);
 				await setupGuildChannels(guild, category);
 
-				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
+				const perms = getPermissionsRemoved(guild);
 				try {
 					await category.permissionOverwrites.set(perms);
 				}
@@ -126,7 +126,7 @@ module.exports = {
 
 				await setupTrackers(guild);
 
-				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+				await resetPermissionsAllChannels(guild);
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
@@ -150,7 +150,7 @@ module.exports = {
 			} break;
 
 			case 'servers': {
-				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
+				const perms = getPermissionsRemoved(guild);
 				try {
 					const category = await discordTools.getCategory(guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
@@ -161,7 +161,7 @@ module.exports = {
 
 				await setupServerList(guild);
 
-				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+				await resetPermissionsAllChannels(guild);
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
@@ -170,7 +170,7 @@ module.exports = {
 			} break;
 
 			case 'settings': {
-				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
+				const perms = getPermissionsRemoved(guild);
 				try {
 					const category = await discordTools.getCategory(guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
@@ -181,7 +181,7 @@ module.exports = {
 
 				await setupSettingsMenu(guild, true);
 
-				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+				await resetPermissionsAllChannels(guild);
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
@@ -193,7 +193,7 @@ module.exports = {
 				await discordTools.clearTextChannel(guild.id, instance.channelIds.switches, 100);
 				await discordTools.clearTextChannel(guild.id, instance.channelIds.switchGroups, 100);
 
-				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
+				const perms = getPermissionsRemoved(guild);
 				try {
 					const category = await discordTools.getCategory(guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
@@ -208,7 +208,7 @@ module.exports = {
 					await setupSwitchGroups(rustplus);
 				}
 
-				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+				await resetPermissionsAllChannels(guild);
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
@@ -231,7 +231,7 @@ module.exports = {
 			case 'storagemonitors': {
 				await discordTools.clearTextChannel(guild.id, instance.channelIds.storageMonitors, 100);
 
-				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
+				const perms = getPermissionsRemoved(guild);
 				try {
 					const category = await discordTools.getCategory(guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
@@ -245,7 +245,7 @@ module.exports = {
 					await setupStorageMonitors(rustplus);
 				}
 
-				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+				await resetPermissionsAllChannels(guild);
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,
@@ -254,7 +254,7 @@ module.exports = {
 			} break;
 
 			case 'trackers': {
-				const perms = PermissionHandler.getPermissionsRemoved(client, guild);
+				const perms = getPermissionsRemoved(guild);
 				try {
 					const category = await discordTools.getCategory(guild.id, instance.channelIds.category);
 					await category.permissionOverwrites.set(perms);
@@ -265,7 +265,7 @@ module.exports = {
 
 				await setupTrackers(guild);
 
-				await PermissionHandler.resetPermissionsAllChannels(client, guild);
+				await resetPermissionsAllChannels(guild);
 
 				log.info(client.intlGet(null, 'slashCommandValueChange', {
 					id: `${verifyId}`,

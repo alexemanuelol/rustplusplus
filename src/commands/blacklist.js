@@ -24,7 +24,7 @@ import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
 import * as constants from '../util/constants';
-const PermissionHandler = require('../handlers/permissionHandler.js');
+import { resetPermissionsAllChannels } from '../handlers/permission-handler';
 const Request = require('../util/request.ts');
 
 module.exports = {
@@ -106,7 +106,7 @@ module.exports = {
 						instance.blacklist['discordIds'].push(discordUser.id);
 						client.setInstance(guildId, instance);
 
-						await PermissionHandler.resetPermissionsAllChannels(client, guild);
+						await resetPermissionsAllChannels(guild);
 
 						str += client.intlGet(guildId, 'userAddedToBlacklist', {
 							user: `${discordUser.username} (${discordUser.id})`
@@ -171,7 +171,7 @@ module.exports = {
 							instance.blacklist['discordIds'].filter(e => e !== discordUser.id)
 						client.setInstance(guildId, instance);
 
-						await PermissionHandler.resetPermissionsAllChannels(client, guild);
+						await resetPermissionsAllChannels(guild);
 
 						str += client.intlGet(guildId, 'userRemovedFromBlacklist', {
 							user: `${discordUser.username} (${discordUser.id})`

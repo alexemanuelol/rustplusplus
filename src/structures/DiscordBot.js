@@ -30,13 +30,13 @@ import { registerSlashCommands } from '../discordTools/register-slash-commands';
 import { setupGuildCategory } from '../discordTools/setup-guild-category';
 import { setupGuildChannels } from '../discordTools/setup-guild-channels';
 import { setupSettingsMenu } from '../discordTools/setup-settings-menu';
+import { getPermissionsRemoved, resetPermissionsAllChannels } from '../handlers/permission-handler';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 const Battlemetrics = require('../structures/Battlemetrics');
 const Config = require('../../config');
 const Credentials = require('../util/credentials.ts');
 const GuildInstance = require('../util/guild-instance.ts');
-const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
 
@@ -211,7 +211,7 @@ class DiscordBot extends Discord.Client {
         const category = await setupGuildCategory(guild);
         await setupGuildChannels(guild, category);
         if (firstTime) {
-            const perms = PermissionHandler.getPermissionsRemoved(this, guild);
+            const perms = getPermissionsRemoved(guild);
             try {
                 await category.permissionOverwrites.set(perms);
             }
@@ -220,7 +220,7 @@ class DiscordBot extends Discord.Client {
             }
         }
         else {
-            await PermissionHandler.resetPermissionsAllChannels(this, guild);
+            await resetPermissionsAllChannels(guild);
         }
 
         require('../util/FcmListener')(this, guild);
@@ -233,7 +233,7 @@ class DiscordBot extends Discord.Client {
 
         await setupSettingsMenu(guild);
 
-        if (firstTime) await PermissionHandler.resetPermissionsAllChannels(this, guild);
+        if (firstTime) await resetPermissionsAllChannels(guild);
 
         this.resetRustplusVariables(guild.id);
     }
