@@ -20,10 +20,10 @@
 
 import { Guild, CategoryChannel, ChannelType, TextChannel } from 'discord.js';
 
-import { log, client, localeManager as lm } from '../../index';
+import { log, localeManager as lm } from '../../index';
 import * as guildInstance from '../util/guild-instance';
 import * as discordTools from './discord-tools';
-const PermissionHandler = require('../handlers/permissionHandler.js');
+import { getPermissionsReset } from '../handlers/permission-handler';
 const Config = require('../../config');
 
 export async function setupGuildChannels(guild: Guild, category: CategoryChannel) {
@@ -77,7 +77,7 @@ async function addTextChannel(name: string, idName: string, guild: Guild, parent
         }
     }
 
-    const perms = PermissionHandler.getPermissionsReset(client, guild, permissionWrite);
+    const perms = getPermissionsReset(guild, permissionWrite);
 
     try {
         await channel.permissionOverwrites.set(perms);
