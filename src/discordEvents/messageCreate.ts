@@ -23,7 +23,7 @@ import { Message } from 'discord.js';
 import { log, client, localeManager as lm } from '../../index';
 import * as guildInstance from '../util/guild-instance';
 import * as discordTools from '../discordTools/discord-tools';
-const DiscordCommandHandler = require('../handlers/discordCommandHandler.js');
+import { discordCommandHandler } from '../handlers/discord-command-handler';
 const Config = require('../../config');
 
 export const name = 'messageCreate';
@@ -53,7 +53,7 @@ export async function execute(message: Message) {
     }
 
     if (message.channelId === instance.channelIds.commands) {
-        await DiscordCommandHandler.discordCommandHandler(rustplus, client, message);
+        await discordCommandHandler(rustplus, message);
     }
     else if (message.channelId === instance.channelIds.teamchat) {
         const guild = await discordTools.getGuild(guildId);
