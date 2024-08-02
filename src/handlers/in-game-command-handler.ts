@@ -18,11 +18,11 @@
 
 */
 
-import { client, localeManager as lm } from '../../index';
+import { localeManager as lm } from '../../index';
 import * as guildInstance from '../util/guild-instance';
-const SmartAlarmHandler = require('./smartAlarmHandler.js');
-const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
-const SmartSwitchHandler = require('./smartSwitchHandler.js');
+import { smartAlarmCommandHandler } from './smart-alarm-handler';
+import { smartSwitchCommandHandler } from './smart-switch-handler';
+import { smartSwitchGroupCommandHandler } from './smart-switch-group-handler';
 const { RustPlus } = require('../structures/RustPlus');
 
 export async function inGameCommandHandler(rustplus: typeof RustPlus, message: any): Promise<boolean> {
@@ -213,17 +213,17 @@ export async function inGameCommandHandler(rustplus: typeof RustPlus, message: a
     else {
         /* Maybe a custom command? */
 
-        if (SmartAlarmHandler.smartAlarmCommandHandler(rustplus, client, command)) {
+        if (smartAlarmCommandHandler(rustplus, command)) {
             rustplus.logInGameCommand('Smart Alarm', message);
             return true;
         }
 
-        if (await SmartSwitchHandler.smartSwitchCommandHandler(rustplus, client, command)) {
+        if (await smartSwitchCommandHandler(rustplus, command)) {
             rustplus.logInGameCommand('Smart Switch', message);
             return true;
         }
 
-        if (await SmartSwitchGroupHandler.smartSwitchGroupCommandHandler(rustplus, client, command)) {
+        if (await smartSwitchGroupCommandHandler(rustplus, command)) {
             rustplus.logInGameCommand('Smart Switch Group', message);
             return true;
         }

@@ -24,7 +24,7 @@ import { log } from '../../index';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
 import * as discordMessages from '../discordTools/discord-messages';
-const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
+import { updateSwitchGroupIfContainSwitch } from '../handlers/smart-switch-group-handler';
 
 module.exports = {
     name: 'switch',
@@ -123,8 +123,7 @@ module.exports = {
                     }
                     else {
                         await discordMessages.sendSmartSwitchMessage(guildId, device.serverId, entityId);
-                        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-                            client, guildId, device.serverId, entityId);
+                        await updateSwitchGroupIfContainSwitch(guildId, device.serverId, entityId);
                     }
                 }
 

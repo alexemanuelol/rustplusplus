@@ -22,10 +22,10 @@ import { setupAlarms } from '../discordTools/setup-alarms';
 import { setupSwitches } from '../discordTools/setup-switches';
 import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
 import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
+import { pollingHandler } from '../handlers/polling-handler';
 import * as discordMessages from '../discordTools/discord-messages';
 const Info = require('../structures/Info');
 const Map = require('../structures/Map');
-const PollingHandler = require('../handlers/pollingHandler.js');
 
 module.exports = {
     name: 'connected',
@@ -109,8 +109,8 @@ module.exports = {
         rustplus.isNewConnection = false;
         rustplus.loadMarkers();
 
-        await PollingHandler.pollingHandler(rustplus, client);
-        rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
+        await pollingHandler(rustplus);
+        rustplus.pollingTaskId = setInterval(pollingHandler, client.pollingIntervalMs, rustplus);
         rustplus.isOperational = true;
 
         rustplus.updateLeaderRustPlusLiteInstance();

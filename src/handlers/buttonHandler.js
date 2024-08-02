@@ -25,8 +25,8 @@ import * as discordTools from '../discordTools/discord-tools';
 import * as discordButtons from '../discordTools/discord-buttons';
 import * as discordModals from '../discordTools/discord-modals';
 import * as discordMessages from '../discordTools/discord-messages';
+import { updateSwitchGroupIfContainSwitch, turnOnOffGroup } from './smart-switch-group-handler';
 const Config = require('../../config');
-const SmartSwitchGroupHandler = require('./smartSwitchGroupHandler.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -704,7 +704,7 @@ module.exports = async (client, interaction) => {
         }));
 
         await discordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
-        SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(client, guildId, ids.serverId, ids.entityId);
+        await updateSwitchGroupIfContainSwitch(guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('SmartSwitchEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartSwitchEdit', ''));
@@ -975,8 +975,7 @@ module.exports = async (client, interaction) => {
                     value: `${active}`
                 }));
 
-                await SmartSwitchGroupHandler.TurnOnOffGroup(
-                    client, rustplus, guildId, ids.serverId, ids.groupId, active);
+                await turnOnOffGroup(rustplus, guildId, ids.serverId, ids.groupId, active);
             }
         }
     }
