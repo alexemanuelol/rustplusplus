@@ -23,8 +23,8 @@ import { teamChatHandler } from '../handlers/team-chat-handler';
 import { teamHandler } from '../handlers/team-handler'
 import { inGameChatHandler } from '../handlers/in-game-chat-handler';
 import { inGameCommandHandler } from '../handlers/in-game-command-handler';
+import { updateSwitchGroupIfContainSwitch } from '../handlers/smart-switch-group-handler';
 const Constants = require('../util/constants.ts');
-const SmartSwitchGroupHandler = require('../handlers/smartSwitchGroupHandler.js');
 
 module.exports = {
     name: 'message',
@@ -163,8 +163,7 @@ async function messageBroadcastEntityChangedSmartSwitch(rustplus, client, messag
     client.setInstance(rustplus.guildId, instance);
 
     await discordMessages.sendSmartSwitchMessage(rustplus.guildId, serverId, entityId);
-    SmartSwitchGroupHandler.updateSwitchGroupIfContainSwitch(
-        client, rustplus.guildId, serverId, entityId);
+    await updateSwitchGroupIfContainSwitch(rustplus.guildId, serverId, entityId);
 }
 
 async function messageBroadcastEntityChangedSmartAlarm(rustplus, client, message) {
