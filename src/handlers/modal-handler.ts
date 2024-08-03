@@ -18,22 +18,20 @@
 
 */
 
-const Discord = require('discord.js');
 import * as discordjs from 'discord.js';
 
 import { log, client, localeManager as lm } from '../../index';
 import * as discordMessages from '../discordTools/discord-messages';
 import * as guildInstance from '../util/guild-instance';
+import * as constants from '../util/constants';
+import { getListOfUsedKeywords } from '../util/keywords';
+import { requestSteamProfileName } from '../util/request';
 const Config = require('../../config');
 const Battlemetrics = require('../structures/Battlemetrics');
-const Constants = require('../util/constants.ts');
-const Keywords = require('../util/keywords.ts');
-const Request = require('../util/request.ts');
 
 export async function modalHandler(interaction: discordjs.ModalSubmitInteraction) {
     const guildId = interaction.guildId as string;
     const instance = guildInstance.readGuildInstanceFile(guildId);
-    const language = instance.generalSettings.language;
 
     const verifyId = Math.floor(100000 + Math.random() * 900000);
     await client.logInteraction(interaction, verifyId, 'userModal');
@@ -129,7 +127,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
         server.switches[ids.entityId].name = smartSwitchName;
 
         if (smartSwitchCommand !== server.switches[ids.entityId].command &&
-            !Keywords.getListOfUsedKeywords(guildId, ids.serverId).includes(smartSwitchCommand)) {
+            !getListOfUsedKeywords(guildId, ids.serverId).includes(smartSwitchCommand)) {
             server.switches[ids.entityId].command = smartSwitchCommand;
         }
 
@@ -159,7 +157,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
         server.switchGroups[ids.groupId].name = groupName;
 
         if (groupCommand !== server.switchGroups[ids.groupId].command &&
-            !Keywords.getListOfUsedKeywords(interaction.guildId, ids.serverId).includes(groupCommand)) {
+            !getListOfUsedKeywords(guildId, ids.serverId).includes(groupCommand)) {
             server.switchGroups[ids.groupId].command = groupCommand;
         }
         guildInstance.writeGuildInstanceFile(guildId, instance);
@@ -234,7 +232,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
         server.alarms[ids.entityId].message = smartAlarmMessage;
 
         if (smartAlarmCommand !== server.alarms[ids.entityId].command &&
-            !Keywords.getListOfUsedKeywords(guildId, ids.serverId).includes(smartAlarmCommand)) {
+            !getListOfUsedKeywords(guildId, ids.serverId).includes(smartAlarmCommand)) {
             server.alarms[ids.entityId].command = smartAlarmCommand;
         }
         guildInstance.writeGuildInstanceFile(guildId, instance);
@@ -289,7 +287,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
                 const bmInstance = client.battlemetricsInstances[trackerBattlemetricsId];
                 tracker.battlemetricsId = trackerBattlemetricsId;
                 tracker.serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
-                tracker.image = Constants.DEFAULT_SERVER_IMAGE;
+                tracker.image = constants.DEFAULT_SERVER_IMAGE;
                 tracker.title = bmInstance.server_name;
             }
             else {
@@ -299,7 +297,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
                     client.battlemetricsInstances[trackerBattlemetricsId] = bmInstance;
                     tracker.battlemetricsId = trackerBattlemetricsId;
                     tracker.serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
-                    tracker.image = Constants.DEFAULT_SERVER_IMAGE;
+                    tracker.image = constants.DEFAULT_SERVER_IMAGE;
                     tracker.title = bmInstance.server_name;
                 }
             }
@@ -323,7 +321,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
             return;
         }
 
-        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
+        const isSteamId64 = id.length === constants.STEAMID64_LENGTH ? true : false;
         const bmInstance = client.battlemetricsInstances[tracker.battlemetricsId];
 
         if ((isSteamId64 && tracker.players.some(e => e.steamId === id)) ||
@@ -338,7 +336,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
 
         if (isSteamId64) {
             steamId = id;
-            name = await Request.requestSteamProfileName(id);
+            name = await requestSteamProfileName(id);
 
             if (name && bmInstance) {
                 playerId = Object.keys(bmInstance.players).find(e => bmInstance.players[e]['name'] === name);
@@ -374,7 +372,7 @@ export async function modalHandler(interaction: discordjs.ModalSubmitInteraction
         const tracker = instance.trackers[ids.trackerId];
         const id = interaction.fields.getTextInputValue('TrackerRemovePlayerId');
 
-        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
+        const isSteamId64 = id.length === constants.STEAMID64_LENGTH ? true : false;
 
         if (!tracker) {
             interaction.deferUpdate();
