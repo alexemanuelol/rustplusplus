@@ -25,6 +25,7 @@ import * as guildInstance from '../util/guild-instance';
 import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
 import { selectMenuHandler } from '../handlers/select-menu-handler';
+import { modalHandler } from '../handlers/modal-handler';
 const Config = require('../../config');
 
 
@@ -71,7 +72,7 @@ export async function execute(interaction: Interaction) {
         }
     }
     else if (interaction.type === InteractionType.ModalSubmit) {
-        require('../handlers/modalHandler')(client, interaction);
+        await modalHandler(interaction);
     }
     else {
         log.error(lm.getIntl(Config.general.language, 'unknownInteraction'));

@@ -19,24 +19,29 @@
 */
 
 const Discord = require('discord.js');
+import * as discordjs from 'discord.js';
 
-import { log } from '../../index';
+import { log, client, localeManager as lm } from '../../index';
 import * as discordMessages from '../discordTools/discord-messages';
+import * as guildInstance from '../util/guild-instance';
+const Config = require('../../config');
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.ts');
 const Keywords = require('../util/keywords.ts');
 const Request = require('../util/request.ts');
 
-module.exports = async (client, interaction) => {
-    const instance = client.getInstance(interaction.guildId);
-    const guildId = interaction.guildId;
+export async function modalHandler(interaction: discordjs.ModalSubmitInteraction) {
+    const guildId = interaction.guildId as string;
+    const instance = guildInstance.readGuildInstanceFile(guildId);
+    const language = instance.generalSettings.language;
 
     const verifyId = Math.floor(100000 + Math.random() * 900000);
     await client.logInteraction(interaction, verifyId, 'userModal');
 
-    if (instance.blacklist['discordIds'].includes(interaction.user.id) &&
-        !interaction.member.permissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-        log.info(client.intlGet(null, 'userPartOfBlacklist', {
+    if (instance.blacklist['discordIds'].includes(interaction.user.id) && interaction.member !== null &&
+        !(interaction.member.permissions as discordjs.PermissionsBitField).has(
+            discordjs.PermissionsBitField.Flags.Administrator)) {
+        log.info(lm.getIntl(Config.general.language, 'userPartOfBlacklist', {
             id: `${verifyId}`,
             user: `${interaction.user.username} (${interaction.user.id})`
         }));
@@ -60,9 +65,9 @@ module.exports = async (client, interaction) => {
         if (oilRigCrateUnlockTime && ((oilRigCrateUnlockTime * 1000) !== server.oilRigLockedCrateUnlockTimeMs)) {
             server.oilRigLockedCrateUnlockTimeMs = oilRigCrateUnlockTime * 1000;
         }
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${server.cargoShipEgressTimeMs}, ${server.oilRigLockedCrateUnlockTimeMs}`
         }));
@@ -91,14 +96,14 @@ module.exports = async (client, interaction) => {
                 }
             }
         }
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${server.battlemetricsId}`
         }));
 
-        await discordMessages.sendServerMessage(interaction.guildId, ids.serverId);
+        await discordMessages.sendServerMessage(guildId, ids.serverId);
 
         /* To force search of player name via scrape */
         client.battlemetricsIntervalCounter = 0;
@@ -131,9 +136,9 @@ module.exports = async (client, interaction) => {
         if (smartSwitchProximity !== null && smartSwitchProximity >= 0) {
             server.switches[ids.entityId].proximity = smartSwitchProximity;
         }
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${smartSwitchName}, ${server.switches[ids.entityId].command}`
         }));
@@ -157,14 +162,14 @@ module.exports = async (client, interaction) => {
             !Keywords.getListOfUsedKeywords(interaction.guildId, ids.serverId).includes(groupCommand)) {
             server.switchGroups[ids.groupId].command = groupCommand;
         }
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${groupName}, ${server.switchGroups[ids.groupId].command}`
         }));
 
-        await discordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('GroupAddSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupAddSwitch', ''));
@@ -183,14 +188,14 @@ module.exports = async (client, interaction) => {
         }
 
         server.switchGroups[ids.groupId].switches.push(switchId);
-        client.setInstance(interaction.guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${switchId}`
         }));
 
-        await discordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('GroupRemoveSwitch')) {
         const ids = JSON.parse(interaction.customId.replace('GroupRemoveSwitch', ''));
@@ -204,14 +209,14 @@ module.exports = async (client, interaction) => {
 
         server.switchGroups[ids.groupId].switches =
             server.switchGroups[ids.groupId].switches.filter(e => e !== switchId);
-        client.setInstance(interaction.guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${switchId}`
         }));
 
-        await discordMessages.sendSmartSwitchGroupMessage(interaction.guildId, ids.serverId, ids.groupId);
+        await discordMessages.sendSmartSwitchGroupMessage(guildId, ids.serverId, ids.groupId);
     }
     else if (interaction.customId.startsWith('SmartAlarmEdit')) {
         const ids = JSON.parse(interaction.customId.replace('SmartAlarmEdit', ''));
@@ -232,14 +237,14 @@ module.exports = async (client, interaction) => {
             !Keywords.getListOfUsedKeywords(guildId, ids.serverId).includes(smartAlarmCommand)) {
             server.alarms[ids.entityId].command = smartAlarmCommand;
         }
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${smartAlarmName}, ${smartAlarmMessage}, ${server.alarms[ids.entityId].command}`
         }));
 
-        await discordMessages.sendSmartAlarmMessage(interaction.guildId, ids.serverId, ids.entityId);
+        await discordMessages.sendSmartAlarmMessage(guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('StorageMonitorEdit')) {
         const ids = JSON.parse(interaction.customId.replace('StorageMonitorEdit', ''));
@@ -252,14 +257,14 @@ module.exports = async (client, interaction) => {
         }
 
         server.storageMonitors[ids.entityId].name = storageMonitorName;
-        client.setInstance(interaction.guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${storageMonitorName}`
         }));
 
-        await discordMessages.sendStorageMonitorMessage(interaction.guildId, ids.serverId, ids.entityId);
+        await discordMessages.sendStorageMonitorMessage(guildId, ids.serverId, ids.entityId);
     }
     else if (interaction.customId.startsWith('TrackerEdit')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
@@ -299,14 +304,14 @@ module.exports = async (client, interaction) => {
                 }
             }
         }
-        client.setInstance(guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${trackerName}, ${tracker.battlemetricsId}, ${tracker.clanTag}`
         }));
 
-        await discordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+        await discordMessages.sendTrackerMessage(guildId, ids.trackerId);
     }
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
@@ -327,8 +332,8 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        let name = null;
-        let steamId = null;
+        let name: string | null = null;
+        let steamId: string | null = null;
         let playerId = null;
 
         if (isSteamId64) {
@@ -355,14 +360,14 @@ module.exports = async (client, interaction) => {
             steamId: steamId,
             playerId: playerId
         });
-        client.setInstance(interaction.guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${id}`
         }));
 
-        await discordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+        await discordMessages.sendTrackerMessage(guildId, ids.trackerId);
     }
     else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
@@ -382,17 +387,17 @@ module.exports = async (client, interaction) => {
         else {
             tracker.players = tracker.players.filter(e => e.playerId !== id || e.steamId !== null);
         }
-        client.setInstance(interaction.guildId, instance);
+        guildInstance.writeGuildInstanceFile(guildId, instance);
 
-        log.info(client.intlGet(null, 'modalValueChange', {
+        log.info(lm.getIntl(Config.general.language, 'modalValueChange', {
             id: `${verifyId}`,
             value: `${id}`
         }));
 
-        await discordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+        await discordMessages.sendTrackerMessage(guildId, ids.trackerId);
     }
 
-    log.info(client.intlGet(null, 'userModalInteractionSuccess', {
+    log.info(lm.getIntl(Config.general.language, 'userModalInteractionSuccess', {
         id: `${verifyId}`
     }));
 
