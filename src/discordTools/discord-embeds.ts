@@ -188,7 +188,7 @@ export function getTrackerEmbed(guildId: string, trackerId: string): discordjs.E
         let id = '';
         let status = '';
 
-        const steamIdLink = constants.GET_STEAM_PROFILE_LINK(player.steamId);
+        const steamIdLink = constants.GET_STEAM_PROFILE_LINK(player.steamId === null ? '' : player.steamId);
         const bmIdLink = constants.GET_BATTLEMETRICS_PROFILE_LINK(player.playerId === null ? '' : player.playerId);
 
         const isNewLine = (player.steamId !== null && player.playerId !== null) ? true : false;

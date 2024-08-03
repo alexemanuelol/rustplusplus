@@ -232,8 +232,8 @@ export interface Tracker {
 }
 
 export interface TrackerPlayer {
-    name: string;
-    steamId: string;
+    name: string | null;
+    steamId: string | null;
     playerId: string | null;
 }
 
