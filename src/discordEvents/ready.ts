@@ -24,8 +24,8 @@ import * as path from 'path';
 import { log, client, localeManager as lm } from '../../index';
 import * as guildInstance from '../util/guild-instance';
 import * as credentials from '../util/credentials';
+import { battlemetricsHandler } from '../handlers/battlemetrics-handler';
 const Config = require('../../config');
-const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
 
 export const name = 'ready';
 export const once = true;
@@ -78,8 +78,8 @@ export async function execute() {
     }
 
     await client.updateBattlemetricsInstances();
-    BattlemetricsHandler.handler(client, true);
-    client.battlemetricsIntervalId = setInterval(BattlemetricsHandler.handler, 60000, client, false);
+    await battlemetricsHandler(true);
+    client.battlemetricsIntervalId = setInterval(battlemetricsHandler, 60000, false);
 
     client.createRustplusInstancesFromConfig();
 }

@@ -750,7 +750,7 @@ export function getServerConnectionInvalidEmbed(guildId: string, serverId: strin
 }
 
 export function getActivityNotificationEmbed(guildId: string, serverId: string, color: string, text: string,
-    steamId: string, png: string, title: string | null = null): discordjs.EmbedBuilder {
+    steamId: string | null, png: string, title: string | null = null): discordjs.EmbedBuilder {
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const footerTitle = title !== null ? title : instance.serverList[serverId].title;
     return getEmbed({
@@ -760,7 +760,7 @@ export function getActivityNotificationEmbed(guildId: string, serverId: string, 
         author: {
             name: text,
             iconURL: (png !== null) ? png : constants.DEFAULT_SERVER_IMAGE,
-            url: `${constants.STEAM_PROFILES_URL}${steamId}`
+            url: `${constants.STEAM_PROFILES_URL}${steamId === null ? '' : steamId}`
         }
     });
 }
