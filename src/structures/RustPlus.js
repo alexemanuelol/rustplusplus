@@ -130,10 +130,10 @@ class RustPlus extends RustPlusLib {
 
     loadRustPlusEvents() {
         const eventFiles = Fs.readdirSync(
-            Path.join(__dirname, '..', 'rustplusEvents')).filter(file => file.endsWith('.js'));
+            Path.join(__dirname, '..', 'rustplusEvents')).filter(file => file.endsWith('.ts'));
         for (const file of eventFiles) {
             const event = require(`../rustplusEvents/${file}`);
-            this.on(event.name, (...args) => event.execute(this, Client.client, ...args));
+            this.on(event.name, (...args) => event.execute(this, ...args));
         }
     }
 
