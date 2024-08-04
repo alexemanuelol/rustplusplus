@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,11 +18,12 @@
 
 */
 
-module.exports = {
-    name: 'request',
-    async execute(rustplus, client, request) {
-        if (!rustplus.isServerAvailable()) return rustplus.deleteThisRustplusInstance();
+const { RustPlus } = require('../structures/RustPlus');
 
-        /* Not used */
-    },
-};
+export const name = 'request';
+
+export async function execute(rustplus: typeof RustPlus, request: any) {
+    if (!rustplus.isServerAvailable()) return rustplus.deleteThisRustplusInstance();
+
+    /* Not used */
+}

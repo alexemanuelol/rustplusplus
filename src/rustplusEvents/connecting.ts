@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,11 +18,15 @@
 
 */
 
-module.exports = {
-    name: 'connecting',
-    async execute(rustplus, client) {
-        if (!rustplus.isServerAvailable()) return rustplus.deleteThisRustplusInstance();
+import { localeManager as lm } from "../../index";
+const { RustPlus } = require('../structures/RustPlus');
+const Config = require('../../config');
 
-        rustplus.info(`${client.intlGet(null, 'connectingCap')}: ${client.intlGet(null, 'connectingToServer')}`);
-    },
-};
+export const name = 'connecting';
+
+export async function execute(rustplus: typeof RustPlus) {
+    if (!rustplus.isServerAvailable()) return rustplus.deleteThisRustplusInstance();
+
+    rustplus.info(`${lm.getIntl(Config.general.language, 'connectingCap')}: ${lm.getIntl(Config.general.language,
+        'connectingToServer')}`);
+}
