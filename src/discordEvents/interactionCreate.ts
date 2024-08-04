@@ -26,6 +26,7 @@ import * as discordEmbeds from '../discordTools/discord-embeds';
 import * as discordTools from '../discordTools/discord-tools';
 import { selectMenuHandler } from '../handlers/select-menu-handler';
 import { modalHandler } from '../handlers/modal-handler';
+import { buttonHandler } from '../handlers/button-handler';
 const Config = require('../../config');
 
 
@@ -49,7 +50,7 @@ export async function execute(interaction: Interaction) {
     }
 
     if (interaction.isButton()) {
-        require('../handlers/buttonHandler')(client, interaction); //! TODO Needs to be refactored for typescript
+        await buttonHandler(interaction);
     }
     else if (interaction.isStringSelectMenu()) {
         await selectMenuHandler(interaction);
