@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,10 +18,37 @@
 
 */
 
-const TimeLib = require('../util/timer.ts');
+import * as guildInstance from '../util/guild-instance';
+import { secondsToFullScale } from "../util/timer";
+const { RustPlus } = require('./RustPlus');
 
-class Time {
-    constructor(time, rustplus, client) {
+export interface TimeConfig {
+    dayLengthMinutes: number;
+    timeScale: number;
+    sunrise: number;
+    sunset: number;
+    time: number;
+}
+
+export interface TimeTillConfig {
+    [key: number]: number;
+}
+
+export class Time {
+    private _dayLengthMinutes: number;
+    private _timeScale: number;
+    private _sunrise: number;
+    private _sunset: number;
+    private _time: number;
+
+    private _rustplus: typeof RustPlus;
+
+    private _startTime: number;
+    private _timeTillDay: TimeTillConfig;
+    private _timeTillNight: TimeTillConfig;
+    private _timeTillActive: boolean;
+
+    constructor(rustplus: typeof RustPlus, time: TimeConfig) {
         this._dayLengthMinutes = time.dayLengthMinutes;
         this._timeScale = time.timeScale;
         this._sunrise = time.sunrise;
@@ -29,55 +56,77 @@ class Time {
         this._time = time.time;
 
         this._rustplus = rustplus;
-        this._client = client;
 
         this._startTime = time.time;
-        this._timeTillDay = new Object();
-        this._timeTillNight = new Object();
+        this._timeTillDay = {};
+        this._timeTillNight = {};
         this._timeTillActive = false;
 
         this.loadTimeTillConfig();
     }
 
     /* Getters and Setters */
-    get dayLengthMinutes() { return this._dayLengthMinutes; }
+    get dayLengthMinutes(): number { return this._dayLengthMinutes; }
     set dayLengthMinutes(dayLengthMinutes) { this._dayLengthMinutes = dayLengthMinutes; }
-    get timeScale() { return this._timeScale; }
+    get timeScale(): number { return this._timeScale; }
     set timeScale(timeScale) { this._timeScale = timeScale; }
-    get sunrise() { return this._sunrise; }
+    get sunrise(): number { return this._sunrise; }
     set sunrise(sunrise) { this._sunrise = sunrise; }
-    get sunset() { return this._sunset; }
+    get sunset(): number { return this._sunset; }
     set sunset(sunset) { this._sunset = sunset; }
-    get time() { return this._time; }
+    get time(): number { return this._time; }
     set time(time) { this._time = time; }
-    get rustplus() { return this._rustplus; }
+    get rustplus(): typeof RustPlus { return this._rustplus; }
     set rustplus(rustplus) { this._rustplus = rustplus; }
-    get client() { return this._client; }
-    set client(client) { this._client = client; }
-    get startTime() { return this._startTime; }
+    get startTime(): number { return this._startTime; }
     set startTime(startTime) { this._startTime = startTime; }
-    get timeTillDay() { return this._timeTillDay; }
+    get timeTillDay(): TimeTillConfig { return this._timeTillDay; }
     set timeTillDay(timeTillDay) { this._timeTillDay = timeTillDay; }
-    get timeTillNight() { return this._timeTillNight; }
+    get timeTillNight(): TimeTillConfig { return this._timeTillNight; }
     set timeTillNight(timeTillNight) { this._timeTillNight = timeTillNight; }
-    get timeTillActive() { return this._timeTillActive; }
+    get timeTillActive(): boolean { return this._timeTillActive; }
     set timeTillActive(timeTillActive) { this._timeTillActive = timeTillActive; }
 
     /* Change checkers */
-    isDayLengthMinutesChanged(time) { return ((this.dayLengthMinutes) !== (time.dayLengthMinutes)); }
-    isTimeScaleChanged(time) { return ((this.timeScale) !== (time.timeScale)); }
-    isSunriseChanged(time) { return ((this.sunrise) !== (time.sunrise)); }
-    isSunsetChanged(time) { return ((this.sunset) !== (time.sunset)); }
-    isTimeChanged(time) { return ((this.time) !== (time.time)); }
+    isDayLengthMinutesChanged(time: TimeConfig): boolean {
+        return ((this.dayLengthMinutes) !== (time.dayLengthMinutes));
+    }
+
+    isTimeScaleChanged(time: TimeConfig): boolean {
+        return ((this.timeScale) !== (time.timeScale));
+    }
+
+    isSunriseChanged(time: TimeConfig): boolean {
+        return ((this.sunrise) !== (time.sunrise));
+    }
+
+    isSunsetChanged(time: TimeConfig): boolean {
+        return ((this.sunset) !== (time.sunset));
+    }
+
+    isTimeChanged(time: TimeConfig): boolean {
+        return ((this.time) !== (time.time));
+    }
 
     /* Other checkers */
-    isDay() { return ((this.time >= this.sunrise) && (this.time < this.sunset)); }
-    isNight() { return !this.isDay(); }
-    isTurnedDay(time) { return (this.isNight() && time.time >= time.sunrise && time.time < time.sunset); }
-    isTurnedNight(time) { return (this.isDay() && !(time.time >= time.sunrise && time.time < time.sunset)); }
+    isDay(): boolean {
+        return ((this.time >= this.sunrise) && (this.time < this.sunset));
+    }
+
+    isNight(): boolean {
+        return !this.isDay();
+    }
+
+    isTurnedDay(time: TimeConfig): boolean {
+        return (this.isNight() && time.time >= time.sunrise && time.time < time.sunset);
+    }
+
+    isTurnedNight(time: TimeConfig): boolean {
+        return (this.isDay() && !(time.time >= time.sunrise && time.time < time.sunset));
+    }
 
     loadTimeTillConfig() {
-        let instance = this.client.getInstance(this.rustplus.guildId);
+        const instance = guildInstance.readGuildInstanceFile(this.rustplus.guildId);
 
         if (instance.serverList[this.rustplus.serverId].timeTillDay !== null) {
             this.timeTillDay = instance.serverList[this.rustplus.serverId].timeTillDay;
@@ -91,7 +140,7 @@ class Time {
             Object.keys(this.timeTillNight).length !== 0;
     }
 
-    updateTime(time) {
+    updateTime(time: TimeConfig) {
         this.dayLengthMinutes = time.dayLengthMinutes;
         this.timeScale = time.timeScale;
         this.sunrise = time.sunrise;
@@ -99,7 +148,7 @@ class Time {
         this.time = time.time;
     }
 
-    getTimeTillDayOrNight(ignore = '') {
+    getTimeTillDayOrNight(ignore: string = ''): string | null {
         if (!this.timeTillActive) {
             return null;
         }
@@ -117,9 +166,7 @@ class Time {
             return (Math.abs(b - time) < Math.abs(a - time) ? b : a);
         });
 
-        return TimeLib.secondsToFullScale(object[closest], ignore);
+        return secondsToFullScale(object[closest], ignore);
     }
 
 }
-
-module.exports = Time;
