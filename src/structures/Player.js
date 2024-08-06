@@ -20,7 +20,7 @@
 
 const Constants = require('../util/constants.ts');
 const Map = require('../util/map.ts');
-const Time = require('../util/timer.ts');
+const Timer = require('../util/timer.ts');
 
 class Player {
     constructor(player, rustplus) {
@@ -148,23 +148,23 @@ class Player {
     }
 
     getAfkSeconds() { return (new Date() - this.lastMovement) / 1000; }
-    getAfkTime(ignore = '') { return Time.secondsToFullScale(this.getAfkSeconds(), ignore); }
+    getAfkTime(ignore = '') { return Timer.secondsToFullScale(this.getAfkSeconds(), ignore); }
 
     getAliveSeconds() {
         if (this.spawnTime === 0) return 0;
         return (new Date() - new Date(this.spawnTime * 1000)) / 1000;
     }
-    getAliveTime(ignore = '') { return Time.secondsToFullScale(this.getAliveSeconds(), ignore); }
+    getAliveTime(ignore = '') { return Timer.secondsToFullScale(this.getAliveSeconds(), ignore); }
 
     getDeathSeconds() {
         if (this.deathTime === 0) return 0;
         return (new Date() - new Date(this.deathTime * 1000)) / 1000;
     }
-    getDeathTime(ignore = '') { return (Time.secondsToFullScale(this.getDeathSeconds(), ignore)); }
+    getDeathTime(ignore = '') { return (Timer.secondsToFullScale(this.getDeathSeconds(), ignore)); }
     getOfflineTime(ignore = '') {
         if (this.wentOfflineTime === null) return null;
         const seconds = (new Date() - this.wentOfflineTime) / 1000;
-        return (Time.secondsToFullScale(seconds, ignore));
+        return (Timer.secondsToFullScale(seconds, ignore));
     }
 
     async assignLeader() {
