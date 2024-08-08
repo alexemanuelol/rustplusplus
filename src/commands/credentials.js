@@ -89,6 +89,14 @@ module.exports = {
                     .setName('steam_id')
                     .setDescription('Steam ID.')
                     .setRequired(true))
+                .addStringOption(option => option
+                    .setName('issued_date')
+                    .setDescription('Issued date of the credentials.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('expire_date')
+                    .setDescription('Expire date of the credentials.')
+                    .setRequired(true))
                 .addBooleanOption(option => option
                     .setName('host')
                     .setDescription('Host the bot')
@@ -186,6 +194,9 @@ async function addCredentials(client, interaction, verifyId) {
     credentials[steamId].fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
     credentials[steamId].fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
 
+    credentials[steamId].issued_date = interaction.options.getString('issued_date');
+    credentials[steamId].expire_date = interaction.options.getString('expire_date');
+
     credentials[steamId].discordUserId = interaction.member.user.id;
 
     const prevHoster = credentials.hoster;
@@ -225,7 +236,9 @@ async function addCredentials(client, interaction, verifyId) {
             `${credentials[steamId].fcm_credentials.gcm.token}, ` +
             `${credentials[steamId].fcm_credentials.gcm.androidId}, ` +
             `${credentials[steamId].fcm_credentials.gcm.securityToken}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.appId}`
+            `${credentials[steamId].fcm_credentials.gcm.appId}, ` +
+            `${credentials[steamId].issued_date}, ` +
+            `${credentials[steamId].expire_date}`
     }));
 
     const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });
