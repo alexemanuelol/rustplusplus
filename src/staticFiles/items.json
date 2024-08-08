@@ -914,6 +914,11 @@
         "name": "Large Hunting Trophy",
         "description": "A large trophy stand to mount the head of killed animals or enemies."
     },
+    "962186730": {
+        "shortname": "tincan.alarm",
+        "name": "Tin Can Alarm",
+        "description": "A primitive perimeter alarm made from hanging tin cans. Clatters loudly when disturbed, alerting you to any trespassers. Simple but effective."
+    },
     "963906841": {
         "shortname": "rock",
         "name": "Rock",
@@ -1133,6 +1138,11 @@
         "shortname": "electric.andswitch",
         "name": "AND Switch",
         "description": "A logic gate that allows electrical passthrough if BOTH inputs receives power, passthrough amount is the greater of either power source"
+    },
+    "1174957864": {
+        "shortname": "cupboard.tool.shockbyte",
+        "name": "Shockbyte Tool Cupboard",
+        "description": "Ensure 100% Tool Cupboard uptime with this Tool Cupboard skin."
     },
     "1176355476": {
         "shortname": "concretehatchet",
@@ -3349,6 +3359,7 @@
         "name": "Inner Tube",
         "description": "An inflated tube for aquatic activities."
     },
+    "undefined": {},
     "-1163532624": {
         "shortname": "jacket",
         "name": "Jacket",
