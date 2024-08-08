@@ -1367,6 +1367,25 @@
     "time": 12.5,
     "timeString": "5–20 sec"
   },
+  "962186730": {
+    "ingredients": [
+      {
+        "id": "-151838493",
+        "quantity": 100
+      },
+      {
+        "id": "1414245522",
+        "quantity": 1
+      },
+      {
+        "id": "-1557377697",
+        "quantity": 2
+      }
+    ],
+    "workbench": "1524187186",
+    "time": 12.5,
+    "timeString": "5–20 sec"
+  },
   "963906841": {
     "ingredients": [
       {

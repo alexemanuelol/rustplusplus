@@ -451,6 +451,14 @@
       "totalScrap": 769
     }
   },
+  "962186730": {
+    "researchTable": 75,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 83,
+      "totalScrap": 597
+    }
+  },
   "963906841": {
     "researchTable": 10,
     "workbench": null
@@ -2064,7 +2072,7 @@
     "workbench": {
       "type": "1524187186",
       "scrap": 83,
-      "totalScrap": 492
+      "totalScrap": 514
     }
   },
   "-48090175": {

@@ -264,6 +264,18 @@
       "hp": 100,
       "hpString": "100"
     },
+    "962186730": {
+      "decay": 7200,
+      "decayString": "2 hours",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 50,
+      "hpString": "50"
+    },
     "968421290": {
       "decay": 345600,
       "decayString": "96 hours",
