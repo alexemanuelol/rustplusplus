@@ -120,6 +120,8 @@ Subcommand | Options | Description | Required
 &nbsp; | `gcm_security_token` | GCM Security Token. | `True`
 &nbsp; | `gcm_app_id` | GCM App ID. | `True`
 &nbsp; | `steam_id` | Steam ID. | `True`
+&nbsp; | `issued_date` | Issued date of the credentials. | `True`
+&nbsp; | `expire_date` | Expire date of the credentials. | `True`
 &nbsp; | `hoster` | Should be hoster. | `False`
 `remove` | &nbsp; | Remove FCM Credentials. | &nbsp;
 &nbsp; | `steam_id` | Steam ID. | `False`
