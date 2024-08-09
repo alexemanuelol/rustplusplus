@@ -1,3 +1,5 @@
-docs/
-node_modules/
-src/credentialApplication/node_modules/
+*
+!src/
+!config/
+!index.ts
+!package*.json
