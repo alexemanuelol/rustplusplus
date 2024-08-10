@@ -50,12 +50,24 @@ module.exports = {
                     .setDescription('Keys Auth Secret.')
                     .setRequired(true))
                 .addStringOption(option => option
+                    .setName('fcm_name')
+                    .setDescription('FCM Name.')
+                    .setRequired(true))
+                .addStringOption(option => option
                     .setName('fcm_token')
                     .setDescription('FCM Token.')
                     .setRequired(true))
                 .addStringOption(option => option
-                    .setName('fcm_push_set')
-                    .setDescription('FCM Push Set.')
+                    .setName('fcm_web_endpoint')
+                    .setDescription('FCM Web EndPoint.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('fcm_web_p256dh')
+                    .setDescription('FCM Web P256DH.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('fcm_web_auth')
+                    .setDescription('FCM Web Auth.')
                     .setRequired(true))
                 .addStringOption(option => option
                     .setName('gcm_token')
@@ -76,6 +88,14 @@ module.exports = {
                 .addStringOption(option => option
                     .setName('steam_id')
                     .setDescription('Steam ID.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('issued_date')
+                    .setDescription('Issued date of the credentials.')
+                    .setRequired(true))
+                .addStringOption(option => option
+                    .setName('expire_date')
+                    .setDescription('Expire date of the credentials.')
                     .setRequired(true))
                 .addBooleanOption(option => option
                     .setName('host')
@@ -161,14 +181,21 @@ async function addCredentials(client, interaction, verifyId) {
     credentials[steamId].fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
 
     credentials[steamId].fcm_credentials.fcm = new Object();
+    credentials[steamId].fcm_credentials.fcm.name = interaction.options.getString('fcm_name');
     credentials[steamId].fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
-    credentials[steamId].fcm_credentials.fcm.pushSet = interaction.options.getString('fcm_push_set');
+    credentials[steamId].fcm_credentials.fcm.web = new Object();
+    credentials[steamId].fcm_credentials.fcm.web.endpoint = interaction.options.getString('fcm_web_endpoint');
+    credentials[steamId].fcm_credentials.fcm.web.p256dh = interaction.options.getString('fcm_web_p256dh');
+    credentials[steamId].fcm_credentials.fcm.web.auth = interaction.options.getString('fcm_web_auth');
 
     credentials[steamId].fcm_credentials.gcm = new Object();
     credentials[steamId].fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
     credentials[steamId].fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
     credentials[steamId].fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
     credentials[steamId].fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
+
+    credentials[steamId].issued_date = interaction.options.getString('issued_date');
+    credentials[steamId].expire_date = interaction.options.getString('expire_date');
 
     credentials[steamId].discordUserId = interaction.member.user.id;
 
@@ -201,12 +228,17 @@ async function addCredentials(client, interaction, verifyId) {
             `${credentials[steamId].fcm_credentials.keys.privateKey}, ` +
             `${credentials[steamId].fcm_credentials.keys.publicKey}, ` +
             `${credentials[steamId].fcm_credentials.keys.authSecret}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.name}, ` +
             `${credentials[steamId].fcm_credentials.fcm.token}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.pushSet}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.web.endpoint}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.web.p256dh}, ` +
+            `${credentials[steamId].fcm_credentials.fcm.web.auth}, ` +
             `${credentials[steamId].fcm_credentials.gcm.token}, ` +
             `${credentials[steamId].fcm_credentials.gcm.androidId}, ` +
             `${credentials[steamId].fcm_credentials.gcm.securityToken}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.appId}`
+            `${credentials[steamId].fcm_credentials.gcm.appId}, ` +
+            `${credentials[steamId].issued_date}, ` +
+            `${credentials[steamId].expire_date}`
     }));
 
     const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });
