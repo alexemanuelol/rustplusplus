@@ -734,6 +734,7 @@
     "unknownInteraction": "Unknown Interaction...",
     "unmutedCap": "UNMUTED",
     "updateCap": "UPDATE",
+    "UpdateInfo": "A new version of RustPlusPlus is available. Current Version: {current}, New Version: {new}.",
     "upkeep": "Upkeep",
     "upkeepForItem": "Upkeep for {item} is {cost}.",
     "userAddedToBlacklist": "{user} was added to blacklist.",
