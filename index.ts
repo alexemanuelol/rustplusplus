@@ -68,7 +68,7 @@ function checkForUpdates() {
         const remote = response.data;
 
         if (remote.version !== local.version) {
-            client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'UpdateInfo', {
+            client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'updateInfo', {
                 current: local.version,
                 new: remote.version
             }), 'warn');
