@@ -92,14 +92,21 @@ class Logger {
                     level: level,
                     message: `${time} | ${this.guildId} | ${this.serverName} | ${text}`
                 });
-
-                console.log(
-                    Colors.green(`${time} `) +
-                    Colors.cyan(`${this.guildId} `) +
-                    Colors.white(`${this.serverName} `) +
-                    ((level === 'error') ? Colors.red(text) : Colors.yellow(text))
-                );
-
+                
+                if (level === 'info') {
+                    console.log(
+                        Colors.green(`${time} `) +
+                        Colors.cyan(`${this.guildId} `) +
+                        Colors.white(`${this.serverName} `) +
+                        Colors.yellow(text));
+                }
+                if (level === 'error') {
+                    console.log(
+                        Colors.green(`${time} `) + 
+                        Colors.cyan(`${this.guildId} `) +
+                        Colors.white(`${this.serverName} `) + 
+                        Colors.red(text));
+                };
                 if (level === 'error' && Config.general.showCallStackError) {
                     for (let line of (new Error().stack.split(/\r?\n/))) {
                         this.logger.log({
