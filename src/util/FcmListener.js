@@ -309,7 +309,7 @@ async function pairingEntitySwitch(client, guild, title, message, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.rpInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].switches[body.entityId].location = location.location;
                 instance.serverList[serverId].switches[body.entityId].x = location.x;
                 instance.serverList[serverId].switches[body.entityId].y = location.y;
@@ -362,7 +362,7 @@ async function pairingEntitySmartAlarm(client, guild, title, message, body) {
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.rpInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].alarms[body.entityId].location = location.location;
                 instance.serverList[serverId].alarms[body.entityId].x = location.x;
                 instance.serverList[serverId].alarms[body.entityId].y = location.y;
@@ -415,7 +415,7 @@ async function pairingEntityStorageMonitor(client, guild, title, message, body) 
             const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
             if (player) {
                 const location = Map.getPos(rustplus.generalSettings.language, player.x, player.y,
-                    rustplus.sInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.rpInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
                 instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
                 instance.serverList[serverId].storageMonitors[body.entityId].x = location.x;
                 instance.serverList[serverId].storageMonitors[body.entityId].y = location.y;

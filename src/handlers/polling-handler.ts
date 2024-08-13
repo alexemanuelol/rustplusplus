@@ -28,8 +28,8 @@ import { smartAlarmHandler } from './smart-alarm-handler';
 import { smartSwitchHandler } from './smart-switch-handler';
 import { Time } from '../structures/Time';
 import { TeamInfo } from '../structures/TeamInfo';
+import { Info } from '../structures/Info';
 const { RustPlus } = require('../structures/RustPlus');
-const Info = require('../structures/Info');
 const MapMarkers = require('../structures/MapMarkers.js');
 
 export async function pollingHandler(rustplus: typeof RustPlus) {
@@ -44,7 +44,7 @@ export async function pollingHandler(rustplus: typeof RustPlus) {
     if (!(await rustplus.isResponseValid(time))) return;
 
     if (rustplus.isFirstPoll) {
-        rustplus.sInfo = new Info(info.info);
+        rustplus.rpInfo = new Info(info.info);
         rustplus.time = new Time(rustplus, time.time);
         rustplus.teamInfo = new TeamInfo(rustplus, teamInfo.teamInfo);
         rustplus.mapMarkers = new MapMarkers(mapMarkers.mapMarkers, rustplus, client);
@@ -58,7 +58,7 @@ export async function pollingHandler(rustplus: typeof RustPlus) {
     await vendingMachineHandler(rustplus, mapMarkers.mapMarkers)
 
     rustplus.time.updateTime(time.time);
-    rustplus.sInfo.updateInfo(info.info);
+    rustplus.rpInfo.updateInfo(info.info);
     rustplus.mapMarkers.updateMapMarkers(mapMarkers.mapMarkers);
 
     await informationHandler(rustplus);

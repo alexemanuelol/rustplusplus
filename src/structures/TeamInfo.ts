@@ -25,16 +25,16 @@ const Config = require('../../config');
 const { RustPlus } = require('./RustPlus');
 
 export interface TeamInfoResponseData {
-    leaderSteamId: number,
-    members: TeamMemberData[],
-    mapNotes?: Note[]
-    leaderMapNotes?: Note[]
+    leaderSteamId: number;
+    members: TeamMemberData[];
+    mapNotes?: Note[];
+    leaderMapNotes?: Note[];
 }
 
 export interface Note {
-    type: NoteType,
-    x: number,
-    y: number
+    type: NoteType;
+    x: number;
+    y: number;
 }
 
 export enum NoteType {

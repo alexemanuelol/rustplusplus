@@ -24,14 +24,14 @@ import { getPos, MapLocation } from "../util/map";
 const { RustPlus } = require('./RustPlus');
 
 export interface TeamMemberData {
-    steamId: number,
-    name: string,
-    x: number,
-    y: number,
-    isOnline: boolean,
-    spawnTime: number,
-    isAlive: boolean,
-    deathTime: number
+    steamId: number;
+    name: string;
+    x: number;
+    y: number;
+    isOnline: boolean;
+    spawnTime: number;
+    isAlive: boolean;
+    deathTime: number;
 }
 
 export class TeamMember {
@@ -189,7 +189,7 @@ export class TeamMember {
                 this.rustplus.generalSettings.language,
                 this.x,
                 this.y,
-                this.rustplus.sInfo.mapSize,
+                this.rustplus.rpInfo.mapSize,
                 this.rustplus.map.monuments,
                 this.rustplus.map.monumentInfo);
         }

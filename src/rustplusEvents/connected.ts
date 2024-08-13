@@ -26,9 +26,9 @@ import { setupStorageMonitors } from '../discordTools/setup-storage-monitors';
 import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
 import { pollingHandler } from '../handlers/polling-handler';
 import * as discordMessages from '../discordTools/discord-messages';
+import { Info } from '../structures/Info';
 const { RustPlus } = require('../structures/RustPlus');
 const Config = require('../../config');
-const Info = require('../structures/Info');
 const Map = require('../structures/Map');
 
 export const name = 'connected';
@@ -69,7 +69,7 @@ export async function execute(rustplus: typeof RustPlus) {
         'rustplusOperational')}`);
 
     const info = await rustplus.getInfoAsync();
-    if (await rustplus.isResponseValid(info)) rustplus.sInfo = new Info(info.info)
+    if (await rustplus.isResponseValid(info)) rustplus.rpInfo = new Info(info.info)
 
     if (client.rustplusMaps.hasOwnProperty(guildId)) {
         if (client.isJpgImageChanged(guildId, map.map)) {

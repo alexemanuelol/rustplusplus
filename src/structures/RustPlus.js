@@ -104,7 +104,7 @@ class RustPlus extends RustPlusLib {
 
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
-        this.sInfo = null;          /* Stores the Info structure. */
+        this.rpInfo = null;         /* Stores the Info structure. */
         this.time = null;           /* Stores the Time structure. */
         this.teamInfo = null;       /* Stores the Team structure. */
         this.mapMarkers = null;     /* Stores the MapMarkers structure. */
@@ -1623,7 +1623,7 @@ class RustPlus extends RustPlusLib {
                     if (member.steamId.toString() === callerSteamId) {
                         const instance = Client.client.getInstance(this.guildId);
                         const location = Map.getPos(this.generalSettings.language, member.x, member.y,
-                            this.sInfo.mapSize, this.map.monuments, this.map.monumentInfo);
+                            this.rpInfo.mapSize, this.map.monuments, this.map.monumentInfo);
                         instance.serverList[this.serverId].markers[name] =
                             { x: member.x, y: member.y, location: location.location };
                         Client.client.setInstance(this.guildId, instance);
@@ -2056,16 +2056,16 @@ class RustPlus extends RustPlusLib {
 
     getCommandPop(isInfoChannel = false) {
         if (isInfoChannel) {
-            return `${this.sInfo.players}${this.sInfo.isQueue() ? `(${this.sInfo.queuedPlayers})` : ''}` +
-                `/${this.sInfo.maxPlayers}`;
+            return `${this.rpInfo.players}${this.rpInfo.isQueue() ? `(${this.rpInfo.queuedPlayers})` : ''}` +
+                `/${this.rpInfo.maxPlayers}`;
         }
         else {
             const string = Client.client.intlGet(this.guildId, 'populationPlayers', {
-                current: this.sInfo.players,
-                max: this.sInfo.maxPlayers
+                current: this.rpInfo.players,
+                max: this.rpInfo.maxPlayers
             });
-            const queuedPlayers = this.sInfo.isQueue() ?
-                ` ${Client.client.intlGet(this.guildId, 'populationQueue', { number: this.sInfo.queuedPlayers })}` : '';
+            const queuedPlayers = this.rpInfo.isQueue() ?
+                ` ${Client.client.intlGet(this.guildId, 'populationQueue', { number: this.rpInfo.queuedPlayers })}` : '';
 
             return `${string}${queuedPlayers}`;
         }
@@ -2701,12 +2701,12 @@ class RustPlus extends RustPlusLib {
     getCommandWipe(isInfoChannel = false) {
         if (isInfoChannel) {
             return Client.client.intlGet(this.guildId, 'dayOfWipe', {
-                day: Math.ceil(this.sInfo.getSecondsSinceWipe() / (60 * 60 * 24))
+                day: Math.ceil(this.rpInfo.getSecondsSinceWipe() / (60 * 60 * 24))
             });
         }
         else {
             return Client.client.intlGet(this.guildId, 'timeSinceWipe', {
-                time: this.sInfo.getTimeSinceWipe()
+                time: this.rpInfo.getTimeSinceWipe()
             });
         }
     }

@@ -334,15 +334,15 @@ class Map {
     }
 
     async mapAppendMonuments() {
-        if (this.rustplus.sInfo === null) {
+        if (this.rustplus.rpInfo === null) {
             this.rustplus.warn(Client.client.intlGet(null, 'couldNotAppendMapMonuments'));
             return;
         }
 
         for (let monument of this.monuments) {
-            let x = monument.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.sInfo.mapSize) + this.oceanMargin;
+            let x = monument.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.rpInfo.mapSize) + this.oceanMargin;
             let n = this.height - 2 * this.oceanMargin;
-            let y = this.height - (monument.y * (n / this.rustplus.sInfo.mapSize) + this.oceanMargin);
+            let y = this.height - (monument.y * (n / this.rustplus.rpInfo.mapSize) + this.oceanMargin);
 
             try {
                 if (monument.token === "train_tunnel_display_name") {
@@ -375,7 +375,7 @@ class Map {
     }
 
     async mapAppendMarkers() {
-        if (this.rustplus.sInfo === null) {
+        if (this.rustplus.rpInfo === null) {
             this.rustplus.warn(Client.client.intlGet(null, 'couldNotAppendMapMarkers'));
             return;
         }
@@ -384,9 +384,9 @@ class Map {
         if (!(await this.rustplus.isResponseValid(mapMarkers))) return;
 
         for (let marker of mapMarkers.mapMarkers.markers) {
-            let x = marker.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.sInfo.mapSize) + this.oceanMargin;
+            let x = marker.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.rpInfo.mapSize) + this.oceanMargin;
             let n = this.height - 2 * this.oceanMargin;
-            let y = this.height - (marker.y * (n / this.rustplus.sInfo.mapSize) + this.oceanMargin);
+            let y = this.height - (marker.y * (n / this.rustplus.rpInfo.mapSize) + this.oceanMargin);
 
             /* Compensate rotations */
             if (marker.type === this.rustplus.mapMarkers.types.CargoShip) {
@@ -427,7 +427,7 @@ class Map {
         try {
             const image = Gm(this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
 
-            if (this.rustplus.sInfo === null) {
+            if (this.rustplus.rpInfo === null) {
                 this.rustplus.warn(Client.client.intlGet(null, 'couldNotAppendMapTracers'));
                 return;
             }
@@ -493,9 +493,9 @@ class Map {
     }
 
     calculateImageXY(coords) {
-        const x = coords.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.sInfo.mapSize) + this.oceanMargin;
+        const x = coords.x * ((this.width - 2 * this.oceanMargin) / this.rustplus.rpInfo.mapSize) + this.oceanMargin;
         const n = this.height - 2 * this.oceanMargin;
-        const y = this.height - (coords.y * (n / this.rustplus.sInfo.mapSize) + this.oceanMargin);
+        const y = this.height - (coords.y * (n / this.rustplus.rpInfo.mapSize) + this.oceanMargin);
         return { x: x, y: y };
     }
 

@@ -805,10 +805,10 @@ export function getUpdateServerInformationEmbed(rustplus: typeof RustPlus): disc
     }
 
     embed.addFields(
-        { name: mapSizeFieldName, value: `\`${rustplus.sInfo.mapSize}\``, inline: true },
-        { name: mapSeedFieldName, value: `\`${rustplus.sInfo.seed}\``, inline: true },
-        { name: mapSaltFieldName, value: `\`${rustplus.sInfo.salt}\``, inline: true },
-        { name: mapFieldName, value: `\`${rustplus.sInfo.map}\``, inline: true });
+        { name: mapSizeFieldName, value: `\`${rustplus.rpInfo.mapSize}\``, inline: true },
+        { name: mapSeedFieldName, value: `\`${rustplus.rpInfo.seed}\``, inline: true },
+        { name: mapSaltFieldName, value: `\`${rustplus.rpInfo.salt}\``, inline: true },
+        { name: mapFieldName, value: `\`${rustplus.rpInfo.map}\``, inline: true });
 
     if (instance.serverList[rustplus.serverId].connect !== null) {
         embed.addFields({
