@@ -225,9 +225,9 @@ export async function smartSwitchHandler(rustplus: typeof RustPlus, time: any) {
         }
         else if (content.autoDayNightOnOff === 5 && content.location !== null) { /* AUTO-ON-PROXIMITY */
             let shouldBeOn = false;
-            for (const player of rustplus.team.players) {
+            for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
                 if (content.x !== null && content.y !== null) {
-                    if (getDistance(content.x, content.y, player.x, player.y) <= content.proximity) {
+                    if (getDistance(content.x, content.y, teamMember.x, teamMember.y) <= content.proximity) {
                         shouldBeOn = true;
                     }
                 }
@@ -259,9 +259,9 @@ export async function smartSwitchHandler(rustplus: typeof RustPlus, time: any) {
         }
         else if (content.autoDayNightOnOff === 6 && content.location !== null) { /* AUTO-OFF-PROXIMITY */
             let shouldBeOn = true;
-            for (const player of rustplus.team.players) {
+            for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
                 if (content.x !== null && content.y !== null) {
-                    if (getDistance(content.x, content.y, player.x, player.y) <= content.proximity) {
+                    if (getDistance(content.x, content.y, teamMember.x, teamMember.y) <= content.proximity) {
                         shouldBeOn = false;
                     }
                 }
@@ -293,8 +293,8 @@ export async function smartSwitchHandler(rustplus: typeof RustPlus, time: any) {
         }
         else if (content.autoDayNightOnOff === 7) { /* AUTO-ON-ANY-ONLINE */
             let shouldBeOn = false;
-            for (const player of rustplus.team.players) {
-                if (player.isOnline) shouldBeOn = true;
+            for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
+                if (teamMember.isOnline) shouldBeOn = true;
             }
 
             if ((shouldBeOn && !content.active) || (!shouldBeOn && content.active)) {
@@ -323,8 +323,8 @@ export async function smartSwitchHandler(rustplus: typeof RustPlus, time: any) {
         }
         else if (content.autoDayNightOnOff === 8) { /* AUTO-OFF-ANY-ONLINE */
             let shouldBeOn = true;
-            for (const player of rustplus.team.players) {
-                if (player.isOnline) shouldBeOn = false;
+            for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
+                if (teamMember.isOnline) shouldBeOn = false;
             }
 
             if ((shouldBeOn && !content.active) || (!shouldBeOn && content.active)) {

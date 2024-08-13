@@ -870,28 +870,30 @@ export function getUpdateTeamInformationEmbed(rustplus: typeof RustPlus): discor
     let fieldIndex = 0;
     let teammateName = [''], teammateStatus = [''], teammateLocation = [''];
     let teammateNameCharacters = 0, teammateStatusCharacters = 0, teammateLocationCharacters = 0;
-    for (const player of rustplus.team.players) {
-        let name = player.name === '' ? '-' : `[${player.name}](${constants.STEAM_PROFILES_URL}${player.steamId})`;
-        name += (player.teamLeader) ? `${constants.LEADER_EMOJI}\n` : '\n';
+    const leaderSteamId = rustplus.teamInfo.leaderSteamId;
+    for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
+        let name = teamMember.name === '' ? '-' :
+            `[${teamMember.name}](${constants.STEAM_PROFILES_URL}${teamMember.steamId})`;
+        name += (teamMember.steamId === leaderSteamId) ? `${constants.LEADER_EMOJI}\n` : '\n';
         let status = '';
-        let location = (player.isOnline || player.isAlive) ? `${player.pos.string}\n` : '-\n';
+        let location = (teamMember.isOnline || teamMember.isAlive) ? `${teamMember.position.string}\n` : '-\n';
 
-        if (player.isOnline) {
-            const isAfk = player.getAfkSeconds() >= constants.AFK_TIME_SECONDS;
-            const afkTime = player.getAfkTime('dhs');
+        if (teamMember.isOnline) {
+            const isAfk = teamMember.afkSeconds >= constants.AFK_TIME_SECONDS;
+            const afkTime = teamMember.getAfkTime('dhs');
 
             status += (isAfk) ? constants.AFK_EMOJI : constants.ONLINE_EMOJI;
-            status += (player.isAlive) ? ((isAfk) ? constants.SLEEPING_EMOJI : constants.ALIVE_EMOJI) :
+            status += (teamMember.isAlive) ? ((isAfk) ? constants.SLEEPING_EMOJI : constants.ALIVE_EMOJI) :
                 constants.DEAD_EMOJI;
-            status += (Object.keys(instance.serverListLite[rustplus.serverId]).includes(player.steamId)) ?
+            status += (Object.keys(instance.serverListLite[rustplus.serverId]).includes(teamMember.steamId)) ?
                 constants.PAIRED_EMOJI : '';
             status += (isAfk) ? ` ${afkTime}\n` : '\n';
         }
         else {
-            const offlineTime = player.getOfflineTime('s');
+            const offlineTime = teamMember.getOfflineTime('s');
             status += constants.OFFLINE_EMOJI;
-            status += (player.isAlive) ? constants.SLEEPING_EMOJI : constants.DEAD_EMOJI;
-            status += (Object.keys(instance.serverListLite[rustplus.serverId]).includes(player.steamId)) ?
+            status += (teamMember.isAlive) ? constants.SLEEPING_EMOJI : constants.DEAD_EMOJI;
+            status += (Object.keys(instance.serverListLite[rustplus.serverId]).includes(teamMember.steamId)) ?
                 constants.PAIRED_EMOJI : '';
             status += (offlineTime !== null) ? offlineTime : '';
             status += '\n';

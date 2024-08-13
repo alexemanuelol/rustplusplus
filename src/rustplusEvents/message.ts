@@ -18,7 +18,7 @@
 
 */
 
-import { client, localeManager as lm } from "../../index";
+import { localeManager as lm } from "../../index";
 import * as guildInstance from '../util/guild-instance';
 import * as discordMessages from '../discordTools/discord-messages';
 import { teamChatHandler } from '../handlers/team-chat-handler';
@@ -66,8 +66,8 @@ async function messageBroadcast(rustplus: typeof RustPlus, message: any) {
 
 async function messageBroadcastTeamChanged(rustplus: typeof RustPlus, message: any) {
     await teamHandler(rustplus, message.broadcast.teamChanged.teamInfo);
-    const changed = rustplus.team.isLeaderSteamIdChanged(message.broadcast.teamChanged.teamInfo);
-    rustplus.team.updateTeam(message.broadcast.teamChanged.teamInfo);
+    const changed = rustplus.teamInfo.isLeaderSteamIdChanged(message.broadcast.teamChanged.teamInfo);
+    rustplus.teamInfo.updateTeamInfo(message.broadcast.teamChanged.teamInfo);
     if (changed) rustplus.updateLeaderRustPlusLiteInstance();
 }
 

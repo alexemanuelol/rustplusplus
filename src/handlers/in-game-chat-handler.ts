@@ -52,7 +52,8 @@ export async function inGameChatHandler(rustplus: typeof RustPlus, message: stri
 
     /* if there is a new message, add message to queue. */
     if (message !== null) {
-        if (rustplus.team === null || rustplus.team.allOffline || rustplus.generalSettings.muteInGameBotMessages) {
+        if (rustplus.teamInfo === null || rustplus.teamInfo.allOffline ||
+            rustplus.generalSettings.muteInGameBotMessages) {
             return;
         }
 

@@ -69,11 +69,11 @@ module.exports = {
 			return;
 		}
 
-		if (!Object.keys(instance.serverListLite[rustplus.serverId]).includes(rustplus.team.leaderSteamId)) {
+		if (!Object.keys(instance.serverListLite[rustplus.serverId]).includes(rustplus.teamInfo.leaderSteamId)) {
 			let names = '';
-			for (const player of rustplus.team.players) {
-				if (Object.keys(instance.serverListLite[rustplus.serverId]).includes(player.steamId)) {
-					names += `${player.name}, `
+			for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
+				if (Object.keys(instance.serverListLite[rustplus.serverId]).includes(teamMember.steamId)) {
+					names += `${teamMember.name}, `
 				}
 			}
 			names = names.slice(0, -2);
@@ -85,11 +85,11 @@ module.exports = {
 			return;
 		}
 
-		for (const player of rustplus.team.players) {
-			if (player.name.includes(member)) {
-				if (rustplus.team.leaderSteamId === player.steamId) {
+		for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
+			if (teamMember.name.includes(member)) {
+				if (rustplus.teamInfo.leaderSteamId === teamMember.steamId) {
 					const str = client.intlGet(interaction.guildId, 'leaderAlreadyLeader', {
-						name: player.name
+						name: teamMember.name
 					});
 					await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str,
 						instance.serverList[rustplus.serverId].title));
@@ -97,9 +97,9 @@ module.exports = {
 				}
 				else {
 					if (rustplus.generalSettings.leaderCommandOnlyForPaired) {
-						if (!Object.keys(instance.serverListLite[rustplus.serverId]).includes(player.steamId)) {
+						if (!Object.keys(instance.serverListLite[rustplus.serverId]).includes(teamMember.steamId)) {
 							const str = client.intlGet(rustplus.guildId, 'playerNotPairedWithServer', {
-								name: player.name
+								name: teamMember.name
 							});
 							await discordTools.interactionEditReply(interaction,
 								discordEmbeds.getActionInfoEmbed(1, str,
@@ -109,15 +109,15 @@ module.exports = {
 						}
 					}
 
-					if (rustplus.team.leaderSteamId === rustplus.playerId) {
-						await rustplus.team.changeLeadership(player.steamId);
+					if (rustplus.teamInfo.leaderSteamId === rustplus.playerId) {
+						await rustplus.teamInfo.promoteTeamMemberToLeader(teamMember.steamId);
 					}
 					else {
-						rustplus.leaderRustPlusInstance.promoteToLeaderAsync(player.steamId);
+						rustplus.leaderRustPlusInstance.promoteToLeaderAsync(teamMember.steamId);
 					}
 
 					const str = client.intlGet(interaction.guildId, 'leaderTransferred', {
-						name: player.name
+						name: teamMember.name
 					});
 					await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(0, str,
 						instance.serverList[rustplus.serverId].title));

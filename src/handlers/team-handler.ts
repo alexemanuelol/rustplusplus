@@ -19,26 +19,27 @@
 */
 
 import { localeManager as lm } from '../../index';
+import { TeamInfoResponseData } from '../structures/TeamInfo';
 import * as guildInstance from '../util/guild-instance';
 import * as discordMessages from '../discordTools/discord-messages';
 import * as constants from '../util/constants';
 const { RustPlus } = require('../structures/RustPlus');
 
-export async function teamHandler(rustplus: typeof RustPlus, teamInfo: any) {
+export async function teamHandler(rustplus: typeof RustPlus, teamInfo: TeamInfoResponseData) {
     const guildId = rustplus.guildId;
     const instance = guildInstance.readGuildInstanceFile(guildId);
     const language = instance.generalSettings.language;
     const serverId = rustplus.serverId;
     const server = instance.serverList[serverId];
 
-    if (rustplus.team.isLeaderSteamIdChanged(teamInfo)) return;
+    if (rustplus.teamInfo.isLeaderSteamIdChanged(teamInfo)) return;
 
-    const newPlayers = rustplus.team.getNewPlayers(teamInfo);
-    const leftPlayers = rustplus.team.getLeftPlayers(teamInfo);
+    const newTeamMembers = rustplus.teamInfo.getNewTeamMembers(teamInfo);
+    const leftTeamMembers = rustplus.teamInfo.getLeftTeamMembers(teamInfo);
 
-    for (const steamId of leftPlayers) {
-        const player = rustplus.team.getPlayer(steamId);
-        const str = lm.getIntl(language, 'playerLeftTheTeam', { name: player.name });
+    for (const steamId of leftTeamMembers) {
+        const teamMember = rustplus.teamInfo.getTeamMember(steamId);
+        const str = lm.getIntl(language, 'playerLeftTheTeam', { name: teamMember.name });
         await discordMessages.sendActivityNotificationMessage(
             guildId, serverId, constants.COLOR_GREY, str, steamId);
         if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
@@ -46,10 +47,10 @@ export async function teamHandler(rustplus: typeof RustPlus, teamInfo: any) {
         rustplus.updateConnections(steamId, str);
     }
 
-    for (const steamId of newPlayers) {
-        for (const player of teamInfo.members) {
-            if (player.steamId.toString() === steamId) {
-                const str = lm.getIntl(language, 'playerJoinedTheTeam', { name: player.name });
+    for (const steamId of newTeamMembers) {
+        for (const member of teamInfo.members) {
+            if (member.steamId.toString() === steamId) {
+                const str = lm.getIntl(language, 'playerJoinedTheTeam', { name: member.name });
                 await discordMessages.sendActivityNotificationMessage(
                     guildId, serverId, constants.COLOR_ACTIVE, str, steamId);
                 if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
@@ -59,39 +60,39 @@ export async function teamHandler(rustplus: typeof RustPlus, teamInfo: any) {
         }
     }
 
-    for (const player of rustplus.team.players) {
-        if (leftPlayers.includes(player.steamId)) continue;
-        for (const playerUpdated of teamInfo.members) {
-            if (player.steamId === playerUpdated.steamId.toString()) {
-                if (player.isGoneDead(playerUpdated)) {
-                    const location = player.pos === null ? 'spawn' : player.pos.string;
+    for (const teamMember of rustplus.teamInfo.teamMemberObjects) {
+        if (leftTeamMembers.includes(teamMember.steamId)) continue;
+        for (const teamMemberUpdated of teamInfo.members) {
+            if (teamMember.steamId === teamMemberUpdated.steamId.toString()) {
+                if (teamMember.isGoneDead(teamMemberUpdated)) {
+                    const location = teamMember.position === null ? 'spawn' : teamMember.position.string;
                     const str = lm.getIntl(language, 'playerJustDied', {
-                        name: player.name,
+                        name: teamMember.name,
                         location: location
                     });
                     await discordMessages.sendActivityNotificationMessage(
-                        guildId, serverId, constants.COLOR_INACTIVE, str, player.steamId);
+                        guildId, serverId, constants.COLOR_INACTIVE, str, teamMember.steamId);
                     if (instance.generalSettings.deathNotify) rustplus.sendInGameMessage(str);
                     rustplus.info(str);
-                    rustplus.updateDeaths(player.steamId, {
-                        name: player.name,
-                        location: player.pos
+                    rustplus.updateDeaths(teamMember.steamId, {
+                        name: teamMember.name,
+                        location: teamMember.position
                     });
                 }
 
-                if (player.isGoneAfk(playerUpdated)) {
+                if (teamMember.isGoneAfk(teamMemberUpdated)) {
                     if (instance.generalSettings.afkNotify) {
-                        const str = lm.getIntl(language, 'playerJustWentAfk', { name: player.name });
+                        const str = lm.getIntl(language, 'playerJustWentAfk', { name: teamMember.name });
                         rustplus.sendInGameMessage(str);
                         rustplus.info(str);
                     }
                 }
 
-                if (player.isAfk() && player.isMoved(playerUpdated)) {
+                if (teamMember.isAfk() && teamMember.isMoved(teamMemberUpdated)) {
                     if (instance.generalSettings.afkNotify) {
-                        const afkTime = player.getAfkTime('dhs');
+                        const afkTime = teamMember.getAfkTime('dhs');
                         const str = lm.getIntl(language, 'playerJustReturned', {
-                            name: player.name,
+                            name: teamMember.name,
                             time: afkTime
                         });
                         rustplus.sendInGameMessage(str);
@@ -99,28 +100,28 @@ export async function teamHandler(rustplus: typeof RustPlus, teamInfo: any) {
                     }
                 }
 
-                if (player.isGoneOnline(playerUpdated)) {
-                    const str = lm.getIntl(language, 'playerJustConnected', { name: player.name });
+                if (teamMember.isGoneOnline(teamMemberUpdated)) {
+                    const str = lm.getIntl(language, 'playerJustConnected', { name: teamMember.name });
                     await discordMessages.sendActivityNotificationMessage(
-                        guildId, serverId, constants.COLOR_ACTIVE, str, player.steamId);
+                        guildId, serverId, constants.COLOR_ACTIVE, str, teamMember.steamId);
                     if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
                     rustplus.info(lm.getIntl(language, 'playerJustConnectedTo', {
-                        name: player.name,
+                        name: teamMember.name,
                         server: server.title
                     }));
-                    rustplus.updateConnections(player.steamId, str);
+                    rustplus.updateConnections(teamMember.steamId, str);
                 }
 
-                if (player.isGoneOffline(playerUpdated)) {
-                    const str = lm.getIntl(language, 'playerJustDisconnected', { name: player.name });
+                if (teamMember.isGoneOffline(teamMemberUpdated)) {
+                    const str = lm.getIntl(language, 'playerJustDisconnected', { name: teamMember.name });
                     await discordMessages.sendActivityNotificationMessage(
-                        guildId, serverId, constants.COLOR_INACTIVE, str, player.steamId);
+                        guildId, serverId, constants.COLOR_INACTIVE, str, teamMember.steamId);
                     if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
                     rustplus.info(lm.getIntl(language, 'playerJustDisconnectedFrom', {
-                        name: player.name,
+                        name: teamMember.name,
                         server: server.title
                     }));
-                    rustplus.updateConnections(player.steamId, str);
+                    rustplus.updateConnections(teamMember.steamId, str);
                 }
                 break;
             }

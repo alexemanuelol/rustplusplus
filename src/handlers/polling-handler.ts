@@ -27,11 +27,10 @@ import { storageMonitorHandler } from './storage-monitor-handler';
 import { smartAlarmHandler } from './smart-alarm-handler';
 import { smartSwitchHandler } from './smart-switch-handler';
 import { Time } from '../structures/Time';
+import { TeamInfo } from '../structures/TeamInfo';
 const { RustPlus } = require('../structures/RustPlus');
 const Info = require('../structures/Info');
 const MapMarkers = require('../structures/MapMarkers.js');
-const Team = require('../structures/Team');
-//const Time = require('../structures/Time');
 
 export async function pollingHandler(rustplus: typeof RustPlus) {
     /* Poll information such as info, mapMarkers, teamInfo and time */
@@ -47,12 +46,12 @@ export async function pollingHandler(rustplus: typeof RustPlus) {
     if (rustplus.isFirstPoll) {
         rustplus.sInfo = new Info(info.info);
         rustplus.time = new Time(rustplus, time.time);
-        rustplus.team = new Team(teamInfo.teamInfo, rustplus);
+        rustplus.teamInfo = new TeamInfo(rustplus, teamInfo.teamInfo);
         rustplus.mapMarkers = new MapMarkers(mapMarkers.mapMarkers, rustplus, client);
     }
 
     await teamHandler(rustplus, teamInfo.teamInfo)
-    rustplus.team.updateTeam(teamInfo.teamInfo);
+    rustplus.teamInfo.updateTeamInfo(teamInfo.teamInfo);
 
     await smartSwitchHandler(rustplus, time.time);
     timeHandler(rustplus, time.time)

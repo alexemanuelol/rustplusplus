@@ -104,9 +104,9 @@ class RustPlus extends RustPlusLib {
 
         /* Rustplus structures */
         this.map = null;            /* Stores the Map structure. */
-        this.sInfo = null;           /* Stores the Info structure. */
+        this.sInfo = null;          /* Stores the Info structure. */
         this.time = null;           /* Stores the Time structure. */
-        this.team = null;           /* Stores the Team structure. */
+        this.teamInfo = null;       /* Stores the Team structure. */
         this.mapMarkers = null;     /* Stores the MapMarkers structure. */
 
         this.loadRustPlusEvents();
@@ -169,7 +169,7 @@ class RustPlus extends RustPlusLib {
         }
 
         const instance = Client.client.getInstance(this.guildId);
-        const leader = this.team.leaderSteamId;
+        const leader = this.teamInfo.leaderSteamId;
         if (leader === this.playerId) return;
         if (!(leader in instance.serverListLite[this.serverId])) return;
         const serverLite = instance.serverListLite[this.serverId][leader];
@@ -666,10 +666,10 @@ class RustPlus extends RustPlusLib {
 
     getCommandAfk() {
         let string = '';
-        for (const player of this.team.players) {
-            if (player.isOnline) {
-                if (player.getAfkSeconds() >= Constants.AFK_TIME_SECONDS) {
-                    string += `${player.name} [${player.getAfkTime('dhs')}], `;
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            if (teamMember.isOnline) {
+                if (teamMember.afkSeconds >= Constants.AFK_TIME_SECONDS) {
+                    string += `${teamMember.name} [${teamMember.getAfkTime('dhs')}], `;
                 }
             }
         }
@@ -684,10 +684,10 @@ class RustPlus extends RustPlusLib {
         let name = null;
 
         if (command.toLowerCase() === `${commandAlive}` || command.toLowerCase() === `${commandAliveEn}`) {
-            const player = this.team.getPlayerLongestAlive();
+            const teamMember = this.teamInfo.getTeamMemberLongestAlive();
             return Client.client.intlGet(this.guildId, 'hasBeenAliveLongest', {
-                name: player.name,
-                time: player.getAliveTime()
+                name: teamMember.name,
+                time: teamMember.getAliveTime()
             });
         }
         else if (command.toLowerCase().startsWith(`${commandAlive} `)) {
@@ -699,11 +699,11 @@ class RustPlus extends RustPlusLib {
 
         if (name === null) return null;
 
-        for (const player of this.team.players) {
-            if (player.name.includes(name)) {
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            if (teamMember.name.includes(name)) {
                 return Client.client.intlGet(this.guildId, 'playerHasBeenAliveFor', {
-                    name: player.name,
-                    time: player.getAliveTime()
+                    name: teamMember.name,
+                    time: teamMember.getAliveTime()
                 });
             }
         }
@@ -877,21 +877,21 @@ class RustPlus extends RustPlusLib {
             const name = command.replace(/ .*/, '');
             const number = parseInt(command.slice(name.length + 1));
 
-            for (const player of this.team.players) {
-                if (player.name.includes(name)) {
-                    if (!this.playerConnections.hasOwnProperty(player.steamId)) {
-                        this.playerConnections[player.steamId] = [];
+            for (const teamMember of this.teamInfo.teamMemberObjects) {
+                if (teamMember.name.includes(name)) {
+                    if (!this.playerConnections.hasOwnProperty(teamMember.steamId)) {
+                        this.playerConnections[teamMember.steamId] = [];
                     }
 
-                    if (this.playerConnections[player.steamId].length === 0) {
+                    if (this.playerConnections[teamMember.steamId].length === 0) {
                         return Client.client.intlGet(this.guildId, 'noRegisteredConnectionEventsUser', {
-                            user: player.name
+                            user: teamMember.name
                         });
                     }
 
                     const strings = [];
                     let counter = 1;
-                    for (const event of this.playerConnections[player.steamId]) {
+                    for (const event of this.playerConnections[teamMember.steamId]) {
                         if (counter === 6) break;
                         if (number === counter) return event;
 
@@ -987,9 +987,9 @@ class RustPlus extends RustPlusLib {
         const teamInfo = await this.getTeamInfoAsync();
         if (!(await this.isResponseValid(teamInfo))) return null;
         await teamHandler(this, teamInfo.teamInfo);
-        this.team.updateTeam(teamInfo.teamInfo);
+        this.teamInfo.updateTeamInfo(teamInfo.teamInfo);
 
-        const caller = this.team.getPlayer(callerSteamId);
+        const caller = this.teamInfo.getTeamMember(callerSteamId);
 
         if (command.toLowerCase().startsWith(`${commandDeaths}`) ||
             command.toLowerCase().startsWith(`${commandDeathsEn}`)) {
@@ -1042,21 +1042,21 @@ class RustPlus extends RustPlusLib {
         const name = command.replace(/ .*/, '');
         const number = parseInt(command.slice(name.length + 1));
 
-        for (const player of this.team.players) {
-            if (player.name.includes(name)) {
-                if (!this.playerDeaths.hasOwnProperty(player.steamId)) {
-                    this.playerDeaths[player.steamId] = [];
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            if (teamMember.name.includes(name)) {
+                if (!this.playerDeaths.hasOwnProperty(teamMember.steamId)) {
+                    this.playerDeaths[teamMember.steamId] = [];
                 }
 
-                if (this.playerDeaths[player.steamId].length === 0) {
+                if (this.playerDeaths[teamMember.steamId].length === 0) {
                     return Client.client.intlGet(this.guildId, 'noRegisteredDeathEventsUser', {
-                        user: player.name
+                        user: teamMember.name
                     });
                 }
 
                 const strings = [];
                 let counter = 1;
-                for (const event of this.playerDeaths[player.steamId]) {
+                for (const event of this.playerDeaths[teamMember.steamId]) {
                     if (counter === 6) break;
                     const location = event.location;
 
@@ -1494,11 +1494,11 @@ class RustPlus extends RustPlusLib {
         }
 
         const instance = Client.client.getInstance(this.guildId);
-        if (!Object.keys(instance.serverListLite[this.serverId]).includes(this.team.leaderSteamId)) {
+        if (!Object.keys(instance.serverListLite[this.serverId]).includes(this.teamInfo.leaderSteamId)) {
             let names = '';
-            for (const player of this.team.players) {
-                if (Object.keys(instance.serverListLite[this.serverId]).includes(player.steamId)) {
-                    names += `${player.name}, `
+            for (const teamMember of this.teamInfo.teamMemberObjects) {
+                if (Object.keys(instance.serverListLite[this.serverId]).includes(teamMember.steamId)) {
+                    names += `${teamMember.name}, `
                 }
             }
             names = names.slice(0, -2);
@@ -1511,23 +1511,23 @@ class RustPlus extends RustPlusLib {
         if (command.toLowerCase() === `${commandLeader}` || command.toLowerCase() === `${commandLeaderEn}`) {
             if (callerSteamId === null) return null;
 
-            if (this.team.leaderSteamId !== callerSteamId) {
+            if (this.teamInfo.leaderSteamId !== callerSteamId) {
                 if (this.generalSettings.leaderCommandOnlyForPaired) {
                     if (!Object.keys(instance.serverListLite[this.serverId]).includes(callerSteamId)) {
                         return Client.client.intlGet(this.guildId, 'youAreNotPairedWithServer');
                     }
                 }
 
-                if (this.team.leaderSteamId === this.playerId) {
-                    await this.team.changeLeadership(callerSteamId);
+                if (this.teamInfo.leaderSteamId === this.playerId) {
+                    await this.teamInfo.promoteTeamMemberToLeader(callerSteamId);
                 }
                 else {
                     this.leaderRustPlusInstance.promoteToLeaderAsync(callerSteamId);
                 }
 
-                const player = this.team.getPlayer(callerSteamId);
+                const teamMember = this.teamInfo.getTeamMember(callerSteamId);
                 return Client.client.intlGet(this.guildId, 'leaderTransferred', {
-                    name: player.name
+                    name: teamMember.name
                 });
             }
             else {
@@ -1544,31 +1544,31 @@ class RustPlus extends RustPlusLib {
                 name = command.slice(`${commandLeaderEn} `.length).trim();
             }
 
-            for (const player of this.team.players) {
-                if (player.name.includes(name)) {
-                    if (this.team.leaderSteamId === player.steamId) {
+            for (const teamMember of this.teamInfo.teamMemberObjects) {
+                if (teamMember.name.includes(name)) {
+                    if (this.teamInfo.leaderSteamId === teamMember.steamId) {
                         return Client.client.intlGet(this.guildId, 'leaderAlreadyLeader', {
-                            name: player.name
+                            name: teamMember.name
                         });
                     }
                     else {
                         if (this.generalSettings.leaderCommandOnlyForPaired) {
-                            if (!Object.keys(instance.serverListLite[this.serverId]).includes(player.steamId)) {
+                            if (!Object.keys(instance.serverListLite[this.serverId]).includes(teamMember.steamId)) {
                                 return Client.client.intlGet(this.guildId, 'playerNotPairedWithServer', {
-                                    name: player.name
+                                    name: teamMember.name
                                 });
                             }
                         }
 
-                        if (this.team.leaderSteamId === this.playerId) {
-                            await this.team.changeLeadership(player.steamId);
+                        if (this.teamInfo.leaderSteamId === this.playerId) {
+                            await this.teamInfo.promoteTeamMemberToLeader(teamMember.steamId);
                         }
                         else {
-                            this.leaderRustPlusInstance.promoteToLeaderAsync(player.steamId);
+                            this.leaderRustPlusInstance.promoteToLeaderAsync(teamMember.steamId);
                         }
 
                         return Client.client.intlGet(this.guildId, 'leaderTransferred', {
-                            name: player.name
+                            name: teamMember.name
                         });
                     }
                 }
@@ -1619,15 +1619,15 @@ class RustPlus extends RustPlusLib {
                 const teamInfo = await this.getTeamInfoAsync();
                 if (!(await this.isResponseValid(teamInfo))) return null;
 
-                for (const player of teamInfo.teamInfo.members) {
-                    if (player.steamId.toString() === callerSteamId) {
+                for (const member of teamInfo.teamInfo.members) {
+                    if (member.steamId.toString() === callerSteamId) {
                         const instance = Client.client.getInstance(this.guildId);
-                        const location = Map.getPos(this.generalSettings.language, player.x, player.y,
+                        const location = Map.getPos(this.generalSettings.language, member.x, member.y,
                             this.sInfo.mapSize, this.map.monuments, this.map.monumentInfo);
                         instance.serverList[this.serverId].markers[name] =
-                            { x: player.x, y: player.y, location: location.location };
+                            { x: member.x, y: member.y, location: location.location };
                         Client.client.setInstance(this.guildId, instance);
-                        this.markers[name] = { x: player.x, y: player.y, location: location.location };
+                        this.markers[name] = { x: member.x, y: member.y, location: location.location };
 
                         return Client.client.intlGet(this.guildId, 'markerAdded', {
                             name: name,
@@ -1667,18 +1667,18 @@ class RustPlus extends RustPlusLib {
                 const teamInfo = await this.getTeamInfoAsync();
                 if (!(await this.isResponseValid(teamInfo))) return null;
 
-                for (const player of teamInfo.teamInfo.members) {
-                    if (player.steamId.toString() === callerSteamId) {
-                        const direction = Map.getAngleBetweenPoints(player.x, player.y, this.markers[command].x,
+                for (const member of teamInfo.teamInfo.members) {
+                    if (member.steamId.toString() === callerSteamId) {
+                        const direction = Map.getAngleBetweenPoints(member.x, member.y, this.markers[command].x,
                             this.markers[command].y);
-                        const distance = Math.floor(Map.getDistance(player.x, player.y, this.markers[command].x,
+                        const distance = Math.floor(Map.getDistance(member.x, member.y, this.markers[command].x,
                             this.markers[command].y));
 
                         return Client.client.intlGet(this.guildId, 'markerLocation', {
                             name: command,
                             location: this.markers[command].location,
                             distance: distance,
-                            player: player.name,
+                            player: member.name,
                             direction: direction
                         });
                     }
@@ -1940,13 +1940,13 @@ class RustPlus extends RustPlusLib {
     getCommandOffline() {
         let string = '';
         let counter = 0;
-        for (const player of this.team.players) {
-            if (!player.isOnline) {
-                string += `${player.name}, `;
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            if (!teamMember.isOnline) {
+                string += `${teamMember.name}, `;
                 counter += 1;
             }
         }
-        const amount = `(${counter}/${this.team.players.length}) `;
+        const amount = `(${counter}/${this.teamInfo.teamMemberObjects.length}) `;
 
         return string !== '' ? `${amount}${string.slice(0, -2)}.` :
             `${amount}${Client.client.intlGet(this.guildId, 'noOneIsOffline')}`;
@@ -1955,13 +1955,13 @@ class RustPlus extends RustPlusLib {
     getCommandOnline() {
         let string = '';
         let counter = 0;
-        for (const player of this.team.players) {
-            if (player.isOnline) {
-                string += `${player.name}, `;
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            if (teamMember.isOnline) {
+                string += `${teamMember.name}, `;
                 counter += 1;
             }
         }
-        const amount = `(${counter}/${this.team.players.length}) `;
+        const amount = `(${counter}/${this.teamInfo.teamMemberObjects.length}) `;
 
         return string !== '' ? `${amount}${string.slice(0, -2)}.` :
             `${amount}${Client.client.intlGet(this.guildId, 'noOneIsOnline')}`;
@@ -2072,7 +2072,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandProx(command, callerSteamId) {
-        const caller = this.team.getPlayer(callerSteamId);
+        const caller = this.teamInfo.getTeamMember(callerSteamId);
         const prefix = this.generalSettings.prefix;
         const commandProx = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxProx')}`;
         const commandProxEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxProx')}`;
@@ -2085,18 +2085,19 @@ class RustPlus extends RustPlusLib {
         const teamInfo = await this.getTeamInfoAsync();
         if (!(await this.isResponseValid(teamInfo))) return null;
         await teamHandler(this, teamInfo.teamInfo);
-        this.team.updateTeam(teamInfo.teamInfo);
+        this.teamInfo.updateTeamInfo(teamInfo.teamInfo);
 
         if (command.toLowerCase() === `${commandProx}` || command.toLowerCase() === `${commandProxEn}`) {
             const closestPlayers = [];
-            let players = [...this.team.players].filter(e => e.steamId !== callerSteamId && e.isAlive === true);
-            if (players.length === 0) {
+            let teamMembers = [...this.teamInfo.teamMemberObjects].filter(e =>
+                e.steamId !== callerSteamId && e.isAlive === true);
+            if (teamMembers.length === 0) {
                 return Client.client.intlGet(this.guildId, 'onlyOneInTeam');
             }
 
             for (let i = 0; i < 3; i++) {
-                if (players.length > 0) {
-                    const player = players.reduce(function (prev, curr) {
+                if (teamMembers.length > 0) {
+                    const teamMember = teamMembers.reduce(function (prev, curr) {
                         if (Map.getDistance(prev.x, prev.y, caller.x, caller.y) <
                             Map.getDistance(curr.x, curr.y, caller.x, caller.y)) {
                             return prev;
@@ -2105,15 +2106,15 @@ class RustPlus extends RustPlusLib {
                             return curr;
                         }
                     });
-                    closestPlayers.push(player);
-                    players = players.filter(e => e.steamId !== player.steamId);
+                    closestPlayers.push(member);
+                    teamMembers = teamMembers.filter(e => e.steamId !== teamMember.steamId);
                 }
             }
 
             let string = '';
             for (const player of closestPlayers) {
                 const distance = Math.floor(Map.getDistance(player.x, player.y, caller.x, caller.y));
-                string += `${player.name} (${distance}m [${player.pos.location}]), `;
+                string += `${player.name} (${distance}m [${player.position.location}]), `;
             }
 
             return string === '' ? Client.client.intlGet(this.guildId, 'allTeammatesAreDead') :
@@ -2128,16 +2129,16 @@ class RustPlus extends RustPlusLib {
             memberName = command.slice(`${commandProxEn} `.length).trim();
         }
 
-        for (const player of this.team.players) {
-            if (player.name.includes(memberName)) {
-                const distance = Math.floor(Map.getDistance(caller.x, caller.y, player.x, player.y));
-                const direction = Map.getAngleBetweenPoints(caller.x, caller.y, player.x, player.y);
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            if (teamMember.name.includes(memberName)) {
+                const distance = Math.floor(Map.getDistance(caller.x, caller.y, teamMember.x, teamMember.y));
+                const direction = Map.getAngleBetweenPoints(caller.x, caller.y, teamMember.x, teamMember.y);
                 return Client.client.intlGet(this.guildId, 'proxLocation', {
-                    name: player.name,
+                    name: teamMember.name,
                     distance: distance,
                     caller: caller.name,
                     direction: direction,
-                    location: player.pos.location
+                    location: teamMember.position.location
                 });
             }
         }
@@ -2277,15 +2278,15 @@ class RustPlus extends RustPlusLib {
             return Client.client.intlGet(this.guildId, 'missingArguments');
         }
 
-        for (const player of this.team.players) {
-            if (player.name.includes(name)) {
-                if (!(player.steamId in credentials)) {
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            if (teamMember.name.includes(name)) {
+                if (!(teamMember.steamId in credentials)) {
                     return Client.client.intlGet(this.guildId, 'userNotRegistered', {
-                        user: player.name
+                        user: teamMember.name
                     });
                 }
 
-                const discordUserId = credentials[player.steamId].discord_user_id;
+                const discordUserId = credentials[teamMember.steamId].discord_user_id;
                 const user = await discordTools.getMember(this.guildId, discordUserId);
 
                 const content = {
@@ -2406,9 +2407,9 @@ class RustPlus extends RustPlusLib {
                 name = command.slice(`${commandSteamidEn} `.length).trim();
             }
 
-            for (const player of this.team.players) {
-                if (player.name.includes(name)) {
-                    return `${player.name}: ${player.steamId}`;
+            for (const teamMember of this.teamInfo.teamMemberObjects) {
+                if (teamMember.name.includes(name)) {
+                    return `${teamMember.name}: ${teamMember.steamId}`;
                 }
             }
 
@@ -2422,8 +2423,8 @@ class RustPlus extends RustPlusLib {
 
     getCommandTeam() {
         let string = '';
-        for (const player of this.team.players) {
-            string += `${player.name}, `;
+        for (const teamMember of this.teamInfo.teamMemberObjects) {
+            string += `${teamMember.name}, `;
         }
 
         return string !== '' ? `${string.slice(0, -2)}.` : null;

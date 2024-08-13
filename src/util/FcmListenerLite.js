@@ -175,7 +175,7 @@ async function pairingServer(client, guild, steamId, title, message, body) {
     client.setInstance(guild.id, instance);
 
     const rustplus = client.rustplusInstances[guild.id];
-    if (rustplus && (rustplus.serverId === serverId) && rustplus.team.leaderSteamId === steamId) {
+    if (rustplus && (rustplus.serverId === serverId) && rustplus.teamInfo.leaderSteamId === steamId) {
         rustplus.updateLeaderRustPlusLiteInstance();
     }
 }

@@ -219,3 +219,7 @@ export function getCurrentDateTime(): string {
 
     return `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
 }
+
+export function getTimeSince(time: Date): number {
+    return ((new Date()).getTime() - time.getTime()) / 1000;
+}
