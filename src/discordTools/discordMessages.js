@@ -533,6 +533,15 @@ module.exports = {
         await Client.client.interactionReply(interaction, content);
     },
 
+    restartingProcess: async function (interaction) {
+        const content = {
+            embeds: [await DiscordEmbeds.getInfoEmbed(interaction.guildId)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionReply(interaction, content);
+    },
+    
     sendCctvMessage: async function (interaction, monument, cctvCodes, dynamic) {
         const content = {
             embeds: [DiscordEmbeds.getCctvEmbed(interaction.guildId, monument, cctvCodes, dynamic)],
