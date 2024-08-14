@@ -74,7 +74,7 @@ export async function vendingMachineHandler(rustplus: typeof RustPlus, mapMarker
                 }
 
                 const location = getPos(rustplus.generalSettings.language, x, y,
-                    rustplus.rpInfo.correctedMapSize, rustplus.map.monuments, rustplus.map.monumentInfo);
+                    rustplus.rpInfo.correctedMapSize, rustplus.rpMap.monuments, rustplus.rpMap.monumentInfo);
                 const itemName = client.items.getName(itemId);
                 const currencyName = client.items.getName(currencyId);
 

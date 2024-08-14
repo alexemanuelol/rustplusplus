@@ -103,7 +103,7 @@ class RustPlus extends RustPlusLib {
         this.cargoShipTracers = new Object();
 
         /* Rustplus structures */
-        this.map = null;            /* Stores the Map structure. */
+        this.rpMap = null;          /* Stores the Map structure. */
         this.rpInfo = null;         /* Stores the Info structure. */
         this.time = null;           /* Stores the Time structure. */
         this.teamInfo = null;       /* Stores the Team structure. */
@@ -1623,7 +1623,7 @@ class RustPlus extends RustPlusLib {
                     if (member.steamId.toString() === callerSteamId) {
                         const instance = Client.client.getInstance(this.guildId);
                         const location = Map.getPos(this.generalSettings.language, member.x, member.y,
-                            this.rpInfo.mapSize, this.map.monuments, this.map.monumentInfo);
+                            this.rpInfo.mapSize, this.rpMap.monuments, this.rpMap.monumentInfo);
                         instance.serverList[this.serverId].markers[name] =
                             { x: member.x, y: member.y, location: location.location };
                         Client.client.setInstance(this.guildId, instance);

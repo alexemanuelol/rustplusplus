@@ -190,8 +190,8 @@ export class TeamMember {
                 this.x,
                 this.y,
                 this.rustplus.rpInfo.mapSize,
-                this.rustplus.map.monuments,
-                this.rustplus.map.monumentInfo);
+                this.rustplus.rpMap.monuments,
+                this.rustplus.rpMap.monumentInfo);
         }
         else {
             this.position = null;

@@ -19,6 +19,7 @@
 */
 
 import { localeManager as lm } from '../../index';
+import { Monument, MonumentInfo } from '../structures/Map';
 
 export const GRID_DIAMETER: number = 146.25;
 
@@ -30,24 +31,8 @@ export interface MapLocation {
     y: number;
 }
 
-export interface Monument {
-    token: string;
-    x: number;
-    y: number;
-}
-
-export interface MonumentInfo {
-    clean: string;
-    map: string;
-    radius: number;
-}
-
-export interface MonumentsInfo {
-    [monument: string]: MonumentInfo;
-}
-
 export function getPos(locale: string, x: number, y: number, mapSize: number,
-    monuments: Monument[] | null = null, monumentsInfo: MonumentsInfo | null = null): MapLocation {
+    monuments: Monument[] | null = null, monumentsInfo: MonumentInfo | null = null): MapLocation {
     const correctedMapSize: number = getCorrectedMapSize(mapSize);
     const location: MapLocation = {
         location: null,
@@ -95,8 +80,8 @@ export function getPos(locale: string, x: number, y: number, mapSize: number,
         for (const monument of monuments) {
             if (monument.token === 'DungeonBase' || !(monument.token in monumentsInfo)) continue;
             if (getDistance(x, y, monument.x, monument.y) <=
-                monumentsInfo[monument.token].radius) {
-                location.monument = monumentsInfo[monument.token].clean;
+                monumentsInfo[monument.token as keyof MonumentInfo].radius) {
+                location.monument = monumentsInfo[monument.token as keyof MonumentInfo].clean;
                 break;
             }
         }

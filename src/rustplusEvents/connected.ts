@@ -27,9 +27,9 @@ import { setupSwitchGroups } from '../discordTools/setup-switch-groups';
 import { pollingHandler } from '../handlers/polling-handler';
 import * as discordMessages from '../discordTools/discord-messages';
 import { Info } from '../structures/Info';
+import { Map } from '../structures/Map';
 const { RustPlus } = require('../structures/RustPlus');
 const Config = require('../../config');
-const Map = require('../structures/Map');
 
 export const name = 'connected';
 
@@ -73,23 +73,23 @@ export async function execute(rustplus: typeof RustPlus) {
 
     if (client.rustplusMaps.hasOwnProperty(guildId)) {
         if (client.isJpgImageChanged(guildId, map.map)) {
-            rustplus.map = new Map(map.map, rustplus);
+            rustplus.rpMap = new Map(rustplus, map.map);
 
-            await rustplus.map.writeMap(false, true);
+            await rustplus.rpMap.writeMap(false, true);
             await discordMessages.sendServerWipeDetectedMessage(guildId, serverId);
             await discordMessages.sendInformationMapMessage(guildId);
         }
         else {
-            rustplus.map = new Map(map.map, rustplus);
+            rustplus.rpMap = new Map(rustplus, map.map);
 
-            await rustplus.map.writeMap(false, true);
+            await rustplus.rpMap.writeMap(false, true);
             await discordMessages.sendInformationMapMessage(guildId);
         }
     }
     else {
-        rustplus.map = new Map(map.map, rustplus);
+        rustplus.rpMap = new Map(rustplus, map.map);
 
-        await rustplus.map.writeMap(false, true);
+        await rustplus.rpMap.writeMap(false, true);
         await discordMessages.sendInformationMapMessage(guildId);
     }
 

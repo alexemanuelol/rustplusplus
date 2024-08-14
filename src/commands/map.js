@@ -67,7 +67,7 @@ module.exports = {
 
 		switch (interaction.options.getSubcommand()) {
 			case 'all': {
-				await rustplus.map.writeMap(true, true);
+				await rustplus.rpMap.writeMap(true, true);
 			} break;
 
 			case 'clean': {
@@ -75,11 +75,11 @@ module.exports = {
 			} break;
 
 			case 'monuments': {
-				await rustplus.map.writeMap(false, true);
+				await rustplus.rpMap.writeMap(false, true);
 			} break;
 
 			case 'markers': {
-				await rustplus.map.writeMap(true, false);
+				await rustplus.rpMap.writeMap(true, false);
 			} break;
 
 			default: {

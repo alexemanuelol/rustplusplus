@@ -110,7 +110,7 @@ module.exports = {
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await rustplus.map.writeMap(false, true);
+					await rustplus.rpMap.writeMap(false, true);
 					await discordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
 
@@ -139,7 +139,7 @@ module.exports = {
 
 				const rustplus = client.rustplusInstances[guild.id];
 				if (rustplus && rustplus.isOperational) {
-					await rustplus.map.writeMap(false, true);
+					await rustplus.rpMap.writeMap(false, true);
 					await discordMessages.sendUpdateMapInformationMessage(rustplus);
 				}
 
