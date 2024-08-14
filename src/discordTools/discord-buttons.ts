@@ -626,7 +626,7 @@ export function getHelpButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBui
             getButton({
                 style: discordjs.ButtonStyle.Link,
                 label: 'CREDENTIALS',
-                url: 'https://github.com/alexemanuelol/rustplusplus-Credential-Application/releases/v1.1.0',
+                url: 'https://github.com/alexemanuelol/rustplusplus-Credential-Application/releases/v1.2.0',
                 type: discordjs.ComponentType.Button
             })
         )];
