@@ -47,7 +47,8 @@ module.exports = {
         }
 
         try {
-            await client.user.setAvatar(Path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
+            const avatarUrl = Config.discord.avatarUrl
+            await client.user.setAvatar((avatarUrl) ? avatarUrl : Path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
         }
         catch (e) {
             client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'ignoreSetAvatar'));
