@@ -25,6 +25,7 @@ const Constants = require('../util/constants.js');
 const DiscordTools = require('./discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
 const Timer = require('../util/timer');
+const _ = require('lodash');
 
 module.exports = {
     getEmbed: function (options = {}) {
@@ -1399,5 +1400,61 @@ module.exports = {
         }
 
         return embed;
+    },
+
+    getInteractionEmbed: function (guildId, color, description, thumbnailUrl, iconUrl, name, customId, value, link, command = null ,response = null) {
+        const embed = module.exports.getEmbed({
+            color: color,
+            timestamp: true,
+            description: description,
+            author: {
+                name: name,
+                iconURL: iconUrl,
+                url: link
+            },
+            thumbnail: thumbnailUrl
+        });
+
+        if (customId !== null) {
+            embed.addFields(
+                {
+                    name: _.upperFirst(_.camelCase(Client.client.intlGet(guildId, 'customId'))),
+                    value: `\`\`${customId}\`\``,
+                    inline: true
+                }
+            )
+        }
+
+        if (value !== null) {
+            embed.addFields(
+                {
+                    name: _.upperFirst(_.camelCase(Client.client.intlGet(guildId, 'value'))),
+                    value: `\`\`${value}\`\``,
+                    inline: true
+                }
+            )
+        }
+
+        if (command !== null) {
+            embed.addFields(
+                {
+                    name: _.upperFirst(_.camelCase(Client.client.intlGet(guildId, 'commandCap'))),
+                    value: `\`\`${command}\`\``,
+                    inline: true
+                }
+            )
+        }
+
+        if (response !== null) {
+            embed.addFields(
+                {
+                    name: _.upperFirst(_.camelCase(Client.client.intlGet(guildId, 'response'))),
+                    value: `>>> ${response}`,
+                    inline: false
+                }
+            )
+        }
+
+        return embed
     },
 }

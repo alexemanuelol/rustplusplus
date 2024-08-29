@@ -24,6 +24,7 @@ const Path = require('path');
 
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
 	name: 'map',
@@ -47,6 +48,12 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(interaction)
+	},
+
+	async executeCommand(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
 		const rustplus = client.rustplusInstances[interaction.guildId];
 

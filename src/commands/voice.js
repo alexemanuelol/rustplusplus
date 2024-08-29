@@ -41,6 +41,12 @@ module.exports = {
     },
 
     async execute(client, interaction) {
+        await this.executeCommand(client, interaction)
+
+        DiscordMessages.sendApplicationCommandInteractionMessage(client, interaction)
+    },
+
+    async executeCommand(client, interaction) {
         const verifyId = Math.floor(100000 + Math.random() * 900000);
         client.logInteraction(interaction, verifyId, 'slashCommand');
 
@@ -61,8 +67,8 @@ module.exports = {
                     await DiscordMessages.sendVoiceMessage(interaction,
                         client.intlGet(interaction.guildId, 'commandsVoiceBotJoinedVoice'));
                     client.log(client.intlGet(null, 'infoCap'), client.intlGet(interaction.guildId, 'commandsVoiceJoin',
-                        {   name: voiceChannel && voiceChannel.name ? voiceChannel.name : client.intlGet(interaction.guildId, 'unknown'), 
-                            id: voiceChannel && voiceChannel.id ? voiceChannel.id : client.intlGet(interaction.guildId, 'unknown'), 
+                        {   name: voiceChannel && voiceChannel.name ? voiceChannel.name : client.intlGet(interaction.guildId, 'unknown'),
+                            id: voiceChannel && voiceChannel.id ? voiceChannel.id : client.intlGet(interaction.guildId, 'unknown'),
                             guild: voiceChannel && voiceChannel.guild.name ? voiceChannel.guild.name : client.intlGet(interaction.guildId, 'unknown')}
                         ));
                 }

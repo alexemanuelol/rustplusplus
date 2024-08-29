@@ -121,6 +121,32 @@ module.exports = {
     },
 
     async execute(client, interaction) {
+        await this.executeCommand(client, interaction)
+
+        DiscordMessages.sendApplicationCommandInteractionMessage(
+            interaction,
+            {
+                steam_id: interaction.options.getString('steam_id'),
+                host: interaction.options.getBoolean('host'),
+                keys_private_key: interaction.options.getString('keys_private_key'),
+                keys_public_key: interaction.options.getString('keys_public_key'),
+                keys_auth_secret: interaction.options.getString('keys_auth_secret'),
+                fcm_name: interaction.options.getString('fcm_name'),
+                fcm_token: interaction.options.getString('fcm_token'),
+                fcm_web_endpoint: interaction.options.getString('fcm_web_endpoint'),
+                fcm_web_p256dh: interaction.options.getString('fcm_web_p256dh'),
+                fcm_web_auth: interaction.options.getString('fcm_web_auth'),
+                gcm_token: interaction.options.getString('gcm_token'),
+                gcm_android_id: interaction.options.getString('gcm_android_id'),
+                gcm_security_token: interaction.options.getString('gcm_security_token'),
+                gcm_app_id: interaction.options.getString('gcm_app_id'),
+                issued_date: interaction.options.getString('issued_date'),
+                expire_date: interaction.options.getString('expire_date'),
+            }
+        )
+    },
+
+    async executeCommand(client, interaction) {
         const verifyId = Math.floor(100000 + Math.random() * 900000);
         client.logInteraction(interaction, verifyId, 'slashCommand');
 
