@@ -2707,7 +2707,7 @@ class RustPlus extends RustPlusLib {
 
     getCommandTravelingVendor(isInfoChannel = false) {
         const strings = [];
-        for (const travelingVendor of this.mapMarkers.travelingVendor) {
+        for (const travelingVendor of this.mapMarkers.travelingVendors) {
             if (isInfoChannel) {
                 return Client.client.intlGet(this.guildId, 'atLocation', {
                     location: travelingVendor.location.string
@@ -2721,7 +2721,7 @@ class RustPlus extends RustPlusLib {
         }
 
         if (strings.length === 0) {
-            const wasOnMap = this.mapMarkers.timeSincePatrolHelicopterWasOnMap;
+            const wasOnMap = this.mapMarkers.timeSinceTravelingVendorWasOnMap;
 
             if (wasOnMap == null) {
                 return isInfoChannel ? Client.client.intlGet(this.guildId, 'notActive') :
