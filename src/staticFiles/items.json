@@ -262,7 +262,7 @@
     "254522515": {
         "shortname": "largemedkit",
         "name": "Large Medkit",
-        "description": "A large medkit."
+        "description": "A large medkit that heals you to max health over time and stops any bleeding instantly.\n\nGuarantees 100% recovery from the wounded state if placed in your toolbar."
     },
     "261913429": {
         "shortname": "firework.volcano",
@@ -764,6 +764,11 @@
         "name": "Semi-Automatic Pistol",
         "description": "A semi-automatic pistol, fires rapidly and with good accuracy."
     },
+    "821588319": {
+        "shortname": "bicycle",
+        "name": "Bicycle",
+        "description": "A pedal bike."
+    },
     "826309791": {
         "shortname": "sign.post.town.roof",
         "name": "Two Sided Town Sign Post",
@@ -908,6 +913,11 @@
         "shortname": "huntingtrophylarge",
         "name": "Large Hunting Trophy",
         "description": "A large trophy stand to mount the head of killed animals or enemies."
+    },
+    "962186730": {
+        "shortname": "tincan.alarm",
+        "name": "Tin Can Alarm",
+        "description": "A primitive perimeter alarm made from hanging tin cans. Clatters loudly when disturbed, alerting you to any trespassers. Simple but effective."
     },
     "963906841": {
         "shortname": "rock",
@@ -1128,6 +1138,11 @@
         "shortname": "electric.andswitch",
         "name": "AND Switch",
         "description": "A logic gate that allows electrical passthrough if BOTH inputs receives power, passthrough amount is the greater of either power source"
+    },
+    "1174957864": {
+        "shortname": "cupboard.tool.shockbyte",
+        "name": "Shockbyte Tool Cupboard",
+        "description": "Ensure 100% Tool Cupboard uptime with this Tool Cupboard skin."
     },
     "1176355476": {
         "shortname": "concretehatchet",
@@ -1974,6 +1989,11 @@
         "name": "Dracula Mask",
         "description": "A classic halloween costume mask which provides decent protection."
     },
+    "1869224826": {
+        "shortname": "motorbike_sidecar",
+        "name": "Motorbike With Sidecar",
+        "description": "A motorbike with sidecar."
+    },
     "1873897110": {
         "shortname": "bearmeat.cooked",
         "name": "Cooked Bear Meat",
@@ -2133,6 +2153,11 @@
         "shortname": "horse.shoes.advanced",
         "name": "High Quality Horse Shoes",
         "description": "Equipping these horse shoes will grant your horse additional movement speed"
+    },
+    "1991794121": {
+        "shortname": "trike",
+        "name": "Trike",
+        "description": "A three-wheeled bicycle."
     },
     "1992974553": {
         "shortname": "burlap.trousers",
@@ -2749,6 +2774,11 @@
         "name": "RF Broadcaster",
         "description": "An RF Broadcaster"
     },
+    "-948291630": {
+        "shortname": "electric.seismicsensor",
+        "name": "Seismic Sensor",
+        "description": "A small device that detects vibrations within a set range. Will output a different power value depending on the explosive type detected, ideal to know when your time has come."
+    },
     "-282113991": {
         "shortname": "electric.simplelight",
         "name": "Simple Light",
@@ -3149,6 +3179,11 @@
         "name": "Salvaged Hammer",
         "description": "A Hammer made from a bunch of other crap."
     },
+    "-839576748": {
+        "shortname": "handcuffs",
+        "name": "Handcuffs",
+        "description": "Handcuffs"
+    },
     "-23994173": {
         "shortname": "hat.boonie",
         "name": "Boonie Hat",
@@ -3324,6 +3359,7 @@
         "name": "Inner Tube",
         "description": "An inflated tube for aquatic activities."
     },
+    "undefined": {},
     "-1163532624": {
         "shortname": "jacket",
         "name": "Jacket",
@@ -3529,6 +3565,11 @@
         "name": "Mobile Phone",
         "description": "A mobile phone that lets you place calls from anywhere. Truly cutting edge Cobalt technology. Use [attack] to access the dialler."
     },
+    "-1417478274": {
+        "shortname": "motorbike",
+        "name": "Motorbike",
+        "description": "A motorbike."
+    },
     "-2047081330": {
         "shortname": "movembermoustache",
         "name": "Movember Moustache",
@@ -3628,6 +3669,11 @@
         "shortname": "powered.water.purifier",
         "name": "Powered Water Purifier",
         "description": "A device that converts salt water to fresh water while powered."
+    },
+    "-892718768": {
+        "shortname": "prisonerhood",
+        "name": "Prisoner Hood",
+        "description": "A hood for prisoners, restricts vision."
     },
     "-1673693549": {
         "shortname": "propanetank",

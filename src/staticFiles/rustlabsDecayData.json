@@ -1,8 +1,8 @@
 {
   "items": {
     "15388698": {
-      "decay": 28800,
-      "decayString": "8 hours",
+      "decay": 900,
+      "decayString": "15 min",
       "decayOutside": null,
       "decayOutsideString": null,
       "decayInside": null,
@@ -264,6 +264,18 @@
       "hp": 100,
       "hpString": "100"
     },
+    "962186730": {
+      "decay": 7200,
+      "decayString": "2 hours",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 50,
+      "hpString": "50"
+    },
     "968421290": {
       "decay": 345600,
       "decayString": "96 hours",
@@ -420,9 +432,21 @@
       "hp": 100,
       "hpString": "100"
     },
+    "1371909803": {
+      "decay": 28800,
+      "decayString": "8 hours",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 250,
+      "hpString": "250"
+    },
     "1373240771": {
-      "decay": 7200,
-      "decayString": "2 hours",
+      "decay": 900,
+      "decayString": "15 min",
       "decayOutside": null,
       "decayOutsideString": null,
       "decayInside": null,
@@ -853,8 +877,8 @@
       "hpString": "500"
     },
     "-1950721390": {
-      "decay": 259200,
-      "decayString": "72 hours",
+      "decay": 900,
+      "decayString": "15 min",
       "decayOutside": null,
       "decayOutsideString": null,
       "decayInside": null,
@@ -1031,6 +1055,18 @@
       "decayUnderwaterString": null,
       "hp": 100,
       "hpString": "100"
+    },
+    "-44876289": {
+      "decay": 28800,
+      "decayString": "8 hours",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 250,
+      "hpString": "250"
     },
     "-1824943010": {
       "decay": 86400,
@@ -1225,6 +1261,18 @@
       "hpString": "1000"
     },
     "-559599960": {
+      "decay": 900,
+      "decayString": "15 min",
+      "decayOutside": null,
+      "decayOutsideString": null,
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 200,
+      "hpString": "200"
+    },
+    "-948291630": {
       "decay": 28800,
       "decayString": "8 hours",
       "decayOutside": null,
@@ -2740,6 +2788,18 @@
       "hp": 850,
       "hpString": "850"
     },
+    "Bike": {
+      "decay": null,
+      "decayString": null,
+      "decayOutside": 86400,
+      "decayOutsideString": "24 hours",
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 250,
+      "hpString": "250"
+    },
     "Duo Submarine": {
       "decay": null,
       "decayString": null,
@@ -2788,6 +2848,18 @@
       "hp": 400,
       "hpString": "400"
     },
+    "Motorbike": {
+      "decay": null,
+      "decayString": null,
+      "decayOutside": 86400,
+      "decayOutsideString": "24 hours",
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 300,
+      "hpString": "300"
+    },
     "RHIB": {
       "decay": null,
       "decayString": null,
@@ -2812,6 +2884,18 @@
       "hp": 1000,
       "hpString": "1000"
     },
+    "Sidecar Motorbike": {
+      "decay": null,
+      "decayString": null,
+      "decayOutside": 86400,
+      "decayOutsideString": "24 hours",
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 350,
+      "hpString": "350"
+    },
     "Snowmobile": {
       "decay": null,
       "decayString": null,
@@ -2835,6 +2919,18 @@
       "decayUnderwaterString": "2 hours",
       "hp": 500,
       "hpString": "500"
+    },
+    "Trike": {
+      "decay": null,
+      "decayString": null,
+      "decayOutside": 86400,
+      "decayOutsideString": "24 hours",
+      "decayInside": null,
+      "decayInsideString": null,
+      "decayUnderwater": null,
+      "decayUnderwaterString": null,
+      "hp": 275,
+      "hpString": "275"
     },
     "Tugboat": {
       "decay": null,

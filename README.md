@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-<a href="https://discord.gg/vcrKbKVAbc"><img src="https://img.shields.io/badge/Discord-Alexemanuelol%238259-%237289DA?style=flat&logo=discord" alt="discord"/></a>
+<a href="https://discord.gg/vcrKbKVAbc"><img src="https://img.shields.io/badge/Discord-Alexemanuel-%237289DA?style=flat&logo=discord" alt="discord"/></a>
 <a href="https://www.reddit.com/user/Alexemanuelol"><img src="https://img.shields.io/badge/Reddit-Alexemanuelol-FF4500?style=flat&logo=reddit" alt="reddit"/></a>
 <a href="https://ko-fi.com/alexemanuelol"><img src="https://img.shields.io/badge/Donate%20a%20Coffee-alexemanuelol-yellow?style=flat&logo=buy-me-a-coffee" alt="donate on ko-fi"/></a>
 
@@ -46,7 +46,7 @@ A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/r
 
 ## **Credentials**
 
-> You can get your credentials by running the `rustplusplus FCM Credential Application`. Download it [here](https://github.com/alexemanuelol/rustplusplus-Credential-Application/releases/download/v1.1.0/rustPlusPlus-1.1.0-win-x64.exe)
+> You can get your credentials by running the `rustplusplus credential application`. Download it [here](https://github.com/alexemanuelol/rustplusplus-credential-application/releases/download/v1.2.0/rustplusplus-1.2.0-win-x64.exe)
 
 
 ## **How to run the bot**

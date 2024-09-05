@@ -342,8 +342,8 @@ class RustLabs {
     /**
      *  Get recycle data from an array of items.
      *  @param {array} items The array of items (every item include itemId, quantity, itemIsBlueprint).
-     *  @return {array} An array of the output of recycling the items (every item include itemId, quantity,
-     *                  itemIsBlueprint).
+     *  @return {Object} An object with recycler, shredder and safe-zone-recycler recycle data where
+     *          the all recycled items have (itemId, quantity, itemIsBlueprint).
      */
     getRecycleDataFromArray(items) {
         /* Remove element duplicates */
@@ -360,54 +360,63 @@ class RustLabs {
         }
         items = mergedItems.slice();
 
-        let recycleData = items.slice();
-        while (true) {
-            let noMoreIterations = true;
+        const recycleData = new Object();
+        recycleData['recycler'] = [];
+        recycleData['shredder'] = [];
+        recycleData['safe-zone-recycler'] = [];
 
-            const expandedItems = [];
-            for (const item of recycleData) {
-                if (!this.hasRecycleDetails(item.itemId)) {
-                    expandedItems.push(item);
-                    continue;
-                }
+        for (const recyclerType in recycleData) {
+            let recycledItems = items.slice();
+            while (true) {
+                let noMoreIterations = true;
 
-                /* Can the item be recycled further? */
-                if (this.recycleData[item.itemId].length > 0 && !item.itemIsBlueprint &&
-                    !IGNORED_RECYCLE_ITEMS.includes(item.itemId)) {
-                    noMoreIterations = false;
-                    for (const recycleItem of this.recycleData[item.itemId]) {
-                        for (let i = 0; i < item.quantity; i++) {
-                            if (recycleItem.probability < 1 && Math.random() * 1 > recycleItem.probability) continue;
+                const expandedItems = [];
+                for (const item of recycledItems) {
+                    if (!this.hasRecycleDetails(item.itemId)) {
+                        expandedItems.push(item);
+                        continue;
+                    }
 
-                            const found = expandedItems.find(e => e.itemId === recycleItem.id);
-                            if (found === undefined) {
-                                expandedItems.push({
-                                    itemId: recycleItem.id,
-                                    quantity: recycleItem.quantity,
-                                    itemIsBlueprint: false
-                                });
-                            }
-                            else {
-                                found.quantity += recycleItem.quantity;
+                    /* Can the item be recycled further? */
+                    if (this.recycleData[item.itemId][recyclerType]['yield'].length > 0 && !item.itemIsBlueprint &&
+                        !IGNORED_RECYCLE_ITEMS.includes(item.itemId)) {
+                        noMoreIterations = false;
+                        for (const recycleItem of this.recycleData[item.itemId][recyclerType]['yield']) {
+                            for (let i = 0; i < item.quantity; i++) {
+                                if (recycleItem.probability < 1 && Math.random() * 1 > recycleItem.probability) continue;
+
+                                const found = expandedItems.find(e => e.itemId === recycleItem.id);
+                                if (found === undefined) {
+                                    expandedItems.push({
+                                        itemId: recycleItem.id,
+                                        quantity: recycleItem.quantity,
+                                        itemIsBlueprint: false
+                                    });
+                                }
+                                else {
+                                    found.quantity += recycleItem.quantity;
+                                }
                             }
                         }
                     }
-                }
-                else {
-                    const found = expandedItems.find(e => e.itemId === item.itemId &&
-                        e.itemIsBlueprint === item.itemIsBlueprint);
-                    if (found === undefined) {
-                        expandedItems.push(item);
-                    }
                     else {
-                        found.quantity += item.quantity;
+                        const found = expandedItems.find(e => e.itemId === item.itemId &&
+                            e.itemIsBlueprint === item.itemIsBlueprint);
+                        if (found === undefined) {
+                            expandedItems.push(item);
+                        }
+                        else {
+                            found.quantity += item.quantity;
+                        }
                     }
                 }
+
+                recycledItems = expandedItems.slice();
+
+                if (noMoreIterations) break;
             }
 
-            recycleData = expandedItems.slice();
-
-            if (noMoreIterations) break;
+            recycleData[recyclerType] = recycledItems;
         }
 
         return recycleData;

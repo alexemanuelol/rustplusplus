@@ -21,10 +21,12 @@
 const Discord = require('discord.js');
 const Fs = require('fs');
 const Path = require('path');
+const axios = require('axios');
 
 const DiscordBot = require('./src/structures/DiscordBot');
 
 createMissingDirectories();
+checkForUpdates();
 
 const client = new DiscordBot({
     intents: [
@@ -57,6 +59,25 @@ function createMissingDirectories() {
         Fs.mkdirSync(Path.join(__dirname, 'maps'));
     }
 }
+
+function checkForUpdates() {
+    const remote = 'https://raw.githubusercontent.com/alexemanuelol/rustplusplus/main/package.json';
+    const local = require('./package.json');
+
+    axios.get(remote).then((response: { data: any; }) => {
+        const remote = response.data;
+
+        if (remote.version !== local.version) {
+            client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'updateInfo', {
+                current: local.version,
+                new: remote.version
+            }), 'warn');
+        }
+    }).catch((error: any) => {
+        console.log(error);
+    });
+}
+
 
 process.on('unhandledRejection', error => {
     client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'unhandledRejection', {
