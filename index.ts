@@ -59,12 +59,12 @@ function createMissingDirectories() {
         Fs.mkdirSync(Path.join(__dirname, 'maps'));
     }
 }
-
+/*
 function checkForUpdates() {
     const remote = 'https://raw.githubusercontent.com/MrFiNka/rustplusplus/main/package.json';
     const local = require('./package.json');
 
-    axios.get(remote).then((response: { data: any; }) => {
+    axios.get(remote).then((response) => {
         const remote = response.data;
 
         if (remote.version !== local.version) {
@@ -77,7 +77,7 @@ function checkForUpdates() {
         console.log(error);
     });
 }
-
+*/
 
 process.on('unhandledRejection', error => {
     client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'unhandledRejection', {
