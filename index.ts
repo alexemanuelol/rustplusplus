@@ -26,7 +26,7 @@ const axios = require('axios');
 const DiscordBot = require('./src/structures/DiscordBot');
 
 createMissingDirectories();
-checkForUpdates();
+//checkForUpdates();
 
 const client = new DiscordBot({
     intents: [
