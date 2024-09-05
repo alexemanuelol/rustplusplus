@@ -20,7 +20,7 @@
 
 const RustPlusLib = require('@liamcottle/rustplus.js');
 
-const Client = require('../../index.ts');
+const Client = require('../../index.js');
 const Config = require('../../config');
 
 class RustPlusLite extends RustPlusLib {

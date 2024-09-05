@@ -22,7 +22,7 @@ const os = require('os');
 const { showTotalMemory, usagePercent } = require("node-system-stats");
 const Discord = require('discord.js');
 
-const Client = require('../../index.ts');
+const Client = require('../../index.js');
 const Constants = require('../util/constants.js');
 const DiscordTools = require('./discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');

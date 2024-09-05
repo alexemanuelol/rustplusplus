@@ -21,7 +21,7 @@
 const Discord = require('discord.js');
 
 const Constants = require('../util/constants.js');
-const Client = require('../../index.ts');
+const Client = require('../../index.js');
 
 const SUCCESS = Discord.ButtonStyle.Success;
 const DANGER = Discord.ButtonStyle.Danger;

@@ -26,7 +26,7 @@ const axios = require('axios');
 const DiscordBot = require('./src/structures/DiscordBot');
 
 createMissingDirectories();
-//checkForUpdates();
+checkForUpdates();
 
 const client = new DiscordBot({
     intents: [
@@ -78,6 +78,23 @@ function checkForUpdates() {
     });
 }
 */
+function checkForUpdates() {
+    const remote = 'https://raw.githubusercontent.com/MrFiNka/rustplusplus/main/package.json';
+    const local = require('./package.json');
+
+    axios.get(remote).then((response) => {
+        const remote = response.data;
+
+        if (remote.version !== local.version) {
+            client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'updateInfo', {
+                current: local.version,
+                new: remote.version
+            }), 'warn');
+        }
+    }).catch((error) => {
+        console.log(error);
+    });
+}
 
 process.on('unhandledRejection', error => {
     client.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'unhandledRejection', {

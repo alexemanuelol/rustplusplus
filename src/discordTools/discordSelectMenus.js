@@ -22,7 +22,7 @@ const Discord = require('discord.js');
 const Fs = require('fs');
 const Path = require('path');
 
-const Client = require('../../index.ts');
+const Client = require('../../index.js');
 const Constants = require('../util/constants.js');
 const Languages = require('../util/languages.js');
 

@@ -18,7 +18,7 @@
 
 */
 
-const Client = require('../../index.ts');
+const Client = require('../../index.js');
 const Player = require('./Player.js');
 
 class Team {
