@@ -61,7 +61,7 @@ function createMissingDirectories() {
 }
 
 function checkForUpdates() {
-    const remote = 'https://raw.githubusercontent.com/alexemanuelol/rustplusplus/main/package.json';
+    const remote = 'https://raw.githubusercontent.com/MrFiNka/rustplusplus/main/package.json';
     const local = require('./package.json');
 
     axios.get(remote).then((response: { data: any; }) => {
