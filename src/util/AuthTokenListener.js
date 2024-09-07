@@ -181,7 +181,7 @@ async function authTokenListener(client, guildId, steamId, firstTime = false) {
                             default: {
                                 client.log('AuthToken',
                                     `GuildID: ${guildId}, SteamID: ${steamId}, ` +
-                                    `pairing: entity: other\n${JSON.stringify(data)}`);
+                                    `pairing: entity: other\n${JSON.stringify(notification)}`);
                             } break;
                         }
                     } break;
@@ -371,7 +371,7 @@ async function pairingEntitySmartAlarm(client, guildId, data) {
     }
 
     await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, data.entityId);
-    }
+}
 
 async function pairingEntityStorageMonitor(client, guildId, data) {
     const instance = client.getInstance(guildId);
@@ -440,7 +440,7 @@ async function pairingEntityStorageMonitor(client, guildId, data) {
 
         await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, data.entityId);
     }
-    }
+}
 
 module.exports = {
     startNewAuthTokenListener
