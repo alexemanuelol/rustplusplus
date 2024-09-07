@@ -166,20 +166,20 @@ async function authTokenListener(client, guildId, steamId, firstTime = false) {
                             } break;
 
                             case 'Smart Alarm': {
-                                client.log('FCM Host',
-                                    `GuildID: ${guildId}, SteamID: ${hoster}, pairing: entity: Smart Alarm`);
+                                client.log('AuthToken',
+                                    `GuildID: ${guildId}, SteamID: ${steamId}, pairing: entity: Smart Alarm`);
                                 pairingEntitySmartAlarm(client, guildId, data);
                             } break;
 
                             case 'Storage Monitor': {
-                                client.log('FCM Host',
-                                    `GuildID: ${guildId}, SteamID: ${hoster}, pairing: entity: Storage Monitor`);
+                                client.log('AuthToken',
+                                    `GuildID: ${guildId}, SteamID: ${steamId}, pairing: entity: Storage Monitor`);
                                 pairingEntityStorageMonitor(client, guildId, data);
                             } break;
 
                             default: {
-                                client.log('FCM Host',
-                                    `GuildID: ${guildId}, SteamID: ${hoster}, ` +
+                                client.log('AuthToken',
+                                    `GuildID: ${guildId}, SteamID: ${steamId}, ` +
                                     `pairing: entity: other\n${JSON.stringify(data)}`);
                             } break;
                         }
