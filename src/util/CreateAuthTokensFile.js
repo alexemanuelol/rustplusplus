@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,16 +18,12 @@
 
 */
 
-module.exports = {
-    name: 'guildCreate',
-    async execute(client, guild) {
-        require('../util/CreateInstanceFile')(client, guild);
-        require('../util/CreateCredentialsFile')(client, guild);
-        require('../util/CreateAuthTokensFile')(client, guild);
-        client.fcmListenersLite[guild.id] = new Object();
+const Fs = require('fs');
+const Path = require('path');
 
-        client.loadGuildIntl(guild.id);
-
-        await client.setupGuild(guild);
-    },
-}
+module.exports = (client, guild) => {
+    if (!Fs.existsSync(Path.join(__dirname, '..', '..', 'authtokens', `${guild.id}.json`))) {
+        Fs.writeFileSync(Path.join(__dirname, '..', '..', 'authtokens', `${guild.id}.json`),
+            JSON.stringify({ hoster: null }, null, 2));
+    }
+};

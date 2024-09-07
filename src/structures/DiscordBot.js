@@ -34,6 +34,7 @@ const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
+const AuthTokenListenerTemp = require('../util/AuthTokenListener.js');
 
 class DiscordBot extends Discord.Client {
     constructor(props) {
@@ -44,6 +45,8 @@ class DiscordBot extends Discord.Client {
         this.commands = new Discord.Collection();
         this.fcmListeners = new Object();
         this.fcmListenersLite = new Object();
+        this.authTokenListenerIntervalIds = new Object();
+        this.authTokenReadNotifications = new Object();
         this.instances = {};
         this.guildIntl = {};
         this.botIntl = null;
@@ -226,12 +229,17 @@ class DiscordBot extends Discord.Client {
             await PermissionHandler.resetPermissionsAllChannels(this, guild);
         }
 
-        require('../util/FcmListener')(this, guild);
-        const credentials = InstanceUtils.readCredentialsFile(guild.id);
-        for (const steamId of Object.keys(credentials)) {
-            if (steamId !== credentials.hoster && steamId !== 'hoster') {
-                require('../util/FcmListenerLite')(this, guild, steamId);
-            }
+        //require('../util/FcmListener')(this, guild);
+        //const credentials = InstanceUtils.readCredentialsFile(guild.id);
+        //for (const steamId of Object.keys(credentials)) {
+        //    if (steamId !== credentials.hoster && steamId !== 'hoster') {
+        //        require('../util/FcmListenerLite')(this, guild, steamId);
+        //    }
+        //}
+        const authTokens = InstanceUtils.readAuthTokensFile(guild.id);
+        for (const steamId of Object.keys(authTokens)) {
+            if (steamId === 'hoster') continue;
+            await AuthTokenListenerTemp.startNewAuthTokenListener(this, guild.id, steamId);
         }
 
         await require('../discordTools/SetupSettingsMenu')(this, guild);
