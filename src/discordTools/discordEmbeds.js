@@ -66,14 +66,12 @@ module.exports = {
 
     getServerEmbed: async function (guildId, serverId) {
         const instance = Client.client.getInstance(guildId);
-
         //const credentials = InstanceUtils.readCredentialsFile(guildId);
         const authTokens = InstanceUtils.readAuthTokensFile(guildId);
         const server = instance.serverList[serverId];
         let hoster = Client.client.intlGet(guildId, 'unknown');
         //if (credentials.hasOwnProperty(server.steamId)) {
         //    hoster = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
-
         if (authTokens.hasOwnProperty(server.steamId)) {
             hoster = await DiscordTools.getUserById(guildId, authTokens[server.steamId].discordUserId);
             hoster = hoster.user.username;
