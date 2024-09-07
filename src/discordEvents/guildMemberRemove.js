@@ -59,11 +59,9 @@ module.exports = {
             authTokens.hoster = null;
         }
 
-
         //delete credentials[steamId];
         delete authTokens[steamId];
         //InstanceUtils.writeCredentialsFile(guildId, credentials);
-
         InstanceUtils.writeAuthTokensFile(guildId, authTokens);
     },
 }
