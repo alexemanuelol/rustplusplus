@@ -34,7 +34,9 @@ const Map = require('../util/map.js');
 const Scrape = require('../util/scrape.js');
 
 const NotificationType = {
-    PAIRING: 1001
+    PAIRING: 1001,
+    DEATH: 1003,
+    ALARM: 1004,
 }
 
 async function startNewAuthTokenListener(client, guildId, steamId) {
@@ -155,34 +157,33 @@ async function authTokenListener(client, guildId, steamId, firstTime = false) {
                         pairingServer(client, guildId, data, hoster);
                     } break;
 
-                    //case 'entity': {
-                    //    switch (data.entityName) {
-                    //        case 'Smart Switch': {
-                    //            client.log('AuthToken',
-                    //                `GuildID: ${guildId}, SteamID: ${steamId}, pairing: entity: Switch`);
-                    //            pairingEntitySwitch(client, guild, full, data, body);
-                    //        } break;
+                    case 'entity': {
+                        switch (data.entityName) {
+                            case 'Smart Switch': {
+                                client.log('AuthToken',
+                                    `GuildID: ${guildId}, SteamID: ${steamId}, pairing: entity: Switch`);
+                                pairingEntitySwitch(client, guildId, data);
+                            } break;
 
-                    //        case 'Smart Alarm': {
-                    //            client.log('FCM Host',
-                    //                `GuildID: ${guild.id}, SteamID: ${hoster}, pairing: entity: Smart Alarm`);
-                    //            pairingEntitySmartAlarm(client, guild, full, data, body);
-                    //        } break;
+                            case 'Smart Alarm': {
+                                client.log('FCM Host',
+                                    `GuildID: ${guildId}, SteamID: ${hoster}, pairing: entity: Smart Alarm`);
+                                pairingEntitySmartAlarm(client, guildId, data);
+                            } break;
 
-                    //        case 'Storage Monitor': {
-                    //            client.log('FCM Host',
-                    //                `GuildID: ${guild.id}, SteamID: ${hoster}, pairing: entity: Storage Monitor`);
-                    //            pairingEntityStorageMonitor(client, guild, full, data, body);
-                    //        } break;
+                            case 'Storage Monitor': {
+                                client.log('FCM Host',
+                                    `GuildID: ${guildId}, SteamID: ${hoster}, pairing: entity: Storage Monitor`);
+                                pairingEntityStorageMonitor(client, guildId, data);
+                            } break;
 
-                    //        default: {
-                    //            client.log('FCM Host',
-                    //                `GuildID: ${guild.id}, SteamID: ${hoster}, ` +
-                    //                `pairing: entity: other\n${JSON.stringify(full)}`);
-                    //        } break;
-                    //    }
-
-                    //} break;
+                            default: {
+                                client.log('FCM Host',
+                                    `GuildID: ${guildId}, SteamID: ${hoster}, ` +
+                                    `pairing: entity: other\n${JSON.stringify(data)}`);
+                            } break;
+                        }
+                    } break;
 
                     default: {
                         client.log('AuthToken',
@@ -273,172 +274,172 @@ async function pairingServer(client, guildId, data, hoster) {
     await DiscordMessages.sendServerMessage(guildId, serverId, null);
 }
 
-//async function pairingEntitySwitch(client, guild, full, data, body) {
-//    const instance = client.getInstance(guild.id);
-//    const serverId = `${body.ip}-${body.port}`;
-//    if (!instance.serverList.hasOwnProperty(serverId)) return;
-//    const switches = instance.serverList[serverId].switches;
-//
-//    const entityExist = instance.serverList[serverId].switches.hasOwnProperty(body.entityId);
-//    instance.serverList[serverId].switches[body.entityId] = {
-//        active: entityExist ? switches[body.entityId].active : false,
-//        reachable: entityExist ? switches[body.entityId].reachable : true,
-//        name: entityExist ? switches[body.entityId].name : client.intlGet(guild.id, 'smartSwitch'),
-//        command: entityExist ? switches[body.entityId].command : body.entityId,
-//        image: entityExist ? switches[body.entityId].image : 'smart_switch.png',
-//        autoDayNightOnOff: entityExist ? switches[body.entityId].autoDayNightOnOff : 0,
-//        location: entityExist ? switches[body.entityId].location : null,
-//        x: entityExist ? switches[body.entityId].x : null,
-//        y: entityExist ? switches[body.entityId].y : null,
-//        server: entityExist ? switches[body.entityId].server : body.name,
-//        proximity: entityExist ? switches[body.entityId].proximity : Constants.PROXIMITY_SETTING_DEFAULT_METERS,
-//        messageId: entityExist ? switches[body.entityId].messageId : null
-//    };
-//    client.setInstance(guild.id, instance);
-//
-//    const rustplus = client.rustplusInstances[guild.id];
-//    if (rustplus && serverId === rustplus.serverId) {
-//        const info = await rustplus.getEntityInfoAsync(body.entityId);
-//        if (!(await rustplus.isResponseValid(info))) {
-//            instance.serverList[serverId].switches[body.entityId].reachable = false;
-//        }
-//
-//        const teamInfo = await rustplus.getTeamInfoAsync();
-//        if (await rustplus.isResponseValid(teamInfo)) {
-//            const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
-//            if (player) {
-//                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
-//                instance.serverList[serverId].switches[body.entityId].location = location.location;
-//                instance.serverList[serverId].switches[body.entityId].x = location.x;
-//                instance.serverList[serverId].switches[body.entityId].y = location.y;
-//            }
-//        }
-//
-//        if (instance.serverList[serverId].switches[body.entityId].reachable) {
-//            instance.serverList[serverId].switches[body.entityId].active = info.entityInfo.payload.value;
-//        }
-//        client.setInstance(guild.id, instance);
-//
-//        await DiscordMessages.sendSmartSwitchMessage(guild.id, serverId, body.entityId);
-//    }
-//}
-//
-//async function pairingEntitySmartAlarm(client, guild, full, data, body) {
-//    const instance = client.getInstance(guild.id);
-//    const serverId = `${body.ip}-${body.port}`;
-//    if (!instance.serverList.hasOwnProperty(serverId)) return;
-//    const alarms = instance.serverList[serverId].alarms;
-//
-//    const entityExist = instance.serverList[serverId].alarms.hasOwnProperty(body.entityId);
-//    instance.serverList[serverId].alarms[body.entityId] = {
-//        active: entityExist ? alarms[body.entityId].active : false,
-//        reachable: entityExist ? alarms[body.entityId].reachable : true,
-//        everyone: entityExist ? alarms[body.entityId].everyone : false,
-//        name: entityExist ? alarms[body.entityId].name : client.intlGet(guild.id, 'smartAlarm'),
-//        message: entityExist ? alarms[body.entityId].message : client.intlGet(guild.id, 'baseIsUnderAttack'),
-//        lastTrigger: entityExist ? alarms[body.entityId].lastTrigger : null,
-//        command: entityExist ? alarms[body.entityId].command : body.entityId,
-//        id: entityExist ? alarms[body.entityId].id : body.entityId,
-//        image: entityExist ? alarms[body.entityId].image : 'smart_alarm.png',
-//        location: entityExist ? alarms[body.entityId].location : null,
-//        server: entityExist ? alarms[body.entityId].server : body.name,
-//        messageId: entityExist ? alarms[body.entityId].messageId : null
-//    };
-//    client.setInstance(guild.id, instance);
-//
-//    const rustplus = client.rustplusInstances[guild.id];
-//    if (rustplus && serverId === rustplus.serverId) {
-//        const info = await rustplus.getEntityInfoAsync(body.entityId);
-//        if (!(await rustplus.isResponseValid(info))) {
-//            instance.serverList[serverId].alarms[body.entityId].reachable = false;
-//        }
-//
-//        const teamInfo = await rustplus.getTeamInfoAsync();
-//        if (await rustplus.isResponseValid(teamInfo)) {
-//            const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
-//            if (player) {
-//                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
-//                instance.serverList[serverId].alarms[body.entityId].location = location.location;
-//            }
-//        }
-//
-//        if (instance.serverList[serverId].alarms[body.entityId].reachable) {
-//            instance.serverList[serverId].alarms[body.entityId].active = info.entityInfo.payload.value;
-//        }
-//        client.setInstance(guild.id, instance);
-//    }
-//
-//    await DiscordMessages.sendSmartAlarmMessage(guild.id, serverId, body.entityId);
-//}
-//
-//async function pairingEntityStorageMonitor(client, guild, full, data, body) {
-//    const instance = client.getInstance(guild.id);
-//    const serverId = `${body.ip}-${body.port}`;
-//    if (!instance.serverList.hasOwnProperty(serverId)) return;
-//    const storageMonitors = instance.serverList[serverId].storageMonitors;
-//
-//    const entityExist = instance.serverList[serverId].storageMonitors.hasOwnProperty(body.entityId);
-//    instance.serverList[serverId].storageMonitors[body.entityId] = {
-//        name: entityExist ? storageMonitors[body.entityId].name : client.intlGet(guild.id, 'storageMonitor'),
-//        reachable: entityExist ? storageMonitors[body.entityId].reachable : true,
-//        id: entityExist ? storageMonitors[body.entityId].id : body.entityId,
-//        type: entityExist ? storageMonitors[body.entityId].type : null,
-//        decaying: entityExist ? storageMonitors[body.entityId].decaying : false,
-//        upkeep: entityExist ? storageMonitors[body.entityId].upkeep : null,
-//        everyone: entityExist ? storageMonitors[body.entityId].everyone : false,
-//        inGame: entityExist ? storageMonitors[body.entityId].inGame : true,
-//        image: entityExist ? storageMonitors[body.entityId].image : 'storage_monitor.png',
-//        location: entityExist ? storageMonitors[body.entityId].location : null,
-//        server: entityExist ? storageMonitors[body.entityId].server : body.name,
-//        messageId: entityExist ? storageMonitors[body.entityId].messageId : null
-//    };
-//    client.setInstance(guild.id, instance);
-//
-//    const rustplus = client.rustplusInstances[guild.id];
-//    if (rustplus && serverId === rustplus.serverId) {
-//        const info = await rustplus.getEntityInfoAsync(body.entityId);
-//        if (!(await rustplus.isResponseValid(info))) {
-//            instance.serverList[serverId].storageMonitors[body.entityId].reachable = false;
-//        }
-//
-//        const teamInfo = await rustplus.getTeamInfoAsync();
-//        if (await rustplus.isResponseValid(teamInfo)) {
-//            const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
-//            if (player) {
-//                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
-//                instance.serverList[serverId].storageMonitors[body.entityId].location = location.location;
-//            }
-//        }
-//
-//        if (instance.serverList[serverId].storageMonitors[body.entityId].reachable) {
-//            if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
-//                instance.serverList[serverId].storageMonitors[body.entityId].type = 'toolCupboard';
-//                instance.serverList[serverId].storageMonitors[body.entityId].image = 'tool_cupboard.png';
-//                if (info.entityInfo.payload.protectionExpiry === 0) {
-//                    instance.serverList[serverId].storageMonitors[body.entityId].decaying = true;
-//                }
-//            }
-//            else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_VENDING_MACHINE_CAPACITY) {
-//                instance.serverList[serverId].storageMonitors[body.entityId].type = 'vendingMachine';
-//                instance.serverList[serverId].storageMonitors[body.entityId].image = 'vending_machine.png';
-//            }
-//            else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
-//                instance.serverList[serverId].storageMonitors[body.entityId].type = 'largeWoodBox';
-//                instance.serverList[serverId].storageMonitors[body.entityId].image = 'large_wood_box.png';
-//            }
-//
-//            rustplus.storageMonitors[body.entityId] = {
-//                items: info.entityInfo.payload.items,
-//                expiry: info.entityInfo.payload.protectionExpiry,
-//                capacity: info.entityInfo.payload.capacity,
-//                hasProtection: info.entityInfo.payload.hasProtection
-//            }
-//        }
-//        client.setInstance(guild.id, instance);
-//
-//        await DiscordMessages.sendStorageMonitorMessage(guild.id, serverId, body.entityId);
-//    }
-//}
+async function pairingEntitySwitch(client, guildId, data) {
+    const instance = client.getInstance(guildId);
+    const serverId = `${data.ip}-${data.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
+    const switches = instance.serverList[serverId].switches;
+
+    const entityExist = instance.serverList[serverId].switches.hasOwnProperty(data.entityId);
+    instance.serverList[serverId].switches[data.entityId] = {
+        active: entityExist ? switches[data.entityId].active : false,
+        reachable: entityExist ? switches[data.entityId].reachable : true,
+        name: entityExist ? switches[data.entityId].name : client.intlGet(guildId, 'smartSwitch'),
+        command: entityExist ? switches[data.entityId].command : data.entityId,
+        image: entityExist ? switches[data.entityId].image : 'smart_switch.png',
+        autoDayNightOnOff: entityExist ? switches[data.entityId].autoDayNightOnOff : 0,
+        location: entityExist ? switches[data.entityId].location : null,
+        x: entityExist ? switches[data.entityId].x : null,
+        y: entityExist ? switches[data.entityId].y : null,
+        server: entityExist ? switches[data.entityId].server : data.name,
+        proximity: entityExist ? switches[data.entityId].proximity : Constants.PROXIMITY_SETTING_DEFAULT_METERS,
+        messageId: entityExist ? switches[data.entityId].messageId : null
+    };
+    client.setInstance(guildId, instance);
+
+    const rustplus = client.rustplusInstances[guildId];
+    if (rustplus && serverId === rustplus.serverId) {
+        const info = await rustplus.getEntityInfoAsync(data.entityId);
+        if (!(await rustplus.isResponseValid(info))) {
+            instance.serverList[serverId].switches[data.entityId].reachable = false;
+        }
+
+        const teamInfo = await rustplus.getTeamInfoAsync();
+        if (await rustplus.isResponseValid(teamInfo)) {
+            const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
+            if (player) {
+                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
+                instance.serverList[serverId].switches[data.entityId].location = location.location;
+                instance.serverList[serverId].switches[data.entityId].x = location.x;
+                instance.serverList[serverId].switches[data.entityId].y = location.y;
+            }
+        }
+
+        if (instance.serverList[serverId].switches[data.entityId].reachable) {
+            instance.serverList[serverId].switches[data.entityId].active = info.entityInfo.payload.value;
+        }
+        client.setInstance(guildId, instance);
+
+        await DiscordMessages.sendSmartSwitchMessage(guildId, serverId, data.entityId);
+    }
+}
+
+async function pairingEntitySmartAlarm(client, guildId, data) {
+    const instance = client.getInstance(guildId);
+    const serverId = `${data.ip}-${data.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
+    const alarms = instance.serverList[serverId].alarms;
+
+    const entityExist = instance.serverList[serverId].alarms.hasOwnProperty(data.entityId);
+    instance.serverList[serverId].alarms[data.entityId] = {
+        active: entityExist ? alarms[data.entityId].active : false,
+        reachable: entityExist ? alarms[data.entityId].reachable : true,
+        everyone: entityExist ? alarms[data.entityId].everyone : false,
+        name: entityExist ? alarms[data.entityId].name : client.intlGet(guildId, 'smartAlarm'),
+        message: entityExist ? alarms[data.entityId].message : client.intlGet(guildId, 'baseIsUnderAttack'),
+        lastTrigger: entityExist ? alarms[data.entityId].lastTrigger : null,
+        command: entityExist ? alarms[data.entityId].command : data.entityId,
+        id: entityExist ? alarms[data.entityId].id : data.entityId,
+        image: entityExist ? alarms[data.entityId].image : 'smart_alarm.png',
+        location: entityExist ? alarms[data.entityId].location : null,
+        server: entityExist ? alarms[data.entityId].server : data.name,
+        messageId: entityExist ? alarms[data.entityId].messageId : null
+    };
+    client.setInstance(guildId, instance);
+
+    const rustplus = client.rustplusInstances[guildId];
+    if (rustplus && serverId === rustplus.serverId) {
+        const info = await rustplus.getEntityInfoAsync(data.entityId);
+        if (!(await rustplus.isResponseValid(info))) {
+            instance.serverList[serverId].alarms[data.entityId].reachable = false;
+        }
+
+        const teamInfo = await rustplus.getTeamInfoAsync();
+        if (await rustplus.isResponseValid(teamInfo)) {
+            const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
+            if (player) {
+                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
+                instance.serverList[serverId].alarms[data.entityId].location = location.location;
+            }
+        }
+
+        if (instance.serverList[serverId].alarms[data.entityId].reachable) {
+            instance.serverList[serverId].alarms[data.entityId].active = info.entityInfo.payload.value;
+        }
+        client.setInstance(guildId, instance);
+    }
+
+    await DiscordMessages.sendSmartAlarmMessage(guildId, serverId, data.entityId);
+    }
+
+async function pairingEntityStorageMonitor(client, guildId, data) {
+    const instance = client.getInstance(guildId);
+    const serverId = `${data.ip}-${data.port}`;
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
+    const storageMonitors = instance.serverList[serverId].storageMonitors;
+
+    const entityExist = instance.serverList[serverId].storageMonitors.hasOwnProperty(data.entityId);
+    instance.serverList[serverId].storageMonitors[data.entityId] = {
+        name: entityExist ? storageMonitors[data.entityId].name : client.intlGet(guildId, 'storageMonitor'),
+        reachable: entityExist ? storageMonitors[data.entityId].reachable : true,
+        id: entityExist ? storageMonitors[data.entityId].id : data.entityId,
+        type: entityExist ? storageMonitors[data.entityId].type : null,
+        decaying: entityExist ? storageMonitors[data.entityId].decaying : false,
+        upkeep: entityExist ? storageMonitors[data.entityId].upkeep : null,
+        everyone: entityExist ? storageMonitors[data.entityId].everyone : false,
+        inGame: entityExist ? storageMonitors[data.entityId].inGame : true,
+        image: entityExist ? storageMonitors[data.entityId].image : 'storage_monitor.png',
+        location: entityExist ? storageMonitors[data.entityId].location : null,
+        server: entityExist ? storageMonitors[data.entityId].server : data.name,
+        messageId: entityExist ? storageMonitors[data.entityId].messageId : null
+    };
+    client.setInstance(guildId, instance);
+
+    const rustplus = client.rustplusInstances[guildId];
+    if (rustplus && serverId === rustplus.serverId) {
+        const info = await rustplus.getEntityInfoAsync(data.entityId);
+        if (!(await rustplus.isResponseValid(info))) {
+            instance.serverList[serverId].storageMonitors[data.entityId].reachable = false;
+        }
+
+        const teamInfo = await rustplus.getTeamInfoAsync();
+        if (await rustplus.isResponseValid(teamInfo)) {
+            const player = teamInfo.teamInfo.members.find(e => e.steamId.toString() === rustplus.playerId);
+            if (player) {
+                const location = Map.getPos(player.x, player.y, rustplus.info.correctedMapSize, rustplus);
+                instance.serverList[serverId].storageMonitors[data.entityId].location = location.location;
+            }
+        }
+
+        if (instance.serverList[serverId].storageMonitors[data.entityId].reachable) {
+            if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_TOOL_CUPBOARD_CAPACITY) {
+                instance.serverList[serverId].storageMonitors[data.entityId].type = 'toolCupboard';
+                instance.serverList[serverId].storageMonitors[data.entityId].image = 'tool_cupboard.png';
+                if (info.entityInfo.payload.protectionExpiry === 0) {
+                    instance.serverList[serverId].storageMonitors[data.entityId].decaying = true;
+                }
+            }
+            else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_VENDING_MACHINE_CAPACITY) {
+                instance.serverList[serverId].storageMonitors[data.entityId].type = 'vendingMachine';
+                instance.serverList[serverId].storageMonitors[data.entityId].image = 'vending_machine.png';
+            }
+            else if (info.entityInfo.payload.capacity === Constants.STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY) {
+                instance.serverList[serverId].storageMonitors[data.entityId].type = 'largeWoodBox';
+                instance.serverList[serverId].storageMonitors[data.entityId].image = 'large_wood_box.png';
+            }
+
+            rustplus.storageMonitors[data.entityId] = {
+                items: info.entityInfo.payload.items,
+                expiry: info.entityInfo.payload.protectionExpiry,
+                capacity: info.entityInfo.payload.capacity,
+                hasProtection: info.entityInfo.payload.hasProtection
+            }
+        }
+        client.setInstance(guildId, instance);
+
+        await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, data.entityId);
+    }
+    }
 
 module.exports = {
     startNewAuthTokenListener
