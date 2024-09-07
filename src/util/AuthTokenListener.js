@@ -157,6 +157,7 @@ async function authTokenListener(client, guildId, steamId, firstTime = false) {
                         pairingServer(client, guildId, data, hoster);
                     } break;
 
+
                     case 'entity': {
                         switch (data.entityName) {
                             case 'Smart Switch': {
