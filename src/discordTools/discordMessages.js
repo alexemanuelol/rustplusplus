@@ -493,9 +493,9 @@ module.exports = {
         await client.messageReply(message, content);
     },
 
-    sendCredentialsShowMessage: async function (interaction) {
+    sendAuthTokensShowMessage: async function (interaction) {
         const content = {
-            embeds: [await DiscordEmbeds.getCredentialsShowEmbed(interaction.guildId)],
+            embeds: [await DiscordEmbeds.getAuthTokensShowEmbed(interaction.guildId)],
             ephemeral: true
         }
 
