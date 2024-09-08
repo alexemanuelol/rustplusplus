@@ -35,8 +35,10 @@ const Scrape = require('../util/scrape.js');
 
 const NotificationType = {
     PAIRING: 1001,
-    DEATH: 1003,
-    ALARM: 1004,
+    PLAYER_LOGGED_IN: 1002,
+    PLAYER_DIED: 1003,
+    SMART_ALARM: 1004,
+    CLAN_ANNOUNCEMENT: 1005
 }
 
 async function startNewAuthTokenListener(client, guildId, steamId) {
@@ -183,12 +185,62 @@ async function authTokenListener(client, guildId, steamId, firstTime = false) {
                 }
             } break;
 
+            case NotificationType.PLAYER_LOGGED_IN: {
+                switch (data.type) {
+                    case 'login': {
+                        client.log('AuthToken', `GuildID: ${guildId}, SteamID: ${steamId}, playerLoggedIn: login`);
+                        playerLoggedInLogin(client, guildId, data);
+                    } break;
+
+                    default: {
+                        client.log('AuthToken',
+                            `GuildID: ${guildId}, SteamID: ${steamId}, playerLoggedIn: other\n` +
+                            `${JSON.stringify(notification)}`);
+                    } break;
+                }
+            } break;
+
+            case NotificationType.PLAYER_DIED: {
+                switch (data.type) {
+                    case 'death': {
+                        client.log('AuthToken', `GuildID: ${guildId}, SteamID: ${steamId}, playerDied: death`);
+                        playerDiedDeath(client, guildId, title, data, discordUserId);
+                    } break;
+
+                    default: {
+                        client.log('AuthToken',
+                            `GuildID: ${guildId}, SteamID: ${steamId}, playerDied: other\n` +
+                            `${JSON.stringify(notification)}`);
+                    } break;
+                }
+            } break;
+
+            case NotificationType.SMART_ALARM: {
+                switch (data.type) {
+                    case 'alarm': {
+                        client.log('AuthToken', `GuildID: ${guildId}, SteamID: ${steamId}, smartAlarm: alarm`);
+                        smartAlarmAlarm(client, guildId, title, data, body);
+                    } break;
+
+                    default: {
+                        if (title === 'You\'re getting raided!') {
+                            /* Custom alarm from plugin: https://umod.org/plugins/raid-alarm */
+                            client.log('AuthToken',
+                                `GuildID: ${guildId}, SteamID: ${steamId}, smartAlarm: raid-alarm plugin`);
+                            smartAlarmRaidAlarm(client, guildId, title, data, body);
+                            break;
+                        }
+                        client.log('AuthToken',
+                            `GuildID: ${guildId}, SteamID: ${steamId}, smartAlarm: other\n` +
+                            `${JSON.stringify(notification)}`);
+                    } break;
+                }
+            } break;
+
             default: {
                 client.log('AuthToken', `GuildID: ${guildId}, SteamID: ${steamId}, other\n${JSON.stringify(notification)}`);
             } break;
         }
-
-        // TODO! Support other notification, right now only pairing is supported.
 
         client.authTokenReadNotifications[guildId][steamId].push(notificationId);
     }
@@ -430,6 +482,97 @@ async function pairingEntityStorageMonitor(client, guildId, data) {
 
         await DiscordMessages.sendStorageMonitorMessage(guildId, serverId, data.entityId);
     }
+}
+
+async function playerLoggedInLogin(client, guildId, data) {
+    const instance = client.getInstance(guildId);
+
+    const content = {
+        embeds: [DiscordEmbeds.getTeamLoginEmbed(
+            guildId, data, await Scrape.scrapeSteamProfilePicture(client, data.targetId))]
+    }
+
+    const rustplus = client.rustplusInstances[guildId];
+    const serverId = `${data.ip}-${data.port}`;
+
+    if (!rustplus || (rustplus && (serverId !== rustplus.serverId))) {
+        await DiscordMessages.sendMessage(guildId, content, null, instance.channelId.activity);
+        client.log(client.intlGet(null, 'infoCap'),
+            client.intlGet(null, 'playerJustConnectedTo', {
+                name: data.targetName,
+                server: data.name
+            }));
+    }
+}
+
+async function playerDiedDeath(client, guildId, title, data, discordUserId) {
+    const user = await DiscordTools.getUserById(guildId, discordUserId);
+
+    let png = null;
+    if (data.targetId !== '') png = await Scrape.scrapeSteamProfilePicture(client, data.targetId);
+    if (png === null) png = isValidUrl(data.img) ? data.img : Constants.DEFAULT_SERVER_IMG;
+
+    const content = {
+        embeds: [DiscordEmbeds.getPlayerDeathEmbed({ title: title }, data, png)]
+    }
+
+    if (user) {
+        await client.messageSend(user, content);
+    }
+}
+
+async function smartAlarmAlarm(client, guildId, title, data, message) {
+    /* Unfortunately the alarm notification from the fcm listener is unreliable. The notification does not include
+    which entityId that got triggered which makes it impossible to know which Smart Alarms are still being used
+    actively. Also, from testing it seems that notifications don't always reach this fcm listener which makes it even
+    more unreliable. The only advantage to using the fcm listener alarm notification is that it includes the title and
+    description messagethat is configured on the Smart Alarm in the game. Due to missing out on this data, Smart Alarm
+    title and description message needs to be re-configured via the /alarm slash command. Alarms that are used on the
+    connected rust server will be handled through the message event from rustplus. Smart Alarms that are still attached
+    to the credential owner and which is not part of the currently connected rust server can notify IF the general
+    setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
+
+    const instance = client.getInstance(guildId);
+    const serverId = `${data.ip}-${data.port}`;
+    const entityId = data.entityId;
+    const server = instance.serverList[serverId];
+    const rustplus = client.rustplusInstances[guildId];
+
+    if (!server || (server && !server.alarms[entityId])) return;
+
+    if ((!rustplus || (rustplus && (rustplus.serverId !== serverId))) &&
+        instance.generalSettings.fcmAlarmNotificationEnabled) {
+        server.alarms[entityId].lastTrigger = Math.floor(new Date() / 1000);
+        client.setInstance(guildId, instance);
+        await DiscordMessages.sendSmartAlarmTriggerMessage(guildId, serverId, entityId);
+        client.log(client.intlGet(null, 'infoCap'), `${title}: ${message}`);
+    }
+}
+
+async function smartAlarmRaidAlarm(client, guildId, title, data, message) {
+    const instance = client.getInstance(guildId);
+    const serverId = `${data.ip}-${data.port}`;
+    const rustplus = client.rustplusInstances[guildId];
+
+    if (!instance.serverList.hasOwnProperty(serverId)) return;
+
+    const files = [];
+    if (data.img === '') {
+        files.push(new Discord.AttachmentBuilder(Path.join(__dirname, '..', `resources/images/rocket.png`)));
+    }
+
+    const content = {
+        embeds: [DiscordEmbeds.getAlarmRaidAlarmEmbed({ title: title, message: message }, data)],
+        content: '@everyone',
+        files: files
+    }
+
+    if (rustplus && (serverId === rustplus.serverId)) {
+        await DiscordMessages.sendMessage(guildId, content, null, instance.channelId.activity);
+        rustplus.sendInGameMessage(`${title}: ${message}`);
+    }
+
+    client.log(client.intlGet(null, 'infoCap'), `${title} ${message}`);
 }
 
 module.exports = {
