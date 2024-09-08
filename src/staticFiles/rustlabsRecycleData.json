@@ -8010,6 +8010,32 @@
       ]
     }
   },
+  "1619039771": {
+    "recycler": {
+      "efficiency": "0.6",
+      "yield": [
+        {
+          "id": "69511070",
+          "probability": 1,
+          "quantity": 60
+        }
+      ]
+    },
+    "shredder": {
+      "efficiency": null,
+      "yield": []
+    },
+    "safe-zone-recycler": {
+      "efficiency": "0.4",
+      "yield": [
+        {
+          "id": "69511070",
+          "probability": 1,
+          "quantity": 40
+        }
+      ]
+    }
+  },
   "1623701499": {
     "recycler": {
       "efficiency": "0.6",
@@ -13380,6 +13406,32 @@
           "id": "479143914",
           "probability": 1,
           "quantity": 1
+        }
+      ]
+    }
+  },
+  "-1767794021": {
+    "recycler": {
+      "efficiency": "0.6",
+      "yield": [
+        {
+          "id": "317398316",
+          "probability": 1,
+          "quantity": 6
+        }
+      ]
+    },
+    "shredder": {
+      "efficiency": null,
+      "yield": []
+    },
+    "safe-zone-recycler": {
+      "efficiency": "0.4",
+      "yield": [
+        {
+          "id": "317398316",
+          "probability": 1,
+          "quantity": 4
         }
       ]
     }
@@ -20057,6 +20109,32 @@
           "id": "-265876753",
           "probability": 1,
           "quantity": 6
+        }
+      ]
+    }
+  },
+  "-1501434104": {
+    "recycler": {
+      "efficiency": "0.6",
+      "yield": [
+        {
+          "id": "-858312878",
+          "probability": 1,
+          "quantity": 3
+        }
+      ]
+    },
+    "shredder": {
+      "efficiency": null,
+      "yield": []
+    },
+    "safe-zone-recycler": {
+      "efficiency": "0.4",
+      "yield": [
+        {
+          "id": "-858312878",
+          "probability": 1,
+          "quantity": 2
         }
       ]
     }

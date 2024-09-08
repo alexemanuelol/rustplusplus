@@ -1476,8 +1476,8 @@
     },
     "1426574435": {
         "shortname": "minihelicopter.repair",
-        "name": "MC repair",
-        "description": "MC repair dummy"
+        "name": "Minicopter",
+        "description": ""
     },
     "1430085198": {
         "shortname": "industrial.crafter",
@@ -1698,6 +1698,11 @@
         "shortname": "frankensteins.monster.03.torso",
         "name": "Heavy Frankenstein Torso",
         "description": "Slightly slower, slightly stronger.\n\nCombined at a Frankenstein Table to create your very own monster."
+    },
+    "1619039771": {
+        "shortname": "electric.digitalclock",
+        "name": "Digital Clock",
+        "description": "A digital clock that displays the server time and lets you set alarms to pass power through when ringing. Ideal for synchronizing traps or timed events."
     },
     "1623701499": {
         "shortname": "industrial.wall.light",
@@ -3161,8 +3166,8 @@
     },
     "-1759188988": {
         "shortname": "habrepair",
-        "name": "Hab Repair",
-        "description": "Hab repair"
+        "name": "Hot Air Balloon",
+        "description": "A Hot Air Balloon."
     },
     "-888153050": {
         "shortname": "halloween.candy",
@@ -3359,7 +3364,6 @@
         "name": "Inner Tube",
         "description": "An inflated tube for aquatic activities."
     },
-    "undefined": {},
     "-1163532624": {
         "shortname": "jacket",
         "name": "Jacket",
@@ -3882,8 +3886,8 @@
     },
     "-1884328185": {
         "shortname": "scraptransportheli.repair",
-        "name": "ScrapTransportHeliRepair",
-        "description": "ScrapTransportHeliRepair Dummy"
+        "name": "Scrap Transport Helicopter",
+        "description": ""
     },
     "-1776128552": {
         "shortname": "seed.green.berry",
@@ -4435,6 +4439,11 @@
         "name": "Strengthened Glass Window",
         "description": "Bulletproof glass insert"
     },
+    "-1501434104": {
+        "shortname": "wallpaper",
+        "name": "Wallpaper",
+        "description": "Transform your base from a rusty shack to a cozy hideout with this sleek wallpaper. A nice touch of style - until the next raid, at least."
+    },
     "-1344017968": {
         "shortname": "wantedposter",
         "name": "Wanted Poster",
@@ -4484,6 +4493,11 @@
         "shortname": "waterpump",
         "name": "Water Pump",
         "description": "Can be placed in a water source to collect that water while powered. Can be connected to other Water entities."
+    },
+    "-1767794021": {
+        "shortname": "weapon.mod.gascompressionovedrive",
+        "name": "Gas Compression Overdrive",
+        "description": "An internal weapon mod which compresses and directs gasses used for cycling the weapon to the barrel, effectively increasing projectile velocity and damage at the expense of cycle rate."
     },
     "-132516482": {
         "shortname": "weapon.mod.lasersight",

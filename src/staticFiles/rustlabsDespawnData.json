@@ -1155,6 +1155,10 @@
     "time": 300,
     "timeString": "5 min"
   },
+  "1619039771": {
+    "time": 1200,
+    "timeString": "20 min"
+  },
   "1623701499": {
     "time": 300,
     "timeString": "5 min"
@@ -2023,6 +2027,10 @@
     "time": 1200,
     "timeString": "20 min"
   },
+  "-1767794021": {
+    "time": 2400,
+    "timeString": "40 min"
+  },
   "-1043618880": {
     "time": 2400,
     "timeString": "40 min"
@@ -2188,8 +2196,8 @@
     "timeString": "40 min"
   },
   "-218009552": {
-    "time": 3600,
-    "timeString": "1 hour"
+    "time": 2400,
+    "timeString": "40 min"
   },
   "-246672609": {
     "time": 300,
@@ -3024,6 +3032,10 @@
     "timeString": "5 min"
   },
   "-1538109120": {
+    "time": 300,
+    "timeString": "5 min"
+  },
+  "-1501434104": {
     "time": 300,
     "timeString": "5 min"
   },

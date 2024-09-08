@@ -502,6 +502,15 @@ module.exports = {
         await Client.client.interactionEditReply(interaction, content);
     },
 
+    sendAuthTokensShowMessage: async function (interaction) {
+        const content = {
+            embeds: [await DiscordEmbeds.getAuthTokensShowEmbed(interaction.guildId)],
+            ephemeral: true
+        }
+
+        await Client.client.interactionEditReply(interaction, content);
+    },
+
     sendItemAvailableInVendingMachineMessage: async function (rustplus, str) {
         const instance = Client.client.getInstance(rustplus.guildId);
 

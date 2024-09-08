@@ -672,7 +672,7 @@
     "workbench": {
       "type": "-41896755",
       "scrap": 150,
-      "totalScrap": 2910
+      "totalScrap": 2460
     }
   },
   "1318558775": {
@@ -901,6 +901,14 @@
       "type": "1524187186",
       "scrap": 22,
       "totalScrap": 22
+    }
+  },
+  "1619039771": {
+    "researchTable": 75,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 90,
+      "totalScrap": 450
     }
   },
   "1638322904": {
@@ -1463,6 +1471,14 @@
       "totalScrap": 618
     }
   },
+  "-1767794021": {
+    "researchTable": 125,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 150,
+      "totalScrap": 2310
+    }
+  },
   "-265876753": {
     "researchTable": 10,
     "workbench": null
@@ -1572,11 +1588,11 @@
     }
   },
   "-218009552": {
-    "researchTable": 500,
+    "researchTable": 125,
     "workbench": {
       "type": "-41896755",
-      "scrap": 600,
-      "totalScrap": 2760
+      "scrap": 150,
+      "totalScrap": 2310
     }
   },
   "-1989600732": {

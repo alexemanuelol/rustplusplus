@@ -61,4 +61,14 @@ module.exports = {
         const path = Path.join(__dirname, '..', '..', 'credentials', `${guildId}.json`);
         Fs.writeFileSync(path, JSON.stringify(credentials, null, 2));
     },
+
+    readAuthTokensFile: function (guildId) {
+        const path = Path.join(__dirname, '..', '..', 'authtokens', `${guildId}.json`);
+        return JSON.parse(Fs.readFileSync(path, 'utf8'));
+    },
+
+    writeAuthTokensFile: function (guildId, authTokens) {
+        const path = Path.join(__dirname, '..', '..', 'authtokens', `${guildId}.json`);
+        Fs.writeFileSync(path, JSON.stringify(authTokens, null, 2));
+    },
 }
