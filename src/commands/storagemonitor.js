@@ -50,6 +50,18 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{
+				id: interaction.options.getString('id'),
+				image: interaction.options.getString('image'),
+			}
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const guildId = interaction.guildId;
 		const instance = client.getInstance(guildId);
 		const rustplus = client.rustplusInstances[guildId];

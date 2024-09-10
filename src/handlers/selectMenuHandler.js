@@ -51,6 +51,7 @@ module.exports = async (client, interaction) => {
             id: `${verifyId}`,
             value: `${instance.generalSettings.language}`
         }));
+        await DiscordMessages.sendSelectMenuInteractionMessage(interaction, instance.generalSettings.language);
 
         await interaction.deferUpdate();
 
@@ -73,6 +74,7 @@ module.exports = async (client, interaction) => {
             id: `${verifyId}`,
             value: `${instance.generalSettings.prefix}`
         }));
+        await DiscordMessages.sendSelectMenuInteractionMessage(interaction, instance.generalSettings.prefix);
 
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getPrefixSelectMenu(guildId, interaction.values[0])]
@@ -92,6 +94,7 @@ module.exports = async (client, interaction) => {
             id: `${verifyId}`,
             value: `${instance.generalSettings.trademark}`
         }));
+        await DiscordMessages.sendSelectMenuInteractionMessage(interaction, instance.generalSettings.trademark);
 
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getTrademarkSelectMenu(guildId, interaction.values[0])]
@@ -107,6 +110,7 @@ module.exports = async (client, interaction) => {
             id: `${verifyId}`,
             value: `${instance.generalSettings.commandDelay}`
         }));
+        await DiscordMessages.sendSelectMenuInteractionMessage(interaction, instance.generalSettings.commandDelay);
 
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getCommandDelaySelectMenu(guildId, interaction.values[0])]
@@ -122,6 +126,7 @@ module.exports = async (client, interaction) => {
             id: `${verifyId}`,
             value: `${instance.generalSettings.voiceGender}`
         }));
+        await DiscordMessages.sendSelectMenuInteractionMessage(interaction, instance.generalSettings.voiceGender);
 
         await client.interactionUpdate(interaction, {
             components: [DiscordSelectMenus.getVoiceGenderSelectMenu(guildId, interaction.values[0])]
@@ -147,6 +152,7 @@ module.exports = async (client, interaction) => {
             id: `${verifyId}`,
             value: `${server.switches[ids.entityId].autoDayNightOnOff}`
         }));
+        await DiscordMessages.sendSelectMenuInteractionMessage(interaction, server.switches[ids.entityId].autoDayNightOnOff);
 
         DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
     }

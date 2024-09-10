@@ -101,6 +101,7 @@ module.exports = {
     COLOR_PATROL_HELICOPTER_TRACER: '#00FF00',
     COLOR_SETTINGS: '#861C0C',
     COLOR_TEAMCHAT_DEFAULT: '#CE412B',
+    COLOR_DISCORD_INTERACTION: '#7289DA',
 
     GET_STEAM_PROFILE_LINK: function (steamId) {
         return `[${steamId}](${this.STEAM_PROFILES_URL}${steamId})`;
@@ -108,5 +109,13 @@ module.exports = {
 
     GET_BATTLEMETRICS_PROFILE_LINK: function (playerId) {
         return `[${playerId}](${this.BATTLEMETRICS_PROFILE_URL}${playerId})`;
+    },
+
+    GET_DISCORD_CHANNEL_URL: function (guildId, channelId) {
+        return `https://discord.com/channels/${guildId}/${channelId}`
+    },
+
+    GET_DISCORD_MESSAGE_URL: function (guildId, channelId, messageId) {
+        return `${this.GET_DISCORD_CHANNEL_URL(guildId, channelId)}/${messageId}`
     }
 }

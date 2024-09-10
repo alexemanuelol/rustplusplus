@@ -32,6 +32,7 @@ module.exports = (client, guild) => {
             generalSettings: client.readGeneralSettingsTemplate(),
             notificationSettings: client.readNotificationSettingsTemplate(),
             channelId: {
+                interactions: null,
                 category: null,
                 information: null,
                 servers: null,
@@ -116,6 +117,7 @@ module.exports = (client, guild) => {
 
         if (!instance.hasOwnProperty('channelId')) {
             instance.channelId = {
+                interactions: null,
                 category: null,
                 information: null,
                 servers: null,
@@ -132,6 +134,7 @@ module.exports = (client, guild) => {
             }
         }
         else {
+            if (!instance.channelId.hasOwnProperty('interactions')) instance.channelId.interactions = null;
             if (!instance.channelId.hasOwnProperty('category')) instance.channelId.category = null;
             if (!instance.channelId.hasOwnProperty('information')) instance.channelId.information = null;
             if (!instance.channelId.hasOwnProperty('servers')) instance.channelId.servers = null;

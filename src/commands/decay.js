@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const Timer = require('../util/timer.js');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
 	name: 'decay',
@@ -45,6 +46,19 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{
+				name: interaction.options.getString('name'),
+				id: interaction.options.getString('id'),
+				hp: interaction.options.getInteger('hp'),
+			}
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const guildId = interaction.guildId;
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);

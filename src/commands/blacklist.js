@@ -25,6 +25,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const Scrape = require('../util/scrape.js');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
 	name: 'blacklist',
@@ -61,6 +62,18 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{
+				discord_user: interaction.options.getUser('discord_user'),
+				steamid: interaction.options.getString('steamid')
+			}
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const guildId = interaction.guildId;
 		const instance = client.getInstance(guildId);
 
