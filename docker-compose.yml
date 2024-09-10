@@ -12,6 +12,3 @@ services:
             - RPP_DISCORD_TOKEN=token
         container_name: rpp
         image: ghcr.io/alexemanuelol/rustplusplus
-permissions        :
-    packages: write
-
