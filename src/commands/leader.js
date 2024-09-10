@@ -21,6 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
 	name: 'leader',
@@ -36,6 +37,17 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{
+				member: interaction.options.getString('member'),
+			}
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
 		const rustplus = client.rustplusInstances[interaction.guildId];
 

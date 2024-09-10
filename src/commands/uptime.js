@@ -39,6 +39,12 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(interaction)
+	},
+
+	async executeCommand(client, interaction) {
 		const rustplus = client.rustplusInstances[interaction.guildId];
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
