@@ -552,7 +552,7 @@ class MapMarkers {
 
             this.rustplus.cargoShipTracers[marker.id].push({ x: marker.x, y: marker.y });
 
-           // const harbors = [];
+            const harbors = [];
             for (const monument of this.rustplus.map.monuments) {
                 if (/harbor/.test(monument.token)) {
                     harbors.push({ x: monument.x, y: monument.y })

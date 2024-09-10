@@ -3,6 +3,7 @@ services:
     app:
         volumes:
             - ./credentials:/app/credentials
+            - ./authtokens:/app/authtokens
             - ./instances:/app/instances
             - ./logs:/app/logs
             - ./maps:/app/maps
