@@ -60,13 +60,13 @@
         "voice": true
     },
     "travelingVendorDetectedSetting": {
-        "image": "chinook_47_logo.png",
+        "image": "traveling_vendor_logo.png",
         "discord": true,
         "inGame": false,
         "voice": true
     },
     "travelingVendorLeftSetting": {
-        "image": "chinook_47_logo.png",
+        "image": "traveling_vendor_logo.png", 
         "discord": true,
         "inGame": false,
         "voice": true
