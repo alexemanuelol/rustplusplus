@@ -34,7 +34,6 @@ const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
-const AuthTokenListenerTemp = require('../util/AuthTokenListener.js');
 
 class DiscordBot extends Discord.Client {
     constructor(props) {
@@ -46,6 +45,7 @@ class DiscordBot extends Discord.Client {
         this.fcmListeners = new Object();
         this.fcmListenersLite = new Object();
         this.authTokenListenerIntervalIds = new Object();
+        this.authTokenListenerSessionIds = new Object();
         this.authTokenReadNotifications = new Object();
         this.instances = {};
         this.guildIntl = {};
@@ -236,11 +236,6 @@ class DiscordBot extends Discord.Client {
         //        require('../util/FcmListenerLite')(this, guild, steamId);
         //    }
         //}
-        const authTokens = InstanceUtils.readAuthTokensFile(guild.id);
-        for (const steamId of Object.keys(authTokens)) {
-            if (steamId === 'hoster') continue;
-            await AuthTokenListenerTemp.startNewAuthTokenListener(this, guild.id, steamId);
-        }
 
         await require('../discordTools/SetupSettingsMenu')(this, guild);
 

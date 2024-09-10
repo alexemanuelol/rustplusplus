@@ -26,7 +26,8 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
-const AuthTokenListenerTemp = require('../util/AuthTokenListener.js');
+const { startNewAuthTokenListener } = require('../util/AuthTokenListener.js');
+const Constants = require('../util/constants');
 
 module.exports = {
     name: 'authtoken',
@@ -74,6 +75,14 @@ module.exports = {
                 .addStringOption(option => option
                     .setName('steam_id')
                     .setDescription('The SteamId of the new hoster.')
+                    .setRequired(false)))
+            .addSubcommand(subcommand => subcommand
+                .setName('start_listener')
+                .setDescription(`Start a ${parseInt(Constants.AUTH_TOKEN_LISTENER_SESSION_MS / (60 * 1000))} ` +
+                    `min listening session.`)
+                .addStringOption(option => option
+                    .setName('steam_id')
+                    .setDescription('The SteamId of the Authentication Token to start listening to.')
                     .setRequired(false)));
     },
 
@@ -99,6 +108,10 @@ module.exports = {
 
             case 'set_hoster': {
                 setHoster(client, interaction, verifyId);
+            } break;
+
+            case 'start_listener': {
+                startListener(client, interaction, verifyId);
             } break;
 
             default: {
@@ -139,7 +152,6 @@ async function addAuthToken(client, interaction, verifyId) {
 
     InstanceUtils.writeAuthTokensFile(guildId, authTokens);
 
-    await AuthTokenListenerTemp.startNewAuthTokenListener(client, interaction.guildId, steamId);
     if (!isHoster) {
         const rustplus = client.rustplusInstances[guildId];
         if (rustplus && rustplus.team.leaderSteamId === steamId) {
@@ -194,14 +206,16 @@ async function removeAuthToken(client, interaction, verifyId) {
         return;
     }
 
-    if (!(client.authTokenListenerIntervalIds[guildId])) {
-        client.authTokenListenerIntervalIds[guildId] = new Object();
-    }
-
     if (client.authTokenListenerIntervalIds[guildId] &&
         client.authTokenListenerIntervalIds[guildId][steamId]) {
         clearInterval(client.authTokenListenerIntervalIds[guildId][steamId]);
         delete client.authTokenListenerIntervalIds[guildId][steamId];
+    }
+
+    if (client.authTokenListenerSessionIds[guildId] &&
+        client.authTokenListenerSessionIds[guildId][steamId]) {
+        clearInterval(client.authTokenListenerSessionIds[guildId][steamId]);
+        delete client.authTokenListenerSessionIds[guildId][steamId];
     }
 
     if (client.authTokenReadNotifications[guildId] &&
@@ -273,14 +287,101 @@ async function setHoster(client, interaction, verifyId) {
         await DiscordMessages.sendServerMessage(guildId, rustplus.serverId);
     }
 
-    await AuthTokenListenerTemp.startNewAuthTokenListener(client, interaction.guildId, steamId);
-
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
         value: `setHoster, ${steamId}`
     }));
 
     const str = `Authentication Token hoster was successfully set to steamId: ${steamId}.`;
+    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+    client.log(client.intlGet(null, 'infoCap'), str);
+}
+
+async function startListener(client, interaction, verifyId) {
+    const guildId = interaction.guildId;
+    const authTokens = InstanceUtils.readAuthTokensFile(guildId);
+    let steamId = interaction.options.getString('steam_id');
+
+    if (steamId && (steamId in authTokens) && authTokens[steamId].discordUserId !== interaction.member.user.id) {
+        if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
+            const str = client.intlGet(interaction.guildId, 'missingPermission');
+            client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            client.log(client.intlGet(null, 'warningCap'), str);
+            return;
+        }
+    }
+
+    if (!steamId) {
+        for (const authToken of Object.keys(authTokens)) {
+            if (authToken === 'hoster') continue;
+
+            if (authTokens[authToken].discordUserId === interaction.member.user.id) {
+                steamId = authToken;
+                break;
+            }
+        }
+
+        if (!steamId) {
+            const str = `Authentication Token could not find a steamId to start listening.`;
+            client.log(client.intlGet(null, 'warningCap'), str);
+            return;
+        }
+    }
+
+    if (!(steamId in authTokens)) {
+        const str = `Authentication Token for steamId: ${steamId} does not exist.`;
+        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+        client.log(client.intlGet(null, 'warningCap'), str);
+        return;
+    }
+
+    /* Create instance for guild if does not exist. */
+    if (!(client.authTokenListenerIntervalIds[guildId])) {
+        client.authTokenListenerIntervalIds[guildId] = new Object();
+    }
+    if (!(client.authTokenListenerSessionIds[guildId])) {
+        client.authTokenListenerSessionIds[guildId] = new Object();
+    }
+    if (!(client.authTokenReadNotifications[guildId])) {
+        client.authTokenReadNotifications[guildId] = new Object();
+    }
+
+    /* Clear previous interval, session, and read notifications. */
+    if (client.authTokenListenerIntervalIds[guildId][steamId]) {
+        clearInterval(client.authTokenListenerIntervalIds[guildId][steamId]);
+        delete client.authTokenListenerIntervalIds[guildId][steamId];
+    }
+    if (client.authTokenListenerSessionIds[guildId][steamId]) {
+        clearTimeout(client.authTokenListenerSessionIds[guildId][steamId]);
+        delete client.authTokenListenerSessionIds[guildId][steamId];
+    }
+    if (client.authTokenReadNotifications[guildId][steamId]) {
+        client.authTokenReadNotifications[guildId][steamId].length = 0; /* Clear the array. */
+    }
+    else {
+        client.authTokenReadNotifications[guildId][steamId] = [];
+    }
+
+    /* Set timeout for session cancellation. */
+    setTimeout(() => {
+        if (client.authTokenListenerIntervalIds[guildId][steamId]) {
+            clearInterval(client.authTokenListenerIntervalIds[guildId][steamId]);
+            delete client.authTokenListenerIntervalIds[guildId][steamId];
+            const str = `Authentication Token listening session for steamId: ${steamId} just stopped.`;
+            client.log(client.intlGet(null, 'infoCap'), str);
+        }
+    }, Constants.AUTH_TOKEN_LISTENER_SESSION_MS);
+
+    /* Initiate auth token listener. */
+    await startNewAuthTokenListener(client, guildId, steamId);
+
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+        id: `${verifyId}`,
+        value: `start_listener, ${interaction.options.getSubcommand()} ${steamId}`
+    }));
+
+    const time = parseInt(Constants.AUTH_TOKEN_LISTENER_SESSION_MS / (60 * 1000));
+    const str = `Authentication Token listening session (${time} min) for steamId: ${steamId} started successfully.`;
     await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
     client.log(client.intlGet(null, 'infoCap'), str);
 }
