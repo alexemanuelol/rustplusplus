@@ -160,7 +160,7 @@
     "commandSyntaxTimers": "timers",
     "commandSyntaxTranslateFromTo": "trf",
     "commandSyntaxTranslateTo": "tr",
-    "commandSyntaxTravelingVendor": "trvendor",
+    "commandSyntaxTravelingVendor": "vendor",
     "commandSyntaxTwig": "twig",
     "commandSyntaxUnmute": "unmute",
     "commandSyntaxUnsubscribe": "unsub",
