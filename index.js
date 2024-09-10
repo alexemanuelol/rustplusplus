@@ -55,6 +55,10 @@ function createMissingDirectories() {
         Fs.mkdirSync(Path.join(__dirname, 'credentials'));
     }
 
+    if (!Fs.existsSync(Path.join(__dirname, 'authtokens'))) {
+        Fs.mkdirSync(Path.join(__dirname, 'authtokens'));
+    }
+
     if (!Fs.existsSync(Path.join(__dirname, 'maps'))) {
         Fs.mkdirSync(Path.join(__dirname, 'maps'));
     }
