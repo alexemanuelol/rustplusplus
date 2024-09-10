@@ -60,6 +60,7 @@
 - **unmute** - Unmute rustplusplus In-Game.
 - **upkeep** - Check upkeep of Storage Monitor Tool Cupboards.
 - **uptime** - Display the uptime of rustplusplus and currently connected server.
+- **vendor** - Get information regarding the Traveling Vendor
 - **wipe** - Display time since wipe.
 
 ## Smart Devices
