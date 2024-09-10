@@ -502,8 +502,10 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         const entity = server.storageMonitors[entityId];
-        const credentials = InstanceUtils.readCredentialsFile(guildId);
-        const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+        //const credentials = InstanceUtils.readCredentialsFile(guildId);
+        const authTokens = InstanceUtils.readAuthTokensFile(guildId);
+        //const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+        const user = await DiscordTools.getUserById(guildId, authTokens[server.steamId].discordUserId);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
@@ -523,8 +525,10 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         const entity = instance.serverList[serverId].switches[entityId];
-        const credentials = InstanceUtils.readCredentialsFile(guildId);
-        const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+        //const credentials = InstanceUtils.readCredentialsFile(guildId);
+        const authTokens = InstanceUtils.readAuthTokensFile(guildId);
+        //const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+        const user = await DiscordTools.getUserById(guildId, authTokens[server.steamId].discordUserId);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
@@ -544,8 +548,10 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const server = instance.serverList[serverId];
         const entity = server.alarms[entityId];
-        const credentials = InstanceUtils.readCredentialsFile(guildId);
-        const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+        //const credentials = InstanceUtils.readCredentialsFile(guildId);
+        const authTokens = InstanceUtils.readAuthTokensFile(guildId);
+        //const user = await DiscordTools.getUserById(guildId, credentials[server.steamId].discordUserId);
+        const user = await DiscordTools.getUserById(guildId, authTokens[server.steamId].discordUserId);
         const grid = entity.location !== null ? ` (${entity.location})` : '';
 
         return module.exports.getEmbed({
@@ -1037,7 +1043,7 @@ module.exports = {
 
         return module.exports.getEmbed({
             color: Constants.COLOR_DEFAULT,
-            title: Client.client.intlGet(guildId, 'fcmCredentials'),
+            title: 'Authentication Token',
             fields: [
                 { name: Client.client.intlGet(guildId, 'name'), value: names, inline: true },
                 { name: 'SteamID', value: steamIds, inline: true },
