@@ -60,12 +60,36 @@ async function startNewAuthTokenListener(client, guildId, steamId) {
         return false;
     }
 
+    client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'fcmListenerStartHost', {
+        guildId: guildId,
+        steamId: hoster
+    }));
     client.log(client.intlGet(null, 'infoCap'),
         `Starting Auth Token Listener for guildId: ${guildId}, steamId: ${steamId}`);
 
+    if (!(client.authTokenListenerIntervalIds[guildId])) {
+        client.authTokenListenerIntervalIds[guildId] = new Object();
+    }
+
+    if (client.authTokenListenerIntervalIds[guildId][steamId]) {
+        clearInterval(client.authTokenListenerIntervalIds[guildId][steamId]);
+        delete client.authTokenListenerIntervalIds[guildId][steamId];
+    }
+
+    if (!(client.authTokenReadNotifications[guildId])) {
+        client.authTokenReadNotifications[guildId] = new Object();
+    }
+
+    if (client.authTokenReadNotifications[guildId][steamId]) {
+        client.authTokenReadNotifications[guildId][steamId].length = 0; /* Clear the array. */
+    }
+    else {
+        client.authTokenReadNotifications[guildId][steamId] = [];
+    }
+
     await authTokenListener(client, guildId, steamId, true);
     client.authTokenListenerIntervalIds[guildId][steamId] =
-        setInterval(authTokenListener, Constants.AUTH_TOKEN_LISTENER_POLL_MS, client, guildId, steamId);
+        setInterval(authTokenListener, Constants.AUTH_TOKEN_LISTENER_REFRESH_MS, client, guildId, steamId);
 
     return true;
 }
@@ -95,23 +119,9 @@ async function authTokenListener(client, guildId, steamId, firstTime = false) {
 
     if (!token) return;
 
-    let response = null;
-    try {
-        response = await Axios.post('https://companion-rust.facepunch.com/api/history/read', {
-            AuthToken: token
-        });
-
-        if (response === null) {
-            client.log(client.intlGet(null, 'warningCap'),
-                `Request to api/history/read was not successful, response is null.`);
-            return;
-        }
-    }
-    catch (e) {
-        client.log(client.intlGet(null, 'warningCap'),
-            `Request to api/history/read was not successful: ${e}.`);
-        return;
-    }
+    const response = await Axios.post('https://companion-rust.facepunch.com/api/history/read', {
+        AuthToken: token
+    });
 
     if (response.status !== 200) {
         client.log(client.intlGet(null, 'warningCap'),
