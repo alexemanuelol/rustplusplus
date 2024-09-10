@@ -83,7 +83,7 @@ function checkForUpdates() {
 }
 */
 function checkForUpdates() {
-    const remote = 'https://raw.githubusercontent.com/MrFiNka/rustplusplus/main/package.json';
+    const remote = 'https://raw.githubusercontent.com/MrFiNka/rustplusplus/master/package.json';
     const local = require('./package.json');
 
     axios.get(remote).then((response) => {
