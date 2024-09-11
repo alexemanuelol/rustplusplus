@@ -28,7 +28,7 @@ module.exports = {
 
         const credentials = InstanceUtils.readCredentialsFile(guildId);
 
-        const steamId = Object.keys(credentials).find(e => credentials[e] && credentials[e].discordUserId === userId);
+        const steamId = Object.keys(credentials).find(e => credentials[e] && credentials[e].discord_user_id === userId);
 
         if (!(steamId in credentials)) return;
 

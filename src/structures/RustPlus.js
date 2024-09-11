@@ -2280,7 +2280,7 @@ class RustPlus extends RustPlusLib {
                     });
                 }
 
-                const discordUserId = credentials[player.steamId].discordUserId;
+                const discordUserId = credentials[player.steamId].discord_user_id;
                 const user = await DiscordTools.getUserById(this.guildId, discordUserId);
 
                 const content = {
