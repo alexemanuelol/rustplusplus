@@ -1,5 +1,2 @@
-*
-!src/
-!config/
-!index.ts
-!package*.json
+docs/
+node_modules/

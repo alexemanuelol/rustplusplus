@@ -2,7 +2,6 @@ node_modules
 .env
 instances
 credentials
-authtokens
 maps
 logs
 temp
