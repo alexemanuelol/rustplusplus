@@ -98,33 +98,32 @@ module.exports = async (client, guild, steamId) => {
             case 'pairing': {
                 switch (body.type) {
                     case 'server': {
-                        client.log('FCM LITE', `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: server`);
+                        log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, pairing: server`);
                         pairingServer(client, guild, steamId, title, message, body);
                     } break;
 
                     case 'entity': {
                         switch (body.entityName) {
                             case 'Smart Switch': {
-                                client.log('FCM LITE',
-                                    `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: entity: Switch`);
+                                log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                    `pairing: entity: Switch`);
                                 pairingEntitySwitch(client, guild, title, message, body);
                             } break;
 
                             case 'Smart Alarm': {
-                                client.log('FCM LITE',
-                                    `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: entity: Smart Alarm`);
+                                log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                    `pairing: entity: Smart Alarm`);
                                 pairingEntitySmartAlarm(client, guild, title, message, body);
                             } break;
 
                             case 'Storage Monitor': {
-                                client.log('FCM LITE',
-                                    `GuildID: ${guild.id}, SteamID: ${steamId}, pairing: entity: Storage Monitor`);
+                                log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                    `pairing: entity: Storage Monitor`);
                                 pairingEntityStorageMonitor(client, guild, title, message, body);
                             } break;
 
                             default: {
-                                client.log('FCM LITE',
-                                    `GuildID: ${guild.id}, SteamID: ${steamId}, ` +
+                                log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, ` +
                                     `pairing: entity: other\n${JSON.stringify(data)}`);
                             } break;
                         }
@@ -138,7 +137,7 @@ module.exports = async (client, guild, steamId) => {
             case 'player': {
                 switch (body.type) {
                     case 'death': {
-                        client.log('FCM LITE', `GuildID: ${guild.id}, SteamID: ${steamId}, player: death`);
+                        log.info(`FCM LITE GuildID: ${guild.id}, SteamID: ${steamId}, player: death`);
                         playerDeath(client, guild, title, message, body, discordUserId);
                     } break;
 

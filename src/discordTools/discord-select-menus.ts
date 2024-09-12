@@ -53,14 +53,17 @@ export function getSelectMenu(guildId: string, options: discordjs.StringSelectMe
     }
 
     if (options.hasOwnProperty('options') && options.options !== undefined) {
-        for (const option of options.options) {
+        /* Convert the readonly array into a mutable one */
+        const mutableOptions = [...options.options];
+
+        for (const option of mutableOptions) {
             if (option.description === undefined) {
                 option.description = lm.getIntl(instance.generalSettings.language, 'empty');
                 continue;
             }
             option.description = option.description.substring(0, constants.SELECT_MENU_MAX_DESCRIPTION_CHARACTERS);
         }
-        selectMenu.setOptions(options.options);
+        selectMenu.setOptions(mutableOptions);
     }
 
     return selectMenu;
