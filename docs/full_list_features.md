@@ -6,7 +6,7 @@
 - **/blacklist** - Blacklist a user from using the bot.
 - **/cctv** - Get cctv camera codes for monuments.
 - **/craft** - Display the cost to craft an item.
-- **/credentials** - Setup FCM-Credentials.
+- **/credentials** - Setup Credentials.
 - **/decay** - Display the decay time of an item.
 - **/help** - Get help message.
 - **/item** - Get the details of an item.

@@ -14,7 +14,7 @@ Slash Command | Description
 [**/blacklist**](commands.md#blacklist) | Blacklist a user from using the bot.
 [**/cctv**](commands.md#cctv) | Posts CCTV codes for a monument.
 [**/craft**](commands.md#craft) | Display the cost to craft an item.
-[**/credentials**](commands.md#credentials) | Set/Clear the FCM Credentials for the user account.
+[**/credentials**](commands.md#credentials) | Set/Clear the Credentials for the user account.
 [**/decay**](commands.md#decay) | Display the decay time of an item.
 [**/help**](commands.md#help) | Display help message.
 [**/item**](commands.md#item) | Get the details of an item.
@@ -105,27 +105,20 @@ Subcommand | Options | Description | Required
 
 ## **/credentials**
 
-> **Add/Remove the FCM Credentials for the user account.**
+> **Add/Remove the Credentials for the user account.**
 
 Subcommand | Options | Description | Required
 ---------- | ------- | ----------- | --------
-`add` | &nbsp; | Add FCM Credentials. | &nbsp;
-&nbsp; | `keys_private_key` | Keys Private Key. | `True`
-&nbsp; | `keys_public_key` | Keys Public Key. | `True`
-&nbsp; | `keys_auth_secret` | Keys Auth Secret. | `True`
-&nbsp; | `fcm_token` | FCM Token. | `True`
-&nbsp; | `fcm_push_set` | FCM Push Set. | `True`
-&nbsp; | `gcm_token` | GCM Token. | `True`
-&nbsp; | `gcm_android_id` | FCM Android ID. | `True`
+`add` | &nbsp; | Add Credentials. | &nbsp;
+&nbsp; | `gcm_android_id` | GCM Android ID. | `True`
 &nbsp; | `gcm_security_token` | GCM Security Token. | `True`
-&nbsp; | `gcm_app_id` | GCM App ID. | `True`
 &nbsp; | `steam_id` | Steam ID. | `True`
 &nbsp; | `issued_date` | Issued date of the credentials. | `True`
 &nbsp; | `expire_date` | Expire date of the credentials. | `True`
 &nbsp; | `hoster` | Should be hoster. | `False`
-`remove` | &nbsp; | Remove FCM Credentials. | &nbsp;
+`remove` | &nbsp; | Remove Credentials. | &nbsp;
 &nbsp; | `steam_id` | Steam ID. | `False`
-`show` | &nbsp; | Show all registered FCM Credentials. | &nbsp;
+`show` | &nbsp; | Show all registered Credentials. | &nbsp;
 `set_hoster` | &nbsp; | Set the hoster. | &nbsp;
 &nbsp; | `steam_id` | Steam ID. | `False`
 

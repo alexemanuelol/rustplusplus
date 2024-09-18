@@ -38,52 +38,12 @@ module.exports = {
                 .setName('add')
                 .setDescription(client.intlGet(guildId, 'commandsCredentialsAddDesc'))
                 .addStringOption(option => option
-                    .setName('keys_private_key')
-                    .setDescription('Keys Private Key.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('keys_public_key')
-                    .setDescription('Keys Public Key.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('keys_auth_secret')
-                    .setDescription('Keys Auth Secret.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('fcm_name')
-                    .setDescription('FCM Name.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('fcm_token')
-                    .setDescription('FCM Token.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('fcm_web_endpoint')
-                    .setDescription('FCM Web EndPoint.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('fcm_web_p256dh')
-                    .setDescription('FCM Web P256DH.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('fcm_web_auth')
-                    .setDescription('FCM Web Auth.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('gcm_token')
-                    .setDescription('GCM Token.')
-                    .setRequired(true))
-                .addStringOption(option => option
                     .setName('gcm_android_id')
                     .setDescription('GCM Android ID.')
                     .setRequired(true))
                 .addStringOption(option => option
                     .setName('gcm_security_token')
                     .setDescription('GCM Security Token.')
-                    .setRequired(true))
-                .addStringOption(option => option
-                    .setName('gcm_app_id')
-                    .setDescription('GCM App ID.')
                     .setRequired(true))
                 .addStringOption(option => option
                     .setName('steam_id')
@@ -173,31 +133,12 @@ async function addCredentials(client, interaction, verifyId) {
     }
 
     credentials[steamId] = new Object();
-    credentials[steamId].fcm_credentials = new Object();
-
-    credentials[steamId].fcm_credentials.keys = new Object();
-    credentials[steamId].fcm_credentials.keys.privateKey = interaction.options.getString('keys_private_key');
-    credentials[steamId].fcm_credentials.keys.publicKey = interaction.options.getString('keys_public_key');
-    credentials[steamId].fcm_credentials.keys.authSecret = interaction.options.getString('keys_auth_secret');
-
-    credentials[steamId].fcm_credentials.fcm = new Object();
-    credentials[steamId].fcm_credentials.fcm.name = interaction.options.getString('fcm_name');
-    credentials[steamId].fcm_credentials.fcm.token = interaction.options.getString('fcm_token');
-    credentials[steamId].fcm_credentials.fcm.web = new Object();
-    credentials[steamId].fcm_credentials.fcm.web.endpoint = interaction.options.getString('fcm_web_endpoint');
-    credentials[steamId].fcm_credentials.fcm.web.p256dh = interaction.options.getString('fcm_web_p256dh');
-    credentials[steamId].fcm_credentials.fcm.web.auth = interaction.options.getString('fcm_web_auth');
-
-    credentials[steamId].fcm_credentials.gcm = new Object();
-    credentials[steamId].fcm_credentials.gcm.token = interaction.options.getString('gcm_token');
-    credentials[steamId].fcm_credentials.gcm.androidId = interaction.options.getString('gcm_android_id');
-    credentials[steamId].fcm_credentials.gcm.securityToken = interaction.options.getString('gcm_security_token');
-    credentials[steamId].fcm_credentials.gcm.appId = interaction.options.getString('gcm_app_id');
-
+    credentials[steamId].gcm = new Object();
+    credentials[steamId].gcm.android_id = interaction.options.getString('gcm_android_id');
+    credentials[steamId].gcm.security_token = interaction.options.getString('gcm_security_token');
     credentials[steamId].issued_date = interaction.options.getString('issued_date');
     credentials[steamId].expire_date = interaction.options.getString('expire_date');
-
-    credentials[steamId].discordUserId = interaction.member.user.id;
+    credentials[steamId].discord_user_id = interaction.member.user.id;
 
     const prevHoster = credentials.hoster;
     if (isHoster) credentials.hoster = steamId;
@@ -223,20 +164,10 @@ async function addCredentials(client, interaction, verifyId) {
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
         id: `${verifyId}`,
         value: `add, ${steamId}, ` +
-            `${credentials[steamId].discordUserId}, ` +
+            `${credentials[steamId].discord_user_id}, ` +
             `${isHoster}, ` +
-            `${credentials[steamId].fcm_credentials.keys.privateKey}, ` +
-            `${credentials[steamId].fcm_credentials.keys.publicKey}, ` +
-            `${credentials[steamId].fcm_credentials.keys.authSecret}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.name}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.token}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.web.endpoint}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.web.p256dh}, ` +
-            `${credentials[steamId].fcm_credentials.fcm.web.auth}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.token}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.androidId}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.securityToken}, ` +
-            `${credentials[steamId].fcm_credentials.gcm.appId}, ` +
+            `${credentials[steamId].gcm.android_id}, ` +
+            `${credentials[steamId].gcm.security_token}, ` +
             `${credentials[steamId].issued_date}, ` +
             `${credentials[steamId].expire_date}`
     }));
@@ -251,7 +182,7 @@ async function removeCredentials(client, interaction, verifyId) {
     const credentials = InstanceUtils.readCredentialsFile(guildId);
     let steamId = interaction.options.getString('steam_id');
 
-    if (steamId && (steamId in credentials) && credentials[steamId].discordUserId !== interaction.member.user.id) {
+    if (steamId && (steamId in credentials) && credentials[steamId].discord_user_id !== interaction.member.user.id) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
@@ -264,7 +195,7 @@ async function removeCredentials(client, interaction, verifyId) {
         for (const credential of Object.keys(credentials)) {
             if (credential === 'hoster') continue;
 
-            if (credentials[credential].discordUserId === interaction.member.user.id) {
+            if (credentials[credential].discord_user_id === interaction.member.user.id) {
                 steamId = credential;
                 break;
             }
@@ -330,7 +261,7 @@ async function setHosterCredentials(client, interaction, verifyId) {
 
     if (!steamId) {
         steamId = Object.keys(credentials).find(e => credentials[e] &&
-            credentials[e].discordUserId === interaction.member.user.id);
+            credentials[e].discord_user_id === interaction.member.user.id);
     }
 
     if (!(steamId in credentials)) {
