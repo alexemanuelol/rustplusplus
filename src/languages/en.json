@@ -734,6 +734,7 @@
     "travelingVendorLocatedAt": "The Traveling Vendor is located at {location}.",
     "travelingVendorLeftMap" : "The Traveling Vendor just left the map at {location}.",
     "travelingVendorNotCurrentlyOnMap": "The Traveling Vendor is not currently on the map.",
+    "travelingVendorSpawnedAt": "The Traveling Vendor spawned at {location}.",
     "turnOffCap": "TURN OFF",
     "turnOnCap": "TURN ON",
     "turningGroupOnOff": "Turning Group {group} {status}.",

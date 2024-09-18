@@ -725,7 +725,7 @@ class MapMarkers {
 
             this.rustplus.sendEvent(
                 this.rustplus.notificationSettings.travelingVendorDetectedSetting,
-                this.client.intlGet(this.rustplus.guildId, 'travelingVendorLocatedAt', { location: pos.string }),
+                this.client.intlGet(this.rustplus.guildId, 'travelingVendorSpawnedAt', { location: pos.string }),
                 'vendor',
                 Constants.COLOR_TRAVELING_VENDOR_LOCATED_AT);
 
