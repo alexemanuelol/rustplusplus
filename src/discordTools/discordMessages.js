@@ -600,4 +600,121 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
+
+    sendButtonInteractionMessage: async function (interaction, value = null) {
+        await this.sendElementInteractionMessage(interaction, "button", value)
+    },
+
+    sendSelectMenuInteractionMessage: async function (interaction, value) {
+        await this.sendElementInteractionMessage(interaction, "selector", value)
+    },
+
+    sendModalInteractionMessage: async function (interaction, value) {
+        await this.sendElementInteractionMessage(interaction, "form", value)
+    },
+
+    sendElementInteractionMessage: async function (interaction, target, value) {
+        const instance = Client.client.getInstance(interaction.guildId)
+        const guild = DiscordTools.getGuild(interaction.guildId)
+        const link = Constants.GET_DISCORD_MESSAGE_URL(interaction.guildId, interaction.channelId, interaction.message.id)
+        const description = Client.client.intlGet(
+            guild.id,
+            `${target}InteractionMessage`,
+            { userId: `<@${interaction.user.id}>`, link: link }
+        )
+
+        const content = {
+            embeds: [
+                DiscordEmbeds.getInteractionEmbed(
+                    guild.id,
+                    Constants.COLOR_DISCORD_INTERACTION,
+                    description,
+                    interaction.user.avatarURL(),
+                    guild.iconURL({dynamic: true}),
+                    guild.name,
+                    interaction.customId.split("{")[0],
+                    value,
+                    link
+                )
+            ]
+        }
+
+        await module.exports.sendMessage(guild.id, content, null, instance.channelId.interactions);
+    },
+
+    sendApplicationCommandInteractionMessage: async function (interaction, options = {}) {
+        const instance = Client.client.getInstance(interaction.guildId)
+        const guild = DiscordTools.getGuild(interaction.guildId)
+        const response = await interaction.fetchReply();
+
+        const optionsFormatted = Object.keys(options).map(k => options[k] === null ? `` : `${k}:${options[k]}`).join(" ")
+        const command = `/${interaction.commandName} ` +
+            `${interaction.options?.getSubcommand(false) || ''} ` +
+            `${optionsFormatted}`
+
+
+        const responseFormatted = response.embeds.map((embed) => [
+            embed?.data?.title,
+            embed?.data?.description,
+            embed?.data?.fields?.map((field) => `${field.name}: ${field.value.replace("\n", ", ")}`).join("\n"),
+            embed?.data?.image?.url
+        ]).flat(1).filter(x => x !== undefined).join("\n")
+
+        const link = Constants.GET_DISCORD_CHANNEL_URL(guild.id, interaction.channelId);
+
+        const description = Client.client.intlGet(
+            guild.id,
+            'applicationCommandInteractionMessage',
+            { userId: `<@${interaction.user.id}>`, link: link }
+        )
+
+        const content = {
+            embeds: [
+                DiscordEmbeds.getInteractionEmbed(
+                    guild.id,
+                    Constants.COLOR_DISCORD_INTERACTION,
+                    description,
+                    interaction.user.avatarURL(),
+                    guild.iconURL({dynamic: true}),
+                    guild.name,
+                    null,
+                    null,
+                    link,
+                    command.replace(/\s+/g,' ').trim(),
+                    responseFormatted
+                )
+            ]
+        }
+
+        await module.exports.sendMessage(guild.id, content, null, instance.channelId.interactions);
+    },
+
+    sendCommandInteractionMessage: async function (message, instance, guild, response) {
+        const link = Constants.GET_DISCORD_MESSAGE_URL(guild.id, message.channelId, message.id);
+        const description = Client.client.intlGet(
+            guild.id,
+            `commandInteractionMessage`,
+            { userId: `<@${message.author.id}>`, link: link }
+        )
+
+        const content = {
+            embeds: [
+                DiscordEmbeds.getInteractionEmbed(
+                    guild.id,
+                    Constants.COLOR_DISCORD_INTERACTION,
+                    description,
+                    message.author.avatarURL(),
+                    guild.iconURL({dynamic: true}),
+                    guild.name,
+                    null,
+                    null,
+                    link,
+                    message.cleanContent,
+                    response
+                )
+            ]
+        }
+
+        await module.exports.sendMessage(guild.id, content, null, instance.channelId.interactions);
+    }
 }

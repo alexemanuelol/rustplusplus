@@ -218,6 +218,9 @@ module.exports = {
             message: message.cleanContent
         }));
 
+
+        await DiscordMessages.sendCommandInteractionMessage(message, instance, guild, response);
+
         return true;
     },
 };

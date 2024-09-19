@@ -22,6 +22,7 @@ const Builder = require('@discordjs/builders');
 
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
     name: 'market',
@@ -93,6 +94,19 @@ module.exports = {
     },
 
     async execute(client, interaction) {
+        await this.executeCommand(client, interaction)
+
+        DiscordMessages.sendApplicationCommandInteractionMessage(
+            interaction,
+            {
+                name: interaction.options.getString('name'),
+                id: interaction.options.getString('id'),
+                order: interaction.options.getString('order'),
+            }
+        )
+    },
+
+    async executeCommand(client, interaction) {
         const instance = client.getInstance(interaction.guildId);
         const rustplus = client.rustplusInstances[interaction.guildId];
 

@@ -41,6 +41,18 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{
+				name: interaction.options.getString('name'),
+				id: interaction.options.getString('id'),
+			}
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const guildId = interaction.guildId;
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);

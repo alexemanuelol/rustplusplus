@@ -23,6 +23,7 @@ const Builder = require('@discordjs/builders');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
 const DiscordTools = require('../discordTools/discordTools');
 const PermissionHandler = require('../handlers/permissionHandler.js');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
 	name: 'role',
@@ -44,6 +45,15 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{ role: interaction.options.getRole('role') }
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const instance = client.getInstance(interaction.guildId);
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);

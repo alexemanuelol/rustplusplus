@@ -23,6 +23,7 @@ const Builder = require('@discordjs/builders');
 const Constants = require('../util/constants.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools.js');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
 	name: 'players',
@@ -64,6 +65,20 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{
+				name: interaction.options.getString('name'),
+				playerid: interaction.options.getString('playerid'),
+				status: interaction.options.getString('status'),
+				battlemetricsid: interaction.options.getString('battlemetricsid'),
+			}
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
 		client.logInteraction(interaction, verifyId, 'slashCommand');
 

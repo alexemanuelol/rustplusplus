@@ -21,6 +21,7 @@
 const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
+const DiscordMessages = require("../discordTools/discordMessages");
 
 module.exports = {
 	name: 'upkeep',
@@ -40,6 +41,18 @@ module.exports = {
 	},
 
 	async execute(client, interaction) {
+		await this.executeCommand(client, interaction)
+
+		DiscordMessages.sendApplicationCommandInteractionMessage(
+			interaction,
+			{
+				id: interaction.options.getString('id'),
+				name: interaction.options.getString('name'),
+			}
+		)
+	},
+
+	async executeCommand(client, interaction) {
 		const guildId = interaction.guildId;
 
 		const verifyId = Math.floor(100000 + Math.random() * 900000);
