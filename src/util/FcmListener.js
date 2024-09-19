@@ -68,10 +68,33 @@ module.exports = async (client, guild) => {
     client.fcmListeners[guild.id].on('ON_DATA_RECEIVED', (data) => {
         const appData = data.appData;
 
+        if (!appData) {
+            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, appData could not be found.`)
+            return;
+        }
+
         const title = appData.find(item => item.key === 'title')?.value;
         const message = appData.find(item => item.key === 'message')?.value;
         const channelId = appData.find(item => item.key === 'channelId')?.value;
-        const body = JSON.parse(appData.find(item => item.key === 'body')?.value);
+
+        if (!channelId) {
+            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, channelId could not be found.`)
+            return;
+        }
+
+        const bodyCheck = appData.find(item => item.key === 'body');
+
+        if (!bodyCheck) {
+            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, body could not be found.`)
+            return;
+        }
+
+        const body = JSON.parse(bodyCheck.value);
+
+        if (!body.type) {
+            client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, body type could not be found.`)
+            return;
+        }
 
         switch (channelId) {
             case 'pairing': {
