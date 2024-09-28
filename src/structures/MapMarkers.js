@@ -722,6 +722,7 @@ class MapMarkers {
             let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
 
             marker.location = pos;
+            marker.isHalted = false;
 
             this.rustplus.sendEvent(
                 this.rustplus.notificationSettings.travelingVendorDetectedSetting,
@@ -751,6 +752,28 @@ class MapMarkers {
             let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
             let travelingVendor = this.getMarkerByTypeId(this.types.TravelingVendor, marker.id);
 
+            /* If TravelingVendor is halted */
+            if (!this.rustplus.isFirstPoll && !travelingVendor.isHalted) {
+                if (marker.x === travelingVendor.x && marker.y === travelingVendor.y) {
+                    travelingVendor.isHalted = true;
+                    this.rustplus.sendEvent(
+                        this.rustplus.notificationSettings.travelingVendorHaltedSetting,
+                        this.client.intlGet(this.rustplus.guildId, 'travelingVendorHaltedAt', { location: pos.string }),
+                        'vendor',
+                        Constants.COLOR_TRAVELING_VENDOR_HALTED);
+                }
+            }
+            /* If TravelingVendor is moving again */
+            else if (!this.rustplus.isFirstPoll && travelingVendor.isHalted) {
+                if (marker.x !== travelingVendor.x || marker.y !== travelingVendor.y) {
+                    travelingVendor.isHalted = false;
+                    this.rustplus.sendEvent(
+                        this.rustplus.notificationSettings.travelingVendorHaltedSetting,
+                        this.client.intlGet(this.rustplus.guildId, 'travelingVendorResumedAt', { location: pos.string }),
+                        'vendor',
+                        Constants.COLOR_TRAVELING_VENDOR_MOVING);
+                }
+            }
             travelingVendor.x = marker.x;
             travelingVendor.y = marker.y;
             travelingVendor.location = pos;

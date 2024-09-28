@@ -65,6 +65,12 @@
         "inGame": false,
         "voice": true
     },
+    "travelingVendorHaltedSetting": {
+        "image": "traveling_vendor_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
     "travelingVendorLeftSetting": {
         "image": "traveling_vendor_logo.png", 
         "discord": true,
