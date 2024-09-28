@@ -731,6 +731,7 @@
     "trainYard": "Train Yard",
     "travelingVendorDetectedSetting": "When the Traveling Vendor is detected, send a notification.",
     "travelingVendorHaltedAt": "The Traveling Vendor stoped at {location}.",
+    "travelingVendorHaltedSetting": "When the Traveling Vendor stops moving, send a notification.",
     "travelingVendorLeftSetting": "When the Traveling Vendor left the map, send a notification.",
     "travelingVendorLocatedAt": "The Traveling Vendor is located at {location}.",
     "travelingVendorLeftMap" : "The Traveling Vendor just left the map at {location}.",
