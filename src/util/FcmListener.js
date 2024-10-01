@@ -91,7 +91,7 @@ module.exports = async (client, guild) => {
 
         const body = JSON.parse(bodyCheck.value);
 
-        if (!body.type) {
+        if (!body.type && channelId !== 'alarm') {
             client.log('FCM Host', `GuildID: ${guild.id}, SteamID: ${hoster}, body type could not be found.`)
             return;
         }
