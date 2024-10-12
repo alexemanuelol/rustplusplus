@@ -729,6 +729,7 @@
     "trackerRemovePlayerDesc": "Remove Player from {tracker}",
     "trademarkShownBeforeMessage": "{trademark} will be shown before messages.",
     "trainYard": "Train Yard",
+    "travelingVendor": "Traveling Vendor",
     "travelingVendorDetectedSetting": "When the Traveling Vendor is detected, send a notification.",
     "travelingVendorHaltedAt": "The Traveling Vendor stopped at {location}.",
     "travelingVendorHaltedSetting": "When the Traveling Vendor stops moving, send a notification.",
