@@ -112,7 +112,7 @@ class Time {
             const locString = this.isDay() ? 'timeTillNightfall' : 'timeTillDaylight';
             const timeTilltransition = this._client.intlGet(this.guildId, locString, { time: timeRemainingString });
 
-            this._rustplus.sendInGameMessage(`${timeTilltransition}`)
+            this.rustplus.sendInGameMessage(`${timeTilltransition}`)
         }
 
     }
