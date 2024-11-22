@@ -63,4 +63,4 @@ If the rustplusplus credential application looks like the image below after you'
 <a name="Console-Stuck-at-FCM-Listener-Will-Start-in-5-Seconds"
 ## I'm not getting any notifications and the application is stuck starting at "FCM-listener Host will start in 5 seconds..."
 
-If the console is not progressing please verify you have connected to the server under the discord channel, if it is not connected there is nothing for the FCM-Listener to listen for.
+If the console is not progressing please verify you have connected to the server under the discord channel "servers", if it is not connected there is nothing for the FCM-Listener to listen for.
