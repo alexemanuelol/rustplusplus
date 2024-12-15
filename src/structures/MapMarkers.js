@@ -242,7 +242,16 @@ class MapMarkers {
         return remainingMarkersOfType;
     }
 
+    isVendingMachineBlacklisted(marker) {
+        if (marker.type !== this.types.VendingMachine) return false;
 
+        const instance = this.client.getInstance(this.rustplus.guildId);
+        const marketBlacklist = instance.marketBlacklist;
+    
+        return marketBlacklist.some(blacklist => 
+            marker.name.toLowerCase().includes(blacklist.toLowerCase())
+        );
+    }
 
 
     /* Update event map markers */
@@ -300,7 +309,7 @@ class MapMarkers {
 
             marker.location = pos;
 
-            if (!this.rustplus.isFirstPoll) {
+            if (!this.rustplus.isFirstPoll && !this.isVendingMachineBlacklisted(marker)) {
                 if (!this.knownVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
                     this.rustplus.sendEvent(
                         this.rustplus.notificationSettings.vendingMachineDetectedSetting,
