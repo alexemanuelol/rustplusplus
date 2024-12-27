@@ -77,16 +77,16 @@ module.exports = {
 			if (!item) {
 				item = client.rustlabs.getClosestOtherNameByName(raidItemName);
 			}
-
-			if (!item) {
-				item = client.rustlabs.getClosestBuildingBlockNameByName(raidItemName);
-			}
-
+			
 			if (!item) {
 				item = client.items.getClosestItemIdByName(raidItemName);
 				if(item !== null) {
 					item = client.items.getName(item);
 				}
+			}
+			
+			if (!item) {
+				item = client.rustlabs.getClosestBuildingBlockNameByName(raidItemName);
 			}
 
 			if (item === null) {
