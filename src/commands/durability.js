@@ -70,43 +70,7 @@ module.exports = {
         return groupedData;
     },
 
-	async execute(client, interaction) {
-		const guildId = interaction.guildId;
-
-		const verifyId = Math.floor(100000 + Math.random() * 900000);
-		client.logInteraction(interaction, verifyId, 'slashCommand');
-
-		if (!await client.validatePermissions(interaction)) return;
-		await interaction.deferReply({ ephemeral: true });
-
-		const raidItemName = interaction.options.getString('name');
-		const raidItemId = interaction.options.getString('id');
-		const raidWithName = interaction.options.getString('raidwithname');
-
-		if (raidWithName !== null) {
-			let raidWithItem = null
-			if (!raidWithItem) {
-				raidWithItem = client.rustlabs.getClosestOtherNameByName(raidItemName);
-			}
-
-			if (!raidWithItem) {
-				raidWithItem = client.rustlabs.getClosestBuildingBlockNameByName(raidItemName);
-			}
-
-			if (!raidWithItem) {
-				raidWithItem = client.items.getClosestItemIdByName(raidItemName);
-			}
-
-			if (raidWithItem === null) {
-				const str = client.intlGet(guildId, 'noItemWithNameFound', {
-					name: raidItemName
-				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
-				return;
-			}
-		}
-
+	getDurabilityData(raidItemName, raidItemId, client, guildId) {
 		let itemId = null;
 		if (raidItemName !== null) {
 			let item = null
@@ -126,12 +90,7 @@ module.exports = {
 			}
 
 			if (item === null) {
-				const str = client.intlGet(guildId, 'noItemWithNameFound', {
-					name: raidItemName
-				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
-				return;
+				return null;
 			}
 			else {
 				itemId = item;
@@ -142,38 +101,54 @@ module.exports = {
 				itemId = raidItemId;
 			}
 			else {
-				const str = client.intlGet(guildId, 'noItemWithIdFound', {
-					id: raidItemId
-				});
-				await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-				client.log(client.intlGet(guildId, 'warningCap'), str);
-				return;
+				return null;
 			}
-		}
-		else if (raidItemName === null && raidItemId === null) {
-			const str = client.intlGet(guildId, 'noNameIdGiven');
-			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-			client.log(client.intlGet(guildId, 'warningCap'), str);
-			return;
 		}
 		const itemName = client.items.getName(itemId);
 
 		const raidDetails = client.rustlabs.getDurabilityDetailsByName(raidItemName);
 		if (raidDetails === null) {
-			const str = client.intlGet(guildId, 'couldNotFindRaidDetails', {
-				name: itemName
+			return null;
+		}
+		
+		raidDetails[3] = this.groupDurabilityData(client, raidDetails[3]);
+		return raidDetails;
+	},
+
+	async execute(client, interaction) {
+		const guildId = interaction.guildId;
+
+		const verifyId = Math.floor(100000 + Math.random() * 900000);
+		client.logInteraction(interaction, verifyId, 'slashCommand');
+
+		if (!await client.validatePermissions(interaction)) return;
+		await interaction.deferReply({ ephemeral: true });
+
+		const raidItemName = interaction.options.getString('name');
+		const raidItemId = interaction.options.getString('id');
+		if (raidItemName === null && raidItemId === null) {
+			const str = client.intlGet(guildId, 'noNameIdGiven');
+			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			client.log(client.intlGet(guildId, 'warningCap'), str);
+			return null;
+		}
+		
+		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+			id: `${verifyId}`,
+			value: `${raidItemName} ${raidItemId}`
+		}));
+
+		const raidDetails = this.getDurabilityData(raidItemName, raidItemId, client, interaction);
+
+		if (raidDetails === null) {
+			const str = client.intlGet(guildId, 'noItemWithNameFound', {
+				name: raidItemName
 			});
 			await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log(client.intlGet(guildId, 'warningCap'), str);
 			return;
 		}
 
-		client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
-			id: `${verifyId}`,
-			value: `${raidItemName} ${raidItemId}`
-		}));
-		
-		raidDetails[3] = this.groupDurabilityData(client, raidDetails[3]);
 		await DiscordMessages.sendRaidMessage(interaction, raidDetails);
 		client.log(client.intlGet(null, 'infoCap'), client.intlGet(guildId, 'commandsRaidDesc'));
 	},
