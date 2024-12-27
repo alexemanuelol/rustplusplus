@@ -529,7 +529,7 @@ class RustLabs {
 
         content = this.getArrayOrderedByChoice(content, orderedBy);
 
-        return ['items', id, this.items.items[id], content];
+        return ['items', this.items.items[id].name, this.items.items[id], content];
     }
 
 

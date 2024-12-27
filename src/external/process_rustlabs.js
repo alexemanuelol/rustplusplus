@@ -594,7 +594,10 @@ function processItemDurability(rustlabsName, shortname, name, data, type = 'item
         }
         if (toolShortname === null || toolName === null) exit();
         toolId = Object.keys(ITEMS).find(e => ITEMS[e].shortname === toolShortname && ITEMS[e].name === toolName);
-        if (!toolId) exit();
+        if (!toolId) {
+            console.error(`Tool ID not found for ${toolShortname} - ${toolName}`);
+            continue; // Skip this iteration and continue with the next match
+        }
 
         /* Caption in tool name */
         let captionInTool = null;
