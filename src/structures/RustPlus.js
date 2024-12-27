@@ -2761,6 +2761,12 @@ class RustPlus extends RustPlusLib {
 
         const durability = Durability.getDurabilityData(command, null, Client.client, this.guildId);
         let raidCosts = "";
+
+        if(!durability) {
+            return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                name: command
+            });
+        }
     
         const sortedItems = Object.values(durability[3].explosive).sort((a, b) => {
             const sulfurA = a[0].sulfur === null ? Infinity : Number(a[0].sulfur);
