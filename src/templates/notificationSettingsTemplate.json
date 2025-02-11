@@ -59,6 +59,24 @@
         "inGame": false,
         "voice": true
     },
+    "travelingVendorDetectedSetting": {
+        "image": "traveling_vendor_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
+    "travelingVendorHaltedSetting": {
+        "image": "traveling_vendor_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
+    "travelingVendorLeftSetting": {
+        "image": "traveling_vendor_logo.png", 
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
     "vendingMachineDetectedSetting": {
         "image": "vending_machine_logo.png",
         "discord": true,

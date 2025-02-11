@@ -759,12 +759,14 @@ module.exports = {
         const smallOilRigFieldName = Client.client.intlGet(guildId, 'smallOilRig');
         const largeOilRigFieldName = Client.client.intlGet(guildId, 'largeOilRig');
         const chinook47FieldName = Client.client.intlGet(guildId, 'chinook47');
+        const travelingVendorFieldName = Client.client.intlGet(guildId, 'travelingVendor');
 
         const cargoShipMessage = rustplus.getCommandCargo(true);
         const patrolHelicopterMessage = rustplus.getCommandHeli(true);
         const smallOilMessage = rustplus.getCommandSmall(true);
         const largeOilMessage = rustplus.getCommandLarge(true);
         const ch47Message = rustplus.getCommandChinook(true);
+        const travelingVendorMessage = rustplus.getCommandTravelingVendor(true);
 
         return module.exports.getEmbed({
             title: Client.client.intlGet(guildId, 'eventInfo'),
@@ -777,7 +779,8 @@ module.exports = {
                 { name: patrolHelicopterFieldName, value: `\`${patrolHelicopterMessage}\``, inline: true },
                 { name: smallOilRigFieldName, value: `\`${smallOilMessage}\``, inline: true },
                 { name: largeOilRigFieldName, value: `\`${largeOilMessage}\``, inline: true },
-                { name: chinook47FieldName, value: `\`${ch47Message}\``, inline: true }],
+                { name: chinook47FieldName, value: `\`${ch47Message}\``, inline: true },
+                { name: travelingVendorFieldName, value: `\`${travelingVendorMessage}\``, inline: true }],
             timestamp: true
         });
     },

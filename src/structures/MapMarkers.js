@@ -37,7 +37,8 @@ class MapMarkers {
             CargoShip: 5,
             Crate: 6,
             GenericRadius: 7,
-            PatrolHelicopter: 8
+            PatrolHelicopter: 8,
+            TravelingVendor: 9
         }
 
         this._players = [];
@@ -46,6 +47,7 @@ class MapMarkers {
         this._cargoShips = [];
         this._genericRadiuses = [];
         this._patrolHelicopters = [];
+        this._travelingVendors = [];
 
         /* Timers */
         this.cargoShipEgressTimers = new Object();
@@ -61,6 +63,7 @@ class MapMarkers {
         this.timeSinceLargeOilRigWasTriggered = null;
         this.timeSincePatrolHelicopterWasOnMap = null;
         this.timeSincePatrolHelicopterWasDestroyed = null;
+        this.timeSinceTravelingVendorWasOnMap = null;
 
         /* Event location */
         this.patrolHelicopterDestroyedLocation = null;
@@ -92,6 +95,8 @@ class MapMarkers {
     set genericRadiuses(genericRadiuses) { this._genericRadiuses = genericRadiuses; }
     get patrolHelicopters() { return this._patrolHelicopters; }
     set patrolHelicopters(patrolHelicopters) { this._patrolHelicopters = patrolHelicopters; }
+    get travelingVendors() { return this._travelingVendors; }
+    set travelingVendors(travelingVendors) { this._travelingVendors = travelingVendors; }
 
     getType(type) {
         if (!Object.values(this.types).includes(type)) {
@@ -121,6 +126,10 @@ class MapMarkers {
 
             case this.types.PatrolHelicopter: {
                 return this.patrolHelicopters;
+            } break;
+
+            case this.types.TravelingVendor: {
+                return this.travelingVendors;
             } break;
 
             default: {
@@ -254,6 +263,7 @@ class MapMarkers {
         this.updateCH47s(mapMarkers);
         this.updateVendingMachines(mapMarkers);
         this.updateGenericRadiuses(mapMarkers);
+        this.updateTravelingVendors(mapMarkers);
     }
 
     updatePlayers(mapMarkers) {
@@ -701,6 +711,75 @@ class MapMarkers {
         }
     }
 
+    updateTravelingVendors(mapMarkers) {
+        let newMarkers = this.getNewMarkersOfTypeId(this.types.TravelingVendor, mapMarkers.markers);
+        let leftMarkers = this.getLeftMarkersOfTypeId(this.types.TravelingVendor, mapMarkers.markers);
+        let remainingMarkers = this.getRemainingMarkersOfTypeId(this.types.TravelingVendor, mapMarkers.markers);
+
+        /* TravelingVendor markers that are new. */
+        for (let marker of newMarkers) {
+            let mapSize = this.rustplus.info.correctedMapSize;
+            let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
+
+            marker.location = pos;
+            marker.isHalted = false;
+
+            this.rustplus.sendEvent(
+                this.rustplus.notificationSettings.travelingVendorDetectedSetting,
+                this.client.intlGet(this.rustplus.guildId, 'travelingVendorSpawnedAt', { location: pos.string }),
+                'vendor',
+                Constants.COLOR_TRAVELING_VENDOR_LOCATED_AT);
+
+            this.travelingVendors.push(marker);
+        }
+        
+        /* TravelingVendor markers that have left. */
+        for (let marker of leftMarkers) {
+            this.rustplus.sendEvent(
+                this.rustplus.notificationSettings.travelingVendorLeftSetting,
+                this.client.intlGet(this.rustplus.guildId, 'travelingVendorLeftMap', { location: marker.location.string }),
+                'vendor',
+                Constants.COLOR_TRAVELING_VENDOR_LEFT_MAP);
+
+            this.timeSinceTravelingVendorWasOnMap = new Date();
+
+            this.travelingVendors = this.travelingVendors.filter(e => e.id !== marker.id);
+        }
+
+        /* TravelingVendor markers that still remains. */
+        for (let marker of remainingMarkers) {
+            let mapSize = this.rustplus.info.correctedMapSize;
+            let pos = Map.getPos(marker.x, marker.y, mapSize, this.rustplus);
+            let travelingVendor = this.getMarkerByTypeId(this.types.TravelingVendor, marker.id);
+
+            /* If TravelingVendor is halted */
+            if (!this.rustplus.isFirstPoll && !travelingVendor.isHalted) {
+                if (marker.x === travelingVendor.x && marker.y === travelingVendor.y) {
+                    travelingVendor.isHalted = true;
+                    this.rustplus.sendEvent(
+                        this.rustplus.notificationSettings.travelingVendorHaltedSetting,
+                        this.client.intlGet(this.rustplus.guildId, 'travelingVendorHaltedAt', { location: pos.string }),
+                        'vendor',
+                        Constants.COLOR_TRAVELING_VENDOR_HALTED);
+                }
+            }
+            /* If TravelingVendor is moving again */
+            else if (!this.rustplus.isFirstPoll && travelingVendor.isHalted) {
+                if (marker.x !== travelingVendor.x || marker.y !== travelingVendor.y) {
+                    travelingVendor.isHalted = false;
+                    this.rustplus.sendEvent(
+                        this.rustplus.notificationSettings.travelingVendorHaltedSetting,
+                        this.client.intlGet(this.rustplus.guildId, 'travelingVendorResumedAt', { location: pos.string }),
+                        'vendor',
+                        Constants.COLOR_TRAVELING_VENDOR_MOVING);
+                }
+            }
+            travelingVendor.x = marker.x;
+            travelingVendor.y = marker.y;
+            travelingVendor.location = pos;
+        }
+    }
+
 
 
     /* Timer notification functions */
@@ -784,6 +863,7 @@ class MapMarkers {
         this.cargoShips = [];
         this.genericRadiuses = [];
         this.patrolHelicopters = [];
+        this.travelingVendors = [];
 
         for (const [id, timer] of Object.entries(this.cargoShipEgressTimers)) {
             timer.stop();
@@ -804,6 +884,7 @@ class MapMarkers {
         this.timeSinceLargeOilRigWasTriggered = null;
         this.timeSincePatrolHelicopterWasOnMap = null;
         this.timeSincePatrolHelicopterWasDestroyed = null;
+        this.timeSinceTravelingVendorWasOnMap = null;
 
         this.patrolHelicopterDestroyedLocation = null;
 
