@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2022 René Renken (faithix)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -89,7 +90,22 @@ module.exports = {
                     .setRequired(false)))
             .addSubcommand(subcommand => subcommand
                 .setName('list')
-                .setDescription(client.intlGet(guildId, 'commandsMarketListDesc')));
+                .setDescription(client.intlGet(guildId, 'commandsMarketListDesc')))
+            .addSubcommand(subcommand => subcommand
+                .setName('blacklist')
+                .setDescription(client.intlGet(guildId, 'commandsMarketBlaclistDesc'))
+                .addStringOption(option => option
+                    .setName('choice')
+                    .setDescription(client.intlGet(guildId, 'commandsAddOrRemove'))
+                    .setRequired(true)
+                    .addChoices(
+                        { name: client.intlGet(guildId, 'add'), value: 'add' },
+                        { name: client.intlGet(guildId, 'remove'), value: 'remove' },
+                        { name: client.intlGet(guildId, 'show'), value: 'show' }))
+                .addStringOption(option => option
+                    .setName('name')
+                    .setDescription(client.intlGet(guildId, 'theNameOfTheVendingMachine'))
+                    .setRequired(false)));
     },
 
     async execute(client, interaction) {
@@ -404,6 +420,80 @@ module.exports = {
 
                 rustplus.log(client.intlGet(interaction.guildId, 'infoCap'),
                     client.intlGet(interaction.guildId, 'showingSubscriptionList'));
+            } break;
+
+            case 'blacklist': {
+                const choice = interaction.options.getString('choice');
+                const name = interaction.options.getString('name');
+
+                if (choice === 'add' && name !== null) {
+                    if (instance.marketBlacklist.includes(name)) {
+                        const str = client.intlGet(interaction.guildId, 'alreadyBlacklisted', {
+                            name: name
+                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    }
+                    else {
+                        instance.marketBlacklist.push(name);
+                        client.setInstance(interaction.guildId, instance);
+
+                        const str = client.intlGet(interaction.guildId, 'justBlacklisted', {
+                            name: name
+                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+                        rustplus.log(client.intlGet(interaction.guildId, 'infoCap'), str);
+                    }
+                }
+                else if (choice === 'remove' && name !== null) {
+                    if (instance.marketBlacklist.includes(name)) {
+                        instance.marketBlacklist = instance.marketBlacklist.filter(e => e !== name);
+                        client.setInstance(interaction.guildId, instance);
+
+                        const str = client.intlGet(interaction.guildId, 'removedBlacklist', {
+                            name: name
+                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(0, str));
+                        rustplus.log(client.intlGet(interaction.guildId, 'infoCap'), str);
+                    }
+                    else {
+                        const str = client.intlGet(interaction.guildId, 'notExistInBlacklist', {
+                            name: name
+                        });
+                        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+                        rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    }
+                }
+                else if (choice === 'show') {
+                    let names = '';
+                    for (const name of instance.marketBlacklist) {
+                        names += `\`${name}\`\n`;
+                    }
+
+                    await client.interactionEditReply(interaction, {
+                        embeds: [DiscordEmbeds.getEmbed({
+                            color: Constants.COLOR_DEFAULT,
+                            title: client.intlGet(interaction.guildId, 'blacklist'),
+                            footer: { text: instance.serverList[rustplus.serverId].title },
+                            description: names === '' ? '\u200B' : names
+                        })],
+                        ephemeral: true
+                    });
+
+                    rustplus.log(client.intlGet(interaction.guildId, 'infoCap'),
+                        client.intlGet(interaction.guildId, 'showingBlacklist'));
+                }
+                else if (choice === null || name === null) {
+                    const str = client.intlGet(interaction.guildId, 'noNameGiven');
+                    await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+                    rustplus.log(client.intlGet(interaction.guildId, 'warningCap'), str);
+                    return;
+                }
+
+                client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'slashCommandValueChange', {
+                    id: `${verifyId}`,
+                    value: `blacklist, ${choice}, ${name}`
+                }));
             } break;
 
             default: {
