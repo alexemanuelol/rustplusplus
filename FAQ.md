@@ -59,3 +59,8 @@ This occurs for some people when their PC crash, there is still no solution for 
 If the rustplusplus credential application looks like the image below after you've logged in with your steam details this might be because of where you live or something else blocking you from generating. The solution for you would be to try it on the [rustplusplus website](https://rustplusplus-credentials.netlify.app/) instead.
 
 ![credential app empty](docs/images/faq/empty-credential-app.png)
+
+<a name="Console-Stuck-at-FCM-Listener-Will-Start-in-5-Seconds"
+## I'm not getting any notifications and the application is stuck starting at "FCM-listener Host will start in 5 seconds..."
+
+If the console is not progressing please verify you have connected to the server under the discord channel "servers", if it is not connected there is nothing for the FCM-Listener to listen for.
