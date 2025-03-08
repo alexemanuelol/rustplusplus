@@ -9,6 +9,11 @@
         "name": "Card Movember Moustache",
         "description": "A fake moustache for Movember"
     },
+    "4384538": {
+        "shortname": "pie.apple",
+        "name": "Apple Pie",
+        "description": "A delicious apple pie, always too hot. Provides a boost to hunger, health and hydration. Gives better night vision and lets you to see tree markings and ore hotspots for a short time."
+    },
     "14241751": {
         "shortname": "arrow.fire",
         "name": "Fire Arrow",
@@ -129,6 +134,11 @@
         "name": "Ice Metal Facemask",
         "description": "A protective facemask which provides the user with excellent head protection from all forms of attacks."
     },
+    "120820987": {
+        "shortname": "pie.chicken",
+        "name": "Chicken Pie",
+        "description": "Just like mom used to make. Provides a boost to hunger, health and hydration, and increases the chance of better genes from crops for short time."
+    },
     "121049755": {
         "shortname": "sign.pictureframe.tall",
         "name": "Tall Picture Frame",
@@ -161,8 +171,8 @@
     },
     "174866732": {
         "shortname": "weapon.mod.8x.scope",
-        "name": "16x Zoom Scope",
-        "description": "A large 16x zoom scope."
+        "name": "Variable Zoom Scope",
+        "description": "A large military-grade scope that can be configured from 4x zoom to 16x zoom."
     },
     "176787552": {
         "shortname": "riflebody",
@@ -178,6 +188,11 @@
         "shortname": "pinkidtag",
         "name": "Pink ID Tag",
         "description": "Pink ID Tag"
+    },
+    "184516676": {
+        "shortname": "beehive",
+        "name": "Beehive",
+        "description": "Artificial beehive, place a nucleus inside to raise your own bees and produce honeycomb. Happy bees will make honeycomb more quickly."
     },
     "185586769": {
         "shortname": "innertube.horse",
@@ -198,6 +213,11 @@
         "shortname": "attire.hide.vest",
         "name": "Hide Vest",
         "description": "A Vest made from the hide of an animal."
+    },
+    "196784377": {
+        "shortname": "improvised.shield",
+        "name": "Improvised Shield",
+        "description": "A makeshift metal shield, sturdy but only protects a small area. Usable with single handed weapons and tools."
     },
     "198438816": {
         "shortname": "vending.machine",
@@ -223,6 +243,11 @@
         "shortname": "head.bag",
         "name": "Head Bag",
         "description": "A sack containing the head of a defeated foe. Can be added to trophies."
+    },
+    "210787554": {
+        "shortname": "iotable",
+        "name": "Engineering Workbench",
+        "description": "This allows you to craft and unlock electrical, water and industrial items"
     },
     "215754713": {
         "shortname": "arrow.bone",
@@ -272,7 +297,7 @@
     "263834859": {
         "shortname": "scraptea",
         "name": "Basic Scrap Tea",
-        "description": "A tea that increases the amount of scrap you receive from barrels."
+        "description": "A basic scrap tea, temporarily increases the amount of scrap you recieve from barrels a small amount."
     },
     "268565518": {
         "shortname": "vehicle.1mod.storage",
@@ -298,6 +323,11 @@
         "shortname": "halloween.mummysuit",
         "name": "Mummy Suit",
         "description": "A mummy suit"
+    },
+    "281099360": {
+        "shortname": "bread.loaf",
+        "name": "Bread Loaf",
+        "description": "A Loaf of Bread. Eating it provides a small boost to health, hunger"
     },
     "282103175": {
         "shortname": "giantlollipops",
@@ -333,6 +363,11 @@
         "shortname": "metal.refined",
         "name": "High Quality Metal",
         "description": "High quality metal suitable for armor and weapons construction."
+    },
+    "320438357": {
+        "shortname": "pie.hunters",
+        "name": "Hunters Pie",
+        "description": "Tasty hunters pie, made with real deer. Provides a boost to hunger, health and hydration, and reduces bleeding for a short time."
     },
     "340210699": {
         "shortname": "frontiermirror.small",
@@ -384,6 +419,11 @@
         "name": "Hose Tool",
         "description": "A tool used to make fluid connections between objects. Aim at an object and click on an input/output handle, then click on another object's input/output handle to form a connection."
     },
+    "368008432": {
+        "shortname": "craftingtea_quality",
+        "name": "Crafting Quality Tea",
+        "description": "A tea that increases the chances of a higher quality crafting outcome."
+    },
     "390728933": {
         "shortname": "clone.yellow.berry",
         "name": "Yellow Berry Clone",
@@ -424,6 +464,11 @@
         "name": "Twitch Rivals Hazmat Suit",
         "description": "A purple hazmat suit made from radiation resistant rubber."
     },
+    "472505338": {
+        "shortname": "rifle.ak.med",
+        "name": "Medieval Assault Rifle",
+        "description": "Medieval themed high damage machine rifle."
+    },
     "476066818": {
         "shortname": "cassette",
         "name": "Cassette - Long",
@@ -454,15 +499,25 @@
         "name": "RAND Switch",
         "description": "This switch will allow passthrough based on a random number. Each time the SET input receives power it will roll true or false to allow passthrough"
     },
+    "504109620": {
+        "shortname": "sculpture.ice",
+        "name": "Ice Sculpture",
+        "description": "An block of ice you can sculpt."
+    },
     "524678627": {
         "shortname": "scraptea.advanced",
         "name": "Advanced Scrap Tea",
-        "description": "A tea that increases the amount of scrap you receive from barrels."
+        "description": "An advanced scrap tea, temporarily increases the amount of scrap you recieve from barrels a moderate amount."
     },
     "528668503": {
         "shortname": "flameturret",
         "name": "Flame Turret",
         "description": "Automated Flame turret. Requires Low Grade Fuel. Sprays flames when triggered."
+    },
+    "547862680": {
+        "shortname": "knighttorso.armour",
+        "name": "Knights armour cuirass",
+        "description": "A well made collection of scrap metal formed into a knights armour."
     },
     "550753330": {
         "shortname": "ammo.snowballgun",
@@ -491,7 +546,7 @@
     },
     "567871954": {
         "shortname": "secretlabchair",
-        "name": "Secret Lab Chair",
+        "name": "Secretlab Chair",
         "description": "A luxurious, comfortable chair for long sessions of CCTV watching."
     },
     "573676040": {
@@ -537,7 +592,7 @@
     "603811464": {
         "shortname": "maxhealthtea.advanced",
         "name": "Advanced Max Health Tea",
-        "description": "A tea that increases your maximum health."
+        "description": "An advanced health tea, provides hydration and temporarily boosts maximum health a moderate amount."
     },
     "605467368": {
         "shortname": "ammo.rifle.incendiary",
@@ -547,7 +602,7 @@
     "607400343": {
         "shortname": "legacy.shelter.wood",
         "name": "Legacy Wood Shelter",
-        "description": "The classic s*** shack. A great starter base for any fresh spawn. There is a limit to how many you can place."
+        "description": "The classic s*** shack. A great starter base for any fresh spawn. You can only have one shelter deployed at anytime."
     },
     "609049394": {
         "shortname": "battery.small",
@@ -574,6 +629,11 @@
         "name": "Raw Pork",
         "description": "Raw pork. Eating it will damage your health, try cooking it first."
     },
+    "625599716": {
+        "shortname": "metal.shield",
+        "name": "Metal Shield",
+        "description": "A large sturdy metal shield, keeps arrows and bullets at bay. Usable\r with single handed weapons and tools."
+    },
     "634478325": {
         "shortname": "cctv.camera",
         "name": "CCTV Camera",
@@ -583,6 +643,11 @@
         "shortname": "sticks",
         "name": "Sticks",
         "description": "Some long, some short."
+    },
+    "647240052": {
+        "shortname": "triangle.rail.road.planter",
+        "name": "Triangle Rail Road Planter",
+        "description": "A triangle planter with enough room to plant 4 seeds."
     },
     "649912614": {
         "shortname": "pistol.revolver",
@@ -664,6 +729,11 @@
         "name": "Tiger Mask",
         "description": "A special tiger mask to celebrate Chinese New Year"
     },
+    "721798950": {
+        "shortname": "vehicle.car_radio",
+        "name": "Car Radio",
+        "description": "A small radio to use in cars. Will only work while the car is turned on."
+    },
     "722955039": {
         "shortname": "gun.water",
         "name": "Water Gun",
@@ -673,6 +743,11 @@
         "shortname": "woodmirror.standing",
         "name": "Wood Mirror Standing",
         "description": "A standing wooden mirror"
+    },
+    "734320711": {
+        "shortname": "orchid",
+        "name": "Orchid",
+        "description": "Smells nice."
     },
     "742745918": {
         "shortname": "industrial.splitter",
@@ -737,12 +812,17 @@
     "803954639": {
         "shortname": "seed.blue.berry",
         "name": "Blue Berry Seed",
-        "description": "These blue berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+        "description": "These blue berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more berries and faster growth."
     },
     "809199956": {
         "shortname": "gravestone",
         "name": "Gravestone",
         "description": "A Gravestone marking the remains of an unknown soul"
+    },
+    "809689733": {
+        "shortname": "mummymask",
+        "name": "Mummy Mask",
+        "description": "A classic halloween costume mask which provides decent protection."
     },
     "809942731": {
         "shortname": "scarecrowhead",
@@ -753,6 +833,11 @@
         "shortname": "wolfmeat.cooked",
         "name": "Cooked Wolf Meat",
         "description": "Cooked Wolf Meat. Eating it will restore some health, hunger, and thirst."
+    },
+    "814297925": {
+        "shortname": "medieval.box.wooden.large",
+        "name": "Medieval Large Wood Box",
+        "description": "Keep your things in this medieval themed wooden storage box. Stores up to 48 items."
     },
     "818733919": {
         "shortname": "door.hinged.industrial.a",
@@ -777,7 +862,7 @@
     "830839496": {
         "shortname": "seed.red.berry",
         "name": "Red Berry Seed",
-        "description": "These red berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+        "description": "These red berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more berries and faster growth."
     },
     "831955134": {
         "shortname": "skylantern.skylantern.purple",
@@ -879,10 +964,20 @@
         "name": "Passenger Vehicle Module",
         "description": "Dual module seating."
     },
+    "912235912": {
+        "shortname": "clone.sunflower",
+        "name": "Sunflower Clone",
+        "description": "A clipping of a sunflower plant."
+    },
     "915408809": {
         "shortname": "ammo.grenadelauncher.smoke",
         "name": "40mm Smoke Grenade",
         "description": "Ammunition for a 40mm Grenade Launcher."
+    },
+    "924598634": {
+        "shortname": "clone.wheat",
+        "name": "Wheat Clone",
+        "description": "A Clipping of a Wheat Plant."
     },
     "926800282": {
         "shortname": "valve2",
@@ -934,6 +1029,11 @@
         "name": "Connected Speaker",
         "description": "A small speaker that will play any audio from a connected Boom Box."
     },
+    "969768382": {
+        "shortname": "reinforced.wooden.shield",
+        "name": "Reinforced Wooden Shield",
+        "description": "A basic wooden shield with added protection, keeps you safe but not for long. Usable with single handed weapons and tools."
+    },
     "971362526": {
         "shortname": "skull.trophy.jar",
         "name": "Skull Trophy",
@@ -972,12 +1072,17 @@
     "998894949": {
         "shortname": "seed.corn",
         "name": "Corn Seed",
-        "description": "Corn seeds can be found when picking wild Corn plants. These seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+        "description": "Corn seeds can be found when picking wild Corn plants. These seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more corn and faster growth."
     },
     "999690781": {
         "shortname": "geiger.counter",
         "name": "Geiger Counter",
         "description": "A geiger counter used by scientists"
+    },
+    "1004843240": {
+        "shortname": "seed.orchid",
+        "name": "Orchid Seed",
+        "description": "Orchid seeds can be found when picking wild Orchids."
     },
     "1015352446": {
         "shortname": "submarineduo",
@@ -1049,6 +1154,11 @@
         "name": "Barbeque",
         "description": "A makeshift Barbeque. You can cook significant amounts of food with this."
     },
+    "1099611828": {
+        "shortname": "clothing.mod.armorinsert_metal",
+        "name": "Metal Armor Insert",
+        "description": "Metal insert for crafted clothing and armor, provides extra protection from bullets at the cost of reduced movement speed."
+    },
     "1103488722": {
         "shortname": "snowballgun",
         "name": "Snowball Gun",
@@ -1079,10 +1189,20 @@
         "name": "Attack Helicopter",
         "description": "A fairly solid helicopter with weapons capability."
     },
+    "1115193056": {
+        "shortname": "wall.frame.lunar2025_a",
+        "name": "Lunar Wall Frame Inlay",
+        "description": "A Lunar New Year themed decorative wall divider with geometric inlay"
+    },
     "1121925526": {
         "shortname": "candycane",
         "name": "Candy Cane",
         "description": "A very old candy cane from 2014"
+    },
+    "1130729138": {
+        "shortname": "fish.spoiled",
+        "name": "Spoiled Fish Meat",
+        "description": "Spoiled Fish Meat. Consuming will damage your health."
     },
     "1132603396": {
         "shortname": "gunrack_stand",
@@ -1093,6 +1213,11 @@
         "shortname": "ceilinglight",
         "name": "Ceiling Light",
         "description": "A small ceiling mounted light source."
+    },
+    "1145722690": {
+        "shortname": "catapult",
+        "name": "Catapult",
+        "description": "An improvised catapult siege weapon. Built for flinging destructive projectiles with questionable accuracy. Can be towed by horses."
     },
     "1149964039": {
         "shortname": "storage.monitor",
@@ -1134,6 +1259,11 @@
         "name": "Metal Detector",
         "description": "Detects metal objects which may otherwise be hidden. When the light flashes, or you hear a beep, aim to search for items. Increase the bar until a flag appears. Dig at the flag with a melee item to reveal what it is. Different areas yield different rewards"
     },
+    "1168916338": {
+        "shortname": "grenade.bee",
+        "name": "Bee Grenade",
+        "description": "A fragile glass jar, throw it to unleash a swarm of bees on the nearest target. The bees will deal damage quickly but they don't like fire or water."
+    },
     "1171735914": {
         "shortname": "electric.andswitch",
         "name": "AND Switch",
@@ -1153,6 +1283,11 @@
         "shortname": "elevator",
         "name": "Elevator",
         "description": "A powered elevator. Place another elevator above or below this to connect it. Requires power."
+    },
+    "1178325727": {
+        "shortname": "wheat",
+        "name": "Wheat",
+        "description": "Wheaty"
     },
     "1181207482": {
         "shortname": "heavy.plate.helmet",
@@ -1282,7 +1417,7 @@
     "1293102274": {
         "shortname": "electric.xorswitch",
         "name": "XOR Switch",
-        "description": "An exclusive-or logic gate that allows electrical passthrough if ONLY ONE input receives power, passthrough amount is whichever single input is active. if BOTH inputs recieve power, passthrough will be zero."
+        "description": "An exclusive-or logic gate that allows electrical passthrough if ONLY ONE input receives power, passthrough amount is whichever single input is active. If BOTH inputs recieve power, passthrough will be zero."
     },
     "1296788329": {
         "shortname": "ammo.rocket.seeker",
@@ -1346,8 +1481,13 @@
     },
     "1346158228": {
         "shortname": "pumpkinbasket",
-        "name": "Pumpkin Bucket",
+        "name": "Pumpkin Basket",
         "description": "A pumpkin basket to help you collect candy much faster during Trick or Treat events with left click. Use right click to throw candy"
+    },
+    "1348294923": {
+        "shortname": "bearmeat.spoiled",
+        "name": "Spoiled Bear Meat",
+        "description": "Spoiled Bear Meat. Consuming will damage your health."
     },
     "1353298668": {
         "shortname": "door.hinged.toptier",
@@ -1447,7 +1587,12 @@
     "1409529282": {
         "shortname": "door.closer",
         "name": "Door Closer",
-        "description": "Auotmatically closes your doors when left open."
+        "description": "Automatically closes your doors when left open."
+    },
+    "1412103380": {
+        "shortname": "seed.sunflower",
+        "name": "Sunflower Seed",
+        "description": "Sunflower seeds can be found when picking wild Sunflowers."
     },
     "1413014235": {
         "shortname": "fridge",
@@ -1458,6 +1603,11 @@
         "shortname": "note",
         "name": "Note",
         "description": "A scrap of paper for leaving notes."
+    },
+    "1414245519": {
+        "shortname": "rose",
+        "name": "Rose",
+        "description": "Romantic AF."
     },
     "1414245522": {
         "shortname": "rope",
@@ -1479,6 +1629,11 @@
         "name": "Minicopter",
         "description": ""
     },
+    "1428574144": {
+        "shortname": "hopper",
+        "name": "Hopper",
+        "description": "Will suck up any dropped items in it's radius while powered"
+    },
     "1430085198": {
         "shortname": "industrial.crafter",
         "name": "Industrial Crafter",
@@ -1494,10 +1649,20 @@
         "name": "Chainlink Fence Gate",
         "description": "A Chainlink Fence Gate."
     },
+    "1456143403": {
+        "shortname": "cookingworkbench",
+        "name": "Cooking Workbench",
+        "description": "Used to cook advanced recipes for food, fuel, ammunition and explosives."
+    },
     "1463862472": {
         "shortname": "wantedposter.wantedposter4",
         "name": "Wanted Poster 4",
         "description": "A poster that can display a given player's face as wanted."
+    },
+    "1467878256": {
+        "shortname": "pie.pork",
+        "name": "Pork Pie",
+        "description": "Tempting pork pie, provides a boost to hunger, health and hydration, and improves healing rate from other sources for a short time."
     },
     "1478091698": {
         "shortname": "weapon.mod.muzzlebrake",
@@ -1507,7 +1672,7 @@
     "1480022580": {
         "shortname": "oretea",
         "name": "Basic Ore Tea",
-        "description": "A tea that increases the amount of ore you receive."
+        "description": "A basic ore tea, provides hydration and temporarily increases your yield from harvesting ores a small amount."
     },
     "1488606552": {
         "shortname": "cupboard.tool.retro",
@@ -1533,6 +1698,11 @@
         "shortname": "clone.potato",
         "name": "Potato Clone",
         "description": "A Clipping of a Potato Plant."
+    },
+    "1516531815": {
+        "shortname": "harvestingtea",
+        "name": "Harvesting Tea",
+        "description": "A basic tea that temporarily increases the amount of resources you receive from harvesting corpses a small amount."
     },
     "1516985844": {
         "shortname": "wall.frame.netting",
@@ -1659,6 +1829,11 @@
         "name": "Frankenstein Table",
         "description": "Place a monsters head, torso and legs into the table to summon Frankensteins monster."
     },
+    "1578317134": {
+        "shortname": "hazmat.plushy",
+        "name": "Hazmat Plushy",
+        "description": "A plushy of your favourite outfit made by the fabulous people at YouTooz.com"
+    },
     "1581210395": {
         "shortname": "planter.large",
         "name": "Large Planter Box",
@@ -1679,6 +1854,11 @@
         "name": "Blue Jumpsuit",
         "description": "A Blue Jumpsuit"
     },
+    "1601800933": {
+        "shortname": "honey",
+        "name": "Jar of Honey",
+        "description": "A jar of honey, good for reducing hunger or radiation. Can also be saved for recipes. The source of the glass jar is a mystery."
+    },
     "1602646136": {
         "shortname": "spear.stone",
         "name": "Stone Spear",
@@ -1688,6 +1868,11 @@
         "shortname": "confetticannon",
         "name": "Confetti Cannon",
         "description": "Blast a cloud of birthday themed confetti cheer."
+    },
+    "1604837581": {
+        "shortname": "wooden.shield",
+        "name": "Wooden Shield",
+        "description": "A basic wooden shield, won't last very long. Usable with single handed weapons and tools."
     },
     "1608640313": {
         "shortname": "shirt.tanktop",
@@ -1802,12 +1987,17 @@
     "1712261904": {
         "shortname": "maxhealthtea.pure",
         "name": "Pure Max Health Tea",
-        "description": "A tea that increases your maximum health."
+        "description": "An advanced health tea, provides hydration and temporarily boosts maximum health a large amount."
     },
     "1714496074": {
         "shortname": "hat.candle",
         "name": "Candle Hat",
         "description": "A hat with a candle on top. You can turn the candle on in your inventory."
+    },
+    "1714509152": {
+        "shortname": "ballista.static",
+        "name": "Ballista",
+        "description": "A stationary ballista, perfect for defence. Can fire deadly bolts at distant targets."
     },
     "1719978075": {
         "shortname": "bone.fragments",
@@ -1832,7 +2022,7 @@
     "1729374708": {
         "shortname": "oretea.pure",
         "name": "Pure Ore Tea",
-        "description": "A tea that increases the amount of ore you receive."
+        "description": "A pure ore tea, provides hydration and temporarily increases your yield when harvesting ores a large amount."
     },
     "1729712564": {
         "shortname": "photoframe.portrait",
@@ -1939,6 +2129,11 @@
         "name": "Garry's Mod Tool Gun",
         "description": "Celebrating 15 Years of Garry's Mod! Use this tool gun to upgrade building parts. Right-click for the options. You can also pick up deployed objects while the hammer is equipped."
     },
+    "1811780502": {
+        "shortname": "water.radioactive",
+        "name": "Radioactive Water",
+        "description": "Glowing water. Consuming will damage your health and irradiate you."
+    },
     "1814288539": {
         "shortname": "knife.bone",
         "name": "Bone Knife",
@@ -1953,6 +2148,11 @@
         "shortname": "wolfmeat.burned",
         "name": "Burnt Wolf Meat",
         "description": "Spoiled Wolf Meat. Consuming will damage your health."
+    },
+    "1831249347": {
+        "shortname": "catapult.ammo.boulder",
+        "name": "Scattershot",
+        "description": "A cluster of heavy rock projectiles for a catapult. Wide spread, pure kinetic damage on impact."
     },
     "1835946060": {
         "shortname": "electric.cabletunnel",
@@ -1988,6 +2188,11 @@
         "shortname": "easterbasket",
         "name": "Egg Basket",
         "description": "An easter egg basket. Equip to pick up eggs during an easter egg hunt with left click. Use right click to throw"
+    },
+    "1858828593": {
+        "shortname": "egg",
+        "name": "Egg",
+        "description": "An egg, laid by a chicken. Can be eaten or hatched in a chicken coop."
     },
     "1865253052": {
         "shortname": "draculamask",
@@ -2072,7 +2277,7 @@
     "1911552868": {
         "shortname": "seed.black.berry",
         "name": "Black Berry Seed",
-        "description": "These black berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+        "description": "These black berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more berries and faster growth."
     },
     "1914691295": {
         "shortname": "pistol.prototype17",
@@ -2089,10 +2294,20 @@
         "name": "Burnt Horse Meat",
         "description": "Burned horse meat. Eating it will damage your health."
     },
+    "1925646349": {
+        "shortname": "porkmeat.spoiled",
+        "name": "Spoiled Pork Meat",
+        "description": "Spoiled Pork Meat. Consuming will damage your health."
+    },
     "1931713481": {
         "shortname": "black.raspberries",
         "name": "Black Raspberries",
         "description": "Black Raspberries picked from berry bushes. Eating it provides a small boost to health, hunger, and thirst."
+    },
+    "1937380239": {
+        "shortname": "frontier_hatchet",
+        "name": "Frontier Hatchet",
+        "description": "A Frontier Hatchet, useful for chopping trees and dismembering corpses."
     },
     "1946219319": {
         "shortname": "campfire",
@@ -2197,7 +2412,12 @@
     "2024467711": {
         "shortname": "scraptea.pure",
         "name": "Pure Scrap Tea",
-        "description": "A tea that increases the amount of scrap you receive from barrels."
+        "description": "A pure scrap tea, temporarily increases the amount of scrap you recieve from barrels a large amount."
+    },
+    "2039177180": {
+        "shortname": "pie.bear",
+        "name": "Bear Pie",
+        "description": "A pie made of bear meat, provides a boost to hunger, health and hydration, and increases effect of harvesting teas but reduces their duration."
     },
     "2040726127": {
         "shortname": "knife.combat",
@@ -2208,6 +2428,11 @@
         "shortname": "floor.triangle.ladder.hatch",
         "name": "Triangle Ladder Hatch",
         "description": "A hatch that opens and changes into a ladder."
+    },
+    "2047789913": {
+        "shortname": "clothing.mod.armorinsert_lead",
+        "name": "Lead Armor Insert",
+        "description": "Lead insert that adds radiation protection for crafted clothes and armor, at the cost of reduced movement speed."
     },
     "2048317869": {
         "shortname": "skull.wolf",
@@ -2232,7 +2457,7 @@
     "2063916636": {
         "shortname": "oretea.advanced",
         "name": "Advanced Ore Tea",
-        "description": "A tea that increases the amount of ore you receive."
+        "description": "An advanced ore tea, provides hydration and temporarily increases your yield from ores a moderate amount."
     },
     "2068884361": {
         "shortname": "smallbackpack",
@@ -2243,6 +2468,11 @@
         "shortname": "sign.pole.banner.large",
         "name": "Large Banner on pole",
         "description": "A large banner hanging on a pole."
+    },
+    "2083256995": {
+        "shortname": "t1_smg",
+        "name": "Handmade SMG",
+        "description": "An extremely basic automatic firearm. Low damage and accuracy."
     },
     "2087678962": {
         "shortname": "searchlight",
@@ -2327,7 +2557,7 @@
     "-384243979": {
         "shortname": "ammo.rocket.sam",
         "name": "SAM Ammo",
-        "description": "Ammunition for a Sam Site, This missile contains a rudimentary guidance system to help it navigate through strong winds."
+        "description": "Ammunition for a SAM Site. This missile contains a rudimentary guidance system to help it navigate through strong winds."
     },
     "-17123659": {
         "shortname": "ammo.rocket.smoke",
@@ -2414,6 +2644,31 @@
         "name": "Salvaged Axe",
         "description": "A high-yield resource gathering axe. Slower than the Hatchet."
     },
+    "-19318653": {
+        "shortname": "ballista.bolt.hammerhead",
+        "name": "Hammerhead Bolt",
+        "description": "Heavy and solid bolt for a ballista, designed to hammer through doors."
+    },
+    "-1987565603": {
+        "shortname": "ballista.bolt.incendiary",
+        "name": "Incendiary Bolt",
+        "description": "A fire-tipped bolt for a ballista, wrapped in burning cloth, ignites upon impact."
+    },
+    "-1127003365": {
+        "shortname": "ballista.bolt.piercer",
+        "name": "Piercer Bolt",
+        "description": "A piercing bolt for a ballista, capable of penetrating armored vehicles."
+    },
+    "-357442017": {
+        "shortname": "ballista.bolt.pitchfork",
+        "name": "Pitchfork Bolt",
+        "description": "A wide-impact bolt for a ballista, covering a large area while dealing moderate damage."
+    },
+    "-759279626": {
+        "shortname": "ballista.mounted",
+        "name": "Mounted Ballista",
+        "description": "A ballista mounted on wheels, designed for mobility and capable of firing bolts at distant targets. Can be towed by horses."
+    },
     "-2072273936": {
         "shortname": "bandage",
         "name": "Bandage",
@@ -2429,6 +2684,11 @@
         "name": "Concrete Barricade",
         "description": "A barricade made out of Stones."
     },
+    "-424687710": {
+        "shortname": "barricade.medieval",
+        "name": "Medieval Barricade",
+        "description": "A medieval barricade. Designed to block paths and provide defensive cover as well as being an effective tool to fortify your base."
+    },
     "-559599960": {
         "shortname": "barricade.sandbags",
         "name": "Sandbag Barricade",
@@ -2438,6 +2698,16 @@
         "shortname": "bathtub.planter",
         "name": "Bath Tub Planter",
         "description": "A small planter with enough room to plant 3 seeds."
+    },
+    "-479314201": {
+        "shortname": "batteringram.head.repair",
+        "name": "Battering Ram Head",
+        "description": ""
+    },
+    "-187304968": {
+        "shortname": "batteringram",
+        "name": "Battering Ram",
+        "description": "A reinforced siege weapon built for smashing through wooden and stone constructions with brute force. Must be repaired with high quality metal to keep functioning."
     },
     "-321431890": {
         "shortname": "beachchair",
@@ -2478,6 +2748,11 @@
         "shortname": "blueprintbase",
         "name": "Blueprint",
         "description": "Blueprint"
+    },
+    "-880412831": {
+        "shortname": "blunderbuss",
+        "name": "Blunderbuss",
+        "description": "A Shotgun with two barrels allowing two shots to be fired in quick succession before needing to reload."
     },
     "-1478094705": {
         "shortname": "boogieboard",
@@ -2524,6 +2799,16 @@
         "name": "Cassette - Medium",
         "description": "A tape that you can record audio on to using a Cassette Recorder. Stores up to 20s of audio."
     },
+    "-1827561369": {
+        "shortname": "catapult.ammo.explosive",
+        "name": "Propane Explosive Bomb",
+        "description": "An explosive propane-filled keg, devastating to structures. Can be placed or used as a projectile in a catapult."
+    },
+    "-484006286": {
+        "shortname": "catapult.ammo.incendiary",
+        "name": "Firebomb",
+        "description": "A crude firebomb made of fuel-filled jugs wrapped in a net. Can be placed or used as a projectile in a catapult."
+    },
     "-1944704288": {
         "shortname": "chair.icethrone",
         "name": "Ice Throne",
@@ -2553,6 +2838,11 @@
         "shortname": "chicken.spoiled",
         "name": "Spoiled Chicken",
         "description": "Spoiled Chicken. Eating it will damage your health."
+    },
+    "-2018158920": {
+        "shortname": "chickencoop",
+        "name": "Chicken Coop",
+        "description": "An enclosure to keep some chickens around."
     },
     "-1916473915": {
         "shortname": "chineselantern",
@@ -2584,10 +2874,30 @@
         "name": "Hemp Clone",
         "description": "A clipping of a hemp plant."
     },
+    "-798662404": {
+        "shortname": "clone.orchid",
+        "name": "Orchid Clone",
+        "description": "A clipping of an orchid plant."
+    },
+    "-19360132": {
+        "shortname": "clone.rose",
+        "name": "Rose Clone",
+        "description": "A clipping of a rose plant."
+    },
     "-858312878": {
         "shortname": "cloth",
         "name": "Cloth",
         "description": "Cloth from an animal or a Hemp Bush. Used in many clothing items, weapons, and more."
+    },
+    "-903796529": {
+        "shortname": "clothing.mod.armorinsert_asbestos",
+        "name": "Asbestos Armor Insert",
+        "description": "Asbestos insert providing extra protection from heat for crafted clothes and armor."
+    },
+    "-593892112": {
+        "shortname": "clothing.mod.armorinsert_wood",
+        "name": "Wooden Armor Insert",
+        "description": "Wood insert for crafted clothes and armor, provides some extra protection from bullets and melee."
     },
     "-803263829": {
         "shortname": "coffeecan.helmet",
@@ -2609,6 +2919,11 @@
         "name": "Concrete Pickaxe",
         "description": "A salvaged piece of concrete and rebar with a sharp edge. Can be used to harvest Stone, Metal ore and Sulfur ore."
     },
+    "-1260229965": {
+        "shortname": "coolingtea",
+        "name": "Cooling Tea",
+        "description": "A cooling tea that temporarily decreases your max and core temperature."
+    },
     "-321733511": {
         "shortname": "crude.oil",
         "name": "Crude Oil",
@@ -2618,6 +2933,11 @@
         "shortname": "cupboard.tool",
         "name": "Tool Cupboard",
         "description": "Placing and authorising with the cupboard will make it so only you can build in a 50 meter radius of it. If you want your friends to build, they'll need to auth too. You should protect this."
+    },
+    "-361911645": {
+        "shortname": "dart.bone",
+        "name": "Bone Dart",
+        "description": "A basic damage dart."
     },
     "-1903165497": {
         "shortname": "deer.skull.mask",
@@ -2633,6 +2953,11 @@
         "shortname": "deermeat.cooked",
         "name": "Cooked Deer Meat",
         "description": "Cooked Deer Meat. Eating it will restore some health, hunger, and thirst."
+    },
+    "-2035449523": {
+        "shortname": "deermeat.spoiled",
+        "name": "Spoiled Deer Meat",
+        "description": "Spoiled Deer Meat. Consuming will damage your health."
     },
     "-113413047": {
         "shortname": "diving.mask",
@@ -2969,6 +3294,11 @@
         "name": "Fogger-3000",
         "description": "A Fog machine which runs on low grade fuel. Can be set to fill an area with a dense fog or triggered by motion."
     },
+    "-1647389398": {
+        "shortname": "frankensteinmask",
+        "name": "Frankenstein Mask",
+        "description": "Frankenstein halloween costume mask which provides decent protection."
+    },
     "-134959124": {
         "shortname": "frankensteins.monster.01.head",
         "name": "Light Frankenstein Head",
@@ -3172,7 +3502,7 @@
     "-888153050": {
         "shortname": "halloween.candy",
         "name": "Halloween Candy",
-        "description": "Some loose halloween candy Collect 10 to upgrade to a Small Loot Bat!"
+        "description": "Some loose halloween candy Collect 10 to upgrade to a Small Loot Bag!"
     },
     "-1785231475": {
         "shortname": "halloween.surgeonsuit",
@@ -3214,6 +3544,16 @@
         "name": "Rabbit Mask",
         "description": "A Beautifully crafted Rabbit mask to celebrate the 2023 Lunar New Year"
     },
+    "-1314079879": {
+        "shortname": "hat.snakemask",
+        "name": "Snake mask",
+        "description": "A Beautifully crafted Snake mask to celebrate the 2025 Lunar New Year"
+    },
+    "-507248640": {
+        "shortname": "hat.wellipets",
+        "name": "Wellipets Hat",
+        "description": "A hat made of wellipets boots"
+    },
     "-1478212975": {
         "shortname": "hat.wolf",
         "name": "Wolf Headdress",
@@ -3233,6 +3573,11 @@
         "shortname": "hazmatsuit.diver",
         "name": "Abyss Divers Suit",
         "description": "A divers suit found in the abyss, doubles as a reliable hazmat suit"
+    },
+    "-105415879": {
+        "shortname": "hazmatsuit.frontier",
+        "name": "Frontier Suit",
+        "description": "A Frontier suit"
     },
     "-560304835": {
         "shortname": "hazmatsuit.spacesuit",
@@ -3257,17 +3602,17 @@
     "-2123125470": {
         "shortname": "healingtea.advanced",
         "name": "Advanced Healing Tea",
-        "description": "A tea that restores health over time."
+        "description": "An advanced healing tea, provides hydration and heals you a moderate amount over time."
     },
     "-929092070": {
         "shortname": "healingtea",
         "name": "Basic Healing Tea",
-        "description": "A tea that restores health over time."
+        "description": "A basic healing tea, provides hydration and heals you a small amount over time."
     },
     "-1677315902": {
         "shortname": "healingtea.pure",
         "name": "Pure Healing Tea",
-        "description": "A tea that restores health over time."
+        "description": "A pure healing tea, provides hydration and heals you a large amount over time."
     },
     "-1102429027": {
         "shortname": "heavy.plate.jacket",
@@ -3299,6 +3644,11 @@
         "name": "Homing Missile Launcher",
         "description": "An active-guidance homing missile launcher. Once launched, the target must be tracked by the launcher until impact. Can be distracted by flares."
     },
+    "-1513203236": {
+        "shortname": "honeycomb",
+        "name": "Honeycomb",
+        "description": "These building blocks of a beehive can turn into honey or nuclei. Cooking them in a furnace guarantees honey."
+    },
     "-1323101799": {
         "shortname": "horse.saddle.double",
         "name": "Double Horse Saddle",
@@ -3328,6 +3678,11 @@
         "shortname": "horsemeat.raw",
         "name": "Raw Horse Meat",
         "description": "Raw Horse Meat. Eating it will damage your health, try cooking it first."
+    },
+    "-724146494": {
+        "shortname": "horsemeat.spoiled",
+        "name": "Spoiled Horse Meat",
+        "description": "Spoiled Horse Meat. Consuming will damage your health."
     },
     "-1982036270": {
         "shortname": "hq.metal.ore",
@@ -3384,6 +3739,11 @@
         "name": "Jumpsuit",
         "description": "A Jumpsuit"
     },
+    "-874908751": {
+        "shortname": "jumpsuit.waterwellnpc",
+        "name": "Waterwell NPC Jumpsuit",
+        "description": "A green jumpsuit and gasmask worn by the waterwell NPC"
+    },
     "-484206264": {
         "shortname": "keycard_blue",
         "name": "Blue Keycard",
@@ -3403,6 +3763,16 @@
         "shortname": "knife.skinning",
         "name": "Skinning Knife",
         "description": "A sharp skinning knife. Extremely good at harvesting flesh and can produce trophies that can be mounted on Hunting Trophies."
+    },
+    "-427072335": {
+        "shortname": "knightsarmour.helmet",
+        "name": "Knights armour helmet",
+        "description": "A medieval knights helmet. Made from scrap metal. Excellent craftmanship."
+    },
+    "-945708533": {
+        "shortname": "knightsarmour.skirt",
+        "name": "Knights armour skirt plates",
+        "description": "A well made set of knights plate that covers the hips and thighs. Made of scrap metal."
     },
     "-316250604": {
         "shortname": "ladder.wooden.wall",
@@ -3487,7 +3857,7 @@
     "-2026042603": {
         "shortname": "mace.baseballbat",
         "name": "Baseball Bat",
-        "description": ""
+        "description": "A baseball bat wrapped in barbed wire"
     },
     "-1966748496": {
         "shortname": "mace",
@@ -3517,12 +3887,22 @@
     "-1184406448": {
         "shortname": "maxhealthtea",
         "name": "Basic Max Health Tea",
-        "description": "A tea that increases your maximum health."
+        "description": "A basic health tea, provides hydration and temporarily boosts maximum health a small amount."
     },
     "-242084766": {
         "shortname": "meat.pork.cooked",
         "name": "Cooked Pork",
         "description": "Cooked pork, Eating it will restore some health, hunger, and thirst."
+    },
+    "-380502678": {
+        "shortname": "medieval.door.double.hinged.metal",
+        "name": "Medieval Sheet Metal Double Door",
+        "description": "Medium strength door, vulnerable to explosives."
+    },
+    "-1654401345": {
+        "shortname": "medieval.door.hinged.metal",
+        "name": "Medieval Sheet Metal Door",
+        "description": "Medium strength door, vulnerable to explosives."
     },
     "-583379016": {
         "shortname": "megaphone",
@@ -3554,6 +3934,11 @@
         "name": "Metal Spring",
         "description": "A metal spring. Used to provide motion or resistance in objects."
     },
+    "-482348853": {
+        "shortname": "minicrossbow",
+        "name": "Mini Crossbow",
+        "description": "A very accurate ranged weapon with a rotating barrel."
+    },
     "-1130709577": {
         "shortname": "mining.pumpjack",
         "name": "Pump Jack",
@@ -3567,7 +3952,7 @@
     "-20045316": {
         "shortname": "mobilephone",
         "name": "Mobile Phone",
-        "description": "A mobile phone that lets you place calls from anywhere. Truly cutting edge Cobalt technology. Use [attack] to access the dialler."
+        "description": "A mobile phone that lets you place calls from anywhere. Truly cutting edge Cobalt technology. Use [attack] to access the dialer."
     },
     "-1417478274": {
         "shortname": "motorbike",
@@ -3599,6 +3984,11 @@
         "name": "Night Vision Goggles",
         "description": "Enables vision at nighttime by projecting and amplifying infrared light.The batteries can be recharged at a Lvl 2 workbench. Cannot be worn with a helmet."
     },
+    "-1811234677": {
+        "shortname": "nucleus",
+        "name": "Beehive Nucleus",
+        "description": "The heart of any hive, needed for raising bees. Produce honeycomb to earn XP and increase its grade. Higher grades will produce more honeycomb at once."
+    },
     "-282193997": {
         "shortname": "orangeidtag",
         "name": "Orange ID Tag",
@@ -3629,6 +4019,21 @@
         "name": "Pickaxe",
         "description": "A Pickaxe, useful for gathering ore from rocks."
     },
+    "-1785248332": {
+        "shortname": "pie.fish",
+        "name": "Fish Pie",
+        "description": "Delightful fish pie. Provides a boost to hunger, health and hydration and increases base comfort level for a short time."
+    },
+    "-1488408786": {
+        "shortname": "pie.pumpkin",
+        "name": "Pumpkin Pie",
+        "description": "Spooky pumpkin pie, Provides a boost to health, hunger and hydration, and increases maximum health for a short time."
+    },
+    "-963820355": {
+        "shortname": "pie.survivors",
+        "name": "Survivor's Pie",
+        "description": "It's people. Survivor's pie is made out of people. Provides a boost to health, hunger and hydration, and increases yield when harvesting corpses for a short time."
+    },
     "-1442496789": {
         "shortname": "pinata",
         "name": "Pinata",
@@ -3654,10 +4059,20 @@
         "name": "Water Pistol",
         "description": "A small water gun that doesn't require pumping, but has a lower range and output."
     },
+    "-280812482": {
+        "shortname": "planter.triangle",
+        "name": "Triangle Planter Box",
+        "description": "A triangle planter with enough room to plant 4 seeds."
+    },
     "-804769727": {
         "shortname": "plantfiber",
         "name": "Plant Fiber",
         "description": "Fiber from dead plants. Can be composted."
+    },
+    "-430416124": {
+        "shortname": "plantpot.single",
+        "name": "Single Plant Pot",
+        "description": "A single plant pot."
     },
     "-1651220691": {
         "shortname": "pookie.bear",
@@ -3701,18 +4116,18 @@
     },
     "-1729415579": {
         "shortname": "radiationresisttea.advanced",
-        "name": "Adv. Anti-Rad Tea",
-        "description": "A tea that reduces the amount of health lost due to radiation."
+        "name": "Advanced Anti-Rad Tea",
+        "description": "An advanced tea that provides some hydration and temporarily increases your resistance to radiation a moderate amount."
     },
     "-487356515": {
         "shortname": "radiationresisttea",
-        "name": "Anti-Rad Tea",
-        "description": "A tea that reduces the amount of health lost due to radiation."
+        "name": "Basic Anti-Rad Tea",
+        "description": "A basic tea that provides hydration and temporarily increases your resistance to radiation a small amount."
     },
     "-33009419": {
         "shortname": "radiationresisttea.pure",
         "name": "Pure Anti-Rad Tea",
-        "description": "A tea that reduces the amount of health lost due to radiation."
+        "description": "A pure tea that provides hydration and temporarily increases your resistance to radiation a large amount."
     },
     "-602717596": {
         "shortname": "reddogtags",
@@ -3729,6 +4144,11 @@
         "name": "Research Paper",
         "description": "Use this item in a Research Bench to create blueprints of items."
     },
+    "-92315244": {
+        "shortname": "revolver.hc",
+        "name": "High Caliber Revolver",
+        "description": "A High Caliber six-shooter."
+    },
     "-566907190": {
         "shortname": "rf_pager",
         "name": "RF Pager",
@@ -3741,7 +4161,7 @@
     },
     "-1335497659": {
         "shortname": "rifle.ak.ice",
-        "name": "Assault Rifle - ICE",
+        "name": "Ice Assault Rifle",
         "description": "Ice-covered high damage machine rifle."
     },
     "-778367295": {
@@ -3762,12 +4182,12 @@
     "-348232115": {
         "shortname": "rifle.sks",
         "name": "SKS",
-        "description": "A Semi Automatic Rifle."
+        "description": "A Military-Grade Semi Automatic Rifle."
     },
     "-699558439": {
         "shortname": "roadsign.gloves",
         "name": "Roadsign Gloves",
-        "description": "Gloves made out of metal offers a good amount of protection to the upper body."
+        "description": "Gloves made out of metal, offer a good amount of protection to the upper body."
     },
     "-2002277461": {
         "shortname": "roadsign.jacket",
@@ -3897,27 +4317,37 @@
     "-237809779": {
         "shortname": "seed.hemp",
         "name": "Hemp Seed",
-        "description": "Hemp seeds can be found when picking wild Hemp. These seeds can be planted in the ground and grown to collect additional cloth.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more cloth and faster groth."
+        "description": "Hemp seeds can be found when picking wild Hemp. These seeds can be planted in the ground and grown to collect additional cloth.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more cloth and faster growth."
     },
     "-2084071424": {
         "shortname": "seed.potato",
         "name": "Potato Seed",
-        "description": "These potato seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+        "description": "These potato seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more potatoes and faster growth."
     },
     "-1511285251": {
         "shortname": "seed.pumpkin",
         "name": "Pumpkin Seed",
-        "description": "Pumpkin Seeds can be found when picking wild Pumpkin plants. These seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Pumpkins and faster groth."
+        "description": "Pumpkin Seeds can be found when picking wild Pumpkin plants. These seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more pumpkins and faster growth."
+    },
+    "-1037472336": {
+        "shortname": "seed.rose",
+        "name": "Rose Seed",
+        "description": "Rose seeds can be found when picking wild Roses."
+    },
+    "-1790885730": {
+        "shortname": "seed.wheat",
+        "name": "Wheat Seed",
+        "description": "Wheat seeds can be found when picking wild Wheat plants. These seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more corn and faster growth."
     },
     "-992286106": {
         "shortname": "seed.white.berry",
         "name": "White Berry Seed",
-        "description": "These white berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+        "description": "These white berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more berries and faster growth."
     },
     "-520133715": {
         "shortname": "seed.yellow.berry",
         "name": "Yellow Berry Seed",
-        "description": "These yellow berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more Corn and faster groth."
+        "description": "These yellow berry seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more berries and faster growth."
     },
     "-1994909036": {
         "shortname": "sheetmetal",
@@ -3974,6 +4404,11 @@
         "name": "Sickle",
         "description": "A very sharp curved cutting weapon. While its traditional role was to cut grass, this tool is also extremely versatile at cutting throats, perhaps trees, too."
     },
+    "-1290278434": {
+        "shortname": "siegetower",
+        "name": "Siege Tower",
+        "description": "A rolling siege tower, providing cover and access to enemy bases. Can be locked with your own door. Can be towed by horses."
+    },
     "-1647846966": {
         "shortname": "sign.hanging.ornate",
         "name": "Two Sided Ornate Hanging Sign",
@@ -4018,6 +4453,11 @@
         "shortname": "sign.wooden.small",
         "name": "Small Wooden Sign",
         "description": "A 1-meter by 0.5-meter wooden sign that you can write on."
+    },
+    "-1056824343": {
+        "shortname": "skidoo",
+        "name": "Diver propulsion vehicle",
+        "description": "A personal underwater propulsion device"
     },
     "-924959988": {
         "shortname": "skull.trophy.jar2",
@@ -4224,6 +4664,11 @@
         "name": "Sulfur Ore",
         "description": "A rock containing sulfur. The sulfur can be extracted using a furnace."
     },
+    "-611118083": {
+        "shortname": "sunflower",
+        "name": "Sunflower",
+        "description": "Very tall."
+    },
     "-2103694546": {
         "shortname": "sunglasses02camo",
         "name": "Sunglasses",
@@ -4313,6 +4758,11 @@
         "shortname": "twitchrivals2023desk",
         "name": "Twitch Rivals Desk",
         "description": "Twitch Rivals Desk"
+    },
+    "-739993590": {
+        "shortname": "twitchrivalsflag",
+        "name": "Twitch Rivals Flag",
+        "description": "A wearable flag for Twitch Rivals"
     },
     "-1683726934": {
         "shortname": "twowaymirror.window",
@@ -4409,6 +4859,16 @@
         "name": "Garage Door",
         "description": "A garage door that rolls up and down."
     },
+    "-450890885": {
+        "shortname": "wall.frame.lunar2025_b",
+        "name": "Lunar Wall Frame Swirling",
+        "description": "A Lunar New Year themed decorative wall divider with swirling inlay"
+    },
+    "-2016974826": {
+        "shortname": "wall.frame.lunar2025_c",
+        "name": "Lunar Wall Frame Floral",
+        "description": "A Lunar New Year themed decorative wall divider with floral inlay"
+    },
     "-796583652": {
         "shortname": "wall.frame.shopfront",
         "name": "Shop Front",
@@ -4453,6 +4913,11 @@
         "shortname": "wantedposter.wantedposter3",
         "name": "Wanted Poster 3",
         "description": "A poster that can display a given player's face as wanted."
+    },
+    "-1142222427": {
+        "shortname": "warmingtea",
+        "name": "Warming Tea",
+        "description": "A warming tea that temporarily increases both your core and minimum temperature."
     },
     "-463122489": {
         "shortname": "watchtower.wood",
@@ -4507,7 +4972,7 @@
     "-1405508498": {
         "shortname": "weapon.mod.muzzleboost",
         "name": "Muzzle Boost",
-        "description": "Increases weapon fire rate by channeling gasses back into the weapon cycling it faster, at the cost of bullet velocity and accuracy."
+        "description": "Increases weapon fire rate by channeling gasses back into the weapon cycling it faster, at the cost of bullet accuracy."
     },
     "-1850571427": {
         "shortname": "weapon.mod.silencer",
@@ -4572,17 +5037,17 @@
     "-541206665": {
         "shortname": "woodtea.advanced",
         "name": "Advanced Wood Tea",
-        "description": "A tea that increases the amount of wood you receive from trees."
+        "description": "An advanced wood tea, temporarily increases the yield from cutting trees a moderate amount."
     },
     "-649128577": {
         "shortname": "woodtea",
         "name": "Basic Wood Tea",
-        "description": "A tea that increases the amount of wood you receive from trees."
+        "description": "A basic wood tea, temporarily increases the yield from cutting trees a small amount."
     },
     "-557539629": {
         "shortname": "woodtea.pure",
         "name": "Pure Wood Tea",
-        "description": "A tea that increases the amount of wood you receive from trees."
+        "description": "A pure wood tea, temporarily increases the yield from cutting trees a large amount."
     },
     "-41896755": {
         "shortname": "workbench2",
