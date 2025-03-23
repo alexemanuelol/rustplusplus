@@ -22,7 +22,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import dotenv from 'dotenv';
 
-import { createLogger } from './src/structures/Logger';
+import { createLogger } from './src/managers/loggerManager';
 import { LocaleManager } from './src/managers/LocaleManager';
 import { CredentialsManager } from './src/managers/credentialsManager';
 import { GuildInstanceManager } from './src/managers/guildInstanceManager';
@@ -39,7 +39,7 @@ function getStringEnv(key: string, defaultValue?: string): string {
         if (defaultValue !== undefined) {
             return defaultValue;
         }
-        throw new Error(`❌ Missing required environment variable: ${key}`);
+        throw new Error(`[index.ts] Missing required environment variable '${key}'`);
     }
     return value;
 }
@@ -103,6 +103,6 @@ discordManager.build();
 export const fcmListenerManager = new FcmListenerManager(discordManager);
 
 process.on('unhandledRejection', error => {
-    log.error(`[main] Unhandled Rejection: ${error}`);
+    log.error(`[index.ts] Unhandled Rejection: ${error}`);
     console.log(error);
 });
