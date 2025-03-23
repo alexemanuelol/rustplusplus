@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,64 +18,57 @@
 
 */
 
-import { Interaction, InteractionType } from 'discord.js';
+import * as discordjs from 'discord.js';
 
-import { log, client, localeManager as lm } from '../../index';
-import * as guildInstance from '../util/guild-instance';
-import * as discordEmbeds from '../discordTools/discord-embeds';
-import * as discordTools from '../discordTools/discord-tools';
-import { selectMenuHandler } from '../handlers/select-menu-handler';
-import { modalHandler } from '../handlers/modal-handler';
-import { buttonHandler } from '../handlers/button-handler';
-const Config = require('../../config');
-
+import { log } from '../../index';
+import { DiscordManager } from '../managers/discordManager';
+import { slashCommandHandler } from '../handlers/slashCommandHandler';
+import { autocompleteHandler } from '../handlers/autocompleteHandler';
 
 export const name = 'interactionCreate';
+export const once = false;
 
-export async function execute(interaction: Interaction) {
-    const instance = guildInstance.readGuildInstanceFile(interaction.guildId as string);
-    const language = instance.generalSettings.language;
+export async function execute(dm: DiscordManager, interaction: discordjs.Interaction) {
+    const funcName = `[discordEvent: ${name}]`;
+    const logParam = { guildId: interaction.guildId };
 
-    /* Check so that the interaction comes from valid channels */
-    if (!Object.values(instance.channelIds).includes(interaction.channelId) && !interaction.isCommand) {
-        log.warn(lm.getIntl(Config.general.language, 'interactionInvalidChannel'))
-        if (interaction.isButton()) {
-            try {
-                interaction.deferUpdate();
-            }
-            catch (e) {
-                log.error(lm.getIntl(Config.general.language, 'couldNotDeferInteraction'));
-            }
-        }
+    let result = false;
+
+    dm.logInteraction(interaction, 'Initiated');
+
+    // TODO! Each interaction handler needs to check if initiator of the interaction is valid
+    // i.e. if roles are set then not everyone can use commands etc
+
+    /* Slash Commands. */
+    if (interaction.isChatInputCommand()) {
+        result = await slashCommandHandler(dm, interaction);
     }
-
-    if (interaction.isButton()) {
-        await buttonHandler(interaction);
+    /* Autocomplete Interactions. */
+    else if (interaction.isAutocomplete()) {
+        result = await autocompleteHandler(dm, interaction);
     }
-    else if (interaction.isStringSelectMenu()) {
-        await selectMenuHandler(interaction);
+    /* Context Menu Commands (User & Message). */
+    else if (interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand()) {
+        /* TBD */
     }
-    else if (interaction.type === InteractionType.ApplicationCommand) {
-        const command = client.commands.get(interaction.commandName);
-
-        /* If the command doesn't exist, return */
-        if (!command) return;
-
-        try {
-            await command.execute(client, interaction);
-        }
-        catch (e) {
-            log.error(e);
-
-            const str = lm.getIntl(language, 'errorExecutingCommand');
-            await discordTools.interactionEditReply(interaction, discordEmbeds.getActionInfoEmbed(1, str));
-            log.error(str);
-        }
+    /* Button Interaction. */
+    else if (interaction.isButton()) {
+        /* TBD */
     }
-    else if (interaction.type === InteractionType.ModalSubmit) {
-        await modalHandler(interaction);
+    /* Select Menus (All types). */
+    else if (interaction.isAnySelectMenu()) {
+        /* TBD */
     }
+    /* Modal Submissions. */
+    else if (interaction.isModalSubmit()) {
+        /* TBD */
+    }
+    /* Unknown interaction. */
     else {
-        log.error(lm.getIntl(Config.general.language, 'unknownInteraction'));
+        log.error(`${funcName} Unknown interaction.`, logParam);
+    }
+
+    if (result) {
+        dm.logInteraction(interaction, 'Completed')
     }
 }

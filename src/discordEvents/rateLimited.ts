@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,21 +17,29 @@
     https://github.com/alexemanuelol/rustplusplus
 
 */
+
 import { RateLimitData } from '@discordjs/rest';
 
-import { log, localeManager as lm } from '../../index';
-const Config = require('../../config');
+import { log } from '../../index';
+import { DiscordManager } from '../managers/discordManager';
 
 export const name = 'rateLimited';
+export const once = false;
 
-export async function execute(info: RateLimitData) {
+export async function execute(dm: DiscordManager, rateLimitInfo: RateLimitData) {
+    const funcName = `[discordEvent: ${name}]`;
     log.warn(
-        `${lm.getIntl(Config.general.language, 'ratelimited')}: ` +
-        `Timeout: ${info.timeToReset}, ` +
-        `Limit: ${info.limit}, ` +
-        `Method: ${info.method}, ` +
-        `Path: ${info.url}, ` +
-        `Route: ${info.route}, ` +
-        `Global: ${info.global}`
+        `${funcName} ` +
+        `global: ${rateLimitInfo.global} ` +
+        `hash: ${rateLimitInfo.hash} ` +
+        `limit: ${rateLimitInfo.limit} ` +
+        `majorParameter: ${rateLimitInfo.majorParameter} ` +
+        `method: ${rateLimitInfo.method} ` +
+        `retryAfter: ${rateLimitInfo.retryAfter} ` +
+        `route: ${rateLimitInfo.route} ` +
+        `scope: ${rateLimitInfo.scope} ` +
+        `sublimitTimeout: ${rateLimitInfo.sublimitTimeout} ` +
+        `timeToReset: ${rateLimitInfo.timeToReset} ` +
+        `url: ${rateLimitInfo.url}`
     );
 }

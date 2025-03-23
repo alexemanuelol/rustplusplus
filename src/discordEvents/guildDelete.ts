@@ -20,29 +20,26 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, credentialsManager as cm } from '../../index';
+import { guildInstanceManager as gim, log, credentialsManager as cm } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
-import * as types from '../utils/types';
 
-export const name = 'guildMemberRemove';
+export const name = 'guildDelete';
 export const once = false;
 
-export async function execute(dm: DiscordManager, member: discordjs.GuildMember) {
+export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
     const funcName = `[discordEvent: ${name}]`;
-    const logParam = { guildId: member.guild.id };
+    const logParam = { guildId: guild.id };
 
-    const associatedSteamIds: types.SteamId[] = [];
+    log.info(`${funcName} Client left guild.`, logParam);
 
-    /* Update credentials associated guilds, remove credentials/fcm listeners for the user if no longer part of
-       any guilds. */
+    /* Update credentials associated guilds, remove credentials/fcm listeners for users that are no longer part of
+       the guild. */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
-        if (credentials.discordUserId !== member.id) continue;
 
-        associatedSteamIds.push(steamId);
-        credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId => guildId !== member.guild.id);
+        credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId => guildId !== guild.id);
 
         if (credentials.associatedGuilds.length === 0) {
             // TODO! Remove from fcm listener
@@ -54,20 +51,8 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         cm.updateCredentials(steamId);
     }
 
-    const gInstance = gim.getGuildInstance(member.guild.id);
-    if (gInstance !== null) {
-        Object.keys(gInstance.pairingDataMap).forEach(serverId => {
-            Object.keys(gInstance.pairingDataMap[serverId]).forEach(steamId => {
-                if (associatedSteamIds.includes(steamId as types.SteamId)) {
-                    delete gInstance.pairingDataMap[serverId][steamId];
-                }
-            });
+    // TODO! turn off and remove rustplus instance from manager for guild
 
-            if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
-                delete gInstance.pairingDataMap[serverId];
-            }
-        });
-
-        gim.updateGuildInstance(member.guild.id);
-    }
+    /* Delete guild instance file last. */
+    gim.deleteGuildInstance(guild.id);
 }

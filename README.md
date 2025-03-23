@@ -22,6 +22,11 @@
 
 A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/rustplus.js) library to utilize the power of the [Rust+ Companion App](https://rust.facepunch.com/companion) with additional Quality-of-Life features.
 
+## **Versions during development**
+
+- NodeJS v22.13.1
+- NPM 10.9.2
+
 
 ## **How-to Setup Video**
 

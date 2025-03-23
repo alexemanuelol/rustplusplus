@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,18 +18,14 @@
 
 */
 
-import * as discordjs from 'discord.js';
-
-import { guildInstanceManager as gim, log } from '../../index';
-import { DiscordManager } from '../managers/discordManager';
-import { GuildInstance } from '../managers/guildInstanceManager';
-
-export const name = 'voiceStateUpdate';
-export const once = false;
-
-export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
-    const funcName = `[discordEvent: ${name}]`;
-
-    // TODO!
-    // Based on user leave/enter channel, make the bot leave the channel after a time
-}
+export type SteamId = string;
+export type GuildId = string;
+export type UserId = string;
+export type RoleId = string;
+export type MessageId = string;
+export type Timestamp = number;
+export type ServerId = string;
+export type ChannelId = string;
+export type BattlemetricsId = string;
+export type EntityId = string;
+export type Version = number;

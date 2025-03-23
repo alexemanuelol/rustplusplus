@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,19 +18,24 @@
 
 */
 
-import { Guild } from 'discord.js';
+import * as discordjs from 'discord.js';
 
-import { client } from '../../index';
-import * as guildInstance from '../util/guild-instance';
+import { guildInstanceManager as gim, log } from '../../index';
+import { DiscordManager } from '../managers/discordManager';
 
 export const name = 'guildCreate';
+export const once = false;
 
-export async function execute(guild: Guild) {
-    guildInstance.createGuildInstanceFile(guild.id);
+export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
+    const funcName = `[discordEvent: ${name}]`;
+    const logParam = { guildId: guild.id };
 
-    client.fcmListenersLite[guild.id] = new Object();
+    log.info(`${funcName} Client joined guild.`, logParam);
 
-    client.loadGuildIntl(guild.id);
+    if (gim.getGuildInstance(guild.id) === null) {
+        gim.addNewGuildInstance(guild.id);
+    }
 
-    await client.setupGuild(guild);
+    await dm.registerGuildSlashCommands(guild);
+    await dm.setupGuild(guild);
 }

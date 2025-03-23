@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,16 +19,19 @@
 */
 
 import { log } from '../../index';
+import { DiscordManager } from '../managers/discordManager';
 
 export const name = 'error';
+export const once = false;
 
-export async function execute(error: Error) {
+export function execute(dm: DiscordManager, error: Error) {
+    const funcName = `[discordEvent: ${name}]`;
+
     const errorString = formatError(error);
     const errorLineArray = errorString.split('\n');
     for (const line of errorLineArray) {
-        log.error(line)
+        log.error(`${funcName} ${line}`);
     }
-    process.exit(1);
 }
 
 function formatError(error: Error): string {

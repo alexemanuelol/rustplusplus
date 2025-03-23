@@ -20,16 +20,15 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, log } from '../../index';
+import { log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
-import { GuildInstance } from '../managers/guildInstanceManager';
 
-export const name = 'voiceStateUpdate';
+export const name = 'guildUnavailable';
 export const once = false;
 
-export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
+export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
     const funcName = `[discordEvent: ${name}]`;
+    const logParam = { guildId: guild.id };
 
-    // TODO!
-    // Based on user leave/enter channel, make the bot leave the channel after a time
+    log.warn(`${funcName} ${guild.name} is now unavailable.`, logParam);
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,54 +18,39 @@
 
 */
 
-import { Message } from 'discord.js';
+import * as discordjs from 'discord.js';
 
-import { log, client, localeManager as lm } from '../../index';
-import * as guildInstance from '../util/guild-instance';
-import * as discordTools from '../discordTools/discord-tools';
-import { discordCommandHandler } from '../handlers/discord-command-handler';
-const Config = require('../../config');
+import { guildInstanceManager as gim, log } from '../../index';
+import { DiscordManager } from '../managers/discordManager';
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'messageCreate';
+export const once = false;
 
-export async function execute(message: Message) {
-    if (!message.guild) return;
+export async function execute(dm: DiscordManager, message: discordjs.Message) {
+    const funcName = `[discordEvent: ${name}]`;
 
-    const guildId = message.guild.id;
-    const instance = guildInstance.readGuildInstanceFile(guildId);
-    const rustplus = client.rustplusInstances[guildId];
+    /* Ignore messages from bots. */
+    if (message.author.bot) return;
 
-    if (message.author.bot || !rustplus || (rustplus && !rustplus.isOperational)) return;
-
-    if (instance.blacklist['discordIds'].includes(message.author.id) &&
-        Object.values(instance.channelIds).includes(message.channelId)) {
-        const guild = await discordTools.getGuild(guildId);
-        if (!guild) return;
-        const channel = await discordTools.getTextChannel(guild.id, message.channelId);
-        if (!channel) return;
-        log.info(lm.getIntl(Config.general.language, `userPartOfBlacklistDiscord`, {
-            guild: `${guild.name} (${guild.id})`,
-            channel: `${channel.name} (${channel.id})`,
-            user: `${message.author.username} (${message.author.id})`,
-            message: message.cleanContent
-        }));
-        return;
+    if (message.guild) {
+        /* Message in a guild. */
+        await handleGuildMessage(dm, message);
     }
+    else {
+        /* Direct message. */
+        await handleDirectMessage(dm, message);
+    }
+}
 
-    if (message.channelId === instance.channelIds.commands) {
-        await discordCommandHandler(rustplus, message);
-    }
-    else if (message.channelId === instance.channelIds.teamchat) {
-        const guild = await discordTools.getGuild(guildId);
-        if (!guild) return;
-        const channel = await discordTools.getTextChannel(guild.id, message.channelId);
-        if (!channel) return;
-        log.info(lm.getIntl(Config.general.language, `logDiscordMessage`, {
-            guild: `${guild.name} (${guild.id})`,
-            channel: `${channel.name} (${channel.id})`,
-            user: `${message.author.username} (${message.author.id})`,
-            message: message.cleanContent
-        }));
-        await rustplus.sendInGameMessage(`${message.author.username}: ${message.cleanContent}`);
-    }
+async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message) {
+    // TODO!
+    // Check what guild the message is created in
+    // Check if the author of the message is part of blacklist
+    // Is the channel commands? Then call the command
+    // I sthe channel teamchat? Then forward it to teamchat ingame
+}
+
+async function handleDirectMessage(dm: DiscordManager, message: discordjs.Message) {
+    /* TBD */
 }

@@ -24,12 +24,27 @@ import { guildInstanceManager as gim, log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { GuildInstance } from '../managers/guildInstanceManager';
 
-export const name = 'voiceStateUpdate';
+export const name = 'roleDelete';
 export const once = false;
 
-export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
+export async function execute(dm: DiscordManager, role: discordjs.Role) {
     const funcName = `[discordEvent: ${name}]`;
+    const logParam = { guildId: role.guild.id };
 
-    // TODO!
-    // Based on user leave/enter channel, make the bot leave the channel after a time
+    const guild = role.guild;
+    const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
+
+    let resetPermissions = false;
+    if (gInstance.roleIds.includes(role.id)) {
+        log.info(`${funcName} ${role.id} was deleted and part of roleIds, permission reset required.`, logParam);
+        resetPermissions = true;
+    }
+    if (gInstance.adminIds.includes(role.id)) {
+        log.info(`${funcName} ${role.id} was deleted and part of adminIds, permission reset required.`, logParam);
+        resetPermissions = true;
+    }
+
+    if (resetPermissions) {
+        await dm.setupGuild(guild);
+    }
 }

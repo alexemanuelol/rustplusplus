@@ -18,18 +18,16 @@
 
 */
 
-import * as discordjs from 'discord.js';
-
-import { guildInstanceManager as gim, log } from '../../index';
+import { log, config } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
-import { GuildInstance } from '../managers/guildInstanceManager';
 
-export const name = 'voiceStateUpdate';
+export const name = 'debug';
 export const once = false;
 
-export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
+export async function execute(dm: DiscordManager, info: string) {
     const funcName = `[discordEvent: ${name}]`;
 
-    // TODO!
-    // Based on user leave/enter channel, make the bot leave the channel after a time
+    if (config.general.debug) {
+        log.debug(`${funcName} ${info}`);
+    }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,68 +18,94 @@
 
 */
 
-import { ActivityType } from 'discord.js';
 import * as path from 'path';
 
-import { log, client, localeManager as lm } from '../../index';
-import * as guildInstance from '../util/guild-instance';
-import * as credentials from '../util/credentials';
-import { battlemetricsHandler } from '../handlers/battlemetrics-handler';
-const Config = require('../../config');
+import { guildInstanceManager as gim, config, log, credentialsManager as cm } from '../../index';
+import { DiscordManager } from '../managers/discordManager';
+import { Credentials } from '../managers/credentialsManager';
+import * as types from '../utils/types';
 
 export const name = 'ready';
 export const once = true;
 
-export async function execute() {
-    for (const guild of client.guilds.cache) {
-        const guildId = guild[0];
-        guildInstance.createGuildInstanceFile(guildId);
+export async function execute(dm: DiscordManager) {
+    const funcName = `[discordEvent: ${name}]`;
 
-        client.fcmListenersLite[guildId] = new Object();
+    log.info(`${funcName} Logged in as ${dm.client.user?.tag ?? 'Unknown User'}.`);
+
+    /* Check if there are new guilds, if so, create empty guild instance files for them. */
+    const activeGuildIds: types.GuildId[] = [];
+    for (const guild of dm.client.guilds.cache.values()) {
+        if (gim.getGuildInstance(guild.id) === null) {
+            gim.addNewGuildInstance(guild.id);
+        }
+        activeGuildIds.push(guild.id);
     }
 
-    credentials.createCredentialsFile();
+    /* Remove guild instances that are no longer active. */
+    const guildInstanceIds = gim.getGuildInstanceGuildIds();
+    const inactiveGuildIds: types.GuildId[] = guildInstanceIds.filter(guildId => !activeGuildIds.includes(guildId));
+    for (const guildId of inactiveGuildIds) {
+        gim.deleteGuildInstance(guildId);
+    }
 
-    client.loadGuildsIntl();
-    log.info(lm.getIntl(Config.general.language, 'loggedInAs', { name: client.user.tag }));
+    /* Update credentials associated guilds, remove credentials/fcm listeners for users that are no longer part of
+       the valid guilds. */
+    const credentialSteamIds = cm.getCredentialSteamIds();
+    for (const steamId of credentialSteamIds) {
+        const credentials = cm.getCredentials(steamId) as Credentials;
+        const discordUserId = credentials.discordUserId;
+
+        credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId =>
+            !inactiveGuildIds.includes(guildId));
+
+        const validGuilds: types.GuildId[] = [];
+        for (const guildId of credentials.associatedGuilds) {
+            const member = await dm.getMember(guildId, discordUserId);
+            if (member) {
+                validGuilds.push(guildId);
+            }
+        }
+        credentials.associatedGuilds = validGuilds;
+
+        if (credentials.associatedGuilds.length === 0) {
+            // TODO! Remove from fcm listener
+
+            cm.deleteCredentials(steamId);
+            continue;
+        }
+
+        cm.addExpireTimeout(steamId, dm);
+        cm.updateCredentials(steamId);
+    }
 
     try {
-        await client.user.setUsername(Config.discord.username);
+        if (config.discord.enforceNameChange) {
+            await dm.client.user?.setUsername(config.discord.username);
+        }
     }
-    catch (e) {
-        log.warn(lm.getIntl(Config.general.language, 'ignoreSetUsername'));
+    catch (error) {
+        log.warn(`${funcName} Could not set username ${config.discord.username}.`);
     }
 
     try {
-        await client.user.setAvatar(path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
-    }
-    catch (e) {
-        log.warn(lm.getIntl(Config.general.language, 'ignoreSetAvatar'));
-    }
-
-    client.user.setPresence({
-        activities: [{ name: '/help', type: ActivityType.Listening }],
-        status: 'online'
-    });
-
-    client.uptimeBot = new Date();
-
-    for (const guildArray of client.guilds.cache) {
-        const guild = guildArray[1];
-
-        try {
-            await guild.members.me.setNickname(Config.discord.username);
+        if (config.discord.enforceAvatarChange) {
+            await dm.client.user?.setAvatar(path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
         }
-        catch (e) {
-            log.warn(lm.getIntl(Config.general.language, 'ignoreSetNickname'));
-        }
-        await client.syncCredentialsWithUsers(guild);
-        await client.setupGuild(guild);
+    }
+    catch (error) {
+        log.warn(`${funcName} Could not set avatar.`);
     }
 
-    await client.updateBattlemetricsInstances();
-    await battlemetricsHandler(true);
-    client.battlemetricsIntervalId = setInterval(battlemetricsHandler, 60000, false);
+    await dm.registerGlobalSlashCommands();
+    for (const guild of dm.client.guilds.cache.values()) {
+        await dm.registerGuildSlashCommands(guild);
+        await dm.setupGuild(guild);
+    }
 
-    client.createRustplusInstancesFromConfig();
+
+    // TODO
+    // Setup rustplus instances based on guild settings
+    // global variable uptimeBot set new time.
+
 }

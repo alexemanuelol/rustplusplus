@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,58 +18,91 @@
 
 */
 
-const Discord = require('discord.js');
-const Fs = require('fs');
-const Path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
+import dotenv from 'dotenv';
 
-const Config = require('./config');
-const DiscordBot = require('./src/structures/DiscordBot');
+import { createLogger } from './src/structures/Logger';
+import { LocaleManager } from './src/managers/LocaleManager';
+import { CredentialsManager } from './src/managers/credentialsManager';
+import { GuildInstanceManager } from './src/managers/guildInstanceManager';
+import { DiscordManager } from './src/managers/discordManager';
+//import { RustPlusMananger } from './src/managers/rustPlusManager';
+import { FcmListenerManager } from './src/managers/fcmListenerManager';
 
-import * as Logger from './src/structures/Logger';
-import { LocaleManager } from './src/structures/LocaleManager';
+dotenv.config();
 
-function createMissingDirectories() {
-    if (!Fs.existsSync(Path.join(__dirname, 'logs'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'logs'));
+/* Function to get a required string value (throws an error if missing) */
+function getStringEnv(key: string, defaultValue?: string): string {
+    const value = process.env[key];
+    if (value === undefined) {
+        if (defaultValue !== undefined) {
+            return defaultValue;
+        }
+        throw new Error(`❌ Missing required environment variable: ${key}`);
     }
+    return value;
+}
 
-    if (!Fs.existsSync(Path.join(__dirname, 'guildInstances'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'guildInstances'));
-    }
+/* Function to get an optional number value (uses default if missing or invalid) */
+function getNumberEnv(key: string, defaultValue: number): number {
+    const value = Number(process.env[key]);
+    return Number.isNaN(value) ? defaultValue : value;
+};
 
-    if (!Fs.existsSync(Path.join(__dirname, 'credentials'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'credentials'));
-    }
+/* Function to get a boolean value (treats 'true' as true, everything else as false) */
+function getBooleanEnv(key: string, defaultValue: boolean = false): boolean {
+    const value = process.env[key];
+    return value === 'true' ? true : defaultValue;
+};
 
-    if (!Fs.existsSync(Path.join(__dirname, 'maps'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'maps'));
+export const config = {
+    general: {
+        debug: getBooleanEnv('RPP_DEBUG', false),
+        language: getStringEnv('RPP_LANGUAGE', 'en'),
+        pollingIntervalMs: getNumberEnv('RPP_POLLING_INTERVAL_MS', 10_000),
+        showCallStackOnError: getBooleanEnv('RPP_SHOW_CALL_STACK_ON_ERROR', false),
+        reconnectIntervalMs: getNumberEnv('RPP_RECONNECT_INTERVAL_MS', 15_000)
+    },
+    discord: {
+        username: getStringEnv('RPP_DISCORD_USERNAME', 'rustplusplus'),
+        clientId: getStringEnv('RPP_DISCORD_CLIENT_ID'),
+        token: getStringEnv('RPP_DISCORD_TOKEN'),
+        useCache: getBooleanEnv('RPP_USE_CACHE', true),
+        enforceNameChange: getBooleanEnv('RPP_ENFORCE_NAME_CHANGE', true),
+        enforceAvatarChange: getBooleanEnv('RPP_ENFORCE_AVATAR_CHANGE', true),
+        enforceChannelPermissions: getBooleanEnv('RPP_ENFORCE_CHANNEL_PERMISSIONS', true)
     }
 }
 
+export const log = createLogger(path.join(__dirname, 'logs', 'rustplusplus.log'));
+
+function createMissingDirectories() {
+    const directories = ['logs', 'guildInstances', 'credentials', 'maps'];
+
+    directories.forEach(dir => {
+        const dirPath = path.join(__dirname, dir);
+        if (!fs.existsSync(dirPath)) {
+            fs.mkdirSync(dirPath, { recursive: true });
+        }
+    });
+}
 createMissingDirectories();
 
-export const log = Logger.createLogger('logs/rustplusplus.log');
-export const localeManager = new LocaleManager(Config.general.language);
+export const localeManager = new LocaleManager(config.general.language);
+export const credentialsManager = new CredentialsManager(path.join(__dirname, 'credentials'));
+export const guildInstanceManager = new GuildInstanceManager(
+    path.join(__dirname, 'guildInstances'),
+    path.join(__dirname, 'src', 'templates')
+);
 
-export const client = new DiscordBot({
-    intents: [
-        Discord.GatewayIntentBits.Guilds,
-        Discord.GatewayIntentBits.GuildMessages,
-        Discord.GatewayIntentBits.MessageContent,
-        Discord.GatewayIntentBits.GuildMembers,
-        Discord.GatewayIntentBits.GuildVoiceStates],
-    retryLimit: 2,
-    restRequestTimeout: 60000,
-    disableEveryone: false
-});
+export const discordManager = new DiscordManager();
+discordManager.build();
 
-client.build();
+//export const rustPlusManager = new RustPlusMananger();
+export const fcmListenerManager = new FcmListenerManager(discordManager);
 
 process.on('unhandledRejection', error => {
-    log.error(localeManager.getIntl(Config.general.language, 'unhandledRejection', {
-        error: error
-    }));
+    log.error(`[main] Unhandled Rejection: ${error}`);
     console.log(error);
 });
-
-exports.client = client;

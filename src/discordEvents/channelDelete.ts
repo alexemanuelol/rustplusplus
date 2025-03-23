@@ -22,14 +22,34 @@ import * as discordjs from 'discord.js';
 
 import { guildInstanceManager as gim, log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
-import { GuildInstance } from '../managers/guildInstanceManager';
 
-export const name = 'voiceStateUpdate';
+export const name = 'channelDelete';
 export const once = false;
 
-export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
+export async function execute(dm: DiscordManager, channel: discordjs.DMChannel | discordjs.GuildChannel) {
+    if (channel.isDMBased()) return;
     const funcName = `[discordEvent: ${name}]`;
+    const logParam = { guildId: channel.guild.id };
 
-    // TODO!
-    // Based on user leave/enter channel, make the bot leave the channel after a time
+    const guildId = channel.guild.id;
+
+    const gInstance = gim.getGuildInstance(guildId);
+    if (!gInstance) {
+        log.warn(`${funcName} GuildInstance was not found.`, logParam);
+        return;
+    }
+
+    let changed = false;
+    const channelIds = gInstance.guildChannelIds;
+    for (const [channelName, channelId] of Object.entries(channelIds)) {
+        if (channelId === channel.id) {
+            channelIds[channelName as keyof typeof channelIds] = null;
+            log.warn(`${funcName} ${channelName} was deleted.`, logParam);
+            changed = true;
+        }
+    }
+
+    if (changed) {
+        gim.updateGuildInstance(guildId);
+    }
 }

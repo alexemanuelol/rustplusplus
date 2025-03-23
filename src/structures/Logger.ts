@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,26 +41,28 @@ export function createLogger(logFilePath: string): winston.Logger {
     const customFormatConsole = winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.printf(({ timestamp, level, message, ...metadata }) => {
-            const coloredTimestamp = `${timestamp} `.green;
-            const coloredLevel = `${level[colorizeLevel(level) as keyof String]} `;
-            const coloredMessage = `${message} `.yellow;
-            const coloredGuildId = metadata.guildId ? `${metadata.guildId} `.cyan : '';
-            const coloredServerName = metadata.serverName ? `${metadata.serverName} `.white : '';
+            const cTimestamp = `${timestamp} `.green;
+            const cLevel = `${level[colorizeLevel(level) as keyof String]} `;
+            const cMessage = `${message} `.yellow;
+            const cGuildId = metadata.guildId ? `${metadata.guildId} `.cyan : '';
+            const cServerId = metadata.serverId ? `${metadata.serverId} `.white : '';
+            const cServerName = metadata.serverName ? `${metadata.serverName} `.white : '';
 
-            return `${coloredTimestamp}${coloredLevel}${coloredGuildId}${coloredServerName}${coloredMessage}`
+            return `${cTimestamp}${cLevel}${cGuildId}${cServerId}${cServerName}${cMessage}`;
         })
     );
 
     const customFormatFile = winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.printf(({ timestamp, level, message, ...metadata }) => {
-            const coloredTimestamp = `${timestamp} `;
-            const coloredLevel = `${level} `;
-            const coloredMessage = `${message} `;
-            const coloredGuildId = metadata.guildId ? `${metadata.guildId} ` : '';
-            const coloredServerName = metadata.serverName ? `${metadata.serverName} ` : '';
+            const cTimestamp = `${timestamp} `;
+            const cLevel = `${level} `;
+            const cMessage = `${message} `;
+            const cGuildId = metadata.guildId ? `${metadata.guildId} ` : '';
+            const cServerId = metadata.serverId ? `${metadata.serverId} `.white : '';
+            const cServerName = metadata.serverName ? `${metadata.serverName} ` : '';
 
-            return `${coloredTimestamp}${coloredLevel}${coloredGuildId}${coloredServerName}${coloredMessage}`
+            return `${cTimestamp}${cLevel}${cGuildId}${cServerId}${cServerName}${cMessage}`;
         })
     );
 
