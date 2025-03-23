@@ -18,6 +18,8 @@
 
 */
 
+/* eslint-disable */
+
 /*
  * This script is used to combine all of the item meta .json files from
  * the Rust game directory "<drive>:\SteamLibrary\steamapps\common\Rust\Bundles\items"

@@ -65,6 +65,7 @@ export function decodeHtml(str: string): string {
 
 export function removeInvisibleCharacters(str: string): string {
     str = str.replace(/[\u200B-\u200D\uFEFF]/g, '');
+    /* eslint-disable-next-line no-control-regex */
     return str.replace(/[\u0000-\u001F\u007F-\u009F]/g, '');
 }
 

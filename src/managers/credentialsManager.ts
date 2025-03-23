@@ -113,7 +113,7 @@ export class CredentialsManager {
             return ReadError.ReadFailed;
         }
 
-        let credentialsFileContentParsed: any;
+        let credentialsFileContentParsed: Credentials;
         try {
             credentialsFileContentParsed = JSON.parse(credentialsFileContent);
         }
@@ -333,10 +333,12 @@ export class CredentialsManager {
  * Validation functions.
  */
 
-export function isValidCredentials(object: any): object is Credentials {
+export function isValidCredentials(object: unknown): object is Credentials {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as Credentials;
 
     const interfaceName = 'Credentials';
     const validKeys = [
@@ -351,14 +353,14 @@ export function isValidCredentials(object: any): object is Credentials {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('version', object.version, 'number'));
-    errors.push(vu.validateType('steamId', object.steamId, 'string'));
-    errors.push(vu.validateInterface('gcm', object.gcm, isValidGcm));
-    errors.push(vu.validateType('discordUserId', object.discordUserId, 'string'));
-    errors.push(vu.validateArrayOfTypes('associatedGuilds', object.associatedGuilds, 'string'));
-    errors.push(vu.validateType('issueDate', object.issueDate, 'number'));
-    errors.push(vu.validateType('expireDate', object.expireDate, 'number'));
-    errors.push(vu.validateType('expirationNotified', object.expirationNotified, 'boolean'));
+    errors.push(vu.validateType('version', obj.version, 'number'));
+    errors.push(vu.validateType('steamId', obj.steamId, 'string'));
+    errors.push(vu.validateInterface('gcm', obj.gcm, isValidGcm));
+    errors.push(vu.validateType('discordUserId', obj.discordUserId, 'string'));
+    errors.push(vu.validateArrayOfTypes('associatedGuilds', obj.associatedGuilds, 'string'));
+    errors.push(vu.validateType('issueDate', obj.issueDate, 'number'));
+    errors.push(vu.validateType('expireDate', obj.expireDate, 'number'));
+    errors.push(vu.validateType('expirationNotified', obj.expirationNotified, 'boolean'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -373,10 +375,12 @@ export function isValidCredentials(object: any): object is Credentials {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidGcm(object: any): object is Gcm {
+export function isValidGcm(object: unknown): object is Gcm {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as Gcm;
 
     const interfaceName = 'Gcm';
     const validKeys = [
@@ -385,8 +389,8 @@ export function isValidGcm(object: any): object is Gcm {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('androidId', object.androidId, 'string'));
-    errors.push(vu.validateType('securityToken', object.securityToken, 'string'));
+    errors.push(vu.validateType('androidId', obj.androidId, 'string'));
+    errors.push(vu.validateType('securityToken', obj.securityToken, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

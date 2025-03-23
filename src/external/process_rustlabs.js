@@ -18,6 +18,8 @@
 
 */
 
+/* eslint-disable */
+
 const Axios = require('axios');
 const Fs = require('fs');
 const Path = require('path');

@@ -31,12 +31,16 @@ const GLOBAL_SLASH_COMMANDS_DIR = 'discordGlobalSlashCommands'
 const GUILD_SLASH_COMMANDS_DIR = 'discordGuildSlashCommands'
 const DISCORD_EVENTS_DIR = 'discordEvents';
 
+export interface CommandData {
+    data: discordjs.SlashCommandBuilder;
+    execute: (dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction) => Promise<boolean>;
+}
 
 export class DiscordManager {
     public client: discordjs.Client;
-    public globalSlashCommands: discordjs.Collection<string, any>;
-    public guildSlashCommands: discordjs.Collection<string, any>;
-    public eventListeners: { name: string; listener: (...args: any[]) => void }[] = [];
+    public globalSlashCommands: discordjs.Collection<string, CommandData>;
+    public guildSlashCommands: discordjs.Collection<string, CommandData>;
+    public eventListeners: { name: string; listener: (...args: unknown[]) => void }[] = [];
 
     constructor() {
         const funcName = '[DiscordManager Init]';
@@ -70,7 +74,8 @@ export class DiscordManager {
         this.loadEvents();
     }
 
-    private async getCommandData(language: string, type: 'global' | 'guild' = 'global'): Promise<any[]> {
+    private async getCommandData(language: string, type: 'global' | 'guild' = 'global'):
+        Promise<discordjs.SlashCommandBuilder[]> {
         const funcName = '[getCommandData]';
         const commandDir = type === 'global' ? GLOBAL_SLASH_COMMANDS_DIR : GUILD_SLASH_COMMANDS_DIR;
         const commandFiles = fs.readdirSync(path.join(__dirname, '..', commandDir))
@@ -81,7 +86,7 @@ export class DiscordManager {
             try {
                 const { default: command } = await import(`../${commandDir}/${file}`);
                 const commandData = command.getData(language);
-                commandsData.push(commandData.toJSON ? commandData.toJSON() : commandData);
+                commandsData.push(commandData);
             }
             catch (error) {
                 log.error(`${funcName} Failed to load command ${file}, ${error}.`);
@@ -182,12 +187,12 @@ export class DiscordManager {
         const eventFiles = fs.readdirSync(path.join(__dirname, '..', DISCORD_EVENTS_DIR))
             .filter(file => file.endsWith('.ts'));
 
-        let events: string[] = [];
+        const events: string[] = [];
         for (const file of eventFiles) {
             try {
                 const { name, execute, once = false } = await import(`../${DISCORD_EVENTS_DIR}/${file}`);
 
-                const listener = (...args: any[]) => execute(this, ...args);
+                const listener = (...args: unknown[]) => execute(this, ...args);
 
                 if (name === 'rateLimited') {
                     this.client.rest.on(name, listener);
@@ -335,7 +340,7 @@ export class DiscordManager {
         const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
         const channels = gInstance.guildChannelIds;
 
-        for (const [channelName, channelId] of Object.entries(channels)) {
+        for (const [channelName] of Object.entries(channels)) {
             if (channelName === 'category') continue;
             await this.setupGuildChannel(guild, channelName as keyof GuildChannelIds, enforceChannelPermissions);
         }
@@ -382,6 +387,7 @@ export class DiscordManager {
         gInstance.guildChannelIds[channelName] = channel ? channel.id : null;
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     public async setupGuildSettingsChannel(guild: discordjs.Guild) {
     }
 
@@ -499,7 +505,7 @@ export class DiscordManager {
         if (adminRequired) return false;
 
         const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (!gInstance || (gInstance && !gInstance.hasOwnProperty('roleIds'))) return false;
+        if (!gInstance || (gInstance && !('roleIds' in gInstance))) return false;
 
         if (gInstance.roleIds.length === 0) return true;
 
@@ -513,7 +519,7 @@ export class DiscordManager {
         if (member.permissions.has(discordjs.PermissionsBitField.Flags.Administrator)) return true;
 
         const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (!gInstance || (gInstance && !gInstance.hasOwnProperty('adminIds'))) return false;
+        if (!gInstance || (gInstance && !('adminIds' in gInstance))) return false;
 
         return member.roles.cache.some(role => gInstance.adminIds.includes(role.id));
     }

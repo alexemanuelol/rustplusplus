@@ -18,6 +18,8 @@
 
 */
 
+/* eslint-disable */
+
 const Path = require('path');
 const Fs = require('fs');
 

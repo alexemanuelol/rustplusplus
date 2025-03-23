@@ -8,7 +8,9 @@
         "startn": "node --no-deprecation -r ts-node/register index.ts",
         "compile": "tsc",
         "preinstall": "npx npm-force-resolutions",
-        "test": "tsc --noEmit -p ."
+        "test": "tsc --noEmit -p .",
+        "lint": "npx eslint . --ext .ts",
+        "find-eslint-comments": "grep -r --exclude-dir=node_modules 'eslint-disable' ."
     },
     "repository": {
         "type": "git",
@@ -46,5 +48,13 @@
     "resolutions": {
         "jpeg-js": "0.4.4",
         "protobufjs": "7.4.0"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.23.0",
+        "@typescript-eslint/eslint-plugin": "^8.27.0",
+        "@typescript-eslint/parser": "^8.27.0",
+        "eslint": "^9.23.0",
+        "globals": "^16.0.0",
+        "typescript-eslint": "^8.27.0"
     }
 }

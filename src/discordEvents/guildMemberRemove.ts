@@ -29,9 +29,6 @@ export const name = 'guildMemberRemove';
 export const once = false;
 
 export async function execute(dm: DiscordManager, member: discordjs.GuildMember) {
-    const funcName = `[discordEvent: ${name}]`;
-    const logParam = { guildId: member.guild.id };
-
     const associatedSteamIds: types.SteamId[] = [];
 
     /* Update credentials associated guilds, remove credentials/fcm listeners for the user if no longer part of

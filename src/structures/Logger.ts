@@ -42,7 +42,7 @@ export function createLogger(logFilePath: string): winston.Logger {
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.printf(({ timestamp, level, message, ...metadata }) => {
             const cTimestamp = `${timestamp} `.green;
-            const cLevel = `${level[colorizeLevel(level) as keyof String]} `;
+            const cLevel = `${level[colorizeLevel(level) as keyof string]} `;
             const cMessage = `${message} `.yellow;
             const cGuildId = metadata.guildId ? `${metadata.guildId} `.cyan : '';
             const cServerId = metadata.serverId ? `${metadata.serverId} `.white : '';

@@ -356,7 +356,7 @@ export class GuildInstanceManager {
             return ReadError.ReadFailed;
         }
 
-        let guildInstanceFileContentParsed: any;
+        let guildInstanceFileContentParsed: GuildInstance;
         try {
             guildInstanceFileContentParsed = JSON.parse(guildInstanceFileContent);
         }
@@ -552,23 +552,18 @@ export class GuildInstanceManager {
 
         return true;
     }
-
-    public updatePairingData(pairingDataMap: PairingDataMap, serverId: types.ServerId, steamId: types.SteamId,
-        pairingData: PairingData): boolean {
-
-
-        return true;
-    }
 }
 
 /**
  * Validation functions.
  */
 
-export function isValidGuildInstance(object: any): object is GuildInstance {
+export function isValidGuildInstance(object: unknown): object is GuildInstance {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as GuildInstance;
 
     const interfaceName = 'GuildInstance';
     const validKeys = [
@@ -592,26 +587,26 @@ export function isValidGuildInstance(object: any): object is GuildInstance {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('version', object.version, 'number'));
-    errors.push(vu.validateType('guildId', object.guildId, 'string'));
-    errors.push(vu.validateNestedObjectOfInterfaces('pairingDataMap', object.pairingDataMap, isValidPairingData));
-    errors.push(vu.validateType('activeServerId', object.activeServerId, 'string', null));
-    errors.push(vu.validateType('mainRequester', object.mainRequester, 'string', null));
-    errors.push(vu.validateInterface('guildChannelIds', object.guildChannelIds, isValidGuildChannelIds));
-    errors.push(vu.validateArrayOfTypes('adminIds', object.adminIds, 'string'));
-    errors.push(vu.validateArrayOfTypes('roleIds', object.roleIds, 'string'));
-    errors.push(vu.validateInterface('informationChannelMessageIds', object.informationChannelMessageIds,
+    errors.push(vu.validateType('version', obj.version, 'number'));
+    errors.push(vu.validateType('guildId', obj.guildId, 'string'));
+    errors.push(vu.validateNestedObjectOfInterfaces('pairingDataMap', obj.pairingDataMap, isValidPairingData));
+    errors.push(vu.validateType('activeServerId', obj.activeServerId, 'string', null));
+    errors.push(vu.validateType('mainRequester', obj.mainRequester, 'string', null));
+    errors.push(vu.validateInterface('guildChannelIds', obj.guildChannelIds, isValidGuildChannelIds));
+    errors.push(vu.validateArrayOfTypes('adminIds', obj.adminIds, 'string'));
+    errors.push(vu.validateArrayOfTypes('roleIds', obj.roleIds, 'string'));
+    errors.push(vu.validateInterface('informationChannelMessageIds', obj.informationChannelMessageIds,
         isValidInformationChannelMessageIds));
-    errors.push(vu.validateInterface('generalSettings', object.generalSettings, isValidGeneralSettings));
-    errors.push(vu.validateObjectOfInterfaces('notificationSettingMap', object.notificationSettingMap,
+    errors.push(vu.validateInterface('generalSettings', obj.generalSettings, isValidGeneralSettings));
+    errors.push(vu.validateObjectOfInterfaces('notificationSettingMap', obj.notificationSettingMap,
         isValidNotificationSetting));
-    errors.push(vu.validateArrayOfInterfaces('commandAliases', object.commandAliases, isValidCommandAlias));
-    errors.push(vu.validateInterface('blacklist', object.blacklist, isValidBlacklist));
-    errors.push(vu.validateObjectOfTypes('teamMemberChatColorMap', object.teamMemberChatColorMap, 'string'));
-    errors.push(vu.validateInterface('marketSubscriptionList', object.marketSubscriptionList,
+    errors.push(vu.validateArrayOfInterfaces('commandAliases', obj.commandAliases, isValidCommandAlias));
+    errors.push(vu.validateInterface('blacklist', obj.blacklist, isValidBlacklist));
+    errors.push(vu.validateObjectOfTypes('teamMemberChatColorMap', obj.teamMemberChatColorMap, 'string'));
+    errors.push(vu.validateInterface('marketSubscriptionList', obj.marketSubscriptionList,
         isValidMarketSubscriptionList));
-    errors.push(vu.validateObjectOfInterfaces('trackerMap', object.trackerMap, isValidTracker));
-    errors.push(vu.validateObjectOfInterfaces('serverInfoMap', object.serverInfoMap, isValidServerInfo));
+    errors.push(vu.validateObjectOfInterfaces('trackerMap', obj.trackerMap, isValidTracker));
+    errors.push(vu.validateObjectOfInterfaces('serverInfoMap', obj.serverInfoMap, isValidServerInfo));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -626,10 +621,12 @@ export function isValidGuildInstance(object: any): object is GuildInstance {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidPairingData(object: any): object is PairingData {
+export function isValidPairingData(object: unknown): object is PairingData {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as PairingData;
 
     const interfaceName = 'PairingData';
     const validKeys = [
@@ -641,11 +638,11 @@ export function isValidPairingData(object: any): object is PairingData {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('valid', object.valid, 'boolean'));
-    errors.push(vu.validateType('serverIp', object.serverIp, 'string'));
-    errors.push(vu.validateType('appPort', object.appPort, 'string'));
-    errors.push(vu.validateType('steamId', object.steamId, 'string'));
-    errors.push(vu.validateType('playerToken', object.playerToken, 'number'));
+    errors.push(vu.validateType('valid', obj.valid, 'boolean'));
+    errors.push(vu.validateType('serverIp', obj.serverIp, 'string'));
+    errors.push(vu.validateType('appPort', obj.appPort, 'string'));
+    errors.push(vu.validateType('steamId', obj.steamId, 'string'));
+    errors.push(vu.validateType('playerToken', obj.playerToken, 'number'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -660,10 +657,12 @@ export function isValidPairingData(object: any): object is PairingData {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidGuildChannelIds(object: any): object is GuildChannelIds {
+export function isValidGuildChannelIds(object: unknown): object is GuildChannelIds {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as GuildChannelIds;
 
     const interfaceName = 'GuildChannelIds';
     const validKeys = [
@@ -683,19 +682,19 @@ export function isValidGuildChannelIds(object: any): object is GuildChannelIds {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('category', object.category, 'string', null));
-    errors.push(vu.validateType('settings', object.settings, 'string', null));
-    errors.push(vu.validateType('servers', object.servers, 'string', null));
-    errors.push(vu.validateType('information', object.information, 'string', null));
-    errors.push(vu.validateType('events', object.events, 'string', null));
-    errors.push(vu.validateType('activity', object.activity, 'string', null));
-    errors.push(vu.validateType('teamchat', object.teamchat, 'string', null));
-    errors.push(vu.validateType('commands', object.commands, 'string', null));
-    errors.push(vu.validateType('smartSwitches', object.smartSwitches, 'string', null));
-    errors.push(vu.validateType('smartSwitchGroups', object.smartSwitchGroups, 'string', null));
-    errors.push(vu.validateType('smartAlarms', object.smartAlarms, 'string', null));
-    errors.push(vu.validateType('storageMonitors', object.storageMonitors, 'string', null));
-    errors.push(vu.validateType('trackers', object.trackers, 'string', null));
+    errors.push(vu.validateType('category', obj.category, 'string', null));
+    errors.push(vu.validateType('settings', obj.settings, 'string', null));
+    errors.push(vu.validateType('servers', obj.servers, 'string', null));
+    errors.push(vu.validateType('information', obj.information, 'string', null));
+    errors.push(vu.validateType('events', obj.events, 'string', null));
+    errors.push(vu.validateType('activity', obj.activity, 'string', null));
+    errors.push(vu.validateType('teamchat', obj.teamchat, 'string', null));
+    errors.push(vu.validateType('commands', obj.commands, 'string', null));
+    errors.push(vu.validateType('smartSwitches', obj.smartSwitches, 'string', null));
+    errors.push(vu.validateType('smartSwitchGroups', obj.smartSwitchGroups, 'string', null));
+    errors.push(vu.validateType('smartAlarms', obj.smartAlarms, 'string', null));
+    errors.push(vu.validateType('storageMonitors', obj.storageMonitors, 'string', null));
+    errors.push(vu.validateType('trackers', obj.trackers, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -710,10 +709,12 @@ export function isValidGuildChannelIds(object: any): object is GuildChannelIds {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidInformationChannelMessageIds(object: any): object is InformationChannelMessageIds {
+export function isValidInformationChannelMessageIds(object: unknown): object is InformationChannelMessageIds {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as InformationChannelMessageIds;
 
     const interfaceName = 'InformationChannelMessageIds';
     const validKeys = [
@@ -725,11 +726,11 @@ export function isValidInformationChannelMessageIds(object: any): object is Info
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('map', object.map, 'string', null));
-    errors.push(vu.validateType('server', object.server, 'string', null));
-    errors.push(vu.validateType('event', object.event, 'string', null));
-    errors.push(vu.validateType('team', object.team, 'string', null));
-    errors.push(vu.validateType('battlemetricsPlayers', object.battlemetricsPlayers, 'string', null));
+    errors.push(vu.validateType('map', obj.map, 'string', null));
+    errors.push(vu.validateType('server', obj.server, 'string', null));
+    errors.push(vu.validateType('event', obj.event, 'string', null));
+    errors.push(vu.validateType('team', obj.team, 'string', null));
+    errors.push(vu.validateType('battlemetricsPlayers', obj.battlemetricsPlayers, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -744,10 +745,12 @@ export function isValidInformationChannelMessageIds(object: any): object is Info
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidGeneralSettings(object: any): object is GeneralSettings {
+export function isValidGeneralSettings(object: unknown): object is GeneralSettings {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as GeneralSettings;
 
     const interfaceName = 'GeneralSettings';
     const validKeys = [
@@ -764,16 +767,16 @@ export function isValidGeneralSettings(object: any): object is GeneralSettings {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('language', object.language, 'string'));
-    errors.push(vu.validateType('prefix', object.prefix, 'string'));
-    errors.push(vu.validateType('trademark', object.trademark, 'string'));
-    errors.push(vu.validateType('voiceGender', object.voiceGender, 'string'));
-    errors.push(vu.validateType('fcmAlarmNotify', object.fcmAlarmNotify, 'boolean'));
-    errors.push(vu.validateType('fcmAlarmNotifyEveryone', object.fcmAlarmNotifyEveryone, 'boolean'));
-    errors.push(vu.validateType('fcmAlarmPluginNotify', object.fcmAlarmPluginNotify, 'boolean'));
-    errors.push(vu.validateType('fcmAlarmPluginNotifyEveryone', object.fcmAlarmPluginNotifyEveryone, 'boolean'));
-    errors.push(vu.validateType('fcmAlarmPluginNotifyInGame', object.fcmAlarmPluginNotifyInGame, 'boolean'));
-    errors.push(vu.validateType('fcmAlarmPluginNotifyActiveServer', object.fcmAlarmPluginNotifyActiveServer,
+    errors.push(vu.validateType('language', obj.language, 'string'));
+    errors.push(vu.validateType('prefix', obj.prefix, 'string'));
+    errors.push(vu.validateType('trademark', obj.trademark, 'string'));
+    errors.push(vu.validateType('voiceGender', obj.voiceGender, 'string'));
+    errors.push(vu.validateType('fcmAlarmNotify', obj.fcmAlarmNotify, 'boolean'));
+    errors.push(vu.validateType('fcmAlarmNotifyEveryone', obj.fcmAlarmNotifyEveryone, 'boolean'));
+    errors.push(vu.validateType('fcmAlarmPluginNotify', obj.fcmAlarmPluginNotify, 'boolean'));
+    errors.push(vu.validateType('fcmAlarmPluginNotifyEveryone', obj.fcmAlarmPluginNotifyEveryone, 'boolean'));
+    errors.push(vu.validateType('fcmAlarmPluginNotifyInGame', obj.fcmAlarmPluginNotifyInGame, 'boolean'));
+    errors.push(vu.validateType('fcmAlarmPluginNotifyActiveServer', obj.fcmAlarmPluginNotifyActiveServer,
         'boolean'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
@@ -789,10 +792,12 @@ export function isValidGeneralSettings(object: any): object is GeneralSettings {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidNotificationSetting(object: any): object is NotificationSetting {
+export function isValidNotificationSetting(object: unknown): object is NotificationSetting {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as NotificationSetting;
 
     const interfaceName = 'NotificationSetting';
     const validKeys = [
@@ -803,10 +808,10 @@ export function isValidNotificationSetting(object: any): object is NotificationS
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('discord', object.discord, 'boolean'));
-    errors.push(vu.validateType('image', object.image, 'string'));
-    errors.push(vu.validateType('inGame', object.inGame, 'boolean'));
-    errors.push(vu.validateType('voice', object.voice, 'boolean'));
+    errors.push(vu.validateType('discord', obj.discord, 'boolean'));
+    errors.push(vu.validateType('image', obj.image, 'string'));
+    errors.push(vu.validateType('inGame', obj.inGame, 'boolean'));
+    errors.push(vu.validateType('voice', obj.voice, 'boolean'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -821,10 +826,12 @@ export function isValidNotificationSetting(object: any): object is NotificationS
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidCommandAlias(object: any): object is CommandAlias {
+export function isValidCommandAlias(object: unknown): object is CommandAlias {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as CommandAlias;
 
     const interfaceName = 'CommandAlias';
     const validKeys = [
@@ -834,9 +841,9 @@ export function isValidCommandAlias(object: any): object is CommandAlias {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('alias', object.alias, 'string'));
-    errors.push(vu.validateType('index', object.index, 'number'));
-    errors.push(vu.validateType('value', object.value, 'string'));
+    errors.push(vu.validateType('alias', obj.alias, 'string'));
+    errors.push(vu.validateType('index', obj.index, 'number'));
+    errors.push(vu.validateType('value', obj.value, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -851,10 +858,12 @@ export function isValidCommandAlias(object: any): object is CommandAlias {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidBlacklist(object: any): object is Blacklist {
+export function isValidBlacklist(object: unknown): object is Blacklist {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as Blacklist;
 
     const interfaceName = 'Blacklist';
     const validKeys = [
@@ -863,8 +872,8 @@ export function isValidBlacklist(object: any): object is Blacklist {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateArrayOfTypes('discordIds', object.discordIds, 'string'));
-    errors.push(vu.validateArrayOfTypes('steamIds', object.steamIds, 'string'));
+    errors.push(vu.validateArrayOfTypes('discordIds', obj.discordIds, 'string'));
+    errors.push(vu.validateArrayOfTypes('steamIds', obj.steamIds, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -879,10 +888,12 @@ export function isValidBlacklist(object: any): object is Blacklist {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidMarketSubscriptionList(object: any): object is MarketSubscriptionList {
+export function isValidMarketSubscriptionList(object: unknown): object is MarketSubscriptionList {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as MarketSubscriptionList;
 
     const interfaceName = 'MarketSubscriptionList';
     const validKeys = [
@@ -892,9 +903,9 @@ export function isValidMarketSubscriptionList(object: any): object is MarketSubs
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateArrayOfTypes('all', object.all, 'string'));
-    errors.push(vu.validateArrayOfTypes('buy', object.buy, 'string'));
-    errors.push(vu.validateArrayOfTypes('sell', object.sell, 'string'));
+    errors.push(vu.validateArrayOfTypes('all', obj.all, 'string'));
+    errors.push(vu.validateArrayOfTypes('buy', obj.buy, 'string'));
+    errors.push(vu.validateArrayOfTypes('sell', obj.sell, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -909,10 +920,12 @@ export function isValidMarketSubscriptionList(object: any): object is MarketSubs
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidTracker(object: any): object is Tracker {
+export function isValidTracker(object: unknown): object is Tracker {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as Tracker;
 
     const interfaceName = 'Tracker';
     const validKeys = [
@@ -929,16 +942,16 @@ export function isValidTracker(object: any): object is Tracker {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('serverId', object.serverId, 'string'));
-    errors.push(vu.validateType('battlemetricsId', object.battlemetricsId, 'string'));
-    errors.push(vu.validateType('title', object.title, 'string'));
-    errors.push(vu.validateType('image', object.image, 'string'));
-    errors.push(vu.validateType('clanTag', object.clanTag, 'string'));
-    errors.push(vu.validateType('everyone', object.everyone, 'boolean'));
-    errors.push(vu.validateType('inGame', object.inGame, 'boolean'));
-    errors.push(vu.validateArrayOfInterfaces('players', object.players, isValidTrackerPlayer))
-    errors.push(vu.validateType('messageId', object.messageId, 'string', null));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('serverId', obj.serverId, 'string'));
+    errors.push(vu.validateType('battlemetricsId', obj.battlemetricsId, 'string'));
+    errors.push(vu.validateType('title', obj.title, 'string'));
+    errors.push(vu.validateType('image', obj.image, 'string'));
+    errors.push(vu.validateType('clanTag', obj.clanTag, 'string'));
+    errors.push(vu.validateType('everyone', obj.everyone, 'boolean'));
+    errors.push(vu.validateType('inGame', obj.inGame, 'boolean'));
+    errors.push(vu.validateArrayOfInterfaces('players', obj.players, isValidTrackerPlayer))
+    errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -953,10 +966,12 @@ export function isValidTracker(object: any): object is Tracker {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidTrackerPlayer(object: any): object is TrackerPlayer {
+export function isValidTrackerPlayer(object: unknown): object is TrackerPlayer {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as TrackerPlayer;
 
     const interfaceName = 'TrackerPlayer';
     const validKeys = [
@@ -966,9 +981,9 @@ export function isValidTrackerPlayer(object: any): object is TrackerPlayer {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('name', object.name, 'string', null));
-    errors.push(vu.validateType('steamId', object.steamId, 'string', null));
-    errors.push(vu.validateType('playerId', object.playerId, 'string', null));
+    errors.push(vu.validateType('name', obj.name, 'string', null));
+    errors.push(vu.validateType('steamId', obj.steamId, 'string', null));
+    errors.push(vu.validateType('playerId', obj.playerId, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -983,10 +998,12 @@ export function isValidTrackerPlayer(object: any): object is TrackerPlayer {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidServerInfo(object: any): object is ServerInfo {
+export function isValidServerInfo(object: unknown): object is ServerInfo {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as ServerInfo;
 
     const interfaceName = 'ServerInfo';
     const validKeys = [
@@ -1009,22 +1026,22 @@ export function isValidServerInfo(object: any): object is ServerInfo {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('desc', object.desc, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('logo', object.logo, 'string'));
-    errors.push(vu.validateType('url', object.url, 'string'));
-    errors.push(vu.validateType('ip', object.ip, 'string'));
-    errors.push(vu.validateType('port', object.port, 'string'));
-    errors.push(vu.validateType('messageId', object.messageId, 'string', null));
-    errors.push(vu.validateType('pairedDate', object.pairedDate, 'number'));
-    errors.push(vu.validateType('connect', object.connect, 'string', null));
-    errors.push(vu.validateObjectOfTypes('noteMap', object.noteMap, 'string'));
-    errors.push(vu.validateType('battlemetricsId', object.battlemetricsId, 'string', null));
-    errors.push(vu.validateObjectOfInterfaces('smartSwitchMap', object.smartSwitchMap, isValidSmartSwitch));
-    errors.push(vu.validateObjectOfInterfaces('smartAlarmMap', object.smartAlarmMap, isValidSmartAlarm));
-    errors.push(vu.validateObjectOfInterfaces('storageMonitorMap', object.storageMonitorMap, isValidStorageMonitor));
-    errors.push(vu.validateObjectOfInterfaces('smartSwitchGroupMap', object.smartSwitchGroupMap,
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('desc', obj.desc, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('logo', obj.logo, 'string'));
+    errors.push(vu.validateType('url', obj.url, 'string'));
+    errors.push(vu.validateType('ip', obj.ip, 'string'));
+    errors.push(vu.validateType('port', obj.port, 'string'));
+    errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
+    errors.push(vu.validateType('pairedDate', obj.pairedDate, 'number'));
+    errors.push(vu.validateType('connect', obj.connect, 'string', null));
+    errors.push(vu.validateObjectOfTypes('noteMap', obj.noteMap, 'string'));
+    errors.push(vu.validateType('battlemetricsId', obj.battlemetricsId, 'string', null));
+    errors.push(vu.validateObjectOfInterfaces('smartSwitchMap', obj.smartSwitchMap, isValidSmartSwitch));
+    errors.push(vu.validateObjectOfInterfaces('smartAlarmMap', obj.smartAlarmMap, isValidSmartAlarm));
+    errors.push(vu.validateObjectOfInterfaces('storageMonitorMap', obj.storageMonitorMap, isValidStorageMonitor));
+    errors.push(vu.validateObjectOfInterfaces('smartSwitchGroupMap', obj.smartSwitchGroupMap,
         isValidSmartSwitchGroup));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
@@ -1040,10 +1057,12 @@ export function isValidServerInfo(object: any): object is ServerInfo {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidSmartSwitch(object: any): object is SmartSwitch {
+export function isValidSmartSwitch(object: unknown): object is SmartSwitch {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as SmartSwitch;
 
     const interfaceName = 'SmartSwitch';
     const validKeys = [
@@ -1058,14 +1077,14 @@ export function isValidSmartSwitch(object: any): object is SmartSwitch {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('entityId', object.entityId, 'string'));
-    errors.push(vu.validateType('messageId', object.messageId, 'string', null));
-    errors.push(vu.validateType('pairedDate', object.pairedDate, 'number'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('command', object.command, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateInterface('autoSetting', object.autoSetting, isValidSmartSwitchAutoSetting));
-    errors.push(vu.validateType('proximitySetting', object.proximitySetting, 'number'));
+    errors.push(vu.validateType('entityId', obj.entityId, 'string'));
+    errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
+    errors.push(vu.validateType('pairedDate', obj.pairedDate, 'number'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('command', obj.command, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateInterface('autoSetting', obj.autoSetting, isValidSmartSwitchAutoSetting));
+    errors.push(vu.validateType('proximitySetting', obj.proximitySetting, 'number'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1080,14 +1099,16 @@ export function isValidSmartSwitch(object: any): object is SmartSwitch {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidSmartSwitchAutoSetting(value: any): value is SmartSwitchAutoSetting {
-    return Object.values(SmartSwitchAutoSetting).includes(value);
+export function isValidSmartSwitchAutoSetting(value: unknown): value is SmartSwitchAutoSetting {
+    return typeof value === 'number' && Object.values(SmartSwitchAutoSetting).includes(value);
 }
 
-export function isValidSmartAlarm(object: any): object is SmartAlarm {
+export function isValidSmartAlarm(object: unknown): object is SmartAlarm {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as SmartAlarm;
 
     const interfaceName = 'SmartAlarm';
     const validKeys = [
@@ -1103,15 +1124,15 @@ export function isValidSmartAlarm(object: any): object is SmartAlarm {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('entityId', object.entityId, 'string'));
-    errors.push(vu.validateType('messageId', object.messageId, 'string', null));
-    errors.push(vu.validateType('pairedDate', object.pairedDate, 'number'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('command', object.command, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('everyone', object.everyone, 'boolean'));
-    errors.push(vu.validateType('lastTrigger', object.lastTrigger, 'string', null));
-    errors.push(vu.validateType('message', object.message, 'string'));
+    errors.push(vu.validateType('entityId', obj.entityId, 'string'));
+    errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
+    errors.push(vu.validateType('pairedDate', obj.pairedDate, 'number'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('command', obj.command, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('everyone', obj.everyone, 'boolean'));
+    errors.push(vu.validateType('lastTrigger', obj.lastTrigger, 'string', null));
+    errors.push(vu.validateType('message', obj.message, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1126,10 +1147,12 @@ export function isValidSmartAlarm(object: any): object is SmartAlarm {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidStorageMonitor(object: any): object is StorageMonitor {
+export function isValidStorageMonitor(object: unknown): object is StorageMonitor {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as StorageMonitor;
 
     const interfaceName = 'StorageMonitor';
     const validKeys = [
@@ -1144,14 +1167,14 @@ export function isValidStorageMonitor(object: any): object is StorageMonitor {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('entityId', object.entityId, 'string'));
-    errors.push(vu.validateType('messageId', object.messageId, 'string', null));
-    errors.push(vu.validateType('pairedDate', object.pairedDate, 'number'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('everyone', object.everyone, 'boolean'));
-    errors.push(vu.validateType('inGame', object.inGame, 'boolean'));
-    errors.push(vu.validateInterface('type', object.type, isValidStorageMonitorType));
+    errors.push(vu.validateType('entityId', obj.entityId, 'string'));
+    errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
+    errors.push(vu.validateType('pairedDate', obj.pairedDate, 'number'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('everyone', obj.everyone, 'boolean'));
+    errors.push(vu.validateType('inGame', obj.inGame, 'boolean'));
+    errors.push(vu.validateInterface('type', obj.type, isValidStorageMonitorType));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1166,14 +1189,16 @@ export function isValidStorageMonitor(object: any): object is StorageMonitor {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidStorageMonitorType(value: any): value is StorageMonitorType {
-    return Object.values(StorageMonitorType).includes(value);
+export function isValidStorageMonitorType(value: unknown): value is StorageMonitorType {
+    return typeof value === 'number' && Object.values(StorageMonitorType).includes(value);
 }
 
-export function isValidSmartSwitchGroup(object: any): object is SmartSwitchGroup {
+export function isValidSmartSwitchGroup(object: unknown): object is SmartSwitchGroup {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as SmartSwitchGroup;
 
     const interfaceName = 'SmartSwitchGroup';
     const validKeys = [
@@ -1185,11 +1210,11 @@ export function isValidSmartSwitchGroup(object: any): object is SmartSwitchGroup
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('messageId', object.messageId, 'string', null));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('command', object.command, 'string'));
-    errors.push(vu.validateType('image', object.image, 'string'));
-    errors.push(vu.validateArrayOfTypes('smartSwitches', object.smartSwitches, 'string'));
+    errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('command', obj.command, 'string'));
+    errors.push(vu.validateType('image', obj.image, 'string'));
+    errors.push(vu.validateArrayOfTypes('smartSwitches', obj.smartSwitches, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

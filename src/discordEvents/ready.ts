@@ -84,7 +84,7 @@ export async function execute(dm: DiscordManager) {
             await dm.client.user?.setUsername(config.discord.username);
         }
     }
-    catch (error) {
+    catch {
         log.warn(`${funcName} Could not set username ${config.discord.username}.`);
     }
 
@@ -93,7 +93,7 @@ export async function execute(dm: DiscordManager) {
             await dm.client.user?.setAvatar(path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
         }
     }
-    catch (error) {
+    catch {
         log.warn(`${funcName} Could not set avatar.`);
     }
 

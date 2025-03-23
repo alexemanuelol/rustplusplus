@@ -20,14 +20,13 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
-import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'voiceStateUpdate';
 export const once = false;
-
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     const funcName = `[discordEvent: ${name}]`;
 
     // TODO!

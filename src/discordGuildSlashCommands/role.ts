@@ -135,7 +135,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		return false;
 	}
 
-	if (!gInstance.hasOwnProperty(type)) {
+	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
 		log.warn(`${funcName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
@@ -197,7 +197,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		return false;
 	}
 
-	if (!gInstance.hasOwnProperty(type)) {
+	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
 		log.warn(`${funcName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
@@ -257,7 +257,7 @@ async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputC
 		return false;
 	}
 
-	if (!gInstance.hasOwnProperty('adminIds') || !gInstance.hasOwnProperty('roleIds')) {
+	if (!('adminIds' in gInstance) || !('roleIds' in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
 		log.warn(`${funcName} ${id} Unknown Error: GuildInstance does not have adminIds or roleIds.`, logParam);

@@ -123,7 +123,7 @@ export function getEmbedColumnFields(options: discordjs.EmbedData, columns: Colu
     if (options.author?.name) totalChars += truncate(options.author.name, EmbedLimits.AuthorName).length;
 
     const columnNames: string[] = [];
-    columns.forEach((column, index) => {
+    columns.forEach((column) => {
         const columnName = truncate(column.name, EmbedLimits.FieldName);
         totalChars += columnName.length;
         columnNames.push(columnName);
@@ -476,6 +476,7 @@ export function getStorageMonitorEmbed(guildId: string, serverId: string, entity
     const itemNames: string[] = [];
     const itemQuantities: string[] = [];
 
+    /* eslint-disable-next-line no-constant-condition */
     if (false) { // TODO! IF storagemonitor in rustplusManager
 
         // TODO! Get items, capacity, expire from rustplusManager for the storagemonitor
@@ -491,6 +492,7 @@ export function getStorageMonitorEmbed(guildId: string, serverId: string, entity
         }
 
         if (storageMonitor.type === StorageMonitorType.ToolCupboard) {
+            /* eslint-disable-next-line prefer-const */
             let expiry = 1742647361; // temp
             description += `**${lm.getIntl(language, 'upkeep')}** `;
 

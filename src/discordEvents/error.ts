@@ -37,6 +37,6 @@ export function execute(dm: DiscordManager, error: Error) {
 function formatError(error: Error): string {
     return `Error: ${error.message}\n` +
         `Stack Trace:\n${error.stack}\n` +
-        `Code: ${(<any>error).code}\n` +
-        `Require Stack: ${JSON.stringify((<any>error).requireStack, null, 2)}`;
+        `Code: ${'code' in error ? error.code : 'Unknown'}\n` +
+        `Require Stack: ${'requireStack' in error ? JSON.stringify(error.requireStack, null, 2) : 'Unknown'}`;
 }

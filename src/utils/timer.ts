@@ -19,20 +19,20 @@
 */
 
 interface TimerCallback {
-    (...args: any[]): void;
+    (...args: unknown[]): void;
 }
 
 export class Timer {
     private callback: TimerCallback;
     private timeout: number;
-    private args: any[];
+    private args: unknown[];
 
     private timeoutId: NodeJS.Timeout | null;
     private startDate: Date | null;
     private remaining: number;
     public running: boolean;
 
-    constructor(callback: TimerCallback, timeoutMs: number, ...args: any[]) {
+    constructor(callback: TimerCallback, timeoutMs: number, ...args: unknown[]) {
         this.callback = callback;
         this.timeout = timeoutMs;
         this.args = args;
@@ -175,7 +175,7 @@ export function getSecondsFromStringTime(str: string): number | null {
     }
 
     for (const match of matches) {
-        let value = parseInt(match.slice(0, -1));
+        const value = parseInt(match.slice(0, -1));
         switch (match[match.length - 1]) {
             case 'd': { /* Days */
                 totSeconds += value * 24 * 60 * 60;
@@ -191,9 +191,6 @@ export function getSecondsFromStringTime(str: string): number | null {
 
             case 's': { /* Seconds */
                 totSeconds += value;
-            } break;
-
-            default: {
             } break;
         }
     }

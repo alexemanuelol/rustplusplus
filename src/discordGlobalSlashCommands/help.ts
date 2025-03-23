@@ -26,6 +26,7 @@ import { DiscordManager } from '../managers/discordManager';
 export default {
 	name: 'help',
 
+	/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 	getData(language: string) {
 		return new discordjs.SlashCommandBuilder()
 			.setName('help')

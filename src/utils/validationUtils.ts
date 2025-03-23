@@ -20,19 +20,19 @@
 
 import { log } from '../../index';
 
-export type ValidationError = { key: string; value: any; expected: any };
+export type ValidationError = { key: string; value: unknown; expected: unknown };
 
-export function getTypeOf(value: any): string {
+export function getTypeOf(value: unknown): string {
     return value === null ? 'null' : typeof value;
 }
 
-export function isType(value: any, ...types: (string | null | undefined)[]): boolean {
+export function isType(value: unknown, ...types: (string | null | undefined)[]): boolean {
     return types.some(type =>
         (type === null && value === null) || (type === undefined && value === undefined) || (typeof value === type)
     );
 }
 
-export function validateType(key: string, value: any, ...types: (string | null | undefined)[]):
+export function validateType(key: string, value: unknown, ...types: (string | null | undefined)[]):
     ValidationError | null {
     if (!isType(value, ...types)) {
         return { key: key, value: getTypeOf(value), expected: types }
@@ -40,7 +40,7 @@ export function validateType(key: string, value: any, ...types: (string | null |
     return null;
 }
 
-export function validateInterface(key: string, value: any, validationCallback: (input: any) => boolean):
+export function validateInterface(key: string, value: unknown, validationCallback: (input: unknown) => boolean):
     ValidationError | null {
     if (!validationCallback(value)) {
         return { key: key, value: value, expected: 'unknown' }
@@ -49,7 +49,7 @@ export function validateInterface(key: string, value: any, validationCallback: (
     return null;
 }
 
-export function validateArrayOfInterfaces(key: string, value: any, validationCallback: (input: any) => boolean):
+export function validateArrayOfInterfaces(key: string, value: unknown, validationCallback: (input: unknown) => boolean):
     ValidationError | null {
     if (!Array.isArray(value)) {
         return { key: key, value: getTypeOf(value), expected: 'Array of interfaces' };
@@ -62,7 +62,7 @@ export function validateArrayOfInterfaces(key: string, value: any, validationCal
     return null;
 }
 
-export function validateArrayOfTypes(key: string, value: any, ...types: (string | null | undefined)[]):
+export function validateArrayOfTypes(key: string, value: unknown, ...types: (string | null | undefined)[]):
     ValidationError | null {
     if (!Array.isArray(value)) {
         return { key: key, value: getTypeOf(value), expected: `Array of types ${types.join(', ')}` };
@@ -87,8 +87,8 @@ export function validateArrayOfTypes(key: string, value: any, ...types: (string 
     return null;
 }
 
-export function validateObjectOfInterfaces(key: string, value: any, validationCallback: (input: any) => boolean):
-    ValidationError | null {
+export function validateObjectOfInterfaces(key: string, value: unknown,
+    validationCallback: (input: unknown) => boolean): ValidationError | null {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
         return { key: key, value: getTypeOf(value), expected: 'Object of interfaces' };
     }
@@ -102,8 +102,8 @@ export function validateObjectOfInterfaces(key: string, value: any, validationCa
     return null;
 }
 
-export function validateNestedObjectOfInterfaces(key: string, value: any, validationCallback: (input: any) => boolean):
-    ValidationError | null {
+export function validateNestedObjectOfInterfaces(key: string, value: unknown,
+    validationCallback: (input: unknown) => boolean): ValidationError | null {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
         return { key: key, value: getTypeOf(value), expected: 'Nested object of interfaces' };
     }
@@ -125,7 +125,7 @@ export function validateNestedObjectOfInterfaces(key: string, value: any, valida
     return null;
 }
 
-export function validateObjectOfTypes(key: string, value: any, ...types: (string | null | undefined)[]):
+export function validateObjectOfTypes(key: string, value: unknown, ...types: (string | null | undefined)[]):
     ValidationError | null {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
         return { key: key, value: getTypeOf(value), expected: `Object of types ${types.join(', ')}` };

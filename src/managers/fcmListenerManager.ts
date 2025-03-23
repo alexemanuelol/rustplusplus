@@ -18,10 +18,9 @@
 
 */
 
-import * as discordjs from 'discord.js';
-import * as path from 'path';
-import * as axios from 'axios';
+/* eslint-disable-next-line @typescript-eslint/no-require-imports */
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
+import * as axios from 'axios';
 
 import { DiscordManager } from './discordManager';
 import { log, credentialsManager as cm, guildInstanceManager as gim, localeManager as lm } from '../../index';
@@ -30,18 +29,12 @@ import * as vu from '../utils/validationUtils';
 import * as constants from '../utils/constants'
 import { PairingDataMap, SmartSwitchAutoSetting, StorageMonitorType } from './guildInstanceManager';
 import * as discordMessages from '../discordUtils/discordMessages';
-import { fetchSteamProfilePicture } from '../utils/steam';
-//import { PairingDetails, SmartSwitchAutoConfig, StorageMonitorType } from './guildInstanceManager';
-//import * as discordTools from '../discordTools/discord-tools';
-//import * as discordEmbeds from '../discordTools/discord-embeds';
-//import { getPos } from '../utils/map';
-//import * as request from '../utils/request';
-//const Battlemetrics = require('../structures/Battlemetrics');
 
 
 const NOTIFICATION_EXPIRATION_TIME_MS = 10_000;
 
 export interface FcmListeners {
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     [steamId: types.SteamId]: any; /* Client */
 }
 
@@ -227,7 +220,7 @@ export class FcmListenerManager {
         const androidId = credentials.gcm.androidId;
         const securityToken = credentials.gcm.securityToken;
         this.listeners[steamId] = new PushReceiverClient(androidId, securityToken, []);
-        this.listeners[steamId].on('ON_DATA_RECEIVED', (data: any) => {
+        (this.listeners[steamId]).on('ON_DATA_RECEIVED', (data: unknown) => {
             const funcName = `[FcmListenerManager: ON_DATA_RECEIVED: ${steamId}]`;
             if (!isValidFcmNotificaton(data)) {
                 log.warn(`${funcName} data is not of type FcmNotification. ` +
@@ -793,36 +786,36 @@ function updatePairingDetails(pairingDataMap: PairingDataMap, serverId: types.Se
  * Validation functions.
  */
 
-export function isValidChannelId(value: any): value is ChannelIds {
-    return Object.values(ChannelIds).includes(value);
+export function isValidChannelId(value: unknown): value is ChannelIds {
+    return typeof value === 'string' && Object.values(ChannelIds).includes(value as ChannelIds);
 }
 
-export function isValidPairingType(value: any): value is PairingTypes {
-    return Object.values(PairingTypes).includes(value);
+export function isValidPairingType(value: unknown): value is PairingTypes {
+    return typeof value === 'string' && Object.values(PairingTypes).includes(value as PairingTypes);
 }
 
-export function isValidPairingEntityType(value: any): value is PairingEntityTypes {
-    return Object.values(PairingEntityTypes).includes(value);
+export function isValidPairingEntityType(value: unknown): value is PairingEntityTypes {
+    return typeof value === 'string' && Object.values(PairingEntityTypes).includes(value as PairingEntityTypes);
 }
 
-export function isValidPairingEntityName(value: any): value is PairingEntityNames {
-    return Object.values(PairingEntityNames).includes(value);
+export function isValidPairingEntityName(value: unknown): value is PairingEntityNames {
+    return typeof value === 'string' && Object.values(PairingEntityNames).includes(value as PairingEntityNames);
 }
 
-export function isValidAlarmType(value: any): value is AlarmTypes {
-    return Object.values(AlarmTypes).includes(value);
+export function isValidAlarmType(value: unknown): value is AlarmTypes {
+    return typeof value === 'string' && Object.values(AlarmTypes).includes(value as AlarmTypes);
 }
 
-export function isValidPlayerType(value: any): value is PlayerTypes {
-    return Object.values(PlayerTypes).includes(value);
+export function isValidPlayerType(value: unknown): value is PlayerTypes {
+    return typeof value === 'string' && Object.values(PlayerTypes).includes(value as PlayerTypes);
 }
 
-export function isValidTeamType(value: any): value is TeamTypes {
-    return Object.values(TeamTypes).includes(value);
+export function isValidTeamType(value: unknown): value is TeamTypes {
+    return typeof value === 'string' && Object.values(TeamTypes).includes(value as TeamTypes);
 }
 
-export function isValidNewsType(value: any): value is TeamTypes {
-    return Object.values(TeamTypes).includes(value);
+export function isValidNewsType(value: unknown): value is NewsTypes {
+    return typeof value === 'string' && Object.values(NewsTypes).includes(value as NewsTypes);
 }
 
 export function isValidUrl(url: string): boolean {
@@ -830,7 +823,7 @@ export function isValidUrl(url: string): boolean {
     try {
         urlObj = new URL(url);
     }
-    catch (_) {
+    catch {
         return false;
     }
 
@@ -851,15 +844,17 @@ export async function isValidImageUrl(url: string): Promise<boolean> {
         const contentType = response.headers['content-type'];
         return contentType && contentType.startsWith('image/');
     }
-    catch (error) {
+    catch {
         return false;
     }
 }
 
-export function isValidFcmNotificaton(object: any): object is FcmNotification {
+export function isValidFcmNotificaton(object: unknown): object is FcmNotification {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as FcmNotification;
 
     const interfaceName = 'FcmNotification';
     const validKeys = [
@@ -874,14 +869,14 @@ export function isValidFcmNotificaton(object: any): object is FcmNotification {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('id', object.id, 'string'));
-    errors.push(vu.validateType('from', object.from, 'string'));
-    errors.push(vu.validateType('category', object.category, 'string'));
-    errors.push(vu.validateType('token', object.token, 'string'));
-    errors.push(vu.validateArrayOfInterfaces('appData', object.appData, isValidAppDataItem));
-    errors.push(vu.validateType('persistentId', object.persistentId, 'string'));
-    errors.push(vu.validateType('ttl', object.ttl, 'number'));
-    errors.push(vu.validateType('sent', object.sent, 'string'));
+    errors.push(vu.validateType('id', obj.id, 'string'));
+    errors.push(vu.validateType('from', obj.from, 'string'));
+    errors.push(vu.validateType('category', obj.category, 'string'));
+    errors.push(vu.validateType('token', obj.token, 'string'));
+    errors.push(vu.validateArrayOfInterfaces('appData', obj.appData, isValidAppDataItem));
+    errors.push(vu.validateType('persistentId', obj.persistentId, 'string'));
+    errors.push(vu.validateType('ttl', obj.ttl, 'number'));
+    errors.push(vu.validateType('sent', obj.sent, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -896,10 +891,12 @@ export function isValidFcmNotificaton(object: any): object is FcmNotification {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidAppDataItem(object: any): object is AppDataItem {
+export function isValidAppDataItem(object: unknown): object is AppDataItem {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as AppDataItem;
 
     const interfaceName = 'AppDataItem';
     const validKeys = [
@@ -908,8 +905,8 @@ export function isValidAppDataItem(object: any): object is AppDataItem {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('key', object.key, 'string'));
-    errors.push(vu.validateType('value', object.value, 'string'));
+    errors.push(vu.validateType('key', obj.key, 'string'));
+    errors.push(vu.validateType('value', obj.value, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -924,10 +921,12 @@ export function isValidAppDataItem(object: any): object is AppDataItem {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidPairingServerBody(object: any): object is PairingServerBody {
+export function isValidPairingServerBody(object: unknown): object is PairingServerBody {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as PairingServerBody;
 
     const interfaceName = 'PairingServerBody';
     const validKeys = [
@@ -945,17 +944,17 @@ export function isValidPairingServerBody(object: any): object is PairingServerBo
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('id', object.id, 'string'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('desc', object.desc, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('logo', object.logo, 'string'));
-    errors.push(vu.validateType('url', object.url, 'string'));
-    errors.push(vu.validateType('ip', object.ip, 'string'));
-    errors.push(vu.validateType('port', object.port, 'string'));
-    errors.push(vu.validateType('playerId', object.playerId, 'string'));
-    errors.push(vu.validateType('playerToken', object.playerToken, 'string'));
-    errors.push(vu.validateInterface('type', object.type, isValidPairingType));
+    errors.push(vu.validateType('id', obj.id, 'string'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('desc', obj.desc, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('logo', obj.logo, 'string'));
+    errors.push(vu.validateType('url', obj.url, 'string'));
+    errors.push(vu.validateType('ip', obj.ip, 'string'));
+    errors.push(vu.validateType('port', obj.port, 'string'));
+    errors.push(vu.validateType('playerId', obj.playerId, 'string'));
+    errors.push(vu.validateType('playerToken', obj.playerToken, 'string'));
+    errors.push(vu.validateInterface('type', obj.type, isValidPairingType));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -970,10 +969,12 @@ export function isValidPairingServerBody(object: any): object is PairingServerBo
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidPairingEntityBody(object: any): object is PairingEntityBody {
+export function isValidPairingEntityBody(object: unknown): object is PairingEntityBody {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as PairingEntityBody;
 
     const interfaceName = 'PairingEntityBody';
     const validKeys = [
@@ -994,20 +995,20 @@ export function isValidPairingEntityBody(object: any): object is PairingEntityBo
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('id', object.id, 'string'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('desc', object.desc, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('logo', object.logo, 'string'));
-    errors.push(vu.validateType('url', object.url, 'string'));
-    errors.push(vu.validateType('ip', object.ip, 'string'));
-    errors.push(vu.validateType('port', object.port, 'string'));
-    errors.push(vu.validateType('playerId', object.playerId, 'string'));
-    errors.push(vu.validateType('playerToken', object.playerToken, 'string'));
-    errors.push(vu.validateType('entityId', object.entityId, 'string'));
-    errors.push(vu.validateInterface('entityType', object.entityType, isValidPairingEntityType));
-    errors.push(vu.validateInterface('entityName', object.entityName, isValidPairingEntityName));
-    errors.push(vu.validateInterface('type', object.type, isValidPairingType));
+    errors.push(vu.validateType('id', obj.id, 'string'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('desc', obj.desc, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('logo', obj.logo, 'string'));
+    errors.push(vu.validateType('url', obj.url, 'string'));
+    errors.push(vu.validateType('ip', obj.ip, 'string'));
+    errors.push(vu.validateType('port', obj.port, 'string'));
+    errors.push(vu.validateType('playerId', obj.playerId, 'string'));
+    errors.push(vu.validateType('playerToken', obj.playerToken, 'string'));
+    errors.push(vu.validateType('entityId', obj.entityId, 'string'));
+    errors.push(vu.validateInterface('entityType', obj.entityType, isValidPairingEntityType));
+    errors.push(vu.validateInterface('entityName', obj.entityName, isValidPairingEntityName));
+    errors.push(vu.validateInterface('type', obj.type, isValidPairingType));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1022,10 +1023,12 @@ export function isValidPairingEntityBody(object: any): object is PairingEntityBo
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidAlarmAlarmBody(object: any): object is AlarmAlarmBody {
+export function isValidAlarmAlarmBody(object: unknown): object is AlarmAlarmBody {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as AlarmAlarmBody;
 
     const interfaceName = 'AlarmAlarmBody';
     const validKeys = [
@@ -1041,16 +1044,16 @@ export function isValidAlarmAlarmBody(object: any): object is AlarmAlarmBody {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('id', object.id, 'string'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('desc', object.desc, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('logo', object.logo, 'string'));
-    errors.push(vu.validateType('url', object.url, 'string'));
-    errors.push(vu.validateType('ip', object.ip, 'string'));
-    errors.push(vu.validateType('port', object.port, 'string'));
-    errors.push(vu.validateType('type', object.type, 'string'));
-    errors.push(vu.validateInterface('type', object.type, isValidAlarmType));
+    errors.push(vu.validateType('id', obj.id, 'string'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('desc', obj.desc, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('logo', obj.logo, 'string'));
+    errors.push(vu.validateType('url', obj.url, 'string'));
+    errors.push(vu.validateType('ip', obj.ip, 'string'));
+    errors.push(vu.validateType('port', obj.port, 'string'));
+    errors.push(vu.validateType('type', obj.type, 'string'));
+    errors.push(vu.validateInterface('type', obj.type, isValidAlarmType));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1065,10 +1068,12 @@ export function isValidAlarmAlarmBody(object: any): object is AlarmAlarmBody {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidAlarmPluginBody(object: any): object is AlarmPluginBody {
+export function isValidAlarmPluginBody(object: unknown): object is AlarmPluginBody {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as AlarmPluginBody;
 
     const interfaceName = 'AlarmPluginBody';
     const validKeys = [
@@ -1083,14 +1088,14 @@ export function isValidAlarmPluginBody(object: any): object is AlarmPluginBody {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('id', object.id, 'string'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('desc', object.desc, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('logo', object.logo, 'string'));
-    errors.push(vu.validateType('url', object.url, 'string'));
-    errors.push(vu.validateType('ip', object.ip, 'string'));
-    errors.push(vu.validateType('port', object.port, 'string'));
+    errors.push(vu.validateType('id', obj.id, 'string'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('desc', obj.desc, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('logo', obj.logo, 'string'));
+    errors.push(vu.validateType('url', obj.url, 'string'));
+    errors.push(vu.validateType('ip', obj.ip, 'string'));
+    errors.push(vu.validateType('port', obj.port, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1105,10 +1110,12 @@ export function isValidAlarmPluginBody(object: any): object is AlarmPluginBody {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidPlayerDeathBody(object: any): object is PlayerDeathBody {
+export function isValidPlayerDeathBody(object: unknown): object is PlayerDeathBody {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as PlayerDeathBody;
 
     const interfaceName = 'PlayerDeathBody';
     const validKeys = [
@@ -1126,17 +1133,17 @@ export function isValidPlayerDeathBody(object: any): object is PlayerDeathBody {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('id', object.id, 'string'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('desc', object.desc, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('logo', object.logo, 'string'));
-    errors.push(vu.validateType('url', object.url, 'string'));
-    errors.push(vu.validateType('ip', object.ip, 'string'));
-    errors.push(vu.validateType('port', object.port, 'string'));
-    errors.push(vu.validateInterface('type', object.type, isValidPlayerType));
-    errors.push(vu.validateType('targetId', object.targetId, 'string'));
-    errors.push(vu.validateType('targetName', object.targetName, 'string'));
+    errors.push(vu.validateType('id', obj.id, 'string'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('desc', obj.desc, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('logo', obj.logo, 'string'));
+    errors.push(vu.validateType('url', obj.url, 'string'));
+    errors.push(vu.validateType('ip', obj.ip, 'string'));
+    errors.push(vu.validateType('port', obj.port, 'string'));
+    errors.push(vu.validateInterface('type', obj.type, isValidPlayerType));
+    errors.push(vu.validateType('targetId', obj.targetId, 'string'));
+    errors.push(vu.validateType('targetName', obj.targetName, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1151,10 +1158,12 @@ export function isValidPlayerDeathBody(object: any): object is PlayerDeathBody {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidTeamLoginBody(object: any): object is TeamLoginBody {
+export function isValidTeamLoginBody(object: unknown): object is TeamLoginBody {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as TeamLoginBody;
 
     const interfaceName = 'TeamLoginBody';
     const validKeys = [
@@ -1172,17 +1181,17 @@ export function isValidTeamLoginBody(object: any): object is TeamLoginBody {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('id', object.id, 'string'));
-    errors.push(vu.validateType('name', object.name, 'string'));
-    errors.push(vu.validateType('desc', object.desc, 'string'));
-    errors.push(vu.validateType('img', object.img, 'string'));
-    errors.push(vu.validateType('logo', object.logo, 'string'));
-    errors.push(vu.validateType('url', object.url, 'string'));
-    errors.push(vu.validateType('ip', object.ip, 'string'));
-    errors.push(vu.validateType('port', object.port, 'string'));
-    errors.push(vu.validateInterface('type', object.type, isValidTeamType));
-    errors.push(vu.validateType('targetId', object.targetId, 'string'));
-    errors.push(vu.validateType('targetName', object.targetName, 'string'));
+    errors.push(vu.validateType('id', obj.id, 'string'));
+    errors.push(vu.validateType('name', obj.name, 'string'));
+    errors.push(vu.validateType('desc', obj.desc, 'string'));
+    errors.push(vu.validateType('img', obj.img, 'string'));
+    errors.push(vu.validateType('logo', obj.logo, 'string'));
+    errors.push(vu.validateType('url', obj.url, 'string'));
+    errors.push(vu.validateType('ip', obj.ip, 'string'));
+    errors.push(vu.validateType('port', obj.port, 'string'));
+    errors.push(vu.validateInterface('type', obj.type, isValidTeamType));
+    errors.push(vu.validateType('targetId', obj.targetId, 'string'));
+    errors.push(vu.validateType('targetName', obj.targetName, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1197,10 +1206,12 @@ export function isValidTeamLoginBody(object: any): object is TeamLoginBody {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidNewsNewsBody(object: any): object is NewsNewsBody {
+export function isValidNewsNewsBody(object: unknown): object is NewsNewsBody {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
+
+    const obj = object as NewsNewsBody;
 
     const interfaceName = 'NewsNewsBody';
     const validKeys = [
@@ -1209,9 +1220,9 @@ export function isValidNewsNewsBody(object: any): object is NewsNewsBody {
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('type', object.type, 'string'));
-    errors.push(vu.validateInterface('type', object.type, isValidNewsType));
-    errors.push(vu.validateType('url', object.url, 'string'));
+    errors.push(vu.validateType('type', obj.type, 'string'));
+    errors.push(vu.validateInterface('type', obj.type, isValidNewsType));
+    errors.push(vu.validateType('url', obj.url, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

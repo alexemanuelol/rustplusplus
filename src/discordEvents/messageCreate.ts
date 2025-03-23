@@ -20,16 +20,12 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
-import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'messageCreate';
 export const once = false;
 
 export async function execute(dm: DiscordManager, message: discordjs.Message) {
-    const funcName = `[discordEvent: ${name}]`;
-
     /* Ignore messages from bots. */
     if (message.author.bot) return;
 
@@ -43,6 +39,7 @@ export async function execute(dm: DiscordManager, message: discordjs.Message) {
     }
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message) {
     // TODO!
     // Check what guild the message is created in
@@ -51,6 +48,7 @@ async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message
     // I sthe channel teamchat? Then forward it to teamchat ingame
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function handleDirectMessage(dm: DiscordManager, message: discordjs.Message) {
     /* TBD */
 }

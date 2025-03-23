@@ -19,16 +19,9 @@
 */
 
 import * as discordjs from 'discord.js';
-import * as path from 'path';
 
-import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
-import * as discordButtons from './discordButtons';
-import * as discordEmbeds from './discordEmbeds';
-import { DiscordManager } from '../managers/discordManager';
-import * as types from '../utils/types';
-import { Credentials } from '../managers/credentialsManager';
+import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { GuildInstance, ServerInfo, SmartSwitch, SmartSwitchAutoSetting } from '../managers/guildInstanceManager';
-import { ButtonConnectionTypes } from './discordButtons';
 
 export const StringSelectMenuLimits = {
     CustomId: 100,
