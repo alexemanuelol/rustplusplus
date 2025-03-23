@@ -22,7 +22,7 @@ import axios, { AxiosResponse } from 'axios';
 
 import * as constants from './constants';
 import { decodeHtml } from './utils';
-import { localeManager as lm, log } from '../../index';
+import { log } from '../../index';
 
 const STEAM_PROFILE_PICTURE_REGEX = /<img src="(.*_full.jpg)(.*?(?="))/;
 const PROFILE_NAME_REGEX = /class="actual_persona_name">(.+?)<\/span>/gm;

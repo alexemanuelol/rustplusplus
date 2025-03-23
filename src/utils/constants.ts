@@ -18,7 +18,7 @@
 
 */
 
-export const RUSTPLUSPLUS_VERSION = 'v1.20.0';
+export const RUSTPLUSPLUS_VERSION = 'v1.21.0';
 export const RUSTPLUSPLUS_CREDENTIAL_APP_VERSION = 'v1.4.0';
 
 export const RUSTPLUSPLUS_REPOSITORY_URL = 'https://github.com/alexemanuelol/rustplusplus';
@@ -122,6 +122,10 @@ export const COLOR_PATROL_HELICOPTER_TAKEN_DOWN = '#FFBF00';
 export const COLOR_PATROL_HELICOPTER_TRACER = '#00FF00';
 export const COLOR_SETTINGS = '#861C0C';
 export const COLOR_TEAMCHAT_DEFAULT = '#CE412B';
+export const COLOR_TRAVELING_VENDOR_HALTED = '#98C4D8';
+export const COLOR_TRAVELING_VENDOR_LOCATED_AT = '#F4A3E2';
+export const COLOR_TRAVELING_VENDOR_LEFT_MAP = '#5A3E9A';
+export const COLOR_TRAVELING_VENDOR_MOVING = '#7FCE41';
 
 export function GET_STEAM_PROFILE_LINK(steamId: string): string {
     return `[${steamId}](${STEAM_PROFILES_URL}${steamId})`;
