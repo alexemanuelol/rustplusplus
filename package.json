@@ -25,12 +25,12 @@
     "dependencies": {
         "@discordjs/rest": "^2.4.3",
         "@discordjs/voice": "^0.18.0",
-        "@formatjs/intl": "^3.1.4",
+        "@formatjs/intl": "^3.1.5",
         "@jimp/types": "^1.6.0",
         "@liamcottle/push-receiver": "^0.0.4",
         "@types/gm": "^1.25.4",
-        "@types/lodash": "^4.17.15",
-        "axios": "^1.7.9",
+        "@types/lodash": "^4.17.16",
+        "axios": "^1.8.4",
         "colors": "^1.4.0",
         "discord-api-types": "^0.37.119",
         "discord.js": "^14.18.0",
@@ -42,7 +42,7 @@
         "rustplus-ts": "^0.0.2",
         "translate": "^3.0.1",
         "ts-node": "^10.9.2",
-        "typescript": "^5.7.3",
+        "typescript": "^5.8.2",
         "winston": "^3.17.0"
     },
     "resolutions": {
