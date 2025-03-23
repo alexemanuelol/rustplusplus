@@ -547,10 +547,12 @@ module.exports = async (client, interaction) => {
             title: server.title,
             img: server.img,
             clanTag: '',
+            trackerId: trackerId,
             everyone: false,
             inGame: true,
             players: [],
-            messageId: null
+            messageId: null,
+            createdAt: Date.now()
         }
         client.setInstance(guildId, instance);
 
