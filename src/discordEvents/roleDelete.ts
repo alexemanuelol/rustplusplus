@@ -36,11 +36,11 @@ export async function execute(dm: DiscordManager, role: discordjs.Role) {
 
     let resetPermissions = false;
     if (gInstance.roleIds.includes(role.id)) {
-        log.info(`${funcName} ${role.id} was deleted and part of roleIds, permission reset required.`, logParam);
+        log.info(`${funcName} '${role.id}' was deleted and part of roleIds, permission reset required.`, logParam);
         resetPermissions = true;
     }
     if (gInstance.adminIds.includes(role.id)) {
-        log.info(`${funcName} ${role.id} was deleted and part of adminIds, permission reset required.`, logParam);
+        log.info(`${funcName} '${role.id}' was deleted and part of adminIds, permission reset required.`, logParam);
         resetPermissions = true;
     }
 

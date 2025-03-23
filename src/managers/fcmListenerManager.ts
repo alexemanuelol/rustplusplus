@@ -188,7 +188,7 @@ export class FcmListenerManager {
     private listeners: FcmListeners;
 
     constructor(dm: DiscordManager) {
-        log.info('[FcmListenerManager Init]');
+        log.info('[FcmListenerManager: Init]');
         this.dm = dm;
         this.listeners = {};
 
@@ -223,13 +223,12 @@ export class FcmListenerManager {
         (this.listeners[steamId]).on('ON_DATA_RECEIVED', (data: unknown) => {
             const funcName = `[FcmListenerManager: ON_DATA_RECEIVED: ${steamId}]`;
             if (!isValidFcmNotificaton(data)) {
-                log.warn(`${funcName} data is not of type FcmNotification. ` +
-                    `Data: ${JSON.stringify(data)}`);
+                log.warn(`${funcName} data is not of type FcmNotification. Data: ${JSON.stringify(data)}`);
                 return;
             }
 
             if ((Date.now() - parseInt((data as FcmNotification).sent)) > NOTIFICATION_EXPIRATION_TIME_MS) {
-                log.warn(`${funcName} data have expired: ${(data as FcmNotification).sent}`);
+                log.warn(`${funcName} data have expired '${(data as FcmNotification).sent}'.`);
                 return;
             }
 
@@ -417,7 +416,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
     const serverId = `${body.ip}-${body.port}`;
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -472,7 +471,7 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
     const serverId = `${body.ip}-${body.port}`;
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -487,7 +486,7 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
         const language = gInstance.generalSettings.language;
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
-            log.warn(`${funcName} Could not find server`, { guildId: guildId, serverId: serverId });
+            log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
@@ -521,7 +520,7 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
     const serverId = `${body.ip}-${body.port}`;
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -536,7 +535,7 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
         const language = gInstance.generalSettings.language;
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
-            log.warn(`${funcName} Could not find server`, { guildId: guildId, serverId: serverId });
+            log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
@@ -570,7 +569,7 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
     const serverId = `${body.ip}-${body.port}`;
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -585,7 +584,7 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
         const language = gInstance.generalSettings.language;
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
-            log.warn(`${funcName} Could not find server`, { guildId: guildId, serverId: serverId });
+            log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
@@ -632,7 +631,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
     const serverId = `${body.ip}-${body.port}`;
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -648,7 +647,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
 
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
-            log.warn(`${funcName} Could not find server`, { guildId: guildId, serverId: serverId });
+            log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
@@ -665,7 +664,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
     const serverId = `${body.ip}-${body.port}`;
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -681,7 +680,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
 
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
-            log.warn(`${funcName} Could not find server`, { guildId: guildId, serverId: serverId });
+            log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
@@ -698,7 +697,7 @@ async function playerDeath(flm: FcmListenerManager, steamId: types.SteamId, titl
     const credentials = cm.getCredentials(steamId);
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -711,7 +710,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
     const serverId = `${body.ip}-${body.port}`;
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 
@@ -725,7 +724,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
 
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
-            log.warn(`${funcName} Could not find server`, { guildId: guildId, serverId: serverId });
+            log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
@@ -744,7 +743,7 @@ async function newsNews(flm: FcmListenerManager, steamId: types.SteamId, title: 
     const credentials = cm.getCredentials(steamId);
 
     if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
+        log.warn(`${funcName} Could not find Credentials.`);
         return;
     }
 

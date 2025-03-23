@@ -20,6 +20,7 @@
 
 import * as discordjs from 'discord.js';
 
+import * as types from '../utils/types';
 import * as constants from '../utils/constants';
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { GuildInstance, ServerInfo, SmartAlarm, StorageMonitor, StorageMonitorType } from '../managers/guildInstanceManager';
@@ -76,6 +77,34 @@ export function getButton(options: discordjs.ButtonComponentData): discordjs.But
     return button;
 }
 
+
+/**
+ * Direct-Message based buttons
+ */
+
+export function getCredentialsExpiredButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
+    return [
+        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+            getButton({
+                style: discordjs.ButtonStyle.Link,
+                label: 'CREDENTIALS APP',
+                url: constants.CREDENTIALS_APP_LATEST_URL,
+                type: discordjs.ComponentType.Button
+            }),
+            getButton({
+                style: discordjs.ButtonStyle.Link,
+                label: 'CREDENTIALS WEBSITE',
+                url: constants.CREDENTIALS_WEBSITE_URL,
+                type: discordjs.ComponentType.Button
+            })
+        )];
+}
+
+
+/**
+ * Slash Command based buttons
+ */
+
 export function getHelpButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     return [
         new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
@@ -112,25 +141,12 @@ export function getHelpButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBui
         )];
 }
 
-export function getCredentialsExpiredButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
-    return [
-        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
-            getButton({
-                style: discordjs.ButtonStyle.Link,
-                label: 'CREDENTIALS APP',
-                url: constants.CREDENTIALS_APP_LATEST_URL,
-                type: discordjs.ComponentType.Button
-            }),
-            getButton({
-                style: discordjs.ButtonStyle.Link,
-                label: 'CREDENTIALS WEBSITE',
-                url: constants.CREDENTIALS_WEBSITE_URL,
-                type: discordjs.ComponentType.Button
-            })
-        )];
-}
 
-export function getServerButtons(guildId: string, serverId: string, connection: ButtonConnectionTypes):
+/**
+ * Guild based buttons
+ */
+
+export function getServerButtons(guildId: types.GuildId, serverId: types.ServerId, connection: ButtonConnectionTypes):
     discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
@@ -178,8 +194,8 @@ export function getServerButtons(guildId: string, serverId: string, connection: 
     ];
 }
 
-export function getSmartSwitchButtons(guildId: string, serverId: string, entityId: string, active: boolean):
-    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+export function getSmartSwitchButtons(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId,
+    active: boolean): discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
     const identifier = JSON.stringify({ 'serverId': serverId, 'entityId': entityId });
@@ -205,7 +221,7 @@ export function getSmartSwitchButtons(guildId: string, serverId: string, entityI
         }));
 }
 
-export function getSmartAlarmButtons(guildId: string, serverId: string, entityId: string):
+export function getSmartAlarmButtons(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId):
     discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
@@ -234,7 +250,7 @@ export function getSmartAlarmButtons(guildId: string, serverId: string, entityId
         }));
 }
 
-export function getStorageMonitorButtons(guildId: string, serverId: string, entityId: string):
+export function getStorageMonitorButtons(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId):
     discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
@@ -288,7 +304,12 @@ export function getStorageMonitorButtons(guildId: string, serverId: string, enti
     return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(...components);
 }
 
-export function getFcmNewsNewsButton(guildId: string, body: NewsNewsBody):
+
+/**
+ * Notifications based buttons
+ */
+
+export function getFcmNewsNewsButton(guildId: types.GuildId, body: NewsNewsBody):
     discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;

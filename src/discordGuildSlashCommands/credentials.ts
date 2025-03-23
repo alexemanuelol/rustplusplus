@@ -126,7 +126,7 @@ export default {
 };
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials -> add]';
+	const funcName = '[SlashCommand: credentials: add]';
 	const logParam = { guildId: interaction.guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
@@ -206,7 +206,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 }
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials -> remove]';
+	const funcName = '[SlashCommand: credentials: remove]';
 	const logParam = { guildId: interaction.guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
@@ -289,7 +289,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 }
 
 async function executeInfo(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials -> info]';
+	const funcName = '[SlashCommand: credentials: info]';
 	const logParam = { guildId: interaction.guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
@@ -310,7 +310,7 @@ async function executeInfo(dm: DiscordManager, interaction: discordjs.ChatInputC
 }
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials -> list]';
+	const funcName = '[SlashCommand: credentials: list]';
 	const logParam = { guildId: interaction.guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`

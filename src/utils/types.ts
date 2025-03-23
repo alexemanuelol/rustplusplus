@@ -18,14 +18,17 @@
 
 */
 
-export type SteamId = string;
 export type GuildId = string;
 export type UserId = string;
 export type RoleId = string;
 export type MessageId = string;
-export type Timestamp = number;
-export type ServerId = string;
 export type ChannelId = string;
-export type BattlemetricsId = string;
+
+export type SteamId = string;
+export type ServerId = string;
 export type EntityId = string;
+export type GroupId = string;
+
+export type Timestamp = number;
+export type BattlemetricsId = string;
 export type Version = number;

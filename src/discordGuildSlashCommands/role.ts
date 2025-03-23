@@ -120,7 +120,7 @@ export default {
 };
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: role -> add]';
+	const funcName = '[SlashCommand: role: add]';
 	const logParam = { guildId: interaction.guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
@@ -182,7 +182,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 }
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: role -> remove]';
+	const funcName = '[SlashCommand: role: remove]';
 	const logParam = { guildId: interaction.guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
@@ -244,7 +244,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 }
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: role -> list]';
+	const funcName = '[SlashCommand: role: list]';
 	const logParam = { guildId: interaction.guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
@@ -264,7 +264,7 @@ async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputC
 		return false;
 	}
 
-	await discordMessages.sendRoleListMessage(dm, interaction, gInstance);
+	await discordMessages.sendRoleListMessage(dm, interaction);
 	log.info(`${funcName} ${id} Successfully listing all configured roles.`, logParam);
 
 	return true;

@@ -31,7 +31,7 @@ export const once = true;
 export async function execute(dm: DiscordManager) {
     const funcName = `[discordEvent: ${name}]`;
 
-    log.info(`${funcName} Logged in as ${dm.client.user?.tag ?? 'Unknown User'}.`);
+    log.info(`${funcName} Logged in as '${dm.client.user?.tag ?? 'Unknown User'}'.`);
 
     /* Check if there are new guilds, if so, create empty guild instance files for them. */
     const activeGuildIds: types.GuildId[] = [];
@@ -85,7 +85,7 @@ export async function execute(dm: DiscordManager) {
         }
     }
     catch {
-        log.warn(`${funcName} Could not set username ${config.discord.username}.`);
+        log.warn(`${funcName} Could not set username '${config.discord.username}'.`);
     }
 
     try {

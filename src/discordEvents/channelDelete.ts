@@ -44,7 +44,7 @@ export async function execute(dm: DiscordManager, channel: discordjs.DMChannel |
     for (const [channelName, channelId] of Object.entries(channelIds)) {
         if (channelId === channel.id) {
             channelIds[channelName as keyof typeof channelIds] = null;
-            log.warn(`${funcName} ${channelName} was deleted.`, logParam);
+            log.warn(`${funcName} '${channelName}' was deleted.`, logParam);
             changed = true;
         }
     }

@@ -54,6 +54,7 @@ function truncate(text: string, maxLength: number): string {
     return text.length > maxLength ? text.slice(0, maxLength) : text;
 }
 
+
 /**
  * Embed help functions
  */
@@ -176,19 +177,74 @@ export function getEmbedColumnFields(options: discordjs.EmbedData, columns: Colu
     return embed;
 }
 
+
 /**
- * Slash command response embeds
+ * Direct-Message based embeds
+ */
+
+export async function getCredentialsExpiredEmbed(dm: DiscordManager, steamId: types.SteamId, imageName: string):
+    Promise<discordjs.EmbedBuilder> {
+    const language = config.general.language;
+    const credentials = cm.getCredentials(steamId) as Credentials;
+    const title = lm.getIntl(language, 'embedTitleCredentialsExpired');
+
+    const guildNames: string[] = [];
+    for (const guildId of credentials.associatedGuilds) {
+        const guild = await dm.getGuild(guildId);
+        if (guild) guildNames.push(`[${guild.name}](https://discord.com/channels/${guild.id})`);
+    }
+
+    const parameters = {
+        steamId: `${constants.GET_STEAM_PROFILE_LINK(credentials.steamId)}`,
+        issueDate: discordjs.time(credentials.issueDate, 'R'),
+        expireDate: discordjs.time(credentials.expireDate, 'R'),
+        guilds: `${guildNames.join(', ')}`
+    }
+
+    const description = lm.getIntl(language, 'embedDescCredentialsExpired', parameters);
+
+    return getEmbed({
+        title: title,
+        description: description,
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        footer: {
+            text: lm.getIntl(language, 'credentialAppRequired', {
+                version1: `${constants.RUSTPLUSPLUS_VERSION}`,
+                version2: `${constants.RUSTPLUSPLUS_CREDENTIAL_APP_VERSION}`
+            })
+        },
+        thumbnail: {
+            url: `attachment://${imageName}`
+        }
+    })
+}
+
+export async function getFcmPlayerDeathEmbed(title: string, body: PlayerDeathBody): Promise<discordjs.EmbedBuilder> {
+    let imgUrl = null;
+    if (body.targetId !== '') imgUrl = await fetchSteamProfilePicture(body.targetId);
+
+    // TODO! Based on targetName, change image to like boar, bear, wolf etc
+
+    return getEmbed({
+        title: title,
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: { url: imgUrl ? imgUrl : constants.DEFAULT_SERVER_IMAGE },
+        footer: { text: body.name },
+        timestamp: new Date(),
+        url: body.targetId !== '' ? `${constants.STEAM_PROFILES_URL}${body.targetId}` : ''
+    });
+}
+
+
+/**
+ * Slash Command based embeds
  */
 
 export function getDefaultEmbed(dm: DiscordManager, interaction: discordjs.Interaction, imageName: string,
     title: string, description: string, parameters: { [key: string]: string } = {}): discordjs.EmbedBuilder {
-    let language = config.general.language;
-    if (interaction.guild) {
-        const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (gInstance) {
-            language = gInstance.generalSettings.language;
-        }
-    }
+    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
 
     return getEmbed({
         title: lm.getIntl(language, title),
@@ -229,15 +285,10 @@ export function getHelpEmbed(dm: DiscordManager, imageName: string): discordjs.E
     });
 }
 
-export function getRoleListEmbed(dm: DiscordManager, interaction: discordjs.Interaction, gInstance: GuildInstance,
-    imageName: string): discordjs.EmbedBuilder {
-    let language = config.general.language;
-    if (interaction.guild) {
-        const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (gInstance) {
-            language = gInstance.generalSettings.language;
-        }
-    }
+export function getRoleListEmbed(dm: DiscordManager, interaction: discordjs.Interaction, imageName: string):
+    discordjs.EmbedBuilder {
+    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
 
     const adminIds = gInstance.adminIds;
     let adminRoleNames = '';
@@ -285,13 +336,8 @@ export function getRoleListEmbed(dm: DiscordManager, interaction: discordjs.Inte
 
 export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
     imageName: string): Promise<discordjs.EmbedBuilder> {
-    let language = config.general.language;
-    if (interaction.guild) {
-        const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (gInstance) {
-            language = gInstance.generalSettings.language;
-        }
-    }
+    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
 
     const discordUserId = interaction.user.id;
     const steamIds = cm.getCredentialSteamIdsFromDiscordUserId(discordUserId);
@@ -341,13 +387,8 @@ export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: d
 
 export function getCredentialsListEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
     imageName: string): discordjs.EmbedBuilder {
-    let language = config.general.language;
-    if (interaction.guild) {
-        const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (gInstance) {
-            language = gInstance.generalSettings.language;
-        }
-    }
+    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
 
     const guildId = (interaction.guild as discordjs.Guild).id;
     const steamIds = cm.getCredentialSteamIdsFromGuildId(guildId);
@@ -383,8 +424,9 @@ export function getCredentialsListEmbed(dm: DiscordManager, interaction: discord
     })
 }
 
+
 /**
- * Other embeds
+ * Guild based embeds
  */
 
 export function getServerEmbed(guildId: types.GuildId, serverId: types.ServerId): discordjs.EmbedBuilder {
@@ -421,8 +463,8 @@ export function getSmartSwitchEmbed(guildId: types.GuildId, serverId: types.Serv
     });
 }
 
-export function getSmartAlarmEmbed(guildId: string, serverId: string, entityId: string, active: boolean):
-    discordjs.EmbedBuilder {
+export function getSmartAlarmEmbed(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId,
+    active: boolean): discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const smartAlarm = serverInfo.smartAlarmMap[entityId] as SmartAlarm;
@@ -454,7 +496,8 @@ export function getSmartAlarmEmbed(guildId: string, serverId: string, entityId: 
     });
 }
 
-export function getStorageMonitorEmbed(guildId: string, serverId: string, entityId: string): discordjs.EmbedBuilder {
+export function getStorageMonitorEmbed(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId):
+    discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const storageMonitor = serverInfo.storageMonitorMap[entityId] as StorageMonitor;
@@ -521,6 +564,11 @@ export function getStorageMonitorEmbed(guildId: string, serverId: string, entity
     ]);
 }
 
+
+/**
+ * Notifications based embeds
+ */
+
 export function getFcmAlarmTriggerEmbed(guildId: types.GuildId, serverId: types.ServerId, title: string,
     message: string): discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
@@ -568,7 +616,7 @@ export async function getFcmTeamLoginEmbed(guildId: types.GuildId, body: TeamLog
     });
 }
 
-export function getFcmNewsNewsEmbed(guildId: string, title: string, message: string):
+export function getFcmNewsNewsEmbed(guildId: types.GuildId, title: string, message: string):
     discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
@@ -581,62 +629,5 @@ export function getFcmNewsNewsEmbed(guildId: string, title: string, message: str
         color: colorHexToNumber(constants.COLOR_DEFAULT),
         thumbnail: { url: constants.DEFAULT_SERVER_IMAGE },
         timestamp: new Date()
-    });
-}
-
-/**
- * Private DM embeds
- */
-
-export async function getCredentialsExpiredEmbed(dm: DiscordManager, credentials: Credentials, imageName: string):
-    Promise<discordjs.EmbedBuilder> {
-    const language = config.general.language;
-    const title = lm.getIntl(language, 'embedTitleCredentialsExpired');
-
-    const guildNames: string[] = [];
-    for (const guildId of credentials.associatedGuilds) {
-        const guild = await dm.getGuild(guildId);
-        if (guild) guildNames.push(`[${guild.name}](https://discord.com/channels/${guild.id})`);
-    }
-
-    const parameters = {
-        steamId: `${constants.GET_STEAM_PROFILE_LINK(credentials.steamId)}`,
-        issueDate: discordjs.time(credentials.issueDate, 'R'),
-        expireDate: discordjs.time(credentials.expireDate, 'R'),
-        guilds: `${guildNames.join(', ')}`
-    }
-
-    const description = lm.getIntl(language, 'embedDescCredentialsExpired', parameters);
-
-    return getEmbed({
-        title: title,
-        description: description,
-        timestamp: new Date(),
-        color: colorHexToNumber(constants.COLOR_DEFAULT),
-        footer: {
-            text: lm.getIntl(language, 'credentialAppRequired', {
-                version1: `${constants.RUSTPLUSPLUS_VERSION}`,
-                version2: `${constants.RUSTPLUSPLUS_CREDENTIAL_APP_VERSION}`
-            })
-        },
-        thumbnail: {
-            url: `attachment://${imageName}`
-        }
-    })
-}
-
-export async function getFcmPlayerDeathEmbed(title: string, body: PlayerDeathBody): Promise<discordjs.EmbedBuilder> {
-    let imgUrl = null;
-    if (body.targetId !== '') imgUrl = await fetchSteamProfilePicture(body.targetId);
-
-    // TODO! Based on targetName, change image to like boar, bear, wolf etc
-
-    return getEmbed({
-        title: title,
-        color: colorHexToNumber(constants.COLOR_DEFAULT),
-        thumbnail: { url: imgUrl ? imgUrl : constants.DEFAULT_SERVER_IMAGE },
-        footer: { text: body.name },
-        timestamp: new Date(),
-        url: body.targetId !== '' ? `${constants.STEAM_PROFILES_URL}${body.targetId}` : ''
     });
 }

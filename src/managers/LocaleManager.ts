@@ -38,8 +38,8 @@ export class LocaleManager {
     private intl: { [locale: string]: formatjs.IntlShape<string> };
 
     constructor(defaultLanguage: string = 'en') {
-        const funcName = '[LocaleManager Init]';
-        log.info(`${funcName} Default language: ${defaultLanguage}.`);
+        const funcName = '[LocaleManager: Init]';
+        log.info(`${funcName} Default language '${defaultLanguage}'.`);
         this.defaultLanguage = defaultLanguage;
         this.locales = {};
         this.intl = {};
@@ -47,7 +47,8 @@ export class LocaleManager {
         /* Check if defaultLanguage exist */
         const defaultLanguagePath = path.join(__dirname, '..', 'languages', `${defaultLanguage}.json`);
         if (!fs.existsSync(defaultLanguagePath)) {
-            throw new Error(`${funcName} Language file for '${defaultLanguage}' does not exist.`);
+            log.error(`${funcName} Language file for '${defaultLanguage}' does not exist. Exiting...`);
+            process.exit(1);
         }
 
         this.setup();
@@ -78,12 +79,12 @@ export class LocaleManager {
     }
 
     public getIntl(locale: string | null, phraseKey: string, parameters: { [key: string]: string } = {}): string {
-        const funcName = '[getIntl]';
+        const funcName = '[LocaleManager: getIntl]';
         if (locale === null) {
             locale = this.defaultLanguage;
         }
         if (!this.locales[locale]) {
-            throw new Error(`${funcName} Unsupported locale: ${locale}.`);
+            throw new Error(`${funcName} Unsupported locale '${locale}'.`);
         }
         return this.intl[locale].formatMessage({
             id: phraseKey,

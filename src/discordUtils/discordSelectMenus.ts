@@ -96,6 +96,11 @@ export function getStringSelectMenu(options: discordjs.StringSelectMenuComponent
     return selectMenu;
 }
 
+
+/**
+ * Guild based selectMenus
+ */
+
 export function getSmartSwitchSelectMenu(guildId: string, serverId: string, entityId: string):
     discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
