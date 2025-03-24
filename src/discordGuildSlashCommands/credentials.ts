@@ -20,7 +20,7 @@
 
 import * as discordjs from 'discord.js';
 
-import { log, config, localeManager as lm, credentialsManager as cm } from '../../index';
+import { log, config, localeManager as lm, credentialsManager as cm, fcmListenerManager as flm } from '../../index';
 import * as discordMessages from '../discordUtils/discordMessages';
 import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
@@ -174,7 +174,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		associatedGuilds = [...oldCredentials.associatedGuilds];
 
 		/* Credentials for steamId already exist, turn off fcm listener. */
-		// TODO! Turn off FCM listener for steamId
+		flm.stopListener(steamId);
 	}
 
 	if (!associatedGuilds.includes(guildId)) associatedGuilds.push(guildId);
@@ -182,8 +182,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 
 	cm.addCredentials(steamId, newCredentials);
 	cm.addExpireTimeout(steamId, dm);
-
-	// TODO! Start FCM listener for steamId
+	flm.startListener(steamId);
 
 	const guildNames: string[] = [];
 	for (const guildId of associatedGuilds) {
@@ -261,7 +260,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	let removedGuilds: types.GuildId[] = [guildId];
 
 	if (all || credentials.associatedGuilds.length === 0) {
-		// TODO! Remove fcm listener for steamId
+		flm.stopListener(steamId);
 
 		removedGuilds = [...new Set([...removedGuilds, ...credentials.associatedGuilds])];
 		cm.deleteCredentials(steamId);

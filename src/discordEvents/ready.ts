@@ -20,7 +20,7 @@
 
 import * as path from 'path';
 
-import { guildInstanceManager as gim, config, log, credentialsManager as cm } from '../../index';
+import { guildInstanceManager as gim, config, log, credentialsManager as cm, fcmListenerManager as flm } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
 import * as types from '../utils/types';
@@ -69,8 +69,7 @@ export async function execute(dm: DiscordManager) {
         credentials.associatedGuilds = validGuilds;
 
         if (credentials.associatedGuilds.length === 0) {
-            // TODO! Remove from fcm listener
-
+            flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
             continue;
         }
@@ -104,7 +103,7 @@ export async function execute(dm: DiscordManager) {
     }
 
 
-    // TODO
+    // TODO!
     // Setup rustplus instances based on guild settings
     // global variable uptimeBot set new time.
 

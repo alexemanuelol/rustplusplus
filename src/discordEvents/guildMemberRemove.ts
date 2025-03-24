@@ -20,7 +20,7 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, credentialsManager as cm } from '../../index';
+import { guildInstanceManager as gim, credentialsManager as cm, fcmListenerManager as flm } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
 import * as types from '../utils/types';
@@ -42,8 +42,7 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId => guildId !== member.guild.id);
 
         if (credentials.associatedGuilds.length === 0) {
-            // TODO! Remove from fcm listener
-
+            flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
             continue;
         }
