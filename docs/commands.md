@@ -694,8 +694,10 @@ Subcommand | Description | Required
 
 Subcommand | Description | Required
 ---------- | ----------- | --------
-`add` | Add a player to a tracker using steamID or BattlemetricsID<br>`!tracker add <steamID or battlemetricsID> [trackerId]` | true
-`remove` | Remove a player from a tracker using steamID or BattlemetricsID<br>`!tracker remove <steamID or battlemetricsID> [trackerId]` | true
+`add` | Add a player to a tracker using steamID or BattlemetricsID<br>`!tracker add <steamID or battlemetricsID> [trackerId]` | `false`
+`remove` | Remove a player from a tracker using steamID or BattlemetricsID<br>`!tracker remove <steamID or battlemetricsID> [trackerId]` | `false`
+
+![In-Game Command tracker Image](images/ingame_commands/tracker_ingame.png)
 
 
 ## **tts**
