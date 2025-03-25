@@ -238,7 +238,7 @@ export function getSmartAlarmButtons(guildId: types.GuildId, serverId: types.Ser
         }),
         getButton({
             customId: `SmartAlarmInGame${identifier}`,
-            label: '@everyone',
+            label: lm.getIntl(language, 'buttonInGame'),
             style: smartAlarm.inGame ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
             type: discordjs.ComponentType.Button
         }),
