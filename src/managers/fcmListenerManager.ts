@@ -549,6 +549,7 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
             command: exist ? smartAlarmMap[body.entityId].command : body.entityId,
             img: exist ? smartAlarmMap[body.entityId].img : 'smart_alarm.png',
             everyone: exist ? smartAlarmMap[body.entityId].everyone : false,
+            inGame: exist ? smartAlarmMap[body.entityId].inGame : false,
             lastTrigger: exist ? smartAlarmMap[body.entityId].lastTrigger : null,
             message: exist ? smartAlarmMap[body.entityId].message : lm.getIntl(language, 'yourBaseIsUnderAttack')
         };

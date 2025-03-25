@@ -47,7 +47,6 @@ export interface AllGuildInstances {
 }
 
 export type PairingDataMap = { [serverId: types.ServerId]: { [steamId: types.SteamId]: PairingData } };
-export type NotificationSettingMap = { [setting: string]: NotificationSetting };
 export type TeamMemberChatColorMap = { [steamId: types.SteamId]: string };
 export type TrackerMap = { [trackerId: string]: Tracker };
 export type ServerInfoMap = { [serverId: types.ServerId]: ServerInfo };
@@ -63,7 +62,8 @@ export interface GuildInstance {
     roleIds: types.RoleId[];
     informationChannelMessageIds: InformationChannelMessageIds;
     generalSettings: GeneralSettings;
-    notificationSettingMap: NotificationSettingMap;
+    eventNotificationSettings: EventNotificationSettings;
+    settingsMessages: SettingsMessages;
     commandAliases: CommandAlias[];
     blacklist: Blacklist;
     teamMemberChatColorMap: TeamMemberChatColorMap;
@@ -105,23 +105,108 @@ export interface InformationChannelMessageIds {
 }
 
 export interface GeneralSettings {
-    language: string;
-    prefix: string;
-    trademark: string;
-    voiceGender: string;
-    fcmAlarmNotify: boolean;
-    fcmAlarmNotifyEveryone: boolean;
-    fcmAlarmPluginNotify: boolean;
-    fcmAlarmPluginNotifyEveryone: boolean;
-    fcmAlarmPluginNotifyInGame: boolean;
-    fcmAlarmPluginNotifyActiveServer: boolean;
+    language: string;                                   /* generalSettings */
+    voiceGender: string;                                /* generalSettings */
+    inGameChatFunctionalityDisabled: boolean;           /* inGameChatGeneralSettings */
+    inGameMuteBotMessages: boolean;                     /* inGameChatGeneralSettings */
+    inGameTrademark: string;                            /* inGameChatGeneralSettings */
+    inGameCommandPrefix: string;                        /* inGameChatGeneralSettings */
+    inGameCommandsEnabled: boolean;                     /* inGameChatCommandSettings */
+    inGameCommandDelay: number;                         /* inGameChatCommandSettings */
+    leaderCommandEnabled: boolean;                      /* generalCommandSettings */
+    leaderCommandOnlyForPaired: boolean                 /* generalCommandSettings */
+    inGameNotifySmartSwitchChangedFromDiscord: boolean; /* inGameChatGeneralNotificationSettings */
+    inGameConnectionNotify: boolean;                    /* inGameChatGeneralNotificationSettings */
+    inGameAfkNotify: boolean;                           /* inGameChatGeneralNotificationSettings */
+    inGameDeathNotify: boolean                          /* inGameChatGeneralNotificationSettings */
+    mapWipeNotifyEveryone: boolean;                     /* generalNotificationSettings */
+    fcmAlarmNotify: boolean;                            /* fcmAlarmNotify */ // TODO! Maybe move to SmartAlarm
+    fcmAlarmNotifyEveryone: boolean;                    /* fcmAlarmNotify */
+    fcmAlarmPluginNotify: boolean;                      /* fcmAlarmPluginNotify */
+    fcmAlarmPluginNotifyEveryone: boolean;              /* fcmAlarmPluginNotify */
+    fcmAlarmPluginNotifyInGame: boolean;                /* fcmAlarmPluginNotify */
+    fcmAlarmPluginNotifyActiveServer: boolean;          /* fcmAlarmPluginNotify */
+
+    // TODO! Battlemetrics settings or should they be in serverInfo?
+    // displayInformationBattlemetricsAllOnlinePlayers
+    //battlemetricsServerNameChanges: booleam;
+    //battlemetricsTrackerNameChanges: boolean;
+    //battlemetricsGlobalNameChanges: boolean;
+    //battlemetricsGlobalLogin: boolean;
+    //battlemetricsGlobalLogout: boolean;
+
+    // TODO! vending machine settings
+    // itemAvailableInVendingMachineNotifyInGame
+
 }
 
-export interface NotificationSetting {
+export interface EventNotificationSettings {
+    vendingMachineSpawned: EventNotificationSetting;
+    vendingMachineDespawned: EventNotificationSetting;
+    ch47Spawned: EventNotificationSetting;
+    ch47Despawned: EventNotificationSetting;
+    ch47Destroyed: EventNotificationSetting;
+    ch47DroppedLockedCrate: EventNotificationSetting;
+    ch47HeavyScientistsCalled: EventNotificationSetting;
+    ch47OilRigLockedCrateUnlocked: EventNotificationSetting;
+    cargoShipSpawned: EventNotificationSetting;
+    cargoShipDespawned: EventNotificationSetting;
+    cargoShipLeaving: EventNotificationSetting;
+    cargoShipDocking: EventNotificationSetting;
+    cargoShipDocked: EventNotificationSetting;
+    cargoShipUndocking: EventNotificationSetting;
+    cargoShipLockedCrateSpawned: EventNotificationSetting;
+    patrolHelicopterSpawned: EventNotificationSetting;
+    patrolHelicopterDespawned: EventNotificationSetting;
+    patrolHelicopterDestroyed: EventNotificationSetting;
+    patrolHelicopterLeaving: EventNotificationSetting;
+    travellingVendorSpawned: EventNotificationSetting;
+    travellingVendorDespawned: EventNotificationSetting;
+    travellingVendorStopped: EventNotificationSetting;
+    travellingVendorStarted: EventNotificationSetting;
+}
+
+export interface EventNotificationSetting {
     discord: boolean;
     image: string;
     inGame: boolean;
     voice: boolean;
+}
+
+export interface SettingsMessages {
+    generalSettingsHeader: types.MessageId | null;
+    generalSettings: types.MessageId | null;
+    inGameChatGeneralSettings: types.MessageId | null;
+    inGameChatCommandSettings: types.MessageId | null;
+    generalCommandSettings: types.MessageId | null;
+    inGameChatGeneralNotificationSettings: types.MessageId | null;
+    generalNotificationSettings: types.MessageId | null;
+    fcmAlarmNotify: types.MessageId | null;
+    fcmAlarmPluginNotify: types.MessageId | null;
+    notificationSettingsHeader: types.MessageId | null;
+    vendingMachineSpawned: types.MessageId | null;
+    vendingMachineDespawned: types.MessageId | null;
+    ch47Spawned: types.MessageId | null;
+    ch47Despawned: types.MessageId | null;
+    ch47Destroyed: types.MessageId | null;
+    ch47DroppedLockedCrate: types.MessageId | null;
+    ch47HeavyScientistsCalled: types.MessageId | null;
+    ch47OilRigLockedCrateUnlocked: types.MessageId | null;
+    cargoShipSpawned: types.MessageId | null;
+    cargoShipDespawned: types.MessageId | null;
+    cargoShipLeaving: types.MessageId | null;
+    cargoShipDocking: types.MessageId | null;
+    cargoShipDocked: types.MessageId | null;
+    cargoShipUndocking: types.MessageId | null;
+    cargoShipLockedCrateSpawned: types.MessageId | null;
+    patrolHelicopterSpawned: types.MessageId | null;
+    patrolHelicopterDespawned: types.MessageId | null;
+    patrolHelicopterDestroyed: types.MessageId | null;
+    patrolHelicopterLeaving: types.MessageId | null;
+    travellingVendorSpawned: types.MessageId | null;
+    travellingVendorDespawned: types.MessageId | null;
+    travellingVendorStopped: types.MessageId | null;
+    travellingVendorStarted: types.MessageId | null;
 }
 
 export interface CommandAlias {
@@ -222,6 +307,7 @@ export interface SmartAlarm {
     command: string;
     img: string;
     everyone: boolean;
+    inGame: boolean;
     lastTrigger: types.Timestamp | null;
     message: string;
 }
@@ -259,7 +345,7 @@ export class GuildInstanceManager {
     private templateFilesPath: string;
     private allGuildInstances: AllGuildInstances;
     private generalSettingsTemplate: GeneralSettings | null;
-    private notificationSettingsTemplate: { [setting: string]: NotificationSetting } | null;
+    private eventNotificationSettingsTemplate: EventNotificationSettings | null;
 
     constructor(guildInstanceFilesPath: string, templateFilesPath: string) {
         const funcName = '[GuildInstanceManager: Init]';
@@ -269,9 +355,9 @@ export class GuildInstanceManager {
         this.allGuildInstances = {};
 
         this.generalSettingsTemplate = this.readGeneralSettingsTemplate();
-        this.notificationSettingsTemplate = this.readNotificationSettingsTemplate();
+        this.eventNotificationSettingsTemplate = this.readEventNotificationSettingsTemplate();
 
-        if (this.generalSettingsTemplate === null || this.notificationSettingsTemplate === null) {
+        if (this.generalSettingsTemplate === null || this.eventNotificationSettingsTemplate === null) {
             log.error(`${funcName} General/Notification settings template could not be read. Exiting...`);
             process.exit(1);
         }
@@ -315,23 +401,24 @@ export class GuildInstanceManager {
         return JSON.parse(templateFileContent) as GeneralSettings;
     }
 
-    private readNotificationSettingsTemplate(): { [setting: string]: NotificationSetting } | null {
-        const funcName = '[GuildInstanceManager: readNotificationSettingsTemplate]';
-        log.info(`${funcName} Reading notification settings template.`);
+    private readEventNotificationSettingsTemplate(): EventNotificationSettings | null {
+        const funcName = '[GuildInstanceManager: readEventNotificationSettingsTemplate]';
+        log.info(`${funcName} Reading event notification settings template.`);
 
-        const templateFilePath = path.join(this.templateFilesPath, 'notificationSettingsTemplate.json');
+        const templateFilePath = path.join(this.templateFilesPath, 'eventNotificationSettingsTemplate.json');
 
         let templateFileContent: string;
         try {
             templateFileContent = fs.readFileSync(templateFilePath, 'utf8');
         }
         catch (error) {
-            log.warn(`${funcName} Failed to read notification settings template file '${templateFilePath}', ${error}`);
+            log.warn(`${funcName} Failed to read event notification settings template file '${templateFilePath}', ` +
+                `${error}`);
             return null;
         }
 
         log.info(`${funcName} Template was successfully read.`);
-        return JSON.parse(templateFileContent) as { [setting: string]: NotificationSetting };
+        return JSON.parse(templateFileContent) as EventNotificationSettings;
     }
 
     private readGuildInstanceFile(guildId: types.GuildId): GuildInstance | ReadError {
@@ -470,8 +557,42 @@ export class GuildInstanceManager {
                 battlemetricsPlayers: null
             },
             generalSettings: structuredClone(this.generalSettingsTemplate) as GeneralSettings,
-            notificationSettingMap: structuredClone(this.notificationSettingsTemplate) as {
-                [setting: string]: NotificationSetting
+            eventNotificationSettings: structuredClone(this.eventNotificationSettingsTemplate) as
+                EventNotificationSettings,
+            settingsMessages: {
+                generalSettingsHeader: null,
+                generalSettings: null,
+                inGameChatGeneralSettings: null,
+                inGameChatCommandSettings: null,
+                generalCommandSettings: null,
+                inGameChatGeneralNotificationSettings: null,
+                generalNotificationSettings: null,
+                fcmAlarmNotify: null,
+                fcmAlarmPluginNotify: null,
+                notificationSettingsHeader: null,
+                vendingMachineSpawned: null,
+                vendingMachineDespawned: null,
+                ch47Spawned: null,
+                ch47Despawned: null,
+                ch47Destroyed: null,
+                ch47DroppedLockedCrate: null,
+                ch47HeavyScientistsCalled: null,
+                ch47OilRigLockedCrateUnlocked: null,
+                cargoShipSpawned: null,
+                cargoShipDespawned: null,
+                cargoShipLeaving: null,
+                cargoShipDocking: null,
+                cargoShipDocked: null,
+                cargoShipUndocking: null,
+                cargoShipLockedCrateSpawned: null,
+                patrolHelicopterSpawned: null,
+                patrolHelicopterDespawned: null,
+                patrolHelicopterDestroyed: null,
+                patrolHelicopterLeaving: null,
+                travellingVendorSpawned: null,
+                travellingVendorDespawned: null,
+                travellingVendorStopped: null,
+                travellingVendorStarted: null
             },
             commandAliases: [],
             blacklist: {
@@ -577,7 +698,8 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
         'roleIds',
         'informationChannelMessageIds',
         'generalSettings',
-        'notificationSettingMap',
+        'eventNotificationSettings',
+        'settingsMessages',
         'commandAliases',
         'blacklist',
         'teamMemberChatColorMap',
@@ -598,8 +720,9 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
     errors.push(vu.validateInterface('informationChannelMessageIds', obj.informationChannelMessageIds,
         isValidInformationChannelMessageIds));
     errors.push(vu.validateInterface('generalSettings', obj.generalSettings, isValidGeneralSettings));
-    errors.push(vu.validateObjectOfInterfaces('notificationSettingMap', obj.notificationSettingMap,
-        isValidNotificationSetting));
+    errors.push(vu.validateInterface('eventNotificationSettings', obj.eventNotificationSettings,
+        isValidEventNotificationSettings));
+    errors.push(vu.validateInterface('settingsMessages', obj.settingsMessages, isValidSettingsMessages));
     errors.push(vu.validateArrayOfInterfaces('commandAliases', obj.commandAliases, isValidCommandAlias));
     errors.push(vu.validateInterface('blacklist', obj.blacklist, isValidBlacklist));
     errors.push(vu.validateObjectOfTypes('teamMemberChatColorMap', obj.teamMemberChatColorMap, 'string'));
@@ -755,9 +878,20 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
     const interfaceName = 'GeneralSettings';
     const validKeys = [
         'language',
-        'prefix',
-        'trademark',
         'voiceGender',
+        'inGameChatFunctionalityDisabled',
+        'inGameMuteBotMessages',
+        'inGameTrademark',
+        'inGameCommandPrefix',
+        'inGameCommandsEnabled',
+        'inGameCommandDelay',
+        'leaderCommandEnabled',
+        'leaderCommandOnlyForPaired',
+        'inGameNotifySmartSwitchChangedFromDiscord',
+        'inGameConnectionNotify',
+        'inGameAfkNotify',
+        'inGameDeathNotify',
+        'mapWipeNotifyEveryone',
         'fcmAlarmNotify',
         'fcmAlarmNotifyEveryone',
         'fcmAlarmPluginNotify',
@@ -768,16 +902,27 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
 
     const errors: (vu.ValidationError | null)[] = [];
     errors.push(vu.validateType('language', obj.language, 'string'));
-    errors.push(vu.validateType('prefix', obj.prefix, 'string'));
-    errors.push(vu.validateType('trademark', obj.trademark, 'string'));
     errors.push(vu.validateType('voiceGender', obj.voiceGender, 'string'));
+    errors.push(vu.validateType('inGameChatFunctionalityDisabled', obj.inGameChatFunctionalityDisabled, 'boolean'));
+    errors.push(vu.validateType('inGameMuteBotMessages', obj.inGameMuteBotMessages, 'boolean'));
+    errors.push(vu.validateType('inGameTrademark', obj.inGameTrademark, 'string'));
+    errors.push(vu.validateType('inGameCommandPrefix', obj.inGameCommandPrefix, 'string'));
+    errors.push(vu.validateType('inGameCommandsEnabled', obj.inGameCommandsEnabled, 'boolean'));
+    errors.push(vu.validateType('inGameCommandDelay', obj.inGameCommandDelay, 'number'));
+    errors.push(vu.validateType('leaderCommandEnabled', obj.leaderCommandEnabled, 'boolean'));
+    errors.push(vu.validateType('leaderCommandOnlyForPaired', obj.leaderCommandOnlyForPaired, 'boolean'));
+    errors.push(vu.validateType('inGameNotifySmartSwitchChangedFromDiscord',
+        obj.inGameNotifySmartSwitchChangedFromDiscord, 'boolean'));
+    errors.push(vu.validateType('inGameConnectionNotify', obj.inGameConnectionNotify, 'boolean'));
+    errors.push(vu.validateType('inGameAfkNotify', obj.inGameAfkNotify, 'boolean'));
+    errors.push(vu.validateType('inGameDeathNotify', obj.inGameDeathNotify, 'boolean'));
+    errors.push(vu.validateType('mapWipeNotifyEveryone', obj.mapWipeNotifyEveryone, 'boolean'));
     errors.push(vu.validateType('fcmAlarmNotify', obj.fcmAlarmNotify, 'boolean'));
     errors.push(vu.validateType('fcmAlarmNotifyEveryone', obj.fcmAlarmNotifyEveryone, 'boolean'));
     errors.push(vu.validateType('fcmAlarmPluginNotify', obj.fcmAlarmPluginNotify, 'boolean'));
     errors.push(vu.validateType('fcmAlarmPluginNotifyEveryone', obj.fcmAlarmPluginNotifyEveryone, 'boolean'));
     errors.push(vu.validateType('fcmAlarmPluginNotifyInGame', obj.fcmAlarmPluginNotifyInGame, 'boolean'));
-    errors.push(vu.validateType('fcmAlarmPluginNotifyActiveServer', obj.fcmAlarmPluginNotifyActiveServer,
-        'boolean'));
+    errors.push(vu.validateType('fcmAlarmPluginNotifyActiveServer', obj.fcmAlarmPluginNotifyActiveServer, 'boolean'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -792,14 +937,100 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidNotificationSetting(object: unknown): object is NotificationSetting {
+export function isValidEventNotificationSettings(object: unknown): object is EventNotificationSettings {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
 
-    const obj = object as NotificationSetting;
+    const obj = object as EventNotificationSettings;
 
-    const interfaceName = 'NotificationSetting';
+    const interfaceName = 'EventNotificationSettings';
+    const validKeys = [
+        'vendingMachineSpawned',
+        'vendingMachineDespawned',
+        'ch47Spawned',
+        'ch47Despawned',
+        'ch47Destroyed',
+        'ch47DroppedLockedCrate',
+        'ch47HeavyScientistsCalled',
+        'ch47OilRigLockedCrateUnlocked',
+        'cargoShipSpawned',
+        'cargoShipDespawned',
+        'cargoShipLeaving',
+        'cargoShipDocking',
+        'cargoShipDocked',
+        'cargoShipUndocking',
+        'cargoShipLockedCrateSpawned',
+        'patrolHelicopterSpawned',
+        'patrolHelicopterDespawned',
+        'patrolHelicopterDestroyed',
+        'patrolHelicopterLeaving',
+        'travellingVendorSpawned',
+        'travellingVendorDespawned',
+        'travellingVendorStopped',
+        'travellingVendorStarted'
+    ];
+
+    const errors: (vu.ValidationError | null)[] = [];
+    errors.push(vu.validateInterface('vendingMachineSpawned', obj.vendingMachineSpawned,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('vendingMachineDespawned', obj.vendingMachineDespawned,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('ch47Spawned', obj.ch47Spawned, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('ch47Despawned', obj.ch47Despawned, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('ch47Destroyed', obj.ch47Destroyed, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('ch47DroppedLockedCrate', obj.ch47DroppedLockedCrate,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('ch47HeavyScientistsCalled', obj.ch47HeavyScientistsCalled,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('ch47OilRigLockedCrateUnlocked', obj.ch47OilRigLockedCrateUnlocked,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('cargoShipSpawned', obj.cargoShipSpawned, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('cargoShipDespawned', obj.cargoShipDespawned, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('cargoShipLeaving', obj.cargoShipLeaving, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('cargoShipDocking', obj.cargoShipDocking, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('cargoShipDocked', obj.cargoShipDocked, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('cargoShipUndocking', obj.cargoShipUndocking, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('cargoShipLockedCrateSpawned', obj.cargoShipLockedCrateSpawned,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('patrolHelicopterSpawned', obj.patrolHelicopterSpawned,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('patrolHelicopterDespawned', obj.patrolHelicopterDespawned,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('patrolHelicopterDestroyed', obj.patrolHelicopterDestroyed,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('patrolHelicopterLeaving', obj.patrolHelicopterLeaving,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('travellingVendorSpawned', obj.travellingVendorSpawned,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('travellingVendorDespawned', obj.travellingVendorDespawned,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('travellingVendorStopped', obj.travellingVendorStopped,
+        isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('travellingVendorStarted', obj.travellingVendorStarted,
+        isValidEventNotificationSetting));
+
+    const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
+
+    const objectKeys = Object.keys(object);
+    const missingKeys = validKeys.filter(key => !objectKeys.includes(key));
+    const unknownKeys = objectKeys.filter(key => !validKeys.includes(key));
+    const hasAllRequiredKeys = missingKeys.length === 0;
+    const hasOnlyValidKeys = unknownKeys.length === 0;
+
+    vu.logValidations(interfaceName, filteredErrors, missingKeys, unknownKeys);
+
+    return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
+}
+
+export function isValidEventNotificationSetting(object: unknown): object is EventNotificationSetting {
+    if (typeof object !== 'object' || object === null || Array.isArray(object)) {
+        return false;
+    }
+
+    const obj = object as EventNotificationSetting;
+
+    const interfaceName = 'EventNotificationSetting';
     const validKeys = [
         'discord',
         'image',
@@ -812,6 +1043,99 @@ export function isValidNotificationSetting(object: unknown): object is Notificat
     errors.push(vu.validateType('image', obj.image, 'string'));
     errors.push(vu.validateType('inGame', obj.inGame, 'boolean'));
     errors.push(vu.validateType('voice', obj.voice, 'boolean'));
+
+    const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
+
+    const objectKeys = Object.keys(object);
+    const missingKeys = validKeys.filter(key => !objectKeys.includes(key));
+    const unknownKeys = objectKeys.filter(key => !validKeys.includes(key));
+    const hasAllRequiredKeys = missingKeys.length === 0;
+    const hasOnlyValidKeys = unknownKeys.length === 0;
+
+    vu.logValidations(interfaceName, filteredErrors, missingKeys, unknownKeys);
+
+    return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
+}
+
+export function isValidSettingsMessages(object: unknown): object is SettingsMessages {
+    if (typeof object !== 'object' || object === null || Array.isArray(object)) {
+        return false;
+    }
+
+    const obj = object as SettingsMessages;
+
+    const interfaceName = 'SettingsMessages';
+    const validKeys = [
+        'generalSettingsHeader',
+        'generalSettings',
+        'inGameChatGeneralSettings',
+        'inGameChatCommandSettings',
+        'generalCommandSettings',
+        'inGameChatGeneralNotificationSettings',
+        'generalNotificationSettings',
+        'fcmAlarmNotify',
+        'fcmAlarmPluginNotify',
+        'notificationSettingsHeader',
+        'vendingMachineSpawned',
+        'vendingMachineDespawned',
+        'ch47Spawned',
+        'ch47Despawned',
+        'ch47Destroyed',
+        'ch47DroppedLockedCrate',
+        'ch47HeavyScientistsCalled',
+        'ch47OilRigLockedCrateUnlocked',
+        'cargoShipSpawned',
+        'cargoShipDespawned',
+        'cargoShipLeaving',
+        'cargoShipDocking',
+        'cargoShipDocked',
+        'cargoShipUndocking',
+        'cargoShipLockedCrateSpawned',
+        'patrolHelicopterSpawned',
+        'patrolHelicopterDespawned',
+        'patrolHelicopterDestroyed',
+        'patrolHelicopterLeaving',
+        'travellingVendorSpawned',
+        'travellingVendorDespawned',
+        'travellingVendorStopped',
+        'travellingVendorStarted'
+    ];
+
+    const errors: (vu.ValidationError | null)[] = [];
+    errors.push(vu.validateType('generalSettingsHeader', obj.generalSettingsHeader, 'string', null));
+    errors.push(vu.validateType('generalSettings', obj.generalSettings, 'string', null));
+    errors.push(vu.validateType('inGameChatGeneralSettings', obj.inGameChatGeneralSettings, 'string', null));
+    errors.push(vu.validateType('inGameChatCommandSettings', obj.inGameChatCommandSettings, 'string', null));
+    errors.push(vu.validateType('generalCommandSettings', obj.generalCommandSettings, 'string', null));
+    errors.push(vu.validateType('inGameChatGeneralNotificationSettings', obj.inGameChatGeneralNotificationSettings,
+        'string', null));
+    errors.push(vu.validateType('generalNotificationSettings', obj.generalNotificationSettings, 'string', null));
+    errors.push(vu.validateType('fcmAlarmNotify', obj.fcmAlarmNotify, 'string', null));
+    errors.push(vu.validateType('fcmAlarmPluginNotify', obj.fcmAlarmPluginNotify, 'string', null));
+    errors.push(vu.validateType('notificationSettingsHeader', obj.notificationSettingsHeader, 'string', null));
+    errors.push(vu.validateType('vendingMachineSpawned', obj.vendingMachineSpawned, 'string', null));
+    errors.push(vu.validateType('vendingMachineDespawned', obj.vendingMachineDespawned, 'string', null));
+    errors.push(vu.validateType('ch47Spawned', obj.ch47Spawned, 'string', null));
+    errors.push(vu.validateType('ch47Despawned', obj.ch47Despawned, 'string', null));
+    errors.push(vu.validateType('ch47Destroyed', obj.ch47Destroyed, 'string', null));
+    errors.push(vu.validateType('ch47DroppedLockedCrate', obj.ch47DroppedLockedCrate, 'string', null));
+    errors.push(vu.validateType('ch47HeavyScientistsCalled', obj.ch47HeavyScientistsCalled, 'string', null));
+    errors.push(vu.validateType('ch47OilRigLockedCrateUnlocked', obj.ch47OilRigLockedCrateUnlocked, 'string', null));
+    errors.push(vu.validateType('cargoShipSpawned', obj.cargoShipSpawned, 'string', null));
+    errors.push(vu.validateType('cargoShipDespawned', obj.cargoShipDespawned, 'string', null));
+    errors.push(vu.validateType('cargoShipLeaving', obj.cargoShipLeaving, 'string', null));
+    errors.push(vu.validateType('cargoShipDocking', obj.cargoShipDocking, 'string', null));
+    errors.push(vu.validateType('cargoShipDocked', obj.cargoShipDocked, 'string', null));
+    errors.push(vu.validateType('cargoShipUndocking', obj.cargoShipUndocking, 'string', null));
+    errors.push(vu.validateType('cargoShipLockedCrateSpawned', obj.cargoShipLockedCrateSpawned, 'string', null));
+    errors.push(vu.validateType('patrolHelicopterSpawned', obj.patrolHelicopterSpawned, 'string', null));
+    errors.push(vu.validateType('patrolHelicopterDespawned', obj.patrolHelicopterDespawned, 'string', null));
+    errors.push(vu.validateType('patrolHelicopterDestroyed', obj.patrolHelicopterDestroyed, 'string', null));
+    errors.push(vu.validateType('patrolHelicopterLeaving', obj.patrolHelicopterLeaving, 'string', null));
+    errors.push(vu.validateType('travellingVendorSpawned', obj.travellingVendorSpawned, 'string', null));
+    errors.push(vu.validateType('travellingVendorDespawned', obj.travellingVendorDespawned, 'string', null));
+    errors.push(vu.validateType('travellingVendorStopped', obj.travellingVendorStopped, 'string', null));
+    errors.push(vu.validateType('travellingVendorStarted', obj.travellingVendorStarted, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1119,6 +1443,7 @@ export function isValidSmartAlarm(object: unknown): object is SmartAlarm {
         'command',
         'img',
         'everyone',
+        'inGame',
         'lastTrigger',
         'message'
     ];
@@ -1131,6 +1456,7 @@ export function isValidSmartAlarm(object: unknown): object is SmartAlarm {
     errors.push(vu.validateType('command', obj.command, 'string'));
     errors.push(vu.validateType('img', obj.img, 'string'));
     errors.push(vu.validateType('everyone', obj.everyone, 'boolean'));
+    errors.push(vu.validateType('inGame', obj.inGame, 'boolean'));
     errors.push(vu.validateType('lastTrigger', obj.lastTrigger, 'string', null));
     errors.push(vu.validateType('message', obj.message, 'string'));
 
