@@ -2753,6 +2753,10 @@ class RustPlus extends RustPlusLib {
         const subCommand = args[1]?.toLowerCase();
         const playerId = args[2];
         const trackerId = args[3] ?? null;
+
+        if (playerId === null || playerId === undefined) {
+            return;
+        }
     
         if (subCommand === 'add') {
             return await this.addPlayerToTracker(trackerId, playerId);
