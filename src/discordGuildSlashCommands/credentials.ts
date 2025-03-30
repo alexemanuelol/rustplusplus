@@ -26,11 +26,12 @@ import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
 import * as constants from '../utils/constants';
 import { Credentials, VERSION } from '../managers/credentialsManager';
+import { Languages } from '../managers/LocaleManager';
 
 export default {
 	name: 'credentials',
 
-	getData(language: string) {
+	getData(language: Languages) {
 		return new discordjs.SlashCommandBuilder()
 			.setName('credentials')
 			.setDescription(lm.getIntl(language, 'slashCommandDescCredentials'))

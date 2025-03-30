@@ -23,7 +23,7 @@ import * as path from 'path';
 import dotenv from 'dotenv';
 
 import { createLogger } from './src/managers/loggerManager';
-import { LocaleManager } from './src/managers/LocaleManager';
+import { LocaleManager, Languages, isValidLanguage } from './src/managers/LocaleManager';
 import { CredentialsManager } from './src/managers/credentialsManager';
 import { GuildInstanceManager } from './src/managers/guildInstanceManager';
 import { DiscordManager } from './src/managers/discordManager';
@@ -59,7 +59,8 @@ function getBooleanEnv(key: string, defaultValue: boolean = false): boolean {
 export const config = {
     general: {
         debug: getBooleanEnv('RPP_DEBUG', false),
-        language: getStringEnv('RPP_LANGUAGE', 'en'),
+        language: isValidLanguage(getStringEnv('RPP_LANGUAGE', 'en')) ?
+            getStringEnv('RPP_LANGUAGE', 'en') as Languages : Languages.ENGLISH,
         pollingIntervalMs: getNumberEnv('RPP_POLLING_INTERVAL_MS', 10_000),
         showCallStackOnError: getBooleanEnv('RPP_SHOW_CALL_STACK_ON_ERROR', false),
         reconnectIntervalMs: getNumberEnv('RPP_RECONNECT_INTERVAL_MS', 15_000)

@@ -456,7 +456,7 @@ export function getSmartSwitchEmbed(guildId: types.GuildId, serverId: types.Serv
         footer: { text: serverInfo.name },
         fields: [{
             name: lm.getIntl(language, 'customCommand'),
-            value: `\`${gInstance.generalSettings.inGameCommandPrefix}${smartSwitch.command}\``,
+            value: `\`${gInstance.generalSettings.inGameChatCommandPrefix}${smartSwitch.command}\``,
             inline: true
         }],
         timestamp: new Date()
@@ -489,7 +489,7 @@ export function getSmartAlarmEmbed(guildId: types.GuildId, serverId: types.Serve
             inline: true
         }, {
             name: lm.getIntl(language, 'customCommand'),
-            value: `\`${gInstance.generalSettings.inGameCommandPrefix}${smartAlarm.command}\``,
+            value: `\`${gInstance.generalSettings.inGameChatCommandPrefix}${smartAlarm.command}\``,
             inline: false
         }],
         timestamp: new Date()

@@ -21,13 +21,15 @@
 import * as discordjs from 'discord.js';
 import * as path from 'path';
 
-import { log, guildInstanceManager as gim, credentialsManager as cm } from '../../index';
+import { log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm } from '../../index';
+import * as constants from '../utils/constants';
 import * as discordButtons from './discordButtons';
 import * as discordEmbeds from './discordEmbeds';
 import * as discordSelectMenus from './discordSelectMenus';
 import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
 import { NewsNewsBody, PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
+import { EventNotificationSettings, GuildInstance, SettingsMessages } from '../managers/guildInstanceManager';
 
 
 /**
@@ -418,4 +420,385 @@ export async function sendFcmNewsNewsMessage(dm: DiscordManager, guildId: types.
     }
 
     await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.activity);
+}
+
+
+/**
+ * Settings based messages
+ */
+
+async function updateSettingsMessage(dm: DiscordManager, guildId: types.GuildId,
+    content: discordjs.MessageCreateOptions | discordjs.MessageEditOptions, setting: keyof SettingsMessages,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const channelId = gInstance.guildChannelIds.settings as types.ChannelId;
+    const messageId = gInstance.settingsMessages[setting];
+    let message = messageId ? await dm.getMessage(guildId, channelId, messageId) : undefined;
+
+    if (interaction || create) {
+        message = await dm.sendUpdateMessage(guildId, content, channelId, messageId, interaction);
+    }
+    else if (message && update) {
+        message = await dm.handleMessage(message, content, 'edit');
+    }
+
+    if (interaction === null) {
+        if (message instanceof discordjs.Message) {
+            gInstance.settingsMessages[setting] = message.id;
+        }
+        else {
+            gInstance.settingsMessages[setting] = null;
+        }
+    }
+}
+
+export async function sendSettingGeneralSettingsHeaderMessage(dm: DiscordManager, guildId: types.GuildId, update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const content = {
+        files: [
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'settings',
+                `general_settings_logo_${gInstance.generalSettings.language}.png`))
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'generalSettingsHeader', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingLanguageMessage(dm: DiscordManager, guildId: types.GuildId, update: boolean = true,
+    create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingLanguageTitle')} :earth_africa:**`,
+            description: `${lm.getIntl(language, 'settingLanguageDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordSelectMenus.getSettingLanguageSelectMenu(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'language', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingVoiceGenderMessage(dm: DiscordManager, guildId: types.GuildId, update: boolean = true,
+    create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingVoiceGenderTitle')} :man:/:woman:**`,
+            description: `${lm.getIntl(language, 'settingVoiceGenderDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordSelectMenus.getSettingVoiceGenderSelectMenu(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'voiceGender', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatFunctionalityEnabledMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatFunctionalityEnabledTitle')} :speech_left:**`,
+            description: `${lm.getIntl(language, 'settingInGameChatFunctionalityEnabledDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingInGameChatFunctionalityEnabledButton(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatFunctionalityEnabled', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatBotUnmutedMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatBotUnmutedTitle')} :shushing_face:**`,
+            description: `${lm.getIntl(language, 'settingInGameChatBotUnmutedDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingInGameChatBotUnmutedButton(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatBotUnmuted', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatTrademarkMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const trademark = gInstance.generalSettings.inGameChatTrademark;
+    const description = lm.getIntl(language, 'settingInGameChatTrademarkDesc', {
+        trademark: trademark === '' ? '' : `\`${trademark}\``
+    });
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatTrademarkTitle')} :tm:**`,
+            description: description,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingInGameChatTrademarkButton(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatTrademark', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatCommandPrefixMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const commandPrefix = gInstance.generalSettings.inGameChatCommandPrefix;
+    const description = lm.getIntl(language, 'settingInGameChatCommandPrefixDesc', {
+        prefix: `\`${commandPrefix}\``
+    });
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatCommandPrefixTitle')} :symbols:**`,
+            description: description,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingInGameChatCommandPrefixButton(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatCommandPrefix', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatCommandsEnabledMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatCommandsEnabledTitle')} :keyboard:**`,
+            description: `${lm.getIntl(language, 'settingInGameChatCommandsEnabledDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingInGameChatCommandsEnabledButton(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatCommandsEnabled', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatCommandResponseDelayMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatCommandResponseDelayTitle')} :timer:**`,
+            description: `${lm.getIntl(language, 'settingInGameChatCommandResponseDelayDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordSelectMenus.getSettingInGameChatCommandResponseDelaySelectMenu(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatCommandResponseDelay', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingLeaderCommandMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingLeaderCommandTitle')} :crown:**`,
+            description: `${lm.getIntl(language, 'settingLeaderCommandDesc', {
+                buttonName: `\`${lm.getIntl(language, 'buttonOnlyPaired')}\``
+            })}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingLeaderCommandButtons(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'leaderCommand', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatNotifySmartSwitchChangedFromDiscordMessage(dm: DiscordManager,
+    guildId: types.GuildId, update: boolean = true, create: boolean = false,
+    interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatNotifySmartSwitchChangedFromDiscordTitle')} ` +
+                `:bell:**`,
+            description: `${lm.getIntl(language, 'settingInGameChatNotifySmartSwitchChangedFromDiscordDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingInGameChatNotifySmartSwitchChangedFromDiscordButton(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatNotifySmartSwitchChangedFromDiscord', update, create,
+        interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingInGameChatNotifyMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingInGameChatNotifyTitle')} :bell:**`,
+            description: `${lm.getIntl(language, 'settingInGameChatNotifyDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingInGameChatNotifyButtons(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatNotify', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingMapWipeNotifyEveryoneMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingMapWipeNotifyEveryoneTitle')} :bell:**`,
+            description: `${lm.getIntl(language, 'settingMapWipeNotifyEveryoneDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingMapWipeNotifyEveryoneButton(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'mapWipeNotifyEveryone', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingFcmAlarmNotifyMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingFcmAlarmNotifyTitle')} :bell:**`,
+            description: `${lm.getIntl(language, 'settingFcmAlarmNotifyDesc')}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingFcmAlarmNotifyButtons(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'fcmAlarmNotify', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingFcmAlarmPluginNotifyMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, 'settingFcmAlarmPluginNotifyTitle')} :boom:**`,
+            description: `${lm.getIntl(language, 'settingFcmAlarmPluginNotifyDesc', {
+                link: `[${lm.getIntl(language, 'linkToThePlugin')}](https://umod.org/plugins/raid-alarm)`
+            })}`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })],
+        components: [
+            discordButtons.getSettingFcmAlarmPluginNotifyButtons(guildId)
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'fcmAlarmPluginNotify', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingEventNotificationSettingsHeaderMessage(dm: DiscordManager, guildId: types.GuildId, update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const content = {
+        files: [
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'settings',
+                `notification_settings_logo_${gInstance.generalSettings.language}.png`))
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, 'eventNotificationSettingsHeader', update, create, interaction);
+    /* gInstance is update at caller */
+}
+
+export async function sendSettingEventNotificationSettingMessage(dm: DiscordManager, guildId: types.GuildId,
+    setting: keyof EventNotificationSettings, update: boolean = true, create: boolean = false,
+    interaction: discordjs.Interaction | null = null) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: `**${lm.getIntl(language, `eventNotificationSetting-${setting}`)}**`,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
+            thumbnail: { url: `attachment://${gInstance.eventNotificationSettings[setting].image}` },
+        })],
+        components: [
+            discordButtons.getSettingEventNotificationSettingButtons(guildId, setting)
+        ],
+        files: [
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'events',
+                gInstance.eventNotificationSettings[setting].image))
+        ]
+    };
+
+    await updateSettingsMessage(dm, guildId, content, setting, update, create, interaction);
+    /* gInstance is update at caller */
 }

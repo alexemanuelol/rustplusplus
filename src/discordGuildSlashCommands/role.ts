@@ -24,11 +24,12 @@ import { log, config, localeManager as lm, guildInstanceManager as gim } from '.
 import * as discordMessages from '../discordUtils/discordMessages';
 import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
+import { Languages } from '../managers/LocaleManager';
 
 export default {
 	name: 'role',
 
-	getData(language: string) {
+	getData(language: Languages) {
 		return new discordjs.SlashCommandBuilder()
 			.setName('role')
 			.setDescription(lm.getIntl(language, 'slashCommandDescRole'))

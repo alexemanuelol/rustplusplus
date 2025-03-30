@@ -24,6 +24,7 @@ import * as path from 'path';
 import { log } from '../../index';
 import * as types from '../utils/types';
 import * as vu from '../utils/validationUtils';
+import { Languages, isValidLanguage } from './LocaleManager';
 
 export const VERSION = 1;
 
@@ -104,28 +105,28 @@ export interface InformationChannelMessageIds {
     battlemetricsPlayers: types.MessageId | null;
 }
 
-export interface GeneralSettings {
-    language: string;                                   /* generalSettings */
-    voiceGender: string;                                /* generalSettings */
-    inGameChatFunctionalityDisabled: boolean;           /* inGameChatGeneralSettings */
-    inGameMuteBotMessages: boolean;                     /* inGameChatGeneralSettings */
-    inGameTrademark: string;                            /* inGameChatGeneralSettings */
-    inGameCommandPrefix: string;                        /* inGameChatGeneralSettings */
-    inGameCommandsEnabled: boolean;                     /* inGameChatCommandSettings */
-    inGameCommandDelay: number;                         /* inGameChatCommandSettings */
-    leaderCommandEnabled: boolean;                      /* generalCommandSettings */
-    leaderCommandOnlyForPaired: boolean                 /* generalCommandSettings */
-    inGameNotifySmartSwitchChangedFromDiscord: boolean; /* inGameChatGeneralNotificationSettings */
-    inGameConnectionNotify: boolean;                    /* inGameChatGeneralNotificationSettings */
-    inGameAfkNotify: boolean;                           /* inGameChatGeneralNotificationSettings */
-    inGameDeathNotify: boolean                          /* inGameChatGeneralNotificationSettings */
-    mapWipeNotifyEveryone: boolean;                     /* generalNotificationSettings */
-    fcmAlarmNotify: boolean;                            /* fcmAlarmNotify */ // TODO! Maybe move to SmartAlarm
-    fcmAlarmNotifyEveryone: boolean;                    /* fcmAlarmNotify */
-    fcmAlarmPluginNotify: boolean;                      /* fcmAlarmPluginNotify */
-    fcmAlarmPluginNotifyEveryone: boolean;              /* fcmAlarmPluginNotify */
-    fcmAlarmPluginNotifyInGame: boolean;                /* fcmAlarmPluginNotify */
-    fcmAlarmPluginNotifyActiveServer: boolean;          /* fcmAlarmPluginNotify */
+export interface GeneralSettings {                          /* SettingsMessages: */
+    language: Languages;                                    /* language */
+    voiceGender: VoiceGenders;                              /* voiceGender */
+    inGameChatFunctionalityEnabled: boolean;                /* inGameChatFunctionalityEnabled */
+    inGameChatBotUnmuted: boolean;                          /* inGameChatBotUnmuted */
+    inGameChatTrademark: string;                            /* inGameChatTrademark */
+    inGameChatCommandPrefix: string;                        /* inGameChatCommandPrefix */
+    inGameChatCommandsEnabled: boolean;                     /* inGameChatCommandsEnabled */
+    inGameChatCommandResponseDelay: number;                 /* inGameChatCommandResponseDelay */
+    leaderCommandEnabled: boolean;                          /* leaderCommand */
+    leaderCommandOnlyPaired: boolean                        /* leaderCommand */
+    inGameChatNotifySmartSwitchChangedFromDiscord: boolean; /* inGameChatNotifySmartSwitchChangedFromDiscord */
+    inGameChatNotifyConnection: boolean;                    /* inGameChatNotify */
+    inGameChatNotifyAfk: boolean;                           /* inGameChatNotify */
+    inGameChatNotifyDeath: boolean                          /* inGameChatNotify */
+    mapWipeNotifyEveryone: boolean;                         /* mapWipeNotifyEveryone */
+    fcmAlarmNotify: boolean;                                /* fcmAlarmNotify */ // TODO! Maybe move to SmartAlarm
+    fcmAlarmNotifyEveryone: boolean;                        /* fcmAlarmNotify */
+    fcmAlarmPluginNotify: boolean;                          /* fcmAlarmPluginNotify */
+    fcmAlarmPluginNotifyEveryone: boolean;                  /* fcmAlarmPluginNotify */
+    fcmAlarmPluginNotifyInGame: boolean;                    /* fcmAlarmPluginNotify */
+    fcmAlarmPluginNotifyActiveServer: boolean;              /* fcmAlarmPluginNotify */
 
     // TODO! Battlemetrics settings or should they be in serverInfo?
     // displayInformationBattlemetricsAllOnlinePlayers
@@ -138,6 +139,11 @@ export interface GeneralSettings {
     // TODO! vending machine settings
     // itemAvailableInVendingMachineNotifyInGame
 
+}
+
+export enum VoiceGenders {
+    MALE = 'male',
+    FEMALE = 'female'
 }
 
 export interface EventNotificationSettings {
@@ -175,15 +181,22 @@ export interface EventNotificationSetting {
 
 export interface SettingsMessages {
     generalSettingsHeader: types.MessageId | null;
-    generalSettings: types.MessageId | null;
-    inGameChatGeneralSettings: types.MessageId | null;
-    inGameChatCommandSettings: types.MessageId | null;
-    generalCommandSettings: types.MessageId | null;
-    inGameChatGeneralNotificationSettings: types.MessageId | null;
-    generalNotificationSettings: types.MessageId | null;
+    language: types.MessageId | null;
+    voiceGender: types.MessageId | null;
+    inGameChatFunctionalityEnabled: types.MessageId | null;
+    inGameChatBotUnmuted: types.MessageId | null;
+    inGameChatTrademark: types.MessageId | null;
+    inGameChatCommandPrefix: types.MessageId | null;
+    inGameChatCommandsEnabled: types.MessageId | null;
+    inGameChatCommandResponseDelay: types.MessageId | null;
+    leaderCommand: types.MessageId | null;
+    inGameChatNotifySmartSwitchChangedFromDiscord: types.MessageId | null;
+    inGameChatNotifyConnection: types.MessageId | null;
+    inGameChatNotify: types.MessageId | null;
+    mapWipeNotifyEveryone: types.MessageId | null;
     fcmAlarmNotify: types.MessageId | null;
     fcmAlarmPluginNotify: types.MessageId | null;
-    notificationSettingsHeader: types.MessageId | null;
+    eventNotificationSettingsHeader: types.MessageId | null;
     vendingMachineSpawned: types.MessageId | null;
     vendingMachineDespawned: types.MessageId | null;
     ch47Spawned: types.MessageId | null;
@@ -561,15 +574,22 @@ export class GuildInstanceManager {
                 EventNotificationSettings,
             settingsMessages: {
                 generalSettingsHeader: null,
-                generalSettings: null,
-                inGameChatGeneralSettings: null,
-                inGameChatCommandSettings: null,
-                generalCommandSettings: null,
-                inGameChatGeneralNotificationSettings: null,
-                generalNotificationSettings: null,
+                language: null,
+                voiceGender: null,
+                inGameChatFunctionalityEnabled: null,
+                inGameChatBotUnmuted: null,
+                inGameChatTrademark: null,
+                inGameChatCommandPrefix: null,
+                inGameChatCommandsEnabled: null,
+                inGameChatCommandResponseDelay: null,
+                leaderCommand: null,
+                inGameChatNotifySmartSwitchChangedFromDiscord: null,
+                inGameChatNotifyConnection: null,
+                inGameChatNotify: null,
+                mapWipeNotifyEveryone: null,
                 fcmAlarmNotify: null,
                 fcmAlarmPluginNotify: null,
-                notificationSettingsHeader: null,
+                eventNotificationSettingsHeader: null,
                 vendingMachineSpawned: null,
                 vendingMachineDespawned: null,
                 ch47Spawned: null,
@@ -879,18 +899,18 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
     const validKeys = [
         'language',
         'voiceGender',
-        'inGameChatFunctionalityDisabled',
-        'inGameMuteBotMessages',
-        'inGameTrademark',
-        'inGameCommandPrefix',
-        'inGameCommandsEnabled',
-        'inGameCommandDelay',
+        'inGameChatFunctionalityEnabled',
+        'inGameChatBotUnmuted',
+        'inGameChatTrademark',
+        'inGameChatCommandPrefix',
+        'inGameChatCommandsEnabled',
+        'inGameChatCommandResponseDelay',
         'leaderCommandEnabled',
-        'leaderCommandOnlyForPaired',
-        'inGameNotifySmartSwitchChangedFromDiscord',
-        'inGameConnectionNotify',
-        'inGameAfkNotify',
-        'inGameDeathNotify',
+        'leaderCommandOnlyPaired',
+        'inGameChatNotifySmartSwitchChangedFromDiscord',
+        'inGameChatNotifyConnection',
+        'inGameChatNotifyAfk',
+        'inGameChatNotifyDeath',
         'mapWipeNotifyEveryone',
         'fcmAlarmNotify',
         'fcmAlarmNotifyEveryone',
@@ -901,21 +921,21 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateType('language', obj.language, 'string'));
-    errors.push(vu.validateType('voiceGender', obj.voiceGender, 'string'));
-    errors.push(vu.validateType('inGameChatFunctionalityDisabled', obj.inGameChatFunctionalityDisabled, 'boolean'));
-    errors.push(vu.validateType('inGameMuteBotMessages', obj.inGameMuteBotMessages, 'boolean'));
-    errors.push(vu.validateType('inGameTrademark', obj.inGameTrademark, 'string'));
-    errors.push(vu.validateType('inGameCommandPrefix', obj.inGameCommandPrefix, 'string'));
-    errors.push(vu.validateType('inGameCommandsEnabled', obj.inGameCommandsEnabled, 'boolean'));
-    errors.push(vu.validateType('inGameCommandDelay', obj.inGameCommandDelay, 'number'));
+    errors.push(vu.validateInterface('language', obj.language, isValidLanguage));
+    errors.push(vu.validateInterface('voiceGender', obj.voiceGender, isValidVoiceGender));
+    errors.push(vu.validateType('inGameChatFunctionalityEnabled', obj.inGameChatFunctionalityEnabled, 'boolean'));
+    errors.push(vu.validateType('inGameChatBotUnmuted', obj.inGameChatBotUnmuted, 'boolean'));
+    errors.push(vu.validateType('inGameChatTrademark', obj.inGameChatTrademark, 'string'));
+    errors.push(vu.validateType('inGameChatCommandPrefix', obj.inGameChatCommandPrefix, 'string'));
+    errors.push(vu.validateType('inGameChatCommandsEnabled', obj.inGameChatCommandsEnabled, 'boolean'));
+    errors.push(vu.validateType('inGameChatCommandResponseDelay', obj.inGameChatCommandResponseDelay, 'number'));
     errors.push(vu.validateType('leaderCommandEnabled', obj.leaderCommandEnabled, 'boolean'));
-    errors.push(vu.validateType('leaderCommandOnlyForPaired', obj.leaderCommandOnlyForPaired, 'boolean'));
-    errors.push(vu.validateType('inGameNotifySmartSwitchChangedFromDiscord',
-        obj.inGameNotifySmartSwitchChangedFromDiscord, 'boolean'));
-    errors.push(vu.validateType('inGameConnectionNotify', obj.inGameConnectionNotify, 'boolean'));
-    errors.push(vu.validateType('inGameAfkNotify', obj.inGameAfkNotify, 'boolean'));
-    errors.push(vu.validateType('inGameDeathNotify', obj.inGameDeathNotify, 'boolean'));
+    errors.push(vu.validateType('leaderCommandOnlyPaired', obj.leaderCommandOnlyPaired, 'boolean'));
+    errors.push(vu.validateType('inGameChatNotifySmartSwitchChangedFromDiscord',
+        obj.inGameChatNotifySmartSwitchChangedFromDiscord, 'boolean'));
+    errors.push(vu.validateType('inGameChatNotifyConnection', obj.inGameChatNotifyConnection, 'boolean'));
+    errors.push(vu.validateType('inGameChatNotifyAfk', obj.inGameChatNotifyAfk, 'boolean'));
+    errors.push(vu.validateType('inGameChatNotifyDeath', obj.inGameChatNotifyDeath, 'boolean'));
     errors.push(vu.validateType('mapWipeNotifyEveryone', obj.mapWipeNotifyEveryone, 'boolean'));
     errors.push(vu.validateType('fcmAlarmNotify', obj.fcmAlarmNotify, 'boolean'));
     errors.push(vu.validateType('fcmAlarmNotifyEveryone', obj.fcmAlarmNotifyEveryone, 'boolean'));
@@ -935,6 +955,10 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
     vu.logValidations(interfaceName, filteredErrors, missingKeys, unknownKeys);
 
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
+}
+
+export function isValidVoiceGender(value: unknown): value is VoiceGenders {
+    return typeof value === 'string' && Object.values(VoiceGenders).includes(value as VoiceGenders);
 }
 
 export function isValidEventNotificationSettings(object: unknown): object is EventNotificationSettings {
@@ -1067,15 +1091,21 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
     const interfaceName = 'SettingsMessages';
     const validKeys = [
         'generalSettingsHeader',
-        'generalSettings',
-        'inGameChatGeneralSettings',
-        'inGameChatCommandSettings',
-        'generalCommandSettings',
-        'inGameChatGeneralNotificationSettings',
-        'generalNotificationSettings',
+        'language',
+        'voiceGender',
+        'inGameChatFunctionalityEnabled',
+        'inGameChatBotUnmuted',
+        'inGameChatTrademark',
+        'inGameChatCommandPrefix',
+        'inGameChatCommandsEnabled',
+        'inGameChatCommandResponseDelay',
+        'leaderCommand',
+        'inGameChatNotifySmartSwitchChangedFromDiscord',
+        'inGameChatNotify',
+        'mapWipeNotifyEveryone',
         'fcmAlarmNotify',
         'fcmAlarmPluginNotify',
-        'notificationSettingsHeader',
+        'eventNotificationSettingsHeader',
         'vendingMachineSpawned',
         'vendingMachineDespawned',
         'ch47Spawned',
@@ -1103,16 +1133,24 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
 
     const errors: (vu.ValidationError | null)[] = [];
     errors.push(vu.validateType('generalSettingsHeader', obj.generalSettingsHeader, 'string', null));
-    errors.push(vu.validateType('generalSettings', obj.generalSettings, 'string', null));
-    errors.push(vu.validateType('inGameChatGeneralSettings', obj.inGameChatGeneralSettings, 'string', null));
-    errors.push(vu.validateType('inGameChatCommandSettings', obj.inGameChatCommandSettings, 'string', null));
-    errors.push(vu.validateType('generalCommandSettings', obj.generalCommandSettings, 'string', null));
-    errors.push(vu.validateType('inGameChatGeneralNotificationSettings', obj.inGameChatGeneralNotificationSettings,
-        'string', null));
-    errors.push(vu.validateType('generalNotificationSettings', obj.generalNotificationSettings, 'string', null));
+
+    errors.push(vu.validateType('language', obj.language, 'string', null));
+    errors.push(vu.validateType('voiceGender', obj.voiceGender, 'string', null));
+    errors.push(vu.validateType('inGameChatFunctionalityEnabled', obj.inGameChatFunctionalityEnabled, 'string', null));
+    errors.push(vu.validateType('inGameChatBotUnmuted', obj.inGameChatBotUnmuted, 'string', null));
+    errors.push(vu.validateType('inGameChatTrademark', obj.inGameChatTrademark, 'string', null));
+    errors.push(vu.validateType('inGameChatCommandPrefix', obj.inGameChatCommandPrefix, 'string', null));
+    errors.push(vu.validateType('inGameChatCommandsEnabled', obj.inGameChatCommandsEnabled, 'string', null));
+    errors.push(vu.validateType('inGameChatCommandResponseDelay', obj.inGameChatCommandResponseDelay, 'string', null));
+    errors.push(vu.validateType('leaderCommand', obj.leaderCommand, 'string', null));
+    errors.push(vu.validateType('inGameChatNotifySmartSwitchChangedFromDiscord',
+        obj.inGameChatNotifySmartSwitchChangedFromDiscord, 'string', null));
+    errors.push(vu.validateType('inGameChatNotify', obj.inGameChatNotify, 'string', null));
+    errors.push(vu.validateType('mapWipeNotifyEveryone', obj.mapWipeNotifyEveryone, 'string', null));
     errors.push(vu.validateType('fcmAlarmNotify', obj.fcmAlarmNotify, 'string', null));
     errors.push(vu.validateType('fcmAlarmPluginNotify', obj.fcmAlarmPluginNotify, 'string', null));
-    errors.push(vu.validateType('notificationSettingsHeader', obj.notificationSettingsHeader, 'string', null));
+    errors.push(vu.validateType('eventNotificationSettingsHeader',
+        obj.eventNotificationSettingsHeader, 'string', null));
     errors.push(vu.validateType('vendingMachineSpawned', obj.vendingMachineSpawned, 'string', null));
     errors.push(vu.validateType('vendingMachineDespawned', obj.vendingMachineDespawned, 'string', null));
     errors.push(vu.validateType('ch47Spawned', obj.ch47Spawned, 'string', null));

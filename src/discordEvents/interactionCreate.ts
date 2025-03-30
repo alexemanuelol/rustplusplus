@@ -24,6 +24,9 @@ import { log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { slashCommandHandler } from '../handlers/slashCommandHandler';
 import { autocompleteHandler } from '../handlers/autocompleteHandler';
+import { selectMenuHandler } from '../handlers/selectMenuHandler';
+import { buttonHandler } from '../handlers/buttonHandler';
+import { modalHandler } from '../handlers/modalHandler';
 
 export const name = 'interactionCreate';
 export const once = false;
@@ -53,15 +56,15 @@ export async function execute(dm: DiscordManager, interaction: discordjs.Interac
     }
     /* Button Interaction. */
     else if (interaction.isButton()) {
-        /* TBD */
+        result = await buttonHandler(dm, interaction);
     }
     /* Select Menus (All types). */
     else if (interaction.isAnySelectMenu()) {
-        /* TBD */
+        result = await selectMenuHandler(dm, interaction);
     }
     /* Modal Submissions. */
     else if (interaction.isModalSubmit()) {
-        /* TBD */
+        result = await modalHandler(dm, interaction);
     }
     /* Unknown interaction. */
     else {

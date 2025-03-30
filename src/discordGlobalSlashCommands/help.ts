@@ -22,12 +22,13 @@ import * as discordjs from 'discord.js';
 
 import * as discordMessages from '../discordUtils/discordMessages';
 import { DiscordManager } from '../managers/discordManager';
+import { Languages } from '../managers/LocaleManager';
 
 export default {
 	name: 'help',
 
 	/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-	getData(language: string) {
+	getData(language: Languages) {
 		return new discordjs.SlashCommandBuilder()
 			.setName('help')
 			.setDescription('Display help message.');

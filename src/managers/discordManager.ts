@@ -24,8 +24,9 @@ import * as path from 'path';
 
 import { log, config, guildInstanceManager as gim, localeManager as lm } from '../../index'
 import * as types from '../utils/types';
-import { GuildInstance, GuildChannelIds } from './guildInstanceManager';
+import { GuildInstance, GuildChannelIds, EventNotificationSettings } from './guildInstanceManager';
 import { channelPermissions } from '../templates/channelPermissionsTemplate';
+import * as discordMessages from '../discordUtils/discordMessages';
 
 const GLOBAL_SLASH_COMMANDS_DIR = 'discordGlobalSlashCommands'
 const GUILD_SLASH_COMMANDS_DIR = 'discordGuildSlashCommands'
@@ -41,6 +42,9 @@ export class DiscordManager {
     public globalSlashCommands: discordjs.Collection<string, CommandData>;
     public guildSlashCommands: discordjs.Collection<string, CommandData>;
     public eventListeners: { name: string; listener: (...args: unknown[]) => void }[] = [];
+
+    public languageChangeTimeout: types.GuildId[] = [];
+    public tryAgainLaterTimeout: Map<string, NodeJS.Timeout> = new Map();
 
     constructor() {
         const funcName = '[DiscordManager: Init]';
@@ -297,7 +301,7 @@ export class DiscordManager {
         /* Setup category, channels and settings. */
         await this.setupGuildCategory(guild, rolesChanged);
         await this.setupGuildChannels(guild, rolesChanged);
-        await this.setupGuildSettingsChannel(guild);
+        await this.setupGuildSettingsChannel(guild, false);
     }
 
     public async setupGuildCategory(guild: discordjs.Guild, enforceChannelPermissions: boolean = false) {
@@ -388,8 +392,49 @@ export class DiscordManager {
         gInstance.guildChannelIds[channelName] = channel ? channel.id : null;
     }
 
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    public async setupGuildSettingsChannel(guild: discordjs.Guild) {
+    public async setupGuildSettingsChannel(guild: discordjs.Guild, update: boolean = true, create: boolean = false) {
+        const funcName = '[DiscordManager: setupGuildSettingsChannel]';
+        const logParam = { guildId: guild.id };
+
+        /* If all settings messages are null, then send all settings messages. */
+        const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
+        if (Object.values(gInstance.settingsMessages).every(value => value === null)) {
+            create = true;
+        }
+
+        if (!('settings' in gInstance.guildChannelIds)) {
+            log.warn(`${funcName} Could not find settings channel.`, logParam);
+            return;
+        }
+
+        if (!update && !create) return;
+
+        /* General Settings */
+        await discordMessages.sendSettingGeneralSettingsHeaderMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingLanguageMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingVoiceGenderMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatFunctionalityEnabledMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatBotUnmutedMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatTrademarkMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatCommandPrefixMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatCommandsEnabledMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatCommandResponseDelayMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingLeaderCommandMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatNotifySmartSwitchChangedFromDiscordMessage(this, guild.id, update,
+            create);
+        await discordMessages.sendSettingInGameChatNotifyMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingMapWipeNotifyEveryoneMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingFcmAlarmNotifyMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingFcmAlarmPluginNotifyMessage(this, guild.id, update, create);
+
+        /* Event Notification Settings */
+        await discordMessages.sendSettingEventNotificationSettingsHeaderMessage(this, guild.id, update, create);
+        for (const setting of Object.keys(gInstance.eventNotificationSettings) as
+            Array<keyof EventNotificationSettings>) {
+            await discordMessages.sendSettingEventNotificationSettingMessage(this, guild.id, setting, update, create);
+        }
+
+        gim.updateGuildInstance(guild.id);
     }
 
     public logInteraction(interaction: discordjs.Interaction, status: 'Initiated' | 'Completed') {
@@ -524,11 +569,6 @@ export class DiscordManager {
 
         return member.roles.cache.some(role => gInstance.adminIds.includes(role.id));
     }
-
-
-
-
-
 
     public async handleInteractionReply<T extends discordjs.Interaction>(interaction: T, content:
         discordjs.InteractionReplyOptions | discordjs.InteractionEditReplyOptions | discordjs.InteractionUpdateOptions,

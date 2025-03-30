@@ -23,7 +23,14 @@ import * as discordjs from 'discord.js';
 import * as types from '../utils/types';
 import * as constants from '../utils/constants';
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
-import { GuildInstance, ServerInfo, SmartAlarm, StorageMonitor, StorageMonitorType } from '../managers/guildInstanceManager';
+import {
+    EventNotificationSettings,
+    GuildInstance,
+    ServerInfo,
+    SmartAlarm,
+    StorageMonitor,
+    StorageMonitorType
+} from '../managers/guildInstanceManager';
 import { NewsNewsBody, isValidUrl } from '../managers/fcmListenerManager';
 
 export const ButtonLimits = {
@@ -329,4 +336,288 @@ export function getFcmNewsNewsButton(guildId: types.GuildId, body: NewsNewsBody)
             url: isValidUrl(url) ? url : constants.DEFAULT_SERVER_URL,
             type: discordjs.ComponentType.Button
         }));
+}
+
+
+/**
+ * Settings based buttons
+ */
+
+export function getSettingInGameChatFunctionalityEnabledButton(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const enabled = lm.getIntl(language, 'buttonEnabled');
+    const disabled = lm.getIntl(language, 'buttonDisabled');
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-inGameChatFunctionalityEnabled',
+            label: gInstance.generalSettings.inGameChatFunctionalityEnabled ? enabled : disabled,
+            style: gInstance.generalSettings.inGameChatFunctionalityEnabled ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        })
+    );
+}
+
+export function getSettingInGameChatBotUnmutedButton(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-inGameChatBotUnmuted',
+            style: gInstance.generalSettings.inGameChatBotUnmuted ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            emoji: gInstance.generalSettings.inGameChatBotUnmuted ? '🔊' : '🔇'
+        })
+    );
+}
+
+export function getSettingInGameChatTrademarkButton(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-inGameChatTrademark',
+            label: lm.getIntl(language, 'buttonTrademark'),
+            style: discordjs.ButtonStyle.Primary,
+            emoji: '📝',
+            type: discordjs.ComponentType.Button
+        })
+    );
+}
+
+export function getSettingInGameChatCommandPrefixButton(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-inGameChatCommandPrefix',
+            label: lm.getIntl(language, 'buttonCommandPrefix'),
+            style: discordjs.ButtonStyle.Primary,
+            emoji: '📝',
+            type: discordjs.ComponentType.Button
+        })
+    );
+}
+
+export function getSettingInGameChatCommandsEnabledButton(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const enabled = lm.getIntl(language, 'buttonEnabled');
+    const disabled = lm.getIntl(language, 'buttonDisabled');
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-inGameChatCommandsEnabled',
+            label: gInstance.generalSettings.inGameChatCommandsEnabled ? enabled : disabled,
+            style: gInstance.generalSettings.inGameChatCommandsEnabled ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        })
+    );
+}
+
+export function getSettingLeaderCommandButtons(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const enabled = lm.getIntl(language, 'buttonEnabled');
+    const disabled = lm.getIntl(language, 'buttonDisabled');
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-leaderCommandEnabled',
+            label: gInstance.generalSettings.leaderCommandEnabled ? enabled : disabled,
+            style: gInstance.generalSettings.leaderCommandEnabled ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        }),
+        getButton({
+            customId: 'GeneralSetting-leaderCommandOnlyPaired',
+            label: lm.getIntl(language, 'buttonOnlyPaired'),
+            style: gInstance.generalSettings.leaderCommandOnlyPaired ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            disabled: gInstance.generalSettings.leaderCommandEnabled ? false : true
+        })
+    );
+}
+
+export function getSettingInGameChatNotifySmartSwitchChangedFromDiscordButton(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const enabled = lm.getIntl(language, 'buttonEnabled');
+    const disabled = lm.getIntl(language, 'buttonDisabled');
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-inGameChatNotifySmartSwitchChangedFromDiscord',
+            label: gInstance.generalSettings.inGameChatNotifySmartSwitchChangedFromDiscord ? enabled : disabled,
+            style: gInstance.generalSettings.inGameChatNotifySmartSwitchChangedFromDiscord ?
+                discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        })
+    );
+}
+
+export function getSettingInGameChatNotifyButtons(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-inGameChatNotifyConnection',
+            label: lm.getIntl(language, 'buttonConnections'),
+            style: gInstance.generalSettings.inGameChatNotifyConnection ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            emoji: '🌐'
+        }),
+        getButton({
+            customId: 'GeneralSetting-inGameChatNotifyAfk',
+            label: lm.getIntl(language, 'buttonAfk'),
+            style: gInstance.generalSettings.inGameChatNotifyAfk ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            emoji: '💤'
+        }),
+        getButton({
+            customId: 'GeneralSetting-inGameChatNotifyDeath',
+            label: lm.getIntl(language, 'buttonDeath'),
+            style: gInstance.generalSettings.inGameChatNotifyDeath ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            emoji: '💀'
+        })
+    );
+}
+
+export function getSettingMapWipeNotifyEveryoneButton(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-mapWipeNotifyEveryone',
+            label: '@everyone',
+            style: gInstance.generalSettings.mapWipeNotifyEveryone ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        })
+    );
+}
+
+export function getSettingFcmAlarmNotifyButtons(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const enabled = lm.getIntl(language, 'buttonEnabled');
+    const disabled = lm.getIntl(language, 'buttonDisabled');
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-fcmAlarmNotify',
+            label: gInstance.generalSettings.fcmAlarmNotify ? enabled : disabled,
+            style: gInstance.generalSettings.fcmAlarmNotify ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        }),
+        getButton({
+            customId: 'GeneralSetting-fcmAlarmNotifyEveryone',
+            label: '@everyone',
+            style: gInstance.generalSettings.fcmAlarmNotifyEveryone ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            disabled: gInstance.generalSettings.fcmAlarmNotify ? false : true
+        })
+    );
+}
+
+export function getSettingFcmAlarmPluginNotifyButtons(guildId: types.GuildId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const enabled = lm.getIntl(language, 'buttonEnabled');
+    const disabled = lm.getIntl(language, 'buttonDisabled');
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: 'GeneralSetting-fcmAlarmPluginNotify',
+            label: gInstance.generalSettings.fcmAlarmPluginNotify ? enabled : disabled,
+            style: gInstance.generalSettings.fcmAlarmPluginNotify ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        }),
+        getButton({
+            customId: 'GeneralSetting-fcmAlarmPluginNotifyEveryone',
+            label: '@everyone',
+            style: gInstance.generalSettings.fcmAlarmPluginNotifyEveryone ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            disabled: gInstance.generalSettings.fcmAlarmPluginNotify ? false : true
+        }),
+        getButton({
+            customId: 'GeneralSetting-fcmAlarmPluginNotifyInGame',
+            label: lm.getIntl(language, 'buttonInGame'),
+            style: gInstance.generalSettings.fcmAlarmPluginNotifyInGame ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            disabled: gInstance.generalSettings.fcmAlarmPluginNotify ? false : true
+        }),
+        getButton({
+            customId: 'GeneralSetting-fcmAlarmPluginNotifyActiveServer',
+            label: lm.getIntl(language, 'buttonActiveServer'),
+            style: gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button,
+            disabled: gInstance.generalSettings.fcmAlarmPluginNotify ? false : true
+        })
+    );
+}
+
+export function getSettingEventNotificationSettingButtons(guildId: types.GuildId,
+    setting: keyof EventNotificationSettings): discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        getButton({
+            customId: `EventNotificationSetting-discord-${setting}`,
+            label: lm.getIntl(language, 'buttonDiscord'),
+            style: gInstance.eventNotificationSettings[setting].discord ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        }),
+        getButton({
+            customId: `EventNotificationSetting-inGame-${setting}`,
+            label: lm.getIntl(language, 'buttonInGame'),
+            style: gInstance.eventNotificationSettings[setting].inGame ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        }),
+        getButton({
+            customId: `EventNotificationSetting-voice-${setting}`,
+            label: lm.getIntl(language, 'buttonVoice'),
+            style: gInstance.eventNotificationSettings[setting].voice ? discordjs.ButtonStyle.Success :
+                discordjs.ButtonStyle.Danger,
+            type: discordjs.ComponentType.Button
+        })
+    );
 }
