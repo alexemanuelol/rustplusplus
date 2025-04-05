@@ -134,7 +134,7 @@
     "pleaseTryAgainLater": "Please try again later...",
     "quantity": "Quantity",
     "roles": "Roles",
-    "settingFcmAlarmNotifyDesc": "When enabled, Smart Alarms that are not part of the currently connected server can send notifications. These notifications uses the title and message given to the Smart ALarm in-game. These Smart Alarms might not be present in the smartalarms Text-Channel in discord.",
+    "settingFcmAlarmNotifyDesc": "When enabled, Smart Alarms that are not part of the currently connected server can send notifications. These notifications uses the title and message given to the Smart Alarm in-game. These Smart Alarms might not be present in the smartalarms Text-Channel in discord.",
     "settingFcmAlarmNotifyTitle": "Smart Alarms FCM Notifications",
     "settingFcmAlarmPluginNotifyDesc": "Manage notifications for the Raid Alarm plugin. Enable alerts for Discord, in-game chat, @everyone mentions, and if notifications should only come from the currently active server.\n\n{link}",
     "settingFcmAlarmPluginNotifyTitle": "Raid Alarm Plugin Notifications",

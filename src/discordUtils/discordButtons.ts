@@ -181,7 +181,7 @@ export function getServerButtons(guildId: types.GuildId, serverId: types.ServerI
     });
 
     const websiteButton = getButton({
-        label: lm.getIntl(language, 'websiteCap'),
+        label: lm.getIntl(language, 'buttonWebsite'),
         style: discordjs.ButtonStyle.Link,
         url: serverInfo.url,
         type: discordjs.ComponentType.Button
