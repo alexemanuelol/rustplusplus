@@ -2751,22 +2751,48 @@ class RustPlus extends RustPlusLib {
     async getCommandTracker(commandString) {
         const args = commandString.split(' ');
         const subCommand = args[1]?.toLowerCase();
-        const playerId = args[2];
-        const trackerId = args[3] ?? null;
-
-        if (playerId === null || playerId === undefined) {
-            return;
+    
+        if (subCommand === 'create') {
+            const trackerIdParts = args.slice(2);
+            const customTrackerId = trackerIdParts.length > 0 ? trackerIdParts.join(' ') : null;
+            return await this.createTracker(customTrackerId);
         }
     
         if (subCommand === 'add') {
+            const playerId = args[2];
+            const trackerId = args.slice(3).join(' ').trim() || null;
+            if (!playerId) return;
             return await this.addPlayerToTracker(trackerId, playerId);
         }
     
         if (subCommand === 'remove') {
+            const playerId = args[2];
+            const trackerId = args.slice(3).join(' ').trim() || null;
+            if (!playerId) return;
             return await this.removePlayerFromTracker(trackerId, playerId);
         }
+    
+        if (!args[2]) return;
     }
     
+    
+    async createTracker(inputTrackerId = null) {
+        const instance = Client.client.getInstance(this.guildId);
+        const serverId = instance?.activeServer;
+        if (!serverId) {
+            return Client.client.intlGet(this.guildId, 'activeRustServerNotFound');
+        }
+    
+        const trackerId = await Client.client.createTrackerInstance(this.guildId, serverId, inputTrackerId);
+    
+        if (!trackerId) {
+            return Client.client.intlGet(this.guildId, 'trackerIdAlreadyExists', { trackerId: inputTrackerId });
+        }
+    
+        await DiscordMessages.sendTrackerMessage(this.guildId, trackerId);
+    
+        return Client.client.intlGet(this.guildId, 'trackerCreated', { trackerId });
+    }
     
     async addPlayerToTracker(trackerId, id) {
         const instance = Client.client.getInstance(this.guildId);
