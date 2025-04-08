@@ -732,6 +732,7 @@
     "toolCupboard": "Tool Cupboard",
     "total": "Total",
     "tracker": "Tracker",
+    "trackerCreated": "Tracker created successfully. (ID: {trackerId})",
     "trackerId": "Tracker ID",
     "trackerIdAlreadyExists": "Tracker ID {trackerId} already exists!",
     "trackerIdNotFound": "Tracker ID {trackerId} could not be found.",
