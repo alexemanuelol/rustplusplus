@@ -528,34 +528,16 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId.startsWith('CreateTracker')) {
         const ids = JSON.parse(interaction.customId.replace('CreateTracker', ''));
+        const trackerId = await client.createTrackerInstance(guildId, ids.serverId);
         const server = instance.serverList[ids.serverId];
-
-        if (!server) {
+    
+        if (!server || !trackerId) {
             await interaction.message.delete();
             return;
         }
 
-        interaction.deferUpdate();
-
-        /* Find an available tracker id */
-        const trackerId = client.findAvailableTrackerId(guildId);
-
-        instance.trackers[trackerId] = {
-            name: 'Tracker',
-            serverId: ids.serverId,
-            battlemetricsId: server.battlemetricsId,
-            title: server.title,
-            img: server.img,
-            clanTag: '',
-            trackerId: trackerId,
-            everyone: false,
-            inGame: true,
-            players: [],
-            messageId: null,
-            createdAt: Date.now()
-        }
-        client.setInstance(guildId, instance);
-
+        await interaction.deferUpdate();
+    
         await DiscordMessages.sendTrackerMessage(guildId, trackerId);
     }
     else if (interaction.customId.startsWith('CreateGroup')) {
