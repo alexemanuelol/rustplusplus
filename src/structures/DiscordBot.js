@@ -362,6 +362,37 @@ class DiscordBot extends Discord.Client {
         }
     }
 
+    createTrackerInstance(guildId, serverId, customId = null) {
+        const instance = this.getInstance(guildId);
+        const server = instance?.serverList?.[serverId];
+        if (!server) return null;
+    
+        const trackerId = customId || this.findAvailableTrackerId(guildId);
+    
+        if (instance.trackers.hasOwnProperty(trackerId)) {
+            return null;
+        }
+    
+        instance.trackers[trackerId] = {
+            name: 'Tracker',
+            serverId,
+            battlemetricsId: server.battlemetricsId,
+            title: server.title ?? 'Untitled',
+            img: server.img ?? null,
+            clanTag: '',
+            trackerId,
+            everyone: false,
+            inGame: true,
+            players: [],
+            messageId: null,
+            createdAt: Date.now()
+        };
+    
+        this.setInstance(guildId, instance);
+        return trackerId;
+    }
+    
+
     findAvailableGroupId(guildId, serverId) {
         const instance = this.getInstance(guildId);
 
