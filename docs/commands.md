@@ -689,11 +689,12 @@ Subcommand | Description | Required
 ## **tracker**
 
 > **Manage player trackers directly from the in-game chat.** 
-<br>Use the `tracker` command to add or remove players to/from specific trackers.
+<br>Use the `tracker` command to create, add, or remove players to/from specific trackers.
 <br>If no `trackerId` is provided, the most recently created tracker for the current server will be used automatically.
 
 Subcommand | Description | Required
 ---------- | ----------- | --------
+`create` | Create a new tracker. You can optionally provide a custom `trackerId`<br>`!tracker create [trackerId]` | `false`
 `add` | Add a player to a tracker using steamID or BattlemetricsID<br>`!tracker add <steamID or battlemetricsID> [trackerId]` | `false`
 `remove` | Remove a player from a tracker using steamID or BattlemetricsID<br>`!tracker remove <steamID or battlemetricsID> [trackerId]` | `false`
 
