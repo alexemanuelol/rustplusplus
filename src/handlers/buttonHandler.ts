@@ -403,6 +403,25 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
         await discordMessages.sendServerMessage(dm, guildId, previousServerToView, connectionStatus);
     }
 
+    const creationPromises: Promise<void>[] = [];
+    for (const content of Object.values(server.smartSwitchMap)) {
+        creationPromises.push(discordMessages.sendSmartSwitchMessage(dm, guildId, serverId, content.entityId));
+    }
+
+    for (const content of Object.values(server.smartAlarmMap)) {
+        creationPromises.push(discordMessages.sendSmartAlarmMessage(dm, guildId, serverId, content.entityId));
+    }
+
+    for (const content of Object.values(server.storageMonitorMap)) {
+        creationPromises.push(
+            discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
+    }
+
+    for (const content of Object.values(server.smartSwitchGroupMap)) {
+        // TODO! Create smartswitchgroup messages
+    }
+    await Promise.allSettled(creationPromises);
+
     server.active = true;
     gim.updateGuildInstance(guildId);
 
@@ -447,6 +466,36 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
 
         // TODO! Remove embeds from information channel if serverToView === null
     }
+
+    const deletionPromises: Promise<boolean>[] = [];
+    for (const content of Object.values(server.smartSwitchMap)) {
+        const channelId = gInstance.guildChannelIds.smartSwitches;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+
+    for (const content of Object.values(server.smartAlarmMap)) {
+        const channelId = gInstance.guildChannelIds.smartAlarms;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+
+    for (const content of Object.values(server.storageMonitorMap)) {
+        const channelId = gInstance.guildChannelIds.storageMonitors;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+
+    for (const content of Object.values(server.smartSwitchGroupMap)) {
+        const channelId = gInstance.guildChannelIds.smartSwitchGroups;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+    await Promise.allSettled(deletionPromises);
 
     server.active = false;
     gim.updateGuildInstance(guildId);

@@ -519,8 +519,10 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
 
         // TODO! Add the switch to rustplusManager
 
-        // TODO! Only send message if activeServerId is the same as serverId
-        await discordMessages.sendSmartSwitchMessage(flm.dm, guildId, serverId, body.entityId);
+        const rustPlusInstance = rpm.getInstance(guildId, serverId);
+        if (rustPlusInstance && serverInfo.active) {
+            await discordMessages.sendSmartSwitchMessage(flm.dm, guildId, serverId, body.entityId);
+        }
     }
 }
 
@@ -569,8 +571,10 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
 
         // TODO! Add the alarm to rustplusManager
 
-        // TODO! Only send message if activeServerId is the same as serverId
-        await discordMessages.sendSmartAlarmMessage(flm.dm, guildId, serverId, body.entityId);
+        const rustPlusInstance = rpm.getInstance(guildId, serverId);
+        if (rustPlusInstance && serverInfo.active) {
+            await discordMessages.sendSmartAlarmMessage(flm.dm, guildId, serverId, body.entityId);
+        }
     }
 }
 
@@ -617,8 +621,10 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
 
         // TODO! Add the storagemonitor to rustplusManager
 
-        // TODO! Only send message if activeServerId is the same as serverId
-        await discordMessages.sendStorageMonitorMessage(flm.dm, guildId, serverId, body.entityId);
+        const rustPlusInstance = rpm.getInstance(guildId, serverId);
+        if (rustPlusInstance && serverInfo.active) {
+            await discordMessages.sendStorageMonitorMessage(flm.dm, guildId, serverId, body.entityId);
+        }
     }
 }
 
