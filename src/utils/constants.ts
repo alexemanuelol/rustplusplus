@@ -47,6 +47,8 @@ export const BOT_MESSAGE_HISTORY_LIMIT = 16;
 export const BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS = 10000;
 export const GRID_DIAMETER = 146.25;
 export const DEFAULT_LANGUAGE = 'en';
+export const DEFAULT_RECONNECT_TIMEOUT_SECONDS = 3;
+export const MAX_RECONNECT_TIMEOUT_SECONDS = 30;
 
 /* Embeds */
 export const EMBED_MAX_TOTAL_CHARACTERS = 6000;

@@ -20,10 +20,11 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim } from '../../index';
+import { guildInstanceManager as gim, rustPlusManager as rpm } from '../../index';
+import { ConnectionStatus } from '../managers/rustPlusManager';
 import { DiscordManager } from "../managers/discordManager";
 import * as types from '../utils/types';
-import { EventNotificationSettings, GuildInstance } from '../managers/guildInstanceManager';
+import { EventNotificationSettings, GuildInstance, ServerInfo } from '../managers/guildInstanceManager';
 import * as discordMessages from '../discordUtils/discordMessages';
 import * as discordModals from '../discordUtils/discordModals';
 
@@ -87,9 +88,25 @@ export async function buttonHandler(dm: DiscordManager, interaction: discordjs.B
     else if (interaction.customId.startsWith('EventNotificationSetting-')) {
         return await eventNotificationSettingButtonHandler(dm, interaction);
     }
+    /* Servers Channel buttons */
+    else if (interaction.customId.startsWith('ServerConnect')) {
+        return await serverConnectButtonHandler(dm, interaction);
+    }
+    else if (interaction.customId.startsWith('ServerConnecting') ||
+        interaction.customId.startsWith('ServerDisconnect') ||
+        interaction.customId.startsWith('ServerReconnecting')) {
+        return await serverConnectingDisconnectReconnectingButtonHandler(dm, interaction);
+    }
+    else if (interaction.customId.startsWith('ServerView')) {
+        return await serverViewButtonHandler(dm, interaction);
+    }
+    else if (interaction.customId.startsWith('ServerDelete')) {
+        return await serverDeleteButtonHandler(dm, interaction);
+    }
 
     return false;
 }
+
 
 /**
  * General Settings / Event Notification Settings
@@ -351,6 +368,209 @@ async function eventNotificationSettingButtonHandler(dm: DiscordManager,
     gim.updateGuildInstance(guildId);
 
     await discordMessages.sendSettingEventNotificationSettingMessage(dm, guildId, setting, true, false, interaction);
+
+    return true;
+}
+
+
+/**
+ * Server channel
+ */
+
+async function serverConnectButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
+    Promise<boolean> {
+    const identifier = JSON.parse(interaction.customId.replace('ServerConnect', ''));
+    const serverId = identifier.serverId as types.ServerId;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+
+    interaction.deferUpdate();
+
+    if (gInstance.serverToView === null) {
+        gInstance.serverToView = serverId;
+    }
+    else if (gInstance.serverToView !== serverId) {
+        const previousServerToView = gInstance.serverToView;
+        gInstance.serverToView = serverId;
+
+        let connectionStatus = ConnectionStatus.Disconnected;
+        const rustPlusInstance = rpm.getInstance(guildId, previousServerToView);
+        if (rustPlusInstance) {
+            connectionStatus = rustPlusInstance.connectionStatus;
+        }
+
+        await discordMessages.sendServerMessage(dm, guildId, previousServerToView, connectionStatus);
+    }
+
+    server.active = true;
+    gim.updateGuildInstance(guildId);
+
+    if (rpm.addInstance(guildId, serverId, server.mainSteamId)) {
+        const rustPlusInstance = rpm.getInstance(guildId, serverId);
+        if (rustPlusInstance) {
+            await rustPlusInstance.startup();
+        }
+    }
+
+    return true;
+}
+
+async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
+    Promise<boolean> {
+    const identifier = JSON.parse(interaction.customId.replace('ServerConnecting', '')
+        .replace('ServerDisconnect', '')
+        .replace('ServerReconnecting', ''));
+    const serverId = identifier.serverId as types.ServerId;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+
+    if (gInstance.serverToView === serverId) {
+        gInstance.serverToView = null;
+
+        /* Check if there are any other active servers that we can set view to. */
+        for (const [sId, content] of Object.entries(gInstance.serverInfoMap)) {
+            if (sId !== serverId && content.active) {
+                gInstance.serverToView = sId;
+
+                let connectionStatus = ConnectionStatus.Disconnected;
+                const rustPlusInstance = rpm.getInstance(guildId, sId);
+                if (rustPlusInstance) {
+                    connectionStatus = rustPlusInstance.connectionStatus;
+                }
+
+                await discordMessages.sendServerMessage(dm, guildId, sId, connectionStatus);
+                break;
+            }
+        }
+
+        // TODO! Remove embeds from information channel if serverToView === null
+    }
+
+    server.active = false;
+    gim.updateGuildInstance(guildId);
+
+    rpm.removeInstance(guildId, serverId);
+    await discordMessages.sendServerMessage(dm, guildId, serverId, ConnectionStatus.Disconnected, interaction);
+
+    return true;
+}
+
+async function serverViewButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
+    Promise<boolean> {
+    const identifier = JSON.parse(interaction.customId.replace('ServerView', ''));
+    const serverId = identifier.serverId as types.ServerId;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    if (gInstance.serverToView === serverId) {
+        gInstance.serverToView = null;
+    }
+    else if (gInstance.serverToView === null) {
+        gInstance.serverToView = serverId;
+    }
+    else {
+        const previousServerToView = gInstance.serverToView;
+        gInstance.serverToView = serverId;
+
+        let connectionStatus = ConnectionStatus.Disconnected;
+        const rustPlusInstance = rpm.getInstance(guildId, previousServerToView);
+        if (rustPlusInstance) {
+            connectionStatus = rustPlusInstance.connectionStatus;
+        }
+
+        await discordMessages.sendServerMessage(dm, guildId, previousServerToView, connectionStatus);
+    }
+    gim.updateGuildInstance(guildId);
+
+    let connectionStatus = ConnectionStatus.Disconnected;
+    const rustPlusInstance = rpm.getInstance(guildId, serverId);
+    if (rustPlusInstance) {
+        connectionStatus = rustPlusInstance.connectionStatus;
+    }
+
+    await discordMessages.sendServerMessage(dm, guildId, serverId, connectionStatus, interaction);
+
+    return true;
+}
+
+async function serverDeleteButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
+    Promise<boolean> {
+    const identifier = JSON.parse(interaction.customId.replace('ServerDelete', ''));
+    const serverId = identifier.serverId as types.ServerId;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+
+    if (!server) {
+        await interaction.message.delete();
+        return true;
+    }
+
+    interaction.deferUpdate();
+
+    rpm.removeInstance(guildId, serverId);
+
+    const deletionPromises: Promise<boolean>[] = [];
+    for (const content of Object.values(server.smartSwitchMap)) {
+        const channelId = gInstance.guildChannelIds.smartSwitches;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+
+    for (const content of Object.values(server.smartAlarmMap)) {
+        const channelId = gInstance.guildChannelIds.smartAlarms;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+
+    for (const content of Object.values(server.storageMonitorMap)) {
+        const channelId = gInstance.guildChannelIds.storageMonitors;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+
+    for (const content of Object.values(server.smartSwitchGroupMap)) {
+        const channelId = gInstance.guildChannelIds.smartSwitchGroups;
+        if (channelId !== null && content.messageId !== null) {
+            deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+        }
+    }
+
+    if (gInstance.guildChannelIds.servers !== null && server.messageId !== null) {
+        deletionPromises.push(dm.deleteMessage(guildId, gInstance.guildChannelIds.servers, server.messageId));
+    }
+
+    await Promise.allSettled(deletionPromises);
+
+    if (gInstance.serverToView === serverId) {
+        gInstance.serverToView = null;
+
+        /* Check if there are any other active servers that we can set view to. */
+        for (const [sId, content] of Object.entries(gInstance.serverInfoMap)) {
+            if (sId !== serverId && content.active) {
+                gInstance.serverToView = sId;
+
+                let connectionStatus = ConnectionStatus.Disconnected;
+                const rustPlusInstance = rpm.getInstance(guildId, sId);
+                if (rustPlusInstance) {
+                    connectionStatus = rustPlusInstance.connectionStatus;
+                }
+
+                await discordMessages.sendServerMessage(dm, guildId, sId, connectionStatus);
+                break;
+            }
+        }
+
+        // TODO! Remove embeds from information channel if serverToView === null
+    }
+
+    delete gInstance.serverInfoMap[serverId];
+    gim.updateGuildInstance(guildId);
 
     return true;
 }

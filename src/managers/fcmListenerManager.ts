@@ -23,7 +23,8 @@ const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 import * as axios from 'axios';
 
 import { DiscordManager } from './discordManager';
-import { log, credentialsManager as cm, guildInstanceManager as gim, localeManager as lm } from '../../index';
+import { log, credentialsManager as cm, guildInstanceManager as gim, localeManager as lm, rustPlusManager as rpm } from '../../index';
+import { ConnectionStatus } from './rustPlusManager';
 import * as types from '../utils/types';
 import * as vu from '../utils/validationUtils';
 import * as constants from '../utils/constants'
@@ -449,6 +450,8 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             port: body.port,
             messageId: (message) ? message.id : null,
             pairedDate: Math.floor(Date.now() / 1000),
+            mainSteamId: serverInfo ? serverInfo.mainSteamId : body.playerId,
+            active: serverInfo ? serverInfo.active : false,
             connect: null,
             noteMap: serverInfo ? serverInfo.noteMap : {},
             battlemetricsId: null,
@@ -459,9 +462,16 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);
+        if (gInstance.serverToView === null) gInstance.serverToView = serverId;
         gim.updateGuildInstance(guildId);
 
-        await discordMessages.sendServerMessage(flm.dm, guildId, serverId);
+        let connectionStatus = ConnectionStatus.Disconnected;
+        const rustPlusInstance = rpm.getInstance(guildId, serverId);
+        if (rustPlusInstance) {
+            connectionStatus = rustPlusInstance.connectionStatus;
+        }
+
+        await discordMessages.sendServerMessage(flm.dm, guildId, serverId, connectionStatus);
     }
 }
 

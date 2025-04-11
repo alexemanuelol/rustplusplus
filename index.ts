@@ -27,7 +27,7 @@ import { LocaleManager, Languages, isValidLanguage } from './src/managers/Locale
 import { CredentialsManager } from './src/managers/credentialsManager';
 import { GuildInstanceManager } from './src/managers/guildInstanceManager';
 import { DiscordManager } from './src/managers/discordManager';
-//import { RustPlusMananger } from './src/managers/rustPlusManager';
+import { RustPlusManager } from './src/managers/rustPlusManager';
 import { FcmListenerManager } from './src/managers/fcmListenerManager';
 
 dotenv.config();
@@ -97,10 +97,10 @@ export const guildInstanceManager = new GuildInstanceManager(
     path.join(__dirname, 'src', 'templates')
 );
 
+export const rustPlusManager = new RustPlusManager();
 export const discordManager = new DiscordManager();
 discordManager.build();
 
-//export const rustPlusManager = new RustPlusMananger();
 export const fcmListenerManager = new FcmListenerManager(discordManager);
 
 process.on('unhandledRejection', error => {

@@ -20,6 +20,7 @@
 
 import * as discordjs from 'discord.js';
 
+import { ConnectionStatus } from '../managers/rustPlusManager';
 import * as types from '../utils/types';
 import * as constants from '../utils/constants';
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
@@ -153,7 +154,8 @@ export function getHelpButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBui
  * Guild based buttons
  */
 
-export function getServerButtons(guildId: types.GuildId, serverId: types.ServerId, connection: ButtonConnectionTypes):
+export function getServerButtons(guildId: types.GuildId, serverId: types.ServerId,
+    connectionStatus: ConnectionStatus):
     discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
@@ -161,15 +163,24 @@ export function getServerButtons(guildId: types.GuildId, serverId: types.ServerI
     const identifier = JSON.stringify({ 'serverId': serverId });
 
     const connectionMap = {
-        [ButtonConnectionTypes.Connected]: ['ServerDisconnect', 'buttonDisconnect', discordjs.ButtonStyle.Danger],
-        [ButtonConnectionTypes.Disconnected]: ['ServerConnect', 'buttonConnect', discordjs.ButtonStyle.Primary],
-        [ButtonConnectionTypes.Reconnecting]: ['ServerReconnecting', 'buttonReconnecting', discordjs.ButtonStyle.Danger]
+        [ConnectionStatus.Disconnected]: ['ServerConnect', 'buttonConnect', discordjs.ButtonStyle.Primary],
+        [ConnectionStatus.Connecting]: ['ServerConnecting', 'buttonConnecting', discordjs.ButtonStyle.Primary],
+        [ConnectionStatus.Connected]: ['ServerDisconnect', 'buttonDisconnect', discordjs.ButtonStyle.Danger],
+        [ConnectionStatus.Reconnecting]: ['ServerReconnecting', 'buttonReconnecting', discordjs.ButtonStyle.Danger]
     }
 
     const connectionButton = getButton({
-        customId: `${connectionMap[connection][0] as string}${identifier}`,
-        label: lm.getIntl(language, connectionMap[connection][1] as string),
-        style: connectionMap[connection][2] as discordjs.ButtonStyle.Danger | discordjs.ButtonStyle.Primary,
+        customId: `${connectionMap[connectionStatus][0] as string}${identifier}`,
+        label: lm.getIntl(language, connectionMap[connectionStatus][1] as string),
+        style: connectionMap[connectionStatus][2] as discordjs.ButtonStyle.Danger | discordjs.ButtonStyle.Primary,
+        type: discordjs.ComponentType.Button
+    });
+
+    const isServerView = gInstance.serverToView === serverId;
+    const viewButton = getButton({
+        customId: `ServerView${identifier}`,
+        label: lm.getIntl(language, 'buttonView'),
+        style: isServerView ? discordjs.ButtonStyle.Success : discordjs.ButtonStyle.Danger,
         type: discordjs.ComponentType.Button
     });
 
@@ -196,7 +207,7 @@ export function getServerButtons(guildId: types.GuildId, serverId: types.ServerI
 
     return [
         new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
-            connectionButton, editButton, websiteButton, deleteButton
+            connectionButton, viewButton, editButton, websiteButton, deleteButton
         )
     ];
 }

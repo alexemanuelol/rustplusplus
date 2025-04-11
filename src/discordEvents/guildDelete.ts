@@ -20,9 +20,16 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, log, credentialsManager as cm, fcmListenerManager as flm } from '../../index';
+import {
+    guildInstanceManager as gim,
+    log,
+    credentialsManager as cm,
+    fcmListenerManager as flm,
+    rustPlusManager as rpm
+} from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'guildDelete';
 export const once = false;
@@ -50,7 +57,10 @@ export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
         cm.updateCredentials(steamId);
     }
 
-    // TODO! turn off and remove rustplus instance from manager for guild
+    const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
+    for (const serverId of Object.keys(gInstance.serverInfoMap)) {
+        rpm.removeInstance(guild.id, serverId);
+    }
 
     /* Delete guild instance file last. */
     gim.deleteGuildInstance(guild.id);

@@ -20,10 +20,18 @@
 
 import * as path from 'path';
 
-import { guildInstanceManager as gim, config, log, credentialsManager as cm, fcmListenerManager as flm } from '../../index';
+import {
+    guildInstanceManager as gim,
+    config,
+    log,
+    credentialsManager as cm,
+    fcmListenerManager as flm,
+    rustPlusManager as rpm
+} from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
 import * as types from '../utils/types';
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'ready';
 export const once = true;
@@ -100,11 +108,19 @@ export async function execute(dm: DiscordManager) {
     for (const guild of dm.client.guilds.cache.values()) {
         await dm.registerGuildSlashCommands(guild);
         await dm.setupGuild(guild);
+
+        const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
+        for (const [serverId, content] of Object.entries(gInstance.serverInfoMap)) {
+            if (content.active) {
+                if (rpm.addInstance(guild.id, serverId, content.mainSteamId)) {
+                    const rustPlusInstance = rpm.getInstance(guild.id, serverId);
+                    if (rustPlusInstance) {
+                        await rustPlusInstance.startup();
+                    }
+                }
+            }
+        }
     }
 
-
-    // TODO!
-    // Setup rustplus instances based on guild settings
-    // global variable uptimeBot set new time.
-
+    // TODO! global variable uptimeBot set new time.
 }

@@ -44,9 +44,7 @@ export enum WriteError {
     WriteFailed = 3
 }
 
-export interface AllCredentials {
-    [steamId: types.SteamId]: Credentials
-}
+export type CredentialsMap = { [steamId: types.SteamId]: Credentials };
 
 export interface Credentials {
     version: number;
@@ -66,14 +64,14 @@ export interface Gcm {
 
 export class CredentialsManager {
     private credentialFilesPath: string;
-    private allCredentials: AllCredentials;
+    private credentialsMap: CredentialsMap;
     private expirationTimeouts: Map<types.SteamId, NodeJS.Timeout>;
 
     constructor(credentialFilesPath: string) {
         const funcName = '[CredentialsManager: Init]';
         log.info(`${funcName} Credentials files path '${credentialFilesPath}'.`);
         this.credentialFilesPath = credentialFilesPath;
-        this.allCredentials = {};
+        this.credentialsMap = {};
         this.expirationTimeouts = new Map();
 
         this.loadAllCredentials();
@@ -92,7 +90,7 @@ export class CredentialsManager {
                 process.exit(1);
             }
 
-            this.allCredentials[steamId] = credentials;
+            this.credentialsMap[steamId] = credentials;
         });
     }
 
@@ -213,13 +211,13 @@ export class CredentialsManager {
     }
 
     public getCredentialSteamIds(): types.SteamId[] {
-        return Object.keys(this.allCredentials);
+        return Object.keys(this.credentialsMap);
     }
 
     public getCredentialSteamIdsFromGuildId(guildId: types.GuildId): types.SteamId[] {
         const steamIds: types.SteamId[] = [];
 
-        for (const [steamId, credentials] of Object.entries(this.allCredentials)) {
+        for (const [steamId, credentials] of Object.entries(this.credentialsMap)) {
             if (credentials.associatedGuilds.includes(guildId)) {
                 steamIds.push(steamId);
             }
@@ -231,7 +229,7 @@ export class CredentialsManager {
     public getCredentialSteamIdsFromDiscordUserId(discordUserId: types.UserId): types.SteamId[] {
         const steamIds: types.SteamId[] = [];
 
-        for (const [steamId, credentials] of Object.entries(this.allCredentials)) {
+        for (const [steamId, credentials] of Object.entries(this.credentialsMap)) {
             if (credentials.discordUserId === discordUserId) {
                 steamIds.push(steamId);
             }
@@ -241,18 +239,18 @@ export class CredentialsManager {
     }
 
     public getCredentials(steamId: types.SteamId): Credentials | null {
-        const credentials = this.allCredentials[steamId];
+        const credentials = this.credentialsMap[steamId];
         return credentials ?? null;
     }
 
     public getCredentialsDeepCopy(steamId: types.SteamId): Credentials | null {
-        const credentials = this.allCredentials[steamId];
+        const credentials = this.credentialsMap[steamId];
         return credentials ? structuredClone(credentials) : null;
     }
 
     public updateCredentials(steamId: types.SteamId): boolean {
         const funcName = `[CredentialsManager: updateCredentials: ${steamId}]`;
-        const credentials = this.allCredentials[steamId];
+        const credentials = this.credentialsMap[steamId];
         if (!credentials) {
             log.warn(`${funcName} Credentials could not be found.`);
             return false;
@@ -272,7 +270,7 @@ export class CredentialsManager {
 
         const result = this.deleteCredentialsFile(steamId);
         if (result) {
-            delete this.allCredentials[steamId];
+            delete this.credentialsMap[steamId];
             return true;
         }
         return false;
@@ -281,7 +279,7 @@ export class CredentialsManager {
     public addCredentials(steamId: types.SteamId, credentials: Credentials): boolean {
         const funcName = `[CredentialsManager: addCredentials: ${steamId}]`;
 
-        if (steamId in this.allCredentials) {
+        if (steamId in this.credentialsMap) {
             log.warn(`${funcName} Old Credentials will be overwritten.`);
         }
 
@@ -291,7 +289,7 @@ export class CredentialsManager {
             return false;
         }
 
-        this.allCredentials[steamId] = credentials;
+        this.credentialsMap[steamId] = credentials;
 
         return true;
     }

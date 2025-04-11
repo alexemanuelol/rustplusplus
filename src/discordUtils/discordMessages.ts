@@ -22,6 +22,7 @@ import * as discordjs from 'discord.js';
 import * as path from 'path';
 
 import { log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm } from '../../index';
+import { ConnectionStatus } from '../managers/rustPlusManager';
 import * as constants from '../utils/constants';
 import * as discordButtons from './discordButtons';
 import * as discordEmbeds from './discordEmbeds';
@@ -154,7 +155,7 @@ export async function sendCredentialsListMessage(dm: DiscordManager, interaction
  */
 
 export async function sendServerMessage(dm: DiscordManager, guildId: types.GuildId, serverId: types.ServerId,
-    interaction: discordjs.Interaction | null = null) {
+    connectionStatus: ConnectionStatus, interaction: discordjs.Interaction | null = null) {
     const funcName = `[sendServerMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
     const gInstance = gim.getGuildInstance(guildId);
@@ -170,18 +171,16 @@ export async function sendServerMessage(dm: DiscordManager, guildId: types.Guild
         return;
     }
 
-    // TODO! Figure out what connection should be, based on rustplusManager and GuildInstance activeServerId
-    const connection = discordButtons.ButtonConnectionTypes.Disconnected;
-
     const content = {
         embeds: [discordEmbeds.getServerEmbed(guildId, serverId)],
-        components: discordButtons.getServerButtons(guildId, serverId, connection)
+        components: discordButtons.getServerButtons(guildId, serverId, connectionStatus)
     };
 
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.servers, serverInfo.
         messageId, interaction);
 
-    if (interaction === null && message instanceof discordjs.Message) {
+    if (interaction === null && message instanceof discordjs.Message &&
+        gInstance.serverInfoMap[serverId].messageId !== message.id) {
         gInstance.serverInfoMap[serverId].messageId = message.id;
         gim.updateGuildInstance(guildId);
     }
@@ -229,7 +228,8 @@ export async function sendSmartSwitchMessage(dm: DiscordManager, guildId: types.
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.smartSwitches,
         smartSwitch.messageId, interaction);
 
-    if (interaction === null && message instanceof discordjs.Message) {
+    if (interaction === null && message instanceof discordjs.Message &&
+        smartSwitch.messageId !== message.id) {
         smartSwitch.messageId = message.id;
         gim.updateGuildInstance(guildId);
     }
@@ -275,7 +275,8 @@ export async function sendSmartAlarmMessage(dm: DiscordManager, guildId: types.G
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.smartAlarms,
         smartAlarm.messageId, interaction);
 
-    if (interaction === null && message instanceof discordjs.Message) {
+    if (interaction === null && message instanceof discordjs.Message &&
+        smartAlarm.messageId !== message.id) {
         smartAlarm.messageId = message.id;
         gim.updateGuildInstance(guildId);
     }
@@ -318,7 +319,8 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.storageMonitors,
         storageMonitor.messageId, interaction);
 
-    if (interaction === null && message instanceof discordjs.Message) {
+    if (interaction === null && message instanceof discordjs.Message &&
+        storageMonitor.messageId !== message.id) {
         storageMonitor.messageId = message.id;
         gim.updateGuildInstance(guildId);
     }

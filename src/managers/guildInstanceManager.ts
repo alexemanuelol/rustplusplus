@@ -43,9 +43,7 @@ export enum WriteError {
     WriteFailed = 3
 }
 
-export interface AllGuildInstances {
-    [guildId: types.GuildId]: GuildInstance
-}
+export type GuildInstanceMap = { [guildId: types.GuildId]: GuildInstance };
 
 export type PairingDataMap = { [serverId: types.ServerId]: { [steamId: types.SteamId]: PairingData } };
 export type TeamMemberChatColorMap = { [steamId: types.SteamId]: string };
@@ -56,7 +54,7 @@ export interface GuildInstance {
     version: types.Version;
     guildId: types.GuildId;
     pairingDataMap: PairingDataMap;
-    activeServerId: types.ServerId | null;
+    serverToView: types.ServerId | null;
     mainRequester: types.SteamId | null;
     guildChannelIds: GuildChannelIds;
     adminIds: types.RoleId[];
@@ -276,6 +274,8 @@ export interface ServerInfo {
     /* Rest */
     messageId: types.MessageId | null;
     pairedDate: types.Timestamp;
+    mainSteamId: types.SteamId;
+    active: boolean;
     connect: string | null;
     noteMap: NoteMap;
     battlemetricsId: types.BattlemetricsId | null;
@@ -356,7 +356,7 @@ export interface SmartSwitchGroup {
 export class GuildInstanceManager {
     private guildInstanceFilesPath: string;
     private templateFilesPath: string;
-    private allGuildInstances: AllGuildInstances;
+    private guildInstanceMap: GuildInstanceMap;
     private generalSettingsTemplate: GeneralSettings | null;
     private eventNotificationSettingsTemplate: EventNotificationSettings | null;
 
@@ -365,7 +365,7 @@ export class GuildInstanceManager {
         log.info(`${funcName} GuildInstance files path '${guildInstanceFilesPath}'.`);
         this.guildInstanceFilesPath = guildInstanceFilesPath;
         this.templateFilesPath = templateFilesPath;
-        this.allGuildInstances = {};
+        this.guildInstanceMap = {};
 
         this.generalSettingsTemplate = this.readGeneralSettingsTemplate();
         this.eventNotificationSettingsTemplate = this.readEventNotificationSettingsTemplate();
@@ -391,7 +391,7 @@ export class GuildInstanceManager {
                 process.exit(1);
             }
 
-            this.allGuildInstances[guildId] = gInstance;
+            this.guildInstanceMap[guildId] = gInstance;
         });
     }
 
@@ -543,7 +543,7 @@ export class GuildInstanceManager {
             version: VERSION,
             guildId: guildId,
             pairingDataMap: {},
-            activeServerId: null,
+            serverToView: null,
             mainRequester: null,
             guildChannelIds: {
                 category: null,
@@ -631,16 +631,16 @@ export class GuildInstanceManager {
     }
 
     public getGuildInstanceGuildIds(): types.GuildId[] {
-        return Object.keys(this.allGuildInstances);
+        return Object.keys(this.guildInstanceMap);
     }
 
     public getGuildInstance(guildId: types.GuildId): GuildInstance | null {
-        const gInstance = this.allGuildInstances[guildId];
+        const gInstance = this.guildInstanceMap[guildId];
         return gInstance ?? null;
     }
 
     public getGuildInstanceDeepCopy(guildId: types.GuildId): GuildInstance | null {
-        const gInstance = this.allGuildInstances[guildId];
+        const gInstance = this.guildInstanceMap[guildId];
         return gInstance ? structuredClone(gInstance) : null;
     }
 
@@ -648,7 +648,7 @@ export class GuildInstanceManager {
         const funcName = '[GuildInstanceManager: updateGuildInstance]';
         const logParam = { guildId: guildId };
 
-        const gInstance = this.allGuildInstances[guildId];
+        const gInstance = this.guildInstanceMap[guildId];
         if (!gInstance) {
             log.warn(`${funcName} GuildInstance could not be found.`, logParam);
             return false;
@@ -666,7 +666,7 @@ export class GuildInstanceManager {
     public deleteGuildInstance(guildId: types.GuildId): boolean {
         const result = this.deleteGuildInstanceFile(guildId);
         if (result) {
-            delete this.allGuildInstances[guildId];
+            delete this.guildInstanceMap[guildId];
             return true;
         }
         return false;
@@ -678,7 +678,7 @@ export class GuildInstanceManager {
 
         const gInstance = this.getNewEmptyGuildInstance(guildId);
 
-        if (guildId in this.allGuildInstances && this.allGuildInstances[guildId] !== null) {
+        if (guildId in this.guildInstanceMap && this.guildInstanceMap[guildId] !== null) {
             log.warn(`${funcName} GuildInstance is already present.`, logParam);
             return false;
         }
@@ -689,10 +689,29 @@ export class GuildInstanceManager {
             return false;
         }
 
-        this.allGuildInstances[guildId] = gInstance;
+        this.guildInstanceMap[guildId] = gInstance;
 
         return true;
     }
+}
+
+export function getServerId(ip: string, port: string): types.ServerId {
+    return `${ip}-${port}`;
+}
+
+export interface IpAndPort {
+    ip: string;
+    port: string;
+}
+
+export function getIpAndPort(serverId: types.ServerId): IpAndPort {
+    const [ip, port] = serverId.split('-');
+
+    if (!ip || !port) {
+        throw new Error(`Invalid serverId format: ${serverId}`);
+    }
+
+    return { ip: ip, port: port };
 }
 
 /**
@@ -711,7 +730,7 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
         'version',
         'guildId',
         'pairingDataMap',
-        'activeServerId',
+        'serverToView',
         'mainRequester',
         'guildChannelIds',
         'adminIds',
@@ -732,7 +751,7 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
     errors.push(vu.validateType('version', obj.version, 'number'));
     errors.push(vu.validateType('guildId', obj.guildId, 'string'));
     errors.push(vu.validateNestedObjectOfInterfaces('pairingDataMap', obj.pairingDataMap, isValidPairingData));
-    errors.push(vu.validateType('activeServerId', obj.activeServerId, 'string', null));
+    errors.push(vu.validateType('serverToView', obj.serverToView, 'string', null));
     errors.push(vu.validateType('mainRequester', obj.mainRequester, 'string', null));
     errors.push(vu.validateInterface('guildChannelIds', obj.guildChannelIds, isValidGuildChannelIds));
     errors.push(vu.validateArrayOfTypes('adminIds', obj.adminIds, 'string'));
@@ -1378,6 +1397,8 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'port',
         'messageId',
         'pairedDate',
+        'mainSteamId',
+        'active',
         'connect',
         'noteMap',
         'battlemetricsId',
@@ -1397,6 +1418,8 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     errors.push(vu.validateType('port', obj.port, 'string'));
     errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
     errors.push(vu.validateType('pairedDate', obj.pairedDate, 'number'));
+    errors.push(vu.validateType('mainSteamId', obj.mainSteamId, 'string'));
+    errors.push(vu.validateType('active', obj.active, 'boolean'));
     errors.push(vu.validateType('connect', obj.connect, 'string', null));
     errors.push(vu.validateObjectOfTypes('noteMap', obj.noteMap, 'string'));
     errors.push(vu.validateType('battlemetricsId', obj.battlemetricsId, 'string', null));
