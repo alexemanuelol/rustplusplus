@@ -18,7 +18,7 @@
 
 */
 
-import { log, discordManager as dm } from '../../index';
+import { log } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
 
 export const name = 'disconnected';
