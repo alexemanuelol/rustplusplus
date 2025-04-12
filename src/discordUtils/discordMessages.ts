@@ -31,6 +31,7 @@ import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
 import { NewsNewsBody, PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
 import { EventNotificationSettings, GuildInstance, SettingsMessages } from '../managers/guildInstanceManager';
+import { Credentials } from '../managers/credentialsManager';
 
 
 /**
@@ -39,15 +40,9 @@ import { EventNotificationSettings, GuildInstance, SettingsMessages } from '../m
 
 export async function sendCredentialsExpiredMessage(dm: DiscordManager, steamId: types.SteamId) {
     const funcName = `[sendCredentialsExpiredMessage: ${steamId}]`;
-    const credentials = cm.getCredentials(steamId);
-
-    if (!credentials) {
-        log.warn(`${funcName} Could not find Credentials.`);
-        return;
-    }
+    const credentials = cm.getCredentials(steamId) as Credentials;
 
     const user = await dm.getUser(credentials.discordUserId);
-
     if (!user) {
         log.warn(`${funcName} Could not find user '${credentials.discordUserId}'.`);
         return;
@@ -66,15 +61,9 @@ export async function sendCredentialsExpiredMessage(dm: DiscordManager, steamId:
 export async function sendFcmPlayerDeathMessage(dm: DiscordManager, steamId: types.SteamId, title: string,
     body: PlayerDeathBody) {
     const funcName = `[sendFcmPlayerDeathMessage: ${steamId}]`;
-    const credentials = cm.getCredentials(steamId);
-
-    if (!credentials) {
-        log.warn(`${funcName} Could not find credentials.`);
-        return;
-    }
+    const credentials = cm.getCredentials(steamId) as Credentials;
 
     const user = await dm.getUser(credentials.discordUserId);
-
     if (!user) {
         log.warn(`${funcName} Could not find user '${credentials.discordUserId}'.`);
         return;
@@ -97,7 +86,8 @@ export async function sendDefaultMessage(dm: DiscordManager, interaction: discor
     const imagePath = path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png');
 
     const content = {
-        embeds: [discordEmbeds.getDefaultEmbed(dm, interaction, 'rustplusplus_logo.png', title, description, parameters)],
+        embeds: [discordEmbeds.getDefaultEmbed(dm, interaction, 'rustplusplus_logo.png', title, description,
+            parameters)],
         files: [new discordjs.AttachmentBuilder(imagePath)]
     };
 
@@ -158,12 +148,7 @@ export async function sendServerMessage(dm: DiscordManager, guildId: types.Guild
     connectionStatus: ConnectionStatus, interaction: discordjs.Interaction | null = null) {
     const funcName = `[sendServerMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
@@ -186,17 +171,13 @@ export async function sendServerMessage(dm: DiscordManager, guildId: types.Guild
     }
 }
 
-// TODO! For smart devices, if the device is not responsive, change embed image to a cross or something, change color to RED, otherwise default color
+// TODO! For smart devices, if the device is not responsive, change embed image to a cross or something, change color 
+// to RED, otherwise default color
 export async function sendSmartSwitchMessage(dm: DiscordManager, guildId: types.GuildId, serverId: types.ServerId,
     entityId: types.EntityId, interaction: discordjs.Interaction | null = null) {
     const funcName = `[sendSmartSwitchMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
@@ -239,12 +220,7 @@ export async function sendSmartAlarmMessage(dm: DiscordManager, guildId: types.G
     entityId: types.EntityId, interaction: discordjs.Interaction | null = null) {
     const funcName = `[sendSmartAlarmMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
@@ -286,12 +262,7 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
     entityId: types.EntityId, interaction: discordjs.Interaction | null = null) {
     const funcName = `[sendStorageMonitorMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
@@ -335,12 +306,7 @@ export async function sendFcmAlarmTriggerMessage(dm: DiscordManager, guildId: ty
     title: string, message: string) {
     const funcName = `[sendFcmAlarmTriggerMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
@@ -360,12 +326,7 @@ export async function sendFcmAlarmPluginTriggerMessage(dm: DiscordManager, guild
     serverId: types.ServerId, title: string, message: string) {
     const funcName = `[sendFcmAlarmPluginTriggerMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
@@ -385,12 +346,7 @@ export async function sendFcmTeamLoginMessage(dm: DiscordManager, guildId: types
     serverId: types.ServerId, body: TeamLoginBody) {
     const funcName = `[sendFcmTeamLoginMessage]`;
     const logParam = { guildId: guildId, serverId: serverId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
@@ -407,14 +363,7 @@ export async function sendFcmTeamLoginMessage(dm: DiscordManager, guildId: types
 
 export async function sendFcmNewsNewsMessage(dm: DiscordManager, guildId: types.GuildId, title: string,
     message: string, body: NewsNewsBody) {
-    const funcName = `[sendFcmAlarmTriggerMessage]`;
-    const logParam = { guildId: guildId };
-    const gInstance = gim.getGuildInstance(guildId);
-
-    if (!gInstance) {
-        log.warn(`${funcName} Could not find GuildInstance.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const content = {
         embeds: [discordEmbeds.getFcmNewsNewsEmbed(guildId, title, message)],
@@ -455,7 +404,8 @@ async function updateSettingsMessage(dm: DiscordManager, guildId: types.GuildId,
     }
 }
 
-export async function sendSettingGeneralSettingsHeaderMessage(dm: DiscordManager, guildId: types.GuildId, update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+export async function sendSettingGeneralSettingsHeaderMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const content = {
@@ -766,7 +716,8 @@ export async function sendSettingFcmAlarmPluginNotifyMessage(dm: DiscordManager,
     /* gInstance is update at caller */
 }
 
-export async function sendSettingEventNotificationSettingsHeaderMessage(dm: DiscordManager, guildId: types.GuildId, update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
+export async function sendSettingEventNotificationSettingsHeaderMessage(dm: DiscordManager, guildId: types.GuildId,
+    update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const content = {

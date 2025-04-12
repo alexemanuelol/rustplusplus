@@ -24,7 +24,7 @@ import { guildInstanceManager as gim, rustPlusManager as rpm } from '../../index
 import { ConnectionStatus } from '../managers/rustPlusManager';
 import { DiscordManager } from "../managers/discordManager";
 import * as types from '../utils/types';
-import { EventNotificationSettings, GuildInstance, ServerInfo } from '../managers/guildInstanceManager';
+import { EventNotificationSettings, GuildInstance } from '../managers/guildInstanceManager';
 import * as discordMessages from '../discordUtils/discordMessages';
 import * as discordModals from '../discordUtils/discordModals';
 
@@ -383,9 +383,10 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
     const serverId = identifier.serverId as types.ServerId;
     const guildId = interaction.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const server = gInstance.serverInfoMap[serverId];
 
     interaction.deferUpdate();
+    if (!server) return false;
 
     if (gInstance.serverToView === null) {
         gInstance.serverToView = serverId;
@@ -395,9 +396,9 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
         gInstance.serverToView = serverId;
 
         let connectionStatus = ConnectionStatus.Disconnected;
-        const rustPlusInstance = rpm.getInstance(guildId, previousServerToView);
-        if (rustPlusInstance) {
-            connectionStatus = rustPlusInstance.connectionStatus;
+        const rpInstance = rpm.getInstance(guildId, previousServerToView);
+        if (rpInstance) {
+            connectionStatus = rpInstance.connectionStatus;
         }
 
         await discordMessages.sendServerMessage(dm, guildId, previousServerToView, connectionStatus);
@@ -417,33 +418,38 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
             discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
     }
 
-    for (const content of Object.values(server.smartSwitchGroupMap)) {
-        // TODO! Create smartswitchgroup messages
-    }
+    // TODO! Create smartswitchgroup messages
+    //for (const content of Object.values(server.smartSwitchGroupMap)) {
+    //}
     await Promise.allSettled(creationPromises);
 
     server.active = true;
     gim.updateGuildInstance(guildId);
 
     if (rpm.addInstance(guildId, serverId, server.mainSteamId)) {
-        const rustPlusInstance = rpm.getInstance(guildId, serverId);
-        if (rustPlusInstance) {
-            await rustPlusInstance.startup();
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (rpInstance) {
+            await rpInstance.startup();
         }
     }
 
     return true;
 }
 
-async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
-    Promise<boolean> {
+async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordManager,
+    interaction: discordjs.ButtonInteraction): Promise<boolean> {
     const identifier = JSON.parse(interaction.customId.replace('ServerConnecting', '')
         .replace('ServerDisconnect', '')
         .replace('ServerReconnecting', ''));
     const serverId = identifier.serverId as types.ServerId;
     const guildId = interaction.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const server = gInstance.serverInfoMap[serverId];
+
+    if (!server) {
+        interaction.deferUpdate();
+        return false;
+    }
 
     if (gInstance.serverToView === serverId) {
         gInstance.serverToView = null;
@@ -454,9 +460,9 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
                 gInstance.serverToView = sId;
 
                 let connectionStatus = ConnectionStatus.Disconnected;
-                const rustPlusInstance = rpm.getInstance(guildId, sId);
-                if (rustPlusInstance) {
-                    connectionStatus = rustPlusInstance.connectionStatus;
+                const rpInstance = rpm.getInstance(guildId, sId);
+                if (rpInstance) {
+                    connectionStatus = rpInstance.connectionStatus;
                 }
 
                 await discordMessages.sendServerMessage(dm, guildId, sId, connectionStatus);
@@ -524,9 +530,9 @@ async function serverViewButtonHandler(dm: DiscordManager, interaction: discordj
         gInstance.serverToView = serverId;
 
         let connectionStatus = ConnectionStatus.Disconnected;
-        const rustPlusInstance = rpm.getInstance(guildId, previousServerToView);
-        if (rustPlusInstance) {
-            connectionStatus = rustPlusInstance.connectionStatus;
+        const rpInstance = rpm.getInstance(guildId, previousServerToView);
+        if (rpInstance) {
+            connectionStatus = rpInstance.connectionStatus;
         }
 
         await discordMessages.sendServerMessage(dm, guildId, previousServerToView, connectionStatus);
@@ -534,9 +540,9 @@ async function serverViewButtonHandler(dm: DiscordManager, interaction: discordj
     gim.updateGuildInstance(guildId);
 
     let connectionStatus = ConnectionStatus.Disconnected;
-    const rustPlusInstance = rpm.getInstance(guildId, serverId);
-    if (rustPlusInstance) {
-        connectionStatus = rustPlusInstance.connectionStatus;
+    const rpInstance = rpm.getInstance(guildId, serverId);
+    if (rpInstance) {
+        connectionStatus = rpInstance.connectionStatus;
     }
 
     await discordMessages.sendServerMessage(dm, guildId, serverId, connectionStatus, interaction);
@@ -550,7 +556,7 @@ async function serverDeleteButtonHandler(dm: DiscordManager, interaction: discor
     const serverId = identifier.serverId as types.ServerId;
     const guildId = interaction.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const server = gInstance.serverInfoMap[serverId];
 
     if (!server) {
         await interaction.message.delete();
@@ -605,9 +611,9 @@ async function serverDeleteButtonHandler(dm: DiscordManager, interaction: discor
                 gInstance.serverToView = sId;
 
                 let connectionStatus = ConnectionStatus.Disconnected;
-                const rustPlusInstance = rpm.getInstance(guildId, sId);
-                if (rustPlusInstance) {
-                    connectionStatus = rustPlusInstance.connectionStatus;
+                const rpInstance = rpm.getInstance(guildId, sId);
+                if (rpInstance) {
+                    connectionStatus = rpInstance.connectionStatus;
                 }
 
                 await discordMessages.sendServerMessage(dm, guildId, sId, connectionStatus);

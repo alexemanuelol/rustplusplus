@@ -24,6 +24,7 @@ import { guildInstanceManager as gim, credentialsManager as cm, fcmListenerManag
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
 import * as types from '../utils/types';
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'guildMemberRemove';
 export const once = false;
@@ -50,20 +51,18 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         cm.updateCredentials(steamId);
     }
 
-    const gInstance = gim.getGuildInstance(member.guild.id);
-    if (gInstance !== null) {
-        Object.keys(gInstance.pairingDataMap).forEach(serverId => {
-            Object.keys(gInstance.pairingDataMap[serverId]).forEach(steamId => {
-                if (associatedSteamIds.includes(steamId as types.SteamId)) {
-                    delete gInstance.pairingDataMap[serverId][steamId];
-                }
-            });
-
-            if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
-                delete gInstance.pairingDataMap[serverId];
+    const gInstance = gim.getGuildInstance(member.guild.id) as GuildInstance;
+    Object.keys(gInstance.pairingDataMap).forEach(serverId => {
+        Object.keys(gInstance.pairingDataMap[serverId]).forEach(steamId => {
+            if (associatedSteamIds.includes(steamId as types.SteamId)) {
+                delete gInstance.pairingDataMap[serverId][steamId];
             }
         });
 
-        gim.updateGuildInstance(member.guild.id);
-    }
+        if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
+            delete gInstance.pairingDataMap[serverId];
+        }
+    });
+
+    gim.updateGuildInstance(member.guild.id);
 }

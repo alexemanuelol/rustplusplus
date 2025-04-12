@@ -21,7 +21,9 @@
 import * as discordjs from 'discord.js';
 
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
-import { GuildInstance, ServerInfo, SmartSwitch, SmartSwitchAutoSetting, VoiceGenders } from '../managers/guildInstanceManager';
+import {
+    GuildInstance, ServerInfo, SmartSwitch, SmartSwitchAutoSetting, VoiceGenders
+} from '../managers/guildInstanceManager';
 import * as types from '../utils/types';
 import { Languages, LanguageDiscordEmoji } from '../managers/LocaleManager';
 
@@ -213,7 +215,6 @@ export function getSettingLanguageSelectMenu(guildId: types.GuildId):
 
     const options: discordjs.SelectMenuComponentOptionData[] = [];
     for (const languageCode of Object.values(Languages)) {
-
         options.push({
             label: lm.getIntl(currentLanguageCode, `languageCode-${languageCode}`),
             description: lm.getIntl(currentLanguageCode, 'settingLanguageOptionDesc', {

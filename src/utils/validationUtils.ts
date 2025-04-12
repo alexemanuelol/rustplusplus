@@ -94,7 +94,8 @@ export function validateObjectOfInterfaces(key: string, value: unknown,
     }
 
     for (const [objKey, objValue] of Object.entries(value)) {
-        if (typeof objKey !== 'string' || typeof objValue !== 'object' || objValue === null || Array.isArray(objValue) || !validationCallback(objValue)) {
+        if (typeof objKey !== 'string' || typeof objValue !== 'object' || objValue === null ||
+            Array.isArray(objValue) || !validationCallback(objValue)) {
             return { key: key, value: 'unknown', expected: 'Object of interfaces' };
         }
     }

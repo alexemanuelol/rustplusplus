@@ -128,10 +128,10 @@ export default {
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
 	const funcName = '[SlashCommand: credentials: add]';
-	const logParam = { guildId: interaction.guildId };
+	const guildId = interaction.guildId as types.GuildId;
+	const logParam = { guildId: guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
-	const guildId = (interaction.guild as discordjs.Guild).id;
 	const discordUserId = interaction.user.id;
 
 	const gcmAndroidId = interaction.options.getString('gcm_android_id', true);
@@ -207,10 +207,10 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
 	const funcName = '[SlashCommand: credentials: remove]';
-	const logParam = { guildId: interaction.guildId };
+	const guildId = interaction.guildId as types.GuildId;
+	const logParam = { guildId: guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
-	const guildId = (interaction.guild as discordjs.Guild).id;
 	const discordUserId = interaction.user.id;
 
 	const steamId = interaction.options.getString('steam_id', true);
@@ -290,7 +290,8 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 
 async function executeInfo(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
 	const funcName = '[SlashCommand: credentials: info]';
-	const logParam = { guildId: interaction.guildId };
+	const guildId = (interaction.guild as discordjs.Guild).id;
+	const logParam = { guildId: guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
 
@@ -311,7 +312,8 @@ async function executeInfo(dm: DiscordManager, interaction: discordjs.ChatInputC
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
 	const funcName = '[SlashCommand: credentials: list]';
-	const logParam = { guildId: interaction.guildId };
+	const guildId = (interaction.guild as discordjs.Guild).id;
+	const logParam = { guildId: guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
 

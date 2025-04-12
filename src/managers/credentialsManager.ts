@@ -86,7 +86,7 @@ export class CredentialsManager {
             const credentials = this.readCredentialsFile(steamId);
 
             if (typeof credentials === 'number') {
-                log.error(`${funcName} Failed to load Credentials file. Exiting...`);
+                log.error(`${funcName} Failed to load Credentials file '${file}'. Exiting...`);
                 process.exit(1);
             }
 
@@ -239,8 +239,7 @@ export class CredentialsManager {
     }
 
     public getCredentials(steamId: types.SteamId): Credentials | null {
-        const credentials = this.credentialsMap[steamId];
-        return credentials ?? null;
+        return this.credentialsMap[steamId] ?? null;
     }
 
     public getCredentialsDeepCopy(steamId: types.SteamId): Credentials | null {

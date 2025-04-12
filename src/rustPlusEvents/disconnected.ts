@@ -23,15 +23,15 @@ import { RustPlusInstance } from "../managers/rustPlusManager";
 
 export const name = 'disconnected';
 
-export async function execute(rustPlusInstance: RustPlusInstance) {
+export async function execute(rpInstance: RustPlusInstance) {
     const funcName = `[rustPlusEvent: ${name}]`;
     const logParam = {
-        guildId: rustPlusInstance.guildId,
-        serverId: rustPlusInstance.serverId,
-        serverName: rustPlusInstance.serverName
+        guildId: rpInstance.guildId,
+        serverId: rpInstance.serverId,
+        serverName: rpInstance.serverName
     };
 
     log.info(`${funcName}`, logParam);
 
-    await rustPlusInstance.scheduleReconnect();
+    await rpInstance.scheduleReconnect();
 }

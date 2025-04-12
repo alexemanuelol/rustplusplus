@@ -20,10 +20,10 @@
 
 import * as discordjs from 'discord.js';
 
+import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { ConnectionStatus } from '../managers/rustPlusManager';
 import * as types from '../utils/types';
 import * as constants from '../utils/constants';
-import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import {
     EventNotificationSettings,
     GuildInstance,

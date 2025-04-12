@@ -21,11 +21,15 @@
 import * as discordjs from 'discord.js';
 
 import { log, guildInstanceManager as gim, credentialsManager as cm } from '../../index';
+import * as types from '../utils/types';
 import { DiscordManager } from "../managers/discordManager";
+import { GuildInstance } from '../managers/guildInstanceManager';
+import { Credentials } from '../managers/credentialsManager';
 
-export async function autocompleteHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction): Promise<boolean> {
+export async function autocompleteHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction):
+    Promise<boolean> {
     const funcName = '[autocompleteHandler]';
-    const logParam = { guildId: interaction.guildId };
+    const logParam = { guildId: interaction.guildId as types.GuildId };
 
     const commandName = interaction.commandName;
 
@@ -48,11 +52,10 @@ function autocompleteRoleHandler(dm: DiscordManager, interaction: discordjs.Auto
         return interaction.respond([]);
     }
 
-    const guildId = interaction.guildId;
+    const guildId = interaction.guildId as types.GuildId;
     if (!guildId) return interaction.respond([]);
 
-    const gInstance = gim.getGuildInstance(guildId);
-    if (!gInstance) return interaction.respond([]);
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const type = interaction.options.getString('type', true) as 'roleIds' | 'adminIds';
 
@@ -90,7 +93,7 @@ function autocompleteCredentialsHandler(dm: DiscordManager, interaction: discord
         return interaction.respond([]);
     }
 
-    const guildId = interaction.guildId;
+    const guildId = interaction.guildId as types.GuildId;
     if (!guildId) return interaction.respond([]);
 
     switch (interaction.options.getSubcommand()) {
@@ -101,8 +104,8 @@ function autocompleteCredentialsHandler(dm: DiscordManager, interaction: discord
             const filteredSteamIds: { name: string; value: string }[] = [];
             const steamIds = cm.getCredentialSteamIds();
             for (const steamId of steamIds) {
-                const credentials = cm.getCredentials(steamId);
-                if (credentials && credentials.associatedGuilds.includes(guildId)) {
+                const credentials = cm.getCredentials(steamId) as Credentials;
+                if (credentials.associatedGuilds.includes(guildId)) {
                     if (isAdmin || credentials.discordUserId === discordUserId) {
                         filteredSteamIds.push({ name: steamId, value: steamId });
                     }

@@ -122,13 +122,14 @@ export default {
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
 	const funcName = '[SlashCommand: role: add]';
-	const logParam = { guildId: interaction.guildId };
+	const guildId = interaction.guildId as types.GuildId;
+	const logParam = { guildId: guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
 	const type = interaction.options.getString('type', true) as 'roleIds' | 'adminIds';
 	const roleId = interaction.options.getString('role', true);
 
-	const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId);
+	const gInstance = gim.getGuildInstance(guildId);
 	if (!gInstance) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
@@ -166,7 +167,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	}
 
 	gInstance[type].push(roleId);
-	gim.updateGuildInstance(interaction.guildId as types.GuildId);
+	gim.updateGuildInstance(guildId);
 
 	/* Used to update permissions. */
 	await dm.setupGuild(interaction.guild as discordjs.Guild);
@@ -184,13 +185,14 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
 	const funcName = '[SlashCommand: role: remove]';
-	const logParam = { guildId: interaction.guildId };
+	const guildId = interaction.guildId as types.GuildId;
+	const logParam = { guildId: guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
 	const type = interaction.options.getString('type', true) as 'roleIds' | 'adminIds';
 	const roleId = interaction.options.getString('role', true);
 
-	const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId);
+	const gInstance = gim.getGuildInstance(guildId);
 	if (!gInstance) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
@@ -228,7 +230,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	}
 
 	gInstance[type] = gInstance[type].filter(gInstanceRoleId => gInstanceRoleId !== roleId);
-	gim.updateGuildInstance(interaction.guildId as types.GuildId);
+	gim.updateGuildInstance(guildId);
 
 	/* Used to update permissions. */
 	await dm.setupGuild(interaction.guild as discordjs.Guild);
@@ -246,11 +248,12 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
 	const funcName = '[SlashCommand: role: list]';
-	const logParam = { guildId: interaction.guildId };
+	const guildId = interaction.guildId as types.GuildId;
+	const logParam = { guildId: guildId };
 
 	const id = `Interaction ID: ${interaction.id} -`
 
-	const gInstance = gim.getGuildInstanceDeepCopy(interaction.guildId as types.GuildId);
+	const gInstance = gim.getGuildInstanceDeepCopy(guildId);
 	if (!gInstance) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');

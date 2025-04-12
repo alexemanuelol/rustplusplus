@@ -25,12 +25,12 @@ import { RustPlusInstance } from "../managers/rustPlusManager";
 
 export const name = 'error';
 
-export async function execute(rustPlusInstance: RustPlusInstance, errorType: rp.EmitErrorType, error: Error) {
+export async function execute(rpInstance: RustPlusInstance, errorType: rp.EmitErrorType, error: Error) {
     const funcName = `[rustPlusEvent: ${name}]`;
     const logParam = {
-        guildId: rustPlusInstance.guildId,
-        serverId: rustPlusInstance.serverId,
-        serverName: rustPlusInstance.serverName
+        guildId: rpInstance.guildId,
+        serverId: rpInstance.serverId,
+        serverName: rpInstance.serverName
     };
 
     log.warn(`${funcName} Type: ${errorType}, Error: ${JSON.stringify(error)}`, logParam);

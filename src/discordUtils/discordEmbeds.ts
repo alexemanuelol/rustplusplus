@@ -21,7 +21,10 @@
 import * as discordjs from 'discord.js';
 
 import { localeManager as lm, guildInstanceManager as gim, config, credentialsManager as cm } from '../../index';
-import { GuildInstance, ServerInfo, SmartSwitch, SmartAlarm, StorageMonitor, StorageMonitorType } from '../managers/guildInstanceManager';
+import {
+    GuildInstance, ServerInfo, SmartSwitch, SmartAlarm, StorageMonitor, StorageMonitorType
+
+} from '../managers/guildInstanceManager';
 import * as constants from '../utils/constants';
 import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
@@ -243,7 +246,8 @@ export async function getFcmPlayerDeathEmbed(title: string, body: PlayerDeathBod
 
 export function getDefaultEmbed(dm: DiscordManager, interaction: discordjs.Interaction, imageName: string,
     title: string, description: string, parameters: { [key: string]: string } = {}): discordjs.EmbedBuilder {
-    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
 
     return getEmbed({
@@ -287,7 +291,8 @@ export function getHelpEmbed(dm: DiscordManager, imageName: string): discordjs.E
 
 export function getRoleListEmbed(dm: DiscordManager, interaction: discordjs.Interaction, imageName: string):
     discordjs.EmbedBuilder {
-    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
 
     const adminIds = gInstance.adminIds;
@@ -336,7 +341,8 @@ export function getRoleListEmbed(dm: DiscordManager, interaction: discordjs.Inte
 
 export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
     imageName: string): Promise<discordjs.EmbedBuilder> {
-    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
 
     const discordUserId = interaction.user.id;
@@ -344,8 +350,7 @@ export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: d
 
     const fields: discordjs.EmbedField[] = [];
     for (const steamId of steamIds) {
-        const credentials = cm.getCredentials(steamId);
-        if (!credentials) continue;
+        const credentials = cm.getCredentials(steamId) as Credentials;
 
         const guildNames: string[] = [];
         for (const guildId of credentials.associatedGuilds) {
@@ -387,16 +392,15 @@ export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: d
 
 export function getCredentialsListEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
     imageName: string): discordjs.EmbedBuilder {
-    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
 
-    const guildId = (interaction.guild as discordjs.Guild).id;
     const steamIds = cm.getCredentialSteamIdsFromGuildId(guildId);
 
     const fields: discordjs.EmbedField[] = [];
     for (const steamId of steamIds) {
-        const credentials = cm.getCredentials(steamId);
-        if (!credentials) continue;
+        const credentials = cm.getCredentials(steamId) as Credentials;
 
         const hasExpired = credentials.expireDate < (Date.now() / 1000);
 

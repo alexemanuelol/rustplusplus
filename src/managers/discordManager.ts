@@ -22,7 +22,7 @@ import * as discordjs from 'discord.js';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { log, config, guildInstanceManager as gim, localeManager as lm } from '../../index'
+import { log, guildInstanceManager as gim, config, localeManager as lm } from '../../index';
 import * as types from '../utils/types';
 import { GuildInstance, GuildChannelIds, EventNotificationSettings } from './guildInstanceManager';
 import { channelPermissions } from '../templates/channelPermissionsTemplate';
@@ -150,8 +150,7 @@ export class DiscordManager {
             }
 
             const rest = new discordjs.REST({ version: '10' }).setToken(config.discord.token);
-            await rest.put(discordjs.Routes.applicationCommands(config.discord.clientId),
-                { body: commandsData })
+            await rest.put(discordjs.Routes.applicationCommands(config.discord.clientId), { body: commandsData });
 
             log.info(`${funcName} Successfully registered/updated global slash commands.`);
         }
@@ -181,8 +180,8 @@ export class DiscordManager {
             log.info(`${funcName} Successfully registered/updated guild slash commands for '${guild.name}'.`, logParam);
         }
         catch (error) {
-            log.error(`${funcName} Failed to register/update guild slash commands for guild '${guild.name}', ${error}.`,
-                logParam);
+            log.error(`${funcName} Failed to register/update guild slash commands for guild '${guild.name}', ` +
+                `${error}.`, logParam);
         }
     }
 
@@ -373,8 +372,8 @@ export class DiscordManager {
 
         if (!channel) {
             /* channel does not exist or we failed to get it, so create it. */
-            channel = await this.createChannel(guild.id, channelDisplayName,
-                discordjs.ChannelType.GuildText, channelPermissions, categoryId);
+            channel = await this.createChannel(guild.id, channelDisplayName, discordjs.ChannelType.GuildText,
+                channelPermissions, categoryId);
 
             if (!channel) {
                 log.error(`${funcName} Failed to create channel '${gInstance.guildChannelIds[channelName]}'.`,
@@ -550,9 +549,7 @@ export class DiscordManager {
         if (this.isAdministrator(interaction)) return true;
         if (adminRequired) return false;
 
-        const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (!gInstance || (gInstance && !('roleIds' in gInstance))) return false;
-
+        const gInstance = gim.getGuildInstance(interaction.guild.id) as GuildInstance;
         if (gInstance.roleIds.length === 0) return true;
 
         return member.roles.cache.some(role => gInstance.roleIds.includes(role.id));
@@ -564,8 +561,7 @@ export class DiscordManager {
 
         if (member.permissions.has(discordjs.PermissionsBitField.Flags.Administrator)) return true;
 
-        const gInstance = gim.getGuildInstance(interaction.guild.id);
-        if (!gInstance || (gInstance && !('adminIds' in gInstance))) return false;
+        const gInstance = gim.getGuildInstance(interaction.guild.id) as GuildInstance;
 
         return member.roles.cache.some(role => gInstance.adminIds.includes(role.id));
     }
@@ -946,12 +942,10 @@ export class DiscordManager {
     private getChannelPermissions(guild: discordjs.Guild, channelName: keyof GuildChannelIds):
         discordjs.OverwriteData[] {
         const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
-        const adminIds = gInstance.adminIds;
-        const roleIds = gInstance.roleIds;
         const permissions: discordjs.OverwriteData[] = []
 
         /* everyone permissions. */
-        if (roleIds.length === 0) {
+        if (gInstance.roleIds.length === 0) {
             permissions.push({
                 id: guild.roles.everyone.id,
                 allow: channelPermissions[channelName].everyone.allow,
@@ -967,7 +961,7 @@ export class DiscordManager {
         }
 
         /* roles permissions */
-        for (const roleId of roleIds) {
+        for (const roleId of gInstance.roleIds) {
             permissions.push({
                 id: roleId,
                 allow: channelPermissions[channelName].roles.allow,
@@ -976,7 +970,7 @@ export class DiscordManager {
         }
 
         /* admins permissions */
-        for (const adminId of adminIds) {
+        for (const adminId of gInstance.adminIds) {
             permissions.push({
                 id: adminId,
                 allow: channelPermissions[channelName].admins.allow,

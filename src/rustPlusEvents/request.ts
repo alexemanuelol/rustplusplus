@@ -25,12 +25,12 @@ import { RustPlusInstance } from "../managers/rustPlusManager";
 
 export const name = 'request';
 
-export async function execute(rustPlusInstance: RustPlusInstance, appRequest: rp.AppRequest) {
+export async function execute(rpInstance: RustPlusInstance, appRequest: rp.AppRequest) {
     const funcName = `[rustPlusEvent: ${name}]`;
     const logParam = {
-        guildId: rustPlusInstance.guildId,
-        serverId: rustPlusInstance.serverId,
-        serverName: rustPlusInstance.serverName
+        guildId: rpInstance.guildId,
+        serverId: rpInstance.serverId,
+        serverName: rpInstance.serverName
     };
 
     log.info(`${funcName} ${JSON.stringify(appRequest)}`, logParam);

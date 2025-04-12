@@ -55,7 +55,7 @@ export interface GuildInstance {
     guildId: types.GuildId;
     pairingDataMap: PairingDataMap;
     serverToView: types.ServerId | null;
-    mainRequester: types.SteamId | null;
+    newsReceiver: types.SteamId | null;
     guildChannelIds: GuildChannelIds;
     adminIds: types.RoleId[];
     roleIds: types.RoleId[];
@@ -119,7 +119,7 @@ export interface GeneralSettings {                          /* SettingsMessages:
     inGameChatNotifyAfk: boolean;                           /* inGameChatNotify */
     inGameChatNotifyDeath: boolean                          /* inGameChatNotify */
     mapWipeNotifyEveryone: boolean;                         /* mapWipeNotifyEveryone */
-    fcmAlarmNotify: boolean;                                /* fcmAlarmNotify */ // TODO! Maybe move to SmartAlarm
+    fcmAlarmNotify: boolean;                                /* fcmAlarmNotify */
     fcmAlarmNotifyEveryone: boolean;                        /* fcmAlarmNotify */
     fcmAlarmPluginNotify: boolean;                          /* fcmAlarmPluginNotify */
     fcmAlarmPluginNotifyEveryone: boolean;                  /* fcmAlarmPluginNotify */
@@ -544,7 +544,7 @@ export class GuildInstanceManager {
             guildId: guildId,
             pairingDataMap: {},
             serverToView: null,
-            mainRequester: null,
+            newsReceiver: null,
             guildChannelIds: {
                 category: null,
                 settings: null,
@@ -731,7 +731,7 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
         'guildId',
         'pairingDataMap',
         'serverToView',
-        'mainRequester',
+        'newsReceiver',
         'guildChannelIds',
         'adminIds',
         'roleIds',
@@ -752,7 +752,7 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
     errors.push(vu.validateType('guildId', obj.guildId, 'string'));
     errors.push(vu.validateNestedObjectOfInterfaces('pairingDataMap', obj.pairingDataMap, isValidPairingData));
     errors.push(vu.validateType('serverToView', obj.serverToView, 'string', null));
-    errors.push(vu.validateType('mainRequester', obj.mainRequester, 'string', null));
+    errors.push(vu.validateType('newsReceiver', obj.newsReceiver, 'string', null));
     errors.push(vu.validateInterface('guildChannelIds', obj.guildChannelIds, isValidGuildChannelIds));
     errors.push(vu.validateArrayOfTypes('adminIds', obj.adminIds, 'string'));
     errors.push(vu.validateArrayOfTypes('roleIds', obj.roleIds, 'string'));

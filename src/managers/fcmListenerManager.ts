@@ -22,13 +22,16 @@
 const PushReceiverClient = require('@liamcottle/push-receiver/src/client');
 import * as axios from 'axios';
 
+import {
+    log, guildInstanceManager as gim, credentialsManager as cm, rustPlusManager as rpm,
+    localeManager as lm
+} from '../../index';
 import { DiscordManager } from './discordManager';
-import { log, credentialsManager as cm, guildInstanceManager as gim, localeManager as lm, rustPlusManager as rpm } from '../../index';
 import { ConnectionStatus } from './rustPlusManager';
 import * as types from '../utils/types';
 import * as vu from '../utils/validationUtils';
 import * as constants from '../utils/constants'
-import { PairingDataMap, SmartSwitchAutoSetting, StorageMonitorType } from './guildInstanceManager';
+import { GuildInstance, PairingDataMap, SmartSwitchAutoSetting, StorageMonitorType } from './guildInstanceManager';
 import * as discordMessages from '../discordUtils/discordMessages';
 
 
@@ -221,7 +224,7 @@ export class FcmListenerManager {
         const androidId = credentials.gcm.androidId;
         const securityToken = credentials.gcm.securityToken;
         this.listeners[steamId] = new PushReceiverClient(androidId, securityToken, []);
-        (this.listeners[steamId]).on('ON_DATA_RECEIVED', (data: unknown) => {
+        this.listeners[steamId].on('ON_DATA_RECEIVED', (data: unknown) => {
             const funcName = `[FcmListenerManager: ON_DATA_RECEIVED: ${steamId}]`;
             if (!isValidFcmNotificaton(data)) {
                 log.warn(`${funcName} data is not of type FcmNotification. Data: ${JSON.stringify(data)}`);
@@ -290,7 +293,8 @@ export class FcmListenerManager {
                     } break;
 
                     case PairingTypes.ENTITY: {
-                        // TODO! If entity pairing, pair server too, all parts of server pairing body is available in entity pairing body
+                        // TODO! If entity pairing, pair server too, all parts of server pairing body is available in
+                        // entity pairing body
                         switch (body.entityType) {
                             case PairingEntityTypes.SMART_SWITCH: {
                                 log.info(`${funcName} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: ` +
@@ -423,12 +427,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
-        }
-
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const serverInfo = gInstance.serverInfoMap[serverId];
 
         let message = null;
@@ -466,9 +465,9 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
         gim.updateGuildInstance(guildId);
 
         let connectionStatus = ConnectionStatus.Disconnected;
-        const rustPlusInstance = rpm.getInstance(guildId, serverId);
-        if (rustPlusInstance) {
-            connectionStatus = rustPlusInstance.connectionStatus;
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (rpInstance) {
+            connectionStatus = rpInstance.connectionStatus;
         }
 
         await discordMessages.sendServerMessage(flm.dm, guildId, serverId, connectionStatus);
@@ -487,13 +486,9 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
-        }
-
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
+
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
             log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
@@ -519,8 +514,8 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
 
         // TODO! Add the switch to rustplusManager
 
-        const rustPlusInstance = rpm.getInstance(guildId, serverId);
-        if (rustPlusInstance && serverInfo.active) {
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (rpInstance && serverInfo.active) {
             await discordMessages.sendSmartSwitchMessage(flm.dm, guildId, serverId, body.entityId);
         }
     }
@@ -538,13 +533,9 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
-        }
-
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
+
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
             log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
@@ -571,8 +562,8 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
 
         // TODO! Add the alarm to rustplusManager
 
-        const rustPlusInstance = rpm.getInstance(guildId, serverId);
-        if (rustPlusInstance && serverInfo.active) {
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (rpInstance && serverInfo.active) {
             await discordMessages.sendSmartAlarmMessage(flm.dm, guildId, serverId, body.entityId);
         }
     }
@@ -590,13 +581,9 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
-        }
-
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
+
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
             log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
@@ -621,8 +608,8 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
 
         // TODO! Add the storagemonitor to rustplusManager
 
-        const rustPlusInstance = rpm.getInstance(guildId, serverId);
-        if (rustPlusInstance && serverInfo.active) {
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (rpInstance && serverInfo.active) {
             await discordMessages.sendStorageMonitorMessage(flm.dm, guildId, serverId, body.entityId);
         }
     }
@@ -640,9 +627,6 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
     to the credential owner and which is not part of the currently connected rust server can notify IF the general
     setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
 
-    // Potential todo: Only allow alarm from a specific teammember from fcm? Otherwise there will be posted alarm
-    // notifications for each "subscribed" alarm.
-
     const funcName = `[FcmListenerManager: alarmAlarm: ${steamId}]`;
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
@@ -656,11 +640,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
-        }
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
@@ -668,14 +648,16 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
             continue;
         }
 
-        // TODO! If serverId !== activeServerId from gInstance OR rustplusManager does not exist for the serverId
-        // and fcmAlarmNotify === true then call the fcm alarm function
-
-        await discordMessages.sendFcmAlarmTriggerMessage(flm.dm, guildId, serverId, title, message);
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainSteamId &&
+            gInstance.generalSettings.fcmAlarmNotify) {
+            await discordMessages.sendFcmAlarmTriggerMessage(flm.dm, guildId, serverId, title, message);
+        }
     }
 }
 
-async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, title: string, message: string, body: AlarmPluginBody) {
+async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, title: string, message: string,
+    body: AlarmPluginBody) {
     const funcName = `[FcmListenerManager: alarmPlugin: ${steamId}]`;
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
@@ -689,11 +671,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
-        }
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
@@ -701,11 +679,25 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
             continue;
         }
 
-        // TODO! If fcmAlarmPluginNotifyActiveServer, then only notify if  serverId === activeServerId
-        // if fcmAlarmPluginNotify is false then dont send message.
-        // if fcmAlarmPluginNotifyInGame, then notify in game too
+        if (gInstance.generalSettings.fcmAlarmPluginNotify && steamId === serverInfo.mainSteamId) {
+            if ((gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer && serverInfo.active) ||
+                !gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer) {
+                discordMessages.sendFcmAlarmPluginTriggerMessage(flm.dm, guildId, serverId, title, message);
+            }
 
-        await discordMessages.sendFcmAlarmPluginTriggerMessage(flm.dm, guildId, serverId, title, message);
+            /* Send messages in game if configured. */
+            if (gInstance.generalSettings.fcmAlarmPluginNotifyInGame) {
+                for (const [sId, content] of Object.entries(gInstance.serverInfoMap)) {
+                    const rpInstance = rpm.getInstance(guildId, sId);
+                    if (rpInstance && content.active) {
+                        if ((gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer && serverInfo.active) ||
+                            !gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer) {
+                            // TODO! Send to in-game chat notification for the raid alarm plugin
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -733,11 +725,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
-        }
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
         const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
@@ -745,12 +733,11 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
             continue;
         }
 
-        // TODO! If serverId !== activeServerId from gInstance OR rustplusManager does not exist for the serverId
-        // then send the message, ALSO, now all fcm listeners will notify about this, todo: only allow once
-
-        //await discordMessages.sendFcmAlarmTriggerMessage(flm.dm, guildId, serverId, title, message);
-        await discordMessages.sendFcmTeamLoginMessage(flm.dm, guildId, serverId, body);
-        log.info(`${funcName} ${body.targetName} just connected to ${body.name}.`);
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainSteamId) {
+            await discordMessages.sendFcmTeamLoginMessage(flm.dm, guildId, serverId, body);
+            log.info(`${funcName} ${body.targetName} just connected to ${body.name}.`);
+        }
     }
 }
 
@@ -766,15 +753,12 @@ async function newsNews(flm: FcmListenerManager, steamId: types.SteamId, title: 
 
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
-        const gInstance = gim.getGuildInstance(guildId);
-        if (!gInstance) {
-            log.warn(`${funcName} Could not find GuildInstance.`, { guildId: guildId });
-            continue;
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+        // TODO! Update newsReceiver steamId in correct places
+        if (steamId === gInstance.newsReceiver) {
+            await discordMessages.sendFcmNewsNewsMessage(flm.dm, guildId, title, message, body);
         }
-
-        // TODO! Only send message once, not all users that have fcm listeners
-
-        await discordMessages.sendFcmNewsNewsMessage(flm.dm, guildId, title, message, body);
     }
 }
 

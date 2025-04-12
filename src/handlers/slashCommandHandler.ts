@@ -23,7 +23,8 @@ import * as discordjs from 'discord.js';
 import { log } from '../../index';
 import { DiscordManager } from "../managers/discordManager";
 
-export async function slashCommandHandler(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
+export async function slashCommandHandler(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction):
+    Promise<boolean> {
     const funcName = '[slashCommandHandler]';
     const logParam = { guildId: interaction.guildId };
 

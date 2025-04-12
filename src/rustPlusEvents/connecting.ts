@@ -24,19 +24,19 @@ import { sendServerMessage } from '../discordUtils/discordMessages';
 
 export const name = 'connecting';
 
-export async function execute(rustPlusInstance: RustPlusInstance) {
+export async function execute(rpInstance: RustPlusInstance) {
     const funcName = `[rustPlusEvent: ${name}]`;
     const logParam = {
-        guildId: rustPlusInstance.guildId,
-        serverId: rustPlusInstance.serverId,
-        serverName: rustPlusInstance.serverName
+        guildId: rpInstance.guildId,
+        serverId: rpInstance.serverId,
+        serverName: rpInstance.serverName
     };
 
     log.info(`${funcName}`, logParam);
 
-    if (rustPlusInstance.connectionStatus === ConnectionStatus.Disconnected) {
-        rustPlusInstance.connectionStatus = ConnectionStatus.Connecting;
-        await sendServerMessage(dm, rustPlusInstance.guildId, rustPlusInstance.serverId,
-            rustPlusInstance.connectionStatus);
+    if (rpInstance.connectionStatus === ConnectionStatus.Disconnected) {
+        rpInstance.connectionStatus = ConnectionStatus.Connecting;
+        await sendServerMessage(dm, rpInstance.guildId, rpInstance.serverId,
+            rpInstance.connectionStatus);
     }
 }

@@ -22,6 +22,7 @@ import * as discordjs from 'discord.js';
 
 import { guildInstanceManager as gim, log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'channelDelete';
 export const once = false;
@@ -33,11 +34,7 @@ export async function execute(dm: DiscordManager, channel: discordjs.DMChannel |
 
     const guildId = channel.guild.id;
 
-    const gInstance = gim.getGuildInstance(guildId);
-    if (!gInstance) {
-        log.warn(`${funcName} GuildInstance was not found.`, logParam);
-        return;
-    }
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     let changed = false;
     const channelIds = gInstance.guildChannelIds;

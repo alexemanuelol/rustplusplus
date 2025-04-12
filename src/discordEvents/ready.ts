@@ -113,9 +113,9 @@ export async function execute(dm: DiscordManager) {
         for (const [serverId, content] of Object.entries(gInstance.serverInfoMap)) {
             if (content.active) {
                 if (rpm.addInstance(guild.id, serverId, content.mainSteamId)) {
-                    const rustPlusInstance = rpm.getInstance(guild.id, serverId);
-                    if (rustPlusInstance) {
-                        await rustPlusInstance.startup();
+                    const rpInstance = rpm.getInstance(guild.id, serverId);
+                    if (rpInstance) {
+                        await rpInstance.startup();
                     }
                 }
             }

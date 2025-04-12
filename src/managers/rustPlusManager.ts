@@ -95,10 +95,7 @@ export class RustPlusManager {
     }
 
     public getInstance(guildId: types.GuildId, serverId: types.ServerId): RustPlusInstance | null {
-        if (!this.hasInstance(guildId, serverId)) {
-            return null;
-        }
-        return this.rustPlusInstanceMap[guildId][serverId];
+        return this.rustPlusInstanceMap[guildId]?.[serverId] ?? null;
     }
 }
 
@@ -210,6 +207,7 @@ export class RustPlusInstance {
     private clearAllData() {
         clearTimeout(this.reconnectTimeoutId);
 
-        // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate, cargoship leave etc...
+        // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
+        // cargoship leave etc...
     }
 }
