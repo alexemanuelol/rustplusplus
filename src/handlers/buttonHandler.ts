@@ -414,8 +414,7 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
     }
 
     for (const content of Object.values(server.storageMonitorMap)) {
-        creationPromises.push(
-            discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
+        creationPromises.push(discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
     }
 
     // TODO! Create smartswitchgroup messages
@@ -478,6 +477,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         const channelId = gInstance.guildChannelIds.smartSwitches;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+            content.messageId = null;
         }
     }
 
@@ -485,6 +485,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         const channelId = gInstance.guildChannelIds.smartAlarms;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+            content.messageId = null;
         }
     }
 
@@ -492,6 +493,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         const channelId = gInstance.guildChannelIds.storageMonitors;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+            content.messageId = null;
         }
     }
 
@@ -499,6 +501,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         const channelId = gInstance.guildChannelIds.smartSwitchGroups;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
+            content.messageId = null;
         }
     }
     await Promise.allSettled(deletionPromises);
