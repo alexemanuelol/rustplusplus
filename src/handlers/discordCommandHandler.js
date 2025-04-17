@@ -36,7 +36,11 @@ module.exports = {
         const prefix = rustplus.generalSettings.prefix;
 
         let response = null;
-        if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxAfk')}` ||
+        if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxAi')}`) ||
+            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxAi')}`)) {
+            response = await rustplus.getCommandAi(command);
+        }
+        else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxAfk')}` ||
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxAfk')}`) {
             response = rustplus.getCommandAfk();
         }

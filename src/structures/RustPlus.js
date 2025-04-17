@@ -2746,6 +2746,38 @@ class RustPlus extends RustPlusLib {
 
         return strings;
     }
+
+    async askAiBot(query) {
+        if (this.ai !== null) {
+            let response = await this.ai.askAiBot(query);
+
+            return response;
+        }
+        return 'Failed to ask Rust bot.'
+    }
+    
+    async getCommandAi(command) {
+        const instance = Client.client.getInstance(this.guildId);
+        const prefix = this.generalSettings.prefix;
+        const commandAi = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxAi')}`;
+        const commandAiEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxAi')}`;
+        let query = null;
+
+        if (command.toLowerCase().startsWith(`${commandAi} `)) {
+            query = command.slice(`${commandAi} `.length).trim();
+        }
+        else if (command.toLowerCase().startsWith(`${commandAiEn} `)) {
+            query = command.slice(`${commandAiEn} `.length).trim();
+        }
+
+        this.log('getCommandAi: ', query);
+
+        if (query === null) return null;
+
+        let response = await this.askAiBot(query);
+
+        return response;
+    }
 }
 
 module.exports = RustPlus;
