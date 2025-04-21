@@ -18,12 +18,11 @@
 
 */
 
-import * as rp from 'rustplus-ts';
+//import * as rp from 'rustplus-ts';
 
-import { log, discordManager as dm, guildInstanceManager as gim } from '../../index';
+import { log, discordManager as dm } from '../../index';
 import { RustPlusInstance, ConnectionStatus } from "../managers/rustPlusManager";
 import { sendServerMessage } from '../discordUtils/discordMessages';
-import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'connected';
 

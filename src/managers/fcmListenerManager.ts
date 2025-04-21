@@ -617,6 +617,7 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
     }
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title: string, message: string,
     body: AlarmAlarmBody) {
     /* Unfortunately the alarm notification from the fcm listener is unreliable. The notification does not include
@@ -658,6 +659,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
     }
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, title: string, message: string,
     body: AlarmPluginBody) {
     const funcName = `[FcmListenerManager: alarmPlugin: ${steamId}]`;
@@ -703,6 +705,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
     }
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function playerDeath(flm: FcmListenerManager, steamId: types.SteamId, title: string, body: PlayerDeathBody) {
     const funcName = `[FcmListenerManager: playerDeath: ${steamId}]`;
     const credentials = cm.getCredentials(steamId);
@@ -715,6 +718,7 @@ async function playerDeath(flm: FcmListenerManager, steamId: types.SteamId, titl
     await discordMessages.sendFcmPlayerDeathMessage(flm.dm, steamId, title, body);
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: TeamLoginBody) {
     const funcName = `[FcmListenerManager: teamLogin: ${steamId}]`;
     const credentials = cm.getCredentials(steamId);
@@ -743,6 +747,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
     }
 }
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function newsNews(flm: FcmListenerManager, steamId: types.SteamId, title: string, message: string,
     body: NewsNewsBody) {
     const funcName = `[FcmListenerManager: newsNews: ${steamId}]`;

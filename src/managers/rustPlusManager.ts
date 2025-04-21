@@ -273,7 +273,9 @@ export class RustPlusInstance {
     }
 
     private async serverPolling(firstPoll: boolean = false) {
+        /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
         const funcName = '[RustPlusManager: serverPolling]';
+        /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
         this.lastServerPollSuccessful = false;
