@@ -31,7 +31,9 @@ export async function execute(rpInstance: RustPlusInstance) {
         serverName: rpInstance.serverName
     };
 
-    log.info(`${funcName}`, logParam);
+    log.info(`${funcName} DISCONNECTED.`, logParam);
+
+    rpInstance.stopServerPollingHandler();
 
     await rpInstance.scheduleReconnect();
 }

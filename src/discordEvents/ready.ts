@@ -112,7 +112,7 @@ export async function execute(dm: DiscordManager) {
         const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
         for (const [serverId, content] of Object.entries(gInstance.serverInfoMap)) {
             if (content.active) {
-                if (rpm.addInstance(guild.id, serverId, content.mainSteamId)) {
+                if (rpm.addInstance(guild.id, serverId, content.mainRequesterSteamId)) {
                     const rpInstance = rpm.getInstance(guild.id, serverId);
                     if (rpInstance) {
                         await rpInstance.startup();

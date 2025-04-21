@@ -32,7 +32,7 @@ export async function execute(rpInstance: RustPlusInstance) {
         serverName: rpInstance.serverName
     };
 
-    log.info(`${funcName}`, logParam);
+    log.info(`${funcName} CONNECTING.`, logParam);
 
     if (rpInstance.connectionStatus === ConnectionStatus.Disconnected) {
         rpInstance.connectionStatus = ConnectionStatus.Connecting;

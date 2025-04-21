@@ -20,12 +20,13 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, localeManager as lm } from '../../index';
+import { guildInstanceManager as gim, localeManager as lm, rustPlusManager as rpm } from '../../index';
 import { DiscordManager } from "../managers/discordManager";
 import * as types from '../utils/types';
-import { GuildInstance, VoiceGenders } from '../managers/guildInstanceManager';
+import { GuildInstance, ServerInfo, VoiceGenders } from '../managers/guildInstanceManager';
 import { Languages } from '../managers/LocaleManager';
 import * as discordMessages from '../discordUtils/discordMessages';
+import { ConnectionStatus } from '../managers/rustPlusManager';
 
 export async function selectMenuHandler(dm: DiscordManager, interaction: discordjs.AnySelectMenuInteraction):
     Promise<boolean> {
@@ -38,6 +39,10 @@ export async function selectMenuHandler(dm: DiscordManager, interaction: discord
     }
     else if (interaction.customId === 'GeneralSetting-inGameChatCommandResponseDelay') {
         return await inGameChatCommandResponseDelaySelectMenuHandler(dm,
+            interaction as discordjs.StringSelectMenuInteraction);
+    }
+    else if (interaction.customId.startsWith('MainRequesterSteamId')) {
+        return await mainRequesterSteamIdSelectMenuHandler(dm,
             interaction as discordjs.StringSelectMenuInteraction);
     }
 
@@ -131,6 +136,29 @@ async function inGameChatCommandResponseDelaySelectMenuHandler(dm: DiscordManage
     gim.updateGuildInstance(guildId);
 
     await discordMessages.sendSettingInGameChatCommandResponseDelayMessage(dm, guildId, true, false, interaction);
+
+    return true;
+}
+
+async function mainRequesterSteamIdSelectMenuHandler(dm: DiscordManager,
+    interaction: discordjs.StringSelectMenuInteraction): Promise<boolean> {
+    const identifier = JSON.parse(interaction.customId.replace('MainRequesterSteamId', ''));
+    const serverId = identifier.serverId as types.ServerId;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const steamId = interaction.values[0] as types.SteamId;
+
+    server.mainRequesterSteamId = steamId;
+    gim.updateGuildInstance(guildId);
+
+    let connectionStatus = ConnectionStatus.Disconnected;
+    const rpInstance = rpm.getInstance(guildId, serverId);
+    if (rpInstance) {
+        connectionStatus = rpInstance.connectionStatus;
+    }
+
+    await discordMessages.sendServerMessage(dm, guildId, serverId, connectionStatus, interaction);
 
     return true;
 }

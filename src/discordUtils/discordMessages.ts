@@ -158,7 +158,9 @@ export async function sendServerMessage(dm: DiscordManager, guildId: types.Guild
 
     const content = {
         embeds: [discordEmbeds.getServerEmbed(guildId, serverId)],
-        components: discordButtons.getServerButtons(guildId, serverId, connectionStatus)
+        components: [
+            await discordSelectMenus.getMainRequesterSteamIdSelectMenu(dm, guildId, serverId),
+            discordButtons.getServerButtons(guildId, serverId, connectionStatus)]
     };
 
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.servers, serverInfo.

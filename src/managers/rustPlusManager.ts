@@ -22,7 +22,7 @@ import * as rp from 'rustplus-ts';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { log, discordManager as dm, guildInstanceManager as gim } from '../../index';
+import { log, discordManager as dm, guildInstanceManager as gim, config } from '../../index';
 import * as constants from '../utils/constants';
 import * as types from '../utils/types';
 import { getServerId, getIpAndPort, GuildInstance } from './guildInstanceManager';
@@ -59,7 +59,7 @@ export class RustPlusManager {
         return false;
     }
 
-    public addInstance(guildId: types.GuildId, serverId: types.ServerId, mainSteamId: types.SteamId): boolean {
+    public addInstance(guildId: types.GuildId, serverId: types.ServerId, mainRequesterSteamId: types.SteamId): boolean {
         const funcName = '[RustPlusManager: addInstance]';
         const ipAndPort = getIpAndPort(serverId);
         const logParam = { guildId: guildId, serverId: serverId };
@@ -74,7 +74,7 @@ export class RustPlusManager {
         }
 
         this.rustPlusInstanceMap[guildId][serverId] = new RustPlusInstance(guildId, ipAndPort.ip, ipAndPort.port,
-            mainSteamId);
+            mainRequesterSteamId);
         log.info(`${funcName} Instance added.`, logParam);
         return true;
     }
@@ -109,7 +109,7 @@ export class RustPlusInstance {
     public guildId: types.GuildId;
     public ip: string;
     public port: string;
-    public mainSteamId: types.SteamId;
+    public mainRequesterSteamId: types.SteamId;
     public serverId: types.ServerId;
     public serverName: string;
 
@@ -117,6 +117,12 @@ export class RustPlusInstance {
     public connectionStatus: ConnectionStatus;
     public reconnectTimeoutId: NodeJS.Timeout | undefined;
     public reconnectTimeoutSeconds: number;
+
+    public serverPollingHandlerIntervalId: NodeJS.Timeout | undefined;
+    public serverPollingHandlerIntervalSeconds: number;
+    public lastServerPollSuccessful: boolean;
+    public lastServerPollSuccessfulTimestampSeconds: types.Timestamp | null;
+
     //private rpInfo: RustPlusInfo | null;
     //private rpTime: RustPlusTime | null;
     //private appMap: rustplus.AppMap | null;
@@ -124,11 +130,11 @@ export class RustPlusInstance {
     //private appMapMarkers: rustplus.AppMapMarkers | null;
 
 
-    constructor(guildId: types.GuildId, ip: string, port: string, mainSteamId: types.SteamId) {
+    constructor(guildId: types.GuildId, ip: string, port: string, mainRequesterSteamId: types.SteamId) {
         this.guildId = guildId;
         this.ip = ip;
         this.port = port;
-        this.mainSteamId = mainSteamId
+        this.mainRequesterSteamId = mainRequesterSteamId
         this.serverId = getServerId(ip, port);
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
@@ -138,6 +144,11 @@ export class RustPlusInstance {
         this.connectionStatus = ConnectionStatus.Disconnected;
         this.reconnectTimeoutId = undefined;
         this.reconnectTimeoutSeconds = constants.DEFAULT_RECONNECT_TIMEOUT_SECONDS;
+
+        this.serverPollingHandlerIntervalId = undefined;
+        this.serverPollingHandlerIntervalSeconds = config.general.serverPollingHandlerIntervalMs / 1000;
+        this.lastServerPollSuccessful = false;
+        this.lastServerPollSuccessfulTimestampSeconds = null;
 
         /* Latest request responses. */
         //this.rpInfo = null;
@@ -187,9 +198,7 @@ export class RustPlusInstance {
             serverName: this.serverName
         });
 
-        this.reconnectTimeoutId = setTimeout(async () => {
-            await this.startup();
-        }, this.reconnectTimeoutSeconds * 1000);
+        this.startReconnectionTimer();
     }
 
     private async loadRustPlusEvents() {
@@ -205,9 +214,113 @@ export class RustPlusInstance {
     }
 
     private clearAllData() {
-        clearTimeout(this.reconnectTimeoutId);
+        this.stopReconnectionTimer();
+        this.stopServerPollingHandler();
 
         // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
         // cargoship leave etc...
+    }
+
+    public startReconnectionTimer() {
+        const funcName = '[RustPlusInstance: startReconnectionTimer]';
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        if (this.reconnectTimeoutId !== undefined) {
+            this.stopReconnectionTimer();
+        }
+
+        log.info(`${funcName}`, logParam);
+
+        this.reconnectTimeoutId = setTimeout(() => {
+            this.startup();
+        }, this.reconnectTimeoutSeconds * 1000);
+    }
+
+    public stopReconnectionTimer() {
+        const funcName = '[RustPlusInstance: stopReconnectionTimer]';
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        log.info(`${funcName}`, logParam);
+
+        clearTimeout(this.reconnectTimeoutId);
+        this.reconnectTimeoutId = undefined;
+    }
+
+    public startServerPollingHandler() {
+        const funcName = '[RustPlusInstance: startServerPollingHandler]';
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        if (this.serverPollingHandlerIntervalId !== undefined) {
+            this.stopServerPollingHandler();
+        }
+
+        log.info(`${funcName}`, logParam);
+
+        this.serverPolling(true);
+        this.serverPollingHandlerIntervalId = setInterval(() => {
+            this.serverPolling();
+        }, this.serverPollingHandlerIntervalSeconds * 1000);
+    }
+
+    public stopServerPollingHandler() {
+        const funcName = '[RustPlusInstance: stopServerPollingHandler]';
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        log.info(`${funcName}`, logParam);
+
+        clearInterval(this.serverPollingHandlerIntervalId);
+        this.serverPollingHandlerIntervalId = undefined;
+    }
+
+    private async serverPolling(firstPoll: boolean = false) {
+        const funcName = '[RustPlusManager: serverPolling]';
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        this.lastServerPollSuccessful = false;
+        // TODO! Retrieve rustplus data below:
+        // - getInfo
+        // - getTime
+        // - getTeamInfo
+        // - getMapMarkers
+
+        this.lastServerPollSuccessful = true;
+        this.lastServerPollSuccessfulTimestampSeconds = Math.floor(Date.now() / 1000);
+
+        if (firstPoll) {
+            console.log('FIRST POLL')
+            // TODO! Set rpInfo, rpTime, rpTeamInfo, rpMapMarkers
+        }
+        else {
+            console.log('POLL')
+        }
+
+        // TODO! teamHandler
+        // TODO! update rpTeamInfo
+
+        // TODO! smartSwitchHandler
+
+        // TODO! timeHandler
+
+        // TODO! update rpTime
+        // TODO! update rpInfo
+        // TODO! update rpMapMarkers
+
+        // TODO! smartAlarmHandler
+        // TODO! storageMonitorHandler
+
+        // TODO! informationChannelHandler
+    }
+
+    public async setupSmartDevices() {
+
+        // TODO! Go through all smart devices to get the status of them
+        // - Smart Switches, current status
+        // - Smart Alarms, current status
+        // - Storage Monitors, Type, content inside...
+        // - Smart Switch Groups...
+
+        // TODO! Start smart devices handlers
+        // - smartSwitchPollingHandler
+
     }
 }

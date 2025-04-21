@@ -156,7 +156,7 @@ export function getHelpButtons(): discordjs.ActionRowBuilder<discordjs.ButtonBui
 
 export function getServerButtons(guildId: types.GuildId, serverId: types.ServerId,
     connectionStatus: ConnectionStatus):
-    discordjs.ActionRowBuilder<discordjs.ButtonBuilder>[] {
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const language = gInstance.generalSettings.language;
@@ -205,11 +205,9 @@ export function getServerButtons(guildId: types.GuildId, serverId: types.ServerI
         type: discordjs.ComponentType.Button
     });
 
-    return [
-        new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
-            connectionButton, viewButton, editButton, websiteButton, deleteButton
-        )
-    ];
+    return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
+        connectionButton, viewButton, editButton, websiteButton, deleteButton
+    );
 }
 
 export function getSmartSwitchButtons(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId,

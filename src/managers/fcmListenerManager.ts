@@ -224,6 +224,12 @@ export class FcmListenerManager {
         const androidId = credentials.gcm.androidId;
         const securityToken = credentials.gcm.securityToken;
         this.listeners[steamId] = new PushReceiverClient(androidId, securityToken, []);
+        // TODO! Something is messed up here. I tested with two steam accounts with credentials on the same discord
+        // guild. For some reason the two fcm instances wont work together properly. When I pair in-game with account
+        // 1, the above steamId is the one for account 2, but the data below is correct and from account 1. For the
+        // love of god I cant figure out how to solve it. When I print each fcm listener (this.listeners) I can see
+        // that each listener have the correct androidId and securityToken for the given steamId. This needs to be
+        // solved before v2 release.
         this.listeners[steamId].on('ON_DATA_RECEIVED', (data: unknown) => {
             const funcName = `[FcmListenerManager: ON_DATA_RECEIVED: ${steamId}]`;
             if (!isValidFcmNotificaton(data)) {
@@ -449,7 +455,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             port: body.port,
             messageId: (message) ? message.id : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            mainSteamId: serverInfo ? serverInfo.mainSteamId : body.playerId,
+            mainRequesterSteamId: serverInfo ? serverInfo.mainRequesterSteamId : body.playerId,
             active: serverInfo ? serverInfo.active : false,
             connect: null,
             noteMap: serverInfo ? serverInfo.noteMap : {},
@@ -649,7 +655,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
         }
 
         const rpInstance = rpm.getInstance(guildId, serverId);
-        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainSteamId &&
+        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainRequesterSteamId &&
             gInstance.generalSettings.fcmAlarmNotify) {
             await discordMessages.sendFcmAlarmTriggerMessage(flm.dm, guildId, serverId, title, message);
         }
@@ -679,7 +685,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
             continue;
         }
 
-        if (gInstance.generalSettings.fcmAlarmPluginNotify && steamId === serverInfo.mainSteamId) {
+        if (gInstance.generalSettings.fcmAlarmPluginNotify && steamId === serverInfo.mainRequesterSteamId) {
             if ((gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer && serverInfo.active) ||
                 !gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer) {
                 discordMessages.sendFcmAlarmPluginTriggerMessage(flm.dm, guildId, serverId, title, message);
@@ -734,7 +740,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
         }
 
         const rpInstance = rpm.getInstance(guildId, serverId);
-        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainSteamId) {
+        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainRequesterSteamId) {
             await discordMessages.sendFcmTeamLoginMessage(flm.dm, guildId, serverId, body);
             log.info(`${funcName} ${body.targetName} just connected to ${body.name}.`);
         }

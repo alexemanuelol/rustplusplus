@@ -20,12 +20,14 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, localeManager as lm } from '../../index';
+import { guildInstanceManager as gim, localeManager as lm, credentialsManager as cm } from '../../index';
 import {
     GuildInstance, ServerInfo, SmartSwitch, SmartSwitchAutoSetting, VoiceGenders
 } from '../managers/guildInstanceManager';
 import * as types from '../utils/types';
 import { Languages, LanguageDiscordEmoji } from '../managers/LocaleManager';
+import { Credentials } from '../managers/credentialsManager';
+import { DiscordManager } from '../managers/discordManager';
 
 export const StringSelectMenuLimits = {
     CustomId: 100,
@@ -198,6 +200,50 @@ export function getSmartSwitchSelectMenu(guildId: types.GuildId, serverId: types
                     description: autoSettingMap[SmartSwitchAutoSetting.AutoOffAnyOnline][1],
                     value: `${SmartSwitchAutoSetting.AutoOffAnyOnline}`
                 }],
+            type: discordjs.ComponentType.StringSelect
+        })
+    );
+}
+
+export async function getMainRequesterSteamIdSelectMenu(dm: DiscordManager, guildId: types.GuildId,
+    serverId: types.ServerId): Promise<discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const identifier = JSON.stringify({ 'serverId': serverId });
+    const serverPairingDataMap = gInstance.pairingDataMap[serverId];
+
+    const options: discordjs.SelectMenuComponentOptionData[] = [];
+    for (const [steamId, pairingData] of Object.entries(serverPairingDataMap)) {
+        const credentials = cm.getCredentials(steamId) as Credentials;
+        const member = await dm.getMember(guildId, credentials.discordUserId);
+        const userName = member ? member.user.username : lm.getIntl(language, 'unknown');
+        options.push({
+            label: steamId,
+            description: lm.getIntl(language, 'mainRequesterSteamIdOptionDesc', { user: userName }),
+            value: steamId,
+            emoji: pairingData.valid ? '✅' : '❌'
+        });
+    }
+
+    const credentials = cm.getCredentials(server.mainRequesterSteamId);
+    let name = server.mainRequesterSteamId;
+    if (credentials) {
+        const member = await dm.getMember(guildId, credentials.discordUserId);
+        const userName = member ? ` (${member.user.username})` : '';
+        name += userName;
+    }
+
+    const mainRequesterValid = Object.hasOwn(serverPairingDataMap, server.mainRequesterSteamId) &&
+        serverPairingDataMap[server.mainRequesterSteamId].valid;
+    const placeholder = `${mainRequesterValid ? '✅' : '❌'} ${name}`;
+
+    return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
+        getStringSelectMenu({
+            customId: `MainRequesterSteamId${identifier}`,
+            disabled: Object.keys(serverPairingDataMap).length === 0 ? true : false,
+            placeholder: placeholder,
+            options: options,
             type: discordjs.ComponentType.StringSelect
         })
     );

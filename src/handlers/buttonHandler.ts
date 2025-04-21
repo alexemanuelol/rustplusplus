@@ -425,7 +425,7 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
     server.active = true;
     gim.updateGuildInstance(guildId);
 
-    if (rpm.addInstance(guildId, serverId, server.mainSteamId)) {
+    if (rpm.addInstance(guildId, serverId, server.mainRequesterSteamId)) {
         const rpInstance = rpm.getInstance(guildId, serverId);
         if (rpInstance) {
             await rpInstance.startup();

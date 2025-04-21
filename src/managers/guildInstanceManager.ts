@@ -274,7 +274,7 @@ export interface ServerInfo {
     /* Rest */
     messageId: types.MessageId | null;
     pairedDate: types.Timestamp;
-    mainSteamId: types.SteamId;
+    mainRequesterSteamId: types.SteamId;
     active: boolean;
     connect: string | null;
     noteMap: NoteMap;
@@ -1397,7 +1397,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'port',
         'messageId',
         'pairedDate',
-        'mainSteamId',
+        'mainRequesterSteamId',
         'active',
         'connect',
         'noteMap',
@@ -1418,7 +1418,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     errors.push(vu.validateType('port', obj.port, 'string'));
     errors.push(vu.validateType('messageId', obj.messageId, 'string', null));
     errors.push(vu.validateType('pairedDate', obj.pairedDate, 'number'));
-    errors.push(vu.validateType('mainSteamId', obj.mainSteamId, 'string'));
+    errors.push(vu.validateType('mainRequesterSteamId', obj.mainRequesterSteamId, 'string'));
     errors.push(vu.validateType('active', obj.active, 'boolean'));
     errors.push(vu.validateType('connect', obj.connect, 'string', null));
     errors.push(vu.validateObjectOfTypes('noteMap', obj.noteMap, 'string'));

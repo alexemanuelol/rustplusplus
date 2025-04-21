@@ -120,3 +120,12 @@ function levenshteinDistance(s1: string, s2: string): number {
 
     return dp[m][n];
 }
+
+export function getCallStack() {
+    const error = new Error();
+    const stack = error.stack || '';
+    const lines = stack.split('\n');
+
+    /* Remove the first line ("Error") and this functions own stack entry */
+    return lines.slice(2).map(line => line.trim())
+}
