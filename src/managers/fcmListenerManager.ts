@@ -224,14 +224,8 @@ export class FcmListenerManager {
         const androidId = credentials.gcm.androidId;
         const securityToken = credentials.gcm.securityToken;
         this.listeners[steamId] = new PushReceiverClient(androidId, securityToken, []);
-        // TODO! Something is messed up here. I tested with two steam accounts with credentials on the same discord
-        // guild. For some reason the two fcm instances wont work together properly. When I pair in-game with account
-        // 1, the above steamId is the one for account 2, but the data below is correct and from account 1. For the
-        // love of god I cant figure out how to solve it. When I print each fcm listener (this.listeners) I can see
-        // that each listener have the correct androidId and securityToken for the given steamId. This needs to be
-        // solved before v2 release.
         this.listeners[steamId].on('ON_DATA_RECEIVED', (data: unknown) => {
-            const funcName = `[FcmListenerManager: ON_DATA_RECEIVED: ${steamId}]`;
+            const funcName = `[FcmListenerManager: ON_DATA_RECEIVED]`;
             if (!isValidFcmNotificaton(data)) {
                 log.warn(`${funcName} data is not of type FcmNotification. Data: ${JSON.stringify(data)}`);
                 return;
@@ -242,7 +236,7 @@ export class FcmListenerManager {
                 return;
             }
 
-            this.onDataReceived(steamId, data);
+            this.onDataReceived(data);
         });
         this.listeners[steamId].connect();
         log.info(`${funcName} FCM Listener started.`);
@@ -259,8 +253,8 @@ export class FcmListenerManager {
         }
     }
 
-    private onDataReceived(steamId: types.SteamId, data: FcmNotification): void {
-        const funcName = `[FcmListenerManager: onDataReceived: ${steamId}]`;
+    private onDataReceived(data: FcmNotification): void {
+        const funcName = `[FcmListenerManager: onDataReceived]`;
         const appData: AppDataItem[] = data.appData;
 
         const title = appData.find(item => item.key === 'title')?.value;
@@ -290,9 +284,11 @@ export class FcmListenerManager {
 
         switch (channelId) {
             case ChannelIds.PAIRING: {
+                const steamId = (body as PairingServerBody || body as PairingEntityBody).playerId;
+                const funcNamePairing = `[FcmListenerManager: onDataReceived: ${steamId}]`;
                 switch (body.type) {
                     case PairingTypes.SERVER: {
-                        log.info(`${funcName} ${ChannelIds.PAIRING}: ${PairingTypes.SERVER}`);
+                        log.info(`${funcNamePairing} ${ChannelIds.PAIRING}: ${PairingTypes.SERVER}`);
                         if (!isValidPairingServerBody(body)) return;
 
                         pairingServer(this, steamId, body);
@@ -303,7 +299,7 @@ export class FcmListenerManager {
                         // entity pairing body
                         switch (body.entityType) {
                             case PairingEntityTypes.SMART_SWITCH: {
-                                log.info(`${funcName} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: ` +
+                                log.info(`${funcNamePairing} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: ` +
                                     `${PairingEntityNames.SMART_SWITCH}`);
                                 if (!isValidPairingEntityBody(body)) return;
 
@@ -311,7 +307,7 @@ export class FcmListenerManager {
                             } break;
 
                             case PairingEntityTypes.SMART_ALARM: {
-                                log.info(`${funcName} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: ` +
+                                log.info(`${funcNamePairing} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: ` +
                                     `${PairingEntityNames.SMART_ALARM}`);
                                 if (!isValidPairingEntityBody(body)) return;
 
@@ -319,7 +315,7 @@ export class FcmListenerManager {
                             } break;
 
                             case PairingEntityTypes.STORAGE_MONITOR: {
-                                log.info(`${funcName} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: ` +
+                                log.info(`${funcNamePairing} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: ` +
                                     `${PairingEntityNames.STORAGE_MONITOR}`);
                                 if (!isValidPairingEntityBody(body)) return;
 
@@ -327,7 +323,7 @@ export class FcmListenerManager {
                             } break;
 
                             default: {
-                                log.info(`${funcName} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: other.`);
+                                log.info(`${funcNamePairing} ${ChannelIds.PAIRING}: ${PairingTypes.ENTITY}: other.`);
                                 if (!isValidPairingEntityBody(body)) return;
                             } break;
                         }
@@ -346,7 +342,7 @@ export class FcmListenerManager {
                         log.info(`${funcName} ${ChannelIds.ALARM}: ${AlarmTypes.ALARM}`);
                         if (!isValidAlarmAlarmBody(body)) return;
 
-                        alarmAlarm(this, steamId, title, message, body);
+                        //alarmAlarm(this, steamId, title, message, body);
                     } break;
 
                     default: {
@@ -355,7 +351,7 @@ export class FcmListenerManager {
                             log.info(`${funcName} ${ChannelIds.ALARM}: plugin`);
                             if (!isValidAlarmPluginBody(body)) return;
 
-                            alarmPlugin(this, steamId, title, message, body);
+                            //alarmPlugin(this, steamId, title, message, body);
                             break;
                         }
 
@@ -371,7 +367,7 @@ export class FcmListenerManager {
                         log.info(`${funcName} ${ChannelIds.PLAYER}: ${PlayerTypes.DEATH}`);
                         if (!isValidPlayerDeathBody(body)) return;
 
-                        playerDeath(this, steamId, title, body);
+                        //playerDeath(this, steamId, title, body);
                     } break;
 
                     default: {
@@ -387,7 +383,7 @@ export class FcmListenerManager {
                         log.info(`${funcName} ${ChannelIds.TEAM}: ${TeamTypes.LOGIN}`);
                         if (!isValidTeamLoginBody(body)) return;
 
-                        teamLogin(this, steamId, body);
+                        //teamLogin(this, steamId, body);
                     } break;
 
                     default: {
@@ -403,7 +399,7 @@ export class FcmListenerManager {
                         log.info(`${funcName} ${ChannelIds.NEWS}: ${NewsTypes.NEWS}`);
                         if (!isValidNewsNewsBody(body)) return;
 
-                        newsNews(this, steamId, title, message, body);
+                        //newsNews(this, steamId, title, message, body);
                     } break;
 
                     default: {
