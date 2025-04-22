@@ -20,18 +20,11 @@
 
 import * as rp from 'rustplus-ts';
 
-import { log } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
 
 export const name = 'request';
 
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export async function execute(rpInstance: RustPlusInstance, appRequest: rp.AppRequest) {
-    const funcName = `[rustPlusEvent: ${name}]`;
-    const logParam = {
-        guildId: rpInstance.guildId,
-        serverId: rpInstance.serverId,
-        serverName: rpInstance.serverName
-    };
-
-    log.info(`${funcName} ${JSON.stringify(appRequest)}`, logParam);
+    /* Not used */
 }

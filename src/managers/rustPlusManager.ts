@@ -21,6 +21,7 @@
 import * as rp from 'rustplus-ts';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Logger } from 'winston';
 
 import { log, discordManager as dm, guildInstanceManager as gim, config } from '../../index';
 import * as constants from '../utils/constants';
@@ -59,7 +60,7 @@ export class RustPlusManager {
         return false;
     }
 
-    public addInstance(guildId: types.GuildId, serverId: types.ServerId, mainRequesterSteamId: types.SteamId): boolean {
+    public addInstance(guildId: types.GuildId, serverId: types.ServerId): boolean {
         const funcName = '[RustPlusManager: addInstance]';
         const ipAndPort = getIpAndPort(serverId);
         const logParam = { guildId: guildId, serverId: serverId };
@@ -73,8 +74,7 @@ export class RustPlusManager {
             return false;
         }
 
-        this.rustPlusInstanceMap[guildId][serverId] = new RustPlusInstance(guildId, ipAndPort.ip, ipAndPort.port,
-            mainRequesterSteamId);
+        this.rustPlusInstanceMap[guildId][serverId] = new RustPlusInstance(guildId, ipAndPort.ip, ipAndPort.port);
         log.info(`${funcName} Instance added.`, logParam);
         return true;
     }
@@ -109,7 +109,6 @@ export class RustPlusInstance {
     public guildId: types.GuildId;
     public ip: string;
     public port: string;
-    public mainRequesterSteamId: types.SteamId;
     public serverId: types.ServerId;
     public serverName: string;
 
@@ -130,11 +129,10 @@ export class RustPlusInstance {
     //private appMapMarkers: rustplus.AppMapMarkers | null;
 
 
-    constructor(guildId: types.GuildId, ip: string, port: string, mainRequesterSteamId: types.SteamId) {
+    constructor(guildId: types.GuildId, ip: string, port: string) {
         this.guildId = guildId;
         this.ip = ip;
         this.port = port;
-        this.mainRequesterSteamId = mainRequesterSteamId
         this.serverId = getServerId(ip, port);
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
@@ -273,17 +271,28 @@ export class RustPlusInstance {
     }
 
     private async serverPolling(firstPoll: boolean = false) {
-        /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
         const funcName = '[RustPlusManager: serverPolling]';
-        /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
-        this.lastServerPollSuccessful = false;
-        // TODO! Retrieve rustplus data below:
-        // - getInfo
-        // - getTime
-        // - getTeamInfo
-        // - getMapMarkers
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const server = gInstance.serverInfoMap[this.serverId];
+        const mainRequesterSteamId = server.mainRequesterSteamId;
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
+
+        if (!pairingData) {
+            this.lastServerPollSuccessful = false;
+            log.warn(`${funcName} pairingData for ${mainRequesterSteamId} could not be found.`, logParam);
+            return;
+        }
+
+        const rpInfo = await this.rustPlus.getInfoAsync(pairingData.steamId, pairingData.playerToken);
+        if (!this.validateServerPollResponse(rpInfo, 'info', rp.isValidAppInfo)) return;
+        const rpTime = await this.rustPlus.getTimeAsync(pairingData.steamId, pairingData.playerToken);
+        if (!this.validateServerPollResponse(rpTime, 'time', rp.isValidAppTime)) return;
+        const rpTeamInfo = await this.rustPlus.getTeamInfoAsync(pairingData.steamId, pairingData.playerToken);
+        if (!this.validateServerPollResponse(rpTeamInfo, 'teamInfo', rp.isValidAppTeamInfo)) return;
+        const rpMapMarkers = await this.rustPlus.getMapMarkersAsync(pairingData.steamId, pairingData.playerToken);
+        if (!this.validateServerPollResponse(rpMapMarkers, 'mapMarkers', rp.isValidAppMapMarkers)) return;
 
         this.lastServerPollSuccessful = true;
         this.lastServerPollSuccessfulTimestampSeconds = Math.floor(Date.now() / 1000);
@@ -311,6 +320,59 @@ export class RustPlusInstance {
         // TODO! storageMonitorHandler
 
         // TODO! informationChannelHandler
+    }
+
+    public async validateServerPollResponse(response: rp.AppResponse | Error | rp.ConsumeTokensError,
+        responseParam: keyof rp.AppResponse, validationCallback: (input: unknown, logger: Logger | null) => boolean):
+        Promise<boolean> {
+        const funcName = `[RustPlusManager: validateServerPollResponse]`
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const server = gInstance.serverInfoMap[this.serverId];
+        const mainRequesterSteamId = server.mainRequesterSteamId;
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
+
+        if (rp.isValidAppResponse(response, log)) {
+            if (!validationCallback(response[responseParam], log)) {
+                if (rp.isValidAppError(response.error, log)) {
+                    log.warn(`${funcName} AppError: ${response.error.error}`, logParam);
+                    if (this.rustPlus.getAppResponseError(response) === rp.AppResponseError.NotFound) {
+                        /* pairingData is no longer valid. */
+                        if (pairingData && pairingData.valid) {
+                            pairingData.valid = false;
+                            gim.updateGuildInstance(this.guildId);
+                            await sendServerMessage(dm, this.guildId, this.serverId, this.connectionStatus);
+                        }
+                    }
+                }
+                else {
+                    log.error(`${funcName} We got completely wrong response: ${JSON.stringify(response)}`, logParam);
+                }
+                this.lastServerPollSuccessful = false;
+                return false;
+            }
+            else {
+                if (pairingData && !pairingData.valid) {
+                    pairingData.valid = true;
+                    gim.updateGuildInstance(this.guildId);
+                    await sendServerMessage(dm, this.guildId, this.serverId, this.connectionStatus);
+                }
+            }
+        }
+        else {
+            /* Error or rp.ConsumeTokensError */
+            if (response instanceof Error) {
+                log.error(`${funcName} Error: ${response.message}`, logParam);
+            }
+            else {
+                log.error(`${funcName} ConsumeTokensError: ${response}`, logParam);
+            }
+            this.lastServerPollSuccessful = false;
+            return false;
+        }
+
+        return true;
     }
 
     public async setupSmartDevices() {
