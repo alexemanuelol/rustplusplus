@@ -340,6 +340,7 @@ export class RustPlusInstance {
                     if (this.rustPlus.getAppResponseError(response) === rp.AppResponseError.NotFound) {
                         /* pairingData is no longer valid. */
                         if (pairingData && pairingData.valid) {
+                            log.warn(`${funcName} PairingData no longer valid for ${mainRequesterSteamId}.`, logParam);
                             pairingData.valid = false;
                             gim.updateGuildInstance(this.guildId);
                             await sendServerMessage(dm, this.guildId, this.serverId, this.connectionStatus);
@@ -373,6 +374,46 @@ export class RustPlusInstance {
         }
 
         return true;
+    }
+
+    public async validatePairingData() {
+        const funcName = `[RustPlusManager: validatePairingData]`
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        log.info(`${funcName}`, logParam);
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const pairingDataMap = gInstance.pairingDataMap[this.serverId];
+        for (const [steamId, pairingData] of Object.entries(pairingDataMap)) {
+            const rpInfo = await this.rustPlus.getInfoAsync(pairingData.steamId, pairingData.playerToken);
+            if (rp.isValidAppResponse(rpInfo, log)) {
+                if (!rp.isValidAppInfo(rpInfo.info, log)) {
+                    if (rp.isValidAppError(rpInfo.error, log)) {
+                        log.warn(`${funcName} SteamId: ${steamId}, AppError: ${rpInfo.error.error}`, logParam);
+                        if (this.rustPlus.getAppResponseError(rpInfo) === rp.AppResponseError.NotFound) {
+                            log.warn(`${funcName} PairingData no longer valid for ${steamId}.`, logParam);
+                            pairingData.valid = false;
+                        }
+                    }
+                    else {
+                        log.error(`${funcName} We got completely wrong response: ${JSON.stringify(rpInfo)}`, logParam);
+                    }
+                }
+                else {
+                    pairingData.valid = true;
+                }
+            }
+            else {
+                /* Error or rp.ConsumeTokensError */
+                if (rpInfo instanceof Error) {
+                    log.error(`${funcName} Error: ${rpInfo.message}`, logParam);
+                }
+                else {
+                    log.error(`${funcName} ConsumeTokensError: ${rpInfo}`, logParam);
+                }
+            }
+        }
+        gim.updateGuildInstance(this.guildId);
     }
 
     public async setupSmartDevices() {

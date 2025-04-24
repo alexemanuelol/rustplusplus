@@ -36,9 +36,11 @@ export async function execute(rpInstance: RustPlusInstance) {
 
     rpInstance.stopReconnectionTimer();
 
+    await rpInstance.validatePairingData();
+
     // TODO! Retrieve map to see if map wipe
 
-    rpInstance.setupSmartDevices();
+    await rpInstance.setupSmartDevices();
 
     rpInstance.startServerPollingHandler();
 
