@@ -6,8 +6,6 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 
 const Groq = require("groq-sdk");
 
-const apiKEy = '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';
-
 module.exports = {
 	name: 'ai',
 
