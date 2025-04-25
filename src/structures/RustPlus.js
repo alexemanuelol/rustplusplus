@@ -38,6 +38,7 @@ const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
+const Ai = require('./Ai.js');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */
@@ -108,7 +109,7 @@ class RustPlus extends RustPlusLib {
         this.time = null;           /* Stores the Time structure. */
         this.team = null;           /* Stores the Team structure. */
         this.mapMarkers = null;     /* Stores the MapMarkers structure. */
-
+        this.ai = new Ai(guildId);
         this.loadRustPlusEvents();
     }
 
@@ -2745,6 +2746,38 @@ class RustPlus extends RustPlusLib {
         }
 
         return strings;
+    }
+
+    async askAiBot(query) {
+        if (this.ai !== null) {
+            let response = await this.ai.askAiBot(query);
+
+            return response;
+        }
+        return 'Failed to ask Rust bot.'
+    }
+    
+    async getCommandAi(command) {
+        const instance = Client.client.getInstance(this.guildId);
+        const prefix = this.generalSettings.prefix;
+        const commandAi = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxAi')}`;
+        const commandAiEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxAi')}`;
+        let query = null;
+
+        if (command.toLowerCase().startsWith(`${commandAi} `)) {
+            query = command.slice(`${commandAi} `.length).trim();
+        }
+        else if (command.toLowerCase().startsWith(`${commandAiEn} `)) {
+            query = command.slice(`${commandAiEn} `.length).trim();
+        }
+
+        this.log('getCommandAi: ', query);
+
+        if (query === null) return null;
+
+        let response = await this.askAiBot(query);
+
+        return response;
     }
 }
 

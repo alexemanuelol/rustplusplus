@@ -1,4 +1,6 @@
 {
+    "aiCap": "AI",
+    "aiCommandResponse": "{response}",
     "24HoursInGameTimePassed": "24 Successful hours in-game time have passed.",
     "abandonedCabins": "Abandoned Cabins",
     "abandonedMilitaryBase": "Abandoned Military Base",
@@ -111,6 +113,7 @@
     "commandSyntaxAdd": "add",
     "commandSyntaxAfk": "afk",
     "commandSyntaxAlive": "alive",
+    "commandSyntaxAi": "ai",
     "commandSyntaxArmored": "armored",
     "commandSyntaxCargo": "cargo",
     "commandSyntaxChinook": "chinook",
