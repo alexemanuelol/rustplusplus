@@ -43,11 +43,6 @@ module.exports = {
         else if (!rustplus.generalSettings.inGameCommandsEnabled) {
             return false;
         }
-        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxAi')}`) ||
-            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxAi')}`)) {
-            const aiResponseMessage = await rustplus.getCommandAi(command);
-            rustplus.sendInGameMessage(aiResponseMessage);
-        }
         else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxAfk')}` ||
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxAfk')}`) {
             rustplus.sendInGameMessage(rustplus.getCommandAfk());

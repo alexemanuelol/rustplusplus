@@ -600,12 +600,4 @@ module.exports = {
 
         await Client.client.interactionEditReply(interaction, content);
     },
-
-    sendAiMessage: async function (interaction, response) {
-        const instance = Client.client.getInstance(interaction.guildId);
-        const content = {
-            embeds: [DiscordEmbeds.getAiEmbed(interaction.guildId, response)]
-        }
-        await Client.client.interactionEditReply(interaction, content);
-    },
 }

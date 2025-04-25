@@ -1403,15 +1403,4 @@ module.exports = {
 
         return embed;
     },
-
-    getAiEmbed: function (guildId, response) {
-        const description = response;
-
-        return module.exports.getEmbed({
-            color: Constants.COLOR_DEFAULT,
-            timestamp: true,
-            title: `Rust AI`,
-            description: description
-        });
-    },
 }

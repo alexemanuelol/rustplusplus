@@ -1,6 +1,6 @@
 {
-    "name": "bigraidhunter",
-    "version": "5.0.0",
+    "name": "rustplusplus",
+    "version": "1.21.0",
     "description": "A NodeJS Discord Bot that uses the rustplus.js library to utilize the power of the Rust+ Companion App with additional Quality-of-Life features.",
     "main": "index.ts",
     "scripts": {
@@ -10,24 +10,26 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/dextermyles/rustplusplus.git"
+        "url": "https://github.com/alexemanuelol/rustplusplus.git"
     },
-    "author": "dextermyles",
+    "author": "Alexemanuelol",
     "license": "SEE LICENSE IN LICENSE",
-    "homepage": "https://github.com/dextermyles/rustplusplus#readme",
+    "bugs": {
+        "url": "https://github.com/alexemanuelol/rustplusplus/issues"
+    },
+    "homepage": "https://github.com/alexemanuelol/rustplusplus#readme",
     "dependencies": {
         "@discordjs/rest": "^1.6.0",
         "@discordjs/voice": "^0.16.0",
         "@formatjs/intl": "^2.6.9",
         "@liamcottle/push-receiver": "^0.0.4",
-        "@liamcottle/rustplus.js": "^2.5.0",
+        "@liamcottle/rustplus.js": "git+https://github.com/alexemanuelol/rustplus.js.git#698c30a0c3060cbc1f515e0725419e07f4de49c4",
         "axios": "^1.3.4",
         "colors": "^1.4.0",
         "discord-api-types": "^0.37.37",
         "discord.js": "^14.8.0",
         "ffmpeg-static": "^5.1.0",
         "gm": "^1.25.0",
-        "groq-sdk": "^0.19.0",
         "jimp": "^0.22.7",
         "libsodium-wrappers": "^0.7.11",
         "lodash": "^4.17.21",
