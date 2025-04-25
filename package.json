@@ -1,6 +1,6 @@
 {
-    "name": "rustplusplus",
-    "version": "1.21.0",
+    "name": "bigraidhunter",
+    "version": "1.0.0",
     "description": "A NodeJS Discord Bot that uses the rustplus.js library to utilize the power of the Rust+ Companion App with additional Quality-of-Life features.",
     "main": "index.ts",
     "scripts": {
@@ -10,20 +10,17 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/alexemanuelol/rustplusplus.git"
+        "url": "https://github.com/dextermyles/rustplusplus.git"
     },
-    "author": "Alexemanuelol",
+    "author": "dextermyles",
     "license": "SEE LICENSE IN LICENSE",
-    "bugs": {
-        "url": "https://github.com/alexemanuelol/rustplusplus/issues"
-    },
-    "homepage": "https://github.com/alexemanuelol/rustplusplus#readme",
+    "homepage": "https://github.com/dextermyles/rustplusplus#readme",
     "dependencies": {
         "@discordjs/rest": "^1.6.0",
         "@discordjs/voice": "^0.16.0",
         "@formatjs/intl": "^2.6.9",
         "@liamcottle/push-receiver": "^0.0.4",
-        "@liamcottle/rustplus.js": "git+https://github.com/JulianMa/rustplus.js.git#9f87ea17f3d330c23615757130855590ad84ac22",
+        "@liamcottle/rustplus.js": "^2.5.0",
         "axios": "^1.3.4",
         "colors": "^1.4.0",
         "discord-api-types": "^0.37.37",
