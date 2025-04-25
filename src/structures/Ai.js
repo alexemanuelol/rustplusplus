@@ -30,7 +30,7 @@ class Ai {
                         content: "In Rust, " + this.lastQuestion
                     }
                 ],
-                temperature: 0.55,
+                temperature: 0.5,
                 max_completion_tokens: 1024,
                 top_p: 0.95,
                 stream: false,
