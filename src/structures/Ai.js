@@ -19,18 +19,32 @@ class Ai {
     async askAiBot(query) {
         this.lastQuestion = query;
 
+        this.log('question: ', query, 'debug');
+
         const resp = await this.groq.chat.completions.create({
-            model: "llama3-70b-8192",
+            model: "deepseek-r1-distill-llama-70b",
             messages: [
                 {
                     role: "user",
-                    content: "In Rust (FacePunch Games) for PC, " +  this.lastQuestion
+                    content: "In Rust (FacePunch Games) for PC, summarize: " + this.lastQuestion
                 }
             ],
-            temperature: 0.3,
-            max_completion_tokens: 2048,
-            stream: false
+            temperature: 0.33,
+            max_completion_tokens: 1024,
+            top_p: 0.95,
+            stream: false,
+            reasoning_format: "hidden",
         });
+
+        if (!resp)
+            return '**error**';
+
+        this.log('AI: ', JSON.stringify(resp.choices), 'debug');
+        let content = resp.choices[0].message.content;
+        let lines = content.split('\n');
+
+        if (lines !== undefined)
+            this.log('lines: ', lines, 'debug');
 
         this.lastAnswer = resp.choices[0].message.content;
 

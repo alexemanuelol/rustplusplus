@@ -34,8 +34,8 @@ const client = new DiscordBot({
         Discord.GatewayIntentBits.GuildMembers,
         Discord.GatewayIntentBits.GuildVoiceStates],
     retryLimit: 2,
-    restRequestTimeout: 60000,
-    disableEveryone: false
+    restRequestTimeout: 15000,
+    disableEveryone: true
 });
 
 client.build();
