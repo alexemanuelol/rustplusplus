@@ -23,7 +23,7 @@
         "@discordjs/voice": "^0.16.0",
         "@formatjs/intl": "^2.6.9",
         "@liamcottle/push-receiver": "^0.0.4",
-        "@liamcottle/rustplus.js": "git+https://github.com/JulianMa/rustplus.js.git#9f87ea17f3d330c23615757130855590ad84ac22",
+        "@liamcottle/rustplus.js": "git+https://github.com/alexemanuelol/rustplus.js.git#698c30a0c3060cbc1f515e0725419e07f4de49c4",
         "axios": "^1.3.4",
         "colors": "^1.4.0",
         "discord-api-types": "^0.37.37",
