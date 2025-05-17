@@ -97,6 +97,24 @@ class Time {
         this.sunrise = time.sunrise;
         this.sunset = time.sunset;
         this.time = time.time;
+        this.checkForBroadcast();
+    }
+
+    checkForBroadcast() {
+        if (!this.timeTillActive) {
+            return null;
+        }
+
+        const timeRemainingString = this.getTimeTillDayOrNight();
+        const timeRemainingSeconds = TimeLib.getSecondsFromStringTime(timeRemainingString);
+
+        if (timeRemainingSeconds === 300) { // 5 minutes
+            const locString = this.isDay() ? 'timeTillNightfall' : 'timeTillDaylight';
+            const timeTilltransition = this._client.intlGet(this.guildId, locString, { time: timeRemainingString });
+
+            this.rustplus.sendInGameMessage(`${timeTilltransition}`)
+        }
+
     }
 
     getTimeTillDayOrNight(ignore = '') {
