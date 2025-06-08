@@ -1121,6 +1121,36 @@ module.exports = {
         });
     },
 
+    getRaidEmbed: function (guildId, raidDetails) {
+        const raidCosts = {
+            name: '',
+            time: '',
+            sulfur: ''
+        };
+    
+        const sortedItems = Object.values(raidDetails[3].explosive).sort((a, b) => {
+            const sulfurA = a[0].sulfur === null ? Infinity : Number(a[0].sulfur);
+            const sulfurB = b[0].sulfur === null ? Infinity : Number(b[0].sulfur);
+            return sulfurA - sulfurB;
+        });
+        for (const item of sortedItems) {
+            raidCosts.name += `${item[0].itemName}\n`;
+            raidCosts.time += `${item[0].timeString} (${item[0].quantity})\n`;
+            raidCosts.sulfur += `${item[0].sulfur}\n`;
+        }
+    
+        return module.exports.getEmbed({
+            title: `${raidDetails[1]}`,
+            color: Constants.COLOR_DEFAULT,
+            timestamp: true,
+            fields: [
+                { name: Client.client.intlGet(guildId, 'name'), value: raidCosts.name.trim(), inline: true },
+                { name: Client.client.intlGet(guildId, 'time'), value: raidCosts.time.trim(), inline: true },
+                { name: Client.client.intlGet(guildId, 'sulfur'), value: raidCosts.sulfur.trim(), inline: true }
+            ]
+        });
+    },
+
     getResearchEmbed: function (guildId, researchDetails) {
         let typeString = '', scrapString = '';
         if (researchDetails[2].researchTable !== null) {
