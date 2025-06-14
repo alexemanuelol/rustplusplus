@@ -292,6 +292,7 @@
     "multipleChannelsFound": "Multiple channels found: {channels}. Please provide a more precise name.",
     "movedToChannel": "Moved {count} player(s) to {channel}: {players}",
     "userNotInVoice": "{user} is not in a voice channel.",
+    "userAlreadyInChannel": "{user} is already in the target voice channel.",
     "failedToMoveUser": "Failed to move {user}.",
     "couldNotFindCategory": "Could not find category: {category}",
     "couldNotFindChannel": "Could not find channel: {channel}",
