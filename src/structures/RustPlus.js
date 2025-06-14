@@ -1608,6 +1608,15 @@ class RustPlus extends RustPlusLib {
                 continue;
             }
 
+            // Check if user is already in the target channel
+            if (member.voice.channelId === targetChannel.id) {
+                results.failed.push({ 
+                    name: member.displayName, 
+                    reason: 'already_in_channel' 
+                });
+                continue;
+            }
+
             try {
                 await member.voice.setChannel(targetChannel);
                 results.moved.push(member.displayName);
@@ -1634,7 +1643,8 @@ class RustPlus extends RustPlusLib {
         if (results.failed.length > 0) {
             const failedMessages = results.failed.map(f => 
                 Client.client.intlGet(this.guildId, 
-                    f.reason === 'not_in_voice' ? 'userNotInVoice' : 'failedToMoveUser',
+                    f.reason === 'not_in_voice' ? 'userNotInVoice' : 
+                f.reason === 'already_in_channel' ? 'userAlreadyInChannel' : 'failedToMoveUser',
                     { user: f.name }
                 )
             );
