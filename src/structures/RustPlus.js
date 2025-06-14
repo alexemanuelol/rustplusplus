@@ -1479,6 +1479,226 @@ class RustPlus extends RustPlusLib {
         return strings;
     }
 
+    async handleMoveCommand(command, callerSteamId, callerName) {
+        const args = command.split(' ').slice(1);
+        if (args.length < 1) {
+            return Client.client.intlGet(this.guildId, 'commandSyntaxMoveHelp');
+        }
+
+        const guild = Client.client.guilds.cache.get(this.guildId);
+        if (!guild) {
+            return Client.client.intlGet(this.guildId, 'couldNotFindGuild', { guildId: this.guildId });
+        }
+
+        const me = await guild.members.fetch(Client.client.user.id);
+        if (!me.permissions.has('MOVE_MEMBERS')) {
+            return Client.client.intlGet(this.guildId, 'missingMoveMembersPermission');
+        }
+
+        let targetChannelInput, playerNames;
+        
+        if (args.length === 1) {
+            targetChannelInput = args[0];
+            
+            const fs = require('fs');
+            const path = require('path');
+            const credentialsPath = path.join(__dirname, '..', '..', 'credentials', `${this.guildId}.json`);
+            
+            try {
+                if (fs.existsSync(credentialsPath)) {
+                    const credentialsData = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+                    console.log('Credentials data:', JSON.stringify(credentialsData, null, 2));
+                    
+                    if (credentialsData[callerSteamId]?.discord_user_id) {
+                        const discordUserId = credentialsData[callerSteamId].discord_user_id;
+                        console.log(`Found Discord ID ${discordUserId} for SteamID ${callerSteamId}`);
+                        playerNames = [discordUserId];
+                    } else {
+                        console.log(`No Discord ID linked for SteamID ${callerSteamId} in credentials`);
+                        console.log('Available Steam IDs in credentials:', Object.keys(credentialsData).filter(k => k !== 'hoster'));
+                        return Client.client.intlGet(this.guildId, 'noLinkedUserFound');
+                    }
+                } else {
+                    console.log(`Credentials file not found: ${credentialsPath}`);
+                    return Client.client.intlGet(this.guildId, 'noLinkedUserFound');
+                }
+            } catch (error) {
+                console.error('Error reading user data:', error);
+                return Client.client.intlGet(this.guildId, 'noLinkedUserFound');
+            }
+        } else {
+            targetChannelInput = args[args.length - 1];
+            playerNames = args.slice(0, -1);
+        }
+        
+        let targetChannel = guild.channels.cache.get(targetChannelInput);
+        
+        if (!targetChannel) {
+            try {
+                const voiceChannels = guild.channels.cache.filter(
+                    c => c.type === 'GUILD_VOICE' || c.type === 2
+                );
+                
+                targetChannel = voiceChannels.find(
+                    c => c.name.toLowerCase() === targetChannelInput.toLowerCase()
+                );
+                
+                if (!targetChannel) {
+                    const matchingChannels = voiceChannels.filter(
+                        c => c.name.toLowerCase().includes(targetChannelInput.toLowerCase())
+                    );
+                    
+                    if (matchingChannels.size === 1) {
+                        targetChannel = matchingChannels.first();
+                    } else if (matchingChannels.size > 1) {
+                        return Client.client.intlGet(this.guildId, 'multipleChannelsFound', { 
+                            channels: matchingChannels.map(c => c.name).join(', ') 
+                        });
+                    }
+                }
+                
+                if (!targetChannel) {
+                    const instance = Client.client.getInstance(this.guildId);
+                    const aliases = instance.aliases || {};
+                    const alias = Object.entries(aliases).find(
+                        ([, v]) => v.toLowerCase() === targetChannelInput.toLowerCase()
+                    );
+                    
+                    if (alias) {
+                        targetChannel = voiceChannels.get(alias[0]);
+                    }
+                }
+                
+                if (!targetChannel) {
+                    return Client.client.intlGet(this.guildId, 'channelNotFound', { channel: targetChannelInput });
+                }
+            } catch (error) {
+                console.error('Error finding voice channel:', error);
+                return Client.client.intlGet(this.guildId, 'errorFindingChannel', { error: error.message });
+            }
+        }
+
+        const results = {
+            moved: [],
+            failed: [],
+            notFound: []
+        };
+
+        for (const name of playerNames) {
+            const searchName = name.toLowerCase();
+            let member = null;
+            
+            member = guild.members.cache.get(name);
+            console.log(`Looking for member with ID: ${name}`);
+            
+            if (member) {
+                console.log(`Found member by ID: ${member.user.tag} (${member.id})`);
+            } else {
+                console.log(`No member found with ID: ${name}`);
+                
+                const voiceMembers = guild.members.cache.filter(m => m.voice?.channelId);
+                console.log(`Searching in ${voiceMembers.size} voice members...`);
+                
+                member = voiceMembers.find(m => 
+                    m.user.id === name ||
+                    m.displayName?.toLowerCase() === searchName ||
+                    m.nickname?.toLowerCase() === searchName ||
+                    m.user.username.toLowerCase() === searchName
+                );
+                
+                if (!member) {
+                    member = voiceMembers.find(m => 
+                        m.displayName?.toLowerCase().includes(searchName) ||
+                        m.nickname?.toLowerCase().includes(searchName) ||
+                        m.user.username.toLowerCase().includes(searchName)
+                    );
+                }
+                
+                if (!member) {
+                    console.log('Searching in all members...');
+                    member = guild.members.cache.find(m => {
+                        const displayName = m.displayName?.toLowerCase();
+                        const nickname = m.nickname?.toLowerCase();
+                        const username = m.user.username.toLowerCase();
+                        
+                        return m.user.id === name ||
+                               displayName === searchName || 
+                               nickname === searchName || 
+                               username === searchName ||
+                               displayName?.includes(searchName) ||
+                               nickname?.includes(searchName) ||
+                               username.includes(searchName);
+                    });
+                }
+                
+                if (member) {
+                    console.log(`Found member by name: ${member.user.tag} (${member.id})`);
+                } else {
+                    console.log('No member found with any search method');
+                }
+            }
+
+            if (!member) {
+                results.notFound.push(name);
+                continue;
+            }
+
+            if (!member.voice?.channelId) {
+                results.failed.push({ name: member.displayName, reason: 'not_in_voice' });
+                continue;
+            }
+
+            if (member.voice.channelId === targetChannel.id) {
+                results.failed.push({ 
+                    name: member.displayName, 
+                    reason: 'already_in_channel' 
+                });
+                continue;
+            }
+
+            try {
+                await member.voice.setChannel(targetChannel);
+                results.moved.push(member.displayName);
+            } catch (error) {
+                console.error(`Failed to move ${member.displayName}:`, error);
+                results.failed.push({ 
+                    name: member.displayName, 
+                    reason: error.message.includes('permissions') ? 'missing_permissions' : 'other_error' 
+                });
+            }
+        }
+
+        const messages = [];
+        
+        if (results.moved.length > 0) {
+            messages.push(Client.client.intlGet(this.guildId, 'movedToChannel', {
+                count: results.moved.length,
+                players: results.moved.join(', '),
+                channel: targetChannel.name
+            }));
+        }
+        
+        if (results.failed.length > 0) {
+            const failedMessages = results.failed.map(f => 
+                Client.client.intlGet(this.guildId, 
+                    f.reason === 'not_in_voice' ? 'userNotInVoice' : 
+                f.reason === 'already_in_channel' ? 'userAlreadyInChannel' : 'failedToMoveUser',
+                    { user: f.name }
+                )
+            );
+            messages.push(failedMessages.join('\n'));
+        }
+        
+        if (results.notFound.length > 0) {
+            messages.push(Client.client.intlGet(this.guildId, 'playersNotFound', {
+                count: results.notFound.length,
+                players: results.notFound.join(', ')
+            }));
+        }
+
+        return messages.join('\n');
+    }
+
     async getCommandLeader(command, callerSteamId) {
         const prefix = this.generalSettings.prefix;
         const commandLeader = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxLeader')}`;
