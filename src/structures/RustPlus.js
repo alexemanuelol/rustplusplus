@@ -1481,7 +1481,7 @@ class RustPlus extends RustPlusLib {
 
     async handleMoveCommand(command, callerSteamId, callerName) {
         const args = command.split(' ').slice(1);
-        if (args.length < 2) {
+        if (args.length < 1) {
             return Client.client.intlGet(this.guildId, 'commandSyntaxMoveHelp');
         }
 
@@ -1495,9 +1495,44 @@ class RustPlus extends RustPlusLib {
             return Client.client.intlGet(this.guildId, 'missingMoveMembersPermission');
         }
 
-        // The last argument is the target channel
-        const targetChannelInput = args[args.length - 1];
-        const playerNames = args.slice(0, -1);
+        let targetChannelInput, playerNames;
+        
+        // If only one argument is provided, it's the channel name and we'll try to move the command sender
+        if (args.length === 1) {
+            targetChannelInput = args[0];
+            
+            // Find the caller's Discord ID from credentials
+            const fs = require('fs');
+            const path = require('path');
+            const credentialsPath = path.join(__dirname, '..', '..', 'credentials', `${this.guildId}.json`);
+            
+            try {
+                if (fs.existsSync(credentialsPath)) {
+                    const credentialsData = JSON.parse(fs.readFileSync(credentialsPath, 'utf8'));
+                    console.log('Credentials data:', JSON.stringify(credentialsData, null, 2));
+                    
+                    if (credentialsData[callerSteamId]?.discord_user_id) {
+                        const discordUserId = credentialsData[callerSteamId].discord_user_id;
+                        console.log(`Found Discord ID ${discordUserId} for SteamID ${callerSteamId}`);
+                        playerNames = [discordUserId];
+                    } else {
+                        console.log(`No Discord ID linked for SteamID ${callerSteamId} in credentials`);
+                        console.log('Available Steam IDs in credentials:', Object.keys(credentialsData).filter(k => k !== 'hoster'));
+                        return Client.client.intlGet(this.guildId, 'noLinkedUserFound');
+                    }
+                } else {
+                    console.log(`Credentials file not found: ${credentialsPath}`);
+                    return Client.client.intlGet(this.guildId, 'noLinkedUserFound');
+                }
+            } catch (error) {
+                console.error('Error reading user data:', error);
+                return Client.client.intlGet(this.guildId, 'noLinkedUserFound');
+            }
+        } else {
+            // The last argument is the target channel, the rest are player names
+            targetChannelInput = args[args.length - 1];
+            playerNames = args.slice(0, -1);
+        }
         
         // First try to find the channel by ID
         let targetChannel = guild.channels.cache.get(targetChannelInput);
@@ -1563,39 +1598,59 @@ class RustPlus extends RustPlusLib {
             const searchName = name.toLowerCase();
             let member = null;
             
-            // First, try to find an exact match in voice channels
-            const voiceMembers = guild.members.cache.filter(m => m.voice?.channelId);
+            // First, try to find by Discord user ID (since we have it from credentials)
+            member = guild.members.cache.get(name);
+            console.log(`Looking for member with ID: ${name}`);
             
-            // 1. Check for exact matches in voice channels
-            member = voiceMembers.find(m => 
-                m.displayName?.toLowerCase() === searchName ||
-                m.nickname?.toLowerCase() === searchName ||
-                m.user.username.toLowerCase() === searchName
-            );
-            
-            // 2. If no exact match, check for partial matches in voice channels
-            if (!member) {
+            if (member) {
+                console.log(`Found member by ID: ${member.user.tag} (${member.id})`);
+            } else {
+                console.log(`No member found with ID: ${name}`);
+                
+                // If not found by ID, try to find by name as fallback
+                const voiceMembers = guild.members.cache.filter(m => m.voice?.channelId);
+                console.log(`Searching in ${voiceMembers.size} voice members...`);
+                
+                // 1. Check for exact matches in voice channels
                 member = voiceMembers.find(m => 
-                    m.displayName?.toLowerCase().includes(searchName) ||
-                    m.nickname?.toLowerCase().includes(searchName) ||
-                    m.user.username.toLowerCase().includes(searchName)
+                    m.user.id === name ||
+                    m.displayName?.toLowerCase() === searchName ||
+                    m.nickname?.toLowerCase() === searchName ||
+                    m.user.username.toLowerCase() === searchName
                 );
-            }
-            
-            // 3. If still no match, search all members (including those not in voice)
-            if (!member) {
-                member = guild.members.cache.find(m => {
-                    const displayName = m.displayName?.toLowerCase();
-                    const nickname = m.nickname?.toLowerCase();
-                    const username = m.user.username.toLowerCase();
-                    
-                    return displayName === searchName || 
-                           nickname === searchName || 
-                           username === searchName ||
-                           displayName?.includes(searchName) ||
-                           nickname?.includes(searchName) ||
-                           username.includes(searchName);
-                });
+                
+                // 2. If no exact match, check for partial matches in voice channels
+                if (!member) {
+                    member = voiceMembers.find(m => 
+                        m.displayName?.toLowerCase().includes(searchName) ||
+                        m.nickname?.toLowerCase().includes(searchName) ||
+                        m.user.username.toLowerCase().includes(searchName)
+                    );
+                }
+                
+                // 3. If still no match, search all members (including those not in voice)
+                if (!member) {
+                    console.log('Searching in all members...');
+                    member = guild.members.cache.find(m => {
+                        const displayName = m.displayName?.toLowerCase();
+                        const nickname = m.nickname?.toLowerCase();
+                        const username = m.user.username.toLowerCase();
+                        
+                        return m.user.id === name ||
+                               displayName === searchName || 
+                               nickname === searchName || 
+                               username === searchName ||
+                               displayName?.includes(searchName) ||
+                               nickname?.includes(searchName) ||
+                               username.includes(searchName);
+                    });
+                }
+                
+                if (member) {
+                    console.log(`Found member by name: ${member.user.tag} (${member.id})`);
+                } else {
+                    console.log('No member found with any search method');
+                }
             }
 
             if (!member) {

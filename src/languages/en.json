@@ -294,6 +294,8 @@
     "userNotInVoice": "{user} is not in a voice channel.",
     "userAlreadyInChannel": "{user} is already in the target voice channel.",
     "failedToMoveUser": "Failed to move {user}.",
+    "commandSyntaxMoveHelp": "Usage: .move [user1 user2 ...] <channel> or .move <channel> to move yourself",
+    "noLinkedUserFound": "No linked Discord account found. Please link your account or specify users to move.",
     "couldNotFindCategory": "Could not find category: {category}",
     "couldNotFindChannel": "Could not find channel: {channel}",
     "couldNotFindCraftDetails": "Could not find craft details for {name}.",
