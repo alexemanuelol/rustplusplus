@@ -1560,20 +1560,43 @@ class RustPlus extends RustPlusLib {
 
         // Process each player
         for (const name of playerNames) {
-            // Try to find member by display name, nickname, or username (case insensitive)
-            const member = guild.members.cache.find(m => {
-                const displayName = m.displayName?.toLowerCase();
-                const nickname = m.nickname?.toLowerCase();
-                const username = m.user.username.toLowerCase();
-                const searchName = name.toLowerCase();
-                
-                return displayName === searchName || 
-                       nickname === searchName || 
-                       username === searchName ||
-                       displayName?.includes(searchName) ||
-                       nickname?.includes(searchName) ||
-                       username.includes(searchName);
-            });
+            const searchName = name.toLowerCase();
+            let member = null;
+            
+            // First, try to find an exact match in voice channels
+            const voiceMembers = guild.members.cache.filter(m => m.voice?.channelId);
+            
+            // 1. Check for exact matches in voice channels
+            member = voiceMembers.find(m => 
+                m.displayName?.toLowerCase() === searchName ||
+                m.nickname?.toLowerCase() === searchName ||
+                m.user.username.toLowerCase() === searchName
+            );
+            
+            // 2. If no exact match, check for partial matches in voice channels
+            if (!member) {
+                member = voiceMembers.find(m => 
+                    m.displayName?.toLowerCase().includes(searchName) ||
+                    m.nickname?.toLowerCase().includes(searchName) ||
+                    m.user.username.toLowerCase().includes(searchName)
+                );
+            }
+            
+            // 3. If still no match, search all members (including those not in voice)
+            if (!member) {
+                member = guild.members.cache.find(m => {
+                    const displayName = m.displayName?.toLowerCase();
+                    const nickname = m.nickname?.toLowerCase();
+                    const username = m.user.username.toLowerCase();
+                    
+                    return displayName === searchName || 
+                           nickname === searchName || 
+                           username === searchName ||
+                           displayName?.includes(searchName) ||
+                           nickname?.includes(searchName) ||
+                           username.includes(searchName);
+                });
+            }
 
             if (!member) {
                 results.notFound.push(name);
