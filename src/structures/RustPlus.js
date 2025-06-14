@@ -1497,11 +1497,9 @@ class RustPlus extends RustPlusLib {
 
         let targetChannelInput, playerNames;
         
-        // If only one argument is provided, it's the channel name and we'll try to move the command sender
         if (args.length === 1) {
             targetChannelInput = args[0];
             
-            // Find the caller's Discord ID from credentials
             const fs = require('fs');
             const path = require('path');
             const credentialsPath = path.join(__dirname, '..', '..', 'credentials', `${this.guildId}.json`);
@@ -1529,28 +1527,22 @@ class RustPlus extends RustPlusLib {
                 return Client.client.intlGet(this.guildId, 'noLinkedUserFound');
             }
         } else {
-            // The last argument is the target channel, the rest are player names
             targetChannelInput = args[args.length - 1];
             playerNames = args.slice(0, -1);
         }
         
-        // First try to find the channel by ID
         let targetChannel = guild.channels.cache.get(targetChannelInput);
         
-        // If not found by ID, try to find by name in voice channels
         if (!targetChannel) {
             try {
-                // Fetch all voice channels to ensure cache is populated
                 const voiceChannels = guild.channels.cache.filter(
-                    c => c.type === 'GUILD_VOICE' || c.type === 2 // 2 is GUILD_VOICE in newer Discord.js versions
+                    c => c.type === 'GUILD_VOICE' || c.type === 2
                 );
                 
-                // Try exact match first
                 targetChannel = voiceChannels.find(
                     c => c.name.toLowerCase() === targetChannelInput.toLowerCase()
                 );
                 
-                // If no exact match, try partial match
                 if (!targetChannel) {
                     const matchingChannels = voiceChannels.filter(
                         c => c.name.toLowerCase().includes(targetChannelInput.toLowerCase())
@@ -1565,7 +1557,6 @@ class RustPlus extends RustPlusLib {
                     }
                 }
                 
-                // If still not found, check aliases
                 if (!targetChannel) {
                     const instance = Client.client.getInstance(this.guildId);
                     const aliases = instance.aliases || {};
@@ -1593,12 +1584,10 @@ class RustPlus extends RustPlusLib {
             notFound: []
         };
 
-        // Process each player
         for (const name of playerNames) {
             const searchName = name.toLowerCase();
             let member = null;
             
-            // First, try to find by Discord user ID (since we have it from credentials)
             member = guild.members.cache.get(name);
             console.log(`Looking for member with ID: ${name}`);
             
@@ -1607,11 +1596,9 @@ class RustPlus extends RustPlusLib {
             } else {
                 console.log(`No member found with ID: ${name}`);
                 
-                // If not found by ID, try to find by name as fallback
                 const voiceMembers = guild.members.cache.filter(m => m.voice?.channelId);
                 console.log(`Searching in ${voiceMembers.size} voice members...`);
                 
-                // 1. Check for exact matches in voice channels
                 member = voiceMembers.find(m => 
                     m.user.id === name ||
                     m.displayName?.toLowerCase() === searchName ||
@@ -1619,7 +1606,6 @@ class RustPlus extends RustPlusLib {
                     m.user.username.toLowerCase() === searchName
                 );
                 
-                // 2. If no exact match, check for partial matches in voice channels
                 if (!member) {
                     member = voiceMembers.find(m => 
                         m.displayName?.toLowerCase().includes(searchName) ||
@@ -1628,7 +1614,6 @@ class RustPlus extends RustPlusLib {
                     );
                 }
                 
-                // 3. If still no match, search all members (including those not in voice)
                 if (!member) {
                     console.log('Searching in all members...');
                     member = guild.members.cache.find(m => {
@@ -1663,7 +1648,6 @@ class RustPlus extends RustPlusLib {
                 continue;
             }
 
-            // Check if user is already in the target channel
             if (member.voice.channelId === targetChannel.id) {
                 results.failed.push({ 
                     name: member.displayName, 
@@ -1684,7 +1668,6 @@ class RustPlus extends RustPlusLib {
             }
         }
 
-        // Build result message
         const messages = [];
         
         if (results.moved.length > 0) {
