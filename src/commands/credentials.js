@@ -125,6 +125,22 @@ async function addCredentials(client, interaction, verifyId) {
         }
     }
 
+    // Clean up existing listeners if there are any.
+    if (steamId in credentials) {
+        if (steamId === credentials.hoster) {
+            if (client.fcmListeners[guildId]) {
+                client.fcmListeners[guildId].destroy();
+            }
+            delete client.fcmListeners[guildId];
+            credentials.hoster = null;
+        } else {
+            if (client.fcmListenersLite[guildId][steamId]) {
+                client.fcmListenersLite[guildId][steamId].destroy();
+            }
+            delete client.fcmListenersLite[guildId][steamId];
+        }
+    }
+    
     credentials[steamId] = new Object();
     credentials[steamId].gcm = new Object();
     credentials[steamId].gcm.android_id = interaction.options.getString('gcm_android_id');
