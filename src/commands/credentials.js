@@ -125,13 +125,6 @@ async function addCredentials(client, interaction, verifyId) {
         }
     }
 
-    if (steamId in credentials) {
-        const str = client.intlGet(guildId, 'credentialsAlreadyRegistered', { steamId: steamId });
-        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-        client.log(client.intlGet(null, 'warningCap'), str);
-        return;
-    }
-
     credentials[steamId] = new Object();
     credentials[steamId].gcm = new Object();
     credentials[steamId].gcm.android_id = interaction.options.getString('gcm_android_id');
