@@ -71,7 +71,8 @@ export function createLogger(logFilePath: string): winston.Logger {
         transports: [
             /* Console transport */
             new winston.transports.Console({
-                format: customFormatConsole
+                format: customFormatConsole,
+                level: 'info'
             }),
             /* File transport */
             new winston.transports.File({
@@ -79,7 +80,8 @@ export function createLogger(logFilePath: string): winston.Logger {
                 maxsize: 10 * 1024 * 1024, /* 10MB in bytes */
                 maxFiles: 5, /* Keep the last 5 log files */
                 tailable: true, /* Ensure the log file names follow the pattern logfile.log, logfile.log.1 etc... */
-                format: customFormatFile
+                format: customFormatFile,
+                level: 'debug'
             })
         ]
     });
