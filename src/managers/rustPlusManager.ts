@@ -46,8 +46,8 @@ export class RustPlusManager {
     private rustPlusInstanceMap: RustPlusInstanceMap;
 
     constructor() {
-        const funcName = '[RustPlusManager: Init]';
-        log.info(`${funcName}`);
+        const fName = '[RustPlusManager: Init]';
+        log.info(`${fName}`);
         this.rustPlusInstanceMap = {};
     }
 
@@ -61,7 +61,7 @@ export class RustPlusManager {
     }
 
     public addInstance(guildId: types.GuildId, serverId: types.ServerId): boolean {
-        const funcName = '[RustPlusManager: addInstance]';
+        const fName = '[RustPlusManager: addInstance]';
         const ipAndPort = getIpAndPort(serverId);
         const logParam = { guildId: guildId, serverId: serverId };
 
@@ -70,27 +70,27 @@ export class RustPlusManager {
         }
 
         if (Object.hasOwn(this.rustPlusInstanceMap, serverId)) {
-            log.warn(`${funcName} Instance already exist.`, logParam);
+            log.warn(`${fName} Instance already exist.`, logParam);
             return false;
         }
 
         this.rustPlusInstanceMap[guildId][serverId] = new RustPlusInstance(guildId, ipAndPort.ip, ipAndPort.port);
-        log.info(`${funcName} Instance added.`, logParam);
+        log.info(`${fName} Instance added.`, logParam);
         return true;
     }
 
     public removeInstance(guildId: types.GuildId, serverId: types.ServerId): boolean {
-        const funcName = '[RustPlusManager: removeInstance]';
+        const fName = '[RustPlusManager: removeInstance]';
         const logParam = { guildId: guildId, serverId: serverId };
 
         if (!this.hasInstance(guildId, serverId)) {
-            log.warn(`${funcName} Instance does not exist.`, logParam);
+            log.warn(`${fName} Instance does not exist.`, logParam);
             return false;
         }
 
         this.rustPlusInstanceMap[guildId][serverId].shutdown();
         delete this.rustPlusInstanceMap[guildId][serverId];
-        log.info(`${funcName} Instance removed.`, logParam);
+        log.info(`${fName} Instance removed.`, logParam);
         return true;
     }
 
@@ -175,7 +175,7 @@ export class RustPlusInstance {
     }
 
     public async scheduleReconnect() {
-        const funcName = '[RustPlusInstance: scheduleReconnect]';
+        const fName = '[RustPlusInstance: scheduleReconnect]';
         this.rustPlus.removeAllListeners();
         await this.rustPlus.disconnect();
 
@@ -190,7 +190,7 @@ export class RustPlusInstance {
                 constants.MAX_RECONNECT_TIMEOUT_SECONDS);
         }
 
-        log.info(`${funcName} Reconnecting in ${this.reconnectTimeoutSeconds} seconds.`, {
+        log.info(`${fName} Reconnecting in ${this.reconnectTimeoutSeconds} seconds.`, {
             guildId: this.guildId,
             serverId: this.serverId,
             serverName: this.serverName
@@ -220,14 +220,14 @@ export class RustPlusInstance {
     }
 
     public startReconnectionTimer() {
-        const funcName = '[RustPlusInstance: startReconnectionTimer]';
+        const fName = '[RustPlusInstance: startReconnectionTimer]';
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
         if (this.reconnectTimeoutId !== undefined) {
             this.stopReconnectionTimer();
         }
 
-        log.info(`${funcName}`, logParam);
+        log.info(`${fName}`, logParam);
 
         this.reconnectTimeoutId = setTimeout(() => {
             this.startup();
@@ -235,24 +235,24 @@ export class RustPlusInstance {
     }
 
     public stopReconnectionTimer() {
-        const funcName = '[RustPlusInstance: stopReconnectionTimer]';
+        const fName = '[RustPlusInstance: stopReconnectionTimer]';
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
-        log.info(`${funcName}`, logParam);
+        log.info(`${fName}`, logParam);
 
         clearTimeout(this.reconnectTimeoutId);
         this.reconnectTimeoutId = undefined;
     }
 
     public startServerPollingHandler() {
-        const funcName = '[RustPlusInstance: startServerPollingHandler]';
+        const fName = '[RustPlusInstance: startServerPollingHandler]';
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
         if (this.serverPollingHandlerIntervalId !== undefined) {
             this.stopServerPollingHandler();
         }
 
-        log.info(`${funcName}`, logParam);
+        log.info(`${fName}`, logParam);
 
         this.serverPolling(true);
         this.serverPollingHandlerIntervalId = setInterval(() => {
@@ -261,17 +261,17 @@ export class RustPlusInstance {
     }
 
     public stopServerPollingHandler() {
-        const funcName = '[RustPlusInstance: stopServerPollingHandler]';
+        const fName = '[RustPlusInstance: stopServerPollingHandler]';
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
-        log.info(`${funcName}`, logParam);
+        log.info(`${fName}`, logParam);
 
         clearInterval(this.serverPollingHandlerIntervalId);
         this.serverPollingHandlerIntervalId = undefined;
     }
 
     private async serverPolling(firstPoll: boolean = false) {
-        const funcName = '[RustPlusManager: serverPolling]';
+        const fName = '[RustPlusManager: serverPolling]';
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
@@ -281,7 +281,7 @@ export class RustPlusInstance {
 
         if (!pairingData) {
             this.lastServerPollSuccessful = false;
-            log.warn(`${funcName} pairingData for ${mainRequesterSteamId} could not be found.`, logParam);
+            log.warn(`${fName} pairingData for ${mainRequesterSteamId} could not be found.`, logParam);
             return;
         }
 
@@ -325,7 +325,7 @@ export class RustPlusInstance {
     public async validateServerPollResponse(response: rp.AppResponse | Error | rp.ConsumeTokensError,
         responseParam: keyof rp.AppResponse, validationCallback: (input: unknown, logger: Logger | null) => boolean):
         Promise<boolean> {
-        const funcName = `[RustPlusManager: validateServerPollResponse]`
+        const fName = `[RustPlusManager: validateServerPollResponse]`
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
@@ -336,11 +336,11 @@ export class RustPlusInstance {
         if (rp.isValidAppResponse(response, log)) {
             if (!validationCallback(response[responseParam], log)) {
                 if (rp.isValidAppError(response.error, log)) {
-                    log.warn(`${funcName} AppError: ${response.error.error}`, logParam);
+                    log.warn(`${fName} AppError: ${response.error.error}`, logParam);
                     if (this.rustPlus.getAppResponseError(response) === rp.AppResponseError.NotFound) {
                         /* pairingData is no longer valid. */
                         if (pairingData && pairingData.valid) {
-                            log.warn(`${funcName} PairingData no longer valid for ${mainRequesterSteamId}.`, logParam);
+                            log.warn(`${fName} PairingData no longer valid for ${mainRequesterSteamId}.`, logParam);
                             pairingData.valid = false;
                             gim.updateGuildInstance(this.guildId);
                             await sendServerMessage(dm, this.guildId, this.serverId, this.connectionStatus);
@@ -348,7 +348,7 @@ export class RustPlusInstance {
                     }
                 }
                 else {
-                    log.error(`${funcName} We got completely wrong response: ${JSON.stringify(response)}`, logParam);
+                    log.error(`${fName} We got completely wrong response: ${JSON.stringify(response)}`, logParam);
                 }
                 this.lastServerPollSuccessful = false;
                 return false;
@@ -364,10 +364,10 @@ export class RustPlusInstance {
         else {
             /* Error or rp.ConsumeTokensError */
             if (response instanceof Error) {
-                log.error(`${funcName} Error: ${response.message}`, logParam);
+                log.error(`${fName} Error: ${response.message}`, logParam);
             }
             else {
-                log.error(`${funcName} ConsumeTokensError: ${response}`, logParam);
+                log.error(`${fName} ConsumeTokensError: ${response}`, logParam);
             }
             this.lastServerPollSuccessful = false;
             return false;
@@ -377,10 +377,10 @@ export class RustPlusInstance {
     }
 
     public async validatePairingData() {
-        const funcName = `[RustPlusManager: validatePairingData]`
+        const fName = `[RustPlusManager: validatePairingData]`
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
-        log.info(`${funcName}`, logParam);
+        log.info(`${fName}`, logParam);
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const pairingDataMap = gInstance.pairingDataMap[this.serverId];
@@ -389,14 +389,14 @@ export class RustPlusInstance {
             if (rp.isValidAppResponse(rpInfo, log)) {
                 if (!rp.isValidAppInfo(rpInfo.info, log)) {
                     if (rp.isValidAppError(rpInfo.error, log)) {
-                        log.warn(`${funcName} SteamId: ${steamId}, AppError: ${rpInfo.error.error}`, logParam);
+                        log.warn(`${fName} SteamId: ${steamId}, AppError: ${rpInfo.error.error}`, logParam);
                         if (this.rustPlus.getAppResponseError(rpInfo) === rp.AppResponseError.NotFound) {
-                            log.warn(`${funcName} PairingData no longer valid for ${steamId}.`, logParam);
+                            log.warn(`${fName} PairingData no longer valid for ${steamId}.`, logParam);
                             pairingData.valid = false;
                         }
                     }
                     else {
-                        log.error(`${funcName} We got completely wrong response: ${JSON.stringify(rpInfo)}`, logParam);
+                        log.error(`${fName} We got completely wrong response: ${JSON.stringify(rpInfo)}`, logParam);
                     }
                 }
                 else {
@@ -406,10 +406,10 @@ export class RustPlusInstance {
             else {
                 /* Error or rp.ConsumeTokensError */
                 if (rpInfo instanceof Error) {
-                    log.error(`${funcName} Error: ${rpInfo.message}`, logParam);
+                    log.error(`${fName} Error: ${rpInfo.message}`, logParam);
                 }
                 else {
-                    log.error(`${funcName} ConsumeTokensError: ${rpInfo}`, logParam);
+                    log.error(`${fName} ConsumeTokensError: ${rpInfo}`, logParam);
                 }
             }
         }

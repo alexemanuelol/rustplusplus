@@ -25,7 +25,7 @@ export const name = 'warn';
 export const once = false;
 
 export async function execute(dm: DiscordManager, info: string) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
 
-    log.warn(`${funcName} ${info}`);
+    log.warn(`${fName} ${info}`);
 }

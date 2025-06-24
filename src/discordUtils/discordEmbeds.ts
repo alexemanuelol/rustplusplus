@@ -106,14 +106,14 @@ export function getEmbed(options: discordjs.EmbedData): discordjs.EmbedBuilder {
 }
 
 export function getEmbedColumnFields(options: discordjs.EmbedData, columns: ColumnData[]): discordjs.EmbedBuilder {
-    const funcName = '[getEmbedColumnFields]';
+    const fName = '[getEmbedColumnFields]';
     if (!columns || columns.length === 0 || columns.length > 3) {
-        throw new Error(`${funcName} Must provide between 1 and 3 columns.`);
+        throw new Error(`${fName} Must provide between 1 and 3 columns.`);
     }
 
     const expectedColumnDataLength = columns[0]?.data.length;
     if (!columns.every(col => col.data.length === expectedColumnDataLength)) {
-        throw new Error(`${funcName} All columns must have the same number of data items.`);
+        throw new Error(`${fName} All columns must have the same number of data items.`);
     }
 
     const embed = getEmbed(options);

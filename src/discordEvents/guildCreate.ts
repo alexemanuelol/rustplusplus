@@ -27,10 +27,10 @@ export const name = 'guildCreate';
 export const once = false;
 
 export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
     const logParam = { guildId: guild.id };
 
-    log.info(`${funcName} Client joined guild.`, logParam);
+    log.info(`${fName} Client joined guild.`, logParam);
 
     if (gim.getGuildInstance(guild.id) === null) {
         gim.addNewGuildInstance(guild.id);

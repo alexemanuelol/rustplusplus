@@ -79,7 +79,7 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const funcName = '[SlashCommand: credentials]';
+		const fName = '[SlashCommand: credentials]';
 		const logParam = { guildId: interaction.guildId };
 
 		const id = `Interaction ID: ${interaction.id} -`
@@ -88,7 +88,7 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${funcName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
@@ -116,7 +116,7 @@ export default {
 				}
 				await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleInvalidSubcommand',
 					'errorDescInvalidSubcommand', parameters);
-				log.info(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
+				log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
 				result = false;
 			} break;
@@ -127,7 +127,7 @@ export default {
 };
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials: add]';
+	const fName = '[SlashCommand: credentials: add]';
 	const guildId = interaction.guildId as types.GuildId;
 	const logParam = { guildId: guildId };
 
@@ -143,7 +143,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
@@ -167,7 +167,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		if (oldCredentials.discordUserId !== newCredentials.discordUserId) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 				'errorDescMissingPermission');
-			log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
+			log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
 				logParam);
 			return false;
 		}
@@ -199,14 +199,14 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	};
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleCredentialsAdd',
 		'slashCommandSuccessDescCredentialsAdd', parameters);
-	log.info(`${funcName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescCredentialsAdd',
+	log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescCredentialsAdd',
 		parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials: remove]';
+	const fName = '[SlashCommand: credentials: remove]';
 	const guildId = interaction.guildId as types.GuildId;
 	const logParam = { guildId: guildId };
 
@@ -219,7 +219,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
 			logParam);
 		return false;
 	}
@@ -231,7 +231,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleCredentialsForSteamIdNotFound',
 			'errorDescCredentialsForSteamIdNotFound', parameters);
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language,
 			'errorDescCredentialsForSteamIdNotFound', parameters)}`, logParam);
 		return false
 	}
@@ -240,7 +240,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		(all && discordUserId !== credentials.discordUserId && !dm.isAdministrator(interaction))) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
 			logParam);
 		return false;
 	}
@@ -251,7 +251,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleCredentialsNotPartOfGuild',
 			'errorDescCredentialsNotPartOfGuild', parameters);
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language,
 			'errorDescCredentialsNotPartOfGuild', parameters)}`, logParam);
 		return false
 	}
@@ -282,14 +282,14 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	};
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleCredentialsRemove',
 		'slashCommandSuccessDescCredentialsRemove', parameters);
-	log.info(`${funcName} ${id} ${lm.getIntl(config.general.language,
+	log.info(`${fName} ${id} ${lm.getIntl(config.general.language,
 		'slashCommandSuccessDescCredentialsRemove', parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeInfo(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials: info]';
+	const fName = '[SlashCommand: credentials: info]';
 	const guildId = (interaction.guild as discordjs.Guild).id;
 	const logParam = { guildId: guildId };
 
@@ -298,20 +298,20 @@ async function executeInfo(dm: DiscordManager, interaction: discordjs.ChatInputC
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
 			logParam);
 		return false;
 	}
 
 	await discordMessages.sendCredentialsInfoMessage(dm, interaction);
-	log.info(`${funcName} ${id} Successfully displaying credentials information for ` +
+	log.info(`${fName} ${id} Successfully displaying credentials information for ` +
 		`${interaction.user.username} (${interaction.user.id}).`, logParam);
 
 	return true;
 }
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: credentials: list]';
+	const fName = '[SlashCommand: credentials: list]';
 	const guildId = (interaction.guild as discordjs.Guild).id;
 	const logParam = { guildId: guildId };
 
@@ -320,12 +320,12 @@ async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputC
 	if (!dm.validPermissions(interaction, true)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
 	await discordMessages.sendCredentialsListMessage(dm, interaction);
-	log.info(`${funcName} ${id} Successfully listing all credentials associated with the guild.`, logParam);
+	log.info(`${fName} ${id} Successfully listing all credentials associated with the guild.`, logParam);
 
 	return true;
 }

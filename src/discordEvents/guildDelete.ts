@@ -35,10 +35,10 @@ export const name = 'guildDelete';
 export const once = false;
 
 export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
     const logParam = { guildId: guild.id };
 
-    log.info(`${funcName} Client left guild.`, logParam);
+    log.info(`${fName} Client left guild.`, logParam);
 
     /* Update credentials associated guilds, remove credentials/fcm listeners for users that are no longer part of
        the guild. */

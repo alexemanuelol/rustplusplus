@@ -28,7 +28,7 @@ import { Credentials } from '../managers/credentialsManager';
 
 export async function autocompleteHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction):
     Promise<boolean> {
-    const funcName = '[autocompleteHandler]';
+    const fName = '[autocompleteHandler]';
     const logParam = { guildId: interaction.guildId as types.GuildId };
 
     const commandName = interaction.commandName;
@@ -40,7 +40,7 @@ export async function autocompleteHandler(dm: DiscordManager, interaction: disco
         autocompleteCredentialsHandler(dm, interaction);
     }
     else {
-        log.error(`${funcName} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
+        log.error(`${fName} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
         return false;
     }
 

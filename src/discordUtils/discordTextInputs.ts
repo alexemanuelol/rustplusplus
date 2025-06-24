@@ -40,12 +40,12 @@ function truncate(text: string, maxLength: number): string {
  */
 
 export function getTextInput(options: discordjs.TextInputComponentData): discordjs.TextInputBuilder {
-    const funcName = `[getTextInput]`;
+    const fName = `[getTextInput]`;
     const textInput = new discordjs.TextInputBuilder();
 
     if ('customId' in options && options.customId) {
         if (options.customId.length > TextInputLimits.CustomId) {
-            throw new Error(`${funcName} CustomId exceeds limit ${TextInputLimits.CustomId}, actual: ` +
+            throw new Error(`${fName} CustomId exceeds limit ${TextInputLimits.CustomId}, actual: ` +
                 `${options.customId.length}. CustomId: '${options.customId}'`);
         }
         textInput.setCustomId(options.customId);

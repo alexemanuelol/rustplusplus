@@ -28,7 +28,7 @@ export const name = 'roleDelete';
 export const once = false;
 
 export async function execute(dm: DiscordManager, role: discordjs.Role) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
     const logParam = { guildId: role.guild.id };
 
     const guild = role.guild;
@@ -36,11 +36,11 @@ export async function execute(dm: DiscordManager, role: discordjs.Role) {
 
     let resetPermissions = false;
     if (gInstance.roleIds.includes(role.id)) {
-        log.info(`${funcName} '${role.id}' was deleted and part of roleIds, permission reset required.`, logParam);
+        log.info(`${fName} '${role.id}' was deleted and part of roleIds, permission reset required.`, logParam);
         resetPermissions = true;
     }
     if (gInstance.adminIds.includes(role.id)) {
-        log.info(`${funcName} '${role.id}' was deleted and part of adminIds, permission reset required.`, logParam);
+        log.info(`${fName} '${role.id}' was deleted and part of adminIds, permission reset required.`, logParam);
         resetPermissions = true;
     }
 

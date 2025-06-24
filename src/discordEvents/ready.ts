@@ -37,9 +37,9 @@ export const name = 'ready';
 export const once = true;
 
 export async function execute(dm: DiscordManager) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
 
-    log.info(`${funcName} Logged in as '${dm.client.user?.tag ?? 'Unknown User'}'.`);
+    log.info(`${fName} Logged in as '${dm.client.user?.tag ?? 'Unknown User'}'.`);
 
     /* Check if there are new guilds, if so, create empty guild instance files for them. */
     const activeGuildIds: types.GuildId[] = [];
@@ -92,7 +92,7 @@ export async function execute(dm: DiscordManager) {
         }
     }
     catch {
-        log.warn(`${funcName} Could not set username '${config.discord.username}'.`);
+        log.warn(`${fName} Could not set username '${config.discord.username}'.`);
     }
 
     try {
@@ -101,7 +101,7 @@ export async function execute(dm: DiscordManager) {
         }
     }
     catch {
-        log.warn(`${funcName} Could not set avatar.`);
+        log.warn(`${fName} Could not set avatar.`);
     }
 
     await dm.registerGlobalSlashCommands();

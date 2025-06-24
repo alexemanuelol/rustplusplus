@@ -27,7 +27,7 @@ export const once = false;
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
 
     // TODO!
     // Based on user leave/enter channel, make the bot leave the channel after a time

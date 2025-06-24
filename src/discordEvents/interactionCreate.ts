@@ -32,7 +32,7 @@ export const name = 'interactionCreate';
 export const once = false;
 
 export async function execute(dm: DiscordManager, interaction: discordjs.Interaction) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
     const logParam = { guildId: interaction.guildId };
 
     let result = false;
@@ -68,7 +68,7 @@ export async function execute(dm: DiscordManager, interaction: discordjs.Interac
     }
     /* Unknown interaction. */
     else {
-        log.error(`${funcName} Unknown interaction.`, logParam);
+        log.error(`${fName} Unknown interaction.`, logParam);
     }
 
     if (result) {

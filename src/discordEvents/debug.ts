@@ -25,9 +25,9 @@ export const name = 'debug';
 export const once = false;
 
 export async function execute(dm: DiscordManager, info: string) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
 
     if (config.general.debug) {
-        log.debug(`${funcName} ${info}`);
+        log.debug(`${fName} ${info}`);
     }
 }

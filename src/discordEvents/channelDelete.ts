@@ -29,7 +29,7 @@ export const once = false;
 
 export async function execute(dm: DiscordManager, channel: discordjs.DMChannel | discordjs.GuildChannel) {
     if (channel.isDMBased()) return;
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
     const logParam = { guildId: channel.guild.id };
 
     const guildId = channel.guild.id;
@@ -41,7 +41,7 @@ export async function execute(dm: DiscordManager, channel: discordjs.DMChannel |
     for (const [channelName, channelId] of Object.entries(channelIds)) {
         if (channelId === channel.id) {
             channelIds[channelName as keyof typeof channelIds] = null;
-            log.warn(`${funcName} '${channelName}' was deleted.`, logParam);
+            log.warn(`${fName} '${channelName}' was deleted.`, logParam);
             changed = true;
         }
     }

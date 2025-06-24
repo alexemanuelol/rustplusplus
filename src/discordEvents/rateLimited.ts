@@ -27,9 +27,9 @@ export const name = 'rateLimited';
 export const once = false;
 
 export async function execute(dm: DiscordManager, rateLimitInfo: RateLimitData) {
-    const funcName = `[discordEvent: ${name}]`;
+    const fName = `[discordEvent: ${name}]`;
     log.warn(
-        `${funcName} ` +
+        `${fName} ` +
         `global: ${rateLimitInfo.global} ` +
         `hash: ${rateLimitInfo.hash} ` +
         `limit: ${rateLimitInfo.limit} ` +

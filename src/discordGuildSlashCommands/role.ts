@@ -69,7 +69,7 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const funcName = '[SlashCommand: role]';
+		const fName = '[SlashCommand: role]';
 		const logParam = { guildId: interaction.guildId };
 
 		const id = `Interaction ID: ${interaction.id} -`
@@ -78,14 +78,14 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${funcName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
 		if (!dm.validPermissions(interaction, true)) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 				'errorDescMissingPermission');
-			log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
+			log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
 				logParam);
 			return false;
 		}
@@ -110,7 +110,7 @@ export default {
 				}
 				await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleInvalidSubcommand',
 					'errorDescInvalidSubcommand', parameters);
-				log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
+				log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
 				result = false;
 			} break;
@@ -121,7 +121,7 @@ export default {
 };
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: role: add]';
+	const fName = '[SlashCommand: role: add]';
 	const guildId = interaction.guildId as types.GuildId;
 	const logParam = { guildId: guildId };
 
@@ -133,14 +133,14 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	if (!gInstance) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${funcName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
+		log.warn(`${fName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
 		return false;
 	}
 
 	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${funcName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
+		log.warn(`${fName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
 		return false;
 	}
 
@@ -150,7 +150,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleDoesNotExist',
 			'errorDescRoleDoesNotExist', parameters);
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
 			logParam);
 		return false;
 	}
@@ -161,7 +161,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleAlreadyConfigured',
 			'errorDescRoleAlreadyConfigured', parameters);
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleAlreadyConfigured',
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleAlreadyConfigured',
 			parameters)}`, logParam);
 		return false;
 	}
@@ -177,14 +177,14 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	};
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleRoleAdd',
 		'slashCommandSuccessDescRoleAdd', parameters);
-	log.info(`${funcName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleAdd', parameters)}`,
+	log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleAdd', parameters)}`,
 		logParam);
 
 	return true;
 }
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: role: remove]';
+	const fName = '[SlashCommand: role: remove]';
 	const guildId = interaction.guildId as types.GuildId;
 	const logParam = { guildId: guildId };
 
@@ -196,14 +196,14 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	if (!gInstance) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${funcName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
+		log.warn(`${fName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
 		return false;
 	}
 
 	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${funcName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
+		log.warn(`${fName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
 		return false;
 	}
 
@@ -213,7 +213,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleDoesNotExist',
 			'errorDescRoleDoesNotExist', parameters);
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
 			logParam);
 		return false;
 	}
@@ -224,7 +224,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleNotConfigured',
 			'errorDescRoleNotConfigured', parameters);
-		log.warn(`${funcName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleNotConfigured', parameters)}`,
+		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleNotConfigured', parameters)}`,
 			logParam);
 		return false;
 	}
@@ -240,14 +240,14 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	};
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleRoleRemove',
 		'slashCommandSuccessDescRoleRemove', parameters);
-	log.info(`${funcName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleRemove',
+	log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleRemove',
 		parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const funcName = '[SlashCommand: role: list]';
+	const fName = '[SlashCommand: role: list]';
 	const guildId = interaction.guildId as types.GuildId;
 	const logParam = { guildId: guildId };
 
@@ -257,19 +257,19 @@ async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputC
 	if (!gInstance) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${funcName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
+		log.warn(`${fName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
 		return false;
 	}
 
 	if (!('adminIds' in gInstance) || !('roleIds' in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${funcName} ${id} Unknown Error: GuildInstance does not have adminIds or roleIds.`, logParam);
+		log.warn(`${fName} ${id} Unknown Error: GuildInstance does not have adminIds or roleIds.`, logParam);
 		return false;
 	}
 
 	await discordMessages.sendRoleListMessage(dm, interaction);
-	log.info(`${funcName} ${id} Successfully listing all configured roles.`, logParam);
+	log.info(`${fName} ${id} Successfully listing all configured roles.`, logParam);
 
 	return true;
 }

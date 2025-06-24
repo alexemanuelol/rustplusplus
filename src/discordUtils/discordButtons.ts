@@ -57,13 +57,13 @@ function truncate(text: string, maxLength: number): string {
  */
 
 export function getButton(options: discordjs.ButtonComponentData): discordjs.ButtonBuilder {
-    const funcName = `[getButton]`;
+    const fName = `[getButton]`;
     const button = new discordjs.ButtonBuilder();
 
     if (options.style) button.setStyle(options.style);
     if ('customId' in options && options.customId) {
         if (options.customId.length > ButtonLimits.CustomId) {
-            throw new Error(`${funcName} CustomId exceed limit ${ButtonLimits.CustomId}, actual: ` +
+            throw new Error(`${fName} CustomId exceed limit ${ButtonLimits.CustomId}, actual: ` +
                 `${options.customId.length}. CustomId: '${options.customId}'`);
         }
         button.setCustomId(options.customId);
