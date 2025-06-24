@@ -59,8 +59,10 @@ function getBooleanEnv(key: string, defaultValue: boolean = false): boolean {
 export const config = {
     general: {
         debug: getBooleanEnv('RPP_DEBUG', false),
-        language: isValidLanguage(getStringEnv('RPP_LANGUAGE', 'en')) ?
-            getStringEnv('RPP_LANGUAGE', 'en') as Languages : Languages.ENGLISH,
+        language: (() => {
+            const lang = getStringEnv('RPP_LANGUAGE', 'en');
+            return isValidLanguage(lang) ? lang as Languages : Languages.ENGLISH;
+        })(),
         serverPollingHandlerIntervalMs: getNumberEnv('RPP_SERVER_POLLING_HANDLER_INTERVAL_MS', 10_000),
         showCallStackOnError: getBooleanEnv('RPP_SHOW_CALL_STACK_ON_ERROR', false),
         reconnectIntervalMs: getNumberEnv('RPP_RECONNECT_INTERVAL_MS', 15_000)
