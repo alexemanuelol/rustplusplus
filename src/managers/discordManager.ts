@@ -376,8 +376,7 @@ export class DiscordManager {
                 channelPermissions, categoryId);
 
             if (!channel) {
-                log.error(`${fName} Failed to create channel '${gInstance.guildChannelIds[channelName]}'.`,
-                    logParam);
+                log.error(`${fName} Failed to create channel '${channelDisplayName}'.`, logParam);
             }
         }
 

@@ -25,38 +25,38 @@
     },
     "homepage": "https://github.com/alexemanuelol/rustplusplus#readme",
     "dependencies": {
-        "@discordjs/rest": "^2.4.3",
+        "@discordjs/rest": "^2.5.1",
         "@discordjs/voice": "^0.18.0",
-        "@formatjs/intl": "^3.1.5",
+        "@formatjs/intl": "^3.1.6",
         "@jimp/types": "^1.6.0",
         "@liamcottle/push-receiver": "^0.0.4",
         "@types/gm": "^1.25.4",
-        "@types/lodash": "^4.17.16",
-        "axios": "^1.8.4",
+        "@types/lodash": "^4.17.18",
+        "axios": "^1.10.0",
         "colors": "^1.4.0",
-        "discord-api-types": "^0.37.119",
-        "discord.js": "^14.18.0",
-        "dotenv": "^16.4.7",
+        "discord-api-types": "^0.38.13",
+        "discord.js": "^14.20.0",
+        "dotenv": "^16.5.0",
         "ffmpeg-static": "^5.2.0",
         "jimp": "^1.6.0",
         "libsodium-wrappers": "^0.7.15",
         "lodash": "^4.17.21",
-        "rustplus-ts": "^0.0.3",
+        "rustplus-ts": "^0.0.4",
         "translate": "^3.0.1",
         "ts-node": "^10.9.2",
-        "typescript": "^5.8.2",
+        "typescript": "^5.8.3",
         "winston": "^3.17.0"
     },
     "resolutions": {
         "jpeg-js": "0.4.4",
-        "protobufjs": "7.4.0"
+        "protobufjs": "7.5.3"
     },
     "devDependencies": {
-        "@eslint/js": "^9.23.0",
-        "@typescript-eslint/eslint-plugin": "^8.27.0",
-        "@typescript-eslint/parser": "^8.27.0",
-        "eslint": "^9.23.0",
-        "globals": "^16.0.0",
-        "typescript-eslint": "^8.27.0"
+        "@eslint/js": "^9.29.0",
+        "@typescript-eslint/eslint-plugin": "^8.35.0",
+        "@typescript-eslint/parser": "^8.35.0",
+        "eslint": "^9.29.0",
+        "globals": "^16.2.0",
+        "typescript-eslint": "^8.35.0"
     }
 }
