@@ -187,9 +187,9 @@ export async function sendSmartSwitchMessage(dm: DiscordManager, guildId: types.
         return;
     }
 
-    const smartSwitch = serverInfo.smartSwitchMap[entityId];
-    if (!smartSwitch) {
-        log.warn(`${fName} Could not find SmartSwitch '${entityId}'.`, logParam);
+    const smartSwitchConfig = serverInfo.smartSwitchConfigMap[entityId];
+    if (!smartSwitchConfig) {
+        log.warn(`${fName} Could not find SmartSwitchConfig '${entityId}'.`, logParam);
         return;
     }
 
@@ -204,16 +204,16 @@ export async function sendSmartSwitchMessage(dm: DiscordManager, guildId: types.
         ],
         files: [
             new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'electrics',
-                smartSwitch.img))
+                smartSwitchConfig.img))
         ]
     };
 
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.smartSwitches,
-        smartSwitch.messageId, interaction);
+        smartSwitchConfig.messageId, interaction);
 
     if (interaction === null && message instanceof discordjs.Message &&
-        smartSwitch.messageId !== message.id) {
-        smartSwitch.messageId = message.id;
+        smartSwitchConfig.messageId !== message.id) {
+        smartSwitchConfig.messageId = message.id;
         gim.updateGuildInstance(guildId);
     }
 }
@@ -230,9 +230,9 @@ export async function sendSmartAlarmMessage(dm: DiscordManager, guildId: types.G
         return;
     }
 
-    const smartAlarm = serverInfo.smartAlarmMap[entityId];
-    if (!smartAlarm) {
-        log.warn(`${fName} Could not find SmartAlarm '${entityId}'.`, logParam);
+    const smartAlarmConfig = serverInfo.smartAlarmConfigMap[entityId];
+    if (!smartAlarmConfig) {
+        log.warn(`${fName} Could not find SmartAlarmConfig '${entityId}'.`, logParam);
         return;
     }
 
@@ -246,16 +246,16 @@ export async function sendSmartAlarmMessage(dm: DiscordManager, guildId: types.G
         ],
         files: [
             new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'electrics',
-                smartAlarm.img))
+                smartAlarmConfig.img))
         ]
     };
 
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.smartAlarms,
-        smartAlarm.messageId, interaction);
+        smartAlarmConfig.messageId, interaction);
 
     if (interaction === null && message instanceof discordjs.Message &&
-        smartAlarm.messageId !== message.id) {
-        smartAlarm.messageId = message.id;
+        smartAlarmConfig.messageId !== message.id) {
+        smartAlarmConfig.messageId = message.id;
         gim.updateGuildInstance(guildId);
     }
 }
@@ -272,9 +272,9 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
         return;
     }
 
-    const storageMonitor = serverInfo.storageMonitorMap[entityId];
-    if (!storageMonitor) {
-        log.warn(`${fName} Could not find StorageMonitor '${entityId}'.`, logParam);
+    const storageMonitorConfig = serverInfo.storageMonitorConfigMap[entityId];
+    if (!storageMonitorConfig) {
+        log.warn(`${fName} Could not find StorageMonitorConfig '${entityId}'.`, logParam);
         return;
     }
 
@@ -285,16 +285,16 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
         ],
         files: [
             new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'electrics',
-                storageMonitor.img))
+                storageMonitorConfig.img))
         ]
     };
 
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.storageMonitors,
-        storageMonitor.messageId, interaction);
+        storageMonitorConfig.messageId, interaction);
 
     if (interaction === null && message instanceof discordjs.Message &&
-        storageMonitor.messageId !== message.id) {
-        storageMonitor.messageId = message.id;
+        storageMonitorConfig.messageId !== message.id) {
+        storageMonitorConfig.messageId = message.id;
         gim.updateGuildInstance(guildId);
     }
 }

@@ -22,7 +22,7 @@ import * as discordjs from 'discord.js';
 
 import { guildInstanceManager as gim, localeManager as lm, credentialsManager as cm } from '../../index';
 import {
-    GuildInstance, ServerInfo, SmartSwitch, SmartSwitchAutoSetting, VoiceGenders
+    GuildInstance, ServerInfo, SmartSwitchConfig, SmartSwitchConfigAutoSetting, VoiceGenders
 } from '../managers/guildInstanceManager';
 import * as types from '../utils/types';
 import { Languages, LanguageDiscordEmoji } from '../managers/LocaleManager';
@@ -112,42 +112,42 @@ export function getSmartSwitchSelectMenu(guildId: types.GuildId, serverId: types
     discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
-    const smartSwitch = serverInfo.smartSwitchMap[entityId] as SmartSwitch;
+    const smartSwitchConfig = serverInfo.smartSwitchConfigMap[entityId] as SmartSwitchConfig;
     const language = gInstance.generalSettings.language;
     const identifier = JSON.stringify({ "serverId": serverId, "entityId": entityId });
 
     const autoSettingLabel = lm.getIntl(language, 'autoSettingLabel');
     const autoSettingMap = {
-        [SmartSwitchAutoSetting.Off]: [
+        [SmartSwitchConfigAutoSetting.Off]: [
             lm.getIntl(language, 'autoSettingOffLabel'),
             lm.getIntl(language, 'autoSettingOffDesc')],
-        [SmartSwitchAutoSetting.AutoDay]: [
+        [SmartSwitchConfigAutoSetting.AutoDay]: [
             lm.getIntl(language, 'autoSettingAutoDayLabel'),
             lm.getIntl(language, 'autoSettingAutoDayDesc')],
-        [SmartSwitchAutoSetting.AutoNight]: [
+        [SmartSwitchConfigAutoSetting.AutoNight]: [
             lm.getIntl(language, 'autoSettingAutoNightLabel'),
             lm.getIntl(language, 'autoSettingAutoNightDesc')],
-        [SmartSwitchAutoSetting.AutoOn]: [
+        [SmartSwitchConfigAutoSetting.AutoOn]: [
             lm.getIntl(language, 'autoSettingAutoOnLabel'),
             lm.getIntl(language, 'autoSettingAutoOnDesc')],
-        [SmartSwitchAutoSetting.AutoOff]: [
+        [SmartSwitchConfigAutoSetting.AutoOff]: [
             lm.getIntl(language, 'autoSettingAutoOffLabel'),
             lm.getIntl(language, 'autoSettingAutoOffDesc')],
-        [SmartSwitchAutoSetting.AutoOnProximity]: [
+        [SmartSwitchConfigAutoSetting.AutoOnProximity]: [
             lm.getIntl(language, 'autoSettingAutoOnProximityLabel'),
             lm.getIntl(language, 'autoSettingAutoOnProximityDesc')],
-        [SmartSwitchAutoSetting.AutoOffProximity]: [
+        [SmartSwitchConfigAutoSetting.AutoOffProximity]: [
             lm.getIntl(language, 'autoSettingAutoOffProximityLabel'),
             lm.getIntl(language, 'autoSettingAutoOffProximityDesc')],
-        [SmartSwitchAutoSetting.AutoOnAnyOnline]: [
+        [SmartSwitchConfigAutoSetting.AutoOnAnyOnline]: [
             lm.getIntl(language, 'autoSettingAutoOnAnyOnlineLabel'),
             lm.getIntl(language, 'autoSettingAutoOnAnyOnlineDesc')],
-        [SmartSwitchAutoSetting.AutoOffAnyOnline]: [
+        [SmartSwitchConfigAutoSetting.AutoOffAnyOnline]: [
             lm.getIntl(language, 'autoSettingAutoOffAnyOnlineLabel'),
             lm.getIntl(language, 'autoSettingAutoOffAnyOnlineDesc')]
     };
 
-    const autoSetting = autoSettingMap[smartSwitch.autoSetting];
+    const autoSetting = autoSettingMap[smartSwitchConfig.autoSetting];
     const autoSettingString = `${autoSettingLabel}${autoSetting[0]}`;
 
     return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
@@ -156,49 +156,49 @@ export function getSmartSwitchSelectMenu(guildId: types.GuildId, serverId: types
             placeholder: `${autoSettingString}`,
             options: [
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.Off][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.Off][1],
-                    value: `${SmartSwitchAutoSetting.Off}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.Off][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.Off][1],
+                    value: `${SmartSwitchConfigAutoSetting.Off}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoDay][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoDay][1],
-                    value: `${SmartSwitchAutoSetting.AutoDay}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoDay][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoDay][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoDay}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoNight][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoNight][1],
-                    value: `${SmartSwitchAutoSetting.AutoNight}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoNight][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoNight][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoNight}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoOn][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoOn][1],
-                    value: `${SmartSwitchAutoSetting.AutoOn}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOn][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOn][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoOn}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoOff][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoOff][1],
-                    value: `${SmartSwitchAutoSetting.AutoOff}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOff][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOff][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoOff}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoOnProximity][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoOnProximity][1],
-                    value: `${SmartSwitchAutoSetting.AutoOnProximity}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOnProximity][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOnProximity][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoOnProximity}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoOffProximity][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoOffProximity][1],
-                    value: `${SmartSwitchAutoSetting.AutoOffProximity}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOffProximity][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOffProximity][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoOffProximity}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoOnAnyOnline][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoOnAnyOnline][1],
-                    value: `${SmartSwitchAutoSetting.AutoOnAnyOnline}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOnAnyOnline][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOnAnyOnline][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoOnAnyOnline}`
                 },
                 {
-                    label: autoSettingMap[SmartSwitchAutoSetting.AutoOffAnyOnline][0],
-                    description: autoSettingMap[SmartSwitchAutoSetting.AutoOffAnyOnline][1],
-                    value: `${SmartSwitchAutoSetting.AutoOffAnyOnline}`
+                    label: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOffAnyOnline][0],
+                    description: autoSettingMap[SmartSwitchConfigAutoSetting.AutoOffAnyOnline][1],
+                    value: `${SmartSwitchConfigAutoSetting.AutoOffAnyOnline}`
                 }],
             type: discordjs.ComponentType.StringSelect
         })

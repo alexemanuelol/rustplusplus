@@ -31,7 +31,7 @@ import { ConnectionStatus } from './rustPlusManager';
 import * as types from '../utils/types';
 import * as vu from '../utils/validationUtils';
 import * as constants from '../utils/constants'
-import { GuildInstance, PairingDataMap, SmartSwitchAutoSetting, StorageMonitorType } from './guildInstanceManager';
+import { GuildInstance, PairingDataMap, SmartSwitchConfigAutoSetting, StorageMonitorConfigType } from './guildInstanceManager';
 import * as discordMessages from '../discordUtils/discordMessages';
 
 
@@ -456,10 +456,10 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             connect: null,
             noteMap: serverInfo ? serverInfo.noteMap : {},
             battlemetricsId: null,
-            smartSwitchMap: serverInfo ? serverInfo.smartSwitchMap : {},
-            smartAlarmMap: serverInfo ? serverInfo.smartAlarmMap : {},
-            storageMonitorMap: serverInfo ? serverInfo.storageMonitorMap : {},
-            smartSwitchGroupMap: serverInfo ? serverInfo.smartSwitchGroupMap : {}
+            smartSwitchConfigMap: serverInfo ? serverInfo.smartSwitchConfigMap : {},
+            smartAlarmConfigMap: serverInfo ? serverInfo.smartAlarmConfigMap : {},
+            storageMonitorConfigMap: serverInfo ? serverInfo.storageMonitorConfigMap : {},
+            smartSwitchGroupConfigMap: serverInfo ? serverInfo.smartSwitchGroupConfigMap : {}
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);
@@ -497,17 +497,17 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
             continue;
         }
 
-        const smartSwitchMap = serverInfo.smartSwitchMap;
-        const exist = body.entityId in smartSwitchMap;
-        smartSwitchMap[body.entityId] = {
+        const smartSwitchConfigMap = serverInfo.smartSwitchConfigMap;
+        const exist = body.entityId in smartSwitchConfigMap;
+        smartSwitchConfigMap[body.entityId] = {
             entityId: body.entityId,
-            messageId: exist ? smartSwitchMap[body.entityId].messageId : null,
+            messageId: exist ? smartSwitchConfigMap[body.entityId].messageId : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            name: exist ? smartSwitchMap[body.entityId].name : lm.getIntl(language, 'smartSwitch'),
-            command: exist ? smartSwitchMap[body.entityId].command : body.entityId,
-            img: exist ? smartSwitchMap[body.entityId].img : 'smart_switch.png',
-            autoSetting: exist ? smartSwitchMap[body.entityId].autoSetting : SmartSwitchAutoSetting.Off,
-            proximitySetting: exist ? smartSwitchMap[body.entityId].proximitySetting :
+            name: exist ? smartSwitchConfigMap[body.entityId].name : lm.getIntl(language, 'smartSwitch'),
+            command: exist ? smartSwitchConfigMap[body.entityId].command : body.entityId,
+            img: exist ? smartSwitchConfigMap[body.entityId].img : 'smart_switch.png',
+            autoSetting: exist ? smartSwitchConfigMap[body.entityId].autoSetting : SmartSwitchConfigAutoSetting.Off,
+            proximitySetting: exist ? smartSwitchConfigMap[body.entityId].proximitySetting :
                 constants.PROXIMITY_SETTING_DEFAULT_METERS
         };
 
@@ -544,19 +544,19 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
             continue;
         }
 
-        const smartAlarmMap = serverInfo.smartAlarmMap;
-        const exist = body.entityId in smartAlarmMap;
-        smartAlarmMap[body.entityId] = {
+        const smartAlarmConfigMap = serverInfo.smartAlarmConfigMap;
+        const exist = body.entityId in smartAlarmConfigMap;
+        smartAlarmConfigMap[body.entityId] = {
             entityId: body.entityId,
-            messageId: exist ? smartAlarmMap[body.entityId].messageId : null,
+            messageId: exist ? smartAlarmConfigMap[body.entityId].messageId : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            name: exist ? smartAlarmMap[body.entityId].name : lm.getIntl(language, 'smartAlarm'),
-            command: exist ? smartAlarmMap[body.entityId].command : body.entityId,
-            img: exist ? smartAlarmMap[body.entityId].img : 'smart_alarm.png',
-            everyone: exist ? smartAlarmMap[body.entityId].everyone : false,
-            inGame: exist ? smartAlarmMap[body.entityId].inGame : false,
-            lastTrigger: exist ? smartAlarmMap[body.entityId].lastTrigger : null,
-            message: exist ? smartAlarmMap[body.entityId].message : lm.getIntl(language, 'yourBaseIsUnderAttack')
+            name: exist ? smartAlarmConfigMap[body.entityId].name : lm.getIntl(language, 'smartAlarm'),
+            command: exist ? smartAlarmConfigMap[body.entityId].command : body.entityId,
+            img: exist ? smartAlarmConfigMap[body.entityId].img : 'smart_alarm.png',
+            everyone: exist ? smartAlarmConfigMap[body.entityId].everyone : false,
+            inGame: exist ? smartAlarmConfigMap[body.entityId].inGame : false,
+            lastTrigger: exist ? smartAlarmConfigMap[body.entityId].lastTrigger : null,
+            message: exist ? smartAlarmConfigMap[body.entityId].message : lm.getIntl(language, 'yourBaseIsUnderAttack')
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);
@@ -592,17 +592,17 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
             continue;
         }
 
-        const storageMonitorMap = serverInfo.storageMonitorMap;
-        const exist = body.entityId in storageMonitorMap;
-        storageMonitorMap[body.entityId] = {
+        const storageMonitorConfigMap = serverInfo.storageMonitorConfigMap;
+        const exist = body.entityId in storageMonitorConfigMap;
+        storageMonitorConfigMap[body.entityId] = {
             entityId: body.entityId,
-            messageId: exist ? storageMonitorMap[body.entityId].messageId : null,
+            messageId: exist ? storageMonitorConfigMap[body.entityId].messageId : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            name: exist ? storageMonitorMap[body.entityId].name : lm.getIntl(language, 'storageMonitor'),
-            img: exist ? storageMonitorMap[body.entityId].img : 'storage_monitor.png',
-            everyone: exist ? storageMonitorMap[body.entityId].everyone : false,
-            inGame: exist ? storageMonitorMap[body.entityId].inGame : true,
-            type: exist ? storageMonitorMap[body.entityId].type : StorageMonitorType.Unknown
+            name: exist ? storageMonitorConfigMap[body.entityId].name : lm.getIntl(language, 'storageMonitor'),
+            img: exist ? storageMonitorConfigMap[body.entityId].img : 'storage_monitor.png',
+            everyone: exist ? storageMonitorConfigMap[body.entityId].everyone : false,
+            inGame: exist ? storageMonitorConfigMap[body.entityId].inGame : true,
+            type: exist ? storageMonitorConfigMap[body.entityId].type : StorageMonitorConfigType.Unknown
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);

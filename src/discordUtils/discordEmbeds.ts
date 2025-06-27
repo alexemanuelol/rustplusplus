@@ -22,7 +22,7 @@ import * as discordjs from 'discord.js';
 
 import { localeManager as lm, guildInstanceManager as gim, config, credentialsManager as cm } from '../../index';
 import {
-    GuildInstance, ServerInfo, SmartSwitch, SmartAlarm, StorageMonitor, StorageMonitorType
+    GuildInstance, ServerInfo, SmartSwitchConfig, SmartAlarmConfig, StorageMonitorConfig, StorageMonitorConfigType
 
 } from '../managers/guildInstanceManager';
 import * as constants from '../utils/constants';
@@ -449,18 +449,18 @@ export function getSmartSwitchEmbed(guildId: types.GuildId, serverId: types.Serv
     active: boolean): discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
-    const smartSwitch = serverInfo.smartSwitchMap[entityId] as SmartSwitch;
+    const smartSwitchConfig = serverInfo.smartSwitchConfigMap[entityId] as SmartSwitchConfig;
     const language = gInstance.generalSettings.language;
 
     return getEmbed({
-        title: smartSwitch.name,
+        title: smartSwitchConfig.name,
         color: colorHexToNumber(active ? constants.COLOR_ACTIVE : constants.COLOR_INACTIVE),
         description: `**${lm.getIntl(language, 'id')}** \`${entityId}\``,
-        thumbnail: { url: `attachment://${smartSwitch.img}` },
+        thumbnail: { url: `attachment://${smartSwitchConfig.img}` },
         footer: { text: serverInfo.name },
         fields: [{
             name: lm.getIntl(language, 'customCommand'),
-            value: `\`${gInstance.generalSettings.inGameChatCommandPrefix}${smartSwitch.command}\``,
+            value: `\`${gInstance.generalSettings.inGameChatCommandPrefix}${smartSwitchConfig.command}\``,
             inline: true
         }],
         timestamp: new Date()
@@ -471,29 +471,29 @@ export function getSmartAlarmEmbed(guildId: types.GuildId, serverId: types.Serve
     active: boolean): discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
-    const smartAlarm = serverInfo.smartAlarmMap[entityId] as SmartAlarm;
+    const smartAlarmConfig = serverInfo.smartAlarmConfigMap[entityId] as SmartAlarmConfig;
     const language = gInstance.generalSettings.language;
 
     let description = `**${lm.getIntl(language, 'id')}** \`${entityId}\`\n`;
     description += `**${lm.getIntl(language, 'lastTrigger')}:** `;
 
-    if (smartAlarm.lastTrigger !== null) {
-        description += discordjs.time(smartAlarm.lastTrigger, 'R');
+    if (smartAlarmConfig.lastTrigger !== null) {
+        description += discordjs.time(smartAlarmConfig.lastTrigger, 'R');
     }
 
     return getEmbed({
-        title: smartAlarm.name,
+        title: smartAlarmConfig.name,
         color: colorHexToNumber(active ? constants.COLOR_ACTIVE : constants.COLOR_DEFAULT),
         description: description,
-        thumbnail: { url: `attachment://${smartAlarm.img}` },
+        thumbnail: { url: `attachment://${smartAlarmConfig.img}` },
         footer: { text: serverInfo.name },
         fields: [{
             name: lm.getIntl(language, 'message'),
-            value: `\`${smartAlarm.message}\``,
+            value: `\`${smartAlarmConfig.message}\``,
             inline: true
         }, {
             name: lm.getIntl(language, 'customCommand'),
-            value: `\`${gInstance.generalSettings.inGameChatCommandPrefix}${smartAlarm.command}\``,
+            value: `\`${gInstance.generalSettings.inGameChatCommandPrefix}${smartAlarmConfig.command}\``,
             inline: false
         }],
         timestamp: new Date()
@@ -504,20 +504,20 @@ export function getStorageMonitorEmbed(guildId: types.GuildId, serverId: types.S
     discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
-    const storageMonitor = serverInfo.storageMonitorMap[entityId] as StorageMonitor;
+    const storageMonitorConfig = serverInfo.storageMonitorConfigMap[entityId] as StorageMonitorConfig;
     const language = gInstance.generalSettings.language;
 
-    const storageMonitorTypeMap = {
-        [StorageMonitorType.Unknown]: lm.getIntl(language, 'unknown'),
-        [StorageMonitorType.ToolCupboard]: lm.getIntl(language, 'toolCupboard'),
-        [StorageMonitorType.VendingMachine]: lm.getIntl(language, 'vendingMachine'),
-        [StorageMonitorType.LargeWoodBox]: lm.getIntl(language, 'largeWoodBox')
+    const storageMonitorConfigTypeMap = {
+        [StorageMonitorConfigType.Unknown]: lm.getIntl(language, 'unknown'),
+        [StorageMonitorConfigType.ToolCupboard]: lm.getIntl(language, 'toolCupboard'),
+        [StorageMonitorConfigType.VendingMachine]: lm.getIntl(language, 'vendingMachine'),
+        [StorageMonitorConfigType.LargeWoodBox]: lm.getIntl(language, 'largeWoodBox')
     }
 
-    const title = storageMonitor.name;
+    const title = storageMonitorConfig.name;
     let description =
         `**${lm.getIntl(language, 'id')}** \`${entityId}\`\n` +
-        `**${lm.getIntl(language, 'type')}** \`${storageMonitorTypeMap[storageMonitor.type]}\`\n`;
+        `**${lm.getIntl(language, 'type')}** \`${storageMonitorConfigTypeMap[storageMonitorConfig.type]}\`\n`;
     let color = constants.COLOR_DEFAULT;
 
     const itemNames: string[] = [];
@@ -530,7 +530,7 @@ export function getStorageMonitorEmbed(guildId: types.GuildId, serverId: types.S
 
         // TODO! If capacity === 0, add in the beginning of description, "NO POWER :zap:"
 
-        if (storageMonitor.type !== StorageMonitorType.Unknown) {
+        if (storageMonitorConfig.type !== StorageMonitorConfigType.Unknown) {
             // TODO! If rustplusManager have the storagemonitor, get the capacity for slots
             description += `**${lm.getIntl(language, 'slots')}** `;
             const numberOfItems = 10;
@@ -538,7 +538,7 @@ export function getStorageMonitorEmbed(guildId: types.GuildId, serverId: types.S
             description += `\`(${numberOfItems}/${capacity})\`\n`
         }
 
-        if (storageMonitor.type === StorageMonitorType.ToolCupboard) {
+        if (storageMonitorConfig.type === StorageMonitorConfigType.ToolCupboard) {
             /* eslint-disable-next-line prefer-const */
             let expiry = 1742647361; // temp
             description += `**${lm.getIntl(language, 'upkeep')}** `;
@@ -559,7 +559,7 @@ export function getStorageMonitorEmbed(guildId: types.GuildId, serverId: types.S
         title: title,
         description: description,
         color: colorHexToNumber(color),
-        thumbnail: { url: `attachment://${storageMonitor.img}` },
+        thumbnail: { url: `attachment://${storageMonitorConfig.img}` },
         footer: { text: serverInfo.name },
         timestamp: new Date()
     }, [

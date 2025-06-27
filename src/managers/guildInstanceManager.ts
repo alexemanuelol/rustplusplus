@@ -113,11 +113,11 @@ export interface GeneralSettings {                          /* SettingsMessages:
     inGameChatCommandsEnabled: boolean;                     /* inGameChatCommandsEnabled */
     inGameChatCommandResponseDelay: number;                 /* inGameChatCommandResponseDelay */
     leaderCommandEnabled: boolean;                          /* leaderCommand */
-    leaderCommandOnlyPaired: boolean                        /* leaderCommand */
+    leaderCommandOnlyPaired: boolean;                       /* leaderCommand */
     inGameChatNotifySmartSwitchChangedFromDiscord: boolean; /* inGameChatNotifySmartSwitchChangedFromDiscord */
     inGameChatNotifyConnection: boolean;                    /* inGameChatNotify */
     inGameChatNotifyAfk: boolean;                           /* inGameChatNotify */
-    inGameChatNotifyDeath: boolean                          /* inGameChatNotify */
+    inGameChatNotifyDeath: boolean;                         /* inGameChatNotify */
     mapWipeNotifyEveryone: boolean;                         /* mapWipeNotifyEveryone */
     fcmAlarmNotify: boolean;                                /* fcmAlarmNotify */
     fcmAlarmNotifyEveryone: boolean;                        /* fcmAlarmNotify */
@@ -136,7 +136,6 @@ export interface GeneralSettings {                          /* SettingsMessages:
 
     // TODO! vending machine settings
     // itemAvailableInVendingMachineNotifyInGame
-
 }
 
 export enum VoiceGenders {
@@ -257,10 +256,10 @@ export interface TrackerPlayer {
 }
 
 export type NoteMap = { [index: string]: string };
-export type SmartSwitchMap = { [entityId: types.EntityId]: SmartSwitch };
-export type SmartAlarmMap = { [entityId: types.EntityId]: SmartAlarm };
-export type StorageMonitorMap = { [entityId: types.EntityId]: StorageMonitor };
-export type SmartSwitchGroupMap = { [groupId: types.GroupId]: SmartSwitchGroup };
+export type SmartSwitchConfigMap = { [entityId: types.EntityId]: SmartSwitchConfig };
+export type SmartAlarmConfigMap = { [entityId: types.EntityId]: SmartAlarmConfig };
+export type StorageMonitorConfigMap = { [entityId: types.EntityId]: StorageMonitorConfig };
+export type SmartSwitchGroupConfigMap = { [groupId: types.GroupId]: SmartSwitchGroupConfig };
 
 export interface ServerInfo {
     /* From FCM notification */
@@ -279,13 +278,13 @@ export interface ServerInfo {
     connect: string | null;
     noteMap: NoteMap;
     battlemetricsId: types.BattlemetricsId | null;
-    smartSwitchMap: SmartSwitchMap;
-    smartAlarmMap: SmartAlarmMap;
-    storageMonitorMap: StorageMonitorMap;
-    smartSwitchGroupMap: SmartSwitchGroupMap;
+    smartSwitchConfigMap: SmartSwitchConfigMap;
+    smartAlarmConfigMap: SmartAlarmConfigMap;
+    storageMonitorConfigMap: StorageMonitorConfigMap;
+    smartSwitchGroupConfigMap: SmartSwitchGroupConfigMap;
 }
 
-export interface SmartSwitch {
+export interface SmartSwitchConfig {
     /* From FCM notification */
     entityId: types.EntityId;
     /* Rest */
@@ -294,11 +293,11 @@ export interface SmartSwitch {
     name: string;
     command: string;
     img: string;
-    autoSetting: SmartSwitchAutoSetting;
+    autoSetting: SmartSwitchConfigAutoSetting;
     proximitySetting: number;
 }
 
-export enum SmartSwitchAutoSetting {
+export enum SmartSwitchConfigAutoSetting {
     Off = 0,
     AutoDay = 1,
     AutoNight = 2,
@@ -310,7 +309,7 @@ export enum SmartSwitchAutoSetting {
     AutoOffAnyOnline = 8
 }
 
-export interface SmartAlarm {
+export interface SmartAlarmConfig {
     /* From FCM notification */
     entityId: types.EntityId;
     /* Rest */
@@ -325,7 +324,7 @@ export interface SmartAlarm {
     message: string;
 }
 
-export interface StorageMonitor {
+export interface StorageMonitorConfig {
     /* From FCM notification */
     entityId: types.EntityId;
     /* Rest */
@@ -335,17 +334,17 @@ export interface StorageMonitor {
     img: string;
     everyone: boolean;
     inGame: boolean;
-    type: StorageMonitorType;
+    type: StorageMonitorConfigType;
 }
 
-export enum StorageMonitorType {
+export enum StorageMonitorConfigType {
     Unknown = 0,
     ToolCupboard = 1,
     VendingMachine = 2,
     LargeWoodBox = 3
 }
 
-export interface SmartSwitchGroup {
+export interface SmartSwitchGroupConfig {
     messageId: types.MessageId | null;
     name: string;
     command: string;
@@ -363,10 +362,10 @@ export class GuildInstanceManager {
     constructor(guildInstanceFilesPath: string, templateFilesPath: string) {
         const fName = '[GuildInstanceManager: Init]';
         log.info(`${fName} GuildInstance files path '${guildInstanceFilesPath}'.`);
+
         this.guildInstanceFilesPath = guildInstanceFilesPath;
         this.templateFilesPath = templateFilesPath;
         this.guildInstanceMap = {};
-
         this.generalSettingsTemplate = this.readGeneralSettingsTemplate();
         this.eventNotificationSettingsTemplate = this.readEventNotificationSettingsTemplate();
 
@@ -1400,10 +1399,10 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'connect',
         'noteMap',
         'battlemetricsId',
-        'smartSwitchMap',
-        'smartAlarmMap',
-        'storageMonitorMap',
-        'smartSwitchGroupMap',
+        'smartSwitchConfigMap',
+        'smartAlarmConfigMap',
+        'storageMonitorConfigMap',
+        'smartSwitchGroupConfigMap',
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1421,11 +1420,13 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     errors.push(vu.validateType('connect', obj.connect, 'string', null));
     errors.push(vu.validateObjectOfTypes('noteMap', obj.noteMap, 'string'));
     errors.push(vu.validateType('battlemetricsId', obj.battlemetricsId, 'string', null));
-    errors.push(vu.validateObjectOfInterfaces('smartSwitchMap', obj.smartSwitchMap, isValidSmartSwitch));
-    errors.push(vu.validateObjectOfInterfaces('smartAlarmMap', obj.smartAlarmMap, isValidSmartAlarm));
-    errors.push(vu.validateObjectOfInterfaces('storageMonitorMap', obj.storageMonitorMap, isValidStorageMonitor));
-    errors.push(vu.validateObjectOfInterfaces('smartSwitchGroupMap', obj.smartSwitchGroupMap,
-        isValidSmartSwitchGroup));
+    errors.push(vu.validateObjectOfInterfaces('smartSwitchConfigMap', obj.smartSwitchConfigMap,
+        isValidSmartSwitchConfig));
+    errors.push(vu.validateObjectOfInterfaces('smartAlarmConfigMap', obj.smartAlarmConfigMap, isValidSmartAlarmConfig));
+    errors.push(vu.validateObjectOfInterfaces('storageMonitorConfigMap', obj.storageMonitorConfigMap,
+        isValidStorageMonitorConfig));
+    errors.push(vu.validateObjectOfInterfaces('smartSwitchGroupConfigMap', obj.smartSwitchGroupConfigMap,
+        isValidSmartSwitchGroupConfig));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1440,14 +1441,14 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidSmartSwitch(object: unknown): object is SmartSwitch {
+export function isValidSmartSwitchConfig(object: unknown): object is SmartSwitchConfig {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
 
-    const obj = object as SmartSwitch;
+    const obj = object as SmartSwitchConfig;
 
-    const interfaceName = 'SmartSwitch';
+    const interfaceName = 'SmartSwitchConfig';
     const validKeys = [
         'entityId',
         'messageId',
@@ -1466,7 +1467,7 @@ export function isValidSmartSwitch(object: unknown): object is SmartSwitch {
     errors.push(vu.validateType('name', obj.name, 'string'));
     errors.push(vu.validateType('command', obj.command, 'string'));
     errors.push(vu.validateType('img', obj.img, 'string'));
-    errors.push(vu.validateInterface('autoSetting', obj.autoSetting, isValidSmartSwitchAutoSetting));
+    errors.push(vu.validateInterface('autoSetting', obj.autoSetting, isValidSmartSwitchConfigAutoSetting));
     errors.push(vu.validateType('proximitySetting', obj.proximitySetting, 'number'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
@@ -1482,18 +1483,18 @@ export function isValidSmartSwitch(object: unknown): object is SmartSwitch {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidSmartSwitchAutoSetting(value: unknown): value is SmartSwitchAutoSetting {
-    return typeof value === 'number' && Object.values(SmartSwitchAutoSetting).includes(value);
+export function isValidSmartSwitchConfigAutoSetting(value: unknown): value is SmartSwitchConfigAutoSetting {
+    return typeof value === 'number' && Object.values(SmartSwitchConfigAutoSetting).includes(value);
 }
 
-export function isValidSmartAlarm(object: unknown): object is SmartAlarm {
+export function isValidSmartAlarmConfig(object: unknown): object is SmartAlarmConfig {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
 
-    const obj = object as SmartAlarm;
+    const obj = object as SmartAlarmConfig;
 
-    const interfaceName = 'SmartAlarm';
+    const interfaceName = 'SmartAlarmConfig';
     const validKeys = [
         'entityId',
         'messageId',
@@ -1532,14 +1533,14 @@ export function isValidSmartAlarm(object: unknown): object is SmartAlarm {
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidStorageMonitor(object: unknown): object is StorageMonitor {
+export function isValidStorageMonitorConfig(object: unknown): object is StorageMonitorConfig {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
 
-    const obj = object as StorageMonitor;
+    const obj = object as StorageMonitorConfig;
 
-    const interfaceName = 'StorageMonitor';
+    const interfaceName = 'StorageMonitorConfig';
     const validKeys = [
         'entityId',
         'messageId',
@@ -1559,7 +1560,7 @@ export function isValidStorageMonitor(object: unknown): object is StorageMonitor
     errors.push(vu.validateType('img', obj.img, 'string'));
     errors.push(vu.validateType('everyone', obj.everyone, 'boolean'));
     errors.push(vu.validateType('inGame', obj.inGame, 'boolean'));
-    errors.push(vu.validateInterface('type', obj.type, isValidStorageMonitorType));
+    errors.push(vu.validateInterface('type', obj.type, isValidStorageMonitorConfigType));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1574,18 +1575,18 @@ export function isValidStorageMonitor(object: unknown): object is StorageMonitor
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidStorageMonitorType(value: unknown): value is StorageMonitorType {
-    return typeof value === 'number' && Object.values(StorageMonitorType).includes(value);
+export function isValidStorageMonitorConfigType(value: unknown): value is StorageMonitorConfigType {
+    return typeof value === 'number' && Object.values(StorageMonitorConfigType).includes(value);
 }
 
-export function isValidSmartSwitchGroup(object: unknown): object is SmartSwitchGroup {
+export function isValidSmartSwitchGroupConfig(object: unknown): object is SmartSwitchGroupConfig {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
 
-    const obj = object as SmartSwitchGroup;
+    const obj = object as SmartSwitchGroupConfig;
 
-    const interfaceName = 'SmartSwitchGroup';
+    const interfaceName = 'SmartSwitchGroupConfig';
     const validKeys = [
         'messageId',
         'name',

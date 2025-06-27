@@ -405,20 +405,20 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
     }
 
     const creationPromises: Promise<void>[] = [];
-    for (const content of Object.values(server.smartSwitchMap)) {
+    for (const content of Object.values(server.smartSwitchConfigMap)) {
         creationPromises.push(discordMessages.sendSmartSwitchMessage(dm, guildId, serverId, content.entityId));
     }
 
-    for (const content of Object.values(server.smartAlarmMap)) {
+    for (const content of Object.values(server.smartAlarmConfigMap)) {
         creationPromises.push(discordMessages.sendSmartAlarmMessage(dm, guildId, serverId, content.entityId));
     }
 
-    for (const content of Object.values(server.storageMonitorMap)) {
+    for (const content of Object.values(server.storageMonitorConfigMap)) {
         creationPromises.push(discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
     }
 
     // TODO! Create smartswitchgroup messages
-    //for (const content of Object.values(server.smartSwitchGroupMap)) {
+    //for (const content of Object.values(server.smartSwitchGroupConfigMap)) {
     //}
     await Promise.allSettled(creationPromises);
 
@@ -473,7 +473,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
     }
 
     const deletionPromises: Promise<boolean>[] = [];
-    for (const content of Object.values(server.smartSwitchMap)) {
+    for (const content of Object.values(server.smartSwitchConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartSwitches;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -481,7 +481,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         }
     }
 
-    for (const content of Object.values(server.smartAlarmMap)) {
+    for (const content of Object.values(server.smartAlarmConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartAlarms;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -489,7 +489,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         }
     }
 
-    for (const content of Object.values(server.storageMonitorMap)) {
+    for (const content of Object.values(server.storageMonitorConfigMap)) {
         const channelId = gInstance.guildChannelIds.storageMonitors;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -497,7 +497,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         }
     }
 
-    for (const content of Object.values(server.smartSwitchGroupMap)) {
+    for (const content of Object.values(server.smartSwitchGroupConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartSwitchGroups;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -571,28 +571,28 @@ async function serverDeleteButtonHandler(dm: DiscordManager, interaction: discor
     rpm.removeInstance(guildId, serverId);
 
     const deletionPromises: Promise<boolean>[] = [];
-    for (const content of Object.values(server.smartSwitchMap)) {
+    for (const content of Object.values(server.smartSwitchConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartSwitches;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
         }
     }
 
-    for (const content of Object.values(server.smartAlarmMap)) {
+    for (const content of Object.values(server.smartAlarmConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartAlarms;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
         }
     }
 
-    for (const content of Object.values(server.storageMonitorMap)) {
+    for (const content of Object.values(server.storageMonitorConfigMap)) {
         const channelId = gInstance.guildChannelIds.storageMonitors;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
         }
     }
 
-    for (const content of Object.values(server.smartSwitchGroupMap)) {
+    for (const content of Object.values(server.smartSwitchGroupConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartSwitchGroups;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
