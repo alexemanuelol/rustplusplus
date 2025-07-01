@@ -4,7 +4,7 @@
 
 Program | Version | Download | Note
 ------- | ------- | -------- | ----
-`NodeJS` | >= 16.9 | [**here**](https://nodejs.org/en/download/) | Since discordjs v14 is used, the version needs to be at least 16.9.
+`NodeJS` | >= 22.12.0 | [**here**](https://nodejs.org/en/download/) | Since discordjs v14 is used, the version needs to be at least 22.12.0.
 `Git` | Any | [**here**](https://git-scm.com/downloads) | &nbsp;
 
 ## Optional Software
