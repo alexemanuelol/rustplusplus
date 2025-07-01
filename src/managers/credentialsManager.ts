@@ -70,6 +70,7 @@ export class CredentialsManager {
     constructor(credentialFilesPath: string) {
         const fName = '[CredentialsManager: Init]';
         log.info(`${fName} Credentials files path '${credentialFilesPath}'.`);
+
         this.credentialFilesPath = credentialFilesPath;
         this.credentialsMap = {};
         this.expirationTimeouts = new Map();
@@ -79,6 +80,7 @@ export class CredentialsManager {
 
     private loadAllCredentials(): void {
         const fName = '[CredentialsManager: loadAllCredentials]';
+
         const credentialFiles = fs.readdirSync(this.credentialFilesPath);
 
         credentialFiles.forEach((file) => {
@@ -176,6 +178,7 @@ export class CredentialsManager {
     private deleteCredentialsFile(steamId: types.SteamId): boolean {
         const fName = `[CredentialsManager: deleteCredentialsFile: ${steamId}]`;
         log.debug(`${fName} Delete Credentials file.`);
+
         const credentialsFilePath = path.join(this.credentialFilesPath, `${steamId}.json`);
 
         if (!fs.existsSync(credentialsFilePath)) {
@@ -248,6 +251,7 @@ export class CredentialsManager {
 
     public updateCredentials(steamId: types.SteamId): boolean {
         const fName = `[CredentialsManager: updateCredentials: ${steamId}]`;
+
         const credentials = this.credentialsMap[steamId];
         if (!credentials) {
             log.warn(`${fName} Credentials could not be found.`);
