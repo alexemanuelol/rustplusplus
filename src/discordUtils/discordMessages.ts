@@ -21,7 +21,9 @@
 import * as discordjs from 'discord.js';
 import * as path from 'path';
 
-import { log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm } from '../../index';
+import {
+    log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm, rustPlusManager as rpm
+} from '../../index';
 import { ConnectionStatus } from '../managers/rustPlusManager';
 import * as constants from '../utils/constants';
 import * as discordButtons from './discordButtons';
@@ -193,14 +195,23 @@ export async function sendSmartSwitchMessage(dm: DiscordManager, guildId: types.
         return;
     }
 
-    // TODO! Check if switch is active via rustplusManager
-    const active = false;
+    // TODO! Make a function in rustPlusManager that returns state of switch?
+    let valid = false;
+    const rpInstance = rpm.getInstance(guildId, serverId);
+    if (rpInstance) {
+        const smartSwitchLiveData = rpInstance.smartDeviceLiveDataMap[entityId];
+        if (smartSwitchLiveData && smartSwitchLiveData.valid) {
+            valid = true;
+        }
+    }
+
+    // TODO! If valid === false do something else. Do not need to send no longer valid message, but we could change layout of the smart switch telling the user that it is currently not valid.
 
     const content = {
-        embeds: [discordEmbeds.getSmartSwitchEmbed(guildId, serverId, entityId, active)],
+        embeds: [discordEmbeds.getSmartSwitchEmbed(guildId, serverId, entityId)],
         components: [
             discordSelectMenus.getSmartSwitchSelectMenu(guildId, serverId, entityId),
-            discordButtons.getSmartSwitchButtons(guildId, serverId, entityId, active)
+            discordButtons.getSmartSwitchButtons(guildId, serverId, entityId)
         ],
         files: [
             new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'electrics',

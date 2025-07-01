@@ -20,13 +20,14 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, rustPlusManager as rpm } from '../../index';
+import { guildInstanceManager as gim, rustPlusManager as rpm, log } from '../../index';
 import { ConnectionStatus } from '../managers/rustPlusManager';
 import { DiscordManager } from "../managers/discordManager";
 import * as types from '../utils/types';
-import { EventNotificationSettings, GuildInstance } from '../managers/guildInstanceManager';
+import { EventNotificationSettings, GuildInstance, ServerInfo, SmartSwitchConfig } from '../managers/guildInstanceManager';
 import * as discordMessages from '../discordUtils/discordMessages';
 import * as discordModals from '../discordUtils/discordModals';
+import { SmartDeviceLiveData } from '../managers/rustPlusManager';
 
 export async function buttonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
     Promise<boolean> {
@@ -102,6 +103,10 @@ export async function buttonHandler(dm: DiscordManager, interaction: discordjs.B
     }
     else if (interaction.customId.startsWith('ServerDelete')) {
         return await serverDeleteButtonHandler(dm, interaction);
+    }
+    /* Smart Switch buttons */
+    else if (interaction.customId.startsWith('SmartSwitchOff') || interaction.customId.startsWith('SmartSwitchOn')) {
+        return await smartSwitchOnOffButtonHandler(dm, interaction);
     }
 
     return false;
@@ -405,15 +410,15 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
     }
 
     const creationPromises: Promise<void>[] = [];
-    for (const content of Object.values(server.smartSwitchMap)) {
+    for (const content of Object.values(server.smartSwitchConfigMap)) {
         creationPromises.push(discordMessages.sendSmartSwitchMessage(dm, guildId, serverId, content.entityId));
     }
 
-    for (const content of Object.values(server.smartAlarmMap)) {
+    for (const content of Object.values(server.smartAlarmConfigMap)) {
         creationPromises.push(discordMessages.sendSmartAlarmMessage(dm, guildId, serverId, content.entityId));
     }
 
-    for (const content of Object.values(server.storageMonitorMap)) {
+    for (const content of Object.values(server.storageMonitorConfigMap)) {
         creationPromises.push(discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
     }
 
@@ -473,7 +478,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
     }
 
     const deletionPromises: Promise<boolean>[] = [];
-    for (const content of Object.values(server.smartSwitchMap)) {
+    for (const content of Object.values(server.smartSwitchConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartSwitches;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -481,7 +486,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         }
     }
 
-    for (const content of Object.values(server.smartAlarmMap)) {
+    for (const content of Object.values(server.smartAlarmConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartAlarms;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -489,7 +494,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
         }
     }
 
-    for (const content of Object.values(server.storageMonitorMap)) {
+    for (const content of Object.values(server.storageMonitorConfigMap)) {
         const channelId = gInstance.guildChannelIds.storageMonitors;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -571,21 +576,21 @@ async function serverDeleteButtonHandler(dm: DiscordManager, interaction: discor
     rpm.removeInstance(guildId, serverId);
 
     const deletionPromises: Promise<boolean>[] = [];
-    for (const content of Object.values(server.smartSwitchMap)) {
+    for (const content of Object.values(server.smartSwitchConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartSwitches;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
         }
     }
 
-    for (const content of Object.values(server.smartAlarmMap)) {
+    for (const content of Object.values(server.smartAlarmConfigMap)) {
         const channelId = gInstance.guildChannelIds.smartAlarms;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
         }
     }
 
-    for (const content of Object.values(server.storageMonitorMap)) {
+    for (const content of Object.values(server.storageMonitorConfigMap)) {
         const channelId = gInstance.guildChannelIds.storageMonitors;
         if (channelId !== null && content.messageId !== null) {
             deletionPromises.push(dm.deleteMessage(guildId, channelId, content.messageId));
@@ -629,6 +634,54 @@ async function serverDeleteButtonHandler(dm: DiscordManager, interaction: discor
 
     delete gInstance.serverInfoMap[serverId];
     gim.updateGuildInstance(guildId);
+
+    return true;
+}
+
+/**
+ * Smart Switch
+ */
+
+async function smartSwitchOnOffButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
+    Promise<boolean> {
+    const identifier = JSON.parse(interaction.customId.replace('SmartSwitchOff', '')
+        .replace('SmartSwitchOn', ''));
+    const serverId = identifier.serverId as types.ServerId;
+    const entityId = identifier.entityId as types.EntityId;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const server = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const mainRequesterSteamId = server.mainRequesterSteamId;
+    const pairingData = gInstance.pairingDataMap[serverId]?.[mainRequesterSteamId] ?? null;
+
+    const funcName = '[smartSwitchOnOffButtonHandler]';
+    const logParam = { guildId: guildId, serverId: serverId, serverName: server.name };
+
+    if (!pairingData) {
+        log.warn(`${funcName} pairingData for ${mainRequesterSteamId} could not be found. ` +
+            `Smart Switch action could not be performed.`, logParam);
+        return false;
+    }
+
+    const smartSwitchConfig = server.smartSwitchConfigMap[entityId] as SmartSwitchConfig;
+
+    const rpInstance = rpm.getInstance(guildId, serverId);
+    if (!rpInstance) {
+        log.warn(`${funcName} RustPlus instance is not active.`, logParam);
+        interaction.deferUpdate();
+        return false;
+    }
+
+    const smartSwitchLiveData = rpInstance.smartDeviceLiveDataMap[entityId] as SmartDeviceLiveData;
+    const active = (interaction.customId.startsWith('SmartSwitchOn')) ? true : false;
+    const prevActive = smartSwitchLiveData.payload?.value ? true : false;
+
+    // TODO! Add to an array of button interaction smart switch action so that rustplus message event wont trigger another update
+
+    const response = await rpInstance.rustPlus.setEntityValueAsync(pairingData.steamId, pairingData.playerToken,
+        Number(entityId), active);
+
 
     return true;
 }

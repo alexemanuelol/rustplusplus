@@ -18,7 +18,7 @@
 
 */
 
-import * as rp from 'rustplus-ts';
+import * as rp from 'rustplus-ts';   
 import * as fs from 'fs';
 import * as path from 'path';
 import { Logger } from 'winston';
@@ -28,6 +28,7 @@ import * as constants from '../utils/constants';
 import * as types from '../utils/types';
 import { getServerId, getIpAndPort, GuildInstance } from './guildInstanceManager';
 import { sendServerMessage } from '../discordUtils/discordMessages';
+import * as discordMessages from '../discordUtils/discordMessages';
 //import { RustPlusTime } from '../structures/rustPlusTime';
 //import { RustPlusInfo } from '../structures/rustPlusInfo';
 
@@ -42,12 +43,20 @@ export enum ConnectionStatus {
     Reconnecting = 3
 }
 
+export interface SmartDeviceLiveData {
+    entityId: types.EntityId;
+    valid: boolean;
+    lastUpdate: Date;
+    payload: rp.AppEntityPayload | undefined;
+}
+
 export class RustPlusManager {
     private rustPlusInstanceMap: RustPlusInstanceMap;
 
     constructor() {
         const funcName = '[RustPlusManager: Init]';
         log.info(`${funcName}`);
+
         this.rustPlusInstanceMap = {};
     }
 
@@ -62,8 +71,9 @@ export class RustPlusManager {
 
     public addInstance(guildId: types.GuildId, serverId: types.ServerId): boolean {
         const funcName = '[RustPlusManager: addInstance]';
-        const ipAndPort = getIpAndPort(serverId);
         const logParam = { guildId: guildId, serverId: serverId };
+
+        const ipAndPort = getIpAndPort(serverId);
 
         if (!Object.hasOwn(this.rustPlusInstanceMap, guildId)) {
             this.rustPlusInstanceMap[guildId] = {};
@@ -119,8 +129,11 @@ export class RustPlusInstance {
 
     public serverPollingHandlerIntervalId: NodeJS.Timeout | undefined;
     public serverPollingHandlerIntervalSeconds: number;
+
     public lastServerPollSuccessful: boolean;
     public lastServerPollSuccessfulTimestampSeconds: types.Timestamp | null;
+
+    public smartDeviceLiveDataMap: { [entityId: types.EntityId]: SmartDeviceLiveData };
 
     //private rpInfo: RustPlusInfo | null;
     //private rpTime: RustPlusTime | null;
@@ -145,8 +158,11 @@ export class RustPlusInstance {
 
         this.serverPollingHandlerIntervalId = undefined;
         this.serverPollingHandlerIntervalSeconds = config.general.serverPollingHandlerIntervalMs / 1000;
+
         this.lastServerPollSuccessful = false;
         this.lastServerPollSuccessfulTimestampSeconds = null;
+
+        this.smartDeviceLiveDataMap = {};
 
         /* Latest request responses. */
         //this.rpInfo = null;
@@ -176,6 +192,7 @@ export class RustPlusInstance {
 
     public async scheduleReconnect() {
         const funcName = '[RustPlusInstance: scheduleReconnect]';
+
         this.rustPlus.removeAllListeners();
         await this.rustPlus.disconnect();
 
@@ -394,6 +411,10 @@ export class RustPlusInstance {
                             log.warn(`${funcName} PairingData no longer valid for ${steamId}.`, logParam);
                             pairingData.valid = false;
                         }
+                        else if (this.rustPlus.getAppResponseError(rpInfo) === rp.AppResponseError.Banned) {
+                            log.warn(`${funcName} ${steamId} Rust+ is banned on the server.`, logParam);
+                            pairingData.valid = false;
+                        }
                     }
                     else {
                         log.error(`${funcName} We got completely wrong response: ${JSON.stringify(rpInfo)}`, logParam);
@@ -417,6 +438,30 @@ export class RustPlusInstance {
     }
 
     public async setupSmartDevices() {
+        const funcName = '[RustPlusManager: setupSmartDevices]';
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const server = gInstance.serverInfoMap[this.serverId];
+        const mainRequesterSteamId = server.mainRequesterSteamId;
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
+
+        if (!pairingData) {
+            log.warn(`${funcName} pairingData for ${mainRequesterSteamId} could not be found. ` +
+                `Setup of Smart Devices could not be performed.`, logParam);
+            return;
+        }
+
+        await this.updateSmartSwitches();
+        await this.setupSmartAlarms();
+        await this.setupStorageMonitors();
+
+
+
+
+
+
+
 
         // TODO! Go through all smart devices to get the status of them
         // - Smart Switches, current status
@@ -428,4 +473,128 @@ export class RustPlusInstance {
         // - smartSwitchPollingHandler
 
     }
+
+    public async updateSmartSwitches() {
+        const funcName = '[RustPlusManager: updateSmartSwitches]';
+        const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const server = gInstance.serverInfoMap[this.serverId];
+        const mainRequesterSteamId = server.mainRequesterSteamId;
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
+
+        if (!pairingData) {
+            log.warn(`${funcName} pairingData for ${mainRequesterSteamId} could not be found. ` +
+                `Update of Smart Switches could not be performed.`, logParam);
+            return;
+        }
+
+        for (const [entityId, content] of Object.entries(server.smartSwitchConfigMap)) {
+            const rpEntityInfo = await this.rustPlus.getEntityInfoAsync(pairingData.steamId, pairingData.playerToken,
+                Number(entityId));
+
+            if (rp.isValidAppResponse(rpEntityInfo, log)) {
+                if (!rp.isValidAppEntityInfo(rpEntityInfo.entityInfo, log)) {
+                    if (rp.isValidAppError(rpEntityInfo.error, log)) {
+                        log.warn(`${funcName} AppError: ${rpEntityInfo.error.error}`, logParam);
+                        if (Object.hasOwn(this.smartDeviceLiveDataMap, entityId)) {
+                            if (this.smartDeviceLiveDataMap[entityId].valid) {
+                                console.log('SWITCH NO LONGER VALID')
+                                // TODO! Send invalid message to activity channel
+                            }
+                            this.smartDeviceLiveDataMap[entityId].valid = false;
+
+                            discordMessages.sendSmartSwitchMessage(dm, this.guildId, this.serverId, entityId);
+                        }
+                    }
+                    else {
+                        if (Object.hasOwn(this.smartDeviceLiveDataMap, entityId)) {
+                            if (this.smartDeviceLiveDataMap[entityId].valid) {
+                                console.log('SWITCH NO LONGER VALID')
+                                // TODO! Send invalid message to activity channel
+                            }
+                            this.smartDeviceLiveDataMap[entityId].valid = false;
+
+                            discordMessages.sendSmartSwitchMessage(dm, this.guildId, this.serverId, entityId);
+                        }
+                    }
+                }
+                else {
+                    this.smartDeviceLiveDataMap[entityId] = {
+                        entityId: entityId,
+                        valid: true,
+                        lastUpdate: new Date(),
+                        payload: rpEntityInfo.entityInfo.payload
+                    };
+
+                    discordMessages.sendSmartSwitchMessage(dm, this.guildId, this.serverId, entityId);
+                }
+            }
+            else {
+                /* Error or rp.ConsumeTokensError */
+                if (Object.hasOwn(this.smartDeviceLiveDataMap, entityId)) {
+                    if (this.smartDeviceLiveDataMap[entityId].valid) {
+                        console.log('SWITCH NO LONGER VALID')
+                        // TODO! Send invalid message to activity channel
+                    }
+                    this.smartDeviceLiveDataMap[entityId].valid = false;
+
+                    discordMessages.sendSmartSwitchMessage(dm, this.guildId, this.serverId, entityId);
+                }
+            }
+        }
+    }
+
+    public async setupSmartAlarms() {
+
+    }
+
+    public async setupStorageMonitors() {
+
+    }
+
+    //public isValidEntityInfoResponse(response: rp.AppResponse | Error | rp.ConsumeTokensError): boolean {
+    //    const funcName = `[RustPlusManager: isValidEntityInfoResponse]`
+    //    const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
+
+    //    const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+    //    const server = gInstance.serverInfoMap[this.serverId];
+    //    const mainRequesterSteamId = server.mainRequesterSteamId;
+    //    const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
+
+    //    if (rp.isValidAppResponse(response, log)) {
+    //        if (!rp.isValidAppEntityInfo(response.entityInfo, log)) {
+    //            if (rp.isValidAppError(response.error, log)) {
+    //                log.warn(`${funcName} AppError: ${response.error.error}`, logParam);
+    //                if (this.rustPlus.getAppResponseError(response) === rp.AppResponseError.NotFound) {
+    //                    /* pairingData is no longer valid. */
+    //                    if (pairingData && pairingData.valid) {
+    //                        log.warn(`${funcName} PairingData no longer valid for ${mainRequesterSteamId}.`, logParam);
+    //                        pairingData.valid = false;
+    //                        gim.updateGuildInstance(this.guildId);
+    //                        await sendServerMessage(dm, this.guildId, this.serverId, this.connectionStatus);
+    //                    }
+    //                }
+    //            }
+    //            else {
+    //                log.error(`${funcName} We got completely wrong response: ${JSON.stringify(response)}`, logParam);
+    //            }
+    //            this.lastServerPollSuccessful = false;
+    //            return false;
+    //        }
+    //        else {
+    //            if (pairingData && !pairingData.valid) {
+    //                pairingData.valid = true;
+    //                gim.updateGuildInstance(this.guildId);
+    //                await sendServerMessage(dm, this.guildId, this.serverId, this.connectionStatus);
+    //            }
+    //        }
+    //    }
+    //    else {
+    //        /* Error or rp.ConsumeTokensError */
+    //        return false;
+    //    }
+
+    //    return true;
+    //}
 }

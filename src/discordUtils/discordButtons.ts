@@ -20,7 +20,7 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, localeManager as lm } from '../../index';
+import { guildInstanceManager as gim, localeManager as lm, rustPlusManager as rpm } from '../../index';
 import { ConnectionStatus } from '../managers/rustPlusManager';
 import * as types from '../utils/types';
 import * as constants from '../utils/constants';
@@ -210,16 +210,26 @@ export function getServerButtons(guildId: types.GuildId, serverId: types.ServerI
     );
 }
 
-export function getSmartSwitchButtons(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId,
-    active: boolean): discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
+export function getSmartSwitchButtons(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId):
+    discordjs.ActionRowBuilder<discordjs.ButtonBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
     const identifier = JSON.stringify({ 'serverId': serverId, 'entityId': entityId });
 
+    // TODO! Make a function in rustPlusManager that returns state of switch?
+    let active = false;
+    const rpInstance = rpm.getInstance(guildId, serverId);
+    if (rpInstance) {
+        const smartSwitchLiveData = rpInstance.smartDeviceLiveDataMap[entityId];
+        if (smartSwitchLiveData && smartSwitchLiveData.payload) {
+            active = smartSwitchLiveData.payload.value;
+        }
+    }
+
     return new discordjs.ActionRowBuilder<discordjs.ButtonBuilder>().addComponents(
         getButton({
             customId: `SmartSwitch${active ? 'Off' : 'On'}${identifier}`,
-            label: active ? lm.getIntl(language, 'buttonOff') : lm.getIntl(language, 'buttonOn'),
+            label: active ? lm.getIntl(language, 'buttonTurnOff') : lm.getIntl(language, 'buttonTurnOn'),
             style: active ? discordjs.ButtonStyle.Danger : discordjs.ButtonStyle.Success,
             type: discordjs.ComponentType.Button
         }),

@@ -20,7 +20,9 @@
 
 import * as discordjs from 'discord.js';
 
-import { localeManager as lm, guildInstanceManager as gim, config, credentialsManager as cm } from '../../index';
+import {
+    localeManager as lm, guildInstanceManager as gim, config, credentialsManager as cm, rustPlusManager as rpm
+} from '../../index';
 import {
     GuildInstance, ServerInfo, SmartSwitch, SmartAlarm, StorageMonitor, StorageMonitorType
 
@@ -445,12 +447,22 @@ export function getServerEmbed(guildId: types.GuildId, serverId: types.ServerId)
     });
 }
 
-export function getSmartSwitchEmbed(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId,
-    active: boolean): discordjs.EmbedBuilder {
+export function getSmartSwitchEmbed(guildId: types.GuildId, serverId: types.ServerId, entityId: types.EntityId):
+    discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const smartSwitch = serverInfo.smartSwitchMap[entityId] as SmartSwitch;
     const language = gInstance.generalSettings.language;
+
+    // TODO! Make a function in rustPlusManager that returns state of switch?
+    let active = false;
+    const rpInstance = rpm.getInstance(guildId, serverId);
+    if (rpInstance) {
+        const smartSwitchLiveData = rpInstance.smartDeviceLiveDataMap[entityId];
+        if (smartSwitchLiveData && smartSwitchLiveData.payload) {
+            active = smartSwitchLiveData.payload.value;
+        }
+    }
 
     return getEmbed({
         title: smartSwitch.name,

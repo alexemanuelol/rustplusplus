@@ -193,6 +193,7 @@ export class FcmListenerManager {
 
     constructor(dm: DiscordManager) {
         log.info('[FcmListenerManager: Init]');
+
         this.dm = dm;
         this.listeners = {};
 
@@ -212,6 +213,7 @@ export class FcmListenerManager {
 
     public startListener(steamId: types.SteamId): boolean {
         const funcName = `[FcmListenerManager: startListener: ${steamId}]`;
+
         if (this.isListenerActive(steamId)) {
             this.stopListener(steamId);
         }
@@ -246,6 +248,7 @@ export class FcmListenerManager {
 
     public stopListener(steamId: types.SteamId): void {
         const funcName = `[FcmListenerManager: stopListener: ${steamId}]`;
+
         if (steamId in this.listeners) {
             log.info(`${funcName} FCM Listener stopped.`);
             this.listeners[steamId].destroy();
@@ -255,6 +258,7 @@ export class FcmListenerManager {
 
     private onDataReceived(data: FcmNotification): void {
         const funcName = `[FcmListenerManager: onDataReceived]`;
+
         const appData: AppDataItem[] = data.appData;
 
         const title = appData.find(item => item.key === 'title')?.value;
@@ -419,6 +423,7 @@ export class FcmListenerManager {
 
 async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, body: PairingServerBody) {
     const funcName = `[FcmListenerManager: pairingServer: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
 
@@ -456,9 +461,9 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             connect: null,
             noteMap: serverInfo ? serverInfo.noteMap : {},
             battlemetricsId: null,
-            smartSwitchMap: serverInfo ? serverInfo.smartSwitchMap : {},
-            smartAlarmMap: serverInfo ? serverInfo.smartAlarmMap : {},
-            storageMonitorMap: serverInfo ? serverInfo.storageMonitorMap : {},
+            smartSwitchConfigMap: serverInfo ? serverInfo.smartSwitchConfigMap : {},
+            smartAlarmConfigMap: serverInfo ? serverInfo.smartAlarmConfigMap : {},
+            storageMonitorConfigMap: serverInfo ? serverInfo.storageMonitorConfigMap : {},
             smartSwitchGroupMap: serverInfo ? serverInfo.smartSwitchGroupMap : {}
         };
 
@@ -478,6 +483,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
 
 async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.SteamId, body: PairingEntityBody) {
     const funcName = `[FcmListenerManager: pairingEntity: SmartSwitch: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
 
@@ -489,25 +495,25 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[serverId];
         const language = gInstance.generalSettings.language;
 
-        const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
             log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
-        const smartSwitchMap = serverInfo.smartSwitchMap;
-        const exist = body.entityId in smartSwitchMap;
-        smartSwitchMap[body.entityId] = {
+        const exist = body.entityId in serverInfo.smartSwitchConfigMap;
+        serverInfo.smartSwitchConfigMap[body.entityId] = {
             entityId: body.entityId,
-            messageId: exist ? smartSwitchMap[body.entityId].messageId : null,
+            messageId: exist ? serverInfo.smartSwitchConfigMap[body.entityId].messageId : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            name: exist ? smartSwitchMap[body.entityId].name : lm.getIntl(language, 'smartSwitch'),
-            command: exist ? smartSwitchMap[body.entityId].command : body.entityId,
-            img: exist ? smartSwitchMap[body.entityId].img : 'smart_switch.png',
-            autoSetting: exist ? smartSwitchMap[body.entityId].autoSetting : SmartSwitchAutoSetting.Off,
-            proximitySetting: exist ? smartSwitchMap[body.entityId].proximitySetting :
+            name: exist ? serverInfo.smartSwitchConfigMap[body.entityId].name : lm.getIntl(language, 'smartSwitch'),
+            command: exist ? serverInfo.smartSwitchConfigMap[body.entityId].command : body.entityId,
+            img: exist ? serverInfo.smartSwitchConfigMap[body.entityId].img : 'smart_switch.png',
+            autoSetting: exist ? serverInfo.smartSwitchConfigMap[body.entityId].autoSetting :
+                SmartSwitchAutoSetting.Off,
+            proximitySetting: exist ? serverInfo.smartSwitchConfigMap[body.entityId].proximitySetting :
                 constants.PROXIMITY_SETTING_DEFAULT_METERS
         };
 
@@ -525,6 +531,7 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
 
 async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.SteamId, body: PairingEntityBody) {
     const funcName = `[FcmListenerManager: pairingEntity: SmartAlarm: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
 
@@ -536,27 +543,27 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[serverId];
         const language = gInstance.generalSettings.language;
 
-        const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
             log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
-        const smartAlarmMap = serverInfo.smartAlarmMap;
-        const exist = body.entityId in smartAlarmMap;
-        smartAlarmMap[body.entityId] = {
+        const exist = body.entityId in serverInfo.smartAlarmConfigMap;
+        serverInfo.smartAlarmConfigMap[body.entityId] = {
             entityId: body.entityId,
-            messageId: exist ? smartAlarmMap[body.entityId].messageId : null,
+            messageId: exist ? serverInfo.smartAlarmConfigMap[body.entityId].messageId : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            name: exist ? smartAlarmMap[body.entityId].name : lm.getIntl(language, 'smartAlarm'),
-            command: exist ? smartAlarmMap[body.entityId].command : body.entityId,
-            img: exist ? smartAlarmMap[body.entityId].img : 'smart_alarm.png',
-            everyone: exist ? smartAlarmMap[body.entityId].everyone : false,
-            inGame: exist ? smartAlarmMap[body.entityId].inGame : false,
-            lastTrigger: exist ? smartAlarmMap[body.entityId].lastTrigger : null,
-            message: exist ? smartAlarmMap[body.entityId].message : lm.getIntl(language, 'yourBaseIsUnderAttack')
+            name: exist ? serverInfo.smartAlarmConfigMap[body.entityId].name : lm.getIntl(language, 'smartAlarm'),
+            command: exist ? serverInfo.smartAlarmConfigMap[body.entityId].command : body.entityId,
+            img: exist ? serverInfo.smartAlarmConfigMap[body.entityId].img : 'smart_alarm.png',
+            everyone: exist ? serverInfo.smartAlarmConfigMap[body.entityId].everyone : false,
+            inGame: exist ? serverInfo.smartAlarmConfigMap[body.entityId].inGame : false,
+            lastTrigger: exist ? serverInfo.smartAlarmConfigMap[body.entityId].lastTrigger : null,
+            message: exist ? serverInfo.smartAlarmConfigMap[body.entityId].message :
+                lm.getIntl(language, 'yourBaseIsUnderAttack')
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);
@@ -573,6 +580,7 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
 
 async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: types.SteamId, body: PairingEntityBody) {
     const funcName = `[FcmListenerManager: pairingEntity: StorageMonitor: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
 
@@ -584,25 +592,25 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
     const associatedGuilds = credentials.associatedGuilds;
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[serverId];
         const language = gInstance.generalSettings.language;
 
-        const serverInfo = gInstance.serverInfoMap[serverId];
         if (!serverInfo) {
             log.warn(`${funcName} Could not find server.`, { guildId: guildId, serverId: serverId });
             continue;
         }
 
-        const storageMonitorMap = serverInfo.storageMonitorMap;
-        const exist = body.entityId in storageMonitorMap;
-        storageMonitorMap[body.entityId] = {
+        const exist = body.entityId in serverInfo.storageMonitorConfigMap;
+        serverInfo.storageMonitorConfigMap[body.entityId] = {
             entityId: body.entityId,
-            messageId: exist ? storageMonitorMap[body.entityId].messageId : null,
+            messageId: exist ? serverInfo.storageMonitorConfigMap[body.entityId].messageId : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            name: exist ? storageMonitorMap[body.entityId].name : lm.getIntl(language, 'storageMonitor'),
-            img: exist ? storageMonitorMap[body.entityId].img : 'storage_monitor.png',
-            everyone: exist ? storageMonitorMap[body.entityId].everyone : false,
-            inGame: exist ? storageMonitorMap[body.entityId].inGame : true,
-            type: exist ? storageMonitorMap[body.entityId].type : StorageMonitorType.Unknown
+            name: exist ? serverInfo.storageMonitorConfigMap[body.entityId].name :
+                lm.getIntl(language, 'storageMonitor'),
+            img: exist ? serverInfo.storageMonitorConfigMap[body.entityId].img : 'storage_monitor.png',
+            everyone: exist ? serverInfo.storageMonitorConfigMap[body.entityId].everyone : false,
+            inGame: exist ? serverInfo.storageMonitorConfigMap[body.entityId].inGame : true,
+            type: exist ? serverInfo.storageMonitorConfigMap[body.entityId].type : StorageMonitorType.Unknown
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);
@@ -631,6 +639,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
     setting fcmAlarmNotificationEnabled is enabled. Those notifications will be handled here. */
 
     const funcName = `[FcmListenerManager: alarmAlarm: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
 
@@ -663,6 +672,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
 async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, title: string, message: string,
     body: AlarmPluginBody) {
     const funcName = `[FcmListenerManager: alarmPlugin: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
 
@@ -708,6 +718,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function playerDeath(flm: FcmListenerManager, steamId: types.SteamId, title: string, body: PlayerDeathBody) {
     const funcName = `[FcmListenerManager: playerDeath: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
 
     if (!credentials) {
@@ -721,6 +732,7 @@ async function playerDeath(flm: FcmListenerManager, steamId: types.SteamId, titl
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: TeamLoginBody) {
     const funcName = `[FcmListenerManager: teamLogin: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
     const serverId = `${body.ip}-${body.port}`;
 
@@ -751,6 +763,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
 async function newsNews(flm: FcmListenerManager, steamId: types.SteamId, title: string, message: string,
     body: NewsNewsBody) {
     const funcName = `[FcmListenerManager: newsNews: ${steamId}]`;
+
     const credentials = cm.getCredentials(steamId);
 
     if (!credentials) {

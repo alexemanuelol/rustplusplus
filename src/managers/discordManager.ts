@@ -49,6 +49,7 @@ export class DiscordManager {
     constructor() {
         const funcName = '[DiscordManager: Init]';
         log.info(`${funcName} Starting DiscordManager.`);
+
         this.client = new discordjs.Client({
             presence: {
                 status: 'online', /* 'online', 'idle', 'dnd', 'invisible' */
@@ -81,6 +82,7 @@ export class DiscordManager {
     private async getCommandData(language: string, type: 'global' | 'guild' = 'global'):
         Promise<discordjs.SlashCommandBuilder[]> {
         const funcName = '[DiscordManager: getCommandData]';
+
         const commandDir = type === 'global' ? GLOBAL_SLASH_COMMANDS_DIR : GUILD_SLASH_COMMANDS_DIR;
         const commandFiles = fs.readdirSync(path.join(__dirname, '..', commandDir))
             .filter(file => file.endsWith('.ts'));
@@ -103,6 +105,7 @@ export class DiscordManager {
     /* Generally to store all the commands to use elsewhere. */
     private async loadSlashCommands() {
         const funcName = '[DiscordManager: loadSlashCommands]';
+
         /* Global */
         const globalCommandFiles = fs.readdirSync(path.join(__dirname, '..', GLOBAL_SLASH_COMMANDS_DIR))
             .filter(file => file.endsWith('.ts'));
@@ -142,6 +145,7 @@ export class DiscordManager {
 
     public async registerGlobalSlashCommands() {
         const funcName = '[DiscordManager: registerGlobalSlashCommands]';
+
         try {
             const commandsData = await this.getCommandData(config.general.language);
             if (commandsData.length === 0) {
@@ -187,6 +191,7 @@ export class DiscordManager {
 
     public async loadEvents() {
         const funcName = '[DiscordManager: loadEvents]';
+
         const eventFiles = fs.readdirSync(path.join(__dirname, '..', DISCORD_EVENTS_DIR))
             .filter(file => file.endsWith('.ts'));
 
@@ -221,6 +226,7 @@ export class DiscordManager {
 
     public async unloadEvents() {
         const funcName = '[DiscordManager: unloadEvents]';
+
         for (const { name, listener } of this.eventListeners) {
             if (name === 'rateLimited') {
                 this.client.rest.off(name, listener);
@@ -235,6 +241,7 @@ export class DiscordManager {
 
     public async build() {
         const funcName = '[DiscordManager: build]';
+
         try {
             this.client.login(config.discord.token);
         }
@@ -632,6 +639,7 @@ export class DiscordManager {
         messageId: types.MessageId | null = null, interaction: discordjs.Interaction | null = null):
         Promise<discordjs.Message | undefined> {
         const funcName = '[DiscordManager: sendUpdateMessage]';
+
         if (interaction) {
             await this.handleInteractionReply(interaction, content as discordjs.InteractionUpdateOptions, 'update');
             return undefined;
