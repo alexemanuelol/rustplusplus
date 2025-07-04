@@ -25,6 +25,7 @@ import * as discordMessages from '../discordUtils/discordMessages';
 import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
 import { Languages } from '../managers/LocaleManager';
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 export default {
 	name: 'role',
@@ -129,14 +130,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	const type = interaction.options.getString('type', true) as 'roleIds' | 'adminIds';
 	const roleId = interaction.options.getString('role', true);
 
-	const gInstance = gim.getGuildInstance(guildId);
-	if (!gInstance) {
-		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
-			'errorDescUnknownError');
-		log.warn(`${fName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
-		return false;
-	}
-
+	const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
@@ -192,14 +186,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	const type = interaction.options.getString('type', true) as 'roleIds' | 'adminIds';
 	const roleId = interaction.options.getString('role', true);
 
-	const gInstance = gim.getGuildInstance(guildId);
-	if (!gInstance) {
-		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
-			'errorDescUnknownError');
-		log.warn(`${fName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
-		return false;
-	}
-
+	const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
@@ -253,14 +240,7 @@ async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputC
 
 	const id = `Interaction ID: ${interaction.id} -`
 
-	const gInstance = gim.getGuildInstanceDeepCopy(guildId);
-	if (!gInstance) {
-		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
-			'errorDescUnknownError');
-		log.warn(`${fName} ${id} Unknown Error: Could not get GuildInstance.`, logParam);
-		return false;
-	}
-
+	const gInstance = gim.getGuildInstanceDeepCopy(guildId) as GuildInstance;
 	if (!('adminIds' in gInstance) || !('roleIds' in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
