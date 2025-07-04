@@ -31,7 +31,9 @@ import { ConnectionStatus } from './rustPlusManager';
 import * as types from '../utils/types';
 import * as vu from '../utils/validationUtils';
 import * as constants from '../utils/constants'
-import { GuildInstance, PairingDataMap, SmartSwitchConfigAutoSetting, StorageMonitorConfigType } from './guildInstanceManager';
+import {
+    GuildInstance, PairingDataMap, SmartSwitchConfigAutoSetting, StorageMonitorConfigType
+} from './guildInstanceManager';
 import * as discordMessages from '../discordUtils/discordMessages';
 
 
