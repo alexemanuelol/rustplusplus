@@ -26,6 +26,11 @@ const DiscordTools = require('./discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
 const Timer = require('../util/timer');
 
+function isValidUrl(url) {
+    if (url.startsWith('https') || url.startsWith('http')) return true;
+    return false;
+}
+
 module.exports = {
     getEmbed: function (options = {}) {
         const embed = new Discord.EmbedBuilder();
@@ -33,7 +38,8 @@ module.exports = {
         if (options.hasOwnProperty('title')) embed.setTitle(options.title);
         if (options.hasOwnProperty('color')) embed.setColor(options.color);
         if (options.hasOwnProperty('description')) embed.setDescription(options.description);
-        if (options.hasOwnProperty('thumbnail') && options.thumbnail !== '') embed.setThumbnail(options.thumbnail);
+        if (options.hasOwnProperty('thumbnail') && options.thumbnail !== '' && isValidUrl(options.thumbnail))
+            embed.setThumbnail(options.thumbnail);
         if (options.hasOwnProperty('image')) embed.setImage(options.image);
         if (options.hasOwnProperty('url') && options.url !== '') embed.setURL(options.url);
         if (options.hasOwnProperty('author')) embed.setAuthor(options.author);
