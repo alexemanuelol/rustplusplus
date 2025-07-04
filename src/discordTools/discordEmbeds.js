@@ -38,8 +38,7 @@ module.exports = {
         if (options.hasOwnProperty('title')) embed.setTitle(options.title);
         if (options.hasOwnProperty('color')) embed.setColor(options.color);
         if (options.hasOwnProperty('description')) embed.setDescription(options.description);
-        if (options.hasOwnProperty('thumbnail') && options.thumbnail !== '' && isValidUrl(options.thumbnail))
-            embed.setThumbnail(options.thumbnail);
+        if (options.hasOwnProperty('thumbnail') && options.thumbnail !== '') embed.setThumbnail(options.thumbnail);
         if (options.hasOwnProperty('image')) embed.setImage(options.image);
         if (options.hasOwnProperty('url') && options.url !== '') embed.setURL(options.url);
         if (options.hasOwnProperty('author')) embed.setAuthor(options.author);
@@ -603,7 +602,7 @@ module.exports = {
             footer: { text: body.name },
             title: data.title,
             description: data.message,
-            thumbnail: body.img !== '' ? body.img : 'attachment://rocket.png'
+            thumbnail: (body.img !== '' && isValidUrl(body.img)) ? body.img : 'attachment://rocket.png'
         });
     },
 
