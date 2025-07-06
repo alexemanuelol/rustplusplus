@@ -125,7 +125,8 @@ module.exports = {
         const serverStatus = !successful ? Constants.NOT_FOUND_EMOJI :
             (bmInstance.server_status ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI);
 
-        let description = `__**Battlemetrics ID:**__ ${battlemetricsLink}\n`;
+        let description = `__**Tracker ID:**__ \`${tracker.trackerId}\`\n`;
+        description += `__**Battlemetrics ID:**__ ${battlemetricsLink}\n`;
         description += `__**${Client.client.intlGet(guildId, 'serverId')}:**__ ${tracker.serverId}\n`;
         description += `__**${Client.client.intlGet(guildId, 'serverStatus')}:**__ ${serverStatus}\n`;
         description += `__**${Client.client.intlGet(guildId, 'streamerMode')}:**__ `;
