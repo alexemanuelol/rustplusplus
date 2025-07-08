@@ -149,8 +149,10 @@ async function mainRequesterSteamIdSelectMenuHandler(dm: DiscordManager,
     const server = gInstance.serverInfoMap[serverId] as ServerInfo;
     const steamId = interaction.values[0] as types.SteamId;
 
-    server.mainRequesterSteamId = steamId;
+    server.mainRequesterSteamId = steamId === 'none' ? null : steamId;
     gim.updateGuildInstance(guildId);
+
+    // TODO! Turn off rpm instance if steamId === none
 
     let connectionStatus = ConnectionStatus.Disconnected;
     const rpInstance = rpm.getInstance(guildId, serverId);

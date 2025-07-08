@@ -64,5 +64,15 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         }
     });
 
+    for (const content of Object.values(gInstance.serverInfoMap)) {
+        if (content.mainRequesterSteamId === null) continue;
+
+        if (associatedSteamIds.includes(content.mainRequesterSteamId)) {
+            content.mainRequesterSteamId = null;
+            // TODO! Turn off rustplus instance if no mainRequesterSteamId is set.
+            // Update server embed because mainRequesterSteamId is removed.
+        }
+    }
+
     gim.updateGuildInstance(member.guild.id);
 }

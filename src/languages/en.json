@@ -124,6 +124,8 @@
     "linkCap": "LINK",
     "linkToThePlugin": "Link to the Plugin",
     "mainRequesterSteamIdOptionDesc": "Set main requester to {user}.",
+    "mainRequesterSteamIdNoneOptionDesc": "Set main requester no one.",
+    "noneSelected": "None selected.",
     "male": "Male",
     "message": "Message",
     "newsCap": "NEWS",

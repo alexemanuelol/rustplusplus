@@ -73,6 +73,18 @@ export async function execute(dm: DiscordManager) {
             if (member) {
                 validGuilds.push(guildId);
             }
+            else {
+                const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+                Object.keys(gInstance.pairingDataMap).forEach(serverId => {
+                    delete gInstance.pairingDataMap[serverId][steamId];
+
+                    if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
+                        delete gInstance.pairingDataMap[serverId];
+                    }
+                });
+
+                gim.updateGuildInstance(guildId);
+            }
         }
         credentials.associatedGuilds = validGuilds;
 
@@ -84,6 +96,19 @@ export async function execute(dm: DiscordManager) {
 
         cm.addExpireTimeout(steamId, dm);
         cm.updateCredentials(steamId);
+    }
+
+    /* Update mainRequesterSteamId */
+    for (const guild of dm.client.guilds.cache.values()) {
+        const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
+        for (const [serverId, content] of Object.entries(gInstance.serverInfoMap)) {
+            if (content.mainRequesterSteamId === null) continue;
+
+            if (!(gInstance.pairingDataMap[serverId]?.[content.mainRequesterSteamId])) {
+                content.mainRequesterSteamId = null;
+            }
+        }
+        gim.updateGuildInstance(guild.id);
     }
 
     try {

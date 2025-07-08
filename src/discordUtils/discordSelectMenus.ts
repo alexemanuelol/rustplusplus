@@ -214,6 +214,13 @@ export async function getMainRequesterSteamIdSelectMenu(dm: DiscordManager, guil
     const serverPairingDataMap = gInstance.pairingDataMap[serverId];
 
     const options: discordjs.SelectMenuComponentOptionData[] = [];
+    options.push({
+        label: lm.getIntl(language, 'noneSelected'),
+        description: lm.getIntl(language, 'mainRequesterSteamIdNoneOptionDesc'),
+        value: 'none',
+        emoji: '❌'
+    });
+
     for (const [steamId, pairingData] of Object.entries(serverPairingDataMap)) {
         const credentials = cm.getCredentials(steamId) as Credentials;
         const member = await dm.getMember(guildId, credentials.discordUserId);
@@ -226,15 +233,19 @@ export async function getMainRequesterSteamIdSelectMenu(dm: DiscordManager, guil
         });
     }
 
-    const credentials = cm.getCredentials(server.mainRequesterSteamId);
-    let name = server.mainRequesterSteamId;
-    if (credentials) {
-        const member = await dm.getMember(guildId, credentials.discordUserId);
-        const userName = member ? ` (${member.user.username})` : '';
-        name += userName;
+    let name = lm.getIntl(language, 'noneSelected');
+    if (server.mainRequesterSteamId !== null) {
+        const credentials = cm.getCredentials(server.mainRequesterSteamId);
+        name = server.mainRequesterSteamId;
+        if (credentials) {
+            const member = await dm.getMember(guildId, credentials.discordUserId);
+            const userName = member ? ` (${member.user.username})` : '';
+            name += userName;
+        }
     }
 
-    const mainRequesterValid = Object.hasOwn(serverPairingDataMap, server.mainRequesterSteamId) &&
+    const mainRequesterValid = server.mainRequesterSteamId !== null &&
+        Object.hasOwn(serverPairingDataMap, server.mainRequesterSteamId) &&
         serverPairingDataMap[server.mainRequesterSteamId].valid;
     const placeholder = `${mainRequesterValid ? '✅' : '❌'} ${name}`;
 

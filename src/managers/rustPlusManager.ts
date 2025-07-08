@@ -277,6 +277,9 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const server = gInstance.serverInfoMap[this.serverId];
         const mainRequesterSteamId = server.mainRequesterSteamId;
+
+        if (mainRequesterSteamId === null) return;
+
         const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
 
         if (!pairingData) {
@@ -331,6 +334,9 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const server = gInstance.serverInfoMap[this.serverId];
         const mainRequesterSteamId = server.mainRequesterSteamId;
+
+        if (mainRequesterSteamId === null) return false;
+
         const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
 
         if (rp.isValidAppResponse(response, log)) {
