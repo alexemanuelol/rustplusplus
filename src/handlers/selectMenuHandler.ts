@@ -41,8 +41,8 @@ export async function selectMenuHandler(dm: DiscordManager, interaction: discord
         return await inGameChatCommandResponseDelaySelectMenuHandler(dm,
             interaction as discordjs.StringSelectMenuInteraction);
     }
-    else if (interaction.customId.startsWith('MainRequesterSteamId')) {
-        return await mainRequesterSteamIdSelectMenuHandler(dm,
+    else if (interaction.customId.startsWith('RequesterSteamId')) {
+        return await requesterSteamIdSelectMenuHandler(dm,
             interaction as discordjs.StringSelectMenuInteraction);
     }
 
@@ -140,16 +140,16 @@ async function inGameChatCommandResponseDelaySelectMenuHandler(dm: DiscordManage
     return true;
 }
 
-async function mainRequesterSteamIdSelectMenuHandler(dm: DiscordManager,
+async function requesterSteamIdSelectMenuHandler(dm: DiscordManager,
     interaction: discordjs.StringSelectMenuInteraction): Promise<boolean> {
-    const identifier = JSON.parse(interaction.customId.replace('MainRequesterSteamId', ''));
+    const identifier = JSON.parse(interaction.customId.replace('RequesterSteamId', ''));
     const serverId = identifier.serverId as types.ServerId;
     const guildId = interaction.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const server = gInstance.serverInfoMap[serverId] as ServerInfo;
     const steamId = interaction.values[0] as types.SteamId;
 
-    server.mainRequesterSteamId = steamId === 'none' ? null : steamId;
+    server.requesterSteamId = steamId === 'none' ? null : steamId;
     gim.updateGuildInstance(guildId);
 
     // TODO! Turn off rpm instance if steamId === none

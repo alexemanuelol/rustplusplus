@@ -453,7 +453,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             port: body.port,
             messageId: (message) ? message.id : null,
             pairedDate: Math.floor(Date.now() / 1000),
-            mainRequesterSteamId: serverInfo ? serverInfo.mainRequesterSteamId : body.playerId,
+            requesterSteamId: serverInfo ? serverInfo.requesterSteamId : body.playerId,
             active: serverInfo ? serverInfo.active : false,
             connect: null,
             noteMap: serverInfo ? serverInfo.noteMap : {},
@@ -654,7 +654,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
         }
 
         const rpInstance = rpm.getInstance(guildId, serverId);
-        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainRequesterSteamId &&
+        if (!rpInstance && !serverInfo.active && steamId === serverInfo.requesterSteamId &&
             gInstance.generalSettings.fcmAlarmNotify) {
             await discordMessages.sendFcmAlarmTriggerMessage(flm.dm, guildId, serverId, title, message);
         }
@@ -685,7 +685,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
             continue;
         }
 
-        if (gInstance.generalSettings.fcmAlarmPluginNotify && steamId === serverInfo.mainRequesterSteamId) {
+        if (gInstance.generalSettings.fcmAlarmPluginNotify && steamId === serverInfo.requesterSteamId) {
             if ((gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer && serverInfo.active) ||
                 !gInstance.generalSettings.fcmAlarmPluginNotifyActiveServer) {
                 discordMessages.sendFcmAlarmPluginTriggerMessage(flm.dm, guildId, serverId, title, message);
@@ -742,7 +742,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
         }
 
         const rpInstance = rpm.getInstance(guildId, serverId);
-        if (!rpInstance && !serverInfo.active && steamId === serverInfo.mainRequesterSteamId) {
+        if (!rpInstance && !serverInfo.active && steamId === serverInfo.requesterSteamId) {
             await discordMessages.sendFcmTeamLoginMessage(flm.dm, guildId, serverId, body);
             log.info(`${fName} ${body.targetName} just connected to ${body.name}.`);
         }

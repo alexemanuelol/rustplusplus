@@ -98,14 +98,14 @@ export async function execute(dm: DiscordManager) {
         cm.updateCredentials(steamId);
     }
 
-    /* Update mainRequesterSteamId */
+    /* Update requesterSteamId */
     for (const guild of dm.client.guilds.cache.values()) {
         const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
         for (const [serverId, content] of Object.entries(gInstance.serverInfoMap)) {
-            if (content.mainRequesterSteamId === null) continue;
+            if (content.requesterSteamId === null) continue;
 
-            if (!(gInstance.pairingDataMap[serverId]?.[content.mainRequesterSteamId])) {
-                content.mainRequesterSteamId = null;
+            if (!(gInstance.pairingDataMap[serverId]?.[content.requesterSteamId])) {
+                content.requesterSteamId = null;
             }
         }
         gim.updateGuildInstance(guild.id);

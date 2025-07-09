@@ -159,7 +159,7 @@ export async function sendServerMessage(dm: DiscordManager, guildId: types.Guild
     const content = {
         embeds: [discordEmbeds.getServerEmbed(guildId, serverId)],
         components: [
-            await discordSelectMenus.getMainRequesterSteamIdSelectMenu(dm, guildId, serverId),
+            await discordSelectMenus.getRequesterSteamIdSelectMenu(dm, guildId, serverId),
             discordButtons.getServerButtons(guildId, serverId, connectionStatus)]
     };
 

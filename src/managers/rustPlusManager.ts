@@ -276,15 +276,15 @@ export class RustPlusInstance {
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const server = gInstance.serverInfoMap[this.serverId];
-        const mainRequesterSteamId = server.mainRequesterSteamId;
+        const requesterSteamId = server.requesterSteamId;
 
-        if (mainRequesterSteamId === null) return;
+        if (requesterSteamId === null) return;
 
-        const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[requesterSteamId] ?? null;
 
         if (!pairingData) {
             this.lastServerPollSuccessful = false;
-            log.warn(`${fName} pairingData for ${mainRequesterSteamId} could not be found.`, logParam);
+            log.warn(`${fName} pairingData for ${requesterSteamId} could not be found.`, logParam);
             return;
         }
 
@@ -333,11 +333,11 @@ export class RustPlusInstance {
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const server = gInstance.serverInfoMap[this.serverId];
-        const mainRequesterSteamId = server.mainRequesterSteamId;
+        const requesterSteamId = server.requesterSteamId;
 
-        if (mainRequesterSteamId === null) return false;
+        if (requesterSteamId === null) return false;
 
-        const pairingData = gInstance.pairingDataMap[this.serverId]?.[mainRequesterSteamId] ?? null;
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[requesterSteamId] ?? null;
 
         if (rp.isValidAppResponse(response, log)) {
             if (!validationCallback(response[responseParam], log)) {
@@ -346,7 +346,7 @@ export class RustPlusInstance {
                     if (this.rustPlus.getAppResponseError(response) === rp.AppResponseError.NotFound) {
                         /* pairingData is no longer valid. */
                         if (pairingData && pairingData.valid) {
-                            log.warn(`${fName} PairingData no longer valid for ${mainRequesterSteamId}.`, logParam);
+                            log.warn(`${fName} PairingData no longer valid for ${requesterSteamId}.`, logParam);
                             pairingData.valid = false;
                             gim.updateGuildInstance(this.guildId);
                             await sendServerMessage(dm, this.guildId, this.serverId, this.connectionStatus);

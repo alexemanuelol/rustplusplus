@@ -205,7 +205,7 @@ export function getSmartSwitchSelectMenu(guildId: types.GuildId, serverId: types
     );
 }
 
-export async function getMainRequesterSteamIdSelectMenu(dm: DiscordManager, guildId: types.GuildId,
+export async function getRequesterSteamIdSelectMenu(dm: DiscordManager, guildId: types.GuildId,
     serverId: types.ServerId): Promise<discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
@@ -216,7 +216,7 @@ export async function getMainRequesterSteamIdSelectMenu(dm: DiscordManager, guil
     const options: discordjs.SelectMenuComponentOptionData[] = [];
     options.push({
         label: lm.getIntl(language, 'noneSelected'),
-        description: lm.getIntl(language, 'mainRequesterSteamIdNoneOptionDesc'),
+        description: lm.getIntl(language, 'requesterSteamIdNoneOptionDesc'),
         value: 'none',
         emoji: '❌'
     });
@@ -227,16 +227,16 @@ export async function getMainRequesterSteamIdSelectMenu(dm: DiscordManager, guil
         const userName = member ? member.user.username : lm.getIntl(language, 'unknown');
         options.push({
             label: steamId,
-            description: lm.getIntl(language, 'mainRequesterSteamIdOptionDesc', { user: userName }),
+            description: lm.getIntl(language, 'requesterSteamIdOptionDesc', { user: userName }),
             value: steamId,
             emoji: pairingData.valid ? '✅' : '❌'
         });
     }
 
     let name = lm.getIntl(language, 'noneSelected');
-    if (server.mainRequesterSteamId !== null) {
-        const credentials = cm.getCredentials(server.mainRequesterSteamId);
-        name = server.mainRequesterSteamId;
+    if (server.requesterSteamId !== null) {
+        const credentials = cm.getCredentials(server.requesterSteamId);
+        name = server.requesterSteamId;
         if (credentials) {
             const member = await dm.getMember(guildId, credentials.discordUserId);
             const userName = member ? ` (${member.user.username})` : '';
@@ -244,14 +244,14 @@ export async function getMainRequesterSteamIdSelectMenu(dm: DiscordManager, guil
         }
     }
 
-    const mainRequesterValid = server.mainRequesterSteamId !== null &&
-        Object.hasOwn(serverPairingDataMap, server.mainRequesterSteamId) &&
-        serverPairingDataMap[server.mainRequesterSteamId].valid;
+    const mainRequesterValid = server.requesterSteamId !== null &&
+        Object.hasOwn(serverPairingDataMap, server.requesterSteamId) &&
+        serverPairingDataMap[server.requesterSteamId].valid;
     const placeholder = `${mainRequesterValid ? '✅' : '❌'} ${name}`;
 
     return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getStringSelectMenu({
-            customId: `MainRequesterSteamId${identifier}`,
+            customId: `RequesterSteamId${identifier}`,
             disabled: Object.keys(serverPairingDataMap).length === 0 ? true : false,
             placeholder: placeholder,
             options: options,
