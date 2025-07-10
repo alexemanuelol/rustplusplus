@@ -627,9 +627,9 @@ export class GuildInstanceManager {
         }
     }
 
-    public getGuildInstanceGuildIds(): types.GuildId[] {
-        return Object.keys(this.guildInstanceMap);
-    }
+    /**
+     * Public methods
+     */
 
     public getGuildInstance(guildId: types.GuildId): GuildInstance | null {
         const gInstance = this.guildInstanceMap[guildId];
@@ -690,6 +690,11 @@ export class GuildInstanceManager {
 
         return true;
     }
+
+    public getGuildInstanceGuildIds(): types.GuildId[] {
+        return Object.keys(this.guildInstanceMap);
+    }
+
 }
 
 export function getServerId(ip: string, port: string): types.ServerId {
