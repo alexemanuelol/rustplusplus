@@ -40,14 +40,15 @@ export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
 
     log.info(`${fName} Client left guild.`, logParam);
 
-    /* Update credentials associated guilds, remove credentials/fcm listeners for users that are no longer part of
-       the guild. */
+    /* Update credentials associated guilds */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
+        if (!credentials.associatedGuilds.includes(guild.id)) continue;
 
         credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId => guildId !== guild.id);
 
+        /* If no longer part of any guild, stop fcm listener and remove credentials */
         if (credentials.associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
@@ -57,11 +58,12 @@ export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
         cm.updateCredentials(steamId);
     }
 
+    /* Remove RustPlus instance */
     const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
     for (const serverId of Object.keys(gInstance.serverInfoMap)) {
         rpm.removeInstance(guild.id, serverId);
     }
 
-    /* Delete guild instance file last. */
+    /* Delete guild instance file last */
     gim.deleteGuildInstance(guild.id);
 }

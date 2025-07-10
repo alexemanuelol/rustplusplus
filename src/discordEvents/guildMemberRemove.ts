@@ -32,16 +32,17 @@ export const once = false;
 export async function execute(dm: DiscordManager, member: discordjs.GuildMember) {
     const associatedSteamIds: types.SteamId[] = [];
 
-    /* Update credentials associated guilds, remove credentials/fcm listeners for the user if no longer part of
-       any guilds. */
+    /* Update credentials associated guilds */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
         if (credentials.discordUserId !== member.id) continue;
+        if (!credentials.associatedGuilds.includes(member.guild.id)) continue;
 
         associatedSteamIds.push(steamId);
         credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId => guildId !== member.guild.id);
 
+        /* If no longer part of any guild, stop fcm listener and remove credentials */
         if (credentials.associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
@@ -51,6 +52,7 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         cm.updateCredentials(steamId);
     }
 
+    /* Remove pairingData associated with the removed member */
     const gInstance = gim.getGuildInstance(member.guild.id) as GuildInstance;
     Object.keys(gInstance.pairingDataMap).forEach(serverId => {
         Object.keys(gInstance.pairingDataMap[serverId]).forEach(steamId => {
@@ -64,6 +66,7 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         }
     });
 
+    /* If the member was a requester for any server, clear it */
     for (const content of Object.values(gInstance.serverInfoMap)) {
         if (content.requesterSteamId === null) continue;
 

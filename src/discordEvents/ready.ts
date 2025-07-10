@@ -41,7 +41,7 @@ export async function execute(dm: DiscordManager) {
 
     log.info(`${fName} Logged in as '${dm.client.user?.tag ?? 'Unknown User'}'.`);
 
-    /* Check if there are new guilds, if so, create empty guild instance files for them. */
+    /* Check if there are new guilds, if so, create empty guild instance files for them */
     const activeGuildIds: types.GuildId[] = [];
     for (const guild of dm.client.guilds.cache.values()) {
         if (gim.getGuildInstance(guild.id) === null) {
@@ -50,15 +50,14 @@ export async function execute(dm: DiscordManager) {
         activeGuildIds.push(guild.id);
     }
 
-    /* Remove guild instances that are no longer active. */
+    /* Remove guild instance files that are no longer active. */
     const guildInstanceIds = gim.getGuildInstanceGuildIds();
     const inactiveGuildIds: types.GuildId[] = guildInstanceIds.filter(guildId => !activeGuildIds.includes(guildId));
     for (const guildId of inactiveGuildIds) {
         gim.deleteGuildInstance(guildId);
     }
 
-    /* Update credentials associated guilds, remove credentials/fcm listeners for users that are no longer part of
-       the valid guilds. */
+    /* Update credentials associated guilds */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
@@ -67,11 +66,11 @@ export async function execute(dm: DiscordManager) {
         credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId =>
             !inactiveGuildIds.includes(guildId));
 
-        const validGuilds: types.GuildId[] = [];
-        for (const guildId of credentials.associatedGuilds) {
+        const associatedGuilds: types.GuildId[] = [];
+        for (const guildId of activeGuildIds) {
             const member = await dm.getMember(guildId, discordUserId);
             if (member) {
-                validGuilds.push(guildId);
+                associatedGuilds.push(guildId);
             }
             else {
                 const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
@@ -86,8 +85,9 @@ export async function execute(dm: DiscordManager) {
                 gim.updateGuildInstance(guildId);
             }
         }
-        credentials.associatedGuilds = validGuilds;
+        credentials.associatedGuilds = associatedGuilds;
 
+        /* If no longer part of any guild, stop fcm listener and remove credentials */
         if (credentials.associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
