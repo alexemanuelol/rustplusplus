@@ -656,6 +656,10 @@ export class DiscordManager {
 
     /* Helper functions */
 
+    public async getGuildIds(): Promise<types.GuildId[]> {
+        return this.client.guilds.cache.map(guild => guild.id);
+    }
+
     public async getGuild(guildId: types.GuildId): Promise<discordjs.Guild | undefined> {
         const fName = '[DiscordManager: getGuild]';
         const logParam = { guildId: guildId };
@@ -776,6 +780,19 @@ export class DiscordManager {
         }
 
         return user;
+    }
+
+    public async getGuildIdsForUser(userId: types.UserId): Promise<types.GuildId[]> {
+        const guildIds = [];
+        for (const guild of this.client.guilds.cache.values()) {
+            const user = await this.getMember(guild.id, userId);
+
+            if (user) {
+                guildIds.push(guild.id);
+            }
+        }
+
+        return guildIds;
     }
 
     public async getRole(guildId: types.GuildId, roleId: types.RoleId):

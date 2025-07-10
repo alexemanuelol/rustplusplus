@@ -46,7 +46,7 @@ export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
         const credentials = cm.getCredentials(steamId) as Credentials;
         if (!credentials.associatedGuilds.includes(guild.id)) continue;
 
-        credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId => guildId !== guild.id);
+        credentials.associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
 
         /* If no longer part of any guild, stop fcm listener and remove credentials */
         if (credentials.associatedGuilds.length === 0) {

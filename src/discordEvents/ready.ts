@@ -41,13 +41,13 @@ export async function execute(dm: DiscordManager) {
 
     log.info(`${fName} Logged in as '${dm.client.user?.tag ?? 'Unknown User'}'.`);
 
+    const activeGuildIds = await dm.getGuildIds();
+
     /* Check if there are new guilds, if so, create empty guild instance files for them */
-    const activeGuildIds: types.GuildId[] = [];
-    for (const guild of dm.client.guilds.cache.values()) {
-        if (gim.getGuildInstance(guild.id) === null) {
-            gim.addNewGuildInstance(guild.id);
+    for (const guildId of activeGuildIds) {
+        if (gim.getGuildInstance(guildId) === null) {
+            gim.addNewGuildInstance(guildId);
         }
-        activeGuildIds.push(guild.id);
     }
 
     /* Remove guild instance files that are no longer active. */
@@ -63,29 +63,25 @@ export async function execute(dm: DiscordManager) {
         const credentials = cm.getCredentials(steamId) as Credentials;
         const discordUserId = credentials.discordUserId;
 
-        credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId =>
-            !inactiveGuildIds.includes(guildId));
+        const previouslyAssociatedGuilds = credentials.associatedGuilds.filter(guildId =>
+            activeGuildIds.includes(guildId));
+        credentials.associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
+        const removedAssociatedGuilds = previouslyAssociatedGuilds.filter(guildId =>
+            !credentials.associatedGuilds.includes(guildId));
 
-        const associatedGuilds: types.GuildId[] = [];
-        for (const guildId of activeGuildIds) {
-            const member = await dm.getMember(guildId, discordUserId);
-            if (member) {
-                associatedGuilds.push(guildId);
+        /* Remove pairingData associated with the removed guild for the steamId */
+        for (const guildId of removedAssociatedGuilds) {
+            const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+            for (const serverId of Object.keys(gInstance.pairingDataMap)) {
+                delete gInstance.pairingDataMap[serverId][steamId];
+
+                if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
+                    delete gInstance.pairingDataMap[serverId];
+                }
             }
-            else {
-                const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-                Object.keys(gInstance.pairingDataMap).forEach(serverId => {
-                    delete gInstance.pairingDataMap[serverId][steamId];
 
-                    if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
-                        delete gInstance.pairingDataMap[serverId];
-                    }
-                });
-
-                gim.updateGuildInstance(guildId);
-            }
+            gim.updateGuildInstance(guildId);
         }
-        credentials.associatedGuilds = associatedGuilds;
 
         /* If no longer part of any guild, stop fcm listener and remove credentials */
         if (credentials.associatedGuilds.length === 0) {
@@ -99,16 +95,16 @@ export async function execute(dm: DiscordManager) {
     }
 
     /* Update requesterSteamId */
-    for (const guild of dm.client.guilds.cache.values()) {
-        const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
-        for (const [serverId, content] of Object.entries(gInstance.serverInfoMap)) {
-            if (content.requesterSteamId === null) continue;
+    for (const guildId of activeGuildIds) {
+        const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+        for (const [serverId, server] of Object.entries(gInstance.serverInfoMap)) {
+            if (server.requesterSteamId === null) continue;
 
-            if (!(gInstance.pairingDataMap[serverId]?.[content.requesterSteamId])) {
-                content.requesterSteamId = null;
+            if (!(gInstance.pairingDataMap[serverId]?.[server.requesterSteamId])) {
+                server.requesterSteamId = null;
             }
         }
-        gim.updateGuildInstance(guild.id);
+        gim.updateGuildInstance(guildId);
     }
 
     try {

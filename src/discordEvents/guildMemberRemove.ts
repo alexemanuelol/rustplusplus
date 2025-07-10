@@ -40,7 +40,7 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         if (!credentials.associatedGuilds.includes(member.guild.id)) continue;
 
         associatedSteamIds.push(steamId);
-        credentials.associatedGuilds = credentials.associatedGuilds.filter(guildId => guildId !== member.guild.id);
+        credentials.associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
 
         /* If no longer part of any guild, stop fcm listener and remove credentials */
         if (credentials.associatedGuilds.length === 0) {
@@ -54,24 +54,24 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
 
     /* Remove pairingData associated with the removed member */
     const gInstance = gim.getGuildInstance(member.guild.id) as GuildInstance;
-    Object.keys(gInstance.pairingDataMap).forEach(serverId => {
-        Object.keys(gInstance.pairingDataMap[serverId]).forEach(steamId => {
-            if (associatedSteamIds.includes(steamId as types.SteamId)) {
+    for (const serverId of Object.keys(gInstance.pairingDataMap)) {
+        for (const steamId of Object.keys(gInstance.pairingDataMap[serverId])) {
+            if (associatedSteamIds.includes(steamId)) {
                 delete gInstance.pairingDataMap[serverId][steamId];
             }
-        });
+        }
 
         if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
             delete gInstance.pairingDataMap[serverId];
         }
-    });
+    }
 
     /* If the member was a requester for any server, clear it */
-    for (const content of Object.values(gInstance.serverInfoMap)) {
-        if (content.requesterSteamId === null) continue;
+    for (const server of Object.values(gInstance.serverInfoMap)) {
+        if (server.requesterSteamId === null) continue;
 
-        if (associatedSteamIds.includes(content.requesterSteamId)) {
-            content.requesterSteamId = null;
+        if (associatedSteamIds.includes(server.requesterSteamId)) {
+            server.requesterSteamId = null;
             // TODO! Turn off rustplus instance if no requesterSteamId is set.
             // Update server embed because requesterSteamId is removed.
         }
