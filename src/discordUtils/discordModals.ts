@@ -23,6 +23,7 @@ import * as discordjs from 'discord.js';
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { GuildInstance } from '../managers/guildInstanceManager';
 import * as types from '../utils/types';
+import * as utils from '../utils/utils';
 import { getTextInput } from './discordTextInputs';
 
 export const ModalLimits = {
@@ -30,10 +31,6 @@ export const ModalLimits = {
     Title: 45,
     MaxComponents: 5
 };
-
-function truncate(text: string, maxLength: number): string {
-    return text.length > maxLength ? text.slice(0, maxLength) : text;
-}
 
 
 /**
@@ -53,7 +50,7 @@ export function getModal(options: discordjs.ModalComponentData): discordjs.Modal
     }
 
     if ('title' in options && options.title) {
-        modal.setTitle(truncate(options.title, ModalLimits.Title));
+        modal.setTitle(utils.truncate(options.title, ModalLimits.Title));
     }
 
     if ('components' in options && Array.isArray(options.components) && options.components.length > 0) {

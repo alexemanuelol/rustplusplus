@@ -20,6 +20,8 @@
 
 import * as discordjs from 'discord.js';
 
+import * as utils from '../utils/utils';
+
 
 export const TextInputLimits = {
     CustomId: 100,
@@ -29,10 +31,6 @@ export const TextInputLimits = {
     Value: 4000,
     Placeholder: 100
 };
-
-function truncate(text: string, maxLength: number): string {
-    return text.length > maxLength ? text.slice(0, maxLength) : text;
-}
 
 
 /**
@@ -56,7 +54,7 @@ export function getTextInput(options: discordjs.TextInputComponentData): discord
     }
 
     if ('label' in options && options.label) {
-        textInput.setLabel(truncate(options.label, TextInputLimits.Label));
+        textInput.setLabel(utils.truncate(options.label, TextInputLimits.Label));
     }
 
     if ('minLength' in options && options.minLength) {
@@ -72,11 +70,11 @@ export function getTextInput(options: discordjs.TextInputComponentData): discord
     }
 
     if ('value' in options && options.value) {
-        textInput.setValue(truncate(options.value, TextInputLimits.Value));
+        textInput.setValue(utils.truncate(options.value, TextInputLimits.Value));
     }
 
     if ('placeholder' in options && options.placeholder) {
-        textInput.setPlaceholder(truncate(options.placeholder, TextInputLimits.Placeholder));
+        textInput.setPlaceholder(utils.truncate(options.placeholder, TextInputLimits.Placeholder));
     }
 
     return textInput;

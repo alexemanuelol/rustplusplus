@@ -25,6 +25,10 @@ export interface HtmlSymbolMap {
     [key: string]: string;
 }
 
+export function truncate(text: string, maxLength: number): string {
+    return text.length > maxLength ? text.slice(0, maxLength) : text;
+}
+
 export function parseArgs(str: string): string[] {
     return str.trim().split(/[ ]+/);
 }

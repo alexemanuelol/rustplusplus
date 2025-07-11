@@ -20,10 +20,14 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, localeManager as lm } from '../../index';
+import {
+    guildInstanceManager as gim,
+    localeManager as lm
+} from '../../index';
 import { ConnectionStatus } from '../managers/rustPlusManager';
 import * as types from '../utils/types';
 import * as constants from '../utils/constants';
+import * as utils from '../utils/utils';
 import {
     EventNotificationSettings,
     GuildInstance,
@@ -46,10 +50,6 @@ export enum ButtonConnectionTypes {
     Connected = 0,
     Disconnected = 1,
     Reconnecting = 2
-}
-
-function truncate(text: string, maxLength: number): string {
-    return text.length > maxLength ? text.slice(0, maxLength) : text;
 }
 
 /**
@@ -76,7 +76,7 @@ export function getButton(options: discordjs.ButtonComponentData): discordjs.But
 
     if (options.label !== undefined) {
         const maxLength = options.emoji !== undefined ? ButtonLimits.LabelWithEmoji : ButtonLimits.Label;
-        button.setLabel(truncate(options.label, maxLength));
+        button.setLabel(utils.truncate(options.label, maxLength));
     }
 
     if (options.emoji !== undefined) button.setEmoji(options.emoji);
@@ -173,7 +173,8 @@ export function getServerButtons(guildId: types.GuildId, serverId: types.ServerI
         customId: `${connectionMap[connectionStatus][0] as string}${identifier}`,
         label: lm.getIntl(language, connectionMap[connectionStatus][1] as string),
         style: connectionMap[connectionStatus][2] as discordjs.ButtonStyle.Danger | discordjs.ButtonStyle.Primary,
-        type: discordjs.ComponentType.Button
+        type: discordjs.ComponentType.Button,
+        disabled: gim.isPairingDataValid(gInstance, serverInfo) ? false : true
     });
 
     const isServerView = gInstance.serverToView === serverId;

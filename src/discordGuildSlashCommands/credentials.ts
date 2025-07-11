@@ -166,7 +166,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 			return false;
 		}
 
-		/* Credentials for steamId already exist, turn off fcm listener. */
+		/* Credentials for steamId already exist, turn off fcm listener */
 		flm.stopListener(steamId);
 	}
 

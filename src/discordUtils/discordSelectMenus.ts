@@ -25,6 +25,7 @@ import {
     GuildInstance, ServerInfo, SmartSwitchConfig, SmartSwitchConfigAutoSetting, VoiceGenders
 } from '../managers/guildInstanceManager';
 import * as types from '../utils/types';
+import * as utils from '../utils/utils';
 import { Languages, LanguageDiscordEmoji } from '../managers/LocaleManager';
 import { Credentials } from '../managers/credentialsManager';
 import { DiscordManager } from '../managers/discordManager';
@@ -36,10 +37,6 @@ export const StringSelectMenuLimits = {
     OptionLabel: 100,
     OptionValue: 100,
     OptionDescription: 100,
-}
-
-function truncate(text: string, maxLength: number): string {
-    return text.length > maxLength ? text.slice(0, maxLength) : text;
 }
 
 
@@ -73,21 +70,22 @@ export function getStringSelectMenu(options: discordjs.StringSelectMenuComponent
     }
 
     if ('placeholder' in options && options.placeholder) {
-        selectMenu.setPlaceholder(truncate(options.placeholder, StringSelectMenuLimits.Placeholder));
+        selectMenu.setPlaceholder(utils.truncate(options.placeholder, StringSelectMenuLimits.Placeholder));
     }
 
     if ('options' in options && options.options.length > 0) {
         const truncatedOptions = options.options.slice(0, StringSelectMenuLimits.MaxOptions).map(option => {
             const selectOption = new discordjs.StringSelectMenuOptionBuilder()
-                .setLabel(truncate(option.label, StringSelectMenuLimits.OptionLabel))
-                .setValue(truncate(option.value, StringSelectMenuLimits.OptionValue));
+                .setLabel(utils.truncate(option.label, StringSelectMenuLimits.OptionLabel))
+                .setValue(utils.truncate(option.value, StringSelectMenuLimits.OptionValue));
 
             if (option.default) {
                 selectOption.setDefault(option.default);
             }
 
             if (option.description) {
-                selectOption.setDescription(truncate(option.description, StringSelectMenuLimits.OptionDescription));
+                selectOption.setDescription(utils.truncate(option.description,
+                    StringSelectMenuLimits.OptionDescription));
             }
 
             if (option.emoji) {

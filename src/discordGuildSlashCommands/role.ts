@@ -163,7 +163,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	gInstance[type].push(roleId);
 	gim.updateGuildInstance(guildId);
 
-	/* Used to update permissions. */
+	/* Used to update permissions */
 	await dm.setupGuild(interaction.guild as discordjs.Guild);
 
 	const parameters = {
@@ -219,7 +219,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	gInstance[type] = gInstance[type].filter(gInstanceRoleId => gInstanceRoleId !== roleId);
 	gim.updateGuildInstance(guildId);
 
-	/* Used to update permissions. */
+	/* Used to update permissions */
 	await dm.setupGuild(interaction.guild as discordjs.Guild);
 
 	const parameters = {

@@ -28,6 +28,7 @@ import {
 import * as constants from '../utils/constants';
 import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
+import * as utils from '../utils/utils';
 import { Credentials } from '../managers/credentialsManager';
 import { PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
 import { fetchSteamProfilePicture } from '../utils/steam';
@@ -53,10 +54,6 @@ export function colorHexToNumber(hex: string): number {
     return parseInt(hex.replace(/^#/, ''), 16);
 }
 
-function truncate(text: string, maxLength: number): string {
-    return text.length > maxLength ? text.slice(0, maxLength) : text;
-}
-
 
 /**
  * Embed help functions
@@ -65,8 +62,8 @@ function truncate(text: string, maxLength: number): string {
 export function getEmbed(options: discordjs.EmbedData): discordjs.EmbedBuilder {
     const embed = new discordjs.EmbedBuilder();
 
-    if (options.title) embed.setTitle(truncate(options.title, EmbedLimits.Title));
-    if (options.description) embed.setDescription(truncate(options.description, EmbedLimits.Description));
+    if (options.title) embed.setTitle(utils.truncate(options.title, EmbedLimits.Title));
+    if (options.description) embed.setDescription(utils.truncate(options.description, EmbedLimits.Description));
     if (options.url) embed.setURL(options.url);
     if (options.timestamp) embed.setTimestamp();
     if (options.color) embed.setColor(options.color);
@@ -74,7 +71,7 @@ export function getEmbed(options: discordjs.EmbedData): discordjs.EmbedBuilder {
     if (options.footer) {
         embed.setFooter({
             ...options.footer,
-            text: truncate(options.footer.text, EmbedLimits.FooterText)
+            text: utils.truncate(options.footer.text, EmbedLimits.FooterText)
         });
     }
 
@@ -84,7 +81,7 @@ export function getEmbed(options: discordjs.EmbedData): discordjs.EmbedBuilder {
     if (options.author) {
         embed.setAuthor({
             ...options.author,
-            name: truncate(options.author.name, EmbedLimits.AuthorName)
+            name: utils.truncate(options.author.name, EmbedLimits.AuthorName)
         });
     }
 
@@ -93,8 +90,8 @@ export function getEmbed(options: discordjs.EmbedData): discordjs.EmbedBuilder {
 
         const truncatedFields = options.fields.slice(0, EmbedLimits.Fields).map(field => {
             return {
-                name: truncate(field.name, EmbedLimits.FieldName),
-                value: truncate(field.value, EmbedLimits.FieldValue),
+                name: utils.truncate(field.name, EmbedLimits.FieldName),
+                value: utils.truncate(field.value, EmbedLimits.FieldValue),
                 inline: field.inline
             };
         });
@@ -121,14 +118,14 @@ export function getEmbedColumnFields(options: discordjs.EmbedData, columns: Colu
 
     let totalChars = 0;
 
-    if (options.title) totalChars += truncate(options.title, EmbedLimits.Title).length;
-    if (options.description) totalChars += truncate(options.description, EmbedLimits.Description).length;
-    if (options.footer?.text) totalChars += truncate(options.footer.text, EmbedLimits.FooterText).length;
-    if (options.author?.name) totalChars += truncate(options.author.name, EmbedLimits.AuthorName).length;
+    if (options.title) totalChars += utils.truncate(options.title, EmbedLimits.Title).length;
+    if (options.description) totalChars += utils.truncate(options.description, EmbedLimits.Description).length;
+    if (options.footer?.text) totalChars += utils.truncate(options.footer.text, EmbedLimits.FooterText).length;
+    if (options.author?.name) totalChars += utils.truncate(options.author.name, EmbedLimits.AuthorName).length;
 
     const columnNames: string[] = [];
     columns.forEach((column) => {
-        const columnName = truncate(column.name, EmbedLimits.FieldName);
+        const columnName = utils.truncate(column.name, EmbedLimits.FieldName);
         totalChars += columnName.length;
         columnNames.push(columnName);
     });
