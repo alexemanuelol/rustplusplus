@@ -65,11 +65,7 @@ export default {
 					.setName('steam_id')
 					.setDescription(lm.getIntl(language, 'steamId'))
 					.setRequired(true)
-					.setAutocomplete(true))
-				.addBooleanOption(option => option
-					.setName('all')
-					.setDescription(lm.getIntl(language, 'slashCommandDescCredentialsRemoveAll'))
-					.setRequired(false)))
+					.setAutocomplete(true)))
 			.addSubcommand(subcommand => subcommand
 				.setName('info')
 				.setDescription(lm.getIntl(language, 'slashCommandDescCredentialsInfo')))
@@ -147,7 +143,6 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		return false;
 	}
 
-	let associatedGuilds: types.GuildId[] = [];
 	const oldCredentials = cm.getCredentials(steamId);
 	const newCredentials: Credentials = {
 		version: VERSION,
@@ -157,7 +152,6 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 			securityToken: gcmSecurityToken
 		},
 		discordUserId: discordUserId,
-		associatedGuilds: [],
 		issueDate: issueDate,
 		expireDate: expireDate,
 		expirationNotified: false
@@ -172,21 +166,16 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 			return false;
 		}
 
-		associatedGuilds = [...oldCredentials.associatedGuilds];
-
 		/* Credentials for steamId already exist, turn off fcm listener. */
 		flm.stopListener(steamId);
 	}
-
-	if (!associatedGuilds.includes(guildId)) associatedGuilds.push(guildId);
-	newCredentials.associatedGuilds = associatedGuilds;
 
 	cm.addCredentials(steamId, newCredentials);
 	cm.addExpireTimeout(steamId, dm);
 	flm.startListener(steamId);
 
 	const guildNames: string[] = [];
-	for (const guildId of associatedGuilds) {
+	for (const guildId of await dm.getGuildIdsForUser(newCredentials.discordUserId)) {
 		const guild = await dm.getGuild(guildId);
 		if (guild) guildNames.push(`[${guild.name}](https://discord.com/channels/${guild.id})`);
 	}
@@ -214,7 +203,6 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	const discordUserId = interaction.user.id;
 
 	const steamId = interaction.options.getString('steam_id', true);
-	const all = interaction.options.getBoolean('all') ?? false;
 
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
@@ -236,8 +224,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		return false
 	}
 
-	if ((discordUserId !== credentials.discordUserId && !dm.isAdministrator(interaction)) ||
-		(all && discordUserId !== credentials.discordUserId && !dm.isAdministrator(interaction))) {
+	if (discordUserId !== credentials.discordUserId && !dm.isAdministrator(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
 		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
@@ -245,33 +232,12 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		return false;
 	}
 
-	if (!(credentials.associatedGuilds.includes(guildId)) && !all) {
-		const parameters = {
-			steamId: `${constants.GET_STEAM_PROFILE_LINK(steamId)}`
-		};
-		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleCredentialsNotPartOfGuild',
-			'errorDescCredentialsNotPartOfGuild', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language,
-			'errorDescCredentialsNotPartOfGuild', parameters)}`, logParam);
-		return false
-	}
-
-	credentials.associatedGuilds = credentials.associatedGuilds.filter(credentialsGuildId =>
-		credentialsGuildId !== guildId);
-	let removedGuilds: types.GuildId[] = [guildId];
-
-	if (all || credentials.associatedGuilds.length === 0) {
-		flm.stopListener(steamId);
-
-		removedGuilds = [...new Set([...removedGuilds, ...credentials.associatedGuilds])];
-		cm.deleteCredentials(steamId);
-	}
-	else {
-		cm.updateCredentials(steamId);
-	}
+	const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
+	flm.stopListener(steamId);
+	cm.deleteCredentials(steamId);
 
 	const guildNames: string[] = [];
-	for (const guildId of removedGuilds) {
+	for (const guildId of associatedGuilds) {
 		const guild = await dm.getGuild(guildId);
 		if (guild) guildNames.push(`[${guild.name}](https://discord.com/channels/${guild.id})`);
 	}

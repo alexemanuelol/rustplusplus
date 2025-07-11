@@ -51,7 +51,6 @@ export interface Credentials {
     steamId: types.SteamId;
     gcm: Gcm;
     discordUserId: types.UserId;
-    associatedGuilds: types.GuildId[];
     issueDate: types.Timestamp;
     expireDate: types.Timestamp;
     expirationNotified: boolean;
@@ -61,6 +60,10 @@ export interface Gcm {
     androidId: string;
     securityToken: string;
 }
+
+export type DiscordUserIdToSteamIdsMap = {
+    [discordUserId: types.UserId]: types.SteamId[];
+};
 
 export class CredentialsManager {
     private credentialFilesPath: string;
@@ -216,16 +219,20 @@ export class CredentialsManager {
         return Object.keys(this.credentialsMap);
     }
 
-    public getCredentialSteamIdsFromGuildId(guildId: types.GuildId): types.SteamId[] {
-        const steamIds: types.SteamId[] = [];
-
-        for (const [steamId, credentials] of Object.entries(this.credentialsMap)) {
-            if (credentials.associatedGuilds.includes(guildId)) {
-                steamIds.push(steamId);
+    public getDiscordUserIdToSteamIdsMap(): DiscordUserIdToSteamIdsMap {
+        const steamIds = this.getCredentialSteamIds();
+        const map: DiscordUserIdToSteamIdsMap = {};
+        for (const steamId of steamIds) {
+            const credentials = this.getCredentialsDeepCopy(steamId) as Credentials;
+            if (Object.hasOwn(map, credentials.discordUserId)) {
+                map[credentials.discordUserId].push(steamId);
+            }
+            else {
+                map[credentials.discordUserId] = [steamId];
             }
         }
 
-        return steamIds;
+        return map;
     }
 
     public getCredentialSteamIdsFromDiscordUserId(discordUserId: types.UserId): types.SteamId[] {
@@ -347,7 +354,6 @@ export function isValidCredentials(object: unknown): object is Credentials {
         'steamId',
         'gcm',
         'discordUserId',
-        'associatedGuilds',
         'issueDate',
         'expireDate',
         'expirationNotified'
@@ -358,7 +364,6 @@ export function isValidCredentials(object: unknown): object is Credentials {
     errors.push(vu.validateType('steamId', obj.steamId, 'string'));
     errors.push(vu.validateInterface('gcm', obj.gcm, isValidGcm));
     errors.push(vu.validateType('discordUserId', obj.discordUserId, 'string'));
-    errors.push(vu.validateArrayOfTypes('associatedGuilds', obj.associatedGuilds, 'string'));
     errors.push(vu.validateType('issueDate', obj.issueDate, 'number'));
     errors.push(vu.validateType('expireDate', obj.expireDate, 'number'));
     errors.push(vu.validateType('expirationNotified', obj.expirationNotified, 'boolean'));

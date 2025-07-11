@@ -24,7 +24,7 @@ import * as axios from 'axios';
 
 import {
     log, guildInstanceManager as gim, credentialsManager as cm, rustPlusManager as rpm,
-    localeManager as lm
+    localeManager as lm, discordManager as dm
 } from '../../index';
 import { DiscordManager } from './discordManager';
 import { ConnectionStatus } from './rustPlusManager';
@@ -429,7 +429,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
         return;
     }
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const serverInfo = gInstance.serverInfoMap[serverId];
@@ -488,7 +488,7 @@ async function pairingEntitySmartSwitch(flm: FcmListenerManager, steamId: types.
         return;
     }
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
@@ -535,7 +535,7 @@ async function pairingEntitySmartAlarm(flm: FcmListenerManager, steamId: types.S
         return;
     }
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
@@ -583,7 +583,7 @@ async function pairingEntityStorageMonitor(flm: FcmListenerManager, steamId: typ
         return;
     }
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
@@ -643,7 +643,7 @@ async function alarmAlarm(flm: FcmListenerManager, steamId: types.SteamId, title
 
     log.info(`${fName} ${title}: ${message}`);
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
@@ -675,7 +675,7 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
 
     log.info(`${fName} ${title}: ${message}`);
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
@@ -731,7 +731,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
         return;
     }
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
@@ -760,7 +760,7 @@ async function newsNews(flm: FcmListenerManager, steamId: types.SteamId, title: 
         return;
     }
 
-    const associatedGuilds = credentials.associatedGuilds;
+    const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
     for (const guildId of associatedGuilds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 

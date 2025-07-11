@@ -37,7 +37,7 @@ export async function autocompleteHandler(dm: DiscordManager, interaction: disco
         autocompleteRoleHandler(dm, interaction);
     }
     else if (commandName === 'credentials') {
-        autocompleteCredentialsHandler(dm, interaction);
+        await autocompleteCredentialsHandler(dm, interaction);
     }
     else {
         log.error(`${fName} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
@@ -88,7 +88,7 @@ function autocompleteRoleHandler(dm: DiscordManager, interaction: discordjs.Auto
     }
 }
 
-function autocompleteCredentialsHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
+async function autocompleteCredentialsHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
     if (!dm.validPermissions(interaction)) {
         return interaction.respond([]);
     }
@@ -105,7 +105,8 @@ function autocompleteCredentialsHandler(dm: DiscordManager, interaction: discord
             const steamIds = cm.getCredentialSteamIds();
             for (const steamId of steamIds) {
                 const credentials = cm.getCredentials(steamId) as Credentials;
-                if (credentials.associatedGuilds.includes(guildId)) {
+                const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
+                if (associatedGuilds.includes(guildId)) {
                     if (isAdmin || credentials.discordUserId === discordUserId) {
                         filteredSteamIds.push({ name: steamId, value: steamId });
                     }

@@ -40,22 +40,18 @@ export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
 
     log.info(`${fName} Client left guild.`, logParam);
 
-    /* Update credentials associated guilds */
+    /* Check if credentials have no associated guild */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
-        if (!credentials.associatedGuilds.includes(guild.id)) continue;
+        const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
 
-        credentials.associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
-
-        /* If no longer part of any guild, stop fcm listener and remove credentials */
-        if (credentials.associatedGuilds.length === 0) {
+        /* If user is no longer part of any guild, stop fcm listener and remove credentials */
+        if (associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
             continue;
         }
-
-        cm.updateCredentials(steamId);
     }
 
     /* Remove RustPlus instance */

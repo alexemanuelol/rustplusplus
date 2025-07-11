@@ -22,7 +22,9 @@ import * as discordjs from 'discord.js';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { log, guildInstanceManager as gim, config, localeManager as lm } from '../../index';
+import {
+    log, guildInstanceManager as gim, config, localeManager as lm, credentialsManager as cm
+} from '../../index';
 import * as types from '../utils/types';
 import { GuildInstance, GuildChannelIds, EventNotificationSettings } from './guildInstanceManager';
 import { channelPermissions } from '../templates/channelPermissionsTemplate';
@@ -950,6 +952,20 @@ export class DiscordManager {
         await permissionChannel.permissionOverwrites.delete(roleId);
 
         return true;
+    }
+
+    public async getCredentialSteamIdsFromGuildId(guildId: types.GuildId): Promise<types.SteamId[]> {
+        const discordUserIdToSteamIdsMap = cm.getDiscordUserIdToSteamIdsMap();
+        const steamIds: types.SteamId[] = [];
+
+        for (const [discordUserId, associatedSteamIds] of Object.entries(discordUserIdToSteamIdsMap)) {
+            const guildIds = await this.getGuildIdsForUser(discordUserId);
+            if (guildIds.includes(guildId)) {
+                steamIds.push(...associatedSteamIds);
+            }
+        }
+
+        return steamIds;
     }
 
 

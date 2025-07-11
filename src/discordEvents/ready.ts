@@ -61,37 +61,41 @@ export async function execute(dm: DiscordManager) {
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
-        const discordUserId = credentials.discordUserId;
 
-        const previouslyAssociatedGuilds = credentials.associatedGuilds.filter(guildId =>
-            activeGuildIds.includes(guildId));
-        credentials.associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
-        const removedAssociatedGuilds = previouslyAssociatedGuilds.filter(guildId =>
-            !credentials.associatedGuilds.includes(guildId));
+        const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
+        const notAssociatedGuilds = activeGuildIds.filter(guildId =>
+            !associatedGuilds.includes(guildId));
 
         /* Remove pairingData associated with the removed guild for the steamId */
-        for (const guildId of removedAssociatedGuilds) {
+        for (const guildId of notAssociatedGuilds) {
             const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+            let changed = false;
             for (const serverId of Object.keys(gInstance.pairingDataMap)) {
-                delete gInstance.pairingDataMap[serverId][steamId];
+                if (gInstance.pairingDataMap[serverId][steamId]) {
+                    delete gInstance.pairingDataMap[serverId][steamId];
+                    changed = true;
+                }
 
                 if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
                     delete gInstance.pairingDataMap[serverId];
+                    changed = true;
                 }
             }
 
-            gim.updateGuildInstance(guildId);
+            if (changed) {
+                gim.updateGuildInstance(guildId);
+            }
         }
 
         /* If no longer part of any guild, stop fcm listener and remove credentials */
-        if (credentials.associatedGuilds.length === 0) {
+        if (associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
             continue;
         }
 
         cm.addExpireTimeout(steamId, dm);
-        cm.updateCredentials(steamId);
     }
 
     /* Update requesterSteamId */

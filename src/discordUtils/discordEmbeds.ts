@@ -192,7 +192,7 @@ export async function getCredentialsExpiredEmbed(dm: DiscordManager, steamId: ty
     const title = lm.getIntl(language, 'embedTitleCredentialsExpired');
 
     const guildNames: string[] = [];
-    for (const guildId of credentials.associatedGuilds) {
+    for (const guildId of await dm.getGuildIdsForUser(credentials.discordUserId)) {
         const guild = await dm.getGuild(guildId);
         if (guild) guildNames.push(`[${guild.name}](https://discord.com/channels/${guild.id})`);
     }
@@ -353,7 +353,7 @@ export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: d
         const credentials = cm.getCredentials(steamId) as Credentials;
 
         const guildNames: string[] = [];
-        for (const guildId of credentials.associatedGuilds) {
+        for (const guildId of await dm.getGuildIdsForUser(credentials.discordUserId)) {
             const guild = await dm.getGuild(guildId);
             if (guild) guildNames.push(`[${guild.name}](https://discord.com/channels/${guild.id})`);
         }
@@ -390,13 +390,13 @@ export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: d
     })
 }
 
-export function getCredentialsListEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
-    imageName: string): discordjs.EmbedBuilder {
+export async function getCredentialsListEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
+    imageName: string): Promise<discordjs.EmbedBuilder> {
     const guildId = interaction.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
 
-    const steamIds = cm.getCredentialSteamIdsFromGuildId(guildId);
+    const steamIds = await dm.getCredentialSteamIdsFromGuildId(guildId);
 
     const fields: discordjs.EmbedField[] = [];
     for (const steamId of steamIds) {

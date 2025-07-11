@@ -132,7 +132,7 @@ export async function sendCredentialsListMessage(dm: DiscordManager, interaction
     const imagePath = path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png');
 
     const content = {
-        embeds: [discordEmbeds.getCredentialsListEmbed(dm, interaction, 'rustplusplus_logo.png')],
+        embeds: [await discordEmbeds.getCredentialsListEmbed(dm, interaction, 'rustplusplus_logo.png')],
         files: [new discordjs.AttachmentBuilder(imagePath)]
     };
 

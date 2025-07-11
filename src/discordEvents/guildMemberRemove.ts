@@ -32,24 +32,21 @@ export const once = false;
 export async function execute(dm: DiscordManager, member: discordjs.GuildMember) {
     const associatedSteamIds: types.SteamId[] = [];
 
-    /* Update credentials associated guilds */
+    /* Check if credentials have no associated guild */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
         if (credentials.discordUserId !== member.id) continue;
-        if (!credentials.associatedGuilds.includes(member.guild.id)) continue;
 
         associatedSteamIds.push(steamId);
-        credentials.associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
+        const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
 
         /* If no longer part of any guild, stop fcm listener and remove credentials */
-        if (credentials.associatedGuilds.length === 0) {
+        if (associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
             continue;
         }
-
-        cm.updateCredentials(steamId);
     }
 
     /* Remove pairingData associated with the removed member */
