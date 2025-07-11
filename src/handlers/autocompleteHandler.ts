@@ -99,7 +99,6 @@ async function autocompleteCredentialsHandler(dm: DiscordManager, interaction: d
     switch (interaction.options.getSubcommand()) {
         case 'remove': {
             const discordUserId = interaction.user.id;
-            const isAdmin = dm.isAdministrator(interaction);
 
             const filteredSteamIds: { name: string; value: string }[] = [];
             const steamIds = cm.getCredentialSteamIds();
@@ -107,7 +106,7 @@ async function autocompleteCredentialsHandler(dm: DiscordManager, interaction: d
                 const credentials = cm.getCredentials(steamId) as Credentials;
                 const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
                 if (associatedGuilds.includes(guildId)) {
-                    if (isAdmin || credentials.discordUserId === discordUserId) {
+                    if (credentials.discordUserId === discordUserId) {
                         filteredSteamIds.push({ name: steamId, value: steamId });
                     }
                 }

@@ -416,6 +416,7 @@ export async function getCredentialsListEmbed(dm: DiscordManager, interaction: d
 
     return getEmbed({
         title: lm.getIntl(language, 'slashCommandSuccessTitleCredentialsList'),
+        description: fields.length === 0 ? lm.getIntl(language, 'noCredentialsConfigured') : '',
         timestamp: new Date(),
         color: colorHexToNumber(constants.COLOR_DEFAULT),
         thumbnail: {

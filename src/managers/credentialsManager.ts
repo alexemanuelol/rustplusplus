@@ -304,6 +304,8 @@ export class CredentialsManager {
     }
 
     public addExpireTimeout(steamId: types.SteamId, dm: DiscordManager) {
+        const fName = `[CredentialsManager: addExpireTimeout: ${steamId}]`;
+
         if (this.expirationTimeouts.has(steamId)) {
             /* Ensure no duplicate timeouts exist. */
             this.deleteExpireTimeout(steamId);
@@ -326,14 +328,18 @@ export class CredentialsManager {
         }, timeout);
 
         this.expirationTimeouts.set(steamId, timeoutId);
+        log.info(`${fName} Expires in ${timeout / 1000} seconds.`);
     }
 
     public deleteExpireTimeout(steamId: types.SteamId) {
+        const fName = `[CredentialsManager: deleteExpireTimeout: ${steamId}]`;
+
         const timeoutId = this.expirationTimeouts.get(steamId);
         if (timeoutId) {
             clearTimeout(timeoutId);
             this.expirationTimeouts.delete(steamId);
         }
+        log.info(`${fName} Expire timeout deleted.`);
     }
 }
 
