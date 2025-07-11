@@ -224,7 +224,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		return false
 	}
 
-	if (discordUserId !== credentials.discordUserId && !dm.isAdministrator(interaction)) {
+	if (discordUserId !== credentials.discordUserId) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
 		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
