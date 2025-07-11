@@ -20,7 +20,11 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, credentialsManager as cm, fcmListenerManager as flm } from '../../index';
+import {
+    credentialsManager as cm,
+    fcmListenerManager as flm,
+    guildInstanceManager as gim
+} from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
 import * as types from '../utils/types';
@@ -32,7 +36,7 @@ export const once = false;
 export async function execute(dm: DiscordManager, member: discordjs.GuildMember) {
     const associatedSteamIds: types.SteamId[] = [];
 
-    /* Check if credentials have no associated guild */
+    /* Check if credentials have no associated guilds */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
@@ -41,7 +45,7 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
         associatedSteamIds.push(steamId);
         const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
 
-        /* If no longer part of any guild, stop fcm listener and remove credentials */
+        /* If no longer associated with any guilds, stop fcm listener and remove credentials */
         if (associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
@@ -51,24 +55,24 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
 
     /* Remove pairingData associated with the removed member */
     const gInstance = gim.getGuildInstance(member.guild.id) as GuildInstance;
-    for (const serverId of Object.keys(gInstance.pairingDataMap)) {
-        for (const steamId of Object.keys(gInstance.pairingDataMap[serverId])) {
+    for (const [serverId, steamIds] of Object.entries(gInstance.pairingDataMap)) {
+        for (const steamId of Object.keys(steamIds)) {
             if (associatedSteamIds.includes(steamId)) {
-                delete gInstance.pairingDataMap[serverId][steamId];
+                delete steamIds[steamId];
             }
         }
 
-        if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
+        if (Object.keys(steamIds).length === 0) {
             delete gInstance.pairingDataMap[serverId];
         }
     }
 
     /* If the member was a requester for any server, clear it */
-    for (const server of Object.values(gInstance.serverInfoMap)) {
-        if (server.requesterSteamId === null) continue;
+    for (const serverInfo of Object.values(gInstance.serverInfoMap)) {
+        if (serverInfo.requesterSteamId === null) continue;
 
-        if (associatedSteamIds.includes(server.requesterSteamId)) {
-            server.requesterSteamId = null;
+        if (associatedSteamIds.includes(serverInfo.requesterSteamId)) {
+            serverInfo.requesterSteamId = null;
             // TODO! Turn off rustplus instance if no requesterSteamId is set.
             // Update server embed because requesterSteamId is removed.
         }

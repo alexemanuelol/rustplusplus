@@ -695,6 +695,16 @@ export class GuildInstanceManager {
         return Object.keys(this.guildInstanceMap);
     }
 
+    public isPairingDataValid(gInstance: GuildInstance, serverInfo: ServerInfo): boolean {
+        if (serverInfo.requesterSteamId === null) return false;
+
+        const serverId = getServerId(serverInfo.ip, serverInfo.port);
+        if (!(gInstance.pairingDataMap[serverId]?.[serverInfo.requesterSteamId])) return false;
+        if (!gInstance.pairingDataMap[serverId][serverInfo.requesterSteamId].valid) return false;
+
+        return true;
+    }
+
 }
 
 export function getServerId(ip: string, port: string): types.ServerId {

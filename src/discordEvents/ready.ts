@@ -43,21 +43,21 @@ export async function execute(dm: DiscordManager) {
 
     const activeGuildIds = await dm.getGuildIds();
 
-    /* Check if there are new guilds, if so, create empty guild instance files for them */
+    /* Create empty guild instance files for new guilds */
     for (const guildId of activeGuildIds) {
         if (gim.getGuildInstance(guildId) === null) {
             gim.addNewGuildInstance(guildId);
         }
     }
 
-    /* Remove guild instance files that are no longer active. */
+    /* Remove guild instance files that are no longer active */
     const guildInstanceIds = gim.getGuildInstanceGuildIds();
     const inactiveGuildIds: types.GuildId[] = guildInstanceIds.filter(guildId => !activeGuildIds.includes(guildId));
     for (const guildId of inactiveGuildIds) {
         gim.deleteGuildInstance(guildId);
     }
 
-    /* Update credentials associated guilds */
+    /* Check if credentials have no associated guilds */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
@@ -66,29 +66,27 @@ export async function execute(dm: DiscordManager) {
         const notAssociatedGuilds = activeGuildIds.filter(guildId =>
             !associatedGuilds.includes(guildId));
 
-        /* Remove pairingData associated with the removed guild for the steamId */
+        /* Remove pairingData associated with the steamId of the removed member */
         for (const guildId of notAssociatedGuilds) {
             const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
             let changed = false;
-            for (const serverId of Object.keys(gInstance.pairingDataMap)) {
-                if (gInstance.pairingDataMap[serverId][steamId]) {
-                    delete gInstance.pairingDataMap[serverId][steamId];
+            for (const [serverId, steamIds] of Object.entries(gInstance.pairingDataMap)) {
+                if (steamIds[steamId]) {
+                    delete steamIds[steamId];
                     changed = true;
                 }
 
-                if (Object.keys(gInstance.pairingDataMap[serverId]).length === 0) {
+                if (Object.keys(steamIds).length === 0) {
                     delete gInstance.pairingDataMap[serverId];
                     changed = true;
                 }
             }
 
-            if (changed) {
-                gim.updateGuildInstance(guildId);
-            }
+            if (changed) gim.updateGuildInstance(guildId);
         }
 
-        /* If no longer part of any guild, stop fcm listener and remove credentials */
+        /* If no longer associated with any guilds, stop fcm listener and remove credentials */
         if (associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
@@ -101,11 +99,11 @@ export async function execute(dm: DiscordManager) {
     /* Update requesterSteamId */
     for (const guildId of activeGuildIds) {
         const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-        for (const [serverId, server] of Object.entries(gInstance.serverInfoMap)) {
-            if (server.requesterSteamId === null) continue;
+        for (const [serverId, serverInfo] of Object.entries(gInstance.serverInfoMap)) {
+            if (serverInfo.requesterSteamId === null) continue;
 
-            if (!(gInstance.pairingDataMap[serverId]?.[server.requesterSteamId])) {
-                server.requesterSteamId = null;
+            if (!(gInstance.pairingDataMap[serverId]?.[serverInfo.requesterSteamId])) {
+                serverInfo.requesterSteamId = null;
             }
         }
         gim.updateGuildInstance(guildId);
@@ -135,13 +133,18 @@ export async function execute(dm: DiscordManager) {
         await dm.setupGuild(guild);
 
         const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
-        for (const [serverId, content] of Object.entries(gInstance.serverInfoMap)) {
-            if (content.active) {
-                if (rpm.addInstance(guild.id, serverId)) {
-                    const rpInstance = rpm.getInstance(guild.id, serverId);
-                    if (rpInstance) {
-                        await rpInstance.startup();
+        for (const [serverId, serverInfo] of Object.entries(gInstance.serverInfoMap)) {
+            if (serverInfo.active) {
+                if (gim.isPairingDataValid(gInstance, serverInfo)) {
+                    if (rpm.addInstance(guild.id, serverId)) {
+                        const rpInstance = rpm.getInstance(guild.id, serverId);
+                        if (rpInstance) {
+                            await rpInstance.startup();
+                        }
                     }
+                }
+                else {
+                    // TODO! Update server embed and disable connect/disconnect button till requesterSteamId is valid
                 }
             }
         }

@@ -18,7 +18,10 @@
 
 */
 
-import { log, config } from '../../index';
+import {
+    config,
+    log
+} from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 
 export const name = 'debug';

@@ -42,31 +42,31 @@ export async function execute(dm: DiscordManager, interaction: discordjs.Interac
     // TODO! Each interaction handler needs to check if initiator of the interaction is valid
     // i.e. if roles are set then not everyone can use commands etc
 
-    /* Slash Commands. */
+    /* Slash Commands */
     if (interaction.isChatInputCommand()) {
         result = await slashCommandHandler(dm, interaction);
     }
-    /* Autocomplete Interactions. */
+    /* Autocomplete Interactions */
     else if (interaction.isAutocomplete()) {
         result = await autocompleteHandler(dm, interaction);
     }
-    /* Context Menu Commands (User & Message). */
+    /* Context Menu Commands (User & Message) */
     else if (interaction.isUserContextMenuCommand() || interaction.isMessageContextMenuCommand()) {
         /* TBD */
     }
-    /* Button Interaction. */
+    /* Button Interaction */
     else if (interaction.isButton()) {
         result = await buttonHandler(dm, interaction);
     }
-    /* Select Menus (All types). */
+    /* Select Menus (All types) */
     else if (interaction.isAnySelectMenu()) {
         result = await selectMenuHandler(dm, interaction);
     }
-    /* Modal Submissions. */
+    /* Modal Submissions */
     else if (interaction.isModalSubmit()) {
         result = await modalHandler(dm, interaction);
     }
-    /* Unknown interaction. */
+    /* Unknown interaction */
     else {
         log.error(`${fName} Unknown interaction.`, logParam);
     }

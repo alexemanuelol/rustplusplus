@@ -20,7 +20,10 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim, log } from '../../index';
+import {
+    guildInstanceManager as gim,
+    log
+} from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 
 export const name = 'guildCreate';

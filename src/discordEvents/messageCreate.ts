@@ -26,15 +26,15 @@ export const name = 'messageCreate';
 export const once = false;
 
 export async function execute(dm: DiscordManager, message: discordjs.Message) {
-    /* Ignore messages from bots. */
+    /* Ignore messages from bots */
     if (message.author.bot) return;
 
     if (message.guild) {
-        /* Message in a guild. */
+        /* Message in a guild */
         await handleGuildMessage(dm, message);
     }
     else {
-        /* Direct message. */
+        /* Direct message */
         await handleDirectMessage(dm, message);
     }
 }

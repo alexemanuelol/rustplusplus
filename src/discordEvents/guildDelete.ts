@@ -21,10 +21,10 @@
 import * as discordjs from 'discord.js';
 
 import {
-    guildInstanceManager as gim,
-    log,
     credentialsManager as cm,
     fcmListenerManager as flm,
+    guildInstanceManager as gim,
+    log,
     rustPlusManager as rpm
 } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
@@ -40,13 +40,13 @@ export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
 
     log.info(`${fName} Client left guild.`, logParam);
 
-    /* Check if credentials have no associated guild */
+    /* Check if credentials have no associated guilds */
     const credentialSteamIds = cm.getCredentialSteamIds();
     for (const steamId of credentialSteamIds) {
         const credentials = cm.getCredentials(steamId) as Credentials;
         const associatedGuilds = await dm.getGuildIdsForUser(credentials.discordUserId);
 
-        /* If user is no longer part of any guild, stop fcm listener and remove credentials */
+        /* If no longer associated with any guilds, stop fcm listener and remove credentials */
         if (associatedGuilds.length === 0) {
             flm.stopListener(steamId);
             cm.deleteCredentials(steamId);
