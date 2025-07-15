@@ -20,7 +20,11 @@
 
 import * as discordjs from 'discord.js';
 
+import { guildInstanceManager as gim } from '../../index';
+import * as types from '../utils/types';
 import { DiscordManager } from '../managers/discordManager';
+import { sendDiscordVoiceMessage } from '../discordUtils/discordVoice';
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'messageCreate';
 export const once = false;
@@ -41,6 +45,16 @@ export async function execute(dm: DiscordManager, message: discordjs.Message) {
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message) {
+    // TODO! Temporary to test bot voice
+    const guildId = message.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    if (message.channelId === gInstance.guildChannelIds.commands &&
+        message.cleanContent.startsWith('.voice ')) {
+        const text = message.cleanContent.replace(/^\.voice\s*/, '');
+        await sendDiscordVoiceMessage(guildId, text);
+    }
+
     // TODO!
     // Check what guild the message is created in
     // Check if the author of the message is part of blacklist
