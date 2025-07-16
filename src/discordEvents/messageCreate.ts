@@ -43,7 +43,6 @@ export async function execute(dm: DiscordManager, message: discordjs.Message) {
     }
 }
 
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message) {
     // TODO! Temporary to test bot voice
     const guildId = message.guildId as types.GuildId;

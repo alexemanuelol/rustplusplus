@@ -426,6 +426,31 @@ export async function getCredentialsListEmbed(dm: DiscordManager, interaction: d
     })
 }
 
+export async function getAliasListEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
+    imageName: string): Promise<discordjs.EmbedBuilder> {
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const aliases: string[] = [];
+    const values: string[] = [];
+
+    for (const alias of gInstance.aliases) {
+        aliases.push(`\`${alias.alias}\``);
+        values.push(`\`${alias.value}\``);
+    }
+
+    return getEmbedColumnFields({
+        title: lm.getIntl(language, 'slashCommandSuccessTitleAliasList'),
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: { url: `attachment://${imageName}` },
+    }, [
+        { name: lm.getIntl(language, 'alias'), data: aliases },
+        { name: lm.getIntl(language, 'value'), data: values }
+    ]);
+}
+
 
 /**
  * Guild based embeds

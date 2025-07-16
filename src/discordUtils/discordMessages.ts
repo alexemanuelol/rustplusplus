@@ -139,6 +139,17 @@ export async function sendCredentialsListMessage(dm: DiscordManager, interaction
     await dm.handleInteractionReply(interaction, content, 'editReply');
 }
 
+export async function sendAliasListMessage(dm: DiscordManager, interaction: discordjs.Interaction) {
+    const imagePath = path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png');
+
+    const content = {
+        embeds: [await discordEmbeds.getAliasListEmbed(dm, interaction, 'rustplusplus_logo.png')],
+        files: [new discordjs.AttachmentBuilder(imagePath)]
+    };
+
+    await dm.handleInteractionReply(interaction, content, 'editReply');
+}
+
 
 /**
  * Guild based messages

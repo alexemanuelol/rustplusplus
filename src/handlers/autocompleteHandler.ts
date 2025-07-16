@@ -33,7 +33,10 @@ export async function autocompleteHandler(dm: DiscordManager, interaction: disco
 
     const commandName = interaction.commandName;
 
-    if (commandName === 'role') {
+    if (commandName === 'alias') {
+        autocompleteAliasHandler(dm, interaction);
+    }
+    else if (commandName === 'role') {
         autocompleteRoleHandler(dm, interaction);
     }
     else if (commandName === 'credentials') {
@@ -113,6 +116,36 @@ async function autocompleteCredentialsHandler(dm: DiscordManager, interaction: d
             }
 
             interaction.respond(filteredSteamIds.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
+
+        } break;
+
+        default: {
+            interaction.respond([]);
+        } break;
+    }
+}
+
+async function autocompleteAliasHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
+    if (!dm.validPermissions(interaction)) {
+        return interaction.respond([]);
+    }
+
+    const guildId = interaction.guildId as types.GuildId;
+    if (!guildId) return interaction.respond([]);
+
+    switch (interaction.options.getSubcommand()) {
+        case 'remove': {
+            const filteredAliases: { name: string; value: string }[] = [];
+
+            const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+            for (const alias of gInstance.aliases) {
+                filteredAliases.push({
+                    name: `${alias.alias} (${alias.value})`,
+                    value: alias.alias
+                });
+            }
+
+            interaction.respond(filteredAliases.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
 
         } break;
 

@@ -63,7 +63,7 @@ export interface GuildInstance {
     generalSettings: GeneralSettings;
     eventNotificationSettings: EventNotificationSettings;
     settingsMessages: SettingsMessages;
-    commandAliases: CommandAlias[];
+    aliases: Alias[];
     blacklist: Blacklist;
     teamMemberChatColorMap: TeamMemberChatColorMap;
     marketSubscriptionList: MarketSubscriptionList;
@@ -219,9 +219,8 @@ export interface SettingsMessages {
     travellingVendorStarted: types.MessageId | null;
 }
 
-export interface CommandAlias {
+export interface Alias {
     alias: string;
-    index: number;
     value: string;
 }
 
@@ -611,7 +610,7 @@ export class GuildInstanceManager {
                 travellingVendorStopped: null,
                 travellingVendorStarted: null
             },
-            commandAliases: [],
+            aliases: [],
             blacklist: {
                 discordIds: [],
                 steamIds: []
@@ -751,7 +750,7 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
         'generalSettings',
         'eventNotificationSettings',
         'settingsMessages',
-        'commandAliases',
+        'aliases',
         'blacklist',
         'teamMemberChatColorMap',
         'marketSubscriptionList',
@@ -774,7 +773,7 @@ export function isValidGuildInstance(object: unknown): object is GuildInstance {
     errors.push(vu.validateInterface('eventNotificationSettings', obj.eventNotificationSettings,
         isValidEventNotificationSettings));
     errors.push(vu.validateInterface('settingsMessages', obj.settingsMessages, isValidSettingsMessages));
-    errors.push(vu.validateArrayOfInterfaces('commandAliases', obj.commandAliases, isValidCommandAlias));
+    errors.push(vu.validateArrayOfInterfaces('aliases', obj.aliases, isValidAlias));
     errors.push(vu.validateInterface('blacklist', obj.blacklist, isValidBlacklist));
     errors.push(vu.validateObjectOfTypes('teamMemberChatColorMap', obj.teamMemberChatColorMap, 'string'));
     errors.push(vu.validateInterface('marketSubscriptionList', obj.marketSubscriptionList,
@@ -1219,23 +1218,21 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
     return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
 }
 
-export function isValidCommandAlias(object: unknown): object is CommandAlias {
+export function isValidAlias(object: unknown): object is Alias {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
 
-    const obj = object as CommandAlias;
+    const obj = object as Alias;
 
-    const interfaceName = 'CommandAlias';
+    const interfaceName = 'Alias';
     const validKeys = [
         'alias',
-        'index',
         'value'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
     errors.push(vu.validateType('alias', obj.alias, 'string'));
-    errors.push(vu.validateType('index', obj.index, 'number'));
     errors.push(vu.validateType('value', obj.value, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
