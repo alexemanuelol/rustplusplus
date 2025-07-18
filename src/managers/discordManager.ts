@@ -272,9 +272,8 @@ export class DiscordManager {
         }
     }
 
-    public async setupGuild(guild: discordjs.Guild) {
+    public async setupGuild(guild: discordjs.Guild, enforcePermissions: boolean = false) {
         const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
-        let rolesChanged = false;
 
         /* Check if any roles are missing. */
         const validRoleIds: types.RoleId[] = [];
@@ -285,7 +284,7 @@ export class DiscordManager {
                 validRoleIds.push(roleId);
             }
             else {
-                rolesChanged = true;
+                enforcePermissions = true;
             }
         }
         for (const adminId of gInstance.adminIds) {
@@ -294,7 +293,7 @@ export class DiscordManager {
                 validAdminIds.push(adminId);
             }
             else {
-                rolesChanged = true;
+                enforcePermissions = true;
             }
         }
         gInstance.roleIds = validRoleIds;
@@ -302,8 +301,8 @@ export class DiscordManager {
         gim.updateGuildInstance(guild.id);
 
         /* Setup category, channels and settings. */
-        await this.setupGuildCategory(guild, rolesChanged);
-        await this.setupGuildChannels(guild, rolesChanged);
+        await this.setupGuildCategory(guild, enforcePermissions);
+        await this.setupGuildChannels(guild, enforcePermissions);
         await this.setupGuildSettingsChannel(guild, false);
     }
 
@@ -1009,6 +1008,18 @@ export class DiscordManager {
                 id: adminId,
                 allow: channelPermissions[channelName].admins.allow,
                 deny: channelPermissions[channelName].admins.deny
+            });
+        }
+
+        /* Blacklist permissions */
+        for (const userId of gInstance.blacklist.userIds) {
+            permissions.push({
+                id: userId,
+                allow: [],
+                deny: [
+                    discordjs.PermissionsBitField.Flags.ViewChannel,
+                    discordjs.PermissionsBitField.Flags.SendMessages
+                ]
             });
         }
 

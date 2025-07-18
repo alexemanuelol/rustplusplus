@@ -31,7 +31,7 @@ import * as types from '../utils/types';
 import * as utils from '../utils/utils';
 import { Credentials } from '../managers/credentialsManager';
 import { PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
-import { fetchSteamProfilePicture } from '../utils/steam';
+import { fetchSteamProfileName, fetchSteamProfilePicture } from '../utils/steam';
 
 export const EmbedLimits = {
     Maximum: 6000,
@@ -449,6 +449,44 @@ export async function getAliasListEmbed(dm: DiscordManager, interaction: discord
         { name: lm.getIntl(language, 'alias'), data: aliases },
         { name: lm.getIntl(language, 'value'), data: values }
     ]);
+}
+
+export async function getBlacklistListEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
+    imageName: string): Promise<discordjs.EmbedBuilder> {
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    let discordUsers = '';
+    let steamUsers = '';
+
+    for (const userId of gInstance.blacklist.userIds) {
+        const member = await dm.getMember(guildId, userId);
+        discordUsers += `\`${member ? member.displayName : lm.getIntl(language, 'unknown')}\` (${userId})\n`;
+    }
+
+    for (const steamid of gInstance.blacklist.steamIds) {
+        const steamName = await fetchSteamProfileName(steamid);
+        steamUsers += `\`${steamName ? steamName : lm.getIntl(language, 'unknown')}\` (${steamid})\n`;
+    }
+
+    return getEmbed({
+        title: lm.getIntl(language, 'blacklist'),
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: { url: `attachment://${imageName}` },
+        fields: [
+            {
+                name: lm.getIntl(language, 'discordUsers'),
+                value: discordUsers === '' ? '\u200B' : discordUsers,
+                inline: true
+            },
+            {
+                name: 'SteamID',
+                value: steamUsers === '' ? '\u200B' : steamUsers,
+                inline: true
+            }]
+    });
 }
 
 

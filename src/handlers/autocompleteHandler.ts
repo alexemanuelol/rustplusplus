@@ -20,11 +20,12 @@
 
 import * as discordjs from 'discord.js';
 
-import { log, guildInstanceManager as gim, credentialsManager as cm } from '../../index';
+import { log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm } from '../../index';
 import * as types from '../utils/types';
 import { DiscordManager } from "../managers/discordManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 import { Credentials } from '../managers/credentialsManager';
+import { fetchSteamProfileName } from '../utils/steam';
 
 export async function autocompleteHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction):
     Promise<boolean> {
@@ -41,6 +42,9 @@ export async function autocompleteHandler(dm: DiscordManager, interaction: disco
     }
     else if (commandName === 'credentials') {
         await autocompleteCredentialsHandler(dm, interaction);
+    }
+    else if (commandName === 'blacklist') {
+        await autocompleteBlacklistHandler(dm, interaction);
     }
     else {
         log.error(`${fName} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
@@ -147,6 +151,60 @@ async function autocompleteAliasHandler(dm: DiscordManager, interaction: discord
 
             interaction.respond(filteredAliases.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
 
+        } break;
+
+        default: {
+            interaction.respond([]);
+        } break;
+    }
+}
+
+async function autocompleteBlacklistHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
+    if (!dm.validPermissions(interaction, true)) {
+        return interaction.respond([]);
+    }
+
+    const options = interaction.options;
+    const guildId = interaction.guildId as types.GuildId;
+    if (!guildId) return interaction.respond([]);
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const focusedOption = options.getFocused(true);
+
+    switch (options.getSubcommand()) {
+        case 'remove': {
+            if (focusedOption.name === 'discord_user') {
+                const filteredDiscordUsers: { name: string; value: string }[] = [];
+                for (const userId of gInstance.blacklist.userIds) {
+                    const member = await dm.getMember(guildId, userId);
+                    const name = member ? member.displayName : lm.getIntl(language, 'unknown');
+                    filteredDiscordUsers.push({
+                        name: `${name} (${userId})`,
+                        value: userId
+                    });
+                }
+
+                /* Discord limits autocomplete choices to 25 max */
+                interaction.respond(filteredDiscordUsers.slice(0, 25));
+            }
+            else if (focusedOption.name === 'steamid') {
+                const filteredSteamUsers: { name: string; value: string }[] = [];
+                for (const steamid of gInstance.blacklist.steamIds) {
+                    const steamName = await fetchSteamProfileName(steamid);
+                    const name = steamName ? steamName : lm.getIntl(language, 'unknown');
+                    filteredSteamUsers.push({
+                        name: `${name} (${steamid})`,
+                        value: steamid
+                    });
+                }
+
+                /* Discord limits autocomplete choices to 25 max */
+                interaction.respond(filteredSteamUsers.slice(0, 25));
+            }
+            else {
+                interaction.respond([]);
+            }
         } break;
 
         default: {

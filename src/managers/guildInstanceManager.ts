@@ -225,7 +225,7 @@ export interface Alias {
 }
 
 export interface Blacklist {
-    discordIds: types.UserId[];
+    userIds: types.UserId[];
     steamIds: types.SteamId[];
 }
 
@@ -612,7 +612,7 @@ export class GuildInstanceManager {
             },
             aliases: [],
             blacklist: {
-                discordIds: [],
+                userIds: [],
                 steamIds: []
             },
             teamMemberChatColorMap: {},
@@ -1257,12 +1257,12 @@ export function isValidBlacklist(object: unknown): object is Blacklist {
 
     const interfaceName = 'Blacklist';
     const validKeys = [
-        'discordIds',
+        'userIds',
         'steamIds'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
-    errors.push(vu.validateArrayOfTypes('discordIds', obj.discordIds, 'string'));
+    errors.push(vu.validateArrayOfTypes('userIds', obj.userIds, 'string'));
     errors.push(vu.validateArrayOfTypes('steamIds', obj.steamIds, 'string'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);

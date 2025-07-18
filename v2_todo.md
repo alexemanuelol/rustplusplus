@@ -3,7 +3,7 @@
 ## Slash commands
 - [ ] alarm
 - [x] alias
-- [ ] blacklist
+- [x] blacklist
 - [ ] cctv
 - [ ] craft
 - [x] credentials
