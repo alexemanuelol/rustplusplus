@@ -245,7 +245,8 @@ async function autocompleteSmartalarmHandler(dm: DiscordManager, interaction: di
                 });
             }
 
-            interaction.respond(filteredSmartalarms.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
+            /* Discord limits autocomplete choices to 25 max */
+            interaction.respond(filteredSmartalarms.slice(0, 25));
 
         } break;
 
@@ -277,7 +278,8 @@ async function autocompleteSmartswitchHandler(dm: DiscordManager, interaction: d
                 });
             }
 
-            interaction.respond(filteredSmartswitches.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
+            /* Discord limits autocomplete choices to 25 max */
+            interaction.respond(filteredSmartswitches.slice(0, 25));
 
         } break;
 
@@ -309,7 +311,8 @@ async function autocompleteStoragemonitorHandler(dm: DiscordManager, interaction
                 });
             }
 
-            interaction.respond(filteredStoragemonitors.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
+            /* Discord limits autocomplete choices to 25 max */
+            interaction.respond(filteredStoragemonitors.slice(0, 25));
 
         } break;
 
