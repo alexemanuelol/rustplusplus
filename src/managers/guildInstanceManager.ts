@@ -20,6 +20,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as rp from 'rustplus-ts'
 
 import { log } from '../../index';
 import * as types from '../utils/types';
@@ -349,6 +350,11 @@ export interface SmartSwitchGroupConfig {
     command: string;
     image: string;
     smartSwitches: types.EntityId[];
+}
+
+export interface SmartDeviceEntity {
+    serverId: types.ServerId;
+    entityId: types.EntityId;
 }
 
 export class GuildInstanceManager {
@@ -704,6 +710,56 @@ export class GuildInstanceManager {
         return true;
     }
 
+    /* Temporary function till discord modals gets more functional */
+    public getSmartDeviceServerId(guildId: types.GuildId, type: rp.AppEntityType, entityId: types.EntityId):
+        types.ServerId | null {
+        const gInstance = this.getGuildInstance(guildId) as GuildInstance;
+
+        for (const [serverId, serverInfo] of Object.entries(gInstance.serverInfoMap)) {
+            if (type === rp.AppEntityType.Switch) {
+                for (const id of Object.keys(serverInfo.smartSwitchConfigMap)) {
+                    if (entityId === id) return serverId;
+                }
+            }
+            else if (type === rp.AppEntityType.Alarm) {
+                for (const id of Object.keys(serverInfo.smartAlarmConfigMap)) {
+                    if (entityId === id) return serverId;
+                }
+            }
+            else if (type === rp.AppEntityType.StorageMonitor) {
+                for (const id of Object.keys(serverInfo.storageMonitorConfigMap)) {
+                    if (entityId === id) return serverId;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public getSmartDeviceEntities(guildId: types.GuildId, type: rp.AppEntityType): SmartDeviceEntity[] {
+        const gInstance = this.getGuildInstance(guildId) as GuildInstance;
+
+        const entities: { serverId: types.ServerId, entityId: types.EntityId }[] = [];
+        for (const [serverId, serverInfo] of Object.entries(gInstance.serverInfoMap)) {
+            if (type === rp.AppEntityType.Switch) {
+                for (const entityId of Object.keys(serverInfo.smartSwitchConfigMap)) {
+                    entities.push({ serverId: serverId, entityId: entityId });
+                }
+            }
+            else if (type === rp.AppEntityType.Alarm) {
+                for (const entityId of Object.keys(serverInfo.smartAlarmConfigMap)) {
+                    entities.push({ serverId: serverId, entityId: entityId });
+                }
+            }
+            else if (type === rp.AppEntityType.StorageMonitor) {
+                for (const entityId of Object.keys(serverInfo.storageMonitorConfigMap)) {
+                    entities.push({ serverId: serverId, entityId: entityId });
+                }
+            }
+        }
+
+        return entities;
+    }
 }
 
 export function getServerId(ip: string, port: string): types.ServerId {

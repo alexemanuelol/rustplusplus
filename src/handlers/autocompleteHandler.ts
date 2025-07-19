@@ -19,6 +19,7 @@
 */
 
 import * as discordjs from 'discord.js';
+import * as rp from 'rustplus-ts';
 
 import { log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm } from '../../index';
 import * as types from '../utils/types';
@@ -45,6 +46,15 @@ export async function autocompleteHandler(dm: DiscordManager, interaction: disco
     }
     else if (commandName === 'blacklist') {
         await autocompleteBlacklistHandler(dm, interaction);
+    }
+    else if (commandName === 'smartalarm') {
+        await autocompleteSmartalarmHandler(dm, interaction);
+    }
+    else if (commandName === 'smartswitch') {
+        await autocompleteSmartswitchHandler(dm, interaction);
+    }
+    else if (commandName === 'storagemonitor') {
+        await autocompleteStoragemonitorHandler(dm, interaction);
     }
     else {
         log.error(`${fName} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
@@ -205,6 +215,102 @@ async function autocompleteBlacklistHandler(dm: DiscordManager, interaction: dis
             else {
                 interaction.respond([]);
             }
+        } break;
+
+        default: {
+            interaction.respond([]);
+        } break;
+    }
+}
+
+async function autocompleteSmartalarmHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
+    if (!dm.validPermissions(interaction)) {
+        return interaction.respond([]);
+    }
+
+    const guildId = interaction.guildId as types.GuildId;
+    if (!guildId) return interaction.respond([]);
+
+    switch (interaction.options.getSubcommand()) {
+        case 'edit': {
+            const filteredSmartalarms: { name: string; value: string }[] = [];
+            const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+            const entities = gim.getSmartDeviceEntities(guildId, rp.AppEntityType.Alarm);
+
+            for (const entity of entities) {
+                const name = gInstance.serverInfoMap[entity.serverId].smartAlarmConfigMap[entity.entityId].name;
+                filteredSmartalarms.push({
+                    name: `${name} (${entity.entityId})`,
+                    value: entity.entityId
+                });
+            }
+
+            interaction.respond(filteredSmartalarms.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
+
+        } break;
+
+        default: {
+            interaction.respond([]);
+        } break;
+    }
+}
+
+async function autocompleteSmartswitchHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
+    if (!dm.validPermissions(interaction)) {
+        return interaction.respond([]);
+    }
+
+    const guildId = interaction.guildId as types.GuildId;
+    if (!guildId) return interaction.respond([]);
+
+    switch (interaction.options.getSubcommand()) {
+        case 'edit': {
+            const filteredSmartswitches: { name: string; value: string }[] = [];
+            const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+            const entities = gim.getSmartDeviceEntities(guildId, rp.AppEntityType.Switch);
+
+            for (const entity of entities) {
+                const name = gInstance.serverInfoMap[entity.serverId].smartSwitchConfigMap[entity.entityId].name;
+                filteredSmartswitches.push({
+                    name: `${name} (${entity.entityId})`,
+                    value: entity.entityId
+                });
+            }
+
+            interaction.respond(filteredSmartswitches.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
+
+        } break;
+
+        default: {
+            interaction.respond([]);
+        } break;
+    }
+}
+
+async function autocompleteStoragemonitorHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
+    if (!dm.validPermissions(interaction)) {
+        return interaction.respond([]);
+    }
+
+    const guildId = interaction.guildId as types.GuildId;
+    if (!guildId) return interaction.respond([]);
+
+    switch (interaction.options.getSubcommand()) {
+        case 'edit': {
+            const filteredStoragemonitors: { name: string; value: string }[] = [];
+            const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+            const entities = gim.getSmartDeviceEntities(guildId, rp.AppEntityType.StorageMonitor);
+
+            for (const entity of entities) {
+                const name = gInstance.serverInfoMap[entity.serverId].storageMonitorConfigMap[entity.entityId].name;
+                filteredStoragemonitors.push({
+                    name: `${name} (${entity.entityId})`,
+                    value: entity.entityId
+                });
+            }
+
+            interaction.respond(filteredStoragemonitors.slice(0, 25)); /* Discord limits autocomplete choices to 25 max */
+
         } break;
 
         default: {

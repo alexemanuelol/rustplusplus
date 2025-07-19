@@ -1,7 +1,7 @@
 # rustplusplus v2 TODO
 
 ## Slash commands
-- [ ] alarm
+- [x] smartalarm
 - [x] alias
 - [x] blacklist
 - [ ] cctv
@@ -20,8 +20,8 @@
 - [ ] reset
 - [x] role
 - [ ] stack
-- [ ] storagemonitor
-- [ ] switch
+- [x] storagemonitor
+- [x] smartswitch
 - [ ] upkeep
 - [ ] uptime
 - [x] voice
