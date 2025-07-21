@@ -189,7 +189,6 @@ export interface SettingsMessages {
     inGameChatCommandResponseDelay: types.MessageId | null;
     leaderCommand: types.MessageId | null;
     inGameChatNotifySmartSwitchChangedFromDiscord: types.MessageId | null;
-    inGameChatNotifyConnection: types.MessageId | null;
     inGameChatNotify: types.MessageId | null;
     mapWipeNotifyEveryone: types.MessageId | null;
     fcmAlarmNotify: types.MessageId | null;
@@ -586,7 +585,6 @@ export class GuildInstanceManager {
                 inGameChatCommandResponseDelay: null,
                 leaderCommand: null,
                 inGameChatNotifySmartSwitchChangedFromDiscord: null,
-                inGameChatNotifyConnection: null,
                 inGameChatNotify: null,
                 mapWipeNotifyEveryone: null,
                 fcmAlarmNotify: null,
