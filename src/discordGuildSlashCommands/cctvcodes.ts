@@ -19,14 +19,11 @@
 */
 
 import * as discordjs from 'discord.js';
-import * as rp from 'rustplus-ts';
 
-import { log, config, localeManager as lm, guildInstanceManager as gim, rustPlusManager as rpm } from '../../index';
+import { log, config, localeManager as lm } from '../../index';
 import * as discordMessages from '../discordUtils/discordMessages';
 import { DiscordManager } from '../managers/discordManager';
-import * as types from '../utils/types';
 import { Languages } from '../managers/LocaleManager';
-import { GuildInstance } from '../managers/guildInstanceManager';
 
 export default {
 	name: 'cctvcodes',
