@@ -89,13 +89,13 @@ export async function buttonHandler(dm: DiscordManager, interaction: discordjs.B
         return await eventNotificationSettingButtonHandler(dm, interaction);
     }
     /* Servers Channel buttons */
-    else if (interaction.customId.startsWith('ServerConnect')) {
-        return await serverConnectButtonHandler(dm, interaction);
-    }
     else if (interaction.customId.startsWith('ServerConnecting') ||
         interaction.customId.startsWith('ServerDisconnect') ||
         interaction.customId.startsWith('ServerReconnecting')) {
         return await serverConnectingDisconnectReconnectingButtonHandler(dm, interaction);
+    }
+    else if (interaction.customId.startsWith('ServerConnect')) {
+        return await serverConnectButtonHandler(dm, interaction);
     }
     else if (interaction.customId.startsWith('ServerView')) {
         return await serverViewButtonHandler(dm, interaction);
@@ -377,64 +377,6 @@ async function eventNotificationSettingButtonHandler(dm: DiscordManager,
  * Server channel
  */
 
-async function serverConnectButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
-    Promise<boolean> {
-    const identifier = JSON.parse(interaction.customId.replace('ServerConnect', ''));
-    const serverId = identifier.serverId as types.ServerId;
-    const guildId = interaction.guildId as types.GuildId;
-    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-    const server = gInstance.serverInfoMap[serverId];
-
-    interaction.deferUpdate();
-    if (!server) return false;
-
-    if (gInstance.serverToView === null) {
-        gInstance.serverToView = serverId;
-    }
-    else if (gInstance.serverToView !== serverId) {
-        const previousServerToView = gInstance.serverToView;
-        gInstance.serverToView = serverId;
-
-        let connectionStatus = ConnectionStatus.Disconnected;
-        const rpInstance = rpm.getInstance(guildId, previousServerToView);
-        if (rpInstance) {
-            connectionStatus = rpInstance.connectionStatus;
-        }
-
-        await discordMessages.sendServerMessage(dm, guildId, previousServerToView, connectionStatus);
-    }
-
-    const creationPromises: Promise<void>[] = [];
-    for (const content of Object.values(server.smartSwitchConfigMap)) {
-        creationPromises.push(discordMessages.sendSmartSwitchMessage(dm, guildId, serverId, content.entityId));
-    }
-
-    for (const content of Object.values(server.smartAlarmConfigMap)) {
-        creationPromises.push(discordMessages.sendSmartAlarmMessage(dm, guildId, serverId, content.entityId));
-    }
-
-    for (const content of Object.values(server.storageMonitorConfigMap)) {
-        creationPromises.push(discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
-    }
-
-    // TODO! Create smartswitchgroup messages
-    //for (const content of Object.values(server.smartSwitchGroupConfigMap)) {
-    //}
-    await Promise.allSettled(creationPromises);
-
-    server.active = true;
-    gim.updateGuildInstance(guildId);
-
-    if (rpm.addInstance(guildId, serverId)) {
-        const rpInstance = rpm.getInstance(guildId, serverId);
-        if (rpInstance) {
-            await rpInstance.startup();
-        }
-    }
-
-    return true;
-}
-
 async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordManager,
     interaction: discordjs.ButtonInteraction): Promise<boolean> {
     const identifier = JSON.parse(interaction.customId.replace('ServerConnecting', '')
@@ -511,6 +453,64 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
 
     rpm.removeInstance(guildId, serverId);
     await discordMessages.sendServerMessage(dm, guildId, serverId, ConnectionStatus.Disconnected, interaction);
+
+    return true;
+}
+
+async function serverConnectButtonHandler(dm: DiscordManager, interaction: discordjs.ButtonInteraction):
+    Promise<boolean> {
+    const identifier = JSON.parse(interaction.customId.replace('ServerConnect', ''));
+    const serverId = identifier.serverId as types.ServerId;
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const server = gInstance.serverInfoMap[serverId];
+
+    interaction.deferUpdate();
+    if (!server) return false;
+
+    if (gInstance.serverToView === null) {
+        gInstance.serverToView = serverId;
+    }
+    else if (gInstance.serverToView !== serverId) {
+        const previousServerToView = gInstance.serverToView;
+        gInstance.serverToView = serverId;
+
+        let connectionStatus = ConnectionStatus.Disconnected;
+        const rpInstance = rpm.getInstance(guildId, previousServerToView);
+        if (rpInstance) {
+            connectionStatus = rpInstance.connectionStatus;
+        }
+
+        await discordMessages.sendServerMessage(dm, guildId, previousServerToView, connectionStatus);
+    }
+
+    const creationPromises: Promise<void>[] = [];
+    for (const content of Object.values(server.smartSwitchConfigMap)) {
+        creationPromises.push(discordMessages.sendSmartSwitchMessage(dm, guildId, serverId, content.entityId));
+    }
+
+    for (const content of Object.values(server.smartAlarmConfigMap)) {
+        creationPromises.push(discordMessages.sendSmartAlarmMessage(dm, guildId, serverId, content.entityId));
+    }
+
+    for (const content of Object.values(server.storageMonitorConfigMap)) {
+        creationPromises.push(discordMessages.sendStorageMonitorMessage(dm, guildId, serverId, content.entityId));
+    }
+
+    // TODO! Create smartswitchgroup messages
+    //for (const content of Object.values(server.smartSwitchGroupConfigMap)) {
+    //}
+    await Promise.allSettled(creationPromises);
+
+    server.active = true;
+    gim.updateGuildInstance(guildId);
+
+    if (rpm.addInstance(guildId, serverId)) {
+        const rpInstance = rpm.getInstance(guildId, serverId);
+        if (rpInstance) {
+            await rpInstance.startup();
+        }
+    }
 
     return true;
 }
