@@ -25,6 +25,7 @@ import {
     GuildInstance, ServerInfo, SmartSwitchConfig, SmartAlarmConfig, StorageMonitorConfig, StorageMonitorConfigType
 
 } from '../managers/guildInstanceManager';
+import { CctvCodes } from '../utils/cctvCodes';
 import * as constants from '../utils/constants';
 import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
@@ -489,6 +490,43 @@ export async function getBlacklistListEmbed(dm: DiscordManager, interaction: dis
     });
 }
 
+export async function getCctvcodesEmbed(dm: DiscordManager, interaction: discordjs.Interaction,
+    imageName: string, monumentOption: string): Promise<discordjs.EmbedBuilder> {
+    const guildId = interaction.guildId as types.GuildId;
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+
+    const title = lm.getIntl(language, 'cctvCodesForMonument', {
+        monument: monumentOption === 'all' ? lm.getIntl(language, 'all') :
+            lm.getIntl(language, `monumentName-${monumentOption}`)
+    });
+
+    let description = '';
+    if (['all', 'AbandonedMilitaryBase', 'underwater_lab'].includes(monumentOption)) {
+        description = lm.getIntl(language, 'asteriskCctvCodesDesc');
+    }
+
+    const cctvCodes = new CctvCodes().getAllCctvCodes();
+    const fields: discordjs.EmbedField[] = [];
+    for (const [monument, codes] of Object.entries(cctvCodes)) {
+        if (monumentOption === 'all' || monumentOption === monument) {
+            fields.push({
+                name: lm.getIntl(language, `monumentName-${monument}`),
+                value: codes.join('\n'),
+                inline: true
+            });
+        }
+    }
+
+    return getEmbed({
+        title: title,
+        description: description,
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: { url: `attachment://${imageName}` },
+        fields: fields
+    });
+}
 
 /**
  * Guild based embeds

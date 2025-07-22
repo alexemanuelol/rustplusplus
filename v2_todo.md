@@ -4,7 +4,7 @@
 - [x] smartalarm
 - [x] alias
 - [x] blacklist
-- [ ] cctv
+- [x] cctvcodes
 - [ ] craft
 - [x] credentials
 - [ ] decay
