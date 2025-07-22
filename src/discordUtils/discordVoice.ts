@@ -71,7 +71,7 @@ function getVoice(guildId: types.GuildId) {
 }
 
 function getActors(): Actors {
-    const filePath = path.join(__dirname, "../staticFiles/actors.json");
+    const filePath = path.join(__dirname, "../staticFiles/voiceActors.json");
     const fileContent = fs.readFileSync(filePath, "utf-8");
     const parsed = JSON.parse(fileContent);
 
