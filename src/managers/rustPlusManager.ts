@@ -281,7 +281,6 @@ export class RustPlusInstance {
         if (requesterSteamId === null) return;
 
         const pairingData = gInstance.pairingDataMap[this.serverId]?.[requesterSteamId] ?? null;
-
         if (!pairingData) {
             this.lastServerPollSuccessful = false;
             log.warn(`${fName} pairingData for ${requesterSteamId} could not be found.`, logParam);
@@ -299,6 +298,11 @@ export class RustPlusInstance {
 
         this.lastServerPollSuccessful = true;
         this.lastServerPollSuccessfulTimestampSeconds = Math.floor(Date.now() / 1000);
+
+        /**
+         * If reached this, then all rustplus requests was successful.
+         * Continue with updating structures
+         */
 
         if (firstPoll) {
             console.log('FIRST POLL')
@@ -332,8 +336,7 @@ export class RustPlusInstance {
         const logParam = { guildId: this.guildId, serverId: this.serverId, serverName: this.serverName };
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
-        const server = gInstance.serverInfoMap[this.serverId];
-        const requesterSteamId = server.requesterSteamId;
+        const requesterSteamId = gInstance.serverInfoMap[this.serverId].requesterSteamId;
 
         if (requesterSteamId === null) return false;
 
@@ -356,6 +359,9 @@ export class RustPlusInstance {
                 else {
                     log.error(`${fName} We got completely wrong response: ${JSON.stringify(response)}`, logParam);
                 }
+
+                // TODO! Send message in activity channel saying that the requesters request was not successful.
+
                 this.lastServerPollSuccessful = false;
                 return false;
             }
@@ -375,6 +381,9 @@ export class RustPlusInstance {
             else {
                 log.error(`${fName} ConsumeTokensError: ${response}`, logParam);
             }
+
+            // TODO! Perhaps send the message here too
+
             this.lastServerPollSuccessful = false;
             return false;
         }
@@ -389,8 +398,7 @@ export class RustPlusInstance {
         log.info(`${fName}`, logParam);
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
-        const pairingDataMap = gInstance.pairingDataMap[this.serverId];
-        for (const [steamId, pairingData] of Object.entries(pairingDataMap)) {
+        for (const [steamId, pairingData] of Object.entries(gInstance.pairingDataMap[this.serverId])) {
             const rpInfo = await this.rustPlus.getInfoAsync(pairingData.steamId, pairingData.playerToken);
             if (rp.isValidAppResponse(rpInfo, log)) {
                 if (!rp.isValidAppInfo(rpInfo.info, log)) {
