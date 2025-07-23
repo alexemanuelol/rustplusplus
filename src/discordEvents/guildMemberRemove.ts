@@ -23,8 +23,11 @@ import * as discordjs from 'discord.js';
 import {
     credentialsManager as cm,
     fcmListenerManager as flm,
-    guildInstanceManager as gim
+    guildInstanceManager as gim,
+    rustPlusManager as rpm
 } from '../../index';
+import * as discordMessages from '../discordUtils/discordMessages';
+import { ConnectionStatus } from '../managers/rustPlusManager';
 import { DiscordManager } from '../managers/discordManager';
 import { Credentials } from '../managers/credentialsManager';
 import * as types from '../utils/types';
@@ -68,13 +71,19 @@ export async function execute(dm: DiscordManager, member: discordjs.GuildMember)
     }
 
     /* If the member was a requester for any server, clear it */
-    for (const serverInfo of Object.values(gInstance.serverInfoMap)) {
+    for (const [serverId, serverInfo] of Object.entries(gInstance.serverInfoMap)) {
         if (serverInfo.requesterSteamId === null) continue;
 
         if (associatedSteamIds.includes(serverInfo.requesterSteamId)) {
             serverInfo.requesterSteamId = null;
-            // TODO! Turn off rustplus instance if no requesterSteamId is set.
-            // Update server embed because requesterSteamId is removed.
+
+            let connectionStatus = ConnectionStatus.Disconnected;
+            const rpInstance = rpm.getInstance(member.guild.id, serverId);
+            if (rpInstance) {
+                connectionStatus = rpInstance.connectionStatus;
+            }
+
+            await discordMessages.sendServerMessage(dm, member.guild.id, serverId, connectionStatus);
         }
     }
 
