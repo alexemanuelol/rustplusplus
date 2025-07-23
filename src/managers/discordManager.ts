@@ -562,6 +562,7 @@ export class DiscordManager {
         if (adminRequired) return false;
 
         const gInstance = gim.getGuildInstance(interaction.guild.id) as GuildInstance;
+        if (gInstance.blacklist.userIds.includes(member.id)) return false;
         if (gInstance.roleIds.length === 0) return true;
 
         return member.roles.cache.some(role => gInstance.roleIds.includes(role.id));
