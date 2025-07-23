@@ -20,20 +20,19 @@
 
 import * as discordjs from 'discord.js';
 
-import {
-    guildInstanceManager as gim,
-    log
-} from '../../index';
+import { log, guildInstanceManager as gim } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 
 export const name = 'guildCreate';
 export const once = false;
 
 export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
-    const fName = `[discordEvent: ${name}]`;
-    const logParam = { guildId: guild.id };
+    const fn = `[discordEvent: ${name}]`;
+    const logParam = {
+        guildId: guild.id
+    };
 
-    log.info(`${fName} Client joined guild.`, logParam);
+    log.info(`${fn} Client joined guild.`, logParam);
 
     if (gim.getGuildInstance(guild.id) === null) {
         gim.addNewGuildInstance(guild.id);

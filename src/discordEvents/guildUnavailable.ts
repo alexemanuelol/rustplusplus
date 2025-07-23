@@ -27,8 +27,10 @@ export const name = 'guildUnavailable';
 export const once = false;
 
 export async function execute(dm: DiscordManager, guild: discordjs.Guild) {
-    const fName = `[discordEvent: ${name}]`;
-    const logParam = { guildId: guild.id };
+    const fn = `[discordEvent: ${name}]`;
+    const logParam = {
+        guildId: guild.id
+    };
 
-    log.warn(`${fName} '${guild.name}' is now unavailable.`, logParam);
+    log.warn(`${fn} '${guild.name}' is now unavailable.`, logParam);
 }

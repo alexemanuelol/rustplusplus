@@ -173,8 +173,7 @@ export function getServerButtons(guildId: types.GuildId, serverId: types.ServerI
         customId: `${connectionMap[connectionStatus][0] as string}${identifier}`,
         label: lm.getIntl(language, connectionMap[connectionStatus][1] as string),
         style: connectionMap[connectionStatus][2] as discordjs.ButtonStyle.Danger | discordjs.ButtonStyle.Primary,
-        type: discordjs.ComponentType.Button,
-        disabled: gim.isPairingDataValid(gInstance, serverInfo) ? false : true
+        type: discordjs.ComponentType.Button
     });
 
     const isServerView = gInstance.serverToView === serverId;

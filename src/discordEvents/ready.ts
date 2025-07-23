@@ -21,11 +21,7 @@
 import * as path from 'path';
 
 import {
-    guildInstanceManager as gim,
-    config,
-    log,
-    credentialsManager as cm,
-    fcmListenerManager as flm,
+    log, config, guildInstanceManager as gim, credentialsManager as cm, fcmListenerManager as flm,
     rustPlusManager as rpm
 } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
@@ -37,9 +33,9 @@ export const name = 'ready';
 export const once = true;
 
 export async function execute(dm: DiscordManager) {
-    const fName = `[discordEvent: ${name}]`;
+    const fn = `[discordEvent: ${name}]`;
 
-    log.info(`${fName} Logged in as '${dm.client.user?.tag ?? 'Unknown User'}'.`);
+    log.info(`${fn} Logged in as '${dm.client.user?.tag ?? 'Unknown User'}'.`);
 
     const activeGuildIds = await dm.getGuildIds();
 
@@ -115,7 +111,7 @@ export async function execute(dm: DiscordManager) {
         }
     }
     catch {
-        log.warn(`${fName} Could not set username '${config.discord.username}'.`);
+        log.warn(`${fn} Could not set username '${config.discord.username}'.`);
     }
 
     try {
@@ -124,7 +120,7 @@ export async function execute(dm: DiscordManager) {
         }
     }
     catch {
-        log.warn(`${fName} Could not set avatar.`);
+        log.warn(`${fn} Could not set avatar.`);
     }
 
     await dm.registerGlobalSlashCommands();
@@ -135,16 +131,11 @@ export async function execute(dm: DiscordManager) {
         const gInstance = gim.getGuildInstance(guild.id) as GuildInstance;
         for (const [serverId, serverInfo] of Object.entries(gInstance.serverInfoMap)) {
             if (serverInfo.active) {
-                if (gim.isPairingDataValid(gInstance, serverInfo)) {
-                    if (rpm.addInstance(guild.id, serverId)) {
-                        const rpInstance = rpm.getInstance(guild.id, serverId);
-                        if (rpInstance) {
-                            await rpInstance.startup();
-                        }
+                if (rpm.addInstance(guild.id, serverId)) {
+                    const rpInstance = rpm.getInstance(guild.id, serverId);
+                    if (rpInstance) {
+                        await rpInstance.startup();
                     }
-                }
-                else {
-                    // TODO! Update server embed and disable connect/disconnect button till requesterSteamId is valid
                 }
             }
         }

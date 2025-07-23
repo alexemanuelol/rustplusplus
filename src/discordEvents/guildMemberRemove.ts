@@ -21,9 +21,7 @@
 import * as discordjs from 'discord.js';
 
 import {
-    credentialsManager as cm,
-    fcmListenerManager as flm,
-    guildInstanceManager as gim,
+    log, credentialsManager as cm, fcmListenerManager as flm, guildInstanceManager as gim,
     rustPlusManager as rpm
 } from '../../index';
 import * as discordMessages from '../discordUtils/discordMessages';
@@ -37,6 +35,13 @@ export const name = 'guildMemberRemove';
 export const once = false;
 
 export async function execute(dm: DiscordManager, member: discordjs.GuildMember) {
+    const fn = `[discordEvent: ${name}]`;
+    const logParam = {
+        guildId: member.guild.id
+    };
+
+    log.info(`${fn} Member '${member.displayName}' left guild.`, logParam);
+
     const associatedSteamIds: types.SteamId[] = [];
 
     /* Check if credentials have no associated guilds */

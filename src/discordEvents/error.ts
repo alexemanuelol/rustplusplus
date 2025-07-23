@@ -25,12 +25,12 @@ export const name = 'error';
 export const once = false;
 
 export function execute(dm: DiscordManager, error: Error) {
-    const fName = `[discordEvent: ${name}]`;
+    const fn = `[discordEvent: ${name}]`;
 
     const errorString = formatError(error);
     const errorLineArray = errorString.split('\n');
     for (const line of errorLineArray) {
-        log.error(`${fName} ${line}`);
+        log.error(`${fn} ${line}`);
     }
 }
 

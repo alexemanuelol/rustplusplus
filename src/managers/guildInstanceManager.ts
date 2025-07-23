@@ -698,16 +698,6 @@ export class GuildInstanceManager {
         return Object.keys(this.guildInstanceMap);
     }
 
-    public isPairingDataValid(gInstance: GuildInstance, serverInfo: ServerInfo): boolean {
-        if (serverInfo.requesterSteamId === null) return false;
-
-        const serverId = getServerId(serverInfo.ip, serverInfo.port);
-        if (!(gInstance.pairingDataMap[serverId]?.[serverInfo.requesterSteamId])) return false;
-        if (!gInstance.pairingDataMap[serverId][serverInfo.requesterSteamId].valid) return false;
-
-        return true;
-    }
-
     /* Temporary function till discord modals gets more functional */
     public getSmartDeviceServerId(guildId: types.GuildId, type: rp.AppEntityType, entityId: types.EntityId):
         types.ServerId | null {

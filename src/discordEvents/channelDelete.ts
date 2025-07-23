@@ -20,10 +20,7 @@
 
 import * as discordjs from 'discord.js';
 
-import {
-    guildInstanceManager as gim,
-    log
-} from '../../index';
+import { log, guildInstanceManager as gim } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import { GuildInstance } from '../managers/guildInstanceManager';
 
@@ -32,18 +29,21 @@ export const once = false;
 
 export async function execute(dm: DiscordManager, channel: discordjs.DMChannel | discordjs.GuildChannel) {
     if (channel.isDMBased()) return;
-    const fName = `[discordEvent: ${name}]`;
-    const logParam = { guildId: channel.guild.id };
+
+    const fn = `[discordEvent: ${name}]`;
+    const logParam = {
+        guildId: channel.guild.id
+    };
 
     const gInstance = gim.getGuildInstance(channel.guild.id) as GuildInstance;
 
     let changed = false;
-    const channelIds = gInstance.guildChannelIds;
-    for (const [channelName, channelId] of Object.entries(channelIds)) {
+    for (const [channelName, channelId] of Object.entries(gInstance.guildChannelIds)) {
         if (channelId === channel.id) {
-            channelIds[channelName as keyof typeof channelIds] = null;
-            log.warn(`${fName} '${channelName}' (${channelId}) was deleted.`, logParam);
+            gInstance.guildChannelIds[channelName as keyof typeof gInstance.guildChannelIds] = null;
+            log.warn(`${fn} '${channelName}' (${channelId}) was deleted.`, logParam);
             changed = true;
+
             // TODO! Send a direct message to the person removing the channel saying how to restore.
         }
     }

@@ -48,8 +48,7 @@ async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message
     const guildId = message.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
-    if (message.channelId === gInstance.guildChannelIds.commands &&
-        message.cleanContent.startsWith('.voice ')) {
+    if (message.channelId === gInstance.guildChannelIds.commands && message.cleanContent.startsWith('.voice ')) {
         const text = message.cleanContent.replace(/^\.voice\s*/, '');
         await sendDiscordVoiceMessage(guildId, text);
     }

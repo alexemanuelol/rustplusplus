@@ -18,19 +18,16 @@
 
 */
 
-import {
-    config,
-    log
-} from '../../index';
+import { config, log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 
 export const name = 'debug';
 export const once = false;
 
 export async function execute(dm: DiscordManager, info: string) {
-    const fName = `[discordEvent: ${name}]`;
+    const fn = `[discordEvent: ${name}]`;
 
     if (config.general.debug) {
-        log.debug(`${fName} ${info}`);
+        log.debug(`${fn} ${info}`);
     }
 }

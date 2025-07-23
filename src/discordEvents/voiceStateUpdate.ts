@@ -21,6 +21,7 @@
 import * as discordjs from 'discord.js';
 import { getVoiceConnection } from '@discordjs/voice';
 
+import { log } from '../../index';
 import { DiscordManager } from '../managers/discordManager';
 import * as constants from '../utils/constants';
 import * as types from '../utils/types';
@@ -29,6 +30,11 @@ export const name = 'voiceStateUpdate';
 export const once = false;
 
 export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState, newState: discordjs.VoiceState) {
+    const fn = `[discordEvent: ${name}]`;
+    const logParam = {
+        guildId: oldState.guild.id
+    };
+
     const guildId = oldState.guild.id;
     const connection = getVoiceConnection(guildId);
 
@@ -57,6 +63,9 @@ export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState
     const targetChannel = leftBotChannel ? oldState.channel : (botMoved ? newState.channel : null);
 
     if (targetChannel && targetChannel.members.size === 1) {
+        log.info(`${fn} Started voice leave timer, leaves in ` +
+            `${constants.BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS} milliseconds.`, logParam);
+
         dm.voiceLeaveTimeouts[guildId] = setTimeout(botLeaveVoiceTimeout.bind(null, guildId),
             constants.BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS);
     }
