@@ -24,14 +24,14 @@ import { RustPlusInstance } from "../managers/rustPlusManager";
 export const name = 'disconnected';
 
 export async function execute(rpInstance: RustPlusInstance) {
-    const fName = `[rustPlusEvent: ${name}]`;
+    const fn = `[rustPlusEvent: ${name}]`;
     const logParam = {
         guildId: rpInstance.guildId,
         serverId: rpInstance.serverId,
         serverName: rpInstance.serverName
     };
 
-    log.info(`${fName} DISCONNECTED.`, logParam);
+    log.info(`${fn} DISCONNECTED.`, logParam);
 
     rpInstance.stopServerPollingHandler();
 

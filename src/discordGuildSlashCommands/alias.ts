@@ -59,8 +59,10 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const fName = '[SlashCommand: alias]';
-		const logParam = { guildId: interaction.guildId };
+		const fn = '[SlashCommand: alias]';
+		const logParam = {
+			guildId: interaction.guildId
+		};
 
 		const id = `Interaction ID: ${interaction.id} -`
 		await interaction.deferReply({ flags: discordjs.MessageFlags.Ephemeral });
@@ -68,7 +70,7 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fn} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
@@ -92,7 +94,7 @@ export default {
 				}
 				await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleInvalidSubcommand',
 					'errorDescInvalidSubcommand', parameters);
-				log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
+				log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
 				result = false;
 			} break;
@@ -103,9 +105,12 @@ export default {
 };
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: alias: add]';
+	const fn = '[SlashCommand: alias: add]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 	const id = `Interaction ID: ${interaction.id} -`
 
@@ -115,7 +120,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
@@ -128,7 +133,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleAliasAlreadyExist',
 				'errorDescAliasAlreadyExist', parameters);
-			log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescAliasAlreadyExist', parameters)}`,
+			log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescAliasAlreadyExist', parameters)}`,
 				logParam);
 			return false;
 		}
@@ -144,16 +149,19 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleAliasAdd',
 		'slashCommandSuccessDescAliasAdd', parameters);
-	log.info(`${fName} ${id} ${lm.getIntl(config.general.language,
+	log.info(`${fn} ${id} ${lm.getIntl(config.general.language,
 		'slashCommandSuccessDescAliasAdd', parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: alias: remove]';
+	const fn = '[SlashCommand: alias: remove]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 	const id = `Interaction ID: ${interaction.id} -`
 
@@ -162,7 +170,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
@@ -173,7 +181,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleAliasNotFound',
 			'errorDescAliasNotFound', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescAliasNotFound', parameters)}`,
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescAliasNotFound', parameters)}`,
 			logParam);
 		return false;
 	}
@@ -187,27 +195,30 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleAliasRemove',
 		'slashCommandSuccessDescAliasRemove', parameters);
-	log.info(`${fName} ${id} ${lm.getIntl(config.general.language,
+	log.info(`${fn} ${id} ${lm.getIntl(config.general.language,
 		'slashCommandSuccessDescAliasRemove', parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: alias: list]';
+	const fn = '[SlashCommand: alias: list]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const id = `Interaction ID: ${interaction.id} -`
 
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
 	await discordMessages.sendAliasListMessage(dm, interaction);
-	log.info(`${fName} ${id} Successfully listing aliases.`, logParam);
+	log.info(`${fn} ${id} Successfully listing aliases.`, logParam);
 
 	return true;
 }

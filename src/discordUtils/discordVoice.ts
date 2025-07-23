@@ -18,14 +18,14 @@
 
 */
 
-import { getVoiceConnection, createAudioPlayer, createAudioResource } from "@discordjs/voice";
-import { Readable } from "stream";
+import { getVoiceConnection, createAudioPlayer, createAudioResource } from '@discordjs/voice';
+import { Readable } from 'stream';
 import * as fs from 'fs';
 import * as path from 'path';
 
 import { guildInstanceManager as gim, log } from '../../index';
 import * as types from '../utils/types';
-import { GuildInstance } from "../managers/guildInstanceManager";
+import { GuildInstance } from '../managers/guildInstanceManager';
 
 interface Actors {
     [language: string]: ActorNames;
@@ -37,8 +37,10 @@ interface ActorNames {
 }
 
 export async function sendDiscordVoiceMessage(guildId: types.GuildId, text: string) {
-    const fName = `[sendDiscordVoiceMessage]`;
-    const logParam = { guildId: guildId };
+    const fn = `[sendDiscordVoiceMessage]`;
+    const logParam = {
+        guildId: guildId
+    };
 
     const connection = getVoiceConnection(guildId);
     const voice = getVoice(guildId);
@@ -52,7 +54,7 @@ export async function sendDiscordVoiceMessage(guildId: types.GuildId, text: stri
         connection.subscribe(player);
         player.play(resource);
 
-        log.debug(`${fName} Playing message '${text}' in voice '${voice}'.`, logParam)
+        log.debug(`${fn} Playing message '${text}' in voice '${voice}'.`, logParam)
     }
 }
 

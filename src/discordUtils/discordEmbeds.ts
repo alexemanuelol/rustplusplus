@@ -23,7 +23,6 @@ import * as discordjs from 'discord.js';
 import { localeManager as lm, guildInstanceManager as gim, config, credentialsManager as cm } from '../../index';
 import {
     GuildInstance, ServerInfo, SmartSwitchConfig, SmartAlarmConfig, StorageMonitorConfig, StorageMonitorConfigType
-
 } from '../managers/guildInstanceManager';
 import { CctvCodes } from '../utils/cctvCodes';
 import * as constants from '../utils/constants';
@@ -104,14 +103,14 @@ export function getEmbed(options: discordjs.EmbedData): discordjs.EmbedBuilder {
 }
 
 export function getEmbedColumnFields(options: discordjs.EmbedData, columns: ColumnData[]): discordjs.EmbedBuilder {
-    const fName = '[getEmbedColumnFields]';
+    const fn = '[getEmbedColumnFields]';
     if (!columns || columns.length === 0 || columns.length > 3) {
-        throw new Error(`${fName} Must provide between 1 and 3 columns.`);
+        throw new Error(`${fn} Must provide between 1 and 3 columns.`);
     }
 
     const expectedColumnDataLength = columns[0]?.data.length;
     if (!columns.every(col => col.data.length === expectedColumnDataLength)) {
-        throw new Error(`${fName} All columns must have the same number of data items.`);
+        throw new Error(`${fn} All columns must have the same number of data items.`);
     }
 
     const embed = getEmbed(options);

@@ -88,8 +88,10 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const fName = '[SlashCommand: cctvcodes]';
-		const logParam = { guildId: interaction.guildId };
+		const fn = '[SlashCommand: cctvcodes]';
+		const logParam = {
+			guildId: interaction.guildId
+		};
 
 		const id = `Interaction ID: ${interaction.id} -`
 		await interaction.deferReply({ flags: discordjs.MessageFlags.Ephemeral });
@@ -97,7 +99,7 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fn} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
@@ -106,7 +108,7 @@ export default {
 		if (!dm.validPermissions(interaction)) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 				'errorDescMissingPermission');
-			log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+			log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 			return false;
 		}
 

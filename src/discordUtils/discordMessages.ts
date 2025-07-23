@@ -39,12 +39,12 @@ import { Credentials } from '../managers/credentialsManager';
  */
 
 export async function sendCredentialsExpiredMessage(dm: DiscordManager, steamId: types.SteamId) {
-    const fName = `[sendCredentialsExpiredMessage: ${steamId}]`;
+    const fn = `[sendCredentialsExpiredMessage: ${steamId}]`;
     const credentials = cm.getCredentials(steamId) as Credentials;
 
     const user = await dm.getUser(credentials.discordUserId);
     if (!user) {
-        log.warn(`${fName} Could not find user '${credentials.discordUserId}'.`);
+        log.warn(`${fn} Could not find user '${credentials.discordUserId}'.`);
         return;
     }
 
@@ -60,12 +60,12 @@ export async function sendCredentialsExpiredMessage(dm: DiscordManager, steamId:
 
 export async function sendFcmPlayerDeathMessage(dm: DiscordManager, steamId: types.SteamId, title: string,
     body: PlayerDeathBody) {
-    const fName = `[sendFcmPlayerDeathMessage: ${steamId}]`;
+    const fn = `[sendFcmPlayerDeathMessage: ${steamId}]`;
     const credentials = cm.getCredentials(steamId) as Credentials;
 
     const user = await dm.getUser(credentials.discordUserId);
     if (!user) {
-        log.warn(`${fName} Could not find user '${credentials.discordUserId}'.`);
+        log.warn(`${fn} Could not find user '${credentials.discordUserId}'.`);
         return;
     }
 
@@ -180,13 +180,17 @@ export async function sendCctvcodesMessage(dm: DiscordManager, interaction: disc
 
 export async function sendServerMessage(dm: DiscordManager, guildId: types.GuildId, serverId: types.ServerId,
     connectionStatus: ConnectionStatus, interaction: discordjs.Interaction | null = null) {
-    const fName = `[sendServerMessage]`;
-    const logParam = { guildId: guildId, serverId: serverId };
+    const fn = `[sendServerMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
-        log.warn(`${fName} Could not find ServerInfo.`, logParam);
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
         return;
     }
 
@@ -211,19 +215,23 @@ export async function sendServerMessage(dm: DiscordManager, guildId: types.Guild
 // to RED, otherwise default color
 export async function sendSmartSwitchMessage(dm: DiscordManager, guildId: types.GuildId, serverId: types.ServerId,
     entityId: types.EntityId, interaction: discordjs.Interaction | null = null) {
-    const fName = `[sendSmartSwitchMessage]`;
-    const logParam = { guildId: guildId, serverId: serverId };
+    const fn = `[sendSmartSwitchMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
-        log.warn(`${fName} Could not find ServerInfo.`, logParam);
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
         return;
     }
 
     const smartSwitchConfig = serverInfo.smartSwitchConfigMap[entityId];
     if (!smartSwitchConfig) {
-        log.warn(`${fName} Could not find SmartSwitchConfig '${entityId}'.`, logParam);
+        log.warn(`${fn} Could not find SmartSwitchConfig '${entityId}'.`, logParam);
         return;
     }
 
@@ -254,19 +262,23 @@ export async function sendSmartSwitchMessage(dm: DiscordManager, guildId: types.
 
 export async function sendSmartAlarmMessage(dm: DiscordManager, guildId: types.GuildId, serverId: types.ServerId,
     entityId: types.EntityId, interaction: discordjs.Interaction | null = null) {
-    const fName = `[sendSmartAlarmMessage]`;
-    const logParam = { guildId: guildId, serverId: serverId };
+    const fn = `[sendSmartAlarmMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
-        log.warn(`${fName} Could not find ServerInfo.`, logParam);
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
         return;
     }
 
     const smartAlarmConfig = serverInfo.smartAlarmConfigMap[entityId];
     if (!smartAlarmConfig) {
-        log.warn(`${fName} Could not find SmartAlarmConfig '${entityId}'.`, logParam);
+        log.warn(`${fn} Could not find SmartAlarmConfig '${entityId}'.`, logParam);
         return;
     }
 
@@ -296,19 +308,23 @@ export async function sendSmartAlarmMessage(dm: DiscordManager, guildId: types.G
 
 export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: types.GuildId, serverId: types.ServerId,
     entityId: types.EntityId, interaction: discordjs.Interaction | null = null) {
-    const fName = `[sendStorageMonitorMessage]`;
-    const logParam = { guildId: guildId, serverId: serverId };
+    const fn = `[sendStorageMonitorMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
-        log.warn(`${fName} Could not find ServerInfo.`, logParam);
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
         return;
     }
 
     const storageMonitorConfig = serverInfo.storageMonitorConfigMap[entityId];
     if (!storageMonitorConfig) {
-        log.warn(`${fName} Could not find StorageMonitorConfig '${entityId}'.`, logParam);
+        log.warn(`${fn} Could not find StorageMonitorConfig '${entityId}'.`, logParam);
         return;
     }
 
@@ -340,13 +356,17 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
 
 export async function sendFcmAlarmTriggerMessage(dm: DiscordManager, guildId: types.GuildId, serverId: types.ServerId,
     title: string, message: string) {
-    const fName = `[sendFcmAlarmTriggerMessage]`;
-    const logParam = { guildId: guildId, serverId: serverId };
+    const fn = `[sendFcmAlarmTriggerMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
-        log.warn(`${fName} Could not find ServerInfo.`, logParam);
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
         return;
     }
 
@@ -360,13 +380,17 @@ export async function sendFcmAlarmTriggerMessage(dm: DiscordManager, guildId: ty
 
 export async function sendFcmAlarmPluginTriggerMessage(dm: DiscordManager, guildId: types.GuildId,
     serverId: types.ServerId, title: string, message: string) {
-    const fName = `[sendFcmAlarmPluginTriggerMessage]`;
-    const logParam = { guildId: guildId, serverId: serverId };
+    const fn = `[sendFcmAlarmPluginTriggerMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
-        log.warn(`${fName} Could not find ServerInfo.`, logParam);
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
         return;
     }
 
@@ -380,13 +404,17 @@ export async function sendFcmAlarmPluginTriggerMessage(dm: DiscordManager, guild
 
 export async function sendFcmTeamLoginMessage(dm: DiscordManager, guildId: types.GuildId,
     serverId: types.ServerId, body: TeamLoginBody) {
-    const fName = `[sendFcmTeamLoginMessage]`;
-    const logParam = { guildId: guildId, serverId: serverId };
+    const fn = `[sendFcmTeamLoginMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const serverInfo = gInstance.serverInfoMap[serverId];
     if (!serverInfo) {
-        log.warn(`${fName} Could not find ServerInfo.`, logParam);
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
         return;
     }
 

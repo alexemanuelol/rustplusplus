@@ -20,20 +20,13 @@
 
 import * as discordjs from 'discord.js';
 
-import {
-    guildInstanceManager as gim,
-    localeManager as lm
-} from '../../index';
+import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { ConnectionStatus } from '../managers/rustPlusManager';
 import * as types from '../utils/types';
 import * as constants from '../utils/constants';
 import * as utils from '../utils/utils';
 import {
-    EventNotificationSettings,
-    GuildInstance,
-    ServerInfo,
-    SmartAlarmConfig,
-    StorageMonitorConfig,
+    EventNotificationSettings, GuildInstance, ServerInfo, SmartAlarmConfig, StorageMonitorConfig,
     StorageMonitorConfigType
 } from '../managers/guildInstanceManager';
 import { NewsNewsBody, isValidUrl } from '../managers/fcmListenerManager';
@@ -57,13 +50,13 @@ export enum ButtonConnectionTypes {
  */
 
 export function getButton(options: discordjs.ButtonComponentData): discordjs.ButtonBuilder {
-    const fName = `[getButton]`;
+    const fn = `[getButton]`;
     const button = new discordjs.ButtonBuilder();
 
     if (options.style) button.setStyle(options.style);
     if ('customId' in options && options.customId) {
         if (options.customId.length > ButtonLimits.CustomId) {
-            throw new Error(`${fName} CustomId exceed limit ${ButtonLimits.CustomId}, actual: ` +
+            throw new Error(`${fn} CustomId exceed limit ${ButtonLimits.CustomId}, actual: ` +
                 `${options.customId.length}. CustomId: '${options.customId}'`);
         }
         button.setCustomId(options.customId);

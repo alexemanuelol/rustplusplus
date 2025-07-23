@@ -43,8 +43,10 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const fName = '[SlashCommand: voice]';
-		const logParam = { guildId: interaction.guildId };
+		const fn = '[SlashCommand: voice]';
+		const logParam = {
+			guildId: interaction.guildId
+		};
 
 		const id = `Interaction ID: ${interaction.id} -`
 		await interaction.deferReply({ flags: discordjs.MessageFlags.Ephemeral });
@@ -52,7 +54,7 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fn} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
@@ -72,7 +74,7 @@ export default {
 				}
 				await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleInvalidSubcommand',
 					'errorDescInvalidSubcommand', parameters);
-				log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
+				log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
 				result = false;
 			} break;
@@ -83,15 +85,18 @@ export default {
 };
 
 async function executeJoin(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: voice: join]';
+	const fn = '[SlashCommand: voice: join]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const id = `Interaction ID: ${interaction.id} -`
 
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
@@ -101,7 +106,7 @@ async function executeJoin(dm: DiscordManager, interaction: discordjs.ChatInputC
 		if (!voiceChannel.isVoiceBased()) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleNotInVoiceChannel',
 				'errorDescNotInVoiceChannel');
-			log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescNotInVoiceChannel')}`, logParam);
+			log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescNotInVoiceChannel')}`, logParam);
 			return false;
 		}
 
@@ -113,13 +118,13 @@ async function executeJoin(dm: DiscordManager, interaction: discordjs.ChatInputC
 
 		await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleVoiceJoin',
 			'slashCommandSuccessDescVoiceJoin', { channel: voiceChannel.name });
-		log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescVoiceJoin',
+		log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescVoiceJoin',
 			{ channel: voiceChannel.name })}`, logParam);
 	}
 	else {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleNotInVoiceChannel',
 			'errorDescNotInVoiceChannel');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescNotInVoiceChannel')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescNotInVoiceChannel')}`, logParam);
 		return false;
 	}
 
@@ -127,15 +132,18 @@ async function executeJoin(dm: DiscordManager, interaction: discordjs.ChatInputC
 }
 
 async function executeLeave(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: voice: leave]';
+	const fn = '[SlashCommand: voice: leave]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const id = `Interaction ID: ${interaction.id} -`
 
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
@@ -145,13 +153,13 @@ async function executeLeave(dm: DiscordManager, interaction: discordjs.ChatInput
 
 		await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleVoiceLeave',
 			'slashCommandSuccessDescVoiceLeave');
-		log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescVoiceLeave')}`,
+		log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescVoiceLeave')}`,
 			logParam);
 	}
 	else {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleVoiceNotConnected',
 			'errorDescVoiceNotConnected');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescVoiceNotConnected')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescVoiceNotConnected')}`, logParam);
 		return false;
 	}
 

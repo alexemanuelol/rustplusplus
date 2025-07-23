@@ -25,8 +25,10 @@ import { DiscordManager } from "../managers/discordManager";
 
 export async function slashCommandHandler(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction):
     Promise<boolean> {
-    const fName = '[slashCommandHandler]';
-    const logParam = { guildId: interaction.guildId };
+    const fn = '[slashCommandHandler]';
+    const logParam = {
+        guildId: interaction.guildId
+    };
 
     const commandName = interaction.commandName;
     const guildId = interaction.guildId;
@@ -37,7 +39,7 @@ export async function slashCommandHandler(dm: DiscordManager, interaction: disco
     }
 
     if (!command) {
-        log.error(`${fName} Command '${commandName}' not found.`, logParam);
+        log.error(`${fn} Command '${commandName}' not found.`, logParam);
         return false;
     }
 
@@ -45,7 +47,7 @@ export async function slashCommandHandler(dm: DiscordManager, interaction: disco
         return await command.execute(dm, interaction);
     }
     catch (error) {
-        log.error(`${fName} Error executing command '${commandName}', error: ${error}.`, logParam);
+        log.error(`${fn} Error executing command '${commandName}', error: ${error}.`, logParam);
         return false;
     }
 }

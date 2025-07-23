@@ -30,8 +30,10 @@ import { fetchSteamProfileName } from '../utils/steam';
 
 export async function autocompleteHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction):
     Promise<boolean> {
-    const fName = '[autocompleteHandler]';
-    const logParam = { guildId: interaction.guildId as types.GuildId };
+    const fn = '[autocompleteHandler]';
+    const logParam = {
+        guildId: interaction.guildId as types.GuildId
+    };
 
     const commandName = interaction.commandName;
 
@@ -57,7 +59,7 @@ export async function autocompleteHandler(dm: DiscordManager, interaction: disco
         await autocompleteStoragemonitorHandler(dm, interaction);
     }
     else {
-        log.error(`${fName} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
+        log.error(`${fn} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
         return false;
     }
 

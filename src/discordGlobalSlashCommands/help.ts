@@ -20,7 +20,9 @@
 
 import * as discordjs from 'discord.js';
 
+import { log } from '../../index';
 import * as discordMessages from '../discordUtils/discordMessages';
+import * as types from '../utils/types';
 import { DiscordManager } from '../managers/discordManager';
 import { Languages } from '../managers/LocaleManager';
 
@@ -35,9 +37,19 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
+		const fn = '[SlashCommand: help]';
+		const guildId = interaction.guildId as types.GuildId;
+		const logParam = {
+			guildId: guildId
+		};
+
+		const id = `Interaction ID: ${interaction.id} -`
+
 		await interaction.deferReply({ flags: discordjs.MessageFlags.Ephemeral });
 
 		await discordMessages.sendHelpMessage(dm, interaction);
+		log.info(`${fn} ${id} Successfully displaying help message.`, logParam);
+
 		return true;
 	}
 };

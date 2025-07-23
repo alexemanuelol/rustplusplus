@@ -25,14 +25,14 @@ import { sendServerMessage } from '../discordUtils/discordMessages';
 export const name = 'connected';
 
 export async function execute(rpInstance: RustPlusInstance) {
-    const fName = `[rustPlusEvent: ${name}]`;
+    const fn = `[rustPlusEvent: ${name}]`;
     const logParam = {
         guildId: rpInstance.guildId,
         serverId: rpInstance.serverId,
         serverName: rpInstance.serverName
     };
 
-    log.info(`${fName} CONNECTED.`, logParam);
+    log.info(`${fn} CONNECTED.`, logParam);
 
     rpInstance.stopReconnectionTimer();
 

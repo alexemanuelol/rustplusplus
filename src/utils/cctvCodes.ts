@@ -39,13 +39,13 @@ export class CctvCodes {
     }
 
     private loadAllCctvCodes() {
-        const fName = `[CctvCodes: loadAllCctvCodes]`;
-        log.debug(`${fName} Reading all cctv codes.`);
+        const fn = `[CctvCodes: loadAllCctvCodes]`;
+        log.debug(`${fn} Reading all cctv codes.`);
 
         const cctvCodesFileContent = fs.readFileSync(this.cctvCodesFilePath, 'utf8');
         const cctvCodesFileContentParsed = JSON.parse(cctvCodesFileContent);
 
-        log.debug(`${fName} Cctv codes file was successfully read.`);
+        log.debug(`${fn} Cctv codes file was successfully read.`);
         this.cctvCodes = cctvCodesFileContentParsed as CctvCodesMap;
     }
 

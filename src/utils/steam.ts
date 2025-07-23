@@ -29,20 +29,20 @@ const STEAM_PROFILE_PICTURE_REGEX = /<img src="(.*_full.jpg)(.*?(?="))/;
 const PROFILE_NAME_REGEX = /class="actual_persona_name">(.+?)<\/span>/gm;
 
 async function fetchUrl(url: string): Promise<AxiosResponse> {
-    const fName = `[fetchUrl: ${url}]`;
+    const fn = `[fetchUrl: ${url}]`;
 
     try {
         const response = await axios.get(url);
         return response;
     }
     catch (error) {
-        log.error(`${fName} Error fetching, Error: ${error}`);
+        log.error(`${fn} Error fetching, Error: ${error}`);
         throw error;
     }
 }
 
 export async function fetchSteamProfilePicture(steamId: types.SteamId): Promise<string | null> {
-    const fName = `[fetchSteamProfilePicture: ${steamId}]`;
+    const fn = `[fetchSteamProfilePicture: ${steamId}]`;
 
     const url = `${constants.STEAM_PROFILES_URL}${steamId}`;
 
@@ -50,12 +50,12 @@ export async function fetchSteamProfilePicture(steamId: types.SteamId): Promise<
         const response = await fetchUrl(url);
 
         if (response.status !== 200) {
-            log.error(`${fName} Failed to fetch steam profile picture. Status: ${response.status}`);
+            log.error(`${fn} Failed to fetch steam profile picture. Status: ${response.status}`);
             return null;
         }
 
         if (!response.data) {
-            log.error(`${fName} No data received from the fetched url.`);
+            log.error(`${fn} No data received from the fetched url.`);
             return null;
         }
 
@@ -63,13 +63,13 @@ export async function fetchSteamProfilePicture(steamId: types.SteamId): Promise<
         return match ? match[1] : null;
     }
     catch (error) {
-        log.error(`${fName} Error fetching steam profile picture. Error: ${error}`);
+        log.error(`${fn} Error fetching steam profile picture. Error: ${error}`);
         return null;
     }
 }
 
 export async function fetchSteamProfileName(steamId: types.SteamId): Promise<string | null> {
-    const fName = `[fetchSteamProfileName: ${steamId}]`;
+    const fn = `[fetchSteamProfileName: ${steamId}]`;
 
     const url = `${constants.STEAM_PROFILES_URL}${steamId}`;
 
@@ -77,12 +77,12 @@ export async function fetchSteamProfileName(steamId: types.SteamId): Promise<str
         const response = await fetchUrl(url);
 
         if (response.status !== 200) {
-            log.error(`${fName} Failed to fetch steam profile name. Status: ${response.status}`);
+            log.error(`${fn} Failed to fetch steam profile name. Status: ${response.status}`);
             return null;
         }
 
         if (!response.data) {
-            log.error(`${fName} No data received from the fetched url.`);
+            log.error(`${fn} No data received from the fetched url.`);
             return null;
         }
 
@@ -93,12 +93,12 @@ export async function fetchSteamProfileName(steamId: types.SteamId): Promise<str
             return decodeHtml(match[1]);
         }
         else {
-            log.error(`${fName} Could not find profile name in the response.`);
+            log.error(`${fn} Could not find profile name in the response.`);
             return null;
         }
     }
     catch (error) {
-        log.error(`${fName} Error fetching steam profile name. Error: ${error}`);
+        log.error(`${fn} Error fetching steam profile name. Error: ${error}`);
         return null;
     }
 }

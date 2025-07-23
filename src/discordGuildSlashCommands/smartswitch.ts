@@ -66,8 +66,10 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const fName = '[SlashCommand: smartswitch]';
-		const logParam = { guildId: interaction.guildId };
+		const fn = '[SlashCommand: smartswitch]';
+		const logParam = {
+			guildId: interaction.guildId
+		};
 
 		const id = `Interaction ID: ${interaction.id} -`
 		await interaction.deferReply({ flags: discordjs.MessageFlags.Ephemeral });
@@ -75,7 +77,7 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fn} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
@@ -91,7 +93,7 @@ export default {
 				}
 				await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleInvalidSubcommand',
 					'errorDescInvalidSubcommand', parameters);
-				log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
+				log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
 				result = false;
 			} break;
@@ -102,9 +104,12 @@ export default {
 };
 
 async function executeEdit(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: smartswitch: edit]';
+	const fn = '[SlashCommand: smartswitch: edit]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 	const id = `Interaction ID: ${interaction.id} -`
 
@@ -114,7 +119,7 @@ async function executeEdit(dm: DiscordManager, interaction: discordjs.ChatInputC
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
@@ -126,7 +131,7 @@ async function executeEdit(dm: DiscordManager, interaction: discordjs.ChatInputC
 
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleSmartswitchDoesNotExist',
 			'errorDescSmartswitchDoesNotExist', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescSmartswitchDoesNotExist',
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescSmartswitchDoesNotExist',
 			parameters)}`, logParam);
 		return false;
 	}
@@ -146,7 +151,7 @@ async function executeEdit(dm: DiscordManager, interaction: discordjs.ChatInputC
 
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleSmartswitchEdit',
 		'slashCommandSuccessDescSmartswitchEdit', parameters);
-	log.info(`${fName} ${id} ${lm.getIntl(config.general.language,
+	log.info(`${fn} ${id} ${lm.getIntl(config.general.language,
 		'slashCommandSuccessDescSmartswitchEdit', parameters)}`, logParam);
 
 	return true;

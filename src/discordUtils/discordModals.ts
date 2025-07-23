@@ -38,12 +38,12 @@ export const ModalLimits = {
  */
 
 export function getModal(options: discordjs.ModalComponentData): discordjs.ModalBuilder {
-    const fName = `[getModal]`;
+    const fn = `[getModal]`;
     const modal = new discordjs.ModalBuilder();
 
     if ('customId' in options && options.customId) {
         if (options.customId.length > ModalLimits.CustomId) {
-            throw new Error(`${fName} CustomId exceeds limit ${ModalLimits.CustomId}, actual: ` +
+            throw new Error(`${fn} CustomId exceeds limit ${ModalLimits.CustomId}, actual: ` +
                 `${options.customId.length}. CustomId: '${options.customId}'`);
         }
         modal.setCustomId(options.customId);

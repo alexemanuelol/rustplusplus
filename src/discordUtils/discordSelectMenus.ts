@@ -46,12 +46,12 @@ export const StringSelectMenuLimits = {
 
 export function getStringSelectMenu(options: discordjs.StringSelectMenuComponentData):
     discordjs.StringSelectMenuBuilder {
-    const fName = `[getStringSelectMenu]`;
+    const fn = `[getStringSelectMenu]`;
     const selectMenu = new discordjs.StringSelectMenuBuilder();
 
     if ('customId' in options && options.customId) {
         if (options.customId.length > StringSelectMenuLimits.CustomId) {
-            throw new Error(`${fName} CustomId exceed limit ${StringSelectMenuLimits.CustomId}, actual: ` +
+            throw new Error(`${fn} CustomId exceed limit ${StringSelectMenuLimits.CustomId}, actual: ` +
                 `${options.customId.length}. CustomId: '${options.customId}'`);
         }
         selectMenu.setCustomId(options.customId);

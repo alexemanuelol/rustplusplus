@@ -65,8 +65,10 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const fName = '[SlashCommand: blacklist]';
-		const logParam = { guildId: interaction.guildId };
+		const fn = '[SlashCommand: blacklist]';
+		const logParam = {
+			guildId: interaction.guildId
+		};
 
 		const id = `Interaction ID: ${interaction.id} -`
 		await interaction.deferReply({ flags: discordjs.MessageFlags.Ephemeral });
@@ -74,7 +76,7 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fn} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
@@ -98,8 +100,7 @@ export default {
 				}
 				await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleInvalidSubcommand',
 					'errorDescInvalidSubcommand', parameters);
-				log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
-					logParam);
+				log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`, logParam);
 				result = false;
 			} break;
 		}
@@ -109,9 +110,12 @@ export default {
 };
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: blacklist: add]';
+	const fn = '[SlashCommand: blacklist: add]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 	const language = gInstance.generalSettings.language;
 	const id = `Interaction ID: ${interaction.id} -`
@@ -122,14 +126,14 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	if (!dm.isAdministrator(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
 	if (discordUserOption === null && steamidOption === null) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleBlacklistMissingArguments',
 			'errorDescBlacklistMissingArguments');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistMissingArguments')}`,
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistMissingArguments')}`,
 			logParam);
 		return false;
 	}
@@ -152,7 +156,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleBlacklistUserAlreadyExist',
 			'errorDescBlacklistUserAlreadyExist', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistUserAlreadyExist',
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistUserAlreadyExist',
 			parameters)}`, logParam);
 		return false;
 	}
@@ -178,16 +182,19 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleBlacklistAdd',
 		'slashCommandSuccessDescBlacklistAdd', parameters);
-	log.info(`${fName} ${id} ${lm.getIntl(config.general.language,
+	log.info(`${fn} ${id} ${lm.getIntl(config.general.language,
 		'slashCommandSuccessDescBlacklistAdd', parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: blacklist: remove]';
+	const fn = '[SlashCommand: blacklist: remove]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 	const language = gInstance.generalSettings.language;
 	const id = `Interaction ID: ${interaction.id} -`
@@ -198,14 +205,14 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	if (!dm.isAdministrator(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
 	if (discordUserOption === null && steamidOption === null) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleBlacklistMissingArguments',
 			'errorDescBlacklistMissingArguments');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistMissingArguments')}`,
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistMissingArguments')}`,
 			logParam);
 		return false;
 	}
@@ -234,7 +241,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleBlacklistUserDoesNotExist',
 			'errorDescBlacklistUserDoesNotExist', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistUserDoesNotExist',
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescBlacklistUserDoesNotExist',
 			parameters)}`, logParam);
 		return false;
 	}
@@ -260,27 +267,30 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleBlacklistRemove',
 		'slashCommandSuccessDescBlacklistRemove', parameters);
-	log.info(`${fName} ${id} ${lm.getIntl(config.general.language,
+	log.info(`${fn} ${id} ${lm.getIntl(config.general.language,
 		'slashCommandSuccessDescBlacklistRemove', parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: blacklist: list]';
+	const fn = '[SlashCommand: blacklist: list]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
+
 	const id = `Interaction ID: ${interaction.id} -`
 
 	if (!dm.validPermissions(interaction)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 			'errorDescMissingPermission');
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`, logParam);
 		return false;
 	}
 
 	await discordMessages.sendBlacklistListMessage(dm, interaction);
-	log.info(`${fName} ${id} Successfully listing the blacklist.`, logParam);
+	log.info(`${fn} ${id} Successfully listing the blacklist.`, logParam);
 
 	return true;
 }

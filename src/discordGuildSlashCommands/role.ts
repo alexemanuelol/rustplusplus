@@ -70,8 +70,10 @@ export default {
 	},
 
 	async execute(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-		const fName = '[SlashCommand: role]';
-		const logParam = { guildId: interaction.guildId };
+		const fn = '[SlashCommand: role]';
+		const logParam = {
+			guildId: interaction.guildId
+		};
 
 		const id = `Interaction ID: ${interaction.id} -`
 		await interaction.deferReply({ flags: discordjs.MessageFlags.Ephemeral });
@@ -79,14 +81,14 @@ export default {
 		if (!interaction.guild) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 				'errorDescUnknownError');
-			log.warn(`${fName} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
+			log.warn(`${fn} ${id} Unknown Error: interaction.guild is not valid.`, logParam);
 			return false;
 		}
 
 		if (!dm.validPermissions(interaction, true)) {
 			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMissingPermission',
 				'errorDescMissingPermission');
-			log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
+			log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMissingPermission')}`,
 				logParam);
 			return false;
 		}
@@ -111,8 +113,7 @@ export default {
 				}
 				await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleInvalidSubcommand',
 					'errorDescInvalidSubcommand', parameters);
-				log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
-					logParam);
+				log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`, logParam);
 				result = false;
 			} break;
 		}
@@ -122,9 +123,11 @@ export default {
 };
 
 async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: role: add]';
+	const fn = '[SlashCommand: role: add]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
 
 	const id = `Interaction ID: ${interaction.id} -`
 	const type = interaction.options.getString('type', true) as 'roleIds' | 'adminIds';
@@ -134,7 +137,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${fName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
+		log.warn(`${fn} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
 		return false;
 	}
 
@@ -144,7 +147,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleDoesNotExist',
 			'errorDescRoleDoesNotExist', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
 			logParam);
 		return false;
 	}
@@ -155,7 +158,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleAlreadyConfigured',
 			'errorDescRoleAlreadyConfigured', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleAlreadyConfigured',
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleAlreadyConfigured',
 			parameters)}`, logParam);
 		return false;
 	}
@@ -171,16 +174,18 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	};
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleRoleAdd',
 		'slashCommandSuccessDescRoleAdd', parameters);
-	log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleAdd', parameters)}`,
+	log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleAdd', parameters)}`,
 		logParam);
 
 	return true;
 }
 
 async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: role: remove]';
+	const fn = '[SlashCommand: role: remove]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
 
 	const id = `Interaction ID: ${interaction.id} -`
 	const type = interaction.options.getString('type', true) as 'roleIds' | 'adminIds';
@@ -190,7 +195,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	if (!(type in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${fName} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
+		log.warn(`${fn} ${id} Unknown Error: GuildInstance does not have '${type}'.`, logParam);
 		return false;
 	}
 
@@ -200,7 +205,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleDoesNotExist',
 			'errorDescRoleDoesNotExist', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleDoesNotExist', parameters)}`,
 			logParam);
 		return false;
 	}
@@ -211,7 +216,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleRoleNotConfigured',
 			'errorDescRoleNotConfigured', parameters);
-		log.warn(`${fName} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleNotConfigured', parameters)}`,
+		log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescRoleNotConfigured', parameters)}`,
 			logParam);
 		return false;
 	}
@@ -227,16 +232,18 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	};
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleRoleRemove',
 		'slashCommandSuccessDescRoleRemove', parameters);
-	log.info(`${fName} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleRemove',
+	log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'slashCommandSuccessDescRoleRemove',
 		parameters)}`, logParam);
 
 	return true;
 }
 
 async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputCommandInteraction): Promise<boolean> {
-	const fName = '[SlashCommand: role: list]';
+	const fn = '[SlashCommand: role: list]';
 	const guildId = interaction.guildId as types.GuildId;
-	const logParam = { guildId: guildId };
+	const logParam = {
+		guildId: guildId
+	};
 
 	const id = `Interaction ID: ${interaction.id} -`
 
@@ -244,12 +251,12 @@ async function executeList(dm: DiscordManager, interaction: discordjs.ChatInputC
 	if (!('adminIds' in gInstance) || !('roleIds' in gInstance)) {
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleUnknownError',
 			'errorDescUnknownError');
-		log.warn(`${fName} ${id} Unknown Error: GuildInstance does not have adminIds or roleIds.`, logParam);
+		log.warn(`${fn} ${id} Unknown Error: GuildInstance does not have adminIds or roleIds.`, logParam);
 		return false;
 	}
 
 	await discordMessages.sendRoleListMessage(dm, interaction);
-	log.info(`${fName} ${id} Successfully listing all configured roles.`, logParam);
+	log.info(`${fn} ${id} Successfully listing all configured roles.`, logParam);
 
 	return true;
 }
