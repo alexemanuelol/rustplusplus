@@ -130,7 +130,7 @@ export class RustPlusInstance {
     public lastServerPollSuccessfulTimestampSeconds: types.Timestamp | null;
 
     public inGameTeamChatQueue: string[];
-    public inGameTeamChatTimeout: NodeJS.Timeout | undefined;
+    public inGameTeamChatTimeoutId: NodeJS.Timeout | undefined;
     public inGameTeamChatMessagesSentByBot: string[];
 
     private commandNames: string[];
@@ -162,7 +162,7 @@ export class RustPlusInstance {
         this.lastServerPollSuccessfulTimestampSeconds = null;
 
         this.inGameTeamChatQueue = [];
-        this.inGameTeamChatTimeout = undefined;
+        this.inGameTeamChatTimeoutId = undefined;
         this.inGameTeamChatMessagesSentByBot = [];
 
         this.commandNames = this.getCommandNames();
@@ -241,8 +241,8 @@ export class RustPlusInstance {
         this.stopServerPollingHandler();
 
         this.inGameTeamChatQueue = [];
-        clearTimeout(this.inGameTeamChatTimeout);
-        this.inGameTeamChatTimeout = undefined;
+        clearTimeout(this.inGameTeamChatTimeoutId);
+        this.inGameTeamChatTimeoutId = undefined;
         this.inGameTeamChatMessagesSentByBot = [];
 
         // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
@@ -396,8 +396,8 @@ export class RustPlusInstance {
             }
         }
 
-        if (this.inGameTeamChatTimeout === undefined) {
-            this.inGameTeamChatTimeout = setTimeout(this.inGameTeamChatMessageQueueHandler.bind(this),
+        if (this.inGameTeamChatTimeoutId === undefined) {
+            this.inGameTeamChatTimeoutId = setTimeout(this.inGameTeamChatMessageQueueHandler.bind(this),
                 inGameChatMessageDelayMs);
         }
     }
@@ -414,8 +414,8 @@ export class RustPlusInstance {
         const server = gInstance.serverInfoMap[this.serverId];
         const requesterSteamId = server.requesterSteamId;
 
-        clearTimeout(this.inGameTeamChatTimeout);
-        this.inGameTeamChatTimeout = undefined;
+        clearTimeout(this.inGameTeamChatTimeoutId);
+        this.inGameTeamChatTimeoutId = undefined;
 
         if (this.inGameTeamChatQueue.length === 0) return;
 
@@ -441,10 +441,10 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const inGameChatMessageDelayMs = gInstance.generalSettings.inGameChatMessageDelay * 1000;
 
-        clearTimeout(this.inGameTeamChatTimeout);
-        this.inGameTeamChatTimeout = undefined;
+        clearTimeout(this.inGameTeamChatTimeoutId);
+        this.inGameTeamChatTimeoutId = undefined;
         if (this.inGameTeamChatQueue.length !== 0) {
-            this.inGameTeamChatTimeout = setTimeout(this.inGameTeamChatMessageQueueHandler.bind(this),
+            this.inGameTeamChatTimeoutId = setTimeout(this.inGameTeamChatMessageQueueHandler.bind(this),
                 inGameChatMessageDelayMs);
         }
     }

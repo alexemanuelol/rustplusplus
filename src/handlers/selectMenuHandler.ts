@@ -61,13 +61,13 @@ async function languageSelectMenuHandler(dm: DiscordManager, interaction: discor
     const language = gInstance.generalSettings.language;
     const selectedLanguage = interaction.values[0] as Languages;
 
-    if (dm.languageChangeTimeout.includes(guildId)) {
+    if (dm.languageChangeTimeoutIds.includes(guildId)) {
         await dm.handleInteractionReply(interaction, {
             content: `**${lm.getIntl(language, 'pleaseTryAgainLater')}**`
         }, 'update');
 
-        if (dm.tryAgainLaterTimeout.has(guildId)) {
-            clearTimeout(dm.tryAgainLaterTimeout.get(guildId));
+        if (dm.tryAgainLaterTimeoutIds.has(guildId)) {
+            clearTimeout(dm.tryAgainLaterTimeoutIds.get(guildId));
         }
 
         const timeoutId = setTimeout(async () => {
@@ -80,7 +80,7 @@ async function languageSelectMenuHandler(dm: DiscordManager, interaction: discor
                 content: null
             }, 'edit');
         }, 10_000);
-        dm.tryAgainLaterTimeout.set(guildId, timeoutId);
+        dm.tryAgainLaterTimeoutIds.set(guildId, timeoutId);
 
         return true;
     }
@@ -90,9 +90,9 @@ async function languageSelectMenuHandler(dm: DiscordManager, interaction: discor
 
     await interaction.deferUpdate();
 
-    dm.languageChangeTimeout.push(guildId);
+    dm.languageChangeTimeoutIds.push(guildId);
     setTimeout(() => {
-        dm.languageChangeTimeout = dm.languageChangeTimeout.filter(id => id !== guildId);
+        dm.languageChangeTimeoutIds = dm.languageChangeTimeoutIds.filter(id => id !== guildId);
     }, 60_000);
 
     const guild = await dm.getGuild(guildId) as discordjs.Guild;

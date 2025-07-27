@@ -44,10 +44,10 @@ export class DiscordManager {
     public globalSlashCommands: discordjs.Collection<string, CommandData>;
     public guildSlashCommands: discordjs.Collection<string, CommandData>;
     public eventListeners: { name: string; listener: (...args: unknown[]) => void }[] = [];
-    public voiceLeaveTimeouts: Record<string, NodeJS.Timeout>;
+    public voiceLeaveTimeoutIds: Record<string, NodeJS.Timeout>;
 
-    public languageChangeTimeout: types.GuildId[] = [];
-    public tryAgainLaterTimeout: Map<string, NodeJS.Timeout> = new Map();
+    public languageChangeTimeoutIds: types.GuildId[] = [];
+    public tryAgainLaterTimeoutIds: Map<string, NodeJS.Timeout> = new Map();
 
     constructor() {
         const fn = '[DiscordManager: Init]';
@@ -76,7 +76,7 @@ export class DiscordManager {
         this.globalSlashCommands = new discordjs.Collection();
         this.guildSlashCommands = new discordjs.Collection();
         this.eventListeners = [];
-        this.voiceLeaveTimeouts = {};
+        this.voiceLeaveTimeoutIds = {};
 
         this.loadSlashCommands();
         this.loadEvents();

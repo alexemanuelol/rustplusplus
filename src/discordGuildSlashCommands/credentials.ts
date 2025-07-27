@@ -175,7 +175,7 @@ async function executeAdd(dm: DiscordManager, interaction: discordjs.ChatInputCo
 	}
 
 	cm.addCredentials(steamId, newCredentials);
-	cm.addExpireTimeout(steamId, dm);
+	cm.scheduleExpireTimeout(steamId, dm);
 	flm.startListener(steamId);
 
 	const guildNames: string[] = [];

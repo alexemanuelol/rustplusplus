@@ -45,9 +45,9 @@ export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState
     const memberId = oldState.member?.id;
     const isBot = memberId === dm.client.user?.id;
 
-    if (Object.hasOwn(dm.voiceLeaveTimeouts, guildId)) {
-        clearTimeout(dm.voiceLeaveTimeouts[guildId] as NodeJS.Timeout);
-        delete dm.voiceLeaveTimeouts[guildId];
+    if (Object.hasOwn(dm.voiceLeaveTimeoutIds, guildId)) {
+        clearTimeout(dm.voiceLeaveTimeoutIds[guildId] as NodeJS.Timeout);
+        delete dm.voiceLeaveTimeoutIds[guildId];
     }
 
     /* If nothing changed */
@@ -66,7 +66,7 @@ export async function execute(dm: DiscordManager, oldState: discordjs.VoiceState
         log.info(`${fn} Started voice leave timer, leaves in ` +
             `${constants.BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS} milliseconds.`, logParam);
 
-        dm.voiceLeaveTimeouts[guildId] = setTimeout(botLeaveVoiceTimeout.bind(null, guildId),
+        dm.voiceLeaveTimeoutIds[guildId] = setTimeout(botLeaveVoiceTimeout.bind(null, guildId),
             constants.BOT_LEAVE_VOICE_CHAT_TIMEOUT_MS);
     }
 }

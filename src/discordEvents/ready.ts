@@ -89,7 +89,7 @@ export async function execute(dm: DiscordManager) {
             continue;
         }
 
-        cm.addExpireTimeout(steamId, dm);
+        cm.scheduleExpireTimeout(steamId, dm);
     }
 
     /* Update requesterSteamId */

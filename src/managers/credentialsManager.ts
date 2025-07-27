@@ -68,7 +68,7 @@ export type DiscordUserIdToSteamIdsMap = {
 export class CredentialsManager {
     private credentialFilesPath: string;
     private credentialsMap: CredentialsMap;
-    private expirationTimeouts: Map<types.SteamId, NodeJS.Timeout>;
+    private expirationTimeoutIds: Map<types.SteamId, NodeJS.Timeout>;
 
     constructor(credentialFilesPath: string) {
         const fn = '[CredentialsManager: Init]';
@@ -76,7 +76,7 @@ export class CredentialsManager {
 
         this.credentialFilesPath = credentialFilesPath;
         this.credentialsMap = {};
-        this.expirationTimeouts = new Map();
+        this.expirationTimeoutIds = new Map();
 
         this.loadAllCredentials();
     }
@@ -212,7 +212,7 @@ export class CredentialsManager {
             this.updateCredentials(steamId);
         }
 
-        this.deleteExpireTimeout(steamId);
+        this.cancelExpireTimeout(steamId);
     }
 
     public getCredentialSteamIds(): types.SteamId[] {
@@ -275,7 +275,7 @@ export class CredentialsManager {
     }
 
     public deleteCredentials(steamId: types.SteamId): boolean {
-        this.deleteExpireTimeout(steamId);
+        this.cancelExpireTimeout(steamId);
 
         const result = this.deleteCredentialsFile(steamId);
         if (result) {
@@ -303,41 +303,41 @@ export class CredentialsManager {
         return true;
     }
 
-    public addExpireTimeout(steamId: types.SteamId, dm: DiscordManager) {
-        const fn = `[CredentialsManager: addExpireTimeout: ${steamId}]`;
+    public scheduleExpireTimeout(steamId: types.SteamId, dm: DiscordManager) {
+        const fn = `[CredentialsManager: scheduleExpireTimeout: ${steamId}]`;
 
-        if (this.expirationTimeouts.has(steamId)) {
+        if (this.expirationTimeoutIds.has(steamId)) {
             /* Ensure no duplicate timeouts exist. */
-            this.deleteExpireTimeout(steamId);
+            this.cancelExpireTimeout(steamId);
         }
 
         const credentials = this.getCredentials(steamId);
         if (credentials === null) return;
 
         const currentTimestamp = Math.floor(Date.now() / 1000);
-        const timeoutBuffer = 5000; /* 5 seconds buffer to ensure the timeout triggers after expiration. */
-        const timeout = ((credentials.expireDate - currentTimestamp) * 1000) + timeoutBuffer;
+        const timeoutBufferMs = 5000; /* 5 seconds buffer to ensure the timeout triggers after expiration. */
+        const timeoutMs = ((credentials.expireDate - currentTimestamp) * 1000) + timeoutBufferMs;
 
-        if (timeout <= 0) {
+        if (timeoutMs <= 0) {
             this.handleExpiredCredentials(steamId, dm);
             return;
         }
 
         const timeoutId = setTimeout(() => {
             this.handleExpiredCredentials(steamId, dm);
-        }, timeout);
+        }, timeoutMs);
 
-        this.expirationTimeouts.set(steamId, timeoutId);
-        log.info(`${fn} Expires in ${timeout / 1000} seconds.`);
+        this.expirationTimeoutIds.set(steamId, timeoutId);
+        log.info(`${fn} Expires in ${timeoutMs / 1000} seconds.`);
     }
 
-    public deleteExpireTimeout(steamId: types.SteamId) {
-        const fn = `[CredentialsManager: deleteExpireTimeout: ${steamId}]`;
+    public cancelExpireTimeout(steamId: types.SteamId) {
+        const fn = `[CredentialsManager: cancelExpireTimeout: ${steamId}]`;
 
-        const timeoutId = this.expirationTimeouts.get(steamId);
+        const timeoutId = this.expirationTimeoutIds.get(steamId);
         if (timeoutId) {
             clearTimeout(timeoutId);
-            this.expirationTimeouts.delete(steamId);
+            this.expirationTimeoutIds.delete(steamId);
         }
         log.info(`${fn} Expire timeout deleted.`);
     }

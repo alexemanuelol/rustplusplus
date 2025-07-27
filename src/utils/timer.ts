@@ -24,7 +24,7 @@ interface TimerCallback {
 
 export class Timer {
     private callback: TimerCallback;
-    private timeout: number;
+    private timeoutMs: number;
     private args: unknown[];
 
     private timeoutId: NodeJS.Timeout | null;
@@ -34,19 +34,19 @@ export class Timer {
 
     constructor(callback: TimerCallback, timeoutMs: number, ...args: unknown[]) {
         this.callback = callback;
-        this.timeout = timeoutMs;
+        this.timeoutMs = timeoutMs;
         this.args = args;
 
         this.timeoutId = null;
         this.startDate = null;
-        this.remaining = this.timeout;
+        this.remaining = this.timeoutMs;
         this.running = false;
     }
 
     start(): void {
         if (this.timeoutId) clearTimeout(this.timeoutId);
         this.startDate = new Date();
-        this.remaining = this.timeout;
+        this.remaining = this.timeoutMs;
         this.running = true;
         this.timeoutId = setTimeout(this.callback, this.remaining, this.args)
     }
