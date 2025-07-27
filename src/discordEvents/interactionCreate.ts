@@ -41,9 +41,6 @@ export async function execute(dm: DiscordManager, interaction: discordjs.Interac
 
     dm.logInteraction(interaction, 'Initiated');
 
-    // TODO! Each interaction handler needs to check if initiator of the interaction is valid
-    // i.e. if roles are set then not everyone can use commands etc
-
     /* Slash Commands */
     if (interaction.isChatInputCommand()) {
         result = await slashCommandHandler(dm, interaction);

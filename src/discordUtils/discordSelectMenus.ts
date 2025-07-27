@@ -323,24 +323,24 @@ export function getSettingVoiceGenderSelectMenu(guildId: types.GuildId):
     );
 }
 
-export function getSettingInGameChatCommandResponseDelaySelectMenu(guildId: types.GuildId):
+export function getSettingInGameChatMessageDelaySelectMenu(guildId: types.GuildId):
     discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder> {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
-    const commandResponseDelay = gInstance.generalSettings.inGameChatCommandResponseDelay;
+    const commandResponseDelay = gInstance.generalSettings.inGameChatMessageDelay;
 
     const options: discordjs.SelectMenuComponentOptionData[] = [];
     for (let i = 0; i <= 10; i++) {
         options.push({
             label: lm.getIntl(language, 'xSeconds', { seconds: `${i}` }),
-            description: lm.getIntl(language, 'settingInGameChatCommandResponseDelayOptionDesc', { seconds: `${i}` }),
+            description: lm.getIntl(language, 'settingInGameChatMessageDelayOptionDesc', { seconds: `${i}` }),
             value: `${i}`
         });
     }
 
     return new discordjs.ActionRowBuilder<discordjs.StringSelectMenuBuilder>().addComponents(
         getStringSelectMenu({
-            customId: 'GeneralSetting-inGameChatCommandResponseDelay',
+            customId: 'GeneralSetting-inGameChatMessageDelay',
             placeholder: lm.getIntl(language, 'xSeconds', { seconds: `${commandResponseDelay}` }),
             options: [...options],
             type: discordjs.ComponentType.StringSelect

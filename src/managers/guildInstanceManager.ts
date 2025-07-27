@@ -112,7 +112,7 @@ export interface GeneralSettings {                          /* SettingsMessages:
     inGameChatTrademark: string;                            /* inGameChatTrademark */
     inGameChatCommandPrefix: string;                        /* inGameChatCommandPrefix */
     inGameChatCommandsEnabled: boolean;                     /* inGameChatCommandsEnabled */
-    inGameChatCommandResponseDelay: number;                 /* inGameChatCommandResponseDelay */
+    inGameChatMessageDelay: number;                         /* inGameChatMessageDelay */
     leaderCommandEnabled: boolean;                          /* leaderCommand */
     leaderCommandOnlyPaired: boolean;                       /* leaderCommand */
     inGameChatNotifySmartSwitchChangedFromDiscord: boolean; /* inGameChatNotifySmartSwitchChangedFromDiscord */
@@ -186,7 +186,7 @@ export interface SettingsMessages {
     inGameChatTrademark: types.MessageId | null;
     inGameChatCommandPrefix: types.MessageId | null;
     inGameChatCommandsEnabled: types.MessageId | null;
-    inGameChatCommandResponseDelay: types.MessageId | null;
+    inGameChatMessageDelay: types.MessageId | null;
     leaderCommand: types.MessageId | null;
     inGameChatNotifySmartSwitchChangedFromDiscord: types.MessageId | null;
     inGameChatNotify: types.MessageId | null;
@@ -586,7 +586,7 @@ export class GuildInstanceManager {
                 inGameChatTrademark: null,
                 inGameChatCommandPrefix: null,
                 inGameChatCommandsEnabled: null,
-                inGameChatCommandResponseDelay: null,
+                inGameChatMessageDelay: null,
                 leaderCommand: null,
                 inGameChatNotifySmartSwitchChangedFromDiscord: null,
                 inGameChatNotify: null,
@@ -986,7 +986,7 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
         'inGameChatTrademark',
         'inGameChatCommandPrefix',
         'inGameChatCommandsEnabled',
-        'inGameChatCommandResponseDelay',
+        'inGameChatMessageDelay',
         'leaderCommandEnabled',
         'leaderCommandOnlyPaired',
         'inGameChatNotifySmartSwitchChangedFromDiscord',
@@ -1010,7 +1010,7 @@ export function isValidGeneralSettings(object: unknown): object is GeneralSettin
     errors.push(vu.validateType('inGameChatTrademark', obj.inGameChatTrademark, 'string'));
     errors.push(vu.validateType('inGameChatCommandPrefix', obj.inGameChatCommandPrefix, 'string'));
     errors.push(vu.validateType('inGameChatCommandsEnabled', obj.inGameChatCommandsEnabled, 'boolean'));
-    errors.push(vu.validateType('inGameChatCommandResponseDelay', obj.inGameChatCommandResponseDelay, 'number'));
+    errors.push(vu.validateType('inGameChatMessageDelay', obj.inGameChatMessageDelay, 'number'));
     errors.push(vu.validateType('leaderCommandEnabled', obj.leaderCommandEnabled, 'boolean'));
     errors.push(vu.validateType('leaderCommandOnlyPaired', obj.leaderCommandOnlyPaired, 'boolean'));
     errors.push(vu.validateType('inGameChatNotifySmartSwitchChangedFromDiscord',
@@ -1180,7 +1180,7 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
         'inGameChatTrademark',
         'inGameChatCommandPrefix',
         'inGameChatCommandsEnabled',
-        'inGameChatCommandResponseDelay',
+        'inGameChatMessageDelay',
         'leaderCommand',
         'inGameChatNotifySmartSwitchChangedFromDiscord',
         'inGameChatNotify',
@@ -1223,7 +1223,7 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
     errors.push(vu.validateType('inGameChatTrademark', obj.inGameChatTrademark, 'string', null));
     errors.push(vu.validateType('inGameChatCommandPrefix', obj.inGameChatCommandPrefix, 'string', null));
     errors.push(vu.validateType('inGameChatCommandsEnabled', obj.inGameChatCommandsEnabled, 'string', null));
-    errors.push(vu.validateType('inGameChatCommandResponseDelay', obj.inGameChatCommandResponseDelay, 'string', null));
+    errors.push(vu.validateType('inGameChatMessageDelay', obj.inGameChatMessageDelay, 'string', null));
     errors.push(vu.validateType('leaderCommand', obj.leaderCommand, 'string', null));
     errors.push(vu.validateType('inGameChatNotifySmartSwitchChangedFromDiscord',
         obj.inGameChatNotifySmartSwitchChangedFromDiscord, 'string', null));

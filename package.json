@@ -41,7 +41,7 @@
         "jimp": "^1.6.0",
         "libsodium-wrappers": "^0.7.15",
         "lodash": "^4.17.21",
-        "rustplus-ts": "^0.0.4",
+        "rustplus-ts": "^0.0.6",
         "translate": "^3.0.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.8.3",

@@ -20,6 +20,7 @@
 
 import * as discordjs from 'discord.js';
 import * as path from 'path';
+import * as rp from 'rustplus-ts';
 
 import { log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm } from '../../index';
 import { ConnectionStatus } from '../managers/rustPlusManager';
@@ -439,6 +440,42 @@ export async function sendFcmNewsNewsMessage(dm: DiscordManager, guildId: types.
 
 
 /**
+ * Response based messages
+ */
+
+export async function sendPrefixedCommandResponseMessage(dm: DiscordManager, guildId: types.GuildId, message: string) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: message,
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
+        })]
+    }
+
+    await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.commands);
+}
+
+export async function sendTeamChatMessage(dm: DiscordManager, guildId: types.GuildId, teamMessage: rp.AppTeamMessage) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    let color = discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT);
+    if (Object.hasOwn(gInstance.teamMemberChatColorMap, teamMessage.steamId)) {
+        color = discordEmbeds.colorHexToNumber(gInstance.teamMemberChatColorMap[teamMessage.steamId]);
+    }
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            color: color,
+            description: `**${teamMessage.name}**: ${teamMessage.message}`
+        })]
+    }
+
+    await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.teamchat);
+}
+
+
+/**
  * Settings based messages
  */
 
@@ -633,23 +670,23 @@ export async function sendSettingInGameChatCommandsEnabledMessage(dm: DiscordMan
     /* gInstance is update at caller */
 }
 
-export async function sendSettingInGameChatCommandResponseDelayMessage(dm: DiscordManager, guildId: types.GuildId,
+export async function sendSettingInGameChatMessageDelayMessage(dm: DiscordManager, guildId: types.GuildId,
     update: boolean = true, create: boolean = false, interaction: discordjs.Interaction | null = null) {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
 
     const content = {
         embeds: [discordEmbeds.getEmbed({
-            title: `**${lm.getIntl(language, 'settingInGameChatCommandResponseDelayTitle')} :timer:**`,
-            description: `${lm.getIntl(language, 'settingInGameChatCommandResponseDelayDesc')}`,
+            title: `**${lm.getIntl(language, 'settingInGameChatMessageDelayTitle')} :timer:**`,
+            description: `${lm.getIntl(language, 'settingInGameChatMessageDelayDesc')}`,
             color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT)
         })],
         components: [
-            discordSelectMenus.getSettingInGameChatCommandResponseDelaySelectMenu(guildId)
+            discordSelectMenus.getSettingInGameChatMessageDelaySelectMenu(guildId)
         ]
     };
 
-    await updateSettingsMessage(dm, guildId, content, 'inGameChatCommandResponseDelay', update, create, interaction);
+    await updateSettingsMessage(dm, guildId, content, 'inGameChatMessageDelay', update, create, interaction);
     /* gInstance is update at caller */
 }
 

@@ -6,7 +6,7 @@
     "inGameChatTrademark": "rustplusplus",
     "inGameChatCommandPrefix": "!",
     "inGameChatCommandsEnabled": true,
-    "inGameChatCommandResponseDelay": 0,
+    "inGameChatMessageDelay": 0,
     "leaderCommandEnabled": true,
     "leaderCommandOnlyPaired": false,
     "inGameChatNotifySmartSwitchChangedFromDiscord": true,

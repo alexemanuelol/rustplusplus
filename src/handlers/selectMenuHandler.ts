@@ -37,8 +37,8 @@ export async function selectMenuHandler(dm: DiscordManager, interaction: discord
     else if (interaction.customId === 'GeneralSetting-voiceGender') {
         return await voiceGenderSelectMenuHandler(dm, interaction as discordjs.StringSelectMenuInteraction);
     }
-    else if (interaction.customId === 'GeneralSetting-inGameChatCommandResponseDelay') {
-        return await inGameChatCommandResponseDelaySelectMenuHandler(dm,
+    else if (interaction.customId === 'GeneralSetting-inGameChatMessageDelay') {
+        return await inGameChatMessageDelaySelectMenuHandler(dm,
             interaction as discordjs.StringSelectMenuInteraction);
     }
     else if (interaction.customId.startsWith('RequesterSteamId')) {
@@ -126,16 +126,16 @@ async function voiceGenderSelectMenuHandler(dm: DiscordManager, interaction: dis
     return true;
 }
 
-async function inGameChatCommandResponseDelaySelectMenuHandler(dm: DiscordManager,
+async function inGameChatMessageDelaySelectMenuHandler(dm: DiscordManager,
     interaction: discordjs.StringSelectMenuInteraction): Promise<boolean> {
     const guildId = interaction.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const commandResponseDelay = interaction.values[0];
 
-    gInstance.generalSettings.inGameChatCommandResponseDelay = Number(commandResponseDelay);
+    gInstance.generalSettings.inGameChatMessageDelay = Number(commandResponseDelay);
     gim.updateGuildInstance(guildId);
 
-    await discordMessages.sendSettingInGameChatCommandResponseDelayMessage(dm, guildId, true, false, interaction);
+    await discordMessages.sendSettingInGameChatMessageDelayMessage(dm, guildId, true, false, interaction);
 
     return true;
 }

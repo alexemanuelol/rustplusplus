@@ -18,12 +18,13 @@
 
 */
 
+import * as discordjs from 'discord.js';
 import * as rp from 'rustplus-ts';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Logger } from 'winston';
 
-import { log, discordManager as dm, guildInstanceManager as gim, config } from '../../index';
+import { log, discordManager as dm, guildInstanceManager as gim, config, localeManager as lm } from '../../index';
 import * as constants from '../utils/constants';
 import * as types from '../utils/types';
 import { getServerId, getIpAndPort, GuildInstance } from './guildInstanceManager';
@@ -128,6 +129,12 @@ export class RustPlusInstance {
     public lastServerPollSuccessful: boolean;
     public lastServerPollSuccessfulTimestampSeconds: types.Timestamp | null;
 
+    public inGameTeamChatQueue: string[];
+    public inGameTeamChatTimeout: NodeJS.Timeout | undefined;
+    public inGameTeamChatMessagesSentByBot: string[];
+
+    private commandNames: string[];
+
     //private rpInfo: RustPlusInfo | null;
     //private rpTime: RustPlusTime | null;
     //private appMap: rustplus.AppMap | null;
@@ -154,6 +161,12 @@ export class RustPlusInstance {
         this.lastServerPollSuccessful = false;
         this.lastServerPollSuccessfulTimestampSeconds = null;
 
+        this.inGameTeamChatQueue = [];
+        this.inGameTeamChatTimeout = undefined;
+        this.inGameTeamChatMessagesSentByBot = [];
+
+        this.commandNames = this.getCommandNames();
+
         /* Latest request responses. */
         //this.rpInfo = null;
         //this.rpTime = null;
@@ -165,6 +178,12 @@ export class RustPlusInstance {
 
 
         //this.leaderSteamId = '0'; /* 0 When there is no leader. */
+    }
+
+    private getCommandNames(): string[] {
+        return fs.readdirSync(path.join(__dirname, '..', 'prefixedCommands'))
+            .filter(file => file.endsWith('.ts'))
+            .map(file => file.replace(/\.ts$/, ''));
     }
 
     public async startup() {
@@ -220,6 +239,11 @@ export class RustPlusInstance {
     private clearAllData() {
         this.stopReconnectionTimer();
         this.stopServerPollingHandler();
+
+        this.inGameTeamChatQueue = [];
+        clearTimeout(this.inGameTeamChatTimeout);
+        this.inGameTeamChatTimeout = undefined;
+        this.inGameTeamChatMessagesSentByBot = [];
 
         // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
         // cargoship leave etc...
@@ -303,7 +327,6 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const server = gInstance.serverInfoMap[this.serverId];
         const requesterSteamId = server.requesterSteamId;
-
         if (requesterSteamId === null) return;
 
         const pairingData = gInstance.pairingDataMap[this.serverId]?.[requesterSteamId] ?? null;
@@ -353,6 +376,106 @@ export class RustPlusInstance {
         // TODO! storageMonitorHandler
 
         // TODO! informationChannelHandler
+    }
+
+    public inGameTeamChatQueueMessage(message: string | string[]) {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const inGameChatMessageDelayMs = gInstance.generalSettings.inGameChatMessageDelay * 1000;
+        const trademark = gInstance.generalSettings.inGameChatTrademark;
+        const trademarkString = trademark === '' ? '' : `${trademark} | `;
+        const messageMaxLength = constants.MAX_LENGTH_TEAM_MESSAGE - trademarkString.length;
+
+        if (!gInstance.generalSettings.inGameChatBotUnmuted) return;
+
+        const messages = Array.isArray(message) ? message : [message];
+        for (const msg of messages) {
+            const strings = msg.match(new RegExp(`.{1,${messageMaxLength}}(\\s|$)`, 'g')) as string[];
+
+            for (const str of strings) {
+                this.inGameTeamChatQueue.push(`${trademarkString}${str}`);
+            }
+        }
+
+        if (this.inGameTeamChatTimeout === undefined) {
+            this.inGameTeamChatTimeout = setTimeout(this.inGameTeamChatMessageQueueHandler.bind(this),
+                inGameChatMessageDelayMs);
+        }
+    }
+
+    private inGameTeamChatMessageQueueHandler() {
+        const fn = '[RustPlusManager: inGameTeamChatMessageQueueHandler]';
+        const logParam = {
+            guildId: this.guildId,
+            serverId: this.serverId,
+            serverName: this.serverName
+        };
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const server = gInstance.serverInfoMap[this.serverId];
+        const requesterSteamId = server.requesterSteamId;
+
+        clearTimeout(this.inGameTeamChatTimeout);
+        this.inGameTeamChatTimeout = undefined;
+
+        if (this.inGameTeamChatQueue.length === 0) return;
+
+        const message = this.inGameTeamChatQueue[0];
+        this.inGameTeamChatQueue = this.inGameTeamChatQueue.slice(1);
+
+        if (requesterSteamId === null) return;
+
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[requesterSteamId] ?? null;
+        if (!pairingData) {
+            log.warn(`${fn} pairingData for ${requesterSteamId} could not be found.`, logParam);
+            return;
+        }
+
+        this.inGameTeamChatAddMessageToSentByBot(message);
+        this.rustPlus.sendTeamMessageAsync(pairingData.steamId, pairingData.playerToken, message);
+        log.info(`${fn} Message sent in-game: '${message}'.`, logParam);
+
+        this.inGameTeamChatResetMessageQueueTimeout();
+    }
+
+    public inGameTeamChatResetMessageQueueTimeout() {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const inGameChatMessageDelayMs = gInstance.generalSettings.inGameChatMessageDelay * 1000;
+
+        clearTimeout(this.inGameTeamChatTimeout);
+        this.inGameTeamChatTimeout = undefined;
+        if (this.inGameTeamChatQueue.length !== 0) {
+            this.inGameTeamChatTimeout = setTimeout(this.inGameTeamChatMessageQueueHandler.bind(this),
+                inGameChatMessageDelayMs);
+        }
+    }
+
+    public inGameTeamChatAddMessageToSentByBot(message: string) {
+        if (this.inGameTeamChatMessagesSentByBot.length === constants.BOT_MESSAGE_HISTORY_LIMIT) {
+            this.inGameTeamChatMessagesSentByBot.pop();
+        }
+        this.inGameTeamChatMessagesSentByBot.unshift(message);
+    }
+
+    public async prefixedCommandHandler(message: rp.AppTeamMessage | discordjs.Message): Promise<boolean> {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+        const commandPrefix = gInstance.generalSettings.inGameChatCommandPrefix;
+
+        const messageString = Object.hasOwn(message, 'steamId') ? (message as rp.AppTeamMessage).message :
+            (message as discordjs.Message).cleanContent;
+
+        const commandNamesCurrentLocale = this.commandNames.map(commandName =>
+            lm.getIntl(language, `prefixedCommand-${commandName}`)
+        );
+        const commandNames = [...this.commandNames, ...commandNamesCurrentLocale];
+
+        const command = commandNames.find(command => messageString.startsWith(`${commandPrefix}${command}`));
+        if (!command) return false;
+
+        const commandPath = path.join(__dirname, '..', 'prefixedCommands', `${command}.ts`);
+        const commandModule = await import(commandPath);
+
+        return await commandModule.execute(this, message);
     }
 
     public async validateServerPollResponse(response: rp.AppResponse | Error | rp.ConsumeTokensError,

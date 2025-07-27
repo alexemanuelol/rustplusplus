@@ -20,10 +20,9 @@
 
 import * as discordjs from 'discord.js';
 
-import { guildInstanceManager as gim } from '../../index';
+import { guildInstanceManager as gim, rustPlusManager as rpm } from '../../index';
 import * as types from '../utils/types';
 import { DiscordManager } from '../managers/discordManager';
-import { sendDiscordVoiceMessage } from '../discordUtils/discordVoice';
 import { GuildInstance } from '../managers/guildInstanceManager';
 
 export const name = 'messageCreate';
@@ -44,20 +43,22 @@ export async function execute(dm: DiscordManager, message: discordjs.Message) {
 }
 
 async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message) {
-    // TODO! Temporary to test bot voice
     const guildId = message.guildId as types.GuildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
-    if (message.channelId === gInstance.guildChannelIds.commands && message.cleanContent.startsWith('.voice ')) {
-        const text = message.cleanContent.replace(/^\.voice\s*/, '');
-        await sendDiscordVoiceMessage(guildId, text);
-    }
+    if (message.author.bot) return;
+    if (gInstance.serverToView === null) return;
+    if (gInstance.blacklist.userIds.includes((message.member as discordjs.GuildMember).id)) return;
 
-    // TODO!
-    // Check what guild the message is created in
-    // Check if the author of the message is part of blacklist
-    // Is the channel commands? Then call the command
-    // I sthe channel teamchat? Then forward it to teamchat ingame
+    const rpInstance = rpm.getInstance(guildId, gInstance.serverToView);
+    if (!rpInstance) return;
+
+    if (message.channelId === gInstance.guildChannelIds.commands) {
+        rpInstance.prefixedCommandHandler(message);
+    }
+    else if (message.channelId === gInstance.guildChannelIds.teamchat) {
+        rpInstance.inGameTeamChatQueueMessage(`${message.author.username}: ${message.cleanContent}`);
+    }
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */

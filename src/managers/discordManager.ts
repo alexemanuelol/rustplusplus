@@ -427,7 +427,7 @@ export class DiscordManager {
         await discordMessages.sendSettingInGameChatTrademarkMessage(this, guild.id, update, create);
         await discordMessages.sendSettingInGameChatCommandPrefixMessage(this, guild.id, update, create);
         await discordMessages.sendSettingInGameChatCommandsEnabledMessage(this, guild.id, update, create);
-        await discordMessages.sendSettingInGameChatCommandResponseDelayMessage(this, guild.id, update, create);
+        await discordMessages.sendSettingInGameChatMessageDelayMessage(this, guild.id, update, create);
         await discordMessages.sendSettingLeaderCommandMessage(this, guild.id, update, create);
         await discordMessages.sendSettingInGameChatNotifySmartSwitchChangedFromDiscordMessage(this, guild.id, update,
             create);
