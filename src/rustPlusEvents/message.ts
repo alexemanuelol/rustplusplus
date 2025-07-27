@@ -127,7 +127,7 @@ async function appMessageBroadcastNewTeamMessage(rpInstance: RustPlusInstance,
         return;
     }
 
-    const isCommand = await rpInstance.prefixedCommandHandler(teamMessage);
+    const isCommand = await rpInstance.prefixCommandHandler(teamMessage);
     if (isCommand) return;
 
     await discordMessages.sendTeamChatMessage(dm, rpInstance.guildId, teamMessage);

@@ -31,7 +31,7 @@ export const name = 'say';
 
 export async function execute(rpInstance: RustPlusInstance, message: rp.AppTeamMessage | discordjs.Message):
     Promise<boolean> {
-    const fn = `[prefixedCommand: ${name}]`;
+    const fn = `[prefixCommand: ${name}]`;
     const logParam = {
         guildId: rpInstance.guildId,
         serverId: rpInstance.serverId,
@@ -56,7 +56,7 @@ export async function execute(rpInstance: RustPlusInstance, message: rp.AppTeamM
         rpInstance.inGameTeamChatQueueMessage([response]);
     }
     else {
-        discordMessages.sendPrefixedCommandResponseMessage(dm, guildId, response);
+        discordMessages.sendPrefixCommandResponseMessage(dm, guildId, response);
     }
     log.info(`${fn} Message '${text}' sent to voice chat.`, logParam);
 

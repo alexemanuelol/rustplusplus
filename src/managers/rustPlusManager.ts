@@ -181,7 +181,7 @@ export class RustPlusInstance {
     }
 
     private getCommandNames(): string[] {
-        return fs.readdirSync(path.join(__dirname, '..', 'prefixedCommands'))
+        return fs.readdirSync(path.join(__dirname, '..', 'prefixCommands'))
             .filter(file => file.endsWith('.ts'))
             .map(file => file.replace(/\.ts$/, ''));
     }
@@ -456,7 +456,7 @@ export class RustPlusInstance {
         this.inGameTeamChatMessagesSentByBot.unshift(message);
     }
 
-    public async prefixedCommandHandler(message: rp.AppTeamMessage | discordjs.Message): Promise<boolean> {
+    public async prefixCommandHandler(message: rp.AppTeamMessage | discordjs.Message): Promise<boolean> {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
         const commandPrefix = gInstance.generalSettings.inGameChatCommandPrefix;
@@ -465,14 +465,14 @@ export class RustPlusInstance {
             (message as discordjs.Message).cleanContent;
 
         const commandNamesCurrentLocale = this.commandNames.map(commandName =>
-            lm.getIntl(language, `prefixedCommand-${commandName}`)
+            lm.getIntl(language, `prefixCommand-${commandName}`)
         );
         const commandNames = [...this.commandNames, ...commandNamesCurrentLocale];
 
         const command = commandNames.find(command => messageString.startsWith(`${commandPrefix}${command}`));
         if (!command) return false;
 
-        const commandPath = path.join(__dirname, '..', 'prefixedCommands', `${command}.ts`);
+        const commandPath = path.join(__dirname, '..', 'prefixCommands', `${command}.ts`);
         const commandModule = await import(commandPath);
 
         return await commandModule.execute(this, message);

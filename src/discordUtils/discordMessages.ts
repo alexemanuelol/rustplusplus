@@ -443,7 +443,7 @@ export async function sendFcmNewsNewsMessage(dm: DiscordManager, guildId: types.
  * Response based messages
  */
 
-export async function sendPrefixedCommandResponseMessage(dm: DiscordManager, guildId: types.GuildId, message: string) {
+export async function sendPrefixCommandResponseMessage(dm: DiscordManager, guildId: types.GuildId, message: string) {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
 
     const content = {

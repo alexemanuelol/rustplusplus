@@ -204,7 +204,7 @@
     "noCredentialsConfigured": "No credentials are configured.",
     "noneSelected": "None selected.",
     "pleaseTryAgainLater": "Please try again later...",
-    "prefixedCommand-say": "say",
+    "prefixCommand-say": "say",
     "quantity": "Quantity",
     "requesterSteamIdNoneOptionDesc": "Set requester to no one.",
     "requesterSteamIdOptionDesc": "Set requester to {user}.",
