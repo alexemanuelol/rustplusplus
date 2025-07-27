@@ -475,7 +475,9 @@ export class RustPlusInstance {
         const commandPath = path.join(__dirname, '..', 'prefixCommands', `${command}.ts`);
         const commandModule = await import(commandPath);
 
-        return await commandModule.execute(this, message);
+        const args = messageString.slice((commandPrefix + command).length).trim().split(/\s+/);
+
+        return await commandModule.execute(this, args, message);
     }
 
     public async validateServerPollResponse(response: rp.AppResponse | Error | rp.ConsumeTokensError,

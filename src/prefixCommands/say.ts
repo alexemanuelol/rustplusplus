@@ -29,7 +29,8 @@ import { sendDiscordVoiceMessage } from '../discordUtils/discordVoice';
 
 export const name = 'say';
 
-export async function execute(rpInstance: RustPlusInstance, message: rp.AppTeamMessage | discordjs.Message):
+export async function execute(rpInstance: RustPlusInstance, args: string[],
+    message: rp.AppTeamMessage | discordjs.Message):
     Promise<boolean> {
     const fn = `[prefixCommand: ${name}]`;
     const logParam = {
@@ -38,15 +39,10 @@ export async function execute(rpInstance: RustPlusInstance, message: rp.AppTeamM
         serverName: rpInstance.serverName
     };
 
+    const isInGame = Object.hasOwn(message, 'steamId') ? true : false;
     const guildId = rpInstance.guildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-    const commandPrefix = gInstance.generalSettings.inGameChatCommandPrefix;
     const language = gInstance.generalSettings.language;
-    const isInGame = Object.hasOwn(message, 'steamId') ? true : false;
-
-    const messageString = isInGame ? (message as rp.AppTeamMessage).message :
-        (message as discordjs.Message).cleanContent;
-    const args = messageString.slice((commandPrefix + name).length).trim().split(/\s+/);
 
     const text = args.join(' ');
     await sendDiscordVoiceMessage(guildId, text);
