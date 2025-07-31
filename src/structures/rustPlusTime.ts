@@ -80,7 +80,7 @@ export class RustPlusTime {
         const server = gInstance.serverInfoMap[this.rpInstance.serverId];
 
         let seconds = 0;
-        let isDay = false;
+        let isDay = this.isDay();
 
         /* Can't calculate time till sunrise or sunset, so use the default time table */
         if ((this.isDay() && (this.latestSunrise === null || server.dayDurationSeconds === null)) ||
@@ -158,7 +158,8 @@ export class RustPlusTime {
             this.latestSunrise = new Date();
 
             if (this.latestSunset !== null) {
-                server.nightDurationSeconds = (this.latestSunrise.getTime() - this.latestSunset.getTime()) / 1000;
+                server.nightDurationSeconds =
+                    Math.floor((this.latestSunrise.getTime() - this.latestSunset.getTime()) / 1000);
                 gim.updateGuildInstance(this.rpInstance.guildId);
             }
         }
@@ -166,7 +167,8 @@ export class RustPlusTime {
             this.latestSunset = new Date();
 
             if (this.latestSunrise !== null) {
-                server.dayDurationSeconds = (this.latestSunset.getTime() - this.latestSunrise.getTime()) / 1000;
+                server.dayDurationSeconds =
+                    Math.floor((this.latestSunset.getTime() - this.latestSunrise.getTime()) / 1000);
                 gim.updateGuildInstance(this.rpInstance.guildId);
             }
         }
