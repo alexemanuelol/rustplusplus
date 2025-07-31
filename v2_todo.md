@@ -43,13 +43,13 @@
 
 ## Modules
 - [ ] Rustlabs
-- [ ] CCTV
+- [x] CCTV
 - [ ] Items
 
 ## RustPlus
 
 ### Classes
-- [ ] Time
+- [x] Time
 - [ ] Team
 - [ ] TeamMember
 - [ ] Info
@@ -61,11 +61,11 @@
 - [ ] Smart alarm
 - [ ] Storage monitor
 - [ ] Smart switch groups
-- [ ] inGame command handler
-- [ ] discord command handler
+- [x] inGame command handler
+- [x] discord command handler
 - [ ] information channel
-- [ ] inGame chat handler
-- [ ] team chat handler
+- [x] inGame chat handler
+- [x] team chat handler
 - [ ] team handler
 - [ ] time handler
 - [ ] vending machine handler

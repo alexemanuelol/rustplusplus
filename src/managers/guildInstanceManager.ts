@@ -281,6 +281,8 @@ export interface ServerInfo {
     smartAlarmConfigMap: SmartAlarmConfigMap;
     storageMonitorConfigMap: StorageMonitorConfigMap;
     smartSwitchGroupConfigMap: SmartSwitchGroupConfigMap;
+    dayDurationSeconds: number | null;
+    nightDurationSeconds: number | null;
 }
 
 export interface SmartSwitchConfig {
@@ -1467,6 +1469,8 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'smartAlarmConfigMap',
         'storageMonitorConfigMap',
         'smartSwitchGroupConfigMap',
+        'dayDurationSeconds',
+        'nightDurationSeconds'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1491,6 +1495,8 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         isValidStorageMonitorConfig));
     errors.push(vu.validateObjectOfInterfaces('smartSwitchGroupConfigMap', obj.smartSwitchGroupConfigMap,
         isValidSmartSwitchGroupConfig));
+    errors.push(vu.validateType('dayDurationSeconds', obj.dayDurationSeconds, 'number', null));
+    errors.push(vu.validateType('nightDurationSeconds', obj.nightDurationSeconds, 'number', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

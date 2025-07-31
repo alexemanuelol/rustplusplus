@@ -461,7 +461,9 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             smartSwitchConfigMap: serverInfo ? serverInfo.smartSwitchConfigMap : {},
             smartAlarmConfigMap: serverInfo ? serverInfo.smartAlarmConfigMap : {},
             storageMonitorConfigMap: serverInfo ? serverInfo.storageMonitorConfigMap : {},
-            smartSwitchGroupConfigMap: serverInfo ? serverInfo.smartSwitchGroupConfigMap : {}
+            smartSwitchGroupConfigMap: serverInfo ? serverInfo.smartSwitchGroupConfigMap : {},
+            dayDurationSeconds: serverInfo ? serverInfo.dayDurationSeconds : null,
+            nightDurationSeconds: serverInfo ? serverInfo.nightDurationSeconds : null
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);
