@@ -64,7 +64,7 @@
 - [ ] unmute
 - [ ] upkeep
 - [ ] uptime
-- [ ] wipe
+- [x] wipe
 
 ## Setup functions
 - [ ] Smart switches
