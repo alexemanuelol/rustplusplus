@@ -67,6 +67,34 @@ export class RustPlusTime {
         this.appTime = appTime;
     }
 
+    public isDayLengthMinutesChanged(appTime: rp.AppTime): boolean {
+        return this.appTime.dayLengthMinutes !== appTime.dayLengthMinutes;
+    }
+
+    public isTimeScaleChanged(appTime: rp.AppTime): boolean {
+        return this.appTime.timeScale !== appTime.timeScale;
+    }
+
+    public isSunriseChanged(appTime: rp.AppTime): boolean {
+        return this.appTime.sunrise !== appTime.sunrise;
+    }
+
+    public isSunsetChanged(appTime: rp.AppTime): boolean {
+        return this.appTime.sunset !== appTime.sunset;
+    }
+
+    public isTimeChanged(appTime: rp.AppTime): boolean {
+        return this.appTime.time !== appTime.time;
+    }
+
+    public isTurnedDay(appTime: rp.AppTime): boolean {
+        return this.isNight() && appTime.time >= appTime.sunrise && appTime.time < appTime.sunset;
+    }
+
+    public isTurnedNight(appTime: rp.AppTime): boolean {
+        return this.isDay() && !(appTime.time >= appTime.sunrise && appTime.time < appTime.sunset);
+    }
+
     public isDay(): boolean {
         return (this.appTime.time >= this.appTime.sunrise) && (this.appTime.time < this.appTime.sunset);
     }
@@ -101,34 +129,6 @@ export class RustPlusTime {
         }
 
         return { timeTill: secondsToFullScale(seconds, ignore), isDay: isDay };
-    }
-
-    public isDayLengthMinutesChanged(appTime: rp.AppTime): boolean {
-        return this.appTime.dayLengthMinutes !== appTime.dayLengthMinutes;
-    }
-
-    public isTimeScaleChanged(appTime: rp.AppTime): boolean {
-        return this.appTime.timeScale !== appTime.timeScale;
-    }
-
-    public isSunriseChanged(appTime: rp.AppTime): boolean {
-        return this.appTime.sunrise !== appTime.sunrise;
-    }
-
-    public isSunsetChanged(appTime: rp.AppTime): boolean {
-        return this.appTime.sunset !== appTime.sunset;
-    }
-
-    public isTimeChanged(appTime: rp.AppTime): boolean {
-        return this.appTime.time !== appTime.time;
-    }
-
-    public isTurnedDay(appTime: rp.AppTime): boolean {
-        return this.isNight() && appTime.time >= appTime.sunrise && appTime.time < appTime.sunset;
-    }
-
-    public isTurnedNight(appTime: rp.AppTime): boolean {
-        return this.isDay() && !(appTime.time >= appTime.sunrise && appTime.time < appTime.sunset);
     }
 
     private updateVariables(appTime: rp.AppTime) {
@@ -174,7 +174,6 @@ export class RustPlusTime {
         }
     }
 }
-
 
 function getTimeTable(): TimeTable {
     const filePath = path.join(__dirname, "../staticFiles/rustPlusTimeTableDefault.json");

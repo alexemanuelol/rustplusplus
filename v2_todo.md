@@ -47,7 +47,7 @@
 - [ ] offline
 - [ ] online
 - [ ] player
-- [ ] pop
+- [x] pop
 - [ ] prox
 - [ ] recycle
 - [ ] research
@@ -56,7 +56,7 @@
 - [ ] stack
 - [ ] steamid
 - [ ] team
-- [ ] time
+- [x] time
 - [ ] timer
 - [ ] translate
 - [ ] travellingvendor

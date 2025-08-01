@@ -30,8 +30,9 @@ import * as types from '../utils/types';
 import { getServerId, getIpAndPort, GuildInstance } from './guildInstanceManager';
 import { sendServerMessage } from '../discordUtils/discordMessages';
 import { RustPlusTime } from '../structures/rustPlusTime';
+import * as rpInfoHandler from '../handlers/rustPlusInfoHandler';
 import * as rpTimeHandler from '../handlers/rustPlusTimeHandler';
-//import { RustPlusInfo } from '../structures/rustPlusInfo';
+import { RustPlusInfo } from '../structures/rustPlusInfo';
 
 
 export type RustPlusInstanceMap = { [guildId: types.GuildId]: RustPlusServerMap };
@@ -136,7 +137,7 @@ export class RustPlusInstance {
 
     private commandNames: string[];
 
-    //private rpInfo: RustPlusInfo | null;
+    public rpInfo: RustPlusInfo | null;
     public rpTime: RustPlusTime | null;
     //private appMap: rustplus.AppMap | null;
     //private appTeamInfo: rustplus.AppTeamInfo | null;
@@ -169,7 +170,7 @@ export class RustPlusInstance {
         this.commandNames = this.getCommandNames();
 
         /* Latest request responses. */
-        //this.rpInfo = null;
+        this.rpInfo = null;
         this.rpTime = null;
 
         //this.appMap = null; // Maybe not save map in memory? quite big
@@ -246,6 +247,7 @@ export class RustPlusInstance {
         this.inGameTeamChatTimeoutId = undefined;
         this.inGameTeamChatMessagesSentByBot = [];
 
+        this.rpInfo = null;
         this.rpTime = null;
 
         // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
@@ -356,11 +358,13 @@ export class RustPlusInstance {
          * Continue with updating structures
          */
 
+        const info = ((rpInfo as rp.AppResponse).info as rp.AppInfo);
         const time = ((rpTime as rp.AppResponse).time as rp.AppTime);
 
         if (firstPoll) {
             console.log('FIRST POLL')
             // TODO! Set rpInfo, rpTime, rpTeamInfo, rpMapMarkers
+            this.rpInfo = new RustPlusInfo(this, info);
             this.rpTime = new RustPlusTime(this, time);
         }
         else {
@@ -373,8 +377,10 @@ export class RustPlusInstance {
         // TODO! smartSwitchHandler
 
         // TODO! timeHandler
+        await rpInfoHandler.handler(this, info);
         await rpTimeHandler.handler(this, time);
 
+        (this.rpInfo as RustPlusInfo).updateInfo(info);
         (this.rpTime as RustPlusTime).updateTime(time);
         // TODO! update rpInfo
         // TODO! update rpMapMarkers

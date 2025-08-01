@@ -67,6 +67,10 @@ export async function handler(rpInstance: RustPlusInstance, time: rp.AppTime) {
         //    logParam);
     }
 
+    /**
+     * Custom handlers
+     */
+
     if ((rpInstance.rpTime as RustPlusTime).isTurnedDay(time)) {
         log.info(`${fn} Just turned day.`, logParam);
     }
