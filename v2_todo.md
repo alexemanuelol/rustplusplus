@@ -26,6 +26,46 @@
 - [ ] uptime
 - [x] voice
 
+## In-Game commands
+- [ ] afk
+- [ ] alive
+- [ ] cargo
+- [ ] chinook
+- [ ] connection
+- [ ] craft
+- [ ] death
+- [ ] decay
+- [ ] despawn
+- [ ] events
+- [ ] heli
+- [ ] large
+- [ ] leader
+- [ ] marker
+- [ ] market
+- [ ] mute
+- [ ] note
+- [ ] offline
+- [ ] online
+- [ ] player
+- [ ] pop
+- [ ] prox
+- [ ] recycle
+- [ ] research
+- [ ] send
+- [ ] small
+- [ ] stack
+- [ ] steamid
+- [ ] team
+- [ ] time
+- [ ] timer
+- [ ] translate
+- [ ] travellingvendor
+- [ ] tts
+- [ ] unmute
+- [ ] upkeep
+- [ ] uptime
+- [ ] wipe
+
 ## Setup functions
 - [ ] Smart switches
 - [ ] Smart alarms
