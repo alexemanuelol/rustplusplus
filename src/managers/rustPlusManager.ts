@@ -399,7 +399,8 @@ export class RustPlusInstance {
         const trademarkString = trademark === '' ? '' : `${trademark} | `;
         const messageMaxLength = constants.MAX_LENGTH_TEAM_MESSAGE - trademarkString.length;
 
-        if (!gInstance.generalSettings.inGameChatBotUnmuted) return;
+        if (!gInstance.generalSettings.inGameChatBotUnmuted ||
+            !gInstance.generalSettings.inGameChatFunctionalityEnabled) return;
 
         const messages = Array.isArray(message) ? message : [message];
         for (const msg of messages) {
@@ -470,12 +471,13 @@ export class RustPlusInstance {
         this.inGameTeamChatMessagesSentByBot.unshift(message);
     }
 
-    public async prefixCommandHandler(message: rp.AppTeamMessage | discordjs.Message): Promise<boolean> {
+    public async prefixCommandHandler(message: rp.AppTeamMessage | discordjs.Message, inGame: boolean):
+        Promise<boolean> {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
         const commandPrefix = gInstance.generalSettings.inGameChatCommandPrefix;
 
-        const messageString = Object.hasOwn(message, 'steamId') ? (message as rp.AppTeamMessage).message :
+        const messageString = inGame ? (message as rp.AppTeamMessage).message :
             (message as discordjs.Message).cleanContent;
 
         const match = messageString.match(/^\S+\s?/);

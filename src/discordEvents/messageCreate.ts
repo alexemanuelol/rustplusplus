@@ -54,7 +54,7 @@ async function handleGuildMessage(dm: DiscordManager, message: discordjs.Message
     if (!rpInstance) return;
 
     if (message.channelId === gInstance.guildChannelIds.commands) {
-        rpInstance.prefixCommandHandler(message);
+        rpInstance.prefixCommandHandler(message, false);
     }
     else if (message.channelId === gInstance.guildChannelIds.teamchat) {
         rpInstance.inGameTeamChatQueueMessage(`${message.author.username}: ${message.cleanContent}`);

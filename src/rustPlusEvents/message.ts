@@ -95,6 +95,8 @@ async function appMessageBroadcastNewTeamMessage(rpInstance: RustPlusInstance,
     const server = gInstance.serverInfoMap[rpInstance.serverId];
     const teamMessage = appNewTeamMessage.message as rp.AppTeamMessage;
 
+    if (!gInstance.generalSettings.inGameChatFunctionalityEnabled) return;
+
     teamMessage.name = teamMessage.name
         .replace(/^<size=.*?><color=.*?>/, '')
         .replace(/<\/color><\/size>$/, '')
@@ -127,8 +129,10 @@ async function appMessageBroadcastNewTeamMessage(rpInstance: RustPlusInstance,
         return;
     }
 
-    const isCommand = await rpInstance.prefixCommandHandler(teamMessage);
-    if (isCommand) return;
+    if (gInstance.generalSettings.inGameChatCommandsEnabled) {
+        const isCommand = await rpInstance.prefixCommandHandler(teamMessage, true);
+        if (isCommand) return;
+    }
 
     await discordMessages.sendTeamChatMessage(dm, rpInstance.guildId, teamMessage);
     log.info(`${fn} In-Game message: ${teamMessage.name}: ${teamMessage.message}.`, logParam);
