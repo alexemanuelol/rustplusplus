@@ -482,7 +482,10 @@ export class RustPlusInstance {
         );
         const commandNames = [...this.commandNames, ...commandNamesCurrentLocale];
 
-        const command = commandNames.find(command => messageString.startsWith(`${commandPrefix}${command}`));
+        const command = commandNames.find(command =>
+            messageString === `${commandPrefix}${command}` ||
+            messageString.startsWith(`${commandPrefix}${command} `)
+        );
         if (!command) return false;
 
         const commandPath = path.join(__dirname, '..', 'prefixCommands', `${command}.ts`);
