@@ -477,21 +477,36 @@ export class RustPlusInstance {
         const messageString = Object.hasOwn(message, 'steamId') ? (message as rp.AppTeamMessage).message :
             (message as discordjs.Message).cleanContent;
 
-        const commandNamesCurrentLocale = this.commandNames.map(commandName =>
-            lm.getIntl(language, `prefixCommand-${commandName}`)
-        );
-        const commandNames = [...this.commandNames, ...commandNamesCurrentLocale];
+        const match = messageString.match(/^\S+\s?/);
+        const baseCommandStartRaw = match ? match[0] : null;
+        if (!baseCommandStartRaw || !baseCommandStartRaw.startsWith(`${commandPrefix}`)) return false;
+        const baseCommandNameRaw = baseCommandStartRaw.slice(commandPrefix.length).trim();
 
-        const command = commandNames.find(command =>
-            messageString === `${commandPrefix}${command}` ||
-            messageString.startsWith(`${commandPrefix}${command} `)
-        );
-        if (!command) return false;
+        let aliasResolvedCommandName = baseCommandNameRaw;
+        for (const alias of gInstance.aliases) {
+            if (aliasResolvedCommandName === alias.alias) {
+                aliasResolvedCommandName = alias.value;
+                break;
+            }
+        }
+
+        let command = this.commandNames.find(command => aliasResolvedCommandName === `${command}`);
+        if (!command) {
+            const commandNamesCurrentLocale = Object.fromEntries(
+                this.commandNames.map(commandName => {
+                    return [lm.getIntl(language, `prefixCommand-${commandName}`), commandName];
+                })
+            );
+
+            if (!(aliasResolvedCommandName in commandNamesCurrentLocale)) return false;
+
+            command = commandNamesCurrentLocale[aliasResolvedCommandName];
+        }
 
         const commandPath = path.join(__dirname, '..', 'prefixCommands', `${command}.ts`);
         const commandModule = await import(commandPath);
 
-        const args = messageString.slice((commandPrefix + command).length).trim().split(/\s+/);
+        const args = messageString.slice(baseCommandStartRaw.length).trim().split(/\s+/);
 
         return await commandModule.execute(this, args, message);
     }
