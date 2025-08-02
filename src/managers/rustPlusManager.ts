@@ -33,6 +33,7 @@ import { RustPlusTime } from '../structures/rustPlusTime';
 import * as rpInfoHandler from '../handlers/rustPlusInfoHandler';
 import * as rpTimeHandler from '../handlers/rustPlusTimeHandler';
 import { RustPlusInfo } from '../structures/rustPlusInfo';
+import * as discordMessages from '../discordUtils/discordMessages';
 
 
 export type RustPlusInstanceMap = { [guildId: types.GuildId]: RustPlusServerMap };
@@ -509,6 +510,15 @@ export class RustPlusInstance {
         const args = messageString.slice(baseCommandStartRaw.length).trim().split(/\s+/);
 
         return await commandModule.execute(this, args, message);
+    }
+
+    public sendPrefixCommandResponse(response: string, inGame: boolean) {
+        if (inGame) {
+            this.inGameTeamChatQueueMessage([response]);
+        }
+        else {
+            discordMessages.sendPrefixCommandResponseMessage(dm, this.guildId, response);
+        }
     }
 
     public async validateServerPollResponse(response: rp.AppResponse | Error | rp.ConsumeTokensError,

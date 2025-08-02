@@ -21,8 +21,7 @@
 import * as rp from 'rustplus-ts';
 import * as discordjs from 'discord.js';
 
-import { log, guildInstanceManager as gim, localeManager as lm, discordManager as dm } from '../../index';
-import * as discordMessages from '../discordUtils/discordMessages';
+import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 
@@ -38,7 +37,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
         serverName: rpInstance.serverName
     };
 
-    const isInGame = Object.hasOwn(message, 'steamId') ? true : false;
+    const inGame = Object.hasOwn(message, 'steamId') ? true : false;
     const guildId = rpInstance.guildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
@@ -55,12 +54,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     const response = `${population}${queue}`;
 
-    if (isInGame) {
-        rpInstance.inGameTeamChatQueueMessage([response]);
-    }
-    else {
-        discordMessages.sendPrefixCommandResponseMessage(dm, guildId, response);
-    }
+    rpInstance.sendPrefixCommandResponse(response, inGame);
     log.info(`${fn} ${response}`, logParam);
 
     return true;
