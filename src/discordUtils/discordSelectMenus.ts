@@ -220,9 +220,13 @@ export async function getRequesterSteamIdSelectMenu(dm: DiscordManager, guildId:
     });
 
     for (const [steamId, pairingData] of Object.entries(serverPairingDataMap)) {
-        const credentials = cm.getCredentials(steamId) as Credentials;
-        const member = await dm.getMember(guildId, credentials.discordUserId);
-        const userName = member ? member.user.username : lm.getIntl(language, 'unknown');
+        const credentials = cm.getCredentials(steamId);
+
+        let userName = `${steamId}`;
+        if (credentials) {
+            const member = await dm.getMember(guildId, credentials.discordUserId);
+            userName = member ? member.user.username : lm.getIntl(language, 'unknown');
+        }
         options.push({
             label: steamId,
             description: lm.getIntl(language, 'requesterSteamIdOptionDesc', { user: userName }),
