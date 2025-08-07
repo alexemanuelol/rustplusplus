@@ -29,10 +29,11 @@ import * as constants from '../utils/constants';
 import * as types from '../utils/types';
 import { getServerId, getIpAndPort, GuildInstance } from './guildInstanceManager';
 import { sendServerMessage } from '../discordUtils/discordMessages';
-import { RustPlusTime } from '../structures/rustPlusTime';
 import * as rpInfoHandler from '../handlers/rustPlusInfoHandler';
 import * as rpTimeHandler from '../handlers/rustPlusTimeHandler';
 import { RustPlusInfo } from '../structures/rustPlusInfo';
+import { RustPlusTime } from '../structures/rustPlusTime';
+import { RustPlusMap } from '../structures/rustPlusMap';
 import * as discordMessages from '../discordUtils/discordMessages';
 
 
@@ -140,7 +141,7 @@ export class RustPlusInstance {
 
     public rpInfo: RustPlusInfo | null;
     public rpTime: RustPlusTime | null;
-    //private appMap: rustplus.AppMap | null;
+    public rpMap: RustPlusMap | null;
     //private appTeamInfo: rustplus.AppTeamInfo | null;
     //private appMapMarkers: rustplus.AppMapMarkers | null;
 
@@ -173,8 +174,8 @@ export class RustPlusInstance {
         /* Latest request responses. */
         this.rpInfo = null;
         this.rpTime = null;
+        this.rpMap = null;
 
-        //this.appMap = null; // Maybe not save map in memory? quite big
         //this.appTeamInfo = null;
         //this.appMapMarkers = null;
 
@@ -250,6 +251,7 @@ export class RustPlusInstance {
 
         this.rpInfo = null;
         this.rpTime = null;
+        this.rpMap = null;
 
         // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
         // cargoship leave etc...
@@ -362,7 +364,7 @@ export class RustPlusInstance {
         const info = ((rpInfo as rp.AppResponse).info as rp.AppInfo);
         const time = ((rpTime as rp.AppResponse).time as rp.AppTime);
 
-        if (firstPoll) {
+        if (firstPoll || this.rpInfo === null || this.rpTime === null) {
             console.log('FIRST POLL')
             // TODO! Set rpInfo, rpTime, rpTeamInfo, rpMapMarkers
             this.rpInfo = new RustPlusInfo(this, info);
@@ -630,6 +632,58 @@ export class RustPlusInstance {
             }
         }
         gim.updateGuildInstance(this.guildId);
+    }
+
+    public async setupRequesting() {
+        const fn = `[RustPlusManager: setupRequesting]`
+        const logParam = {
+            guildId: this.guildId,
+            serverId: this.serverId,
+            serverName: this.serverName
+        };
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const server = gInstance.serverInfoMap[this.serverId];
+        const requesterSteamId = server.requesterSteamId;
+        if (requesterSteamId === null) return;
+
+        log.info(`${fn} Setup requesting for ${requesterSteamId}.`, logParam);
+
+        const pairingData = gInstance.pairingDataMap[this.serverId]?.[requesterSteamId] ?? null;
+        if (!pairingData) return;
+
+        const rpInfo = await this.rustPlus.getInfoAsync(pairingData.steamId, pairingData.playerToken);
+        if (!this.validateServerPollResponse(rpInfo, 'info', rp.isValidAppInfo)) return;
+        const info = ((rpInfo as rp.AppResponse).info as rp.AppInfo);
+        this.rpInfo = new RustPlusInfo(this, info);
+
+        const rpMap = await this.rustPlus.getMapAsync(pairingData.steamId, pairingData.playerToken, true,
+            3 * 60 * 1000); /* 3 min timeout */
+        if (!this.validateServerPollResponse(rpMap, 'map', rp.isValidAppMap)) {
+            // TODO! Server connection invalid message, invalid pairingData?
+            return;
+        }
+
+        const map = ((rpMap as rp.AppResponse).map as rp.AppMap);
+
+        if (this.rpMap !== null) {
+            if (this.rpMap.isJpgImageChanged(map)) {
+                // TODO! Notify that the map was wiped
+                console.log('MAP WAS WIPED')
+            }
+
+            this.rpMap.updateMap(map);
+        }
+        else {
+            this.rpMap = new RustPlusMap(this, map);
+        }
+        await this.rpMap.writeImage();
+        // TODO! Just update map in information channel
+
+        await this.setupSmartDevices();
+        this.startServerPollingHandler();
+
+        log.info(`${fn} Setup requesting for ${requesterSteamId} was successful.`, logParam);
     }
 
     public async setupSmartDevices() {

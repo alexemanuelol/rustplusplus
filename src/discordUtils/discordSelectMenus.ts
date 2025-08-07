@@ -27,7 +27,6 @@ import {
 import * as types from '../utils/types';
 import * as utils from '../utils/utils';
 import { Languages, LanguageDiscordEmoji } from '../managers/LocaleManager';
-import { Credentials } from '../managers/credentialsManager';
 import { DiscordManager } from '../managers/discordManager';
 
 export const StringSelectMenuLimits = {

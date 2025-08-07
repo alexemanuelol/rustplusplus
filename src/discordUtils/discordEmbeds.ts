@@ -20,7 +20,10 @@
 
 import * as discordjs from 'discord.js';
 
-import { localeManager as lm, guildInstanceManager as gim, config, credentialsManager as cm } from '../../index';
+import {
+    localeManager as lm, guildInstanceManager as gim, config, credentialsManager as cm,
+    rustPlusManager as rpm
+} from '../../index';
 import {
     GuildInstance, ServerInfo, SmartSwitchConfig, SmartAlarmConfig, StorageMonitorConfig, StorageMonitorConfigType
 } from '../managers/guildInstanceManager';
@@ -32,6 +35,7 @@ import * as utils from '../utils/utils';
 import { Credentials } from '../managers/credentialsManager';
 import { PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
 import { fetchSteamProfileName, fetchSteamProfilePicture } from '../utils/steam';
+import { ConnectionStatus } from '../managers/rustPlusManager';
 
 export const EmbedLimits = {
     Maximum: 6000,
@@ -531,13 +535,21 @@ export async function getCctvcodesEmbed(dm: DiscordManager, interaction: discord
  * Guild based embeds
  */
 
-export function getServerEmbed(guildId: types.GuildId, serverId: types.ServerId): discordjs.EmbedBuilder {
+export function getServerEmbed(guildId: types.GuildId, serverId: types.ServerId,
+    connectionStatus: ConnectionStatus): discordjs.EmbedBuilder {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
 
+    const rpInstance = rpm.getInstance(guildId, serverId);
+    const color = colorHexToNumber(
+        connectionStatus === ConnectionStatus.Disconnected ? constants.COLOR_DEFAULT :
+            (rpInstance !== null && rpInstance.serverPollingHandlerIntervalId !== null ?
+                constants.COLOR_ACTIVE : constants.COLOR_INACTIVE)
+    );
+
     return getEmbed({
         title: serverInfo.name,
-        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        color: color,
         description: serverInfo.desc,
         thumbnail: { url: serverInfo.img }
     });

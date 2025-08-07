@@ -155,6 +155,9 @@ async function requesterSteamIdSelectMenuHandler(dm: DiscordManager,
     let connectionStatus = ConnectionStatus.Disconnected;
     const rpInstance = rpm.getInstance(guildId, serverId);
     if (rpInstance) {
+        if (server.requesterSteamId !== null) {
+            await rpInstance.setupRequesting();
+        }
         connectionStatus = rpInstance.connectionStatus;
     }
 

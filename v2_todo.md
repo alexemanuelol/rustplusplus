@@ -12,7 +12,7 @@
 - [x] help
 - [ ] item
 - [ ] leader
-- [ ] map
+- [x] map
 - [ ] market
 - [ ] players
 - [ ] recycle

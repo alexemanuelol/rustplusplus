@@ -174,6 +174,23 @@ export async function sendCctvcodesMessage(dm: DiscordManager, interaction: disc
     await dm.handleInteractionReply(interaction, content, 'editReply');
 }
 
+export async function sendMapMessage(dm: DiscordManager, interaction: discordjs.Interaction, serverId: types.ServerId,
+    imageName: string) {
+    const gInstance = gim.getGuildInstance(interaction.guildId as types.GuildId) as GuildInstance;
+    const imagePath = path.join(__dirname, '..', '..', 'maps', `${imageName}`);
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            color: discordEmbeds.colorHexToNumber(constants.COLOR_DEFAULT),
+            image: { url: `attachment://${imageName}` },
+            footer: { text: gInstance.serverInfoMap[serverId].name }
+        })],
+        files: [new discordjs.AttachmentBuilder(imagePath)]
+    };
+
+    await dm.handleInteractionReply(interaction, content, 'editReply');
+}
+
 
 /**
  * Guild based messages
@@ -196,7 +213,7 @@ export async function sendServerMessage(dm: DiscordManager, guildId: types.Guild
     }
 
     const content = {
-        embeds: [discordEmbeds.getServerEmbed(guildId, serverId)],
+        embeds: [discordEmbeds.getServerEmbed(guildId, serverId, connectionStatus)],
         components: [
             await discordSelectMenus.getRequesterSteamIdSelectMenu(dm, guildId, serverId),
             discordButtons.getServerButtons(guildId, serverId, connectionStatus)]

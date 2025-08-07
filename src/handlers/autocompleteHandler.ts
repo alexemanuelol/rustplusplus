@@ -58,6 +58,9 @@ export async function autocompleteHandler(dm: DiscordManager, interaction: disco
     else if (commandName === 'storagemonitor') {
         await autocompleteStoragemonitorHandler(dm, interaction);
     }
+    else if (commandName === 'map') {
+        await autocompleteMapHandler(dm, interaction);
+    }
     else {
         log.error(`${fn} Command '${commandName}' have unknown autocomplete interaction.`, logParam);
         return false;
@@ -321,5 +324,34 @@ async function autocompleteStoragemonitorHandler(dm: DiscordManager, interaction
         default: {
             interaction.respond([]);
         } break;
+    }
+}
+
+async function autocompleteMapHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction) {
+    if (!dm.validPermissions(interaction)) {
+        return interaction.respond([]);
+    }
+
+    const options = interaction.options;
+    const guildId = interaction.guildId as types.GuildId;
+    if (!guildId) return interaction.respond([]);
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const focusedOption = options.getFocused(true);
+
+    if (focusedOption.name === 'server') {
+        const filteredServerIds: { name: string; value: string }[] = [];
+        for (const [serverId, serverInfo] of Object.entries(gInstance.serverInfoMap)) {
+            filteredServerIds.push({
+                name: serverInfo.name,
+                value: serverId
+            });
+        }
+
+        /* Discord limits autocomplete choices to 25 max */
+        interaction.respond(filteredServerIds.slice(0, 25));
+    }
+    else {
+        interaction.respond([]);
     }
 }

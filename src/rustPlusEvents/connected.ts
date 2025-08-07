@@ -37,12 +37,7 @@ export async function execute(rpInstance: RustPlusInstance) {
     rpInstance.stopReconnectionTimer();
 
     await rpInstance.validatePairingData();
-
-    // TODO! Retrieve map to see if map wipe
-
-    await rpInstance.setupSmartDevices();
-
-    rpInstance.startServerPollingHandler();
+    await rpInstance.setupRequesting();
 
     rpInstance.connectionStatus = ConnectionStatus.Connected;
     await sendServerMessage(dm, rpInstance.guildId, rpInstance.serverId, ConnectionStatus.Connected);

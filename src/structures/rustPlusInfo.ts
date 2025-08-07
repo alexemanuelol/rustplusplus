@@ -22,6 +22,7 @@ import * as rp from 'rustplus-ts';
 
 import { RustPlusInstance } from '../managers/rustPlusManager';
 import { secondsToFullScale } from '../utils/timer';
+
 export class RustPlusInfo {
     public rpInstance: RustPlusInstance;
     public appInfo: rp.AppInfo;

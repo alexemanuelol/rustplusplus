@@ -1,0 +1,121 @@
+{
+    "monuments": {
+        "AbandonedMilitaryBase": {
+            "radius": 46
+        },
+        "DungeonBase": {
+            "radius": 0
+        },
+        "airfield_display_name": {
+            "radius": 120
+        },
+        "arctic_base_a": {
+            "radius": 64
+        },
+        "bandit_camp": {
+            "radius": 82
+        },
+        "dome_monument_name": {
+            "radius": 50
+        },
+        "excavator": {
+            "radius": 110
+        },
+        "ferryterminal": {
+            "radius": 88
+        },
+        "fishing_village_display_name": {
+            "radius": 31
+        },
+        "gas_station": {
+            "radius": 28
+        },
+        "harbor_2_display_name": {
+            "radius": 96
+        },
+        "harbor_display_name": {
+            "radius": 96
+        },
+        "jungle_ziggurat": {
+            "radius": 35
+        },
+        "junkyard_display_name": {
+            "radius": 88
+        },
+        "large_fishing_village_display_name": {
+            "radius": 40
+        },
+        "large_oil_rig": {
+            "radius": 40
+        },
+        "launchsite": {
+            "radius": 250
+        },
+        "lighthouse_display_name": {
+            "radius": 28
+        },
+        "military_tunnels_display_name": {
+            "radius": 122
+        },
+        "mining_outpost_display_name": {
+            "radius": 17
+        },
+        "mining_quarry_hqm_display_name": {
+            "radius": 27
+        },
+        "mining_quarry_stone_display_name": {
+            "radius": 35
+        },
+        "mining_quarry_sulfur_display_name": {
+            "radius": 33
+        },
+        "missile_silo_monument": {
+            "radius": 81
+        },
+        "oil_rig_small": {
+            "radius": 32
+        },
+        "outpost": {
+            "radius": 81
+        },
+        "power_plant_display_name": {
+            "radius": 112
+        },
+        "radtown": {
+            "radius": 50
+        },
+        "satellite_dish_display_name": {
+            "radius": 78
+        },
+        "sewer_display_name": {
+            "radius": 87
+        },
+        "stables_a": {
+            "radius": 35
+        },
+        "stables_b": {
+            "radius": 35
+        },
+        "supermarket": {
+            "radius": 19
+        },
+        "swamp_c": {
+            "radius": 42
+        },
+        "train_tunnel_display_name": {
+            "radius": 0
+        },
+        "train_tunnel_link_display_name": {
+            "radius": 0
+        },
+        "train_yard_display_name": {
+            "radius": 115
+        },
+        "underwater_lab": {
+            "radius": 75
+        },
+        "water_treatment_plant_display_name": {
+            "radius": 110
+        }
+    }
+}
