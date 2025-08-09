@@ -455,6 +455,29 @@ export async function sendFcmNewsNewsMessage(dm: DiscordManager, guildId: types.
     await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.activity);
 }
 
+export async function sendEventNotificationMessage(dm: DiscordManager, guildId: types.GuildId,
+    serverId: types.ServerId, setting: keyof EventNotificationSettings, text: string) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId];
+    const settingData = gInstance.eventNotificationSettings[setting];
+
+    const content = {
+        embeds: [discordEmbeds.getEmbed({
+            title: text,
+            timestamp: new Date(),
+            color: discordEmbeds.colorHexToNumber(settingData.color),
+            footer: { text: serverInfo.name, iconURL: serverInfo.img },
+            thumbnail: { url: `attachment://${settingData.image}` },
+        })],
+        files: [
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'events',
+                settingData.image))
+        ]
+    };
+
+    await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.events);
+}
+
 
 /**
  * Response based messages

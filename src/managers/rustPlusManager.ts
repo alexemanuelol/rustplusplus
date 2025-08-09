@@ -27,14 +27,16 @@ import { Logger } from 'winston';
 import { log, discordManager as dm, guildInstanceManager as gim, config, localeManager as lm } from '../../index';
 import * as constants from '../utils/constants';
 import * as types from '../utils/types';
-import { getServerId, getIpAndPort, GuildInstance } from './guildInstanceManager';
+import { getServerId, getIpAndPort, GuildInstance, EventNotificationSettings } from './guildInstanceManager';
 import { sendServerMessage } from '../discordUtils/discordMessages';
 import * as rpInfoHandler from '../handlers/rustPlusInfoHandler';
 import * as rpTimeHandler from '../handlers/rustPlusTimeHandler';
 import { RustPlusInfo } from '../structures/rustPlusInfo';
 import { RustPlusTime } from '../structures/rustPlusTime';
 import { RustPlusMap } from '../structures/rustPlusMap';
+import { RustPlusMapMarkers } from '../structures/rustPlusMapMarkers';
 import * as discordMessages from '../discordUtils/discordMessages';
+import * as discordVoice from '../discordUtils/discordVoice';
 
 
 export type RustPlusInstanceMap = { [guildId: types.GuildId]: RustPlusServerMap };
@@ -143,7 +145,7 @@ export class RustPlusInstance {
     public rpTime: RustPlusTime | null;
     public rpMap: RustPlusMap | null;
     //private appTeamInfo: rustplus.AppTeamInfo | null;
-    //private appMapMarkers: rustplus.AppMapMarkers | null;
+    public rpMapMarkers: RustPlusMapMarkers | null;
 
 
     constructor(guildId: types.GuildId, ip: string, port: string) {
@@ -175,9 +177,9 @@ export class RustPlusInstance {
         this.rpInfo = null;
         this.rpTime = null;
         this.rpMap = null;
+        this.rpMapMarkers = null;
 
         //this.appTeamInfo = null;
-        //this.appMapMarkers = null;
 
 
 
@@ -252,6 +254,7 @@ export class RustPlusInstance {
         this.rpInfo = null;
         this.rpTime = null;
         this.rpMap = null;
+        this.rpMapMarkers = null;
 
         // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
         // cargoship leave etc...
@@ -363,12 +366,14 @@ export class RustPlusInstance {
 
         const info = ((rpInfo as rp.AppResponse).info as rp.AppInfo);
         const time = ((rpTime as rp.AppResponse).time as rp.AppTime);
+        const mapMarkers = ((rpMapMarkers as rp.AppResponse).mapMarkers as rp.AppMapMarkers);
 
         if (firstPoll || this.rpInfo === null || this.rpTime === null) {
             console.log('FIRST POLL')
             // TODO! Set rpInfo, rpTime, rpTeamInfo, rpMapMarkers
             this.rpInfo = new RustPlusInfo(this, info);
             this.rpTime = new RustPlusTime(this, time);
+            this.rpMapMarkers = new RustPlusMapMarkers(this, mapMarkers);
         }
         else {
             console.log('POLL')
@@ -385,8 +390,8 @@ export class RustPlusInstance {
 
         (this.rpInfo as RustPlusInfo).updateInfo(info);
         (this.rpTime as RustPlusTime).updateTime(time);
+        (this.rpMapMarkers as RustPlusMapMarkers).updateMapMarkers(mapMarkers);
         // TODO! update rpInfo
-        // TODO! update rpMapMarkers
 
         // TODO! smartAlarmHandler
         // TODO! storageMonitorHandler
@@ -697,5 +702,29 @@ export class RustPlusInstance {
         // TODO! Start smart devices handlers
         // - smartSwitchPollingHandler
 
+    }
+
+    public async sendEventNotification(setting: keyof EventNotificationSettings, text: string) {
+        const fn = `[RustPlusManager: sendEventNotification]`
+        const logParam = {
+            guildId: this.guildId,
+            serverId: this.serverId,
+            serverName: this.serverName
+        };
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const settingData = gInstance.eventNotificationSettings[setting];
+
+        if (settingData.discord) {
+            await discordMessages.sendEventNotificationMessage(dm, this.guildId, this.serverId, setting, text);
+        }
+        if (settingData.inGame) {
+            this.inGameTeamChatQueueMessage(text);
+        }
+        if (settingData.voice) {
+            await discordVoice.sendDiscordVoiceMessage(this.guildId, text);
+        }
+
+        log.info(`${fn} ${text}`, logParam);
     }
 }

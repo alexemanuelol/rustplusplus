@@ -26,12 +26,27 @@ import { GuildInstance } from "../managers/guildInstanceManager";
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import * as constants from '../utils/constants';
 
-export interface Pos {
-    location: string | null;
-    monument: string | null;
-    string: string | null;
+
+export enum Outside {
+    N = 'north',
+    E = 'east',
+    S = 'south',
+    W = 'west'
+}
+
+export enum Corner {
+    NW = 'northWest',
+    SW = 'southWest',
+    NE = 'northEast',
+    SE = 'southEast'
+}
+export interface Position {
     x: number;
     y: number;
+    grid: string | null;
+    monument: string;
+    outside: Outside | null;
+    corner: Corner | null;
 }
 
 export interface MonumentsInfo {
@@ -40,51 +55,54 @@ export interface MonumentsInfo {
     }
 }
 
-export function getPos(x: number, y: number, rpInstance: RustPlusInstance): Pos | null {
+export function getPos(x: number, y: number, rpInstance: RustPlusInstance): Position | null {
     const gInstance = gim.getGuildInstance(rpInstance.guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
     const mapSize = rpInstance.rpInfo?.appInfo.mapSize;
     const monuments = rpInstance.rpMap?.appMap.monuments;
     if (!mapSize || !monuments) return null;
 
-    const pos = {
-        location: '',
-        monument: '',
-        string: '',
+    const pos: Position = {
         x: x,
-        y: y
+        y: y,
+        grid: null,
+        monument: '',
+        outside: null,
+        corner: null
     }
 
     if (isOutsideGridSystem(x, y, mapSize)) {
-        if (isOutsideRowOrColumn(x, y, mapSize)) {
+        if (isOutsideGridCorners(x, y, mapSize)) {
             if (x < 0 && y > mapSize) {
-                pos.location = lm.getIntl(language, 'northWest');
+                pos.corner = Corner.NW;
             }
             else if (x < 0 && y < 0) {
-                pos.location = lm.getIntl(language, 'southWest');
+                pos.corner = Corner.SW;
             }
             else if (x > mapSize && y > mapSize) {
-                pos.location = lm.getIntl(language, 'northEast');
+                pos.corner = Corner.NE;
             }
             else {
-                pos.location = lm.getIntl(language, 'southEast');
+                pos.corner = Corner.SE;
             }
         }
         else {
-            let str = '';
-            if (x < 0 || x > mapSize) {
-                str += (x < 0) ? lm.getIntl(language, 'westOfGrid') : lm.getIntl(language, 'eastOfGrid');
-                str += ` ${getGridPosNumberY(y, mapSize)}`;
+            if (x < 0) {
+                pos.outside = Outside.W;
+            }
+            else if (x > mapSize) {
+                pos.outside = Outside.E;
+            }
+            else if (y < 0) {
+                pos.outside = Outside.S;
             }
             else {
-                str += (y < 0) ? lm.getIntl(language, 'southOfGrid') : lm.getIntl(language, 'northOfGrid');
-                str += ` ${getGridPosLettersX(x, mapSize)}`;
+                pos.outside = Outside.N;
             }
-            pos.location = str;
         }
     }
     else {
-        pos.location = getGridPos(x, y, mapSize) as string;
+        pos.grid = getGridPos(x, y, mapSize) as string;
     }
 
     const monumentsInfo = getMonumentsInfo().monuments;
@@ -97,9 +115,36 @@ export function getPos(x: number, y: number, rpInstance: RustPlusInstance): Pos 
         }
     }
 
-    pos.string = `${pos.location}${pos.monument !== null ? ` (${pos.monument})` : ''}`;
-
     return pos;
+}
+
+export function getPosString(position: Position, rpInstance: RustPlusInstance, short: boolean = false,
+    monument: boolean = false): string {
+    const gInstance = gim.getGuildInstance(rpInstance.guildId) as GuildInstance;
+    const language = gInstance.generalSettings.language;
+    const mapSize = rpInstance.rpInfo?.appInfo.mapSize;
+    if (!mapSize) return '';
+
+    let str = '';
+    if (position.grid) {
+        str = position.grid;
+    }
+    else if (position.outside) {
+        const outside = (position.outside === Outside.W || position.outside === Outside.E) ?
+            `${getGridPosNumberY(position.y, mapSize)}` :
+            `${getGridPosLettersX(position.x, mapSize)}`;
+        const phrase = `${position.outside}OfGrid${short ? 'Short' : ''}`;
+        str = lm.getIntl(language, phrase, { outside: outside });
+    }
+    else {
+        str = lm.getIntl(language, `${position.corner}${short ? 'Short' : ''}`);
+    }
+
+    if (monument) {
+        str = `${str}${position.monument ? ` (${position.monument})` : ''}`;
+    }
+
+    return str;
 }
 
 export function getGridPos(x: number, y: number, mapSize: number): string | null {
@@ -112,33 +157,25 @@ export function getGridPos(x: number, y: number, mapSize: number): string | null
 }
 
 export function getGridPosLettersX(x: number, mapSize: number): string {
-    let counter = 1;
+    let grid;
     const numberOfGrids = Math.floor(mapSize / constants.GRID_DIAMETER);
     const gridDiameter = mapSize / numberOfGrids;
-    for (let startGrid = 0; startGrid < mapSize; startGrid += gridDiameter) {
-        if (x >= startGrid && x < (startGrid + gridDiameter)) {
-            /* We're at the correct grid! */
-            return numberToLetters(counter);
-        }
-        counter++;
+    for (grid = 0; grid < numberOfGrids; grid++) {
+        if (grid === (numberOfGrids - 1) || x > mapSize) break;
+        if (x >= (grid * gridDiameter) && x < ((grid * gridDiameter) + gridDiameter)) break;
     }
-
-    return '';
+    return numberToLetters(grid + 1);
 }
 
 export function getGridPosNumberY(y: number, mapSize: number): number {
-    let counter = 0;
+    let grid;
     const numberOfGrids = Math.floor(mapSize / constants.GRID_DIAMETER);
     const gridDiameter = mapSize / numberOfGrids;
-    for (let startGrid = mapSize; startGrid >= 0; startGrid -= gridDiameter) {
-        if (y <= startGrid && y > (startGrid - gridDiameter)) {
-            /* We're at the correct grid! */
-            return counter;
-        }
-        counter++;
+    for (grid = 0; grid < numberOfGrids; grid++) {
+        if (grid === (numberOfGrids - 1) || y > mapSize) break;
+        if (y <= (mapSize - grid * gridDiameter) && y > ((mapSize - grid * gridDiameter) - gridDiameter)) break;
     }
-
-    return 0;
+    return grid;
 }
 
 export function numberToLetters(num: number): string {
@@ -172,7 +209,7 @@ export function isOutsideGridSystem(x: number, y: number, mapSize: number, offse
     return false;
 }
 
-export function isOutsideRowOrColumn(x: number, y: number, mapSize: number): boolean {
+export function isOutsideGridCorners(x: number, y: number, mapSize: number): boolean {
     if ((x < 0 && y > mapSize) || (x < 0 && y < 0) || (x > mapSize && y > mapSize) || (x > mapSize && y < 0)) {
         return true;
     }

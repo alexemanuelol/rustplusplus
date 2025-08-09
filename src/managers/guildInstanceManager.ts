@@ -171,6 +171,7 @@ export interface EventNotificationSettings {
 }
 
 export interface EventNotificationSetting {
+    color: string;
     discord: boolean;
     image: string;
     inGame: boolean;
@@ -1140,6 +1141,7 @@ export function isValidEventNotificationSetting(object: unknown): object is Even
 
     const interfaceName = 'EventNotificationSetting';
     const validKeys = [
+        'color',
         'discord',
         'image',
         'inGame',
@@ -1147,6 +1149,7 @@ export function isValidEventNotificationSetting(object: unknown): object is Even
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
+    errors.push(vu.validateType('color', obj.color, 'string'));
     errors.push(vu.validateType('discord', obj.discord, 'boolean'));
     errors.push(vu.validateType('image', obj.image, 'string'));
     errors.push(vu.validateType('inGame', obj.inGame, 'boolean'));

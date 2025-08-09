@@ -29,11 +29,11 @@ export class RustPlusInfo {
 
     constructor(rpInstance: RustPlusInstance, appInfo: rp.AppInfo) {
         this.rpInstance = rpInstance;
-        this.appInfo = appInfo
+        this.appInfo = appInfo;
     }
 
     public updateInfo(appInfo: rp.AppInfo) {
-        this.appInfo = appInfo
+        this.appInfo = appInfo;
     }
 
     public isNameChanged(appInfo: rp.AppInfo): boolean {
@@ -99,6 +99,10 @@ export class RustPlusInfo {
     public isCamerasEnabledChanged(appInfo: rp.AppInfo): boolean {
         return this.appInfo.camerasEnabled !== appInfo.camerasEnabled;
     }
+
+    /**
+     * Other methods
+     */
 
     public isMaxPlayersIncreased(appInfo: rp.AppInfo) {
         return ((this.appInfo.maxPlayers) < (appInfo.maxPlayers));

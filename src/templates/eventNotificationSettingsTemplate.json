@@ -1,139 +1,162 @@
 {
     "vendingMachineSpawned": {
-        "image": "vending_machine_logo.png",
+        "color": "#FF0000",
         "discord": true,
+        "image": "vending_machine_logo.png",
         "inGame": false,
         "voice": true
     },
     "vendingMachineDespawned": {
-        "image": "vending_machine_logo.png",
+        "color": "#00FF00",
         "discord": true,
+        "image": "vending_machine_logo.png",
         "inGame": false,
         "voice": true
     },
     "ch47Spawned": {
-        "image": "chinook_47_logo.png",
+        "color": "#0000FF",
         "discord": true,
+        "image": "chinook_47_logo.png",
         "inGame": false,
         "voice": true
     },
     "ch47Despawned": {
-        "image": "chinook_47_logo.png",
+        "color": "#FFFF00",
         "discord": true,
+        "image": "chinook_47_logo.png",
         "inGame": false,
         "voice": true
     },
     "ch47Destroyed": {
-        "image": "chinook_47_logo.png",
+        "color": "#FF00FF",
         "discord": true,
+        "image": "chinook_47_logo.png",
         "inGame": false,
         "voice": true
     },
     "ch47DroppedLockedCrate": {
-        "image": "locked_crate_logo.png",
+        "color": "#00FFFF",
         "discord": true,
+        "image": "locked_crate_logo.png",
         "inGame": false,
         "voice": true
     },
     "ch47HeavyScientistsCalled": {
-        "image": "oil_rig_logo.png",
+        "color": "#800000",
         "discord": true,
+        "image": "oil_rig_logo.png",
         "inGame": false,
         "voice": true
     },
     "ch47OilRigLockedCrateUnlocked": {
-        "image": "locked_crate_logo.png",
+        "color": "#008000",
         "discord": true,
+        "image": "locked_crate_logo.png",
         "inGame": false,
         "voice": true
     },
     "cargoShipSpawned": {
-        "image": "cargoship_logo.png",
+        "color": "#000080",
         "discord": true,
+        "image": "cargoship_logo.png",
         "inGame": false,
         "voice": true
     },
     "cargoShipDespawned": {
-        "image": "cargoship_logo.png",
+        "color": "#808000",
         "discord": true,
+        "image": "cargoship_logo.png",
         "inGame": false,
         "voice": true
     },
     "cargoShipLeaving": {
-        "image": "cargoship_logo.png",
+        "color": "#800080",
         "discord": true,
+        "image": "cargoship_logo.png",
         "inGame": false,
         "voice": true
     },
     "cargoShipDocking": {
-        "image": "cargoship_logo.png",
+        "color": "#008080",
         "discord": true,
+        "image": "cargoship_logo.png",
         "inGame": false,
         "voice": true
     },
     "cargoShipDocked": {
-        "image": "cargoship_logo.png",
+        "color": "#FFA500",
         "discord": true,
+        "image": "cargoship_logo.png",
         "inGame": false,
         "voice": true
     },
     "cargoShipUndocking": {
-        "image": "cargoship_logo.png",
+        "color": "#A52A2A",
         "discord": true,
+        "image": "cargoship_logo.png",
         "inGame": false,
         "voice": true
     },
     "cargoShipLockedCrateSpawned": {
-        "image": "locked_crate_cargoship_logo.png",
+        "color": "#FFC0CB",
         "discord": true,
+        "image": "locked_crate_cargoship_logo.png",
         "inGame": false,
         "voice": true
     },
     "patrolHelicopterSpawned": {
-        "image": "patrol_helicopter_logo.png",
+        "color": "#40E0D0",
         "discord": true,
+        "image": "patrol_helicopter_logo.png",
         "inGame": false,
         "voice": true
     },
     "patrolHelicopterDespawned": {
-        "image": "patrol_helicopter_logo.png",
+        "color": "#FFD700",
         "discord": true,
+        "image": "patrol_helicopter_logo.png",
         "inGame": false,
         "voice": true
     },
     "patrolHelicopterDestroyed": {
-        "image": "patrol_helicopter_destroyed_logo.png",
+        "color": "#ADFF2F",
         "discord": true,
+        "image": "patrol_helicopter_destroyed_logo.png",
         "inGame": false,
         "voice": true
     },
     "patrolHelicopterLeaving": {
-        "image": "patrol_helicopter_logo.png",
+        "color": "#FF4500",
         "discord": true,
+        "image": "patrol_helicopter_logo.png",
         "inGame": false,
         "voice": true
     },
     "travellingVendorSpawned": {
-        "image": "travelling_vendor_logo.png",
+        "color": "#1E90FF",
         "discord": true,
+        "image": "travelling_vendor_logo.png",
         "inGame": false,
         "voice": true
     },
     "travellingVendorDespawned": {
-        "image": "travelling_vendor_logo.png",
+        "color": "#DC143C",
         "discord": true,
+        "image": "travelling_vendor_logo.png",
         "inGame": false,
         "voice": true
     },
     "travellingVendorStopped": {
-        "image": "travelling_vendor_logo.png",
+        "color": "#7FFF00",
         "discord": true,
+        "image": "travelling_vendor_logo.png",
         "inGame": false,
         "voice": true
     },
     "travellingVendorStarted": {
-        "image": "travelling_vendor_logo.png",
+        "color": "#8B008B",
         "discord": true,
+        "image": "travelling_vendor_logo.png",
         "inGame": false,
         "voice": true
     }

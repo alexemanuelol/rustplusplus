@@ -37,11 +37,11 @@ export class RustPlusMap {
 
     constructor(rpInstance: RustPlusInstance, appMap: rp.AppMap) {
         this.rpInstance = rpInstance;
-        this.appMap = appMap
+        this.appMap = appMap;
     }
 
     public updateMap(appMap: rp.AppMap) {
-        this.appMap = appMap
+        this.appMap = appMap;
     }
 
     public isWidthChanged(appMap: rp.AppMap): boolean {
