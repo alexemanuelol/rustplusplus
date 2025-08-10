@@ -34,6 +34,8 @@ export async function execute(rpInstance: RustPlusInstance) {
 
     log.info(`${fn} CONNECTED.`, logParam);
 
+    dm.connectionStarted = dm.connectionStarted.filter(e => e !== `${rpInstance.guildId}-${rpInstance.serverId}`);
+
     rpInstance.stopReconnectionTimer();
 
     await rpInstance.validatePairingData();

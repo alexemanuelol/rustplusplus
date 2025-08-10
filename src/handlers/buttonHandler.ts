@@ -454,6 +454,7 @@ async function serverConnectingDisconnectReconnectingButtonHandler(dm: DiscordMa
     rpm.removeInstance(guildId, serverId);
     await discordMessages.sendServerMessage(dm, guildId, serverId, ConnectionStatus.Disconnected, interaction);
 
+    dm.connectionStarted = dm.connectionStarted.filter(e => e !== `${guildId}-${serverId}`);
     return true;
 }
 
@@ -467,6 +468,9 @@ async function serverConnectButtonHandler(dm: DiscordManager, interaction: disco
 
     interaction.deferUpdate();
     if (!server) return false;
+
+    if (dm.connectionStarted.includes(`${guildId}-${serverId}`)) return false;
+    dm.connectionStarted.push(`${guildId}-${serverId}`);
 
     if (gInstance.serverToView === null) {
         gInstance.serverToView = serverId;

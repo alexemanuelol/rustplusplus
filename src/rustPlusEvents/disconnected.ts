@@ -18,7 +18,7 @@
 
 */
 
-import { log } from '../../index';
+import { log, discordManager as dm } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
 
 export const name = 'disconnected';
@@ -32,6 +32,8 @@ export async function execute(rpInstance: RustPlusInstance) {
     };
 
     log.info(`${fn} DISCONNECTED.`, logParam);
+
+    dm.connectionStarted = dm.connectionStarted.filter(e => e !== `${rpInstance.guildId}-${rpInstance.serverId}`);
 
     rpInstance.stopServerPollingHandler();
 

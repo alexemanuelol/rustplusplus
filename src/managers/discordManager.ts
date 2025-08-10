@@ -49,6 +49,8 @@ export class DiscordManager {
     public languageChangeTimeoutIds: types.GuildId[] = [];
     public tryAgainLaterTimeoutIds: Map<string, NodeJS.Timeout> = new Map();
 
+    public connectionStarted: string[];
+
     constructor() {
         const fn = '[DiscordManager: Init]';
         log.info(`${fn} Starting DiscordManager.`);
@@ -77,6 +79,8 @@ export class DiscordManager {
         this.guildSlashCommands = new discordjs.Collection();
         this.eventListeners = [];
         this.voiceLeaveTimeoutIds = {};
+
+        this.connectionStarted = [];
 
         this.loadSlashCommands();
         this.loadEvents();
