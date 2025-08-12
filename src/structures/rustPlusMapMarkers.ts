@@ -20,7 +20,15 @@
 
 import * as rp from 'rustplus-ts';
 
+import { localeManager as lm, guildInstanceManager as gim } from '../../index';
 import { RustPlusInstance } from '../managers/rustPlusManager';
+import { getPos, getPosString } from '../utils/map';
+import { GuildInstance } from '../managers/guildInstanceManager';
+
+export interface Point {
+    x: number;
+    y: number;
+}
 
 export class RustPlusMapMarkers {
     public rpInstance: RustPlusInstance;
@@ -37,6 +45,8 @@ export class RustPlusMapMarkers {
     public patrolHelicopters: rp.AppMarker[];
     public travellingVendors: rp.AppMarker[];
 
+    public knownVendingMachines: Point[];
+
     constructor(rpInstance: RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
         this.rpInstance = rpInstance;
         this.appMapMarkers = appMapMarkers;
@@ -51,6 +61,8 @@ export class RustPlusMapMarkers {
         this.genericRadii = [];
         this.patrolHelicopters = [];
         this.travellingVendors = [];
+
+        this.knownVendingMachines = [];
 
         this.updateMapMarkers(appMapMarkers, false);
     }
@@ -92,17 +104,15 @@ export class RustPlusMapMarkers {
             this.players.push(marker);
         }
 
-        /* Player markers that have left. */
+        /* Markers that have left. */
         for (const marker of leftMarkers) {
             this.players = this.players.filter(e => e.id !== marker.id);
         }
 
-        /* Player markers that still remains. */
+        /* Markers that still remains. */
         for (const marker of remainingMarkers) {
-            const player = this.getMarkersOfTypeById(type, marker.id);
-
-            player.x = marker.x;
-            player.y = marker.y;
+            const player = this.players.find(e => e.id === marker.id);
+            if (player) Object.assign(player, marker);
         }
     }
 
@@ -111,9 +121,39 @@ export class RustPlusMapMarkers {
         /* No longer used in Rust+ */
     }
 
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private updateVendingMachines(mapMarkers: rp.AppMapMarkers, notify: boolean = true) {
+        const type = rp.AppMarkerType.VendingMachine;
+        const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
+        const leftMarkers = this.getLeftMarkersById(type, mapMarkers.markers);
+        const remainingMarkers = this.getRemainingMarkersById(type, mapMarkers.markers);
 
+        /* Markers that are new. */
+        for (const marker of newMarkers) {
+            if (notify && !this.knownVendingMachines.some(e => e.x === marker.x && e.y === marker.y)) {
+                const location = getPos(marker.x, marker.y, this.rpInstance);
+                if (location) {
+                    const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+                    const language = gInstance.generalSettings.language;
+                    const locationString = getPosString(location, this.rpInstance, false, true);
+                    this.rpInstance.sendEventNotification('vendingMachineSpawned',
+                        lm.getIntl(language, 'inGameEvent-vendingMachineSpawned', { location: locationString }));
+                }
+            }
+
+            this.knownVendingMachines.push({ x: marker.x, y: marker.y });
+            this.vendingMachines.push(marker);
+        }
+
+        /* Markers that have left. */
+        for (const marker of leftMarkers) {
+            this.vendingMachines = this.vendingMachines.filter(e => e.x !== marker.x || e.y !== marker.y);
+        }
+
+        /* Markers that still remains. */
+        for (const marker of remainingMarkers) {
+            const vendingMachine = this.vendingMachines.find(e => e.x === marker.x && e.y === marker.y);
+            if (vendingMachine) Object.assign(vendingMachine, marker);
+        }
     }
 
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */

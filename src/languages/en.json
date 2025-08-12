@@ -146,6 +146,7 @@
     "hbhfSensor": "HBHF Sensor",
     "heater": "Heater",
     "id": "ID",
+    "inGameEvent-vendingMachineSpawned": "A new Vending Machine located at {location}.",
     "inGameTime": "In-Game time: {time}.",
     "issuedAt": "Issued: {time}",
     "item": "Item",
