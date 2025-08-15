@@ -257,6 +257,7 @@ export class RustPlusMapMarkers {
                 this.rpInstance.sendEventNotification('ch47Despawned', eventText);
             }
 
+            this.ch47LockedCrateNotified = this.ch47LockedCrateNotified.filter(e => e !== marker.id);
             this.ch47s = this.ch47s.filter(e => e.id !== marker.id);
         }
 
