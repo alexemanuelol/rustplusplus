@@ -34,7 +34,7 @@
         "inGame": false,
         "voice": true
     },
-    "ch47DroppedLockedCrate": {
+    "ch47MaybeDroppedLockedCrate": {
         "color": "#00FFFF",
         "discord": true,
         "image": "locked_crate_logo.png",

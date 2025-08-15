@@ -25,19 +25,30 @@ import * as path from 'path';
 
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { RustPlusInstance } from '../managers/rustPlusManager';
-import { getGridPos, getMonumentsInfo } from '../utils/map';
+import { getGridPos, getMonumentsInfo, getDistance } from '../utils/map';
 import * as constants from '../utils/constants';
 import { GuildInstance } from '../managers/guildInstanceManager';
+
+export interface Point {
+    x: number;
+    y: number;
+}
 
 export class RustPlusMap {
     public rpInstance: RustPlusInstance;
     public appMap: rp.AppMap;
+
+    public invalidClosestMonuments: string[];
 
     private static fontsRegistered = false;
 
     constructor(rpInstance: RustPlusInstance, appMap: rp.AppMap) {
         this.rpInstance = rpInstance;
         this.appMap = appMap;
+
+        this.invalidClosestMonuments = [
+            'DungeonBase', 'train_tunnel_display_name', 'train_tunnel_link_display_name'
+        ];
     }
 
     public updateMap(appMap: rp.AppMap) {
@@ -207,5 +218,21 @@ export class RustPlusMap {
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private async drawMarkers(ctx: SKRSContext2D) {
         // TODO! TBD
+    }
+
+    public getMonumentPointIfInside(point: Point, monumentName: string, radius: number): Point | null {
+        const monument = this.appMap.monuments.find(e => monumentName === e.token &&
+            getDistance(point.x, point.y, e.x, e.y) <= radius);
+
+        return monument ? { x: monument.x, y: monument.y } : null;
+    }
+
+    public getClosestMonument(point: Point): rp.AppMap_Monument {
+        const validMonuments = this.appMap.monuments.filter(e => !this.invalidClosestMonuments.includes(e.token));
+        return validMonuments.reduce((closest, monument) => {
+            const currentDistance = getDistance(point.x, point.y, monument.x, monument.y);
+            const closestDistance = getDistance(point.x, point.y, closest.x, closest.y);
+            return currentDistance < closestDistance ? monument : closest;
+        });
     }
 }

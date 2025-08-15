@@ -150,7 +150,7 @@ export interface EventNotificationSettings {
     ch47Spawned: EventNotificationSetting;
     ch47Despawned: EventNotificationSetting;
     ch47Destroyed: EventNotificationSetting;
-    ch47DroppedLockedCrate: EventNotificationSetting;
+    ch47MaybeDroppedLockedCrate: EventNotificationSetting;
     ch47HeavyScientistsCalled: EventNotificationSetting;
     ch47OilRigLockedCrateUnlocked: EventNotificationSetting;
     cargoShipSpawned: EventNotificationSetting;
@@ -200,7 +200,7 @@ export interface SettingsMessages {
     ch47Spawned: types.MessageId | null;
     ch47Despawned: types.MessageId | null;
     ch47Destroyed: types.MessageId | null;
-    ch47DroppedLockedCrate: types.MessageId | null;
+    ch47MaybeDroppedLockedCrate: types.MessageId | null;
     ch47HeavyScientistsCalled: types.MessageId | null;
     ch47OilRigLockedCrateUnlocked: types.MessageId | null;
     cargoShipSpawned: types.MessageId | null;
@@ -284,6 +284,7 @@ export interface ServerInfo {
     smartSwitchGroupConfigMap: SmartSwitchGroupConfigMap;
     dayDurationSeconds: number | null;
     nightDurationSeconds: number | null;
+    oilRigLockedCrateUnlockTimeMs: number;
 }
 
 export interface SmartSwitchConfig {
@@ -602,7 +603,7 @@ export class GuildInstanceManager {
                 ch47Spawned: null,
                 ch47Despawned: null,
                 ch47Destroyed: null,
-                ch47DroppedLockedCrate: null,
+                ch47MaybeDroppedLockedCrate: null,
                 ch47HeavyScientistsCalled: null,
                 ch47OilRigLockedCrateUnlocked: null,
                 cargoShipSpawned: null,
@@ -1060,7 +1061,7 @@ export function isValidEventNotificationSettings(object: unknown): object is Eve
         'ch47Spawned',
         'ch47Despawned',
         'ch47Destroyed',
-        'ch47DroppedLockedCrate',
+        'ch47MaybeDroppedLockedCrate',
         'ch47HeavyScientistsCalled',
         'ch47OilRigLockedCrateUnlocked',
         'cargoShipSpawned',
@@ -1088,7 +1089,7 @@ export function isValidEventNotificationSettings(object: unknown): object is Eve
     errors.push(vu.validateInterface('ch47Spawned', obj.ch47Spawned, isValidEventNotificationSetting));
     errors.push(vu.validateInterface('ch47Despawned', obj.ch47Despawned, isValidEventNotificationSetting));
     errors.push(vu.validateInterface('ch47Destroyed', obj.ch47Destroyed, isValidEventNotificationSetting));
-    errors.push(vu.validateInterface('ch47DroppedLockedCrate', obj.ch47DroppedLockedCrate,
+    errors.push(vu.validateInterface('ch47MaybeDroppedLockedCrate', obj.ch47MaybeDroppedLockedCrate,
         isValidEventNotificationSetting));
     errors.push(vu.validateInterface('ch47HeavyScientistsCalled', obj.ch47HeavyScientistsCalled,
         isValidEventNotificationSetting));
@@ -1198,7 +1199,7 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
         'ch47Spawned',
         'ch47Despawned',
         'ch47Destroyed',
-        'ch47DroppedLockedCrate',
+        'ch47MaybeDroppedLockedCrate',
         'ch47HeavyScientistsCalled',
         'ch47OilRigLockedCrateUnlocked',
         'cargoShipSpawned',
@@ -1243,7 +1244,7 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
     errors.push(vu.validateType('ch47Spawned', obj.ch47Spawned, 'string', null));
     errors.push(vu.validateType('ch47Despawned', obj.ch47Despawned, 'string', null));
     errors.push(vu.validateType('ch47Destroyed', obj.ch47Destroyed, 'string', null));
-    errors.push(vu.validateType('ch47DroppedLockedCrate', obj.ch47DroppedLockedCrate, 'string', null));
+    errors.push(vu.validateType('ch47MaybeDroppedLockedCrate', obj.ch47MaybeDroppedLockedCrate, 'string', null));
     errors.push(vu.validateType('ch47HeavyScientistsCalled', obj.ch47HeavyScientistsCalled, 'string', null));
     errors.push(vu.validateType('ch47OilRigLockedCrateUnlocked', obj.ch47OilRigLockedCrateUnlocked, 'string', null));
     errors.push(vu.validateType('cargoShipSpawned', obj.cargoShipSpawned, 'string', null));
@@ -1473,7 +1474,8 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'storageMonitorConfigMap',
         'smartSwitchGroupConfigMap',
         'dayDurationSeconds',
-        'nightDurationSeconds'
+        'nightDurationSeconds',
+        'oilRigLockedCrateUnlockTimeMs'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1500,6 +1502,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         isValidSmartSwitchGroupConfig));
     errors.push(vu.validateType('dayDurationSeconds', obj.dayDurationSeconds, 'number', null));
     errors.push(vu.validateType('nightDurationSeconds', obj.nightDurationSeconds, 'number', null));
+    errors.push(vu.validateType('oilRigLockedCrateUnlockTimeMs', obj.oilRigLockedCrateUnlockTimeMs, 'number'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
