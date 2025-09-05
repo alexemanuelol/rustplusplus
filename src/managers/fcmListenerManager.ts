@@ -465,7 +465,9 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             dayDurationSeconds: serverInfo ? serverInfo.dayDurationSeconds : null,
             nightDurationSeconds: serverInfo ? serverInfo.nightDurationSeconds : null,
             oilRigLockedCrateUnlockTimeMs: serverInfo ? serverInfo.oilRigLockedCrateUnlockTimeMs :
-                constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS
+                constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
+            cargoShipEgressTimeMs: serverInfo ? serverInfo.cargoShipEgressTimeMs :
+                constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);

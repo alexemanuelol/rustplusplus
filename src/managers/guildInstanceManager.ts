@@ -285,6 +285,7 @@ export interface ServerInfo {
     dayDurationSeconds: number | null;
     nightDurationSeconds: number | null;
     oilRigLockedCrateUnlockTimeMs: number;
+    cargoShipEgressTimeMs: number;
 }
 
 export interface SmartSwitchConfig {
@@ -1475,7 +1476,8 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'smartSwitchGroupConfigMap',
         'dayDurationSeconds',
         'nightDurationSeconds',
-        'oilRigLockedCrateUnlockTimeMs'
+        'oilRigLockedCrateUnlockTimeMs',
+        'cargoShipEgressTimeMs'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1503,6 +1505,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     errors.push(vu.validateType('dayDurationSeconds', obj.dayDurationSeconds, 'number', null));
     errors.push(vu.validateType('nightDurationSeconds', obj.nightDurationSeconds, 'number', null));
     errors.push(vu.validateType('oilRigLockedCrateUnlockTimeMs', obj.oilRigLockedCrateUnlockTimeMs, 'number'));
+    errors.push(vu.validateType('cargoShipEgressTimeMs', obj.cargoShipEgressTimeMs, 'number'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

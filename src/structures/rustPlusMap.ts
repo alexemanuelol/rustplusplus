@@ -25,20 +25,16 @@ import * as path from 'path';
 
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { RustPlusInstance } from '../managers/rustPlusManager';
-import { getGridPos, getMonumentsInfo, getDistance } from '../utils/map';
+import { getGridPos, getMonumentsInfo, getDistance, Point } from '../utils/map';
 import * as constants from '../utils/constants';
 import { GuildInstance } from '../managers/guildInstanceManager';
-
-export interface Point {
-    x: number;
-    y: number;
-}
 
 export class RustPlusMap {
     public rpInstance: RustPlusInstance;
     public appMap: rp.AppMap;
 
     public invalidClosestMonuments: string[];
+    public harborMonuments: string[];
 
     private static fontsRegistered = false;
 
@@ -48,6 +44,9 @@ export class RustPlusMap {
 
         this.invalidClosestMonuments = [
             'DungeonBase', 'train_tunnel_display_name', 'train_tunnel_link_display_name'
+        ];
+        this.harborMonuments = [
+            'harbor_display_name', 'harbor_2_display_name'
         ];
     }
 
@@ -233,6 +232,26 @@ export class RustPlusMap {
             const currentDistance = getDistance(point.x, point.y, monument.x, monument.y);
             const closestDistance = getDistance(point.x, point.y, closest.x, closest.y);
             return currentDistance < closestDistance ? monument : closest;
+        });
+    }
+
+    public getNumberOfHarbors(): number {
+        return this.appMap.monuments.filter(m =>
+            this.harborMonuments.includes(m.token)
+        ).length;
+    }
+
+    public getClosestHarbor(point: Point): rp.AppMap_Monument | null {
+        const harbors = this.appMap.monuments.filter(m =>
+            this.harborMonuments.includes(m.token)
+        );
+
+        if (harbors.length === 0) return null;
+
+        return harbors.reduce((closest, harbor) => {
+            const currentDistance = getDistance(point.x, point.y, harbor.x, harbor.y);
+            const closestDistance = getDistance(point.x, point.y, closest.x, closest.y);
+            return currentDistance < closestDistance ? harbor : closest;
         });
     }
 }

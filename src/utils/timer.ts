@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2024 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2025 Alexander Emanuelsson (alexemanuelol)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,43 +18,39 @@
 
 */
 
-interface TimerCallback {
-    (...args: unknown[]): void;
-}
-
 export class Timer {
-    private callback: TimerCallback;
+    private callback: (...args: unknown[]) => void;
     private timeoutMs: number;
     private args: unknown[];
 
     private timeoutId: NodeJS.Timeout | null;
     private startDate: Date | null;
-    private remaining: number;
+    private remainingMs: number;
     public running: boolean;
 
-    constructor(callback: TimerCallback, timeoutMs: number, ...args: unknown[]) {
+    constructor(callback: (...args: unknown[]) => void, timeoutMs: number, ...args: unknown[]) {
         this.callback = callback;
         this.timeoutMs = timeoutMs;
         this.args = args;
 
         this.timeoutId = null;
         this.startDate = null;
-        this.remaining = this.timeoutMs;
+        this.remainingMs = this.timeoutMs;
         this.running = false;
     }
 
     start(): void {
         if (this.timeoutId) clearTimeout(this.timeoutId);
         this.startDate = new Date();
-        this.remaining = this.timeoutMs;
+        this.remainingMs = this.timeoutMs;
         this.running = true;
-        this.timeoutId = setTimeout(this.callback, this.remaining, this.args)
+        this.timeoutId = setTimeout(this.callback, this.remainingMs, this.args)
     }
 
     stop(): void {
         if (this.timeoutId) clearTimeout(this.timeoutId);
         this.startDate = null;
-        this.remaining = 0;
+        this.remainingMs = 0;
         this.running = false;
     }
 
@@ -65,7 +61,7 @@ export class Timer {
         this.running = false;
         const currentDate = new Date();
         const elapsedTime = currentDate.getTime() - this.startDate.getTime();
-        this.remaining = Math.max(0, Math.floor(this.remaining - elapsedTime));
+        this.remainingMs = Math.max(0, Math.floor(this.remainingMs - elapsedTime));
     }
 
     resume(): void {
@@ -73,15 +69,15 @@ export class Timer {
 
         this.startDate = new Date();
         this.running = true;
-        this.timeoutId = setTimeout(this.callback, this.remaining, this.args);
+        this.timeoutId = setTimeout(this.callback, this.remainingMs, this.args);
     }
 
-    getTimeLeft(): number {
+    getTimeLeftMs(): number {
         if (!this.startDate) return 0;
 
         const currentDate = new Date();
         const elapsedTime = currentDate.getTime() - this.startDate.getTime();
-        return Math.max(0, Math.floor((this.remaining - elapsedTime) / 1000));
+        return Math.max(0, Math.floor(this.remainingMs - elapsedTime));
     }
 }
 

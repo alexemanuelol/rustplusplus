@@ -49,6 +49,12 @@ export interface Position {
     corner: Corner | null;
 }
 
+export interface Point {
+    x: number;
+    y: number;
+}
+
+
 export interface MonumentsInfo {
     monuments: {
         [monumentName: string]: { radius: number };
@@ -193,6 +199,59 @@ export function getAngleBetweenPoints(x1: number, y1: number, x2: number, y2: nu
     }
 
     return Math.floor((Math.abs(angle - 360) + 90) % 360);
+}
+
+export function isSameDirection(p1: Point, p2: Point, p3: Point, threshold: number = 0.017): boolean {
+    /* threshold default = ~1° in radians */
+
+    /* Vector A (p1 -> p2) */
+    const ax = p2.x - p1.x;
+    const ay = p2.y - p1.y;
+
+    /* Vector B (p2 -> p3) */
+    const bx = p3.x - p2.x;
+    const by = p3.y - p2.y;
+
+    /* normalize A */
+    const amag = Math.sqrt(ax * ax + ay * ay);
+    if (amag === 0) return false;
+    const nax = ax / amag;
+    const nay = ay / amag;
+
+    /* normalize B */
+    const bmag = Math.sqrt(bx * bx + by * by);
+    if (bmag === 0) return false;
+    const nbx = bx / bmag;
+    const nby = by / bmag;
+
+    /* dot product */
+    const dot = nax * nbx + nay * nby;
+    /* clamp to avoid NaN due to float precision */
+    const clamped = Math.min(1, Math.max(-1, dot));
+
+    /* angle between vectors */
+    const angle = Math.acos(clamped);
+
+    return angle < threshold;
+}
+
+export function isFacing(point1: Point, point2: Point, rotation: number, thresholdDeg: number = 30): boolean {
+    const dx = point1.x - point2.x;
+    const dy = point1.y - point2.y;
+    const mag = Math.sqrt(dx * dx + dy * dy);
+    if (mag === 0) return true;
+
+    const dirX = dx / mag;
+    const dirY = dy / mag;
+
+    const rad = (rotation * Math.PI) / 180;
+    const fx = -Math.sin(rad);
+    const fy = Math.cos(rad);
+
+    const dot = fx * dirX + fy * dirY;
+    const angle = Math.acos(dot) * (180 / Math.PI);
+
+    return angle <= thresholdDeg;
 }
 
 export function getDistance(x1: number, y1: number, x2: number, y2: number): number {

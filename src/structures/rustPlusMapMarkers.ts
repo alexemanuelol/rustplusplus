@@ -22,10 +22,12 @@ import * as rp from 'rustplus-ts';
 
 import { localeManager as lm, guildInstanceManager as gim } from '../../index';
 import { RustPlusInstance } from '../managers/rustPlusManager';
-import { getDistance, getGridPos, getPos, getPosString, isOutsideGridSystem } from '../utils/map';
+import {
+    getDistance, getGridPos, getPos, getPosString, isOutsideGridSystem, isSameDirection, Point, Position
+} from '../utils/map';
 import { GuildInstance } from '../managers/guildInstanceManager';
-import { Point } from './rustPlusMap';
 import * as constants from '../utils/constants';
+import { Timer } from '../utils/timer';
 
 const VALID_LOCKED_CRATE_MONUMENTS: string[] = [
     'airfield_display_name',
@@ -34,6 +36,29 @@ const VALID_LOCKED_CRATE_MONUMENTS: string[] = [
     'train_yard_display_name',
     'water_treatment_plant_display_name'
 ];
+
+export enum DockingStatus {
+    DOCKING = 0,
+    DOCKED = 1,
+    UNDOCKING = 2
+}
+
+const CARGO_SHIP_LOOT_ROUNDS = 3;
+const CARGO_SHIP_LOOT_ROUNDS_SPACING_MS = 10 * 60 * 1000; /* 10 min */
+const CARGO_SHIP_HARBOR_DOCKING_TIME_MS = 8 * 60 * 1000; /* 8 min */
+const CARGO_SHIP_HARBOR_DOCKING_DISTANCE = 480;
+const CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE = 280;
+const CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS = 2 * 60 * 1000; /* 2 min */
+const CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS = 19.5 * 60 * 1000; /* 19.5 min */
+
+export interface CargoShipMetaData {
+    lockedCrateSpawnCounter: number;
+    harborsDocked: Point[];
+    dockingStatus: DockingStatus | null;
+    isLeaving: boolean;
+    prevPoint: Point | null;
+    isDepartureCertain: boolean;
+}
 
 export class RustPlusMapMarkers {
     public rpInstance: RustPlusInstance;
@@ -53,6 +78,11 @@ export class RustPlusMapMarkers {
     public travellingVendors: rp.AppMarker[];
 
     public oilRigLockedCrateUnlockedTimeoutIds: { [ch47: number]: NodeJS.Timeout };
+    public cargoShipEgressTimeoutIds: { [cargoShip: number]: Timer };
+    public cargoShipEgressAfterHarbor1TimeoutIds: { [cargoShip: number]: Timer };
+    public cargoShipEgressAfterHarbor2TimeoutIds: { [cargoShip: number]: Timer };
+    public cargoShipLockedCrateSpawnIntervalIds: { [cargoShip: number]: NodeJS.Timeout };
+    public cargoShipUndockingNotificationTimeoutIds: { [cargoShip: number]: NodeJS.Timeout };
 
     public timeSinceSmallOilRigWasTriggered: Date | null;
     public timeSinceLargeOilRigWasTriggered: Date | null;
@@ -60,6 +90,7 @@ export class RustPlusMapMarkers {
     public knownVendingMachines: Point[];
     public oilRigCh47s: number[];
     public ch47LockedCrateNotified: number[];
+    public cargoShipMetaData: { [cargoShip: number]: CargoShipMetaData };
 
     constructor(rpInstance: RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
         this.rpInstance = rpInstance;
@@ -80,6 +111,11 @@ export class RustPlusMapMarkers {
 
         /* Timeout Ids */
         this.oilRigLockedCrateUnlockedTimeoutIds = {};
+        this.cargoShipEgressTimeoutIds = {};
+        this.cargoShipEgressAfterHarbor2TimeoutIds = {}
+        this.cargoShipEgressAfterHarbor1TimeoutIds = {}
+        this.cargoShipLockedCrateSpawnIntervalIds = {};
+        this.cargoShipUndockingNotificationTimeoutIds = {};
 
         /* Event dates */
         this.timeSinceSmallOilRigWasTriggered = null;
@@ -88,9 +124,7 @@ export class RustPlusMapMarkers {
         this.knownVendingMachines = [];
         this.oilRigCh47s = [];
         this.ch47LockedCrateNotified = [];
-
-        this.updateMapMarkers(appMapMarkers);
-        this.firstPoll = false;
+        this.cargoShipMetaData = {};
     }
 
 
@@ -110,6 +144,7 @@ export class RustPlusMapMarkers {
         this.updatePatrolHelicopters(appMapMarkers);
         this.updateTravellingVendors(appMapMarkers);
 
+        this.firstPoll = false;
         this.appMapMarkers = appMapMarkers;
     }
 
@@ -136,8 +171,8 @@ export class RustPlusMapMarkers {
 
         /* Markers that still remains. */
         for (const marker of remainingMarkers) {
-            const player = this.players.find(e => e.id === marker.id);
-            if (player) Object.assign(player, marker);
+            const player = this.players.find(e => e.id === marker.id) as rp.AppMarker;
+            Object.assign(player, marker);
         }
     }
 
@@ -176,8 +211,8 @@ export class RustPlusMapMarkers {
 
         /* Markers that still remains. */
         for (const marker of remainingMarkers) {
-            const vendingMachine = this.vendingMachines.find(e => e.x === marker.x && e.y === marker.y);
-            if (vendingMachine) Object.assign(vendingMachine, marker);
+            const vendingMachine = this.vendingMachines.find(e => e.x === marker.x && e.y === marker.y) as rp.AppMarker;
+            Object.assign(vendingMachine, marker);
         }
     }
 
@@ -191,6 +226,8 @@ export class RustPlusMapMarkers {
         const remainingMarkers = this.getRemainingMarkersById(type, mapMarkers.markers);
 
         if (!this.rpInstance.rpMap || !this.rpInstance.rpInfo) return;
+
+        const mapSize = this.rpInstance.rpInfo.appInfo.mapSize;
 
         /* Markers that are new. */
         for (const marker of newMarkers) {
@@ -227,7 +264,6 @@ export class RustPlusMapMarkers {
             }
             else {
                 const ch47Pos = getPos(marker.x, marker.y, this.rpInstance);
-                const mapSize = this.rpInstance.rpInfo.appInfo.mapSize;
                 if (ch47Pos) {
                     const ch47PosString = getPosString(ch47Pos, this.rpInstance, false, true);
                     const phrase = 'inGameEvent-ch47Spawned' + (this.firstPoll ? '-located' :
@@ -248,7 +284,6 @@ export class RustPlusMapMarkers {
             }
 
             const ch47Pos = getPos(marker.x, marker.y, this.rpInstance);
-            const mapSize = this.rpInstance.rpInfo.appInfo.mapSize;
             if (ch47Pos) {
                 const ch47PosString = getPosString(ch47Pos, this.rpInstance, false, true);
                 const phrase = 'inGameEvent-ch47Despawned' +
@@ -283,7 +318,6 @@ export class RustPlusMapMarkers {
 
             if (prevClosestMonument.token === closestMonument.token && validMonument && !notified &&
                 distance <= minDistanceInside && difference <= maxDifference) {
-                const mapSize = this.rpInstance.rpInfo.appInfo.mapSize;
                 const monumentName = lm.getIntl(language, `monumentName-${closestMonument.token}`);
                 const gridPos = getGridPos(closestMonument.x, closestMonument.y, mapSize) as string;
                 const eventText = lm.getIntl(language, 'inGameEvent-ch47MaybeDroppedLockedCrate', {
@@ -297,18 +331,262 @@ export class RustPlusMapMarkers {
                 this.ch47LockedCrateNotified = this.ch47LockedCrateNotified.filter(e => e !== marker.id);
             }
 
-            if (ch47) Object.assign(ch47, marker);
+            Object.assign(ch47, marker);
+        }
+    }
+
+    private updateCargoShips(mapMarkers: rp.AppMapMarkers) {
+        const type = rp.AppMarkerType.CargoShip;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
+        const leftMarkers = this.getLeftMarkersById(type, mapMarkers.markers);
+        const remainingMarkers = this.getRemainingMarkersById(type, mapMarkers.markers);
+
+        if (!this.rpInstance.rpMap || !this.rpInstance.rpInfo) return;
+
+        const mapSize = this.rpInstance.rpInfo.appInfo.mapSize;
+        const numberOfGrids = Math.floor(mapSize / constants.GRID_DIAMETER);
+        const gridDiameter = mapSize / numberOfGrids;
+
+        /* Markers that are new. */
+        for (const marker of newMarkers) {
+            this.cargoShipMetaData[marker.id] = {
+                lockedCrateSpawnCounter: 0,
+                harborsDocked: [],
+                dockingStatus: null,
+                isLeaving: false,
+                prevPoint: null,
+                isDepartureCertain: true
+            };
+
+            const offset = 4 * gridDiameter;
+            const isOutside = isOutsideGridSystem(marker.x, marker.y, mapSize, offset);
+
+            const cargoShipPos = getPos(marker.x, marker.y, this.rpInstance) as Position;
+            const cargoShipPosString = getPosString(cargoShipPos, this.rpInstance, false, true);
+
+            const phrase = 'inGameEvent-cargoShipSpawned' + (this.firstPoll ? '-located' :
+                (isOutside ? '-enters' : ''));
+            const eventText = lm.getIntl(language, phrase, { location: cargoShipPosString });
+            this.rpInstance.sendEventNotification('cargoShipSpawned', eventText);
+
+            /* Needs to be added before notifying about spawned locked crate */
+            this.cargoShips.push(marker);
+
+            if (!this.firstPoll) {
+                this.cargoShipEgressTimeoutIds[marker.id] = new Timer(
+                    this.notifyCargoShipEgress.bind(this, marker.id),
+                    gInstance.serverInfoMap[this.rpInstance.serverId].cargoShipEgressTimeMs
+                );
+                (this.cargoShipEgressTimeoutIds[marker.id] as Timer).start();
+
+                this.notifyCargoShipLockedCrateSpawn(marker.id);
+                this.cargoShipLockedCrateSpawnIntervalIds[marker.id] = setInterval(
+                    this.notifyCargoShipLockedCrateSpawn.bind(this, marker.id),
+                    CARGO_SHIP_LOOT_ROUNDS_SPACING_MS
+                );
+            }
+        }
+
+        /* Markers that have left. */
+        for (const marker of leftMarkers) {
+            const cargoShipPos = getPos(marker.x, marker.y, this.rpInstance) as Position;
+            const cargoShipPosString = getPosString(cargoShipPos, this.rpInstance, false, true);
+
+            const phrase = 'inGameEvent-cargoShipDespawned';
+            const eventText = lm.getIntl(language, phrase, { location: cargoShipPosString });
+            this.rpInstance.sendEventNotification('cargoShipDespawned', eventText);
+
+            if (Object.hasOwn(this.cargoShipEgressTimeoutIds, marker.id)) {
+                this.cargoShipEgressTimeoutIds[marker.id]?.stop();
+                delete this.cargoShipEgressTimeoutIds[marker.id];
+            }
+            if (Object.hasOwn(this.cargoShipEgressAfterHarbor1TimeoutIds, marker.id)) {
+                this.cargoShipEgressAfterHarbor1TimeoutIds[marker.id]?.stop();
+                delete this.cargoShipEgressAfterHarbor1TimeoutIds[marker.id];
+            }
+            if (Object.hasOwn(this.cargoShipEgressAfterHarbor2TimeoutIds, marker.id)) {
+                this.cargoShipEgressAfterHarbor2TimeoutIds[marker.id]?.stop();
+                delete this.cargoShipEgressAfterHarbor2TimeoutIds[marker.id];
+            }
+            if (Object.hasOwn(this.cargoShipLockedCrateSpawnIntervalIds, marker.id)) {
+                clearInterval(this.cargoShipLockedCrateSpawnIntervalIds[marker.id] ?? undefined);
+                delete this.cargoShipLockedCrateSpawnIntervalIds[marker.id];
+            }
+            if (Object.hasOwn(this.cargoShipUndockingNotificationTimeoutIds, marker.id)) {
+                clearTimeout(this.cargoShipUndockingNotificationTimeoutIds[marker.id]);
+                delete this.cargoShipUndockingNotificationTimeoutIds[marker.id];
+            }
+
+            delete this.cargoShipMetaData[marker.id];
+            this.cargoShips = this.cargoShips.filter(e => e.id !== marker.id);
+        }
+
+        /* Markers that still remains. */
+        for (const marker of remainingMarkers) {
+            const cargoShip = this.cargoShips.find(e => e.id === marker.id) as rp.AppMarker;
+
+            const harbor = this.rpInstance.rpMap.getClosestHarbor({ x: marker.x, y: marker.y });
+            if (!harbor) {
+                /* No harbor seem to exist on the map, continue */
+                Object.assign(cargoShip, marker);
+                continue;
+            }
+
+            const prevDist = getDistance(cargoShip.x, cargoShip.y, harbor.x, harbor.y)
+            const currDist = getDistance(marker.x, marker.y, harbor.x, harbor.y)
+            const harborAlreadyDocked = this.cargoShipMetaData[marker.id].harborsDocked.some(e =>
+                e.x === harbor.x && e.y === harbor.y);
+            const hasDockingStatus = this.cargoShipMetaData[marker.id].dockingStatus !== null;
+            const allHarborsDocked = this.cargoShipMetaData[marker.id].harborsDocked.length ===
+                this.rpInstance.rpMap.getNumberOfHarbors();
+            const isStandingStill = cargoShip.x === marker.x && cargoShip.y === marker.y;
+            const isLeaving = this.cargoShipMetaData[marker.id].isLeaving;
+            const harborName = lm.getIntl(language, `monumentName-${harbor.token}`);
+            const harborGridPos = getGridPos(harbor.x, harbor.y, mapSize);
+            const prevPoint = this.cargoShipMetaData[marker.id].prevPoint;
+            const isSameDir = prevPoint && isSameDirection(
+                { x: prevPoint.x, y: prevPoint.y },
+                { x: cargoShip.x, y: cargoShip.y },
+                { x: marker.x, y: marker.y });
+            const hasEgressTimer = Object.hasOwn(this.cargoShipEgressTimeoutIds, marker.id);
+            const isOutside = isOutsideGridSystem(marker.x, marker.y, mapSize, 4 * gridDiameter);
+
+            const startHarborApproach =
+                prevDist > CARGO_SHIP_HARBOR_DOCKING_DISTANCE &&
+                currDist <= CARGO_SHIP_HARBOR_DOCKING_DISTANCE &&
+                !hasDockingStatus && !harborAlreadyDocked && !allHarborsDocked;
+
+            const justDocked =
+                (hasDockingStatus && this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.DOCKING &&
+                    isStandingStill) || (!hasDockingStatus && isStandingStill);
+
+            const startHarborDeparture =
+                hasDockingStatus && this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.DOCKED &&
+                !isStandingStill;
+
+            const justUndocked =
+                prevDist < CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE &&
+                currDist >= CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE &&
+                hasDockingStatus && (this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.DOCKING ||
+                    this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.UNDOCKING);
+
+            const startLeavingMap = !isLeaving && isSameDir && !hasEgressTimer && isOutside;
+
+            if (startHarborApproach) {
+                this.cargoShipMetaData[marker.id].dockingStatus = DockingStatus.DOCKING;
+
+                const eventText = lm.getIntl(language, 'inGameEvent-cargoShipDocking', {
+                    location: harborName,
+                    grid: harborGridPos as string
+                });
+                this.rpInstance.sendEventNotification('cargoShipDocking', eventText);
+            }
+            else if (justDocked) {
+                this.cargoShipMetaData[marker.id].dockingStatus = DockingStatus.DOCKED;
+                this.cargoShipMetaData[marker.id].harborsDocked.push({ x: harbor.x, y: harbor.y });
+
+                const eventText = lm.getIntl(language, 'inGameEvent-cargoShipDocked', {
+                    location: harborName,
+                    grid: harborGridPos as string
+                });
+                this.rpInstance.sendEventNotification('cargoShipDocked', eventText);
+
+                /* Notify 1 min (+10 seconds) before undocking */
+                this.cargoShipUndockingNotificationTimeoutIds[marker.id] = setTimeout(
+                    this.notifyCargoShipUndockingSoon.bind(this, marker.id, mapSize),
+                    CARGO_SHIP_HARBOR_DOCKING_TIME_MS - (60 * 1000 + 10 * 1000)
+                );
+            }
+            else if (startHarborDeparture) {
+                this.cargoShipMetaData[marker.id].dockingStatus = DockingStatus.UNDOCKING;
+
+                const eventText = lm.getIntl(language, 'inGameEvent-cargoShipUndocking', {
+                    location: harborName,
+                    grid: harborGridPos as string
+                });
+                this.rpInstance.sendEventNotification('cargoShipUndocking', eventText);
+
+                if (Object.hasOwn(this.cargoShipUndockingNotificationTimeoutIds, marker.id)) {
+                    clearTimeout(this.cargoShipUndockingNotificationTimeoutIds[marker.id]);
+                    delete this.cargoShipUndockingNotificationTimeoutIds[marker.id];
+                }
+            }
+            else if (justUndocked) {
+                if (Object.hasOwn(this.cargoShipEgressTimeoutIds, marker.id) && allHarborsDocked &&
+                    this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.UNDOCKING) {
+                    const timeLeftMs = this.cargoShipEgressTimeoutIds[marker.id].getTimeLeftMs();
+
+                    if (timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS) {
+                        this.cargoShipEgressTimeoutIds[marker.id]?.stop();
+
+                        this.cargoShipEgressAfterHarbor1TimeoutIds[marker.id] = new Timer(
+                            this.notifyCargoShipEgressAfterHarbor.bind(this, marker.id, true),
+                            CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS
+                        );
+                        (this.cargoShipEgressAfterHarbor1TimeoutIds[marker.id] as Timer).start();
+                    }
+
+                    if (timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS ||
+                        (timeLeftMs >= CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS &&
+                            timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS)) {
+                        this.cargoShipEgressAfterHarbor2TimeoutIds[marker.id] = new Timer(
+                            this.notifyCargoShipEgressAfterHarbor.bind(this, marker.id, false),
+                            CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS
+                        );
+                        (this.cargoShipEgressAfterHarbor2TimeoutIds[marker.id] as Timer).start();
+
+                        this.cargoShipMetaData[marker.id].isDepartureCertain = false;
+                    }
+
+                    const timeLeftMin = Math.floor((timeLeftMs / 1000) / 60).toFixed(1);
+
+                    let phrase = '';
+                    const param: { [key: string]: string } = {};
+                    if (timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS) {
+                        phrase = 'inGameEvent-cargoShipLeaving-soon';
+                        param['first'] = '2';
+                        param['second'] = '19.5';
+                    }
+                    else if (timeLeftMs >= CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS &&
+                        timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS) {
+                        phrase = 'inGameEvent-cargoShipLeaving-soon';
+                        param['first'] = `${timeLeftMin}`;
+                        param['second'] = '19.5';
+                    }
+                    else {
+                        phrase = 'inGameEvent-cargoShipLeaving-inTime';
+                        param['min'] = `${timeLeftMin}`;
+                    }
+
+                    const eventText = lm.getIntl(language, phrase, param);
+                    this.rpInstance.sendEventNotification('cargoShipLeaving', eventText);
+                }
+
+                this.cargoShipMetaData[marker.id].dockingStatus = null;
+            }
+            else if (startLeavingMap) {
+                this.cargoShipMetaData[marker.id].isLeaving = true;
+
+                const cargoShipPos = getPos(marker.x, marker.y, this.rpInstance);
+                if (cargoShipPos) {
+                    const cargoShipPosString = getPosString(cargoShipPos, this.rpInstance, false, false);
+                    const phrase = 'inGameEvent-cargoShipLeaving';
+                    const eventText = lm.getIntl(language, phrase, { location: cargoShipPosString });
+                    this.rpInstance.sendEventNotification('cargoShipLeaving', eventText);
+                }
+            }
+
+            this.cargoShipMetaData[marker.id].prevPoint = { x: cargoShip.x, y: cargoShip.y };
+            Object.assign(cargoShip, marker);
         }
     }
 
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-    private updateCargoShips(mapMarkers: rp.AppMapMarkers) {
-
-    }
-
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private updateCrates(mapMarkers: rp.AppMapMarkers) {
-
+        /* No longer used in Rust+ */
     }
 
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -406,5 +684,105 @@ export class RustPlusMapMarkers {
             location: location
         });
         this.rpInstance.sendEventNotification('ch47OilRigLockedCrateUnlocked', eventText);
+    }
+
+    private notifyCargoShipEgress(cargoShipId: number) {
+        this.cargoShipEgressTimeoutIds[cargoShipId]?.stop();
+
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        if (!this.rpInstance.rpMap || !this.rpInstance.rpInfo) return;
+
+        const allHarborsDocked = this.cargoShipMetaData[cargoShipId].harborsDocked.length ===
+            this.rpInstance.rpMap.getNumberOfHarbors();
+        const hasDockingStatus = this.cargoShipMetaData[cargoShipId].dockingStatus !== null;
+
+        if (allHarborsDocked && !hasDockingStatus) {
+            const cargoShip = this.cargoShips.find(e => e.id === cargoShipId);
+            if (!cargoShip) return;
+
+            const cargoShipPos = getPos(cargoShip.x, cargoShip.y, this.rpInstance);
+            if (cargoShipPos) {
+                const isDepartureCertain = this.cargoShipMetaData[cargoShipId].isDepartureCertain;
+                const cargoShipPosString = getPosString(cargoShipPos, this.rpInstance, false, true);
+                const phrase = 'inGameEvent-cargoShipLeaving' + (isDepartureCertain ? '' : '-maybe');
+                const eventText = lm.getIntl(language, phrase, { location: cargoShipPosString });
+                this.rpInstance.sendEventNotification('cargoShipLeaving', eventText);
+            }
+        }
+    }
+
+    private notifyCargoShipEgressAfterHarbor(cargoShipId: number, firstTimer: boolean) {
+        if (firstTimer) {
+            this.cargoShipEgressAfterHarbor1TimeoutIds[cargoShipId]?.stop();
+        }
+        else {
+            this.cargoShipEgressAfterHarbor2TimeoutIds[cargoShipId]?.stop();
+        }
+
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        if (!this.rpInstance.rpMap || !this.rpInstance.rpInfo) return;
+
+        const cargoShip = this.cargoShips.find(e => e.id === cargoShipId);
+        if (!cargoShip) return;
+
+        const cargoShipPos = getPos(cargoShip.x, cargoShip.y, this.rpInstance);
+        if (cargoShipPos) {
+            const cargoShipPosString = getPosString(cargoShipPos, this.rpInstance, false, true);
+            const phrase = 'inGameEvent-cargoShipLeaving' + (firstTimer ? '-noLockedCratesLeft' : '');
+            const eventText = lm.getIntl(language, phrase, { location: cargoShipPosString });
+            this.rpInstance.sendEventNotification('cargoShipLeaving', eventText);
+        }
+    }
+
+    private notifyCargoShipLockedCrateSpawn(cargoShipId: number) {
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        this.cargoShipMetaData[cargoShipId].lockedCrateSpawnCounter++;
+
+        const cargoShip = this.cargoShips.find(e => e.id === cargoShipId);
+        if (!cargoShip) return;
+
+        const cargoShipPos = getPos(cargoShip.x, cargoShip.y, this.rpInstance);
+        if (cargoShipPos) {
+            const cargoShipPosString = getPosString(cargoShipPos, this.rpInstance, false, true);
+            const phrase = 'inGameEvent-cargoShipLockedCrateSpawned';
+            const eventText = lm.getIntl(language, phrase, { location: cargoShipPosString });
+            this.rpInstance.sendEventNotification('cargoShipLockedCrateSpawned', eventText);
+        }
+
+        if (this.cargoShipMetaData[cargoShipId].lockedCrateSpawnCounter === CARGO_SHIP_LOOT_ROUNDS) {
+            clearInterval(this.cargoShipLockedCrateSpawnIntervalIds[cargoShipId]);
+            delete this.cargoShipLockedCrateSpawnIntervalIds[cargoShipId];
+        }
+    }
+
+    private notifyCargoShipUndockingSoon(cargoShipId: number, mapSize: number) {
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const cargoShip = this.cargoShips.find(e => e.id === cargoShipId);
+        if (!cargoShip) return;
+
+        const harbor = this.rpInstance.rpMap?.getClosestHarbor({ x: cargoShip.x, y: cargoShip.y });
+        if (!harbor) return;
+
+        const harborName = lm.getIntl(language, `monumentName-${harbor.token}`);
+        const harborGridPos = getGridPos(harbor.x, harbor.y, mapSize);
+
+        const eventText = lm.getIntl(language, 'inGameEvent-cargoShipUndocking-soon', {
+            location: harborName,
+            grid: harborGridPos as string
+        });
+        this.rpInstance.sendEventNotification('cargoShipUndocking', eventText);
+
+        if (Object.hasOwn(this.cargoShipUndockingNotificationTimeoutIds, cargoShipId)) {
+            clearTimeout(this.cargoShipUndockingNotificationTimeoutIds[cargoShipId]);
+            delete this.cargoShipUndockingNotificationTimeoutIds[cargoShipId];
+        }
     }
 }
