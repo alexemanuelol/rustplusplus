@@ -23,9 +23,10 @@ import * as rp from 'rustplus-ts';
 import { localeManager as lm, guildInstanceManager as gim } from '../../index';
 import { RustPlusInstance } from '../managers/rustPlusManager';
 import {
-    getDistance, getGridPos, getPos, getPosString, isOutsideGridSystem, isSameDirection, Point, Position
+    getDistance, getGridPos, getPos, getPosString, isOutsideGridSystem, isSameDirection, Point, Position,
+    getAngleBetweenPoints
 } from '../utils/map';
-import { GuildInstance } from '../managers/guildInstanceManager';
+import { EventNotificationSettings, GuildInstance } from '../managers/guildInstanceManager';
 import * as constants from '../utils/constants';
 import { Timer } from '../utils/timer';
 
@@ -50,6 +51,7 @@ const CARGO_SHIP_HARBOR_DOCKING_DISTANCE = 480;
 const CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE = 280;
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS = 2 * 60 * 1000; /* 2 min */
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS = 19.5 * 60 * 1000; /* 19.5 min */
+const PATROL_HELICOPTER_LEAVING_SPEED_MIN = 400;
 
 export interface CargoShipMetaData {
     lockedCrateSpawnCounter: number;
@@ -58,6 +60,11 @@ export interface CargoShipMetaData {
     isLeaving: boolean;
     prevPoint: Point | null;
     isDepartureCertain: boolean;
+}
+
+export interface PatrolHelicopterMetaData {
+    prevPoint: Point | null;
+    isLeaving: boolean;
 }
 
 export class RustPlusMapMarkers {
@@ -91,6 +98,7 @@ export class RustPlusMapMarkers {
     public oilRigCh47s: number[];
     public ch47LockedCrateNotified: number[];
     public cargoShipMetaData: { [cargoShip: number]: CargoShipMetaData };
+    public patrolHelicopterMetaData: { [cargoShip: number]: PatrolHelicopterMetaData };
 
     constructor(rpInstance: RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
         this.rpInstance = rpInstance;
@@ -125,6 +133,7 @@ export class RustPlusMapMarkers {
         this.oilRigCh47s = [];
         this.ch47LockedCrateNotified = [];
         this.cargoShipMetaData = {};
+        this.patrolHelicopterMetaData = {};
     }
 
 
@@ -435,8 +444,8 @@ export class RustPlusMapMarkers {
                 continue;
             }
 
-            const prevDist = getDistance(cargoShip.x, cargoShip.y, harbor.x, harbor.y)
-            const currDist = getDistance(marker.x, marker.y, harbor.x, harbor.y)
+            const prevDist = getDistance(cargoShip.x, cargoShip.y, harbor.x, harbor.y);
+            const currDist = getDistance(marker.x, marker.y, harbor.x, harbor.y);
             const harborAlreadyDocked = this.cargoShipMetaData[marker.id].harborsDocked.some(e =>
                 e.x === harbor.x && e.y === harbor.y);
             const hasDockingStatus = this.cargoShipMetaData[marker.id].dockingStatus !== null;
@@ -589,14 +598,121 @@ export class RustPlusMapMarkers {
         /* No longer used in Rust+ */
     }
 
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private updateGenericRadii(mapMarkers: rp.AppMapMarkers) {
+        const type = rp.AppMarkerType.GenericRadius;
+        const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
+        const leftMarkers = this.getLeftMarkersById(type, mapMarkers.markers);
+        const remainingMarkers = this.getRemainingMarkersById(type, mapMarkers.markers);
 
+        /* Markers that are new. */
+        for (const marker of newMarkers) {
+            this.genericRadii.push(marker);
+        }
+
+        /* Markers that have left. */
+        for (const marker of leftMarkers) {
+            this.genericRadii = this.genericRadii.filter(e => e.id !== marker.id);
+        }
+
+        /* Markers that still remains. */
+        for (const marker of remainingMarkers) {
+            const genericRadius = this.genericRadii.find(e => e.id === marker.id) as rp.AppMarker;
+            Object.assign(genericRadius, marker);
+        }
     }
 
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private updatePatrolHelicopters(mapMarkers: rp.AppMapMarkers) {
+        const type = rp.AppMarkerType.PatrolHelicopter;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
 
+        const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
+        const leftMarkers = this.getLeftMarkersById(type, mapMarkers.markers);
+        const remainingMarkers = this.getRemainingMarkersById(type, mapMarkers.markers);
+
+        if (!this.rpInstance.rpMap || !this.rpInstance.rpInfo) return;
+
+        const mapSize = this.rpInstance.rpInfo.appInfo.mapSize;
+        const numberOfGrids = Math.floor(mapSize / constants.GRID_DIAMETER);
+        const gridDiameter = mapSize / numberOfGrids;
+
+        /* Markers that are new. */
+        for (const marker of newMarkers) {
+            this.patrolHelicopterMetaData[marker.id] = {
+                prevPoint: null,
+                isLeaving: false
+            }
+
+            const offset = 4 * gridDiameter;
+            const isOutside = isOutsideGridSystem(marker.x, marker.y, mapSize, offset);
+
+            const patrolHelicopterPos = getPos(marker.x, marker.y, this.rpInstance) as Position;
+            const patrolHelicopterPosString = getPosString(patrolHelicopterPos, this.rpInstance, false, true);
+
+            const phrase = 'inGameEvent-patrolHelicopterSpawned' + (this.firstPoll ? '-located' :
+                (isOutside ? '-enters' : ''));
+            const eventText = lm.getIntl(language, phrase, { location: patrolHelicopterPosString });
+            this.rpInstance.sendEventNotification('patrolHelicopterSpawned', eventText);
+
+            this.patrolHelicopters.push(marker);
+        }
+
+        /* Markers that have left. */
+        for (const marker of leftMarkers) {
+            const isOutside = isOutsideGridSystem(marker.x, marker.y, mapSize);
+            const phrase = 'inGameEvent-patrolHelicopter' + (isOutside ? 'Despawned' : 'Destroyed');
+            const settingsKey = 'patrolHelicopter' + (isOutside ? 'Despawned' : 'Destroyed');
+
+            const patrolHelicopterPos = getPos(marker.x, marker.y, this.rpInstance);
+            if (patrolHelicopterPos) {
+                const patrolHelicopterPosString = getPosString(patrolHelicopterPos, this.rpInstance, false, true);
+                const eventText = lm.getIntl(language, phrase, { location: patrolHelicopterPosString });
+                this.rpInstance.sendEventNotification(settingsKey as keyof EventNotificationSettings, eventText);
+            }
+
+            delete this.patrolHelicopterMetaData[marker.id];
+            this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== marker.id);
+        }
+
+        /* Markers that still remains. */
+        for (const marker of remainingMarkers) {
+            const patrolHelicopter = this.patrolHelicopters.find(e => e.id === marker.id) as rp.AppMarker;
+
+            if (this.patrolHelicopterMetaData[marker.id].prevPoint !== null) {
+                const prevPoint = this.patrolHelicopterMetaData[marker.id].prevPoint as Point;
+                const prevDist = getDistance(prevPoint.x, prevPoint.y, patrolHelicopter.x, patrolHelicopter.y);
+                const currDist = getDistance(patrolHelicopter.x, patrolHelicopter.y, marker.x, marker.y);
+                const isLeaving = this.patrolHelicopterMetaData[marker.id].isLeaving;
+                const isSameDir = isSameDirection(prevPoint,
+                    { x: patrolHelicopter.x, y: patrolHelicopter.y },
+                    { x: marker.x, y: marker.y }
+                );
+
+                const startLeavingMap =
+                    prevDist >= PATROL_HELICOPTER_LEAVING_SPEED_MIN &&
+                    currDist >= PATROL_HELICOPTER_LEAVING_SPEED_MIN &&
+                    isSameDir && !isLeaving;
+
+                if (startLeavingMap) {
+                    this.patrolHelicopterMetaData[marker.id].isLeaving = true;
+
+                    const patrolHelicopterPos = getPos(marker.x, marker.y, this.rpInstance);
+                    if (patrolHelicopterPos) {
+                        const patrolHelicopterPosString = getPosString(
+                            patrolHelicopterPos, this.rpInstance, false, true);
+                        const direction = getAngleBetweenPoints(prevPoint.x, prevPoint.y, marker.x, marker.y);
+                        const eventText = lm.getIntl(language, 'inGameEvent-patrolHelicopterLeaving', {
+                            location: patrolHelicopterPosString,
+                            direction: `${direction}`
+                        });
+                        this.rpInstance.sendEventNotification('cargoShipDocking', eventText);
+                    }
+                }
+            }
+
+            this.patrolHelicopterMetaData[marker.id].prevPoint = { x: patrolHelicopter.x, y: patrolHelicopter.y };
+            Object.assign(patrolHelicopter, marker);
+        }
     }
 
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
