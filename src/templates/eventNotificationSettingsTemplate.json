@@ -145,19 +145,5 @@
         "image": "travelling_vendor_logo.png",
         "inGame": false,
         "voice": true
-    },
-    "travellingVendorStopped": {
-        "color": "#7FFF00",
-        "discord": true,
-        "image": "travelling_vendor_logo.png",
-        "inGame": false,
-        "voice": true
-    },
-    "travellingVendorStarted": {
-        "color": "#8B008B",
-        "discord": true,
-        "image": "travelling_vendor_logo.png",
-        "inGame": false,
-        "voice": true
     }
 }

@@ -166,8 +166,6 @@ export interface EventNotificationSettings {
     patrolHelicopterLeaving: EventNotificationSetting;
     travellingVendorSpawned: EventNotificationSetting;
     travellingVendorDespawned: EventNotificationSetting;
-    travellingVendorStopped: EventNotificationSetting;
-    travellingVendorStarted: EventNotificationSetting;
 }
 
 export interface EventNotificationSetting {
@@ -216,8 +214,6 @@ export interface SettingsMessages {
     patrolHelicopterLeaving: types.MessageId | null;
     travellingVendorSpawned: types.MessageId | null;
     travellingVendorDespawned: types.MessageId | null;
-    travellingVendorStopped: types.MessageId | null;
-    travellingVendorStarted: types.MessageId | null;
 }
 
 export interface Alias {
@@ -619,9 +615,7 @@ export class GuildInstanceManager {
                 patrolHelicopterDestroyed: null,
                 patrolHelicopterLeaving: null,
                 travellingVendorSpawned: null,
-                travellingVendorDespawned: null,
-                travellingVendorStopped: null,
-                travellingVendorStarted: null
+                travellingVendorDespawned: null
             },
             aliases: [],
             blacklist: {
@@ -1077,9 +1071,7 @@ export function isValidEventNotificationSettings(object: unknown): object is Eve
         'patrolHelicopterDestroyed',
         'patrolHelicopterLeaving',
         'travellingVendorSpawned',
-        'travellingVendorDespawned',
-        'travellingVendorStopped',
-        'travellingVendorStarted'
+        'travellingVendorDespawned'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1115,10 +1107,6 @@ export function isValidEventNotificationSettings(object: unknown): object is Eve
     errors.push(vu.validateInterface('travellingVendorSpawned', obj.travellingVendorSpawned,
         isValidEventNotificationSetting));
     errors.push(vu.validateInterface('travellingVendorDespawned', obj.travellingVendorDespawned,
-        isValidEventNotificationSetting));
-    errors.push(vu.validateInterface('travellingVendorStopped', obj.travellingVendorStopped,
-        isValidEventNotificationSetting));
-    errors.push(vu.validateInterface('travellingVendorStarted', obj.travellingVendorStarted,
         isValidEventNotificationSetting));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
@@ -1215,9 +1203,7 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
         'patrolHelicopterDestroyed',
         'patrolHelicopterLeaving',
         'travellingVendorSpawned',
-        'travellingVendorDespawned',
-        'travellingVendorStopped',
-        'travellingVendorStarted'
+        'travellingVendorDespawned'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1261,8 +1247,6 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
     errors.push(vu.validateType('patrolHelicopterLeaving', obj.patrolHelicopterLeaving, 'string', null));
     errors.push(vu.validateType('travellingVendorSpawned', obj.travellingVendorSpawned, 'string', null));
     errors.push(vu.validateType('travellingVendorDespawned', obj.travellingVendorDespawned, 'string', null));
-    errors.push(vu.validateType('travellingVendorStopped', obj.travellingVendorStopped, 'string', null));
-    errors.push(vu.validateType('travellingVendorStarted', obj.travellingVendorStarted, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

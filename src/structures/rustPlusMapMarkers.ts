@@ -52,6 +52,7 @@ const CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE = 280;
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS = 2 * 60 * 1000; /* 2 min */
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS = 19.5 * 60 * 1000; /* 19.5 min */
 const PATROL_HELICOPTER_LEAVING_SPEED_MIN = 400;
+const TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000;
 
 export interface CargoShipMetaData {
     lockedCrateSpawnCounter: number;
@@ -90,6 +91,7 @@ export class RustPlusMapMarkers {
     public cargoShipEgressAfterHarbor2TimeoutIds: { [cargoShip: number]: Timer };
     public cargoShipLockedCrateSpawnIntervalIds: { [cargoShip: number]: NodeJS.Timeout };
     public cargoShipUndockingNotificationTimeoutIds: { [cargoShip: number]: NodeJS.Timeout };
+    public travellingVendorLeavingNotificationTimeoutIds: { [travellingVendor: number]: NodeJS.Timeout };
 
     public timeSinceSmallOilRigWasTriggered: Date | null;
     public timeSinceLargeOilRigWasTriggered: Date | null;
@@ -124,6 +126,7 @@ export class RustPlusMapMarkers {
         this.cargoShipEgressAfterHarbor1TimeoutIds = {}
         this.cargoShipLockedCrateSpawnIntervalIds = {};
         this.cargoShipUndockingNotificationTimeoutIds = {};
+        this.travellingVendorLeavingNotificationTimeoutIds = {};
 
         /* Event dates */
         this.timeSinceSmallOilRigWasTriggered = null;
@@ -715,9 +718,55 @@ export class RustPlusMapMarkers {
         }
     }
 
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private updateTravellingVendors(mapMarkers: rp.AppMapMarkers) {
+        const type = rp.AppMarkerType.TravellingVendor;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
 
+        const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
+        const leftMarkers = this.getLeftMarkersById(type, mapMarkers.markers);
+        const remainingMarkers = this.getRemainingMarkersById(type, mapMarkers.markers);
+
+        /* Markers that are new. */
+        for (const marker of newMarkers) {
+            const travellingVendorPos = getPos(marker.x, marker.y, this.rpInstance) as Position;
+            const travellingVendorPosString = getPosString(travellingVendorPos, this.rpInstance, false, true);
+
+            const phrase = 'inGameEvent-travellingVendorSpawned' + (this.firstPoll ? '-located' : '');
+            const eventText = lm.getIntl(language, phrase, { location: travellingVendorPosString });
+            this.rpInstance.sendEventNotification('travellingVendorSpawned', eventText);
+
+            /* Notify 5 min before leaving */
+            this.travellingVendorLeavingNotificationTimeoutIds[marker.id] = setTimeout(
+                this.notifyTravellingVendorLeavingSoon.bind(this, marker.id),
+                TRAVELLING_VENDOR_ACTIVE_TIME_MS - (5 * 60 * 1000)
+            );
+
+            this.travellingVendors.push(marker);
+        }
+
+        /* Markers that have left. */
+        for (const marker of leftMarkers) {
+            const travellingVendorPos = getPos(marker.x, marker.y, this.rpInstance) as Position;
+            const travellingVendorPosString = getPosString(travellingVendorPos, this.rpInstance, false, true);
+
+            const phrase = 'inGameEvent-travellingVendorDespawned';
+            const eventText = lm.getIntl(language, phrase, { location: travellingVendorPosString });
+            this.rpInstance.sendEventNotification('travellingVendorDespawned', eventText);
+
+            if (Object.hasOwn(this.travellingVendorLeavingNotificationTimeoutIds, marker.id)) {
+                clearTimeout(this.travellingVendorLeavingNotificationTimeoutIds[marker.id]);
+                delete this.travellingVendorLeavingNotificationTimeoutIds[marker.id];
+            }
+
+            this.travellingVendors = this.travellingVendors.filter(e => e.id !== marker.id);
+        }
+
+        /* Markers that still remains. */
+        for (const marker of remainingMarkers) {
+            const travellingVendor = this.travellingVendors.find(e => e.id === marker.id) as rp.AppMarker;
+            Object.assign(travellingVendor, marker);
+        }
     }
 
 
@@ -899,6 +948,27 @@ export class RustPlusMapMarkers {
         if (Object.hasOwn(this.cargoShipUndockingNotificationTimeoutIds, cargoShipId)) {
             clearTimeout(this.cargoShipUndockingNotificationTimeoutIds[cargoShipId]);
             delete this.cargoShipUndockingNotificationTimeoutIds[cargoShipId];
+        }
+    }
+
+    private notifyTravellingVendorLeavingSoon(travellingVendorId: number) {
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const travellingVendor = this.travellingVendors.find(e => e.id === travellingVendorId);
+        if (!travellingVendor) return;
+
+        const travellingVendorPos = getPos(travellingVendor.x, travellingVendor.y, this.rpInstance);
+        if (travellingVendorPos) {
+            const travellingVendorPosString = getPosString(travellingVendorPos, this.rpInstance, false, true);
+            const phrase = 'inGameEvent-travellingVendorDespawned-soon';
+            const eventText = lm.getIntl(language, phrase, { location: travellingVendorPosString });
+            this.rpInstance.sendEventNotification('travellingVendorDespawned', eventText);
+        }
+
+        if (Object.hasOwn(this.travellingVendorLeavingNotificationTimeoutIds, travellingVendorId)) {
+            clearTimeout(this.travellingVendorLeavingNotificationTimeoutIds[travellingVendorId]);
+            delete this.travellingVendorLeavingNotificationTimeoutIds[travellingVendorId];
         }
     }
 }

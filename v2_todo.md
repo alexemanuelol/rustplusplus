@@ -112,29 +112,27 @@
 - [ ] vending machine handler
 
 ### RustPlus events
-- [ ] Vending Machine spawned
-- [ ] Vending Machine despawned
-- [ ] CH47 spawned
-- [ ] CH47 despawned
-- [ ] CH47 destroyed
-- [ ] Locked crate dropped
-- [ ] Heavy scientists called to oil rig
-- [ ] Locked crate unlocked at oil rig
-- [ ] cargoship spawned
-- [ ] cargoship despawned
-- [ ] cargoship leaving
-- [ ] cargoship docking
-- [ ] cargoship docked
-- [ ] cargoship undocking
-- [ ] cargoship locked crate spawned
-- [ ] patrol helicopter spawned
-- [ ] patrol helicopter despawned
-- [ ] patrol helicopter destroyed
-- [ ] patrol helicopter leaving
-- [ ] travelling vendor spawned
-- [ ] travelling vendor despawned
-- [ ] travelling vendor stopped moving
-- [ ] travelling vendor started moving
+- [x] Vending Machine spawned
+- [x] Vending Machine despawned
+- [x] CH47 spawned
+- [x] CH47 despawned
+- [x] CH47 destroyed
+- [x] Locked crate dropped
+- [x] Heavy scientists called to oil rig
+- [x] Locked crate unlocked at oil rig
+- [x] cargoship spawned
+- [x] cargoship despawned
+- [x] cargoship leaving
+- [x] cargoship docking
+- [x] cargoship docked
+- [x] cargoship undocking
+- [x] cargoship locked crate spawned
+- [x] patrol helicopter spawned
+- [x] patrol helicopter despawned
+- [x] patrol helicopter destroyed
+- [x] patrol helicopter leaving
+- [x] travelling vendor spawned
+- [x] travelling vendor despawned
 
 ## Trackers
 - [ ] Class
