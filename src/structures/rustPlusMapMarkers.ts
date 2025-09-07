@@ -29,7 +29,6 @@ import {
 import { EventNotificationSettings, GuildInstance } from '../managers/guildInstanceManager';
 import * as constants from '../utils/constants';
 import { Timer } from '../utils/timer';
-import * as types from '../utils/types';
 
 const VALID_LOCKED_CRATE_MONUMENTS: string[] = [
     'airfield_display_name',
