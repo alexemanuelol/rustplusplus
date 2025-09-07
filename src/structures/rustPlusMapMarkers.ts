@@ -29,6 +29,7 @@ import {
 import { EventNotificationSettings, GuildInstance } from '../managers/guildInstanceManager';
 import * as constants from '../utils/constants';
 import { Timer } from '../utils/timer';
+import * as types from '../utils/types';
 
 const VALID_LOCKED_CRATE_MONUMENTS: string[] = [
     'airfield_display_name',
@@ -53,6 +54,8 @@ const CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS = 2 * 60 * 1000; /* 2 min */
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS = 19.5 * 60 * 1000; /* 19.5 min */
 const PATROL_HELICOPTER_LEAVING_SPEED_MIN = 400;
 const TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000;
+const MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE = 3;
+const MAX_PLAYERS_TRACER_ENTRIES = 500;
 
 export interface CargoShipMetaData {
     lockedCrateSpawnCounter: number;
@@ -66,6 +69,15 @@ export interface CargoShipMetaData {
 export interface PatrolHelicopterMetaData {
     prevPoint: Point | null;
     isLeaving: boolean;
+}
+
+export interface Tracers {
+    players: Map<string, Point[]>;
+    ch47s: Map<string, Point[]>;
+    oilRigCh47s: Map<string, Point[]>;
+    cargoShips: Map<string, Point[]>;
+    patrolHelicopters: Map<string, Point[]>;
+    travellingVendors: Map<string, Point[]>;
 }
 
 export class RustPlusMapMarkers {
@@ -102,6 +114,8 @@ export class RustPlusMapMarkers {
     public cargoShipMetaData: { [cargoShip: number]: CargoShipMetaData };
     public patrolHelicopterMetaData: { [cargoShip: number]: PatrolHelicopterMetaData };
 
+    public tracers: Tracers;
+
     constructor(rpInstance: RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
         this.rpInstance = rpInstance;
         this.appMapMarkers = appMapMarkers;
@@ -137,6 +151,15 @@ export class RustPlusMapMarkers {
         this.ch47LockedCrateNotified = [];
         this.cargoShipMetaData = {};
         this.patrolHelicopterMetaData = {};
+
+        this.tracers = {
+            players: new Map(),
+            ch47s: new Map(),
+            oilRigCh47s: new Map(),
+            cargoShips: new Map(),
+            patrolHelicopters: new Map(),
+            travellingVendors: new Map(),
+        };
     }
 
 
@@ -173,17 +196,20 @@ export class RustPlusMapMarkers {
 
         /* Markers that are new. */
         for (const marker of newMarkers) {
+            this.addTracer('players', marker.steamId, { x: marker.x, y: marker.y });
             this.players.push(marker);
         }
 
         /* Markers that have left. */
         for (const marker of leftMarkers) {
+            this.tracers.players.delete(marker.steamId);
             this.players = this.players.filter(e => e.id !== marker.id);
         }
 
         /* Markers that still remains. */
         for (const marker of remainingMarkers) {
             const player = this.players.find(e => e.id === marker.id) as rp.AppMarker;
+            this.addTracer('players', marker.steamId, { x: marker.x, y: marker.y });
             Object.assign(player, marker);
         }
     }
@@ -249,6 +275,7 @@ export class RustPlusMapMarkers {
             const smallOilRig = this.rpInstance.rpMap.getMonumentPointIfInside(point, 'oil_rig_small', radius);
             const largeOilRig = this.rpInstance.rpMap.getMonumentPointIfInside(point, 'large_oil_rig', radius);
             if (smallOilRig || largeOilRig) {
+                this.addTracer('oilRigCh47s', marker.id, { x: marker.x, y: marker.y });
                 this.oilRigCh47s.push(marker.id);
                 const oilRigPoint = (smallOilRig ? smallOilRig : largeOilRig) as Point;
                 const oilRigTokenName = smallOilRig ? 'oil_rig_small' : 'large_oil_rig';
@@ -275,6 +302,7 @@ export class RustPlusMapMarkers {
                 }
             }
             else {
+                this.addTracer('ch47s', marker.id, { x: marker.x, y: marker.y });
                 const ch47Pos = getPos(marker.x, marker.y, this.rpInstance);
                 if (ch47Pos) {
                     const ch47PosString = getPosString(ch47Pos, this.rpInstance, false, true);
@@ -312,9 +340,12 @@ export class RustPlusMapMarkers {
         for (const marker of remainingMarkers) {
             const ch47 = this.ch47s.find(e => e.id === marker.id) as rp.AppMarker;
             if (this.oilRigCh47s.includes(marker.id)) {
+                this.addTracer('oilRigCh47s', marker.id, { x: marker.x, y: marker.y });
                 Object.assign(ch47, marker);
                 continue;
             }
+
+            this.addTracer('ch47s', marker.id, { x: marker.x, y: marker.y });
 
             const minDistanceInside = 100;
             const maxDifference = 2;
@@ -364,6 +395,7 @@ export class RustPlusMapMarkers {
 
         /* Markers that are new. */
         for (const marker of newMarkers) {
+            this.addTracer('cargoShips', marker.id, { x: marker.x, y: marker.y });
             this.cargoShipMetaData[marker.id] = {
                 lockedCrateSpawnCounter: 0,
                 harborsDocked: [],
@@ -439,6 +471,7 @@ export class RustPlusMapMarkers {
         /* Markers that still remains. */
         for (const marker of remainingMarkers) {
             const cargoShip = this.cargoShips.find(e => e.id === marker.id) as rp.AppMarker;
+            this.addTracer('cargoShips', marker.id, { x: marker.x, y: marker.y });
 
             const harbor = this.rpInstance.rpMap.getClosestHarbor({ x: marker.x, y: marker.y });
             if (!harbor) {
@@ -641,6 +674,7 @@ export class RustPlusMapMarkers {
 
         /* Markers that are new. */
         for (const marker of newMarkers) {
+            this.addTracer('patrolHelicopters', marker.id, { x: marker.x, y: marker.y });
             this.patrolHelicopterMetaData[marker.id] = {
                 prevPoint: null,
                 isLeaving: false
@@ -680,6 +714,7 @@ export class RustPlusMapMarkers {
         /* Markers that still remains. */
         for (const marker of remainingMarkers) {
             const patrolHelicopter = this.patrolHelicopters.find(e => e.id === marker.id) as rp.AppMarker;
+            this.addTracer('patrolHelicopters', marker.id, { x: marker.x, y: marker.y });
 
             if (this.patrolHelicopterMetaData[marker.id].prevPoint !== null) {
                 const prevPoint = this.patrolHelicopterMetaData[marker.id].prevPoint as Point;
@@ -729,6 +764,7 @@ export class RustPlusMapMarkers {
 
         /* Markers that are new. */
         for (const marker of newMarkers) {
+            this.addTracer('travellingVendors', marker.id, { x: marker.x, y: marker.y });
             const travellingVendorPos = getPos(marker.x, marker.y, this.rpInstance) as Position;
             const travellingVendorPosString = getPosString(travellingVendorPos, this.rpInstance, false, true);
 
@@ -765,6 +801,7 @@ export class RustPlusMapMarkers {
         /* Markers that still remains. */
         for (const marker of remainingMarkers) {
             const travellingVendor = this.travellingVendors.find(e => e.id === marker.id) as rp.AppMarker;
+            this.addTracer('travellingVendors', marker.id, { x: marker.x, y: marker.y });
             Object.assign(travellingVendor, marker);
         }
     }
@@ -831,6 +868,34 @@ export class RustPlusMapMarkers {
             }
         }
         return remainingMarkers;
+    }
+
+    private addTracer(key: keyof Tracers, id: string | number, point: Point) {
+        const idString = `${id}`;
+
+        if (!this.tracers[key].has(idString)) {
+            this.tracers[key].set(idString, []);
+        }
+        const tracerArray = this.tracers[key].get(idString)!;
+
+        /* Is x,y the same as last point? if so, skip */
+        const lastPoint = tracerArray[tracerArray.length - 1];
+        if (lastPoint && lastPoint.x === point.x && lastPoint.y === point.y) return;
+
+        tracerArray.push(point);
+
+        /* Enforce only 3 latest tracers if key is not players */
+        if (key !== 'players' && this.tracers[key].size > MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE) {
+            const oldestKey = this.tracers[key].keys().next().value;
+            if (oldestKey !== undefined) {
+                this.tracers[key].delete(oldestKey);
+            }
+        }
+        else if (key === 'players') {
+            if (tracerArray.length > MAX_PLAYERS_TRACER_ENTRIES) {
+                tracerArray.shift(); /* Remove oldest point */
+            }
+        }
     }
 
     /**
