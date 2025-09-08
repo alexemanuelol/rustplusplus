@@ -104,8 +104,13 @@ export class RustPlusMapMarkers {
     public cargoShipUndockingNotificationTimeoutIds: { [cargoShip: number]: NodeJS.Timeout };
     public travellingVendorLeavingNotificationTimeoutIds: { [travellingVendor: number]: NodeJS.Timeout };
 
-    public timeSinceSmallOilRigWasTriggered: Date | null;
-    public timeSinceLargeOilRigWasTriggered: Date | null;
+    public dateSmallOilRigWasTriggered: Date | null;
+    public dateLargeOilRigWasTriggered: Date | null;
+    public dateCh47LeftMap: Date | null;
+    public dateCargoShipLeftMap: Date | null;
+    public datePatrolHelicopterLeftMap: Date | null;
+    public datePatrolHelicopterDestroyed: Date | null;
+    public dateTravellingVendorLeftMap: Date | null;
 
     public knownVendingMachines: Point[];
     public oilRigCh47s: number[];
@@ -142,8 +147,13 @@ export class RustPlusMapMarkers {
         this.travellingVendorLeavingNotificationTimeoutIds = {};
 
         /* Event dates */
-        this.timeSinceSmallOilRigWasTriggered = null;
-        this.timeSinceLargeOilRigWasTriggered = null;
+        this.dateSmallOilRigWasTriggered = null;
+        this.dateLargeOilRigWasTriggered = null;
+        this.dateCh47LeftMap = null;
+        this.dateCargoShipLeftMap = null;
+        this.datePatrolHelicopterLeftMap = null;
+        this.datePatrolHelicopterDestroyed = null;
+        this.dateTravellingVendorLeftMap = null;
 
         this.knownVendingMachines = [];
         this.oilRigCh47s = [];
@@ -296,8 +306,8 @@ export class RustPlusMapMarkers {
                     );
 
                     const now = new Date()
-                    this.timeSinceSmallOilRigWasTriggered = smallOilRig ? now : this.timeSinceSmallOilRigWasTriggered;
-                    this.timeSinceLargeOilRigWasTriggered = largeOilRig ? now : this.timeSinceLargeOilRigWasTriggered;
+                    this.dateSmallOilRigWasTriggered = smallOilRig ? now : this.dateSmallOilRigWasTriggered;
+                    this.dateLargeOilRigWasTriggered = largeOilRig ? now : this.dateLargeOilRigWasTriggered;
                 }
             }
             else {
@@ -331,6 +341,7 @@ export class RustPlusMapMarkers {
                 this.rpInstance.sendEventNotification('ch47Despawned', eventText);
             }
 
+            this.dateCh47LeftMap = new Date();
             this.ch47LockedCrateNotified = this.ch47LockedCrateNotified.filter(e => e !== marker.id);
             this.ch47s = this.ch47s.filter(e => e.id !== marker.id);
         }
@@ -463,6 +474,7 @@ export class RustPlusMapMarkers {
                 delete this.cargoShipUndockingNotificationTimeoutIds[marker.id];
             }
 
+            this.dateCargoShipLeftMap = new Date();
             delete this.cargoShipMetaData[marker.id];
             this.cargoShips = this.cargoShips.filter(e => e.id !== marker.id);
         }
@@ -706,6 +718,9 @@ export class RustPlusMapMarkers {
                 this.rpInstance.sendEventNotification(settingsKey as keyof EventNotificationSettings, eventText);
             }
 
+            const now = new Date()
+            this.datePatrolHelicopterLeftMap = now;
+            this.datePatrolHelicopterDestroyed = !isOutside ? now : this.datePatrolHelicopterDestroyed;
             delete this.patrolHelicopterMetaData[marker.id];
             this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== marker.id);
         }
@@ -794,6 +809,7 @@ export class RustPlusMapMarkers {
                 delete this.travellingVendorLeavingNotificationTimeoutIds[marker.id];
             }
 
+            this.dateTravellingVendorLeftMap = new Date();
             this.travellingVendors = this.travellingVendors.filter(e => e.id !== marker.id);
         }
 
