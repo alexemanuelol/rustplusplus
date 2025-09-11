@@ -6,8 +6,14 @@ name: Docker
 # documentation.
 
 on:
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+    inputs:
+      note:
+        description: Optional note for this run
+        required: false
   push:
-    branches: [ master ]
+    branches: [ master, main ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
   pull_request:
@@ -31,6 +37,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          # Ensure full history and tags are available if needed
+          fetch-depth: 0
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
