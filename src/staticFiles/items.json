@@ -12,7 +12,7 @@
     "4384538": {
         "shortname": "pie.apple",
         "name": "Apple Pie",
-        "description": "A delicious apple pie, always too hot. Provides a boost to hunger, health and hydration. Gives better night vision and lets you to see tree markings and ore hotspots for a short time."
+        "description": "A delicious apple pie, always too hot. Provides a boost to hunger, health and hydration. Gives better night vision, including tree markings and ore hotspots, for a short time."
     },
     "14241751": {
         "shortname": "arrow.fire",
@@ -74,15 +74,25 @@
         "name": "Incendiary Pistol Bullet",
         "description": "Slower moving ammunition that deals fire damage. There's a small chance it will start a fire."
     },
+    "54265286": {
+        "shortname": "pie.crocodile",
+        "name": "Crocodile Pie",
+        "description": "A pie made from crocodile meat, may cause a reptile dysfunction. Boosts hunger, health and hydration. Gives better night vision, including tree markings and ore hotspots, for a short time."
+    },
     "60528587": {
         "shortname": "horse.armor.roadsign",
         "name": "Roadsign Horse Armor",
-        "description": "A set of roadsign armor for a horse"
+        "description": "A full body armor for a horse. Provides strong protection for you and your steed, at the cost of greatly reduced movement speed."
     },
     "62577426": {
         "shortname": "photo",
         "name": "Photograph",
         "description": "A photograph taken with an instant camera."
+    },
+    "63265850": {
+        "shortname": "wall.external.high.frontier",
+        "name": "High External Frontier Wall",
+        "description": "A high stone wall used to keep people off your property."
     },
     "69511070": {
         "shortname": "metal.fragments",
@@ -114,6 +124,11 @@
         "name": "Metal Pipe",
         "description": "Metal Pipe."
     },
+    "97903330": {
+        "shortname": "purecraftingtea_quality",
+        "name": "Pure Crafting Quality Tea",
+        "description": "A pure crafting tea. provides hydration and increases the chances of a higher quality crafting outcome for a short time."
+    },
     "98508942": {
         "shortname": "sign.pictureframe.xxl",
         "name": "XXL Picture Frame",
@@ -137,7 +152,7 @@
     "120820987": {
         "shortname": "pie.chicken",
         "name": "Chicken Pie",
-        "description": "Just like mom used to make. Provides a boost to hunger, health and hydration, and increases the chance of better genes from crops for short time."
+        "description": "Just like mom used to make. Provides a boost to hunger, health and hydration. Increases the chance of better genes from crops for short time."
     },
     "121049755": {
         "shortname": "sign.pictureframe.tall",
@@ -157,7 +172,12 @@
     "143803535": {
         "shortname": "grenade.f1",
         "name": "F1 Grenade",
-        "description": "Reliable explosive device."
+        "description": "A reliable military grenade that can be thrown a short distance. Deadly at close range on detonation."
+    },
+    "158303804": {
+        "shortname": "knife.bone.obsidian",
+        "name": "Obsidian Bone Knife",
+        "description": "Melee weapon crafted from obsidian. Good for harvesting carcases."
     },
     "170758448": {
         "shortname": "vehicle.1mod.cockpit.with.engine",
@@ -192,7 +212,7 @@
     "184516676": {
         "shortname": "beehive",
         "name": "Beehive",
-        "description": "Artificial beehive, place a nucleus inside to raise your own bees and produce honeycomb. Happy bees will make honeycomb more quickly."
+        "description": "Hand made beehive, place a nucleus inside to raise your own bees and produce honeycomb. Happy bees will make honeycomb more quickly."
     },
     "185586769": {
         "shortname": "innertube.horse",
@@ -212,12 +232,12 @@
     "196700171": {
         "shortname": "attire.hide.vest",
         "name": "Hide Vest",
-        "description": "A Vest made from the hide of an animal."
+        "description": "Simple hide vest, made with common materials. Basic all-round protection."
     },
     "196784377": {
         "shortname": "improvised.shield",
         "name": "Improvised Shield",
-        "description": "A makeshift metal shield, sturdy but only protects a small area. Usable with single handed weapons and tools."
+        "description": "A makeshift metal shield, sturdy but only protects a small area. Usable with single handed weapons and tools. "
     },
     "198438816": {
         "shortname": "vending.machine",
@@ -257,7 +277,7 @@
     "223891266": {
         "shortname": "tshirt",
         "name": "T-Shirt",
-        "description": "A t-shirt with very short sleeves."
+        "description": "A tshirt, simple undergarment. Good protection from damage and the elements."
     },
     "236677901": {
         "shortname": "lumberjack.pickaxe",
@@ -267,7 +287,7 @@
     "237239288": {
         "shortname": "pants",
         "name": "Pants",
-        "description": "Pants."
+        "description": "A pair of pants, highly capable undergarment for your legs. Great all round protection from damage and the elements."
     },
     "240752557": {
         "shortname": "gunrack_tall.horizontal",
@@ -284,6 +304,11 @@
         "name": "Frontier Mirror Large",
         "description": "A large wooden frontier themed mirror"
     },
+    "248643189": {
+        "shortname": "bigcatmeat.spoiled",
+        "name": "Spoiled Big Cat Meat",
+        "description": "Spoiled Big Cat Meat. Consuming will damage your health."
+    },
     "254522515": {
         "shortname": "largemedkit",
         "name": "Large Medkit",
@@ -297,7 +322,7 @@
     "263834859": {
         "shortname": "scraptea",
         "name": "Basic Scrap Tea",
-        "description": "A basic scrap tea, temporarily increases the amount of scrap you recieve from barrels a small amount."
+        "description": "A basic scrap tea, temporarily increases the amount of scrap you receive from barrels a small amount."
     },
     "268565518": {
         "shortname": "vehicle.1mod.storage",
@@ -312,7 +337,7 @@
     "273172220": {
         "shortname": "fun.trumpet",
         "name": "Plumber's Trumpet",
-        "description": "Toot your own horn with this brassy improvised Trumpet."
+        "description": "Toot your own horn with this brassy improvised Trumpet.\r"
     },
     "273951840": {
         "shortname": "scarecrow.suit",
@@ -327,7 +352,7 @@
     "281099360": {
         "shortname": "bread.loaf",
         "name": "Bread Loaf",
-        "description": "A Loaf of Bread. Eating it provides a small boost to health, hunger"
+        "description": "A loaf of bread, eating it provides a boost to health, hunger and hydration. Feeding to a horse will provide a boost to its digestion and dung production for a short time."
     },
     "282103175": {
         "shortname": "giantlollipops",
@@ -347,7 +372,7 @@
     "296519935": {
         "shortname": "diving.fins",
         "name": "Diving Fins",
-        "description": "Diving Fins which greatly increase underwater movement"
+        "description": "Diving Fins. Significantly boosts your speed underwater but greatly reduces mobility on land."
     },
     "301063058": {
         "shortname": "wantedposter.wantedposter2",
@@ -359,6 +384,11 @@
         "name": "Flare",
         "description": "Light up the night sky with this brand new red flare!"
     },
+    "309017792": {
+        "shortname": "pie.bigcat",
+        "name": "Big Cat Pie",
+        "description": "A pie made from jungle cat meat, purrfect temperature. Boosts hunger, health and hydration. Shows nearby animal tracks for a short time."
+    },
     "317398316": {
         "shortname": "metal.refined",
         "name": "High Quality Metal",
@@ -367,7 +397,7 @@
     "320438357": {
         "shortname": "pie.hunters",
         "name": "Hunters Pie",
-        "description": "Tasty hunters pie, made with real deer. Provides a boost to hunger, health and hydration, and reduces bleeding for a short time."
+        "description": "Tasty hunters pie, made with real deer. Provides a boost to hunger, health and hydration. Reduces bleeding for a short time."
     },
     "340210699": {
         "shortname": "frontiermirror.small",
@@ -421,18 +451,28 @@
     },
     "368008432": {
         "shortname": "craftingtea_quality",
-        "name": "Crafting Quality Tea",
-        "description": "A tea that increases the chances of a higher quality crafting outcome."
+        "name": "Basic Crafting Quality Tea",
+        "description": "A basic crafting tea. provides hydration and increases the chances of a higher quality crafting outcome for a short time."
+    },
+    "377750553": {
+        "shortname": "pureharvestingtea",
+        "name": "Pure Harvesting Tea",
+        "description": "A pure harvesting tea, provides hydration and temporarily increases the amount of resources you receive from harvesting corpses a large amount."
     },
     "390728933": {
         "shortname": "clone.yellow.berry",
         "name": "Yellow Berry Clone",
         "description": "A clipping of a Yellow Berry Plant."
     },
+    "392828520": {
+        "shortname": "crocodilemeat.cooked",
+        "name": "Cooked Crocodile Meat",
+        "description": "Delicious Crocodile Meat, Eating it will restore some health, hunger, and thirst."
+    },
     "418081930": {
         "shortname": "wood.armor.jacket",
         "name": "Wood Chestplate",
-        "description": "A shoddy piece of body armor made from Wood and rope."
+        "description": "A shoddy piece of body armor made from simple materials, provides some basic protection from melee and ranged attacks."
     },
     "442289265": {
         "shortname": "weapon.mod.holosight",
@@ -504,10 +544,15 @@
         "name": "Ice Sculpture",
         "description": "An block of ice you can sculpt."
     },
+    "507284030": {
+        "shortname": "cocoknight.armor.pants",
+        "name": "Coconut Armor Pants",
+        "description": "A shoddy piece of leg armor made from coconut and plants, provides some basic protection from melee and ranged attacks."
+    },
     "524678627": {
         "shortname": "scraptea.advanced",
         "name": "Advanced Scrap Tea",
-        "description": "An advanced scrap tea, temporarily increases the amount of scrap you recieve from barrels a moderate amount."
+        "description": "An advanced scrap tea, temporarily increases the amount of scrap you receive from barrels a moderate amount."
     },
     "528668503": {
         "shortname": "flameturret",
@@ -533,6 +578,11 @@
         "shortname": "skull_fire_pit",
         "name": "Skull Fire Pit",
         "description": "Enjoy burning your enemies remnants to ashes with this Halloween exclusive! Provides warmth and light, and you can cook with it."
+    },
+    "553967074": {
+        "shortname": "wallpaper.wall",
+        "name": "Wallpaper Wall",
+        "description": ""
     },
     "559147458": {
         "shortname": "fishtrap.small",
@@ -769,6 +819,11 @@
         "name": "Medium Present",
         "description": "A medium present, might be good! Collect 5 to upgrade to a larger present."
     },
+    "756890702": {
+        "shortname": "wall.external.high.adobe",
+        "name": "High External Adobe Wall",
+        "description": "A high stone wall used to keep people off your property."
+    },
     "762289806": {
         "shortname": "electric.sirenlight",
         "name": "Siren Light",
@@ -784,10 +839,15 @@
         "name": "Pistol Bullet",
         "description": "Ammunition for a Pistol. Loses velocity when fired over long distances resulting in slightly decreased damage."
     },
+    "789333045": {
+        "shortname": "sunken.knife",
+        "name": "Sunken Combat Knife",
+        "description": "A corroded sunken knife designed for close combat engagements, can attack while sprinting. Best in class at harvesting flesh."
+    },
     "794356786": {
         "shortname": "attire.hide.boots",
         "name": "Hide Boots",
-        "description": "Boots made from the hide of an animal."
+        "description": "Simple hide boots, made with common materials. Basic all-round protection."
     },
     "794443127": {
         "shortname": "xmas.tree",
@@ -872,7 +932,7 @@
     "832133926": {
         "shortname": "wood.armor.pants",
         "name": "Wood Armor Pants",
-        "description": "A shoddy piece of leg armor made from Wood and rope."
+        "description": "A shoddy piece of leg armor made from simple materials, provides some basic protection from melee and ranged attacks."
     },
     "833533164": {
         "shortname": "box.wooden.large",
@@ -887,7 +947,7 @@
     "838308300": {
         "shortname": "weapon.mod.burstmodule",
         "name": "Burst Module",
-        "description": "Forces the weapon to fire in 3 round bursts."
+        "description": "A weapon attachment that modifies recoil and rate of fire. Allows weapon to fire in 3 round bursts when turned on. Use [+firemode] to toggle on or off."
     },
     "838831151": {
         "shortname": "clone.blue.berry",
@@ -974,6 +1034,11 @@
         "name": "40mm Smoke Grenade",
         "description": "Ammunition for a 40mm Grenade Launcher."
     },
+    "920930831": {
+        "shortname": "industrial.wall.light.blue",
+        "name": "Blue Industrial Wall Light",
+        "description": "A small blue light source."
+    },
     "924598634": {
         "shortname": "clone.wheat",
         "name": "Wheat Clone",
@@ -992,7 +1057,7 @@
     "935692442": {
         "shortname": "tshirt.long",
         "name": "Longsleeve T-Shirt",
-        "description": "A t-shirt with long sleeves."
+        "description": "Long sleeve tshirt, versatile clothing for protection against damage and the elements."
     },
     "936496778": {
         "shortname": "floor.grill",
@@ -1022,7 +1087,7 @@
     "968019378": {
         "shortname": "clatter.helmet",
         "name": "Clatter Helmet",
-        "description": "A special item for those who own Clatter."
+        "description": "Special helmet for players who own Clatter and have played for at least 30 minutes, replaces the bucket helmet."
     },
     "968421290": {
         "shortname": "connected.speaker",
@@ -1047,7 +1112,7 @@
     "980333378": {
         "shortname": "attire.hide.poncho",
         "name": "Hide Poncho",
-        "description": "A Poncho made from the hide of an animal."
+        "description": "Primitive armour for the chest made from animal skin. One size fits all. Offers some basic protection from damage and the elements."
     },
     "988652725": {
         "shortname": "smart.switch",
@@ -1157,7 +1222,7 @@
     "1099611828": {
         "shortname": "clothing.mod.armorinsert_metal",
         "name": "Metal Armor Insert",
-        "description": "Metal insert for crafted clothing and armor, provides extra protection from bullets at the cost of reduced movement speed."
+        "description": "Metal insert for crafted clothing and armor, provides extra protection from projectiles."
     },
     "1103488722": {
         "shortname": "snowballgun",
@@ -1193,6 +1258,11 @@
         "shortname": "wall.frame.lunar2025_a",
         "name": "Lunar Wall Frame Inlay",
         "description": "A Lunar New Year themed decorative wall divider with geometric inlay"
+    },
+    "1121416193": {
+        "shortname": "purecoolingtea",
+        "name": "Pure Cooling Tea",
+        "description": "A pure cooling tea that temporarily decreases your max and core temperature."
     },
     "1121925526": {
         "shortname": "candycane",
@@ -1262,7 +1332,7 @@
     "1168916338": {
         "shortname": "grenade.bee",
         "name": "Bee Grenade",
-        "description": "A fragile glass jar, throw it to unleash a swarm of bees on the nearest target. The bees will deal damage quickly but they don't like fire or water."
+        "description": "A fragile glass jar full of bees. Breaking upon impact, the bees will find the nearest player to attack. Careful where you throw it!"
     },
     "1171735914": {
         "shortname": "electric.andswitch",
@@ -1287,12 +1357,17 @@
     "1178325727": {
         "shortname": "wheat",
         "name": "Wheat",
-        "description": "Wheaty"
+        "description": "A bundle of wheat. Edible, but better off in a cooking recipe."
     },
     "1181207482": {
         "shortname": "heavy.plate.helmet",
         "name": "Heavy Plate Helmet",
         "description": "Offers superior protection at the cost of reduced vision and movement speed."
+    },
+    "1184215560": {
+        "shortname": "spoiled.produce",
+        "name": "Spoiled Produce",
+        "description": "A spoiled fruit or vegetable. It's so far gone it's hard to tell what it originally was."
     },
     "1186655046": {
         "shortname": "vehicle.2mod.fuel.tank",
@@ -1402,7 +1477,7 @@
     "1272430949": {
         "shortname": "piano",
         "name": "Wheelbarrow Piano",
-        "description": "The Piano is a repurposed wheelbarrow that weighs a ton, but makes up for it with a wide range of notes."
+        "description": "The Piano is a repurposed wheelbarrow that weighs a ton, but makes up for it with a wide range of notes. "
     },
     "1272768630": {
         "shortname": "humanmeat.spoiled",
@@ -1488,6 +1563,11 @@
         "shortname": "bearmeat.spoiled",
         "name": "Spoiled Bear Meat",
         "description": "Spoiled Bear Meat. Consuming will damage your health."
+    },
+    "1350707894": {
+        "shortname": "jungle.rock",
+        "name": "Jungle Rock",
+        "description": "A Jungle Rock. The most basic melee weapon and gathering tool."
     },
     "1353298668": {
         "shortname": "door.hinged.toptier",
@@ -1614,6 +1694,11 @@
         "name": "Rope",
         "description": "A Length of Rope."
     },
+    "1420547167": {
+        "shortname": "horse.costume",
+        "name": "Horse Costume",
+        "description": "An inflatable horse costume. Acting as a replacement for wooden pants, you can equip this item to look as silly as possible."
+    },
     "1422530437": {
         "shortname": "deermeat.raw",
         "name": "Raw Deer Meat",
@@ -1623,6 +1708,11 @@
         "shortname": "bucket.water",
         "name": "Water Bucket",
         "description": "A bucket for transporting water or other liquids."
+    },
+    "1426097945": {
+        "shortname": "cocoknight.armor.torso",
+        "name": "Coconut Armor Chestplate",
+        "description": "A shoddy piece of body armor made from coconut and plants, provides some basic protection from melee and ranged attacks."
     },
     "1426574435": {
         "shortname": "minihelicopter.repair",
@@ -1662,7 +1752,7 @@
     "1467878256": {
         "shortname": "pie.pork",
         "name": "Pork Pie",
-        "description": "Tempting pork pie, provides a boost to hunger, health and hydration, and improves healing rate from other sources for a short time."
+        "description": "Tempting pork pie, provides a boost to hunger, health and hydration. Improves healing rate from other sources for a short time."
     },
     "1478091698": {
         "shortname": "weapon.mod.muzzlebrake",
@@ -1694,6 +1784,11 @@
         "name": "Medium Frankenstein Torso",
         "description": "A balanced torso.\n\nCombined at a Frankenstein Table to create your very own monster."
     },
+    "1494014226": {
+        "shortname": "discord.trophy",
+        "name": "Discord Trophy",
+        "description": "A companion that reminds you of your youth."
+    },
     "1512054436": {
         "shortname": "clone.potato",
         "name": "Potato Clone",
@@ -1701,8 +1796,8 @@
     },
     "1516531815": {
         "shortname": "harvestingtea",
-        "name": "Harvesting Tea",
-        "description": "A basic tea that temporarily increases the amount of resources you receive from harvesting corpses a small amount."
+        "name": "Basic Harvesting Tea",
+        "description": "A basic harvesting tea, provides hydration and temporarily increases the amount of resources you receive from harvesting corpses a small amount."
     },
     "1516985844": {
         "shortname": "wall.frame.netting",
@@ -1787,7 +1882,7 @@
     "1556365900": {
         "shortname": "grenade.molotov",
         "name": "Molotov Cocktail",
-        "description": "An incendiary device"
+        "description": "A glass bottle filled with low grade fuel. Smashes and spreads fire when it lands, incredibly high damage to wood and players but innefective against stronger materials."
     },
     "1557173737": {
         "shortname": "sunglasses02red",
@@ -1812,7 +1907,7 @@
     "1568388703": {
         "shortname": "diesel_barrel",
         "name": "Diesel Fuel",
-        "description": "Appropriate fuel for the excavator"
+        "description": "Suitable fuel to power quarries and the giant excavator."
     },
     "1569882109": {
         "shortname": "fishingrod.handmade",
@@ -1847,7 +1942,7 @@
     "1588492232": {
         "shortname": "drone",
         "name": "Drone",
-        "description": "A remote controlled drone operated from the Computer station with a limited range. Easily damaged from impacts."
+        "description": "A remote controlled drone operated from the Computer station with a limited range. Easily damaged from impacts. "
     },
     "1601468620": {
         "shortname": "jumpsuit.suit.blue",
@@ -1857,7 +1952,7 @@
     "1601800933": {
         "shortname": "honey",
         "name": "Jar of Honey",
-        "description": "A jar of honey, good for reducing hunger or radiation. Can also be saved for recipes. The source of the glass jar is a mystery."
+        "description": "A jar of honey. Good for reducing hunger and radiation, or could be saved for recipes. The source of the glass jar is a mystery."
     },
     "1602646136": {
         "shortname": "spear.stone",
@@ -1877,7 +1972,7 @@
     "1608640313": {
         "shortname": "shirt.tanktop",
         "name": "Tank Top",
-        "description": "A tshirt without sleeves"
+        "description": "A tank top, comes with free stains. Basic protection, but better than nothing."
     },
     "1614528785": {
         "shortname": "frankensteins.monster.03.torso",
@@ -1889,6 +1984,11 @@
         "name": "Digital Clock",
         "description": "A digital clock that displays the server time and lets you set alarms to pass power through when ringing. Ideal for synchronizing traps or timed events."
     },
+    "1621942085": {
+        "shortname": "outbreak.sprayer",
+        "name": "Outbreak Sprayer",
+        "description": "An outbreak sprayer used by scientists"
+    },
     "1623701499": {
         "shortname": "industrial.wall.light",
         "name": "Industrial Wall Light",
@@ -1898,6 +1998,11 @@
         "shortname": "snowman",
         "name": "Snowman",
         "description": "Get into the holiday spirit with this decorative snowman"
+    },
+    "1629564540": {
+        "shortname": "wallpaper.tool",
+        "name": "Wallpaper Tool",
+        "description": "Transform your base from a rusty shack to a cozy hideout! This tool lets you apply wallpaper on walls, floors and ceilings. A nice touch of style - until the next raid, at least.\n\nPress [+attack2] to select your skin."
     },
     "1638322904": {
         "shortname": "ammo.rocket.fire",
@@ -1932,7 +2037,7 @@
     "1659447559": {
         "shortname": "horse.armor.wood",
         "name": "Wooden Horse Armor",
-        "description": "A set of wooden horse armor"
+        "description": "A full body armor for a horse made of wood. Provides moderate protection for you and your steed, but with a reduction in movement speed."
     },
     "1660145984": {
         "shortname": "yellow.berry",
@@ -1952,7 +2057,12 @@
     "1675639563": {
         "shortname": "hat.beenie",
         "name": "Beenie Hat",
-        "description": "A wooly hat."
+        "description": "A wooly hat, offering some basic protection from damage and cold for your head."
+    },
+    "1680793490": {
+        "shortname": "boomerang",
+        "name": "Boomerang",
+        "description": "Can be used a melee weapon or as a throwable. Once thrown (with right click) it travels in an arc before coming back to you."
     },
     "1686524871": {
         "shortname": "xmas.decoration.gingerbreadmen",
@@ -1987,7 +2097,7 @@
     "1712261904": {
         "shortname": "maxhealthtea.pure",
         "name": "Pure Max Health Tea",
-        "description": "An advanced health tea, provides hydration and temporarily boosts maximum health a large amount."
+        "description": "A pure health tea, provides hydration and temporarily boosts maximum health a large amount."
     },
     "1714496074": {
         "shortname": "hat.candle",
@@ -1999,6 +2109,11 @@
         "name": "Ballista",
         "description": "A stationary ballista, perfect for defence. Can fire deadly bolts at distant targets."
     },
+    "1719587208": {
+        "shortname": "weapon.mod.targetingattachment",
+        "name": "Targeting Attachment",
+        "description": "An internal weapon mod that allows the user to send pings to their team while the weapon is equipped."
+    },
     "1719978075": {
         "shortname": "bone.fragments",
         "name": "Bone Fragments",
@@ -2007,7 +2122,7 @@
     "1722154847": {
         "shortname": "attire.hide.pants",
         "name": "Hide Pants",
-        "description": "Trousers made from the hide of an animal."
+        "description": "Trousers made from the hide of an animal. Moderate protection against animal attacks."
     },
     "1723747470": {
         "shortname": "xmas.decoration.lights",
@@ -2029,6 +2144,11 @@
         "name": "Portrait Photo Frame",
         "description": "A portrait oriented canvas for artists paintings."
     },
+    "1730664641": {
+        "shortname": "wallpaper.ceiling",
+        "name": "Wallpaper Ceiling",
+        "description": ""
+    },
     "1735402444": {
         "shortname": "discofloor.largetiles",
         "name": "Disco Floor",
@@ -2042,7 +2162,7 @@
     "1746956556": {
         "shortname": "bone.armor.suit",
         "name": "Bone Armor",
-        "description": "A suit of armor made of bones."
+        "description": "A primitive suit of armor made of bones, weak protection from damage and the elements but better than nothing."
     },
     "1751045826": {
         "shortname": "hoodie",
@@ -2107,7 +2227,7 @@
     "1784406797": {
         "shortname": "fun.tuba",
         "name": "Sousaphone",
-        "description": "A collection of used piping that’s been converted into a Tuba. Probably not very hygienic."
+        "description": "A collection of used piping that’s been converted into a Tuba. Probably not very hygienic.\r"
     },
     "1787198294": {
         "shortname": "frontiermirror.standing",
@@ -2167,7 +2287,7 @@
     "1840822026": {
         "shortname": "grenade.beancan",
         "name": "Beancan Grenade",
-        "description": "Unreliable explosive device."
+        "description": "An unreliable explosive grenade. Each one has a different length fuse, so you might lose some fingers. Can be used to make satchel charges."
     },
     "1846605708": {
         "shortname": "divertorch",
@@ -2182,7 +2302,7 @@
     "1850456855": {
         "shortname": "roadsign.kilt",
         "name": "Road Sign Kilt",
-        "description": "A shoddy piece of leg armor made from roadsigns."
+        "description": "A shoddy piece of leg armor made from roadsigns. Moderate protection from melee and projectiles."
     },
     "1856217390": {
         "shortname": "easterbasket",
@@ -2192,7 +2312,7 @@
     "1858828593": {
         "shortname": "egg",
         "name": "Egg",
-        "description": "An egg, laid by a chicken. Can be eaten or hatched in a chicken coop."
+        "description": "An egg laid by a chicken, will hatch in a coop. Can be eaten raw but best saved for a recipe."
     },
     "1865253052": {
         "shortname": "draculamask",
@@ -2203,6 +2323,11 @@
         "shortname": "motorbike_sidecar",
         "name": "Motorbike With Sidecar",
         "description": "A motorbike with sidecar."
+    },
+    "1873004466": {
+        "shortname": "cocoknight.armor.gloves",
+        "name": "Coconut Armor Gloves",
+        "description": "Hand protection made of bark and plants, offers some protection to the upper body."
     },
     "1873897110": {
         "shortname": "bearmeat.cooked",
@@ -2267,7 +2392,7 @@
     "1903654061": {
         "shortname": "planter.small",
         "name": "Small Planter Box",
-        "description": "A small planter with enough room to plant 3 seeds."
+        "description": "A small planter with enough room to plant 3 seeds.\r"
     },
     "1905387657": {
         "shortname": "radiationremovetea.pure",
@@ -2282,7 +2407,7 @@
     "1914691295": {
         "shortname": "pistol.prototype17",
         "name": "Prototype 17",
-        "description": "A burst fire prototype pistol"
+        "description": "A protype pistol with a built-in 3 round burst fire mode. Strong in close quarters. Swap between single shot and burst with [+firemode]"
     },
     "1916016738": {
         "shortname": "lightupmirror.standing",
@@ -2338,6 +2463,11 @@
         "shortname": "pistol.nailgun",
         "name": "Nailgun",
         "description": "A construction tool turned deadly"
+    },
+    "1954597876": {
+        "shortname": "catapult.ammo.bee",
+        "name": "Bee Catapult Bomb",
+        "description": "A bunch of Bee Grenades in a single catapult projectile. Creates swarms of Bees on impact."
     },
     "1965232394": {
         "shortname": "crossbow",
@@ -2412,12 +2542,17 @@
     "2024467711": {
         "shortname": "scraptea.pure",
         "name": "Pure Scrap Tea",
-        "description": "A pure scrap tea, temporarily increases the amount of scrap you recieve from barrels a large amount."
+        "description": "A pure scrap tea, temporarily increases the amount of scrap you receive from barrels a large amount."
+    },
+    "2036395619": {
+        "shortname": "dart.scatter",
+        "name": "Scatter Dart",
+        "description": "A spread shot dart that fires multiple smaller darts."
     },
     "2039177180": {
         "shortname": "pie.bear",
         "name": "Bear Pie",
-        "description": "A pie made of bear meat, provides a boost to hunger, health and hydration, and increases effect of harvesting teas but reduces their duration."
+        "description": "A pie made of bear meat, provides a boost to hunger, health and hydration. Increases effect of harvesting teas but reduces their duration."
     },
     "2040726127": {
         "shortname": "knife.combat",
@@ -2432,7 +2567,7 @@
     "2047789913": {
         "shortname": "clothing.mod.armorinsert_lead",
         "name": "Lead Armor Insert",
-        "description": "Lead insert that adds radiation protection for crafted clothes and armor, at the cost of reduced movement speed."
+        "description": "Lead insert that adds radiation protection for crafted clothes and armor."
     },
     "2048317869": {
         "shortname": "skull.wolf",
@@ -2448,6 +2583,11 @@
         "shortname": "factorydoor",
         "name": "Factory Door",
         "description": "Medium strength door, vulnerable to explosives. Contains a bulletproof viewing portal"
+    },
+    "2054929933": {
+        "shortname": "rifle.ak.jungle",
+        "name": "Jungle Relic Assault Rifle",
+        "description": "Jungle Relic themed high damage machine rifle."
     },
     "2055695285": {
         "shortname": "frontiermirror.medium",
@@ -2518,6 +2658,31 @@
         "shortname": "clone.red.berry",
         "name": "Red Berry Clone",
         "description": "A clipping of a Red Berry Plant."
+    },
+    "2137338174": {
+        "shortname": "gates.external.high.frontier",
+        "name": "High External Frontier Gate",
+        "description": "A high wooden gate, allowing access in and out of your compound."
+    },
+    "-1498613415": {
+        "shortname": "advancedcoolingtea",
+        "name": "Advanced Cooling Tea",
+        "description": "An advanced cooling tea, provides hydration and temporarily decreases your max and core temperature."
+    },
+    "-652889722": {
+        "shortname": "advancedcraftingtea_quality",
+        "name": "Advanced Crafting Quality Tea",
+        "description": "An advanced crafting tea, provides hydration and temporarily increases the chances of a higher quality crafting outcome."
+    },
+    "-334418777": {
+        "shortname": "advancedwarmingtea",
+        "name": "Advanced Warming Tea",
+        "description": "An advanced warming tea that temporarily increases both your core and minimum temperature."
+    },
+    "-1385721419": {
+        "shortname": "advanceharvestingtea",
+        "name": "Advanced Harvesting Tea",
+        "description": "An advanced harvesting tea, provides hydration and temporarily boosts the amount of resources you receive from harvesting corpses a moderate amount."
     },
     "-2097376851": {
         "shortname": "ammo.nailgun.nails",
@@ -2617,7 +2782,7 @@
     "-1773144852": {
         "shortname": "attire.hide.skirt",
         "name": "Hide Skirt",
-        "description": "A Skirt made from the hide of an animal."
+        "description": "Simple hide skirt, made with common materials. Basic all-round protection."
     },
     "-1506417026": {
         "shortname": "attire.ninja.suit",
@@ -2668,6 +2833,11 @@
         "shortname": "ballista.mounted",
         "name": "Mounted Ballista",
         "description": "A ballista mounted on wheels, designed for mobility and capable of firing bolts at distant targets. Can be towed by horses."
+    },
+    "-1652561344": {
+        "shortname": "bamboo.barrel",
+        "name": "Bamboo Barrel",
+        "description": "Keep your things in this bamboo barrel. Stores up to 48 items. Cannot be locked."
     },
     "-2072273936": {
         "shortname": "bandage",
@@ -2738,6 +2908,21 @@
         "shortname": "bed",
         "name": "Bed",
         "description": "A Bed. Placing this will give you a place to respawn and can be used much more frequently than a sleeping bag. Note: Must be placed inside a building."
+    },
+    "-1318837358": {
+        "shortname": "bigcatmeat.cooked",
+        "name": "Cooked Big Cat Meat",
+        "description": "Delicious Big Cat Meat, Eating it will restore some health, hunger, and thirst."
+    },
+    "-2095813057": {
+        "shortname": "bigcatmeat",
+        "name": "Raw Big Cat Meat",
+        "description": "Raw Big Cat Meat. Eating it will damage your health, try cooking it first."
+    },
+    "-851288382": {
+        "shortname": "blowpipe",
+        "name": "Blow Pipe",
+        "description": "A blown weapon that fires darts with different effects."
     },
     "-586342290": {
         "shortname": "blueberries",
@@ -2842,7 +3027,7 @@
     "-2018158920": {
         "shortname": "chickencoop",
         "name": "Chicken Coop",
-        "description": "An enclosure to keep some chickens around."
+        "description": "An enclosure to keep some chickens around. Chickens with plenty of food, water and sunlight produce more eggs."
     },
     "-1916473915": {
         "shortname": "chineselantern",
@@ -2897,12 +3082,22 @@
     "-593892112": {
         "shortname": "clothing.mod.armorinsert_wood",
         "name": "Wooden Armor Insert",
-        "description": "Wood insert for crafted clothes and armor, provides some extra protection from bullets and melee."
+        "description": "Wood insert for crafted clothes and armor, provides some extra protection from bullets and melee. "
+    },
+    "-582467439": {
+        "shortname": "cocoknight.armor.helmet",
+        "name": "Coconut Armor Helmet",
+        "description": "A shoddy helmet made from coconut, provides some basic protection from melee and ranged attacks."
     },
     "-803263829": {
         "shortname": "coffeecan.helmet",
         "name": "Coffee Can Helmet",
         "description": "A Coffee Can Helmet. It provides a level of regional protection from inflicted damage."
+    },
+    "-1247485104": {
+        "shortname": "command.block",
+        "name": "Command Block",
+        "description": "A block that runs commands"
     },
     "-1488398114": {
         "shortname": "composter",
@@ -2921,8 +3116,18 @@
     },
     "-1260229965": {
         "shortname": "coolingtea",
-        "name": "Cooling Tea",
-        "description": "A cooling tea that temporarily decreases your max and core temperature."
+        "name": "Basic Cooling Tea",
+        "description": "A basic cooling tea that temporarily decreases your max and core temperature."
+    },
+    "-1081599445": {
+        "shortname": "crocodilemeat",
+        "name": "Raw Crocodile Meat",
+        "description": "Raw Crocodile Meat. Eating it will damage your health, try cooking it first."
+    },
+    "-1796837031": {
+        "shortname": "crocodilemeat.spoiled",
+        "name": "Spoiled Crocodile Meat",
+        "description": "Spoiled Crocodile Meat. Consuming will damage your health."
     },
     "-321733511": {
         "shortname": "crude.oil",
@@ -2939,10 +3144,25 @@
         "name": "Bone Dart",
         "description": "A basic damage dart."
     },
+    "-963819285": {
+        "shortname": "dart.incapacitate",
+        "name": "Incapacitate Dart",
+        "description": "A dart that slows your target and blocks their vision briefly."
+    },
+    "-594596146": {
+        "shortname": "dart.radiation",
+        "name": "Radiation Dart",
+        "description": "A dart that applies stackable radiation."
+    },
+    "-274709858": {
+        "shortname": "dart.wood",
+        "name": "Wood Dart",
+        "description": "A basic damage dart."
+    },
     "-1903165497": {
         "shortname": "deer.skull.mask",
         "name": "Bone Helmet",
-        "description": "A helmet made of bone."
+        "description": "A primitive helmet made from bone. Moderate protection from projectiles and melee damage."
     },
     "-78533081": {
         "shortname": "deermeat.burned",
@@ -2962,7 +3182,7 @@
     "-113413047": {
         "shortname": "diving.mask",
         "name": "Diving Mask",
-        "description": "A Diving Mask. Provides clear vision under water."
+        "description": "A diving mask that provides clear vision under water at the cost of reduced peripheral vision."
     },
     "-2022172587": {
         "shortname": "diving.tank",
@@ -3327,7 +3547,7 @@
     "-2107018088": {
         "shortname": "fun.bass",
         "name": "Shovel Bass",
-        "description": "Use this stringed together shovel to play some deep, deep tunes."
+        "description": "Use this stringed together shovel to play some deep, deep tunes.\r"
     },
     "-1530414568": {
         "shortname": "fun.casetterecorder",
@@ -3342,7 +3562,7 @@
     "-2040817543": {
         "shortname": "fun.flute",
         "name": "Pan Flute",
-        "description": "A set of repurposed PVC pipes that can be used to play a variety of melodies."
+        "description": "A set of repurposed PVC pipes that can be used to play a variety of melodies.\r"
     },
     "-2124352573": {
         "shortname": "fun.guitar",
@@ -3373,6 +3593,11 @@
         "shortname": "fuse",
         "name": "Electric Fuse",
         "description": "An unreliable electric fuse. Will allow electrical passthrough for a period of time."
+    },
+    "-401905610": {
+        "shortname": "gates.external.high.adobe",
+        "name": "High External Adobe Gate",
+        "description": "A high stone gate, allowing access in and out of your compound."
     },
     "-691113464": {
         "shortname": "gates.external.high.stone",
@@ -3499,6 +3724,11 @@
         "name": "Hot Air Balloon",
         "description": "A Hot Air Balloon."
     },
+    "-1923843855": {
+        "shortname": "half.bamboo.shelves",
+        "name": "Half Height Bamboo Shelves",
+        "description": "Half height salvaged bamboo shelves for stacking"
+    },
     "-888153050": {
         "shortname": "halloween.candy",
         "name": "Halloween Candy",
@@ -3517,17 +3747,17 @@
     "-839576748": {
         "shortname": "handcuffs",
         "name": "Handcuffs",
-        "description": "Handcuffs"
+        "description": "You're under arrest! Use on a surrendering or wounded player to keep them restrained. The wearer is blocked from using or holding items and can be pushed around."
     },
     "-23994173": {
         "shortname": "hat.boonie",
         "name": "Boonie Hat",
-        "description": "A boonie hat."
+        "description": "A boonie hat, offering minor protection from damage and cold for your head."
     },
     "-1022661119": {
         "shortname": "hat.cap",
         "name": "Baseball Cap",
-        "description": "A baseball cap."
+        "description": "Simple hat for your head. Offers basic protection from damage and the cold."
     },
     "-22883916": {
         "shortname": "hat.dragonmask",
@@ -3647,7 +3877,7 @@
     "-1513203236": {
         "shortname": "honeycomb",
         "name": "Honeycomb",
-        "description": "These building blocks of a beehive can turn into honey or nuclei. Cooking them in a furnace guarantees honey."
+        "description": "Building blocks of a hive, taken from a natural beehive. Can be cooked in a furnace to guarantee honey, or extracted for honey and a small chance of a nucleus."
     },
     "-1323101799": {
         "shortname": "horse.saddle.double",
@@ -3722,7 +3952,7 @@
     "-1163532624": {
         "shortname": "jacket",
         "name": "Jacket",
-        "description": "A rugged jacket."
+        "description": "A rugged jacket, will help keep you warm. High cold protection but incompatible with other chest attire."
     },
     "-48090175": {
         "shortname": "jacket.snow",
@@ -3842,7 +4072,7 @@
     "-763071910": {
         "shortname": "lumberjack hoodie",
         "name": "Lumberjack Hoodie",
-        "description": "A Lumberjack Hoodie"
+        "description": "A lumberjack themed hoodie, earned by helping the Lumberjack. Offers the same protection as the standard hoodie."
     },
     "-399173933": {
         "shortname": "lumberjack.hatchet",
@@ -3877,7 +4107,7 @@
     "-2012470695": {
         "shortname": "mask.balaclava",
         "name": "Improvised Balaclava",
-        "description": "A home made balaclava."
+        "description": "A makeshift balaclava. Cost effective protection from the cold, but unremarkable at preventing melee and projectile damage."
     },
     "-702051347": {
         "shortname": "mask.bandana",
@@ -3987,12 +4217,17 @@
     "-1811234677": {
         "shortname": "nucleus",
         "name": "Beehive Nucleus",
-        "description": "The heart of any hive, needed for raising bees. Produce honeycomb to earn XP and increase its grade. Higher grades will produce more honeycomb at once."
+        "description": "The heart of any hive, needed for raising bees. Produce honeycomb from happy bees to grow the nucleus and increase yields."
     },
     "-282193997": {
         "shortname": "orangeidtag",
         "name": "Orange ID Tag",
         "description": "Orange ID Tag"
+    },
+    "-2133781216": {
+        "shortname": "oubreak_scientist",
+        "name": "Outbreak Scientist Suit",
+        "description": "A outbreak scientist suit"
     },
     "-733625651": {
         "shortname": "paddlingpool",
@@ -4002,7 +4237,7 @@
     "-1695367501": {
         "shortname": "pants.shorts",
         "name": "Shorts",
-        "description": "Trousers without the bottom of the legs."
+        "description": "Trusty pair of shorts, may provide a breeze in undesired places. Worse than their full length counterparts with only basic protection from damage and the elements."
     },
     "-1779183908": {
         "shortname": "paper",
@@ -4022,17 +4257,17 @@
     "-1785248332": {
         "shortname": "pie.fish",
         "name": "Fish Pie",
-        "description": "Delightful fish pie. Provides a boost to hunger, health and hydration and increases base comfort level for a short time."
+        "description": "Delightful fish pie. Provides a boost to hunger, health and hydration. Increases base comfort level for a short time."
     },
     "-1488408786": {
         "shortname": "pie.pumpkin",
         "name": "Pumpkin Pie",
-        "description": "Spooky pumpkin pie, Provides a boost to health, hunger and hydration, and increases maximum health for a short time."
+        "description": "Spooky pumpkin pie, provides a boost to health, hunger and hydration. Increases maximum health for a short time."
     },
     "-963820355": {
         "shortname": "pie.survivors",
         "name": "Survivor's Pie",
-        "description": "It's people. Survivor's pie is made out of people. Provides a boost to health, hunger and hydration, and increases yield when harvesting corpses for a short time."
+        "description": "It's people. Survivor's pie is made out of people. Provides a boost to health, hunger and hydration. Increases yield when harvesting corpses for a short time."
     },
     "-1442496789": {
         "shortname": "pinata",
@@ -4104,6 +4339,11 @@
         "name": "Pumpkin",
         "description": "An edible vegetable that can also be worn as a hat. Eating it provides a small boost to health, hunger, and thirst."
     },
+    "-1476814093": {
+        "shortname": "purewarmingtea",
+        "name": "Pure Warming Tea",
+        "description": "A pure warming tea that temporarily increases both your core and minimum temperature."
+    },
     "-1386082991": {
         "shortname": "purpleidtag",
         "name": "Purple ID Tag",
@@ -4147,7 +4387,7 @@
     "-92315244": {
         "shortname": "revolver.hc",
         "name": "High Caliber Revolver",
-        "description": "A High Caliber six-shooter."
+        "description": "A powerful six-shot revolver using 5.56 rounds. High damage and accuracy, but slow fire rate and even slower to reload."
     },
     "-566907190": {
         "shortname": "rf_pager",
@@ -4244,6 +4484,16 @@
         "name": "Rustigé Egg - White",
         "description": "A beautiful hand crafted gold and white egg, with a miniature underwater lab scene contained inside."
     },
+    "-173268127": {
+        "shortname": "rustige_egg_g",
+        "name": "Rustigé Egg - Cerulean",
+        "description": "A beautiful hand crafted cerulean and gold egg, with a miniature cargo ship scene contained inside."
+    },
+    "-2110553371": {
+        "shortname": "salvaged.bamboo.shelves",
+        "name": "Bamboo Salvaged Shelves",
+        "description": "Bamboo shelves for item stacking"
+    },
     "-1978999529": {
         "shortname": "salvaged.cleaver",
         "name": "Salvaged Cleaver",
@@ -4337,7 +4587,7 @@
     "-1790885730": {
         "shortname": "seed.wheat",
         "name": "Wheat Seed",
-        "description": "Wheat seeds can be found when picking wild Wheat plants. These seeds can be planted in the ground and grown to collect additional food.\n\n\nPlanting these seeds in a planter, and then watering them with large quantities of water yields significantly more corn and faster growth."
+        "description": "Wheat seeds, found when eating wheat or harvesting wild crops. Plant in the ground or a planter to grow more.  Seeds grown in good conditions will have higher yields and grow faster."
     },
     "-992286106": {
         "shortname": "seed.white.berry",
@@ -4357,12 +4607,12 @@
     "-2025184684": {
         "shortname": "shirt.collared",
         "name": "Shirt",
-        "description": "A smart casual shirt"
+        "description": "A smart casual shirt. Might make you look more trustworthy. Moderate clothing for protection against damage and the elements."
     },
     "-1549739227": {
         "shortname": "shoes.boots",
         "name": "Boots",
-        "description": "Work boots."
+        "description": "Sturdy work boots to keep your toes safe, you'd feel nothing if you kicked a table leg. Strong protection against the cold and incoming damage."
     },
     "-765183617": {
         "shortname": "shotgun.double",
@@ -4454,6 +4704,11 @@
         "name": "Small Wooden Sign",
         "description": "A 1-meter by 0.5-meter wooden sign that you can write on."
     },
+    "-193519904": {
+        "shortname": "single.shallow.wall.shelves",
+        "name": "Single Shallow Wall Shelves",
+        "description": "Single Shallow Wall Shelves"
+    },
     "-1056824343": {
         "shortname": "skidoo",
         "name": "Diver propulsion vehicle",
@@ -4522,7 +4777,7 @@
     "-1754948969": {
         "shortname": "sleepingbag",
         "name": "Sleeping Bag",
-        "description": "A sleeping bag. Placing this will give you a location to respawn."
+        "description": "A sleeping bag. Placing this will give you or an assigned player a place to respawn, with a long cooldown."
     },
     "-1293296287": {
         "shortname": "small.oil.refinery",
@@ -4548,6 +4803,21 @@
         "shortname": "smg.thompson",
         "name": "Thompson",
         "description": "A medium damage machine gun."
+    },
+    "-170436364": {
+        "shortname": "snakemeat.cooked",
+        "name": "Cooked Snake Meat",
+        "description": "Delicious Snake Meat, Eating it will restore some health, hunger, and thirst."
+    },
+    "-2100458529": {
+        "shortname": "snakemeat",
+        "name": "Raw Snake Meat",
+        "description": "Raw Snake Meat. Eating it will damage your health, try cooking it first."
+    },
+    "-1616704051": {
+        "shortname": "snakemeat.spoiled",
+        "name": "Spoiled Snake Meat",
+        "description": "Spoiled Snake Meat. Consuming will damage your health."
     },
     "-363689972": {
         "shortname": "snowball",
@@ -4747,7 +5017,7 @@
     "-1478445584": {
         "shortname": "tunalight",
         "name": "Tuna Can Lamp",
-        "description": "A Makeshift wall light."
+        "description": "A makeshift wall light. Still smells faintly of fish."
     },
     "-1569700847": {
         "shortname": "twitch.headset",
@@ -4824,6 +5094,11 @@
         "name": "Large Chassis",
         "description": "Four-socket vehicle chassis."
     },
+    "-870140677": {
+        "shortname": "venom.snake",
+        "name": "Snake Venom",
+        "description": "The venom of a snake. Used to create Incapacitate darts."
+    },
     "-1416322465": {
         "shortname": "walkietalkie",
         "name": "Walkie Talkie",
@@ -4899,6 +5174,11 @@
         "name": "Strengthened Glass Window",
         "description": "Bulletproof glass insert"
     },
+    "-551431036": {
+        "shortname": "wallpaper.flooring",
+        "name": "Wallpaper Flooring",
+        "description": ""
+    },
     "-1501434104": {
         "shortname": "wallpaper",
         "name": "Wallpaper",
@@ -4916,8 +5196,8 @@
     },
     "-1142222427": {
         "shortname": "warmingtea",
-        "name": "Warming Tea",
-        "description": "A warming tea that temporarily increases both your core and minimum temperature."
+        "name": "Basic Warming Tea",
+        "description": "A basic warming tea that temporarily increases both your core and minimum temperature."
     },
     "-463122489": {
         "shortname": "watchtower.wood",
@@ -4952,7 +5232,7 @@
     "-119235651": {
         "shortname": "waterjug",
         "name": "Water Jug",
-        "description": "A large jerry can for water."
+        "description": "A large jerry can for all kinds of water. Holds up to 5000ml. Careful not to throw it all away!"
     },
     "-1284169891": {
         "shortname": "waterpump",
@@ -4974,9 +5254,14 @@
         "name": "Muzzle Boost",
         "description": "Increases weapon fire rate by channeling gasses back into the weapon cycling it faster, at the cost of bullet accuracy."
     },
+    "-781866273": {
+        "shortname": "weapon.mod.oilfiltersilencer",
+        "name": "Oil Filter Silencer",
+        "description": "Significantly reduces the sound of gunfire, and completely removes any visible muzzle flash. Fashioned out of an old oil filter, this won't last long."
+    },
     "-1850571427": {
         "shortname": "weapon.mod.silencer",
-        "name": "Silencer",
+        "name": "Military Silencer",
         "description": "Significantly reduces the sound of gunfire, and completely removes any visible muzzle flash."
     },
     "-855748505": {
@@ -4984,10 +5269,20 @@
         "name": "Simple Handmade Sight",
         "description": "A poorly made sight, slightly better than iron sights."
     },
+    "-1659598760": {
+        "shortname": "weapon.mod.sodacansilencer",
+        "name": "Soda Can Silencer",
+        "description": "Significantly reduces the sound of gunfire, and completely removes any visible muzzle flash. Crudely made out of a soda can, this will only survive a few shots."
+    },
     "-1163943815": {
         "shortname": "weaponrack.light",
         "name": "Weapon Rack Light",
         "description": "A weapon rack light."
+    },
+    "-526026171": {
+        "shortname": "wicker.barrel",
+        "name": "Wicker Barrel",
+        "description": "Keep your things in this wicker barrel. Stores up to 48 items. Cannot be locked."
     },
     "-144417939": {
         "shortname": "wiretool",
@@ -5007,12 +5302,17 @@
     "-2094954543": {
         "shortname": "wood.armor.helmet",
         "name": "Wood Armor Helmet",
-        "description": "A shoddy helmet made from Wood and Cloth."
+        "description": "A shoddy helmet made from simple materials, provides some basic protection from melee and ranged attacks."
     },
     "-151838493": {
         "shortname": "wood",
         "name": "Wood",
         "description": "Wood. Collected from trees and used in many crafting recipes. It's also needed to cook in camp-fires."
+    },
+    "-459159118": {
+        "shortname": "woodarmor.gloves",
+        "name": "Wood Armor Gloves",
+        "description": "Gloves made out of wood and leather, offers some protection to the upper body."
     },
     "-635951327": {
         "shortname": "woodframe.large",
