@@ -56,7 +56,8 @@ const ICONS = {
     Loot: 'icon-loot.png'
 }
 
-async function generateIcon(basePath: string, maskPath: string, color: string, iconPath: string | null = null): Promise<Buffer> {
+async function generateIcon(basePath: string, maskPath: string, color: string, iconPath: string | null = null):
+    Promise<Buffer> {
     const baseImage = await loadImage(basePath);
     const maskImage = await loadImage(maskPath);
     const iconImage = iconPath ? await loadImage(iconPath) : null;
