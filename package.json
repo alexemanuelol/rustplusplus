@@ -11,6 +11,7 @@
         "test": "tsc --noEmit -p .",
         "lint": "npx eslint . --ext .ts",
         "gen-env": "ts-node scripts/generate-env.ts",
+        "gen-icons": "ts-node scripts/generate-icons.ts",
         "unusedPhrases": "npx ts-node scripts/findUnusedPhrases.ts",
         "find-eslint-comments": "grep -r --exclude-dir=node_modules 'eslint-disable' .",
         "force-update-master": "git fetch origin && git reset --hard origin/master"
