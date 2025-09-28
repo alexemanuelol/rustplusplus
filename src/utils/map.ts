@@ -166,10 +166,15 @@ export function getGridPosLettersX(x: number, mapSize: number): string {
     let grid;
     const numberOfGrids = Math.floor(mapSize / constants.GRID_DIAMETER);
     const gridDiameter = mapSize / numberOfGrids;
+    const margin = 1;
+
     for (grid = 0; grid < numberOfGrids; grid++) {
         if (grid === (numberOfGrids - 1) || x > mapSize) break;
-        if (x >= (grid * gridDiameter) && x < ((grid * gridDiameter) + gridDiameter)) break;
+        const left = grid * gridDiameter;
+        const right = left + gridDiameter;
+        if ((x + margin) < right) break;
     }
+
     return numberToLetters(grid + 1);
 }
 
@@ -177,9 +182,13 @@ export function getGridPosNumberY(y: number, mapSize: number): number {
     let grid;
     const numberOfGrids = Math.floor(mapSize / constants.GRID_DIAMETER);
     const gridDiameter = mapSize / numberOfGrids;
+    const margin = 1;
+
     for (grid = 0; grid < numberOfGrids; grid++) {
         if (grid === (numberOfGrids - 1) || y > mapSize) break;
-        if (y <= (mapSize - grid * gridDiameter) && y > ((mapSize - grid * gridDiameter) - gridDiameter)) break;
+        const upper = mapSize - (grid * gridDiameter);
+        const lower = upper - gridDiameter;
+        if ((y - margin) > lower) break;
     }
     return grid;
 }
