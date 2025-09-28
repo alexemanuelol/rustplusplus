@@ -55,6 +55,10 @@ export default {
 			.addBooleanOption(option => option
 				.setName('markers')
 				.setDescription(lm.getIntl(language, 'slashCommandDescMapMarkers'))
+				.setRequired(false))
+			.addBooleanOption(option => option
+				.setName('tracers')
+				.setDescription(lm.getIntl(language, 'slashCommandDescMapTracers'))
 				.setRequired(false));
 	},
 
@@ -82,6 +86,7 @@ export default {
 		const grids = interaction.options.getBoolean('grids', false) ?? complete;
 		const monuments = interaction.options.getBoolean('monuments', false) ?? complete;
 		const markers = interaction.options.getBoolean('markers', false) ?? complete;
+		const tracers = interaction.options.getBoolean('tracers', false) ?? complete;
 
 		if (!Object.keys(gInstance.serverInfoMap).includes(serverId)) {
 			const parameters = {
@@ -108,7 +113,7 @@ export default {
 			return false;
 		}
 
-		const imageName = await (rpInstance.rpMap as RustPlusMap).writeImage(grids, monuments, markers);
+		const imageName = await (rpInstance.rpMap as RustPlusMap).writeImage(grids, monuments, markers, tracers);
 		await discordMessages.sendMapMessage(dm, interaction, serverId, imageName);
 		log.info(`${fn} ${id} Showing the map.`, logParam);
 

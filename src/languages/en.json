@@ -321,6 +321,7 @@
     "slashCommandDescMapComplete": "Get the complete map with grids, monuments and markers.",
     "slashCommandDescMapGrids": "Get the map with grids.",
     "slashCommandDescMapMarkers": "Get the map with markers.",
+    "slashCommandDescMapTracers": "Get the map with tracers.",
     "slashCommandDescMapMonuments": "Get the map with monuments.",
     "slashCommandDescMapServer": "The server to retrieve the map from.",
     "slashCommandDescRole": "Manage roles and admin roles.",

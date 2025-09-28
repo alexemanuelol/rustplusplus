@@ -29,6 +29,22 @@ import { getGridPos, getMonumentsInfo, getDistance, Point } from '../utils/map';
 import * as constants from '../utils/constants';
 import { GuildInstance } from '../managers/guildInstanceManager';
 
+const MARKERS_PATH = path.join(__dirname, '..', 'resources/images/markers/');
+const NOTE_MARKERS_PATH = path.join(__dirname, '..', 'resources/images/note_markers/');
+
+const MARKER_ICON_MAP: Record<rp.AppMarkerType, string> = {
+    [rp.AppMarkerType.Undefined]: '',
+    [rp.AppMarkerType.Player]: 'player',
+    [rp.AppMarkerType.Explosion]: 'explosion',
+    [rp.AppMarkerType.VendingMachine]: 'vending_machine',
+    [rp.AppMarkerType.CH47]: 'chinook_body',
+    [rp.AppMarkerType.CargoShip]: 'cargo_ship_body',
+    [rp.AppMarkerType.Crate]: 'crate',
+    [rp.AppMarkerType.GenericRadius]: 'chinook_blade',
+    [rp.AppMarkerType.PatrolHelicopter]: 'patrol_helicopter_body',
+    [rp.AppMarkerType.TravellingVendor]: 'travelling_vendor'
+}
+
 export class RustPlusMap {
     public rpInstance: RustPlusInstance;
     public appMap: rp.AppMap;
@@ -92,8 +108,8 @@ export class RustPlusMap {
         }
     }
 
-    public async writeImage(grids: boolean = false, monuments: boolean = false, markers: boolean = false):
-        Promise<string> {
+    public async writeImage(grids: boolean = false, monuments: boolean = false, markers: boolean = false,
+        tracers: boolean = false): Promise<string> {
         RustPlusMap.registerFonts();
 
         const cleanImage = grids === false && monuments === false;
@@ -108,7 +124,7 @@ export class RustPlusMap {
         if (grids) this.drawGridSystem(ctx);
         if (monuments) await this.drawMonuments(ctx);
         if (markers) await this.drawMarkers(ctx);
-        // TODO! tracer for cargoship, patrol helicopter, travelling vendor, chinook 47
+        if (tracers) await this.drawTracers(ctx);
 
         const outBuffer = canvas.toBuffer('image/png');
         fs.writeFileSync(`maps/${imageName}`, outBuffer);
@@ -216,6 +232,43 @@ export class RustPlusMap {
 
     /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private async drawMarkers(ctx: SKRSContext2D) {
+        const rpMapMarkers = this.rpInstance.rpMapMarkers;
+        if (!rpMapMarkers) return;
+        const mapSize = this.rpInstance.rpInfo?.appInfo.mapSize;
+        if (!mapSize) return;
+
+        const width = this.appMap.width;
+        const height = this.appMap.height;
+        const oceanMargin = this.appMap.oceanMargin;
+
+        for (const marker of this.rpInstance.rpMapMarkers!.appMapMarkers.markers) {
+            const x = marker.x * ((width - 2 * oceanMargin) / mapSize) + oceanMargin;
+            const n = height - 2 * oceanMargin;
+            const y = height - (marker.y * (n / mapSize) + oceanMargin);
+
+            let iconPath = MARKER_ICON_MAP[marker.type as rp.AppMarkerType];
+            if (marker.type === rp.AppMarkerType.VendingMachine) {
+                iconPath += marker.outOfStock ? '_inactive' : '_active';
+            }
+
+            const markerIcon = await loadImage(path.join(MARKERS_PATH, `${iconPath}.png`));
+
+            const scale = 0.3;
+            const iconWidth = markerIcon.width * scale;
+            const iconHeight = markerIcon.height * scale;
+            const radians = Math.abs(marker.rotation - 360) * (Math.PI / 180);
+
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(radians);
+            ctx.drawImage(markerIcon, -iconWidth / 2, -iconHeight / 2, iconWidth, iconHeight);
+            ctx.restore();
+        }
+
+        // TODO! Add note markers from teaminfo
+    }
+
+    private async drawTracers(ctx: SKRSContext2D) {
         // TODO! TBD
     }
 
