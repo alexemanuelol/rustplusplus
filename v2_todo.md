@@ -93,9 +93,9 @@
 - [x] Time
 - [ ] Team
 - [ ] TeamMember
-- [ ] Info
-- [ ] MapMarkers
-- [ ] Map
+- [x] Info
+- [x] MapMarkers
+- [x] Map
 
 ### Handlers
 - [ ] Smart switch
@@ -108,7 +108,7 @@
 - [x] inGame chat handler
 - [x] team chat handler
 - [ ] team handler
-- [ ] time handler
+- [x] time handler
 - [ ] vending machine handler
 
 ### RustPlus events
