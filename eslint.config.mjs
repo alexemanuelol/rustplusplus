@@ -16,5 +16,10 @@ export default defineConfig([
       "max-len": ["error", { code: 120 }]
     }
   },
+  {
+    ignores: [
+      "temp"
+    ]
+  },
   tseslint.configs.recommended,
 ]);
