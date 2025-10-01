@@ -25,12 +25,16 @@ import * as path from 'path';
 
 import { guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { RustPlusInstance } from '../managers/rustPlusManager';
-import { getGridPos, getMonumentsInfo, getDistance, Point } from '../utils/map';
+import * as map from '../utils/map';
 import * as constants from '../utils/constants';
 import { GuildInstance } from '../managers/guildInstanceManager';
+import { Tracers } from './rustPlusMapMarkers';
 
 const MARKERS_PATH = path.join(__dirname, '..', 'resources/images/markers/');
+/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 const NOTE_MARKERS_PATH = path.join(__dirname, '..', 'resources/images/note_markers/');
+
+const TRACER_LINE_WIDTH = 2;
 
 const MARKER_ICON_MAP: Record<rp.AppMarkerType, string> = {
     [rp.AppMarkerType.Undefined]: '',
@@ -44,6 +48,15 @@ const MARKER_ICON_MAP: Record<rp.AppMarkerType, string> = {
     [rp.AppMarkerType.PatrolHelicopter]: 'patrol_helicopter_body',
     [rp.AppMarkerType.TravellingVendor]: 'travelling_vendor'
 }
+
+const TRACER_COLOR_MAP: Record<keyof Tracers, string> = {
+    players: "#9CDB2E",
+    ch47s: "#E6194B",
+    oilRigCh47s: "#4363D8",
+    cargoShips: "#F58231",
+    patrolHelicopters: "#911EB4",
+    travellingVendors: "#FFE119"
+};
 
 export class RustPlusMap {
     public rpInstance: RustPlusInstance;
@@ -176,7 +189,7 @@ export class RustPlusMap {
                 const pixelX = x * (mapWidthInPixels / mapSize) + oceanMargin;
                 const pixelY = height - (y * (mapHeightInPixels / mapSize) + oceanMargin);
 
-                const label = getGridPos(x, y, mapSize) as string;
+                const label = map.getGridPos(x, y, mapSize) as string;
                 ctx.fillText(label, pixelX + labelPadding, pixelY + labelPadding);
             }
         }
@@ -188,12 +201,9 @@ export class RustPlusMap {
 
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
-        const width = this.appMap.width;
-        const height = this.appMap.height;
-        const oceanMargin = this.appMap.oceanMargin;
         const monuments = this.appMap.monuments;
 
-        const monumentsInfo = getMonumentsInfo().monuments;
+        const monumentsInfo = map.getMonumentsInfo().monuments;
         const monumentsWithoutText = [
             'DungeonBase', 'train_tunnel_display_name', 'train_tunnel_link_display_name'
         ];
@@ -210,41 +220,32 @@ export class RustPlusMap {
         const sizeOfMonumentIcons = 40;
 
         for (const monument of monuments) {
-            const x = monument.x * ((width - 2 * oceanMargin) / mapSize) + oceanMargin;
-            const n = height - 2 * oceanMargin;
-            const y = height - (monument.y * (n / mapSize) + oceanMargin);
+            const point = this.getMapPoint(monument.x, monument.y, mapSize)
 
             if (monumentsWithoutText.includes(monument.token)) {
                 if (monument.token === 'train_tunnel_display_name') {
-                    ctx.drawImage(trainTunnel, x, y, sizeOfMonumentIcons, sizeOfMonumentIcons);
+                    ctx.drawImage(trainTunnel, point.x, point.y, sizeOfMonumentIcons, sizeOfMonumentIcons);
                 }
                 else if (monument.token === 'train_tunnel_link_display_name') {
-                    ctx.drawImage(trainTunnelLink, x, y, sizeOfMonumentIcons, sizeOfMonumentIcons);
+                    ctx.drawImage(trainTunnelLink, point.x, point.y, sizeOfMonumentIcons, sizeOfMonumentIcons);
                 }
             }
             else {
                 const name = Object.keys(monumentsInfo).includes(monument.token) ?
                     lm.getIntl(language, `monumentName-${monument.token}`) : monument.token;
-                ctx.fillText(name, x, y);
+                ctx.fillText(name, point.x, point.y);
             }
         }
     }
 
-    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
     private async drawMarkers(ctx: SKRSContext2D) {
         const rpMapMarkers = this.rpInstance.rpMapMarkers;
         if (!rpMapMarkers) return;
         const mapSize = this.rpInstance.rpInfo?.appInfo.mapSize;
         if (!mapSize) return;
 
-        const width = this.appMap.width;
-        const height = this.appMap.height;
-        const oceanMargin = this.appMap.oceanMargin;
-
         for (const marker of this.rpInstance.rpMapMarkers!.appMapMarkers.markers) {
-            const x = marker.x * ((width - 2 * oceanMargin) / mapSize) + oceanMargin;
-            const n = height - 2 * oceanMargin;
-            const y = height - (marker.y * (n / mapSize) + oceanMargin);
+            const point = this.getMapPoint(marker.x, marker.y, mapSize)
 
             let iconPath = MARKER_ICON_MAP[marker.type as rp.AppMarkerType];
             if (marker.type === rp.AppMarkerType.VendingMachine) {
@@ -259,7 +260,7 @@ export class RustPlusMap {
             const radians = Math.abs(marker.rotation - 360) * (Math.PI / 180);
 
             ctx.save();
-            ctx.translate(x, y);
+            ctx.translate(point.x, point.y);
             ctx.rotate(radians);
             ctx.drawImage(markerIcon, -iconWidth / 2, -iconHeight / 2, iconWidth, iconHeight);
             ctx.restore();
@@ -269,21 +270,47 @@ export class RustPlusMap {
     }
 
     private async drawTracers(ctx: SKRSContext2D) {
-        // TODO! TBD
+        const rpMapMarkers = this.rpInstance.rpMapMarkers;
+        if (!rpMapMarkers) return;
+        const mapSize = this.rpInstance.rpInfo?.appInfo.mapSize;
+        if (!mapSize) return;
+
+        const tracers = this.rpInstance.rpMapMarkers!.tracers;
+
+        for (const [category, entityMap] of Object.entries(tracers)) {
+            for (const [, points] of entityMap as Map<string, map.Point[]>) {
+                const color = TRACER_COLOR_MAP[category as keyof Tracers];
+                if (points.length < 2) continue;
+
+                ctx.beginPath();
+                ctx.strokeStyle = color;
+                ctx.lineWidth = TRACER_LINE_WIDTH;
+
+                const firstPoint = this.getMapPoint(points[0].x, points[0].y, mapSize);
+                ctx.moveTo(firstPoint.x, firstPoint.y);
+
+                for (let i = 1; i < points.length; i++) {
+                    const point = this.getMapPoint(points[i].x, points[i].y, mapSize);
+                    ctx.lineTo(point.x, point.y);
+                }
+
+                ctx.stroke();
+            }
+        }
     }
 
-    public getMonumentPointIfInside(point: Point, monumentName: string, radius: number): Point | null {
+    public getMonumentPointIfInside(point: map.Point, monumentName: string, radius: number): map.Point | null {
         const monument = this.appMap.monuments.find(e => monumentName === e.token &&
-            getDistance(point.x, point.y, e.x, e.y) <= radius);
+            map.getDistance(point.x, point.y, e.x, e.y) <= radius);
 
         return monument ? { x: monument.x, y: monument.y } : null;
     }
 
-    public getClosestMonument(point: Point): rp.AppMap_Monument {
+    public getClosestMonument(point: map.Point): rp.AppMap_Monument {
         const validMonuments = this.appMap.monuments.filter(e => !this.invalidClosestMonuments.includes(e.token));
         return validMonuments.reduce((closest, monument) => {
-            const currentDistance = getDistance(point.x, point.y, monument.x, monument.y);
-            const closestDistance = getDistance(point.x, point.y, closest.x, closest.y);
+            const currentDistance = map.getDistance(point.x, point.y, monument.x, monument.y);
+            const closestDistance = map.getDistance(point.x, point.y, closest.x, closest.y);
             return currentDistance < closestDistance ? monument : closest;
         });
     }
@@ -294,7 +321,7 @@ export class RustPlusMap {
         ).length;
     }
 
-    public getClosestHarbor(point: Point): rp.AppMap_Monument | null {
+    public getClosestHarbor(point: map.Point): rp.AppMap_Monument | null {
         const harbors = this.appMap.monuments.filter(m =>
             this.harborMonuments.includes(m.token)
         );
@@ -302,9 +329,21 @@ export class RustPlusMap {
         if (harbors.length === 0) return null;
 
         return harbors.reduce((closest, harbor) => {
-            const currentDistance = getDistance(point.x, point.y, harbor.x, harbor.y);
-            const closestDistance = getDistance(point.x, point.y, closest.x, closest.y);
+            const currentDistance = map.getDistance(point.x, point.y, harbor.x, harbor.y);
+            const closestDistance = map.getDistance(point.x, point.y, closest.x, closest.y);
             return currentDistance < closestDistance ? harbor : closest;
         });
+    }
+
+    public getMapPoint(x: number, y: number, mapSize: number): map.Point {
+        const width = this.appMap.width;
+        const height = this.appMap.height;
+        const oceanMargin = this.appMap.oceanMargin;
+
+        const mapX = x * ((width - 2 * oceanMargin) / mapSize) + oceanMargin;
+        const n = height - 2 * oceanMargin;
+        const mapY = height - (y * (n / mapSize) + oceanMargin);
+
+        return { x: mapX, y: mapY };
     }
 }
