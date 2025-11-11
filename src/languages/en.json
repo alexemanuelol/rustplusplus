@@ -161,7 +161,7 @@
     "inGameEvent-ch47Despawned": "Chinook 47 left the map at {location}.",
     "inGameEvent-ch47Despawned-destroyed": "Chinook 47 got destroyed at {location}.",
     "inGameEvent-ch47HeavyScientistsCalled": "Heavy Scientists got called to the {rig} at {location}.",
-    "inGameEvent-ch47MaybeDroppedLockedCrate": "Chinook 47 is considering dropped locked crate at {monument} ({grid}).",
+    "inGameEvent-ch47MaybeDroppedLockedCrate": "Chinook 47 is considering dropping locked crate at {monument} ({grid}).",
     "inGameEvent-ch47OilRigLockedCrateUnlocked": "Locked Crate at {rig} at {location} has been unlocked.",
     "inGameEvent-ch47Spawned": "Chinook 47 spawned at {location}.",
     "inGameEvent-ch47Spawned-enters": "Chinook 47 enters the map from {location} to drop off a Locked Crate.",
