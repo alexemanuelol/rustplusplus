@@ -91,5 +91,24 @@
          "TECHCABINET\\*\\*\\*\\*"
       ],
       "dynamic": true
+   },
+   "Cargo Ship": {
+      "codes": [
+         "CARGODECK",
+         "CARGOBRIDGE",
+         "CARGOSTERN",
+         "CARGOHOLD1",
+         "CARGOHOLD2"
+      ],
+      "dynamic": false
+   },
+   "Ferry Terminal": {
+      "codes": [
+         "FERRYDOCK",
+         "FERRYLOGISTICS",
+         "FERRYPARKING",
+         "FERRYUTILITIES"
+      ],
+      "dynamic": false
    }
 }
