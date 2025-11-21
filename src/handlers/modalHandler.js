@@ -20,6 +20,8 @@
 
 const Discord = require('discord.js');
 
+const DiscordEmbeds = require('../discordTools/discordEmbeds');
+
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
@@ -263,21 +265,24 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('TrackerEdit')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerEdit', ''));
         const tracker = instance.trackers[ids.trackerId];
+    
         const trackerName = interaction.fields.getTextInputValue('TrackerName');
         const trackerBattlemetricsId = interaction.fields.getTextInputValue('TrackerBattlemetricsId');
         const trackerClanTag = interaction.fields.getTextInputValue('TrackerClanTag');
-
+        const trackerNewId = interaction.fields.getTextInputValue('TrackerId');
+    
         if (!tracker) {
             interaction.deferUpdate();
             return;
         }
-
+    
         tracker.name = trackerName;
+    
         if (trackerClanTag !== tracker.clanTag) {
             tracker.clanTag = trackerClanTag;
             client.battlemetricsIntervalCounter = 0;
         }
-
+    
         if (trackerBattlemetricsId !== tracker.battlemetricsId) {
             if (client.battlemetricsInstances.hasOwnProperty(trackerBattlemetricsId)) {
                 const bmInstance = client.battlemetricsInstances[trackerBattlemetricsId];
@@ -285,10 +290,10 @@ module.exports = async (client, interaction) => {
                 tracker.serverId = `${bmInstance.server_ip}-${bmInstance.server_port}`;
                 tracker.img = Constants.DEFAULT_SERVER_IMG;
                 tracker.title = bmInstance.server_name;
-            }
-            else {
+            } else {
                 const bmInstance = new Battlemetrics(trackerBattlemetricsId);
                 await bmInstance.setup();
+    
                 if (bmInstance.lastUpdateSuccessful) {
                     client.battlemetricsInstances[trackerBattlemetricsId] = bmInstance;
                     tracker.battlemetricsId = trackerBattlemetricsId;
@@ -298,14 +303,33 @@ module.exports = async (client, interaction) => {
                 }
             }
         }
+    
+        const isTrackerIdChanged = trackerNewId && trackerNewId !== ids.trackerId;
+    
+        if (isTrackerIdChanged) {
+            if (instance.trackers.hasOwnProperty(trackerNewId)) {
+                const str = client.intlGet(interaction.guildId, 'trackerIdAlreadyExists', { trackerId: trackerNewId });
+                await client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+                client.log(client.intlGet(null, 'warningCap'), str);
+                return;
+            }
+    
+            tracker.trackerId = trackerNewId;
+            instance.trackers[trackerNewId] = tracker;
+    
+            delete instance.trackers[ids.trackerId];
+    
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, trackerNewId);
+        } else {
+            await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+        }
+    
         client.setInstance(guildId, instance);
-
+    
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
-            value: `${trackerName}, ${tracker.battlemetricsId}, ${tracker.clanTag}`
+            value: `${trackerName}, ${tracker.battlemetricsId}, ${tracker.clanTag}, ${tracker.trackerId}`
         }));
-
-        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));

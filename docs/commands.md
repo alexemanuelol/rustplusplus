@@ -376,6 +376,7 @@ In-Game Command | Description
 [**timer**](commands.md#timer) | Set custom timers that will notify whenever the timer have expired.
 [**tr**](commands.md#tr) | Translate a text to another language.
 [**trf**](commands.md#trf) | Translate a text from one language to another.
+[**tracker**](commands.md#tracker) | Manage trackers by adding or removing players directly from the in-game chat.
 [**tts**](commands.md#tts) | Send a Text-To-Speech message to the Discord teamchat channel.
 [**unmute**](commands.md#unmute) | Unmute the bot from the In-Game Team Chat.
 [**upkeep**](commands.md#upkeep) | Get the upkeep time of all connected tool cupboard monitors.
@@ -683,6 +684,22 @@ Subcommand | Description | Required
 <br>Command: `!trf <language-code-from> <language-code-to> <Text>`
 
 ![In-Game Command translateFrom Image](images/ingame_commands/translateFrom_ingame.png)
+
+
+## **tracker**
+
+> **Manage player trackers directly from the in-game chat.** 
+<br>Use the `tracker` command to create, add, or remove players to/from specific trackers.
+<br>If no `trackerId` is provided, the most recently created tracker for the current server will be used automatically.
+
+Subcommand | Description | Required
+---------- | ----------- | --------
+`create` | Create a new tracker. You can optionally provide a custom `trackerId`<br>`!tracker create [trackerId]` | `false`
+`add` | Add a player to a tracker using steamID or BattlemetricsID<br>`!tracker add <steamID or battlemetricsID> [trackerId]` | `false`
+`remove` | Remove a player from a tracker using steamID or BattlemetricsID<br>`!tracker remove <steamID or battlemetricsID> [trackerId]` | `false`
+
+![In-Game Command tracker Image](images/ingame_commands/tracker_ingame.png)
+
 
 ## **tts**
 

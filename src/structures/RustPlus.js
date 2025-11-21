@@ -38,6 +38,7 @@ const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
+const Scrape = require('../util/scrape.js');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */
@@ -2746,6 +2747,216 @@ class RustPlus extends RustPlusLib {
 
         return strings;
     }
+
+    async getCommandTracker(commandString) {
+        const args = commandString.split(' ');
+        const subCommand = args[1]?.toLowerCase();
+    
+        if (subCommand === 'create') {
+            const trackerIdParts = args.slice(2);
+            const customTrackerId = trackerIdParts.length > 0 ? trackerIdParts.join(' ') : null;
+            return await this.createTracker(customTrackerId);
+        }
+    
+        if (subCommand === 'add') {
+            const playerId = args[2];
+            const trackerId = args.slice(3).join(' ').trim() || null;
+            if (!playerId) return;
+            return await this.addPlayerToTracker(trackerId, playerId);
+        }
+    
+        if (subCommand === 'remove') {
+            const playerId = args[2];
+            const trackerId = args.slice(3).join(' ').trim() || null;
+            if (!playerId) return;
+            return await this.removePlayerFromTracker(trackerId, playerId);
+        }
+    
+        if (!args[2]) return;
+    }
+    
+    
+    async createTracker(inputTrackerId = null) {
+        const instance = Client.client.getInstance(this.guildId);
+        const serverId = instance?.activeServer;
+        if (!serverId) {
+            return Client.client.intlGet(this.guildId, 'activeRustServerNotFound');
+        }
+    
+        const trackerId = await Client.client.createTrackerInstance(this.guildId, serverId, inputTrackerId);
+    
+        if (!trackerId) {
+            return Client.client.intlGet(this.guildId, 'trackerIdAlreadyExists', { trackerId: inputTrackerId });
+        }
+    
+        await DiscordMessages.sendTrackerMessage(this.guildId, trackerId);
+    
+        return Client.client.intlGet(this.guildId, 'trackerCreated', { trackerId });
+    }
+    
+    async addPlayerToTracker(trackerId, id) {
+        const instance = Client.client.getInstance(this.guildId);
+        if (!instance) {
+            return;
+        }
+    
+        let targetTrackerId = trackerId;
+    
+        if (!targetTrackerId) {
+            const rustplus = Client.client.rustplusInstances[this.guildId];
+            const currentServerId = rustplus?.serverId;
+    
+            if (!currentServerId) {
+                return Client.client.intlGet(this.guildId, 'activeRustServerNotFound');
+            }
+    
+            const matchingTrackers = Object.entries(instance.trackers)
+            .filter(([id, tracker]) => tracker.serverId === currentServerId)
+            .sort((a, b) => {
+                const createdA = a[1].createdAt || 0; 
+                const createdB = b[1].createdAt || 0;
+                return createdB - createdA;
+            });
+        
+    
+            if (matchingTrackers.length === 0) {
+                return Client.client.intlGet(this.guildId, 'noTrackersForServer');
+            }
+    
+            targetTrackerId = matchingTrackers[0][0];
+        }
+    
+        const tracker = instance.trackers[targetTrackerId];
+        
+        if (!tracker) {
+            return Client.client.intlGet(this.guildId, 'trackerIdNotFound', { trackerId: targetTrackerId });
+        }
+    
+        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH;
+        const bmInstance = Client.client.battlemetricsInstances[tracker.battlemetricsId];
+    
+        const playerExists = (isSteamId64 && tracker.players.some(e => e.steamId === id)) ||
+                             (!isSteamId64 && tracker.players.some(e => e.playerId === id && e.steamId === null));
+    
+        if (playerExists) {
+            return Client.client.intlGet(this.guildId, 'playerAlreadyExistsInTracker', {
+            id,
+            trackerId: targetTrackerId
+        });
+        }
+    
+        let name = null;
+        let steamId = null;
+        let playerId = null;
+    
+        if (isSteamId64) {
+            steamId = id;
+            name = await Scrape.scrapeSteamProfileName(Client.client, steamId);
+            if (!name) {
+                name = 'Unknown';
+            }
+    
+            if (bmInstance) {
+                playerId = Object.keys(bmInstance.players).find(
+                    key => bmInstance.players[key]?.name === name
+                );
+                if (!playerId) {
+                    playerId = null;
+                }
+            }
+    
+        } else {
+            playerId = id;
+    
+            if (bmInstance && bmInstance.players.hasOwnProperty(playerId)) {
+                name = bmInstance.players[playerId].name;
+            } else {
+                name = '-';
+            }
+        }
+    
+        tracker.players.push({
+            name: name,
+            steamId: steamId,
+            playerId: playerId
+        });
+    
+        Client.client.setInstance(this.guildId, instance);
+    
+        await DiscordMessages.sendTrackerMessage(this.guildId, targetTrackerId);
+    
+        return Client.client.intlGet(this.guildId, 'playerAddedToTracker', {
+            name,
+            id,
+            trackerId: targetTrackerId
+        });
+    }    
+
+    async removePlayerFromTracker(trackerId, id) {
+        const instance = Client.client.getInstance(this.guildId);
+        if (!instance) {
+            return;
+        }
+    
+        let targetTrackerId = trackerId;
+    
+        if (!targetTrackerId) {
+            const rustplus = Client.client.rustplusInstances[this.guildId];
+            const currentServerId = rustplus?.serverId;
+    
+            if (!currentServerId) {
+                return Client.client.intlGet(this.guildId, 'activeRustServerNotFound');
+            }
+    
+            const matchingTrackers = Object.entries(instance.trackers)
+            .filter(([id, tracker]) => tracker.serverId === currentServerId)
+            .sort((a, b) => {
+                const createdA = a[1].createdAt || 0;
+                const createdB = b[1].createdAt || 0;
+                return createdB - createdA;
+            });
+        
+    
+            if (matchingTrackers.length === 0) {
+                return Client.client.intlGet(this.guildId, 'noTrackersForServer');
+            }
+    
+            targetTrackerId = matchingTrackers[0][0];
+        }
+    
+        const tracker = instance.trackers[targetTrackerId];
+        if (!tracker) {
+            return Client.client.intlGet(this.guildId, 'trackerIdNotFound', { trackerId: targetTrackerId });
+        }
+    
+        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH;
+    
+        const beforeCount = tracker.players.length;
+    
+        if (isSteamId64) {
+            tracker.players = tracker.players.filter(e => e.steamId !== id);
+        } else {
+            tracker.players = tracker.players.filter(e => e.playerId !== id || e.steamId !== null);
+        }
+    
+        const afterCount = tracker.players.length;
+    
+        if (beforeCount === afterCount) {
+            return Client.client.intlGet(this.guildId, 'playerNotFoundInTracker', {
+                id,
+                trackerId: targetTrackerId
+            });
+        }
+    
+        Client.client.setInstance(this.guildId, instance);
+    
+        await DiscordMessages.sendTrackerMessage(this.guildId, targetTrackerId);
+    
+        return Client.client.intlGet(this.guildId, 'playerRemovedFromTracker', {
+            id,
+            trackerId: targetTrackerId
+        });
+    }    
 }
 
 module.exports = RustPlus;

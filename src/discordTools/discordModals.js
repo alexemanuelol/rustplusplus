@@ -264,14 +264,14 @@ module.exports = {
         const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];
         const identifier = JSON.stringify({ "trackerId": trackerId });
-
+    
         const modal = module.exports.getModal({
             customId: `TrackerEdit${identifier}`,
             title: Client.client.intlGet(guildId, 'editingOf', {
                 entity: tracker.name.length > 18 ? `${tracker.name.slice(0, 18)}..` : tracker.name
             })
         });
-
+    
         modal.addComponents(
             new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
                 customId: 'TrackerName',
@@ -292,11 +292,18 @@ module.exports = {
                 style: Discord.TextInputStyle.Short,
                 required: false,
                 minLength: 0
-            }))
+            })),
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'TrackerId',
+                label: Client.client.intlGet(guildId, 'trackerId'),
+                value: String(tracker.trackerId),
+                style: Discord.TextInputStyle.Short
+            }))                       
         );
-
+    
         return modal;
     },
+    
 
     getTrackerAddPlayerModal(guildId, trackerId) {
         const instance = Client.client.getInstance(guildId);
