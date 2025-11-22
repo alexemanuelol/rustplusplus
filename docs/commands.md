@@ -22,6 +22,7 @@ Slash Command | Description
 [**/map**](commands.md#map) | Get the currently connected server map image.
 [**/market**](commands.md#market) | Operations for In-Game Vending Machines.
 [**/players**](commands.md#players) | Get player/players information based on battlemetrics.
+[**/raid**](commands.md#raid) | Display the raid costs for an item.
 [**/recycle**](commands.md#recycle) | Display the output of recycling an item.
 [**/research**](commands.md#research) | Display the cost to research an item.
 [**/reset**](commands.md#reset) | Reset Discord channels.
@@ -223,6 +224,17 @@ Subcommand | Options | Description | Required
 ![Discord Slash Command players all players Image](images/slash_commands/players_all_players.png)
 ![Discord Slash Command players specific user Image](images/slash_commands/players_specific_user.png)
 
+
+## **/raid**
+
+> **Display the raid costs for an item.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+&nbsp; | `name` | The name of the item to raid. | `False`
+&nbsp; | `id` | The id of the item to raid. | `False`
+
+![Discord Slash Command raid Image](images/slash_commands/raid.png)
 
 ## **/recycle**
 

@@ -38,6 +38,7 @@ const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
+const Durability = require('../commands/durability.js');
 
 const TOKENS_LIMIT = 24;        /* Per player */
 const TOKENS_REPLENISH = 3;     /* Per second */
@@ -2745,6 +2746,38 @@ class RustPlus extends RustPlusLib {
         }
 
         return strings;
+    }
+
+    getCommandRaidCost(command) {
+        const prefix = this.generalSettings.prefix;
+        const commandRaid = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxRaid')}`;
+        const commandRaidEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxRaid')}`;
+        if (command.toLowerCase().startsWith(`${commandRaid} `)) {
+            command = command.slice(`${commandRaid} `.length).trim();
+        }
+        else {
+            command = command.slice(`${commandRaidEn} `.length).trim();
+        }
+
+        const durability = Durability.getDurabilityData(command, null, Client.client, this.guildId);
+        let raidCosts = `${durability[1]}: `;
+
+        if(!durability) {
+            return Client.client.intlGet(this.guildId, 'noItemWithNameFound', {
+                name: command
+            });
+        }
+    
+        const sortedItems = Object.values(durability[3].explosive).sort((a, b) => {
+            const sulfurA = a[0].sulfur === null ? Infinity : Number(a[0].sulfur);
+            const sulfurB = b[0].sulfur === null ? Infinity : Number(b[0].sulfur);
+            return sulfurA - sulfurB;
+        }).slice(0,3);
+        for (const item of sortedItems) {
+            raidCosts += `${item[0].itemName} ${item[0].timeString} (${item[0].quantity}) ${item[0].sulfur}, `;
+        }
+
+        return raidCosts.trim().trim(",");
     }
 }
 

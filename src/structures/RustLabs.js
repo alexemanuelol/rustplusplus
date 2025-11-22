@@ -469,10 +469,10 @@ class RustLabs {
         }
 
         if (!foundName) {
-            foundName = this.getClosestBuildingBlockNameByName(name);
+            foundName = this.items.getClosestItemIdByName(name);
             if (foundName) {
-                if (this.durabilityData['buildingBlocks'].hasOwnProperty(foundName)) {
-                    type = 'buildingBlocks';
+                if (this.durabilityData['items'].hasOwnProperty(foundName)) {
+                    return this.getDurabilityDetailsById(foundName, group, which, orderedBy);
                 }
                 else {
                     foundName = null;
@@ -481,10 +481,10 @@ class RustLabs {
         }
 
         if (!foundName) {
-            foundName = this.items.getClosestItemIdByName(name);
+            foundName = this.getClosestBuildingBlockNameByName(name);
             if (foundName) {
-                if (this.durabilityData['items'].hasOwnProperty(foundName)) {
-                    return this.getDurabilityDetailsById(foundName, group, which, orderedBy);
+                if (this.durabilityData['buildingBlocks'].hasOwnProperty(foundName)) {
+                    type = 'buildingBlocks';
                 }
                 else {
                     foundName = null;
@@ -529,7 +529,7 @@ class RustLabs {
 
         content = this.getArrayOrderedByChoice(content, orderedBy);
 
-        return ['items', id, this.items.items[id], content];
+        return ['items', this.items.items[id].name, this.items.items[id], content];
     }
 
 
