@@ -5653,5 +5653,15 @@
         "shortname": "xylophone",
         "name": "Xylobone",
         "description": "A selection of bones that were “acquired” for their acoustic attributes. Play a lullaby for your camp with these soothing tones."
+    },
+    "-143481979": {
+        "shortname": "basicblueprintfragment",
+        "name": "Basic Blueprint Fragment",
+        "description": "Damaged diagrams containing partial information to constuct a Tier 2 Workbench for advanced crafting. Several fragments are needed. 20 Basic Fragments can be pieced together to make an Advanced Fragment."
+    },
+    "-1896395719": {
+        "shortname": "advancedblueprintfragment",
+        "name": "Advanced Blueprint Fragment",
+        "description": "Precision schematics with complex information, multiple fragments are necessary for crafting a Tier 3 Workbench."
     }
 }
