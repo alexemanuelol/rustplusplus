@@ -1,2 +1,11 @@
 docs/
 node_modules/
+dist/
+logs/
+maps/
+credentials/
+instances/
+.git/
+.env
+.env.*
+*.md

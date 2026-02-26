@@ -1,13 +1,19 @@
-version: '3.3'
 services:
-    app:
+    rpp:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: rpp
+        restart: unless-stopped
         volumes:
             - ./credentials:/app/credentials
             - ./instances:/app/instances
             - ./logs:/app/logs
             - ./maps:/app/maps
-        environment:
-            - RPP_DISCORD_CLIENT_ID=111....1111
-            - RPP_DISCORD_TOKEN=token
-        container_name: rpp
-        image: ghcr.io/alexemanuelol/rustplusplus
+        env_file:
+            - .env
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "5"
