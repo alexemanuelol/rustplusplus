@@ -1,11 +1,14 @@
 const amqp = require("amqplib")
 
+const EVENTS_ENABLED = process.env.RPP_EVENTS_ENABLED === "true";
+
 /**
  * @type {import('amqplib').Channel}
  */
 let channel = null
 
 async function requiresRabbit() {
+    if (!EVENTS_ENABLED) return null
     if (channel) return channel
 
     const conn = await amqp.connect({
@@ -30,6 +33,8 @@ async function requiresRabbit() {
 
 async function sendAlarmToBackend(alarm) {
     try {
+        if (!EVENTS_ENABLED) return
+
         const ch = await requiresRabbit()
         
         ch.sendToQueue("rustplus_alarms", Buffer.from(JSON.stringify(alarm)), {
