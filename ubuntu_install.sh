@@ -4,7 +4,7 @@
 
 set -e
 
-REPO_URL="https://github.com/alexemanuelol/rustplusplus.git"
+REPO_URL="https://github.com/abboodnoga176-max/rustplusplus.git"
 INSTALL_DIR="$HOME/rustplusplus"
 
 echo "=== Rustplusplus Ubuntu Installer ==="
