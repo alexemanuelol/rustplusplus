@@ -786,5 +786,6 @@
     "wipeDetected": "Wipe detecté!",
     "yield": "Rendement",
     "youAreAlreadyLeader": "Vous êtes déjà le chef du groupe.",
-    "youAreNotPairedWithServer": "La commande Leader ne fonctionne pas car n'est pas associé au serveur."
+    "youAreNotPairedWithServer": "La commande Leader ne fonctionne pas car n'est pas associé au serveur.",
+    "commandSyntaxCalc": "calc"
 }

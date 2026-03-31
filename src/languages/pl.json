@@ -786,5 +786,6 @@
     "wipeDetected": "Wipe detected!",
     "yield": "Plon",
     "youAreAlreadyLeader": "You are already leader.",
-    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
+    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server.",
+    "commandSyntaxCalc": "calc"
 }

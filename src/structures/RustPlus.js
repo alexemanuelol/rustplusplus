@@ -708,6 +708,34 @@ class RustPlus extends RustPlusLib {
         });
     }
 
+    getCommandCalc(client, command) {
+        const prefix = this.generalSettings.prefix;
+        const commandCalc = `${prefix}${client.intlGet(this.guildId, 'commandSyntaxCalc')}`;
+        const commandCalcEn = `${prefix}${client.intlGet('en', 'commandSyntaxCalc')}`;
+
+        let expr = '';
+        if (command.toLowerCase().startsWith(`${commandCalc} `)) {
+            expr = command.substring(commandCalc.length).trim();
+        }
+        else if (command.toLowerCase().startsWith(`${commandCalcEn} `)) {
+            expr = command.substring(commandCalcEn.length).trim();
+        }
+
+        if (expr === '') return client.intlGet(this.guildId, 'missingArguments');
+
+        try {
+            const safeExpr = expr.replace(/[^\d.\+\-\*\/\(\)\s]/g, '');
+            if (safeExpr.length === 0) return client.intlGet(this.guildId, 'errorExecutingCommand');
+
+            const res = new Function(`return (${safeExpr});`)();
+            if (res === undefined || Number.isNaN(res)) return client.intlGet(this.guildId, 'errorExecutingCommand');
+
+            return `${client.intlGet(this.guildId, 'calculated')}: ${expr} = ${res}`;
+        } catch(e) {
+            return client.intlGet(this.guildId, 'errorExecutingCommand');
+        }
+    }
+
     getCommandCargo(isInfoChannel = false) {
         const strings = [];
         let unhandled = this.mapMarkers.cargoShips.map(e => e.id);

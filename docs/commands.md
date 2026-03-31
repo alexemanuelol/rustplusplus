@@ -347,6 +347,7 @@ In-Game Command | Description
 --------------- | -----------
 [**afk**](commands.md#afk) | Get the currently afk players in your team.
 [**alive**](commands.md#alive) | Get the player with the longest time alive.
+[**calc**](commands.md#calc) | Calculate a mathematical expression.
 [**cargo**](commands.md#cargo) | Get information about CargoShip (Location, time till enters egress stage, time since last on map).
 [**chinook**](commands.md#chinook) | Get information about Chinook 47 (Location, time since last on map).
 [**connection/connections**](commands.md#connectionconnections) | Get recent connection events.
@@ -400,6 +401,12 @@ In-Game Command | Description
 <br>Command: `!alive Alle`
 
 ![In-Game Command alive Image](images/ingame_commands/alive_ingame.png)
+
+## **calc**
+
+> **Calculate a mathematical expression.**
+<br>Command: `!calc 1+1`
+<br>Command: `!calc 17*33`
 
 
 ## **cargo**

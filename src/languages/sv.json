@@ -786,5 +786,6 @@
     "wipeDetected": "Rensning upptäcktes!",
     "yield": "Yield",
     "youAreAlreadyLeader": "Du är redan lagledare.",
-    "youAreNotPairedWithServer": "Leader-kommandot fungerar inte eftersom du inte är parad med servern."
+    "youAreNotPairedWithServer": "Leader-kommandot fungerar inte eftersom du inte är parad med servern.",
+    "commandSyntaxCalc": "calc"
 }

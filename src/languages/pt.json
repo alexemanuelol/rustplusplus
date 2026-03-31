@@ -786,5 +786,6 @@
     "wipeDetected": "Wipe detetado!",
     "yield": "Rendimento",
     "youAreAlreadyLeader": "Você já é o líder.",
-    "youAreNotPairedWithServer": "O comando Líder não funciona porque você não está emparelhado com o servidor."
+    "youAreNotPairedWithServer": "O comando Líder não funciona porque você não está emparelhado com o servidor.",
+    "commandSyntaxCalc": "calc"
 }

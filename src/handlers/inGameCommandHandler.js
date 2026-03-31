@@ -51,6 +51,12 @@ module.exports = {
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxAlive')}`)) {
             rustplus.sendInGameMessage(rustplus.getCommandAlive(command));
         }
+        else if ((commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxCalc')} `) ||
+            commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxCalc')}`) ||
+            (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxCalc')} `) ||
+                commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxCalc')}`)) {
+            rustplus.sendInGameMessage(rustplus.getCommandCalc(client, command));
+        }
         else if (commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxCargo')}` ||
             commandLowerCase === `${prefix}${client.intlGet(guildId, 'commandSyntaxCargo')}`) {
             rustplus.sendInGameMessage(rustplus.getCommandCargo());

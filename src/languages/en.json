@@ -735,7 +735,7 @@
     "travelingVendorHaltedSetting": "When the Traveling Vendor stops moving, send a notification.",
     "travelingVendorLeftSetting": "When the Traveling Vendor left the map, send a notification.",
     "travelingVendorLocatedAt": "The Traveling Vendor is located at {location}.",
-    "travelingVendorLeftMap" : "The Traveling Vendor just left the map at {location}.",
+    "travelingVendorLeftMap": "The Traveling Vendor just left the map at {location}.",
     "travelingVendorNotCurrentlyOnMap": "The Traveling Vendor is not currently on the map.",
     "travelingVendorResumedAt": "The Traveling Vendor resumed moving at {location}.",
     "travelingVendorSpawnedAt": "The Traveling Vendor spawned at {location}.",
@@ -786,5 +786,6 @@
     "wipeDetected": "Wipe detected!",
     "yield": "Yield",
     "youAreAlreadyLeader": "You are already leader.",
-    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server."
+    "youAreNotPairedWithServer": "Leader command does not work because you're not paired with the server.",
+    "commandSyntaxCalc": "calc"
 }
