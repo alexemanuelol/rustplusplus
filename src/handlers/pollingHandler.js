@@ -29,6 +29,7 @@ const TeamHandler = require('../handlers/teamHandler.js');
 const Time = require('../structures/Time');
 const TimeHandler = require('../handlers/timeHandler.js');
 const VendingMachines = require('../handlers/vendingMachineHandler.js');
+const { sendPlayerDataToMap } = require('../utils/liveMapService.js');
 
 module.exports = {
     pollingHandler: async function (rustplus, client) {
@@ -56,6 +57,11 @@ module.exports = {
     handlers: async function (rustplus, client, info, mapMarkers, teamInfo, time) {
         await TeamHandler.handler(rustplus, client, teamInfo.teamInfo);
         rustplus.team.updateTeam(teamInfo.teamInfo);
+
+        // Send real-time data to Rust Live Map tracker
+        if (teamInfo && teamInfo.teamInfo && teamInfo.teamInfo.members) {
+            sendPlayerDataToMap(teamInfo.teamInfo.members).catch(err => console.error("[MapService Error]", err));
+        }
 
         await SmartSwitchHandler.handler(rustplus, client, time.time);
         TimeHandler.handler(rustplus, client, time.time);
