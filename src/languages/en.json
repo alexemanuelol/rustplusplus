@@ -713,7 +713,7 @@
     "timeSinceWipe": "{time} since wipe.",
     "timeTill": "Time till {event}",
     "timeTillDaylight": "{time} before daylight.",
-    "timeTillNightfall": "{time} before nightfall.",
+    "timeTillNightfall": "{time} before nitetime.",
     "timeTillStructureDecay": "{time} before {type} wall decay.",
     "timeUntilUnlocksAt": "{time} until unlocks at {location}.",
     "timer": "Timer: {message}.",

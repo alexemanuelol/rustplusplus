@@ -1,45 +1,56 @@
 {
-    "name": "rustplusplus",
-    "version": "1.22.0",
+    "name": "HondaBot",
+    "version": "2.2.0",
     "description": "A NodeJS Discord Bot that uses the rustplus.js library to utilize the power of the Rust+ Companion App with additional Quality-of-Life features.",
-    "main": "index.ts",
+    "main": "dist/index.js",
     "scripts": {
-        "start": "ts-node .",
-        "preinstall": "npx npm-force-resolutions",
-        "test": "tsc --noEmit -p ."
+        "start": "node --max-old-space-size=1536 dist/index.js",
+        "start:dev": "node --max-old-space-size=1536 -r ts-node/register .",
+        "build": "tsc -p .",
+        "build:watch": "tsc -p . --watch",
+        "test": "tsc --noEmit -p .",
+        "clean": "rm -rf dist",
+        "rebuild": "npm run clean && npm run build",
+        "postinstall": "cp patches/rustplus.proto node_modules/@liamcottle/rustplus.js/rustplus.proto && cp patches/rustplus.js node_modules/@liamcottle/rustplus.js/rustplus.js"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/alexemanuelol/rustplusplus.git"
+        "url": "https://github.com/ghempy53/HondaBot.git"
     },
     "author": "Alexemanuelol",
     "license": "SEE LICENSE IN LICENSE",
     "bugs": {
-        "url": "https://github.com/alexemanuelol/rustplusplus/issues"
+        "url": "https://github.com/ghempy53/HondaBot/issues"
     },
-    "homepage": "https://github.com/alexemanuelol/rustplusplus#readme",
+    "homepage": "https://github.com/ghempy53/HondaBot#readme",
     "dependencies": {
-        "@discordjs/rest": "^2.5.1",
-        "@discordjs/voice": "^0.18.0",
-        "@formatjs/intl": "^2.6.9",
+        "@discordjs/rest": "^2.6.0",
+        "@discordjs/voice": "^0.19.0",
+        "@formatjs/intl": "^4.1.2",
         "@liamcottle/push-receiver": "^0.0.4",
-        "@liamcottle/rustplus.js": "git+https://github.com/alexemanuelol/rustplus.js.git#089cfd3db1b04709911948bce669273139c6a124",
-        "axios": "^1.3.4",
-        "colors": "^1.4.0",
-        "discord-api-types": "^0.38.14",
-        "discord.js": "^14.21.0",
-        "ffmpeg-static": "^5.1.0",
-        "gm": "^1.25.0",
-        "jimp": "^0.22.7",
-        "libsodium-wrappers": "^0.7.11",
-        "lodash": "^4.17.21",
-        "translate": "^1.4.1",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.8.3",
-        "winston": "^3.8.2"
+        "@liamcottle/rustplus.js": "git+https://github.com/alexemanuelol/rustplus.js.git",
+        "axios": "^1.13.4",
+        "picocolors": "^1.1.1",
+        "discord-api-types": "^0.37.120",
+        "discord.js": "^14.25.1",
+        "ffmpeg-static": "^5.3.0",
+        "sharp": "^0.34.5",
+        "jimp": "^0.22.12",
+        "libsodium-wrappers": "^0.8.2",
+        "lodash": "^4.17.23",
+        "translate": "^3.0.1",
+        "winston": "^3.19.0"
     },
-    "resolutions": {
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.0"
+    },
+    "engines": {
+        "node": ">=22.0.0"
+    },
+    "overrides": {
         "jpeg-js": "0.4.4",
-        "protobufjs": "7.2.4"
+        "protobufjs": "8.0.0"
     }
 }

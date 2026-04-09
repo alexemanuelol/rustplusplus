@@ -20,7 +20,7 @@
 
 const Discord = require('discord.js');
 
-const Client = require('../../index.ts');
+const Client = require('../../index');
 
 module.exports = {
     getGuild: function (guildId) {
@@ -282,7 +282,7 @@ module.exports = {
                     Client.client.intlGet(null, 'couldNotPerformMessagesFetch', { channel: channelId }), 'error');
             }
 
-            if (Object.keys(messages).length === 0) {
+            if (!messages || messages.size === 0) {
                 return;
             }
 

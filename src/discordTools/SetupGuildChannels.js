@@ -45,17 +45,24 @@ async function addTextChannel(name, idName, client, guild, parent, permissionWri
         channel = DiscordTools.getTextChannelById(guild.id, instance.channelId[idName]);
     }
     if (channel === undefined) {
-        channel = await DiscordTools.addTextChannel(guild.id, name);
+        /* Look for an existing channel by name under the same category before creating a new one */
+        const existing = guild.channels.cache.find(
+            c => c.name === name && c.parentId === parent.id && c.type === 0);
+        if (existing) {
+            channel = existing;
+        } else {
+            channel = await DiscordTools.addTextChannel(guild.id, name);
+
+            try {
+                channel.setParent(parent.id);
+            }
+            catch (e) {
+                client.log(client.intlGet(null, 'errorCap'),
+                    client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }), 'error');
+            }
+        }
         instance.channelId[idName] = channel.id;
         client.setInstance(guild.id, instance);
-
-        try {
-            channel.setParent(parent.id);
-        }
-        catch (e) {
-            client.log(client.intlGet(null, 'errorCap'),
-                client.intlGet(null, 'couldNotSetParent', { channelId: channel.id }), 'error');
-        }
     }
 
     if (instance.firstTime) {

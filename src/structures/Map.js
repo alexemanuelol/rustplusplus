@@ -19,12 +19,12 @@
 */
 
 const Fs = require('fs');
-const Gm = require('gm');
+const sharp = require('sharp');
 const Jimp = require('jimp');
 const Path = require('path');
 
 const Constants = require('../util/constants.js');
-const Client = require('../../index.ts');
+const Client = require('../../index');
 
 class Map {
     constructor(map, rustplus) {
@@ -427,8 +427,6 @@ class Map {
             this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
 
         try {
-            const image = Gm(this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
-
             if (this.rustplus.info === null) {
                 this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
                     Client.client.intlGet(null, 'couldNotAppendMapTracers'));
@@ -437,39 +435,61 @@ class Map {
 
             if (!markers) return;
 
+            /* Build SVG paths for tracers */
+            let svgPaths = '';
+
             /* Tracer for CargoShip */
-            image.stroke(Constants.COLOR_CARGO_TRACER, 2);
             for (const [id, coords] of Object.entries(this.rustplus.cargoShipTracers)) {
-                let prev = null;
+                let pathData = '';
+                let isFirst = true;
                 for (const point of coords) {
-                    if (prev === null) {
-                        prev = point;
-                        continue;
+                    const imagePoint = this.calculateImageXY(point);
+                    if (isFirst) {
+                        pathData += `M ${imagePoint.x} ${imagePoint.y}`;
+                        isFirst = false;
+                    } else {
+                        pathData += ` L ${imagePoint.x} ${imagePoint.y}`;
                     }
-                    const point1 = this.calculateImageXY(prev);
-                    const point2 = this.calculateImageXY(point);
-                    image.drawLine(point1.x, point1.y, point2.x, point2.y);
-                    prev = point;
+                }
+                if (pathData) {
+                    svgPaths += `<path d="${pathData}" stroke="${Constants.COLOR_CARGO_TRACER}" stroke-width="2" fill="none"/>`;
                 }
             }
 
             /* Tracer for Patrol Helicopter */
-            image.stroke(Constants.COLOR_PATROL_HELICOPTER_TRACER, 2);
             for (const [id, coords] of Object.entries(this.rustplus.patrolHelicopterTracers)) {
-                let prev = null;
+                let pathData = '';
+                let isFirst = true;
                 for (const point of coords) {
-                    if (prev === null) {
-                        prev = point;
-                        continue;
+                    const imagePoint = this.calculateImageXY(point);
+                    if (isFirst) {
+                        pathData += `M ${imagePoint.x} ${imagePoint.y}`;
+                        isFirst = false;
+                    } else {
+                        pathData += ` L ${imagePoint.x} ${imagePoint.y}`;
                     }
-                    const point1 = this.calculateImageXY(prev);
-                    const point2 = this.calculateImageXY(point);
-                    image.drawLine(point1.x, point1.y, point2.x, point2.y);
-                    prev = point;
+                }
+                if (pathData) {
+                    svgPaths += `<path d="${pathData}" stroke="${Constants.COLOR_PATROL_HELICOPTER_TRACER}" stroke-width="2" fill="none"/>`;
                 }
             }
 
-            await this.gmWriteAsync(image, this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png'));
+            /* Only composite if there are tracers to draw */
+            if (svgPaths) {
+                const fullMapPath = this.mapMarkerImageMeta.map.image.replace('clean.png', 'full.png');
+                const svgOverlay = `<svg width="${this.width}" height="${this.height}">${svgPaths}</svg>`;
+
+                await sharp(fullMapPath)
+                    .composite([{
+                        input: Buffer.from(svgOverlay),
+                        top: 0,
+                        left: 0
+                    }])
+                    .toFile(fullMapPath + '.tmp');
+
+                /* Replace original with composited image */
+                await Fs.promises.rename(fullMapPath + '.tmp', fullMapPath);
+            }
         }
         catch (error) {
             this.rustplus.log(Client.client.intlGet(null, 'warningCap'),
@@ -503,18 +523,6 @@ class Map {
         return { x: x, y: y };
     }
 
-    async gmWriteAsync(image, path) {
-        return new Promise(function (resolve, reject) {
-            image.write(path, (err) => {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    resolve()
-                }
-            })
-        });
-    }
 }
 
 module.exports = Map;

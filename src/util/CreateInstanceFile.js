@@ -92,6 +92,11 @@ module.exports = (client, guild) => {
                     instance.generalSettings[key] = value;
                 }
             }
+
+            /* Migrate trademark from upstream default to HondaBot */
+            if (instance.generalSettings.trademark === 'rustplusplus') {
+                instance.generalSettings.trademark = 'HondaBot';
+            }
         }
 
         if (!instance.hasOwnProperty('notificationSettings')) {

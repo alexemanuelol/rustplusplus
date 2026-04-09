@@ -43,7 +43,7 @@ module.exports = {
             for (const order of sellOrders) {
                 const itemId = order.itemId.toString();
                 const currencyId = order.currencyId.toString();
-                const amountInStock = order.amountInStock;
+                const amountInStock = order.amountInStock ?? 0;
 
                 for (const orderType of ['all', 'buy', 'sell']) {
                     const found = rustplus.foundSubscriptionItems[orderType].find(e =>

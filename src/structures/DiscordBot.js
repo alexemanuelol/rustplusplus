@@ -55,7 +55,9 @@ class DiscordBot extends Discord.Client {
         this.rustplusReconnectTimers = new Object();
         this.rustplusLiteReconnectTimers = new Object();
         this.rustplusReconnecting = new Object();
+        this.rustplusReconnectAttempts = new Object();
         this.rustplusMaps = new Object();
+        this.rustplusMapInstances = new Object();   /* Cached Map objects for reconnection */
 
         this.uptimeBot = null;
 
@@ -196,7 +198,7 @@ class DiscordBot extends Discord.Client {
         const channel = DiscordTools.getTextChannelById(interaction.guildId, interaction.channelId);
         const args = new Object();
         args['guild'] = `${interaction.member.guild.name} (${interaction.member.guild.id})`;
-        args['channel'] = `${channel.name} (${interaction.channelId})`;
+        args['channel'] = `${channel?.name || 'Unknown'} (${interaction.channelId})`;
         args['user'] = `${interaction.user.username} (${interaction.user.id})`;
         args[(type === 'slashCommand') ? 'command' : 'customid'] = (type === 'slashCommand') ?
             `${interaction.commandName}` : `${interaction.customId}`;
@@ -335,7 +337,9 @@ class DiscordBot extends Discord.Client {
     resetRustplusVariables(guildId) {
         this.activeRustplusInstances[guildId] = false;
         this.rustplusReconnecting[guildId] = false;
+        this.rustplusReconnectAttempts[guildId] = 0;
         delete this.rustplusMaps[guildId];
+        delete this.rustplusMapInstances[guildId];
 
         if (this.rustplusReconnectTimers[guildId]) {
             clearTimeout(this.rustplusReconnectTimers[guildId]);

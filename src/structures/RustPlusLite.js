@@ -20,8 +20,11 @@
 
 const RustPlusLib = require('@liamcottle/rustplus.js');
 
-const Client = require('../../index.ts');
+const Client = require('../../index');
 const Config = require('../../config');
+
+const MAX_LITE_RECONNECT_INTERVAL_MS = 120000; /* 2 minutes max backoff */
+const MAX_LITE_RECONNECT_ATTEMPTS = 20;
 
 class RustPlusLite extends RustPlusLib {
     constructor(guildId, logger, rustplus, serverIp, appPort, steamId, playerToken) {
@@ -33,6 +36,7 @@ class RustPlusLite extends RustPlusLib {
         this.rustplus = rustplus;
 
         this.isActive = true;
+        this.reconnectAttempts = 0;
 
         this.loadRustPlusLiteEvents();
     }
@@ -116,6 +120,9 @@ async function rustPlusLiteConnectedEvent(rustplusLite) {
     rustplusLite.log(Client.client.intlGet(null, 'connectedCap'),
         Client.client.intlGet(null, 'rustplusOperational'));
 
+    /* Reset backoff on successful connection */
+    rustplusLite.reconnectAttempts = 0;
+
     if (Client.client.rustplusReconnectTimers[rustplusLite.guildId]) {
         clearTimeout(Client.client.rustplusReconnectTimers[rustplusLite.guildId]);
         Client.client.rustplusReconnectTimers[rustplusLite.guildId] = null;
@@ -133,8 +140,26 @@ async function rustPlusLiteDisconnectedEvent(rustplusLite) {
 
     /* Was the disconnection unexpected? */
     if (rustplusLite.isActive && Client.client.activeRustplusInstances[rustplusLite.guildId]) {
+        rustplusLite.reconnectAttempts++;
+
+        if (rustplusLite.reconnectAttempts > MAX_LITE_RECONNECT_ATTEMPTS) {
+            rustplusLite.log(Client.client.intlGet(null, 'errorCap'),
+                `Lite reconnect abandoned after ${MAX_LITE_RECONNECT_ATTEMPTS} attempts.`, 'error');
+            rustplusLite.isActive = false;
+            return;
+        }
+
+        /* Exponential backoff for lite instance reconnection */
+        const baseInterval = Config.general.reconnectIntervalMs;
+        const backoffMs = Math.min(
+            baseInterval * Math.pow(2, rustplusLite.reconnectAttempts - 1),
+            MAX_LITE_RECONNECT_INTERVAL_MS
+        );
+
         rustplusLite.log(Client.client.intlGet(null, 'reconnectingCap'),
-            Client.client.intlGet(null, 'reconnectingToServer'));
+            `${Client.client.intlGet(null, 'reconnectingToServer')} ` +
+            `(lite attempt ${rustplusLite.reconnectAttempts}/${MAX_LITE_RECONNECT_ATTEMPTS}, ` +
+            `next in ${Math.round(backoffMs / 1000)}s)`);
 
         if (Client.client.rustplusLiteReconnectTimers[rustplusLite.guildId]) {
             clearTimeout(Client.client.rustplusLiteReconnectTimers[rustplusLite.guildId]);
@@ -143,7 +168,7 @@ async function rustPlusLiteDisconnectedEvent(rustplusLite) {
 
         Client.client.rustplusLiteReconnectTimers[rustplusLite.guildId] = setTimeout(
             rustplusLite.rustplus.updateLeaderRustPlusLiteInstance.bind(rustplusLite.rustplus),
-            Config.general.reconnectIntervalMs);
+            backoffMs);
     }
 }
 

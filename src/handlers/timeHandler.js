@@ -27,6 +27,7 @@ module.exports = {
     },
 
     checkChanges: function (rustplus, client, time) {
+        if (rustplus.time === null) return;
         if (rustplus.time.timeTillActive) return;
 
         const prevTime = rustplus.time.time;
@@ -39,7 +40,7 @@ module.exports = {
         }
 
         const distance = (prevTime > newTime) ? (24 - prevTime) + newTime : newTime - prevTime;
-        if (distance > 1) {
+        if (distance > 4) {
             /* Too big of a jump for a normal server, might have been a skip night server */
             rustplus.log(client.intlGet(null, 'errorCap'), client.intlGet(null, 'invalidTimeDistance', {
                 distance: distance,

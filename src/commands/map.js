@@ -54,7 +54,7 @@ module.exports = {
 		client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: [Discord.MessageFlags.Ephemeral] });
 
 		if (!rustplus || (rustplus && !rustplus.isOperational)) {
 			const str = client.intlGet(interaction.guildId, 'notConnectedToRustServer');
@@ -107,7 +107,7 @@ module.exports = {
 				footer: { text: instance.serverList[rustplus.serverId].title }
 			})],
 			files: [file],
-			ephemeral: true
+			flags: [Discord.MessageFlags.Ephemeral]
 		});
 		rustplus.log(client.intlGet(interaction.guildId, 'infoCap'), client.intlGet(interaction.guildId,
 			'displayingMap', { mapName: fileName }));

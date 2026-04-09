@@ -18,6 +18,7 @@
 
 */
 
+const Discord = require('discord.js');
 const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
@@ -47,7 +48,7 @@ module.exports = {
 		client.logInteraction(interaction, verifyId, 'slashCommand');
 
 		if (!await client.validatePermissions(interaction)) return;
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: [Discord.MessageFlags.Ephemeral] });
 
 		const itemItemName = interaction.options.getString('name');
 		const itemItemId = interaction.options.getString('id');

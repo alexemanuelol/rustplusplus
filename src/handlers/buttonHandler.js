@@ -478,7 +478,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         const groupsToUpdate = [];
         for (const [entityId, content] of Object.entries(server.switches)) {
@@ -535,7 +535,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         /* Find an available tracker id */
         const trackerId = client.findAvailableTrackerId(guildId);
@@ -565,7 +565,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         const groupId = client.findAvailableGroupId(guildId, ids.serverId);
 
@@ -613,7 +613,7 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
 
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -657,7 +657,7 @@ module.exports = async (client, interaction) => {
         }
 
         if (!rustplus || (rustplus && (rustplus.serverId !== ids.serverId))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -725,7 +725,7 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
 
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -778,7 +778,7 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
 
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -860,7 +860,7 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
 
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -884,7 +884,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         if (!rustplus || (rustplus && rustplus.serverId !== ids.serverId)) return;
 
@@ -917,7 +917,7 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
 
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -934,7 +934,7 @@ module.exports = async (client, interaction) => {
     }
     else if (interaction.customId === 'RecycleDelete') {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -950,7 +950,7 @@ module.exports = async (client, interaction) => {
             return;
         }
 
-        interaction.deferUpdate();
+        await interaction.deferUpdate();
 
         if (rustplus) {
             clearTimeout(rustplus.currentSwitchTimeouts[ids.group]);
@@ -999,7 +999,7 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
 
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -1094,7 +1094,7 @@ module.exports = async (client, interaction) => {
         const tracker = instance.trackers[ids.trackerId];
 
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 

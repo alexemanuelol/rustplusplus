@@ -39,36 +39,76 @@ module.exports = {
         /* Start the token replenish task */
         rustplus.tokensReplenishTaskId = setInterval(rustplus.replenishTokens.bind(rustplus), 1000);
 
-        /* Request the map. Act as a check to see if connection is truly operational. */
-        const map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
-        if (!(await rustplus.isResponseValid(map))) {
-            rustplus.log(client.intlGet(null, 'errorCap'),
-                client.intlGet(null, 'somethingWrongWithConnection'), 'error');
+        const isReconnecting = client.rustplusReconnecting[guildId];
 
-            instance.activeServer = null;
-            client.setInstance(guildId, instance);
+        /* On reconnection, use a lightweight getInfo check instead of downloading the full map.
+           Map downloads are several MB of JPEG data over protobuf - on a Pi 4 over Wi-Fi this
+           saturates the link and can crash the network if it fails and triggers another reconnect. */
+        if (isReconnecting && client.rustplusMapInstances.hasOwnProperty(guildId)) {
+            /* Lightweight connection check - just verify we can talk to the server */
+            const info = await rustplus.getInfoAsync();
+            if (!(await rustplus.isResponseValid(info))) {
+                rustplus.log(client.intlGet(null, 'errorCap'),
+                    client.intlGet(null, 'somethingWrongWithConnection'), 'error');
 
-            await DiscordMessages.sendServerConnectionInvalidMessage(guildId, serverId);
-            await DiscordMessages.sendServerMessage(guildId, serverId, null);
+                instance.activeServer = null;
+                client.setInstance(guildId, instance);
 
-            client.resetRustplusVariables(guildId);
+                await DiscordMessages.sendServerConnectionInvalidMessage(guildId, serverId);
+                await DiscordMessages.sendServerMessage(guildId, serverId, null);
 
-            rustplus.disconnect();
-            delete client.rustplusInstances[guildId];
-            return;
+                client.resetRustplusVariables(guildId);
+
+                rustplus.disconnect();
+                delete client.rustplusInstances[guildId];
+                return;
+            }
+            rustplus.info = new Info(info.info);
+            rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'rustplusOperational'));
+
+            /* Reuse cached Map instance - skip the expensive multi-MB map download on reconnect.
+               This prevents bandwidth saturation on Pi 4 Wi-Fi during reconnection storms. */
+            rustplus.map = client.rustplusMapInstances[guildId];
+            rustplus.map._rustplus = rustplus;
         }
-        rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'rustplusOperational'));
+        else {
+            /* New connection - do the full map download */
+            const map = await rustplus.getMapAsync(3 * 60 * 1000); /* 3 min timeout */
+            if (!(await rustplus.isResponseValid(map))) {
+                rustplus.log(client.intlGet(null, 'errorCap'),
+                    client.intlGet(null, 'somethingWrongWithConnection'), 'error');
 
-        const info = await rustplus.getInfoAsync();
-        if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info)
+                instance.activeServer = null;
+                client.setInstance(guildId, instance);
 
-        if (client.rustplusMaps.hasOwnProperty(guildId)) {
-            if (client.isJpgImageChanged(guildId, map.map)) {
-                rustplus.map = new Map(map.map, rustplus);
+                await DiscordMessages.sendServerConnectionInvalidMessage(guildId, serverId);
+                await DiscordMessages.sendServerMessage(guildId, serverId, null);
 
-                await rustplus.map.writeMap(false, true);
-                await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
-                await DiscordMessages.sendInformationMapMessage(guildId);
+                client.resetRustplusVariables(guildId);
+
+                rustplus.disconnect();
+                delete client.rustplusInstances[guildId];
+                return;
+            }
+            rustplus.log(client.intlGet(null, 'connectedCap'), client.intlGet(null, 'rustplusOperational'));
+
+            const info = await rustplus.getInfoAsync();
+            if (await rustplus.isResponseValid(info)) rustplus.info = new Info(info.info);
+
+            if (client.rustplusMaps.hasOwnProperty(guildId)) {
+                if (client.isJpgImageChanged(guildId, map.map)) {
+                    rustplus.map = new Map(map.map, rustplus);
+
+                    await rustplus.map.writeMap(false, true);
+                    await DiscordMessages.sendServerWipeDetectedMessage(guildId, serverId);
+                    await DiscordMessages.sendInformationMapMessage(guildId);
+                }
+                else {
+                    rustplus.map = new Map(map.map, rustplus);
+
+                    await rustplus.map.writeMap(false, true);
+                    await DiscordMessages.sendInformationMapMessage(guildId);
+                }
             }
             else {
                 rustplus.map = new Map(map.map, rustplus);
@@ -76,16 +116,14 @@ module.exports = {
                 await rustplus.map.writeMap(false, true);
                 await DiscordMessages.sendInformationMapMessage(guildId);
             }
-        }
-        else {
-            rustplus.map = new Map(map.map, rustplus);
 
-            await rustplus.map.writeMap(false, true);
-            await DiscordMessages.sendInformationMapMessage(guildId);
+            /* Cache the Map instance for lightweight reconnections */
+            client.rustplusMapInstances[guildId] = rustplus.map;
         }
 
-        if (client.rustplusReconnecting[guildId]) {
+        if (isReconnecting) {
             client.rustplusReconnecting[guildId] = false;
+            client.rustplusReconnectAttempts[guildId] = 0;
 
             if (client.rustplusReconnectTimers[guildId]) {
                 clearTimeout(client.rustplusReconnectTimers[guildId]);

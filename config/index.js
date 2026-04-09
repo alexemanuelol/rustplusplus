@@ -21,14 +21,18 @@
 module.exports = {
     general: {
         language: process.env.RPP_LANGUAGE || 'en',
-        pollingIntervalMs: process.env.RPP_POLLING_INTERVAL || 10000,
-        showCallStackError: process.env.RPP_LOG_CALL_STACK || false,
-        reconnectIntervalMs: process.env.RPP_RECONNECT_INTERVAL || 15000,
+        // FIX: Parse as integer since env vars are strings
+        pollingIntervalMs: parseInt(process.env.RPP_POLLING_INTERVAL, 10) || 10000,
+        // FIX: Properly parse boolean from string - only true if explicitly 'true'
+        showCallStackError: process.env.RPP_LOG_CALL_STACK === 'true',
+        // FIX: Parse as integer since env vars are strings
+        reconnectIntervalMs: parseInt(process.env.RPP_RECONNECT_INTERVAL, 10) || 15000,
     },
     discord: {
         username: process.env.RPP_DISCORD_USERNAME || 'rustplusplus',
         clientId: process.env.RPP_DISCORD_CLIENT_ID || '',
         token: process.env.RPP_DISCORD_TOKEN || '',
-        needAdminPrivileges: process.env.RPP_NEED_ADMIN_PRIVILEGES || true, /* If true, only admins can delete (server, switch..), manage credentials and reset a channel */
+        // FIX: Properly parse boolean - default to true unless explicitly set to 'false'
+        needAdminPrivileges: process.env.RPP_NEED_ADMIN_PRIVILEGES !== 'false',
     }
 };

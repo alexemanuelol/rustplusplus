@@ -18,6 +18,7 @@
 
 */
 
+const Discord = require('discord.js');
 const Builder = require('@discordjs/builders');
 
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
@@ -53,12 +54,12 @@ module.exports = {
 
 		if (!client.isAdministrator(interaction)) {
 			const str = client.intlGet(interaction.guildId, 'missingPermission');
-			client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+			await client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
 			client.log(client.intlGet(null, 'warningCap'), str);
 			return;
 		}
 
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: [Discord.MessageFlags.Ephemeral] });
 
 		let role = null;
 		switch (interaction.options.getSubcommand()) {

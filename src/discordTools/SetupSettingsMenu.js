@@ -26,6 +26,7 @@ const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
+const Timer = require('../util/timer.js');
 
 module.exports = async (client, guild, forced = false) => {
     const instance = client.getInstance(guild.id);
@@ -97,6 +98,8 @@ async function setupGeneralSettings(client, guildId, channel) {
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
+    await Timer.sleep(1100);
+
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: Constants.COLOR_SETTINGS,
@@ -141,6 +144,8 @@ async function setupGeneralSettings(client, guildId, channel) {
         files: [new Discord.AttachmentBuilder(
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
+
+    await Timer.sleep(1100);
 
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
@@ -198,6 +203,8 @@ async function setupGeneralSettings(client, guildId, channel) {
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
+    await Timer.sleep(1100);
+
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: Constants.COLOR_SETTINGS,
@@ -245,6 +252,8 @@ async function setupGeneralSettings(client, guildId, channel) {
             Path.join(__dirname, '..', 'resources/images/settings_logo.png'))]
     });
 
+    await Timer.sleep(1100);
+
     await client.messageSend(channel, {
         embeds: [DiscordEmbeds.getEmbed({
             color: Constants.COLOR_SETTINGS,
@@ -278,7 +287,11 @@ async function setupNotificationSettings(client, guildId, channel) {
                 `resources/images/settings/notification_settings_logo_${instance.generalSettings.language}.png`))]
     });
 
+    let notifCount = 0;
     for (const setting in instance.notificationSettings) {
+        if (notifCount > 0 && notifCount % 4 === 0) {
+            await Timer.sleep(1100);
+        }
         await client.messageSend(channel, {
             embeds: [DiscordEmbeds.getEmbed({
                 color: Constants.COLOR_SETTINGS,
@@ -296,5 +309,6 @@ async function setupNotificationSettings(client, guildId, channel) {
                     Path.join(__dirname, '..',
                         `resources/images/events/${instance.notificationSettings[setting].image}`))]
         });
+        notifCount++;
     }
 }

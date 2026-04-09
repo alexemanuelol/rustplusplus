@@ -84,8 +84,10 @@ module.exports = {
         const verifyId = Math.floor(100000 + Math.random() * 900000);
         client.logInteraction(interaction, verifyId, 'slashCommand');
 
+        // Defer immediately to prevent timeout
+        await interaction.deferReply({ flags: 64 });  // 64 = Ephemeral flag
+
         if (!await client.validatePermissions(interaction)) return;
-        await interaction.deferReply({ ephemeral: true });
 
         switch (interaction.options.getSubcommand()) {
             case 'add': {
@@ -116,7 +118,7 @@ async function addCredentials(client, interaction, verifyId) {
     const steamId = interaction.options.getString('steam_id');
     const isHoster = interaction.options.getBoolean('host') || Object.keys(credentials).length === 1;
 
-    if (Object.keys(credentials) !== 1 && isHoster) {
+    if (Object.keys(credentials).length !== 1 && isHoster) {
         if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
             const str = client.intlGet(interaction.guildId, 'missingPermission');
             client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));

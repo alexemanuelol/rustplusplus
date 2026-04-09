@@ -1,84 +1,342 @@
-<p align="center">
-<img src="./rustplusplus.png" width="500"></a>
-</p>
+# HondaBot v2.1
 
-<p align="center">
-<a href="https://discord.gg/vcrKbKVAbc"><img src="https://img.shields.io/badge/Discord-Alexemanuel-%237289DA?style=flat&logo=discord" alt="discord"/></a>
-<a href="https://www.reddit.com/user/Alexemanuelol"><img src="https://img.shields.io/badge/Reddit-Alexemanuelol-FF4500?style=flat&logo=reddit" alt="reddit"/></a>
-<a href="https://ko-fi.com/alexemanuelol"><img src="https://img.shields.io/badge/Donate%20a%20Coffee-alexemanuelol-yellow?style=flat&logo=buy-me-a-coffee" alt="donate on ko-fi"/></a>
+A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/rustplus.js) library to utilize the power of the Rust+ Companion App with additional Quality-of-Life features. Modified from [rustplusplus](https://github.com/alexemanuelol/rustplusplus).
 
-<p align="center">
-<a href="https://crowdin.com/project/rustplusplus"><img src="https://badges.crowdin.net/rustplusplus/localized.svg" alt="donate on ko-fi"/></a>
-</p>
+## Features
 
-<p align="center">
-    <a href="https://discord.gg/vcrKbKVAbc">
-        <img src="./join_discord.png" width="250">
-    </a>
-</p>
+- Receive notifications for in-game events (Patrol Helicopter, Cargo Ship, Chinook 47, Oil Rigs triggered)
+- Control Smart Switches or Groups of Smart Switches via Discord or In-Game Team Chat
+- Setup Smart Alarms to notify in Discord or In-Game Team Chat whenever they are triggered
+- Use Storage Monitors to keep track of Tool Cupboard Upkeep or Large Wooden Box/Vending Machine content
+- View server information, ongoing events, and team member status in the Information Text Channel
+- Communicate with teammates from Discord to In-Game and vice versa
+- Keep track of other teams on the server with the Battlemetrics Player Tracker
+- Many QoL commands that can be used In-Game or from Discord
 
-<h1 align="center"><em><b>rustplusplus</b> ~ Rust+ Discord Bot</em></h1>
-</p>
+For detailed documentation, see the [full documentation](docs/documentation.md).
 
-A NodeJS Discord Bot that uses the [rustplus.js](https://github.com/liamcottle/rustplus.js) library to utilize the power of the [Rust+ Companion App](https://rust.facepunch.com/companion) with additional Quality-of-Life features.
+## Prerequisites
 
+- Raspberry Pi 4 (2GB+ RAM recommended)
+- Raspberry Pi OS (64-bit)
+- Docker and Docker Compose
+- Git
+- Node.js 22+ (handled by Docker)
+- Discord Bot Token ([Discord Developer Portal](https://discord.com/developers/applications))
+- Rust+ Credentials ([rustplusplus credential application](https://github.com/alexemanuelol/rustplusplus-credential-application))
 
-## **How-to Setup Video**
+## Installation
 
-[![Image of setup video](https://www.youtube.com/s/desktop/4a88d8c6/img/favicon_144x144.png)](https://youtu.be/GX03brJiMZg)
+### 1. Install Docker
 
-## **Features**
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+```
 
-* Receive notifications for [In-Game Events](docs/discord_text_channels.md#events-channel) (Patrol Helicopter, Cargo Ship, Chinook 47, Oil Rigs triggered).
-* Control [Smart Switches](docs/smart_devices.md#smart-switches) or Groups of Smart Switches via Discord or In-Game Team Chat.
-* Setup [Smart Alarms](docs/smart_devices.md#smart-alarms) to notify in Discord or In-Game Team Chat whenever they are triggered.
-* Use [Storage Monitors](docs/smart_devices.md#storage-monitors) to keep track of Tool Cupboard Upkeep or Large Wooden Box/Vending Machine content.
-* Head over to the [Information Text Channel](docs/images/information_channel.png) to see all sorts of information about the server, ongoing events and team member status.
-* Communicate with teammates from [Discord to In-Game](docs/discord_text_channels.md#teamchat-channel) and vice versa.
-* Keep track of other teams on the server with the [Battlemetrics Player Tracker](docs/discord_text_channels.md#trackers-channel).
-* Alot of [QoL Commands](docs/commands.md) that can be used In-Game or from Discord.
-* View the [Full list of features](docs/full_list_features.md).
+Log out and back in for group changes to take effect.
 
+### 2. Clone the Repository
 
-## **Documentation**
+```bash
+git clone https://github.com/ghempy53/HondaBot.git
+cd HondaBot
+```
 
-> Documentation can be found [here](https://github.com/alexemanuelol/rustplusplus/blob/master/docs/documentation.md). The documentation explains the features as well as `how to setup the bot`, so make sure to take a look at it 😉
+### 3. Create Environment File
 
-## **Credentials**
+```bash
+cp .env.example .env
+nano .env
+```
 
-> You can get your credentials by running the `rustplusplus credential application`. Download it [here](https://github.com/alexemanuelol/rustplusplus-credential-application/releases/download/v1.4.0/rustplusplus-1.4.0-win-x64.exe)
+Add your Discord credentials:
 
+```env
+RPP_DISCORD_CLIENT_ID=your_client_id_here
+RPP_DISCORD_TOKEN=your_bot_token_here
+RPP_DISCORD_USERNAME=your_discord_username
+TZ=America/New_York
+```
 
-## **How to run the bot**
+### 4. Fix IPv6 Issues (Recommended)
 
-> To run the bot, simply open the terminal of your choice and run the following from repository root:
+Raspberry Pi often has IPv6 connectivity issues with Docker. Run the helper script to fix this:
 
-    $ npm start run
+```bash
+chmod +x docker-helper.sh
+./docker-helper.sh fix-ipv6
+```
 
+Or manually disable IPv6:
 
-## **How to update the repository**
+```bash
+# Add to /etc/sysctl.conf
+sudo nano /etc/sysctl.conf
+```
 
-> Depending on your OS / choice of terminal you can run:
+```
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+```
 
-    $ update.bat
+```bash
+# Apply changes
+sudo sysctl -p
 
-or
+# Configure Docker daemon
+sudo nano /etc/docker/daemon.json
+```
 
-    $ ./update.sh
+```json
+{
+    "ipv6": false,
+    "ip6tables": false,
+    "dns": ["8.8.8.8", "8.8.4.4"]
+}
+```
 
+```bash
+sudo systemctl restart docker
+```
 
-## **Running via docker**
+### 5. Build and Start
 
-    $ docker run --rm -it -v ${pwd}/credentials:/app/credentials -v ${pwd}/instances:/app/instances -v ${pwd}/logs:/app/logs -e RPP_DISCORD_CLIENT_ID=111....1111 -e RPP_DISCORD_TOKEN=token --name rpp ghcr.io/alexemanuelol/rustplusplus
+```bash
+./docker-helper.sh build
+./docker-helper.sh start
+```
 
-or
+## Docker Helper Commands
 
-    $ docker-compose up -d
+| Command | Description |
+|---------|-------------|
+| `./docker-helper.sh build` | Build the Docker image |
+| `./docker-helper.sh build-verbose` | Build with full output (for debugging) |
+| `./docker-helper.sh start` | Start the container |
+| `./docker-helper.sh stop` | Stop the container |
+| `./docker-helper.sh restart` | Restart the container |
+| `./docker-helper.sh rebuild` | Stop, rebuild, and start (fresh build) |
+| `./docker-helper.sh logs` | View logs (follow mode) |
+| `./docker-helper.sh logs-tail` | View last 100 log lines |
+| `./docker-helper.sh logs-error` | Show only error logs |
+| `./docker-helper.sh status` | Show container status |
+| `./docker-helper.sh health` | Check health and resource usage |
+| `./docker-helper.sh stats` | Show live resource usage |
+| `./docker-helper.sh shell` | Open shell in container |
+| `./docker-helper.sh exec <cmd>` | Execute a command in the container |
+| `./docker-helper.sh backup` | Backup persistent data |
+| `./docker-helper.sh update` | Pull latest code and rebuild |
+| `./docker-helper.sh clean` | Remove container and image |
+| `./docker-helper.sh clean-all` | Remove everything including volumes |
+| `./docker-helper.sh diagnose` | Run full diagnostic check |
+| `./docker-helper.sh fix-ipv6` | Apply IPv6 fix for Raspberry Pi |
+| `./docker-helper.sh fix-permissions` | Fix file permissions |
+| `./docker-helper.sh validate` | Validate configuration files |
+| `./docker-helper.sh version` | Show version information |
 
-Make sure you use the correct values for DISCORD_CLIENT_ID as well as DISCORD_TOKEN in the docker command/docker-compose.yml
+## Manual Docker Commands
 
-## **Thanks to**
+If you prefer not to use the helper script:
 
-**liamcottle**@GitHub - for the [rustplus.js](https://github.com/liamcottle/rustplus.js) library.
-<br>
-**.Vegas.#4844**@Discord - for the awesome icons!
+```bash
+# Build
+docker compose build --no-cache
+
+# Start
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+
+# Restart
+docker compose restart
+```
+
+## Resource Configuration
+
+The default configuration is optimized for Raspberry Pi 4 with 4GB RAM. Adjust the memory limits in `docker-compose.yml` based on your Pi model:
+
+| Pi 4 Model | Memory Limit | CPU Limit |
+|------------|--------------|-----------|
+| 1GB | 768m | 2.0 |
+| 2GB | 1024m | 3.0 |
+| 4GB | 1536m | 3.0 |
+| 8GB | 2048m | 4.0 |
+
+## Updating
+
+To update HondaBot to the latest version:
+
+```bash
+./docker-helper.sh update
+```
+
+Or manually:
+
+```bash
+./docker-helper.sh stop
+git pull origin master
+./docker-helper.sh build
+./docker-helper.sh start
+```
+
+## Persistent Data
+
+The following directories are mounted as volumes and persist across container restarts:
+
+| Directory | Purpose |
+|-----------|---------|
+| `./credentials` | FCM credentials for Rust+ |
+| `./instances` | Server and guild configurations |
+| `./logs` | Application logs |
+| `./maps` | Generated map images |
+
+## Backup
+
+Create a backup of all persistent data:
+
+```bash
+./docker-helper.sh backup
+```
+
+This creates a timestamped tarball (e.g., `backup_20250126_120000.tar.gz`) containing credentials, instances, logs, maps, and your `.env` file.
+
+## Troubleshooting
+
+### Container won't start
+
+Check the logs for errors:
+
+```bash
+./docker-helper.sh logs-tail
+```
+
+### Build fails with network errors
+
+Run the IPv6 fix:
+
+```bash
+./docker-helper.sh fix-ipv6
+```
+
+### Out of memory errors
+
+Reduce the memory limit in `docker-compose.yml` or add swap space:
+
+```bash
+sudo dphys-swapfile swapoff
+sudo nano /etc/dphys-swapfile
+# Set CONF_SWAPSIZE=2048
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
+```
+
+### Container keeps restarting
+
+Check health status and logs:
+
+```bash
+./docker-helper.sh health
+./docker-helper.sh logs-tail
+```
+
+### Run diagnostics
+
+For comprehensive troubleshooting:
+
+```bash
+./docker-helper.sh diagnose
+```
+
+## Discord Slash Commands
+
+| Command | Description |
+|---------|-------------|
+| `/alarm` | Operations on Smart Alarms |
+| `/alias` | Create an alias for a command/sequence of characters |
+| `/blacklist` | Blacklist a user from using the bot |
+| `/cctv` | Get CCTV camera codes for monuments |
+| `/craft` | Display the cost to craft an item |
+| `/credentials` | Setup Credentials |
+| `/decay` | Display the decay time of an item |
+| `/help` | Get help message |
+| `/item` | Get the details of an item |
+| `/leader` | Transfer leadership |
+| `/map` | Display the In-Game Map |
+| `/market` | Search for or subscribe to items in vending machines |
+| `/players` | Get Battlemetrics data on all connected players |
+| `/recycle` | Display the output of recycling an item |
+| `/research` | Display the cost to research an item |
+| `/reset` | Reset Discord Channels |
+| `/role` | Setup a specific role to use the bot |
+| `/storagemonitor` | Operations on Storage Monitors |
+| `/switch` | Operations on Smart Switches |
+| `/upkeep` | Get the upkeep cost of an item |
+| `/uptime` | Get the current uptime |
+| `/voice` | Voice channel operations |
+
+## In-Game Commands
+
+| Command | Description |
+|---------|-------------|
+| `!afk` | Display AFK teammates |
+| `!alive` | Display who has been alive longest |
+| `!cargo` | Display Cargoship information |
+| `!chinook` | Display Chinook 47 information |
+| `!connections` | Display latest team connections |
+| `!craft` | Display the cost to craft an item |
+| `!deaths` | Display latest deaths |
+| `!decay` | Display the decay time of an item |
+| `!events` | Get recent events |
+| `!heli` | Get Patrol Helicopter information |
+| `!large` | Get Large Oil Rig information |
+| `!leader` | Transfer leadership |
+| `!marker` | Set markers to navigate to |
+| `!market` | Search for items in vending machines |
+| `!mute` | Mute bot In-Game |
+| `!notes` | Add notes |
+| `!offline` | Display offline teammates |
+| `!online` | Display online teammates |
+| `!players` | Get Battlemetrics player information |
+| `!pop` | Get server population |
+| `!prox` | Display nearby teammates |
+| `!recycle` | Display recycling output |
+| `!research` | Display research cost |
+| `!send` | Send a message to Discord |
+| `!small` | Get Small Oil Rig information |
+| `!steamid` | Get teammate steamid |
+| `!team` | Get team information |
+| `!time` | Get In-Game time |
+| `!timer` | Setup timers |
+| `!tr` | Translate text |
+| `!tts` | Text-To-Speech |
+| `!unmute` | Unmute bot In-Game |
+| `!upkeep` | Check Tool Cupboard upkeep |
+| `!uptime` | Display uptime |
+| `!vendor` | Get Traveling Vendor information |
+| `!wipe` | Display time since wipe |
+
+## Credentials
+
+Get your Rust+ credentials by running the [rustplusplus credential application](https://github.com/alexemanuelol/rustplusplus-credential-application) on Windows.
+
+## Version Information
+
+- **HondaBot**: v2.1
+- **Node.js**: 22 (via Docker)
+- **Docker Helper Script**: v2.1
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+## Credits
+
+- Original project: [rustplusplus](https://github.com/alexemanuelol/rustplusplus) by [alexemanuelol](https://github.com/alexemanuelol)
+- Rust+ library: [rustplus.js](https://github.com/liamcottle/rustplus.js) by [liamcottle](https://github.com/liamcottle)

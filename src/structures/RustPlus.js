@@ -23,7 +23,7 @@ const Path = require('path');
 const RustPlusLib = require('@liamcottle/rustplus.js');
 const Translate = require('translate');
 
-const Client = require('../../index.ts');
+const Client = require('../../index');
 const Constants = require('../util/constants.js');
 const Decay = require('../util/decay.js');
 const DiscordEmbeds = require('../discordTools/discordEmbeds');
@@ -154,6 +154,8 @@ class RustPlus extends RustPlusLib {
             this.leaderRustPlusInstance.disconnect();
             this.leaderRustPlusInstance = null;
         }
+
+        if (this.team === null) return;
 
         const instance = Client.client.getInstance(this.guildId);
         const leader = this.team.leaderSteamId;
@@ -660,6 +662,7 @@ class RustPlus extends RustPlusLib {
     /* Commands */
 
     getCommandAfk() {
+        if (this.team === null) return null;
         let string = '';
         for (const player of this.team.players) {
             if (player.isOnline) {
@@ -673,6 +676,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandAlive(command) {
+        if (this.team === null) return null;
         const prefix = this.generalSettings.prefix;
         const commandAlive = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxAlive')}`;
         const commandAliveEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxAlive')}`;
@@ -709,6 +713,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandCargo(isInfoChannel = false) {
+        if (this.mapMarkers === null) return null;
         const strings = [];
         let unhandled = this.mapMarkers.cargoShips.map(e => e.id);
         for (const [id, timer] of Object.entries(this.mapMarkers.cargoShipEgressTimers)) {
@@ -789,6 +794,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandChinook(isInfoChannel = false) {
+        if (this.mapMarkers === null) return null;
         const strings = [];
         for (const ch47 of this.mapMarkers.ch47s) {
             if (ch47.ch47Type === 'crate') {
@@ -973,6 +979,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandDeath(command, callerSteamId) {
+        if (this.team === null) return null;
         const prefix = this.generalSettings.prefix;
         const commandDeath = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxDeath')}`;
         const commandDeathEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxDeath')}`;
@@ -1372,6 +1379,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandHeli(isInfoChannel = false) {
+        if (this.mapMarkers === null) return null;
         const strings = [];
         for (const patrolHelicopter of this.mapMarkers.patrolHelicopters) {
             if (isInfoChannel) {
@@ -1437,6 +1445,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandLarge(isInfoChannel = false) {
+        if (this.mapMarkers === null) return null;
         const strings = [];
         if (this.mapMarkers.crateLargeOilRigTimer) {
             const time = Timer.getTimeLeftOfTimer(this.mapMarkers.crateLargeOilRigTimer);
@@ -1480,6 +1489,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandLeader(command, callerSteamId) {
+        if (this.team === null) return null;
         const prefix = this.generalSettings.prefix;
         const commandLeader = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxLeader')}`;
         const commandLeaderEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxLeader')}`;
@@ -1578,6 +1588,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandMarker(command, callerSteamId) {
+        if (this.team === null || this.info === null) return null;
         const prefix = this.generalSettings.prefix;
         const commandMarker = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxMarker')}`;
         const commandMarkerEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxMarker')}`;
@@ -1685,6 +1696,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandMarket(command) {
+        if (this.mapMarkers === null) return null;
         const instance = Client.client.getInstance(this.guildId);
         const prefix = this.generalSettings.prefix;
         const commandMarket = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxMarket')}`;
@@ -1713,6 +1725,8 @@ class RustPlus extends RustPlusLib {
         switch (subcommand) {
             case commandSearchEn:
             case commandSearch: {
+                const MAX_MESSAGE_LENGTH = 129;
+                
                 if (!['all', 'buy', 'sell'].includes(orderType)) {
                     return Client.client.intlGet(this.guildId, 'notAValidOrderType', {
                         order: orderType
@@ -1726,7 +1740,8 @@ class RustPlus extends RustPlusLib {
                     });
                 }
 
-                const locations = [];
+                // Collect all matching orders with full details
+                const orders = [];
                 for (const vendingMachine of this.mapMarkers.vendingMachines) {
                     if (!vendingMachine.hasOwnProperty('sellOrders')) continue;
 
@@ -1744,17 +1759,123 @@ class RustPlus extends RustPlusLib {
                             (orderItemId === parseInt(itemId) || orderCurrencyId === parseInt(itemId))) ||
                             (orderType === 'buy' && orderCurrencyId === parseInt(itemId)) ||
                             (orderType === 'sell' && orderItemId === parseInt(itemId))) {
-                            if (locations.includes(vendingMachine.location.location)) continue;
-                            locations.push(vendingMachine.location.location);
+                            
+                            const orderItemName = orderItemId ? 
+                                Client.client.items.getName(orderItemId) : 'Unknown';
+                            const orderCurrencyName = orderCurrencyId ? 
+                                Client.client.items.getName(orderCurrencyId) : 'Unknown';
+                            
+                            orders.push({
+                                location: vendingMachine.location.location,
+                                quantity: order.quantity,
+                                itemName: orderItemName,
+                                costPerItem: order.costPerItem,
+                                currencyName: orderCurrencyName,
+                                itemIsBlueprint: order.itemIsBlueprint,
+                                currencyIsBlueprint: order.currencyIsBlueprint
+                            });
                         }
                     }
                 }
 
-                if (locations.length === 0) {
+                if (orders.length === 0) {
                     return Client.client.intlGet(this.guildId, 'noItemFound');
                 }
 
-                return locations.join(', ');
+                // Group by currency, then sort:
+                // 1. Groups ordered by their lowest price (best deal currency first)
+                // 2. Within each group, sorted by price (lowest first)
+                
+                // First, group orders by currency
+                const groupedByCurrency = {};
+                for (const order of orders) {
+                    const key = order.currencyName;
+                    if (!groupedByCurrency[key]) {
+                        groupedByCurrency[key] = [];
+                    }
+                    groupedByCurrency[key].push(order);
+                }
+
+                // Sort each currency group by price (lowest first)
+                for (const currency in groupedByCurrency) {
+                    groupedByCurrency[currency].sort((a, b) => a.costPerItem - b.costPerItem);
+                }
+
+                // Sort currency groups by their lowest price
+                const sortedCurrencies = Object.keys(groupedByCurrency).sort((a, b) => {
+                    const lowestA = groupedByCurrency[a][0].costPerItem;
+                    const lowestB = groupedByCurrency[b][0].costPerItem;
+                    return lowestA - lowestB;
+                });
+
+                // Flatten back into a single sorted array
+                const sortedOrders = [];
+                for (const currency of sortedCurrencies) {
+                    sortedOrders.push(...groupedByCurrency[currency]);
+                }
+                orders.length = 0;
+                orders.push(...sortedOrders);
+
+                // Format each order as a string: [G10] 1x AK47 for 500x Scrap
+                const formatOrder = (order) => {
+                    const bpItem = order.itemIsBlueprint ? ' BP' : '';
+                    const bpCurrency = order.currencyIsBlueprint ? ' BP' : '';
+                    return `[${order.location}] ${order.quantity}x ${order.itemName}${bpItem} for ${order.costPerItem}x ${order.currencyName}${bpCurrency}`;
+                };
+
+                const formattedOrders = orders.map(formatOrder);
+
+                // Account for trademark in message length calculation
+                const trademark = this.generalSettings.trademark;
+                const trademarkString = (trademark === 'NOT SHOWING') ? '' : `${trademark} | `;
+                const availableLength = MAX_MESSAGE_LENGTH - trademarkString.length;
+
+                // If 1-2 orders and they fit in one message, return single string
+                if (orders.length <= 2) {
+                    const combined = formattedOrders.join(' | ');
+                    if (combined.length <= availableLength) {
+                        return combined;
+                    }
+                }
+
+                // Split into multiple messages, never splitting an order across messages
+                const messages = [];
+                let currentMessage = '';
+                const separator = ' | ';
+                
+                for (const orderStr of formattedOrders) {
+                    // If this single order is too long by itself, truncate it
+                    if (orderStr.length > availableLength) {
+                        if (currentMessage) {
+                            messages.push(currentMessage);
+                            currentMessage = '';
+                        }
+                        messages.push(orderStr.substring(0, availableLength - 3) + '...');
+                        continue;
+                    }
+
+                    const potentialMessage = currentMessage 
+                        ? currentMessage + separator + orderStr 
+                        : orderStr;
+                    
+                    if (potentialMessage.length <= availableLength) {
+                        currentMessage = potentialMessage;
+                    } else {
+                        // Current message is full, push it and start new one
+                        if (currentMessage) {
+                            messages.push(currentMessage);
+                        }
+                        currentMessage = orderStr;
+                    }
+                }
+                
+                // Don't forget the last message
+                if (currentMessage) {
+                    messages.push(currentMessage);
+                }
+
+                // Return array for multiple messages, or single string for one
+                return messages.length === 1 ? messages[0] : messages;
             } break;
 
             case commandSubEn:
@@ -1933,6 +2054,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandOffline() {
+        if (this.team === null) return null;
         let string = '';
         let counter = 0;
         for (const player of this.team.players) {
@@ -1948,6 +2070,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandOnline() {
+        if (this.team === null) return null;
         let string = '';
         let counter = 0;
         for (const player of this.team.players) {
@@ -2050,6 +2173,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandPop(isInfoChannel = false) {
+        if (this.info === null) return null;
         if (isInfoChannel) {
             return `${this.info.players}${this.info.isQueue() ? `(${this.info.queuedPlayers})` : ''}` +
                 `/${this.info.maxPlayers}`;
@@ -2067,6 +2191,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandProx(command, callerSteamId) {
+        if (this.team === null) return null;
         const caller = this.team.getPlayer(callerSteamId);
         const prefix = this.generalSettings.prefix;
         const commandProx = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxProx')}`;
@@ -2254,6 +2379,7 @@ class RustPlus extends RustPlusLib {
     }
 
     async getCommandSend(command, callerName) {
+        if (this.team === null) return null;
         const credentials = InstanceUtils.readCredentialsFile(this.guildId);
         const prefix = this.generalSettings.prefix;
         const commandSend = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxSend')}`;
@@ -2304,6 +2430,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandSmall(isInfoChannel = false) {
+        if (this.mapMarkers === null) return null;
         const strings = [];
         if (this.mapMarkers.crateSmallOilRigTimer) {
             const time = Timer.getTimeLeftOfTimer(this.mapMarkers.crateSmallOilRigTimer);
@@ -2382,6 +2509,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandSteamId(command, callerSteamId, callerName) {
+        if (this.team === null) return null;
         const prefix = this.generalSettings.prefix;
         const commandSteamid = `${prefix}${Client.client.intlGet(this.guildId, 'commandSyntaxSteamid')}`;
         const commandSteamidEn = `${prefix}${Client.client.intlGet('en', 'commandSyntaxSteamid')}`;
@@ -2416,6 +2544,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandTeam() {
+        if (this.team === null) return null;
         let string = '';
         for (const player of this.team.players) {
             string += `${player.name}, `;
@@ -2425,6 +2554,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandTime(isInfoChannel = false) {
+        if (this.time === null) return null;
         const time = Timer.convertDecimalToHoursMinutes(this.time.time);
         if (isInfoChannel) {
             return [time, this.time.getTimeTillDayOrNight('s')];
@@ -2693,6 +2823,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandWipe(isInfoChannel = false) {
+        if (this.info === null) return null;
         if (isInfoChannel) {
             return Client.client.intlGet(this.guildId, 'dayOfWipe', {
                 day: Math.ceil(this.info.getSecondsSinceWipe() / (60 * 60 * 24))
@@ -2706,6 +2837,7 @@ class RustPlus extends RustPlusLib {
     }
 
     getCommandTravelingVendor(isInfoChannel = false) {
+        if (this.mapMarkers === null) return null;
         const strings = [];
         for (const travelingVendor of this.mapMarkers.travelingVendors) {
             if (isInfoChannel) {

@@ -20,13 +20,19 @@
 
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
+const Timer = require('../util/timer.js');
 
 module.exports = async (client, guild) => {
     const instance = client.getInstance(guild.id);
 
     await DiscordTools.clearTextChannel(guild.id, instance.channelId.trackers, 100);
 
+    let trackerCount = 0;
     for (const trackerId in instance.trackers) {
+        if (trackerCount > 0 && trackerCount % 4 === 0) {
+            await Timer.sleep(1100);
+        }
         await DiscordMessages.sendTrackerMessage(guild.id, trackerId);
+        trackerCount++;
     }
 }

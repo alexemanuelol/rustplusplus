@@ -575,7 +575,7 @@ class RustLabs {
      *      from parameter item.
      */
     getSmeltingDetailsFromParameterById(id) {
-        if (!this.items.hasOwnProperty(id)) return null;
+        if (!this.items.itemExist(id)) return null;
         const fromParameterSmeltingDetails = new Object();
         for (const [smeltingTool, smeltingDetails] of Object.entries(this.smeltingData)) {
             for (const details of smeltingDetails) {

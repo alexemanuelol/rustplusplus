@@ -22,7 +22,7 @@ const Discord = require('discord.js');
 const Fs = require('fs');
 const Path = require('path');
 
-const Client = require('../../index.ts');
+const Client = require('../../index');
 const Constants = require('../util/constants.js');
 const Languages = require('../util/languages.js');
 
@@ -114,11 +114,11 @@ module.exports = {
                     Client.client.intlGet(guildId, 'notShowingCap') : trademark}`,
                 options: [
                     {
-                        label: 'rustplusplus',
+                        label: 'HondaBot',
                         description: Client.client.intlGet(guildId, 'trademarkShownBeforeMessage', {
-                            trademark: 'rustplusplus'
+                            trademark: 'HondaBot'
                         }),
-                        value: 'rustplusplus'
+                        value: 'HondaBot'
                     },
                     {
                         label: 'Rust++',

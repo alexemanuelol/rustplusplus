@@ -20,6 +20,7 @@
 
 const DiscordMessages = require('./discordMessages.js');
 const DiscordTools = require('./discordTools.js');
+const Timer = require('../util/timer.js');
 
 module.exports = async (client, rustplus) => {
     const instance = client.getInstance(rustplus.guildId);
@@ -29,7 +30,12 @@ module.exports = async (client, rustplus) => {
         await DiscordTools.clearTextChannel(guildId, instance.channelId.switchGroups, 100);
     }
 
+    let groupCount = 0;
     for (const groupId in instance.serverList[rustplus.serverId].switchGroups) {
+        if (groupCount > 0 && groupCount % 4 === 0) {
+            await Timer.sleep(1100);
+        }
         await DiscordMessages.sendSmartSwitchGroupMessage(rustplus.guildId, rustplus.serverId, groupId);
+        groupCount++;
     }
 };

@@ -25,7 +25,7 @@ const BattlemetricsHandler = require('../handlers/battlemetricsHandler.js');
 const Config = require('../../config');
 
 module.exports = {
-    name: 'ready',
+    name: 'clientReady',
     once: true,
     async execute(client) {
         for (const guild of client.guilds.cache) {
@@ -47,7 +47,7 @@ module.exports = {
         }
 
         try {
-            await client.user.setAvatar(Path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png'));
+            await client.user.setAvatar(Path.join(__dirname, '..', 'resources/images/hondabot_logo.png'));
         }
         catch (e) {
             client.log(client.intlGet(null, 'warningCap'), client.intlGet(null, 'ignoreSetAvatar'));

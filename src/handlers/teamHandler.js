@@ -28,6 +28,7 @@ module.exports = {
     },
 
     checkChanges: async function (rustplus, client, teamInfo) {
+        if (rustplus.team === null) return;
         let instance = client.getInstance(rustplus.guildId);
         const guildId = rustplus.guildId;
         const serverId = rustplus.serverId;

@@ -26,35 +26,35 @@ const DiscordBot = require('./src/structures/DiscordBot');
 
 createMissingDirectories();
 
+// FIXED: Discord.js v14 compatible options
+// Removed: disableEveryone (removed in v14)
+// Changed: restRequestTimeout -> rest.timeout
+// Changed: retryLimit -> rest.retries
 const client = new DiscordBot({
     intents: [
         Discord.GatewayIntentBits.Guilds,
         Discord.GatewayIntentBits.GuildMessages,
         Discord.GatewayIntentBits.MessageContent,
         Discord.GatewayIntentBits.GuildMembers,
-        Discord.GatewayIntentBits.GuildVoiceStates],
-    retryLimit: 2,
-    restRequestTimeout: 60000,
-    disableEveryone: false
+        Discord.GatewayIntentBits.GuildVoiceStates
+    ],
+    rest: {
+        timeout: 60000,
+        retries: 2
+    }
+    // NOTE: disableEveryone was removed in discord.js v14
 });
 
 client.build();
 
 function createMissingDirectories() {
-    if (!Fs.existsSync(Path.join(__dirname, 'logs'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'logs'));
-    }
-
-    if (!Fs.existsSync(Path.join(__dirname, 'instances'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'instances'));
-    }
-
-    if (!Fs.existsSync(Path.join(__dirname, 'credentials'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'credentials'));
-    }
-
-    if (!Fs.existsSync(Path.join(__dirname, 'maps'))) {
-        Fs.mkdirSync(Path.join(__dirname, 'maps'));
+    const directories = ['logs', 'instances', 'credentials', 'maps'];
+    
+    for (const dir of directories) {
+        const dirPath = Path.join(__dirname, dir);
+        if (!Fs.existsSync(dirPath)) {
+            Fs.mkdirSync(dirPath, { recursive: true });
+        }
     }
 }
 
@@ -63,6 +63,13 @@ process.on('unhandledRejection', error => {
         error: error
     }), 'error');
     console.log(error);
+});
+
+process.on('uncaughtException', error => {
+    console.error('Uncaught Exception:', error);
+    setTimeout(() => {
+        process.exit(1);
+    }, 1000);
 });
 
 exports.client = client;

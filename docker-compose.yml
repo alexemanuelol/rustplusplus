@@ -1,13 +1,97 @@
-version: '3.3'
+# =============================================================================
+# Docker Compose Configuration for Raspberry Pi 4
+# =============================================================================
+# Build with: DOCKER_BUILDKIT=1 docker compose build
+# Or set in shell: export DOCKER_BUILDKIT=1
+# =============================================================================
+
 services:
-    app:
-        volumes:
-            - ./credentials:/app/credentials
-            - ./instances:/app/instances
-            - ./logs:/app/logs
-            - ./maps:/app/maps
-        environment:
-            - RPP_DISCORD_CLIENT_ID=111....1111
-            - RPP_DISCORD_TOKEN=token
-        container_name: rpp
-        image: ghcr.io/alexemanuelol/rustplusplus
+  hondabot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # BuildKit optimizations for faster Raspberry Pi builds
+      args:
+        BUILDKIT_INLINE_CACHE: 1
+    image: hondabot:latest
+    container_name: HondaBot
+    hostname: hondabot
+    restart: unless-stopped
+    
+    # Resource Limits for Raspberry Pi 4
+    deploy:
+      resources:
+        limits:
+          memory: 1536m
+          cpus: "3.0"
+        reservations:
+          memory: 512m
+          cpus: "1.0"
+    
+    # DNS Configuration - Prevents DNS resolution failures from flooding network
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    dns_search: .
+    
+    # Connection limits - Prevents NAT table exhaustion
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 2048
+    
+    volumes:
+      - ./credentials:/app/credentials
+      - ./instances:/app/instances
+      - ./logs:/app/logs
+      - ./maps:/app/maps
+      - /etc/localtime:/etc/localtime:ro
+    
+    # Tmpfs for temp files (reduces SD card wear)
+    tmpfs:
+      - /app/temp:size=50M,mode=1777
+    
+    environment:
+      - RPP_DISCORD_CLIENT_ID=${RPP_DISCORD_CLIENT_ID}
+      - RPP_DISCORD_TOKEN=${RPP_DISCORD_TOKEN}
+      - RPP_DISCORD_USERNAME=${RPP_DISCORD_USERNAME}
+      - NODE_ENV=production
+      - NODE_OPTIONS=--max-old-space-size=1024
+      - TZ=${TZ:-UTC}
+    
+    env_file:
+      - .env
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        compress: "true"
+    
+    healthcheck:
+      test: ["CMD", "node", "-e", "console.log('healthy')"]
+      interval: 90s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    
+    networks:
+      - hondabot-network
+    
+    security_opt:
+      - no-new-privileges:true
+    
+    stop_grace_period: 30s
+
+networks:
+  hondabot-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+    ipam:
+      driver: default
+      config:
+        # /24 is sufficient for a single-container setup and avoids bloating
+        # iptables/conntrack tables that conflict with Tailscale on Pi 4
+        - subnet: 172.28.0.0/24

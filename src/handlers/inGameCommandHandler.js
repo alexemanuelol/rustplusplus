@@ -40,6 +40,10 @@ module.exports = {
         if (!rustplus.isOperational) {
             return false;
         }
+        else if (rustplus.time === null || rustplus.team === null ||
+            rustplus.info === null || rustplus.mapMarkers === null) {
+            return false;
+        }
         else if (!rustplus.generalSettings.inGameCommandsEnabled) {
             return false;
         }

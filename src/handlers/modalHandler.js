@@ -49,7 +49,7 @@ module.exports = async (client, interaction) => {
         const oilRigCrateUnlockTime = parseInt(interaction.fields.getTextInputValue('OilRigCrateUnlockTime'));
 
         if (!server) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -116,7 +116,7 @@ module.exports = async (client, interaction) => {
         }
 
         if (!server || (server && !server.switches.hasOwnProperty(ids.entityId))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -146,7 +146,7 @@ module.exports = async (client, interaction) => {
         const groupCommand = interaction.fields.getTextInputValue('GroupCommand');
 
         if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -171,13 +171,13 @@ module.exports = async (client, interaction) => {
         const switchId = interaction.fields.getTextInputValue('GroupAddSwitchId');
 
         if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
         if (!Object.keys(server.switches).includes(switchId) ||
             server.switchGroups[ids.groupId].switches.includes(switchId)) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -197,7 +197,7 @@ module.exports = async (client, interaction) => {
         const switchId = interaction.fields.getTextInputValue('GroupRemoveSwitchId');
 
         if (!server || (server && !server.switchGroups.hasOwnProperty(ids.groupId))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -220,7 +220,7 @@ module.exports = async (client, interaction) => {
         const smartAlarmCommand = interaction.fields.getTextInputValue('SmartAlarmCommand');
 
         if (!server || (server && !server.alarms.hasOwnProperty(ids.entityId))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -246,7 +246,7 @@ module.exports = async (client, interaction) => {
         const storageMonitorName = interaction.fields.getTextInputValue('StorageMonitorName');
 
         if (!server || (server && !server.storageMonitors.hasOwnProperty(ids.entityId))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -268,7 +268,7 @@ module.exports = async (client, interaction) => {
         const trackerClanTag = interaction.fields.getTextInputValue('TrackerClanTag');
 
         if (!tracker) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -313,7 +313,7 @@ module.exports = async (client, interaction) => {
         const id = interaction.fields.getTextInputValue('TrackerAddPlayerId');
 
         if (!tracker) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -322,7 +322,7 @@ module.exports = async (client, interaction) => {
 
         if ((isSteamId64 && tracker.players.some(e => e.steamId === id)) ||
             (!isSteamId64 && tracker.players.some(e => e.playerId === id && e.steamId === null))) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -371,7 +371,7 @@ module.exports = async (client, interaction) => {
         const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
 
         if (!tracker) {
-            interaction.deferUpdate();
+            await interaction.deferUpdate();
             return;
         }
 
@@ -395,5 +395,5 @@ module.exports = async (client, interaction) => {
         id: `${verifyId}`
     }));
 
-    interaction.deferUpdate();
+    await interaction.deferUpdate();
 }

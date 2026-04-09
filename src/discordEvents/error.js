@@ -22,6 +22,13 @@ module.exports = {
     name: 'error',
     async execute(client, error) {
         client.log(client.intlGet(null, 'errorCap'), error, 'error');
-        process.exit(1);
+        
+        // Only exit on fatal, unrecoverable errors
+        const fatalCodes = ['TOKEN_INVALID', 'DISALLOWED_INTENTS', 'SHARDING_REQUIRED'];
+        if (error && error.code && fatalCodes.includes(error.code)) {
+            console.error('Fatal Discord error, exiting:', error.code);
+            process.exit(1);
+        }
+        // For other errors, log but continue running
     },
-}
+};

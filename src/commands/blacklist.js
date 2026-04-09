@@ -18,6 +18,7 @@
 
 */
 
+const Discord = require('discord.js');
 const Builder = require('@discordjs/builders');
 
 const Constants = require('../util/constants.js');
@@ -76,7 +77,7 @@ module.exports = {
 			return;
 		}
 
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: [Discord.MessageFlags.Ephemeral] });
 
 		const guild = DiscordTools.getGuild(guildId);
 
@@ -249,7 +250,7 @@ module.exports = {
 								inline: true
 							}]
 					})],
-					ephemeral: true
+					flags: [Discord.MessageFlags.Ephemeral]
 				});
 
 				client.log(client.intlGet(guildId, 'infoCap'), client.intlGet(guildId, 'showingBlacklist'));

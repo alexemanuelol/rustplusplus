@@ -22,6 +22,9 @@ const DiscordMessages = require('../discordTools/discordMessages.js');
 
 const Config = require('../../config');
 
+const MAX_RECONNECT_INTERVAL_MS = 300000; /* 5 minutes max backoff */
+const MAX_RECONNECT_ATTEMPTS = 50;        /* Stop after 50 attempts (~25 min at max backoff) */
+
 module.exports = {
     name: 'disconnected',
     async execute(rustplus, client) {
@@ -62,11 +65,34 @@ module.exports = {
             if (!client.rustplusReconnecting[guildId]) {
                 await DiscordMessages.sendServerChangeStateMessage(guildId, serverId, 1);
                 await DiscordMessages.sendServerMessage(guildId, serverId, 2);
+                client.rustplusReconnectAttempts[guildId] = 0;
             }
 
             client.rustplusReconnecting[guildId] = true;
 
-            rustplus.log(client.intlGet(null, 'reconnectingCap'), client.intlGet(null, 'reconnectingToServer'));
+            /* Track reconnect attempts and apply exponential backoff */
+            if (!client.rustplusReconnectAttempts[guildId]) {
+                client.rustplusReconnectAttempts[guildId] = 0;
+            }
+            client.rustplusReconnectAttempts[guildId]++;
+            const attempt = client.rustplusReconnectAttempts[guildId];
+
+            if (attempt > MAX_RECONNECT_ATTEMPTS) {
+                rustplus.log(client.intlGet(null, 'errorCap'),
+                    `Reconnect abandoned after ${MAX_RECONNECT_ATTEMPTS} attempts. ` +
+                    `Use /connect to retry manually.`, 'error');
+                client.rustplusReconnecting[guildId] = false;
+                delete client.rustplusInstances[guildId];
+                return;
+            }
+
+            /* Exponential backoff: base * 2^(attempt-1), capped at MAX_RECONNECT_INTERVAL_MS */
+            const baseInterval = Config.general.reconnectIntervalMs;
+            const backoffMs = Math.min(baseInterval * Math.pow(2, attempt - 1), MAX_RECONNECT_INTERVAL_MS);
+
+            rustplus.log(client.intlGet(null, 'reconnectingCap'),
+                `${client.intlGet(null, 'reconnectingToServer')} ` +
+                `(attempt ${attempt}/${MAX_RECONNECT_ATTEMPTS}, next in ${Math.round(backoffMs / 1000)}s)`);
 
             delete client.rustplusInstances[guildId];
 
@@ -77,7 +103,7 @@ module.exports = {
 
             client.rustplusReconnectTimers[guildId] = setTimeout(
                 client.createRustplusInstance.bind(client),
-                Config.general.reconnectIntervalMs,
+                backoffMs,
                 guildId,
                 rustplus.server,
                 rustplus.port,

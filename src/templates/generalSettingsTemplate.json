@@ -3,7 +3,7 @@
     "voiceGender": "male",
     "prefix": "!",
     "muteInGameBotMessages": false,
-    "trademark": "rustplusplus",
+    "trademark": "HondaBot",
     "inGameCommandsEnabled": true,
     "fcmAlarmNotificationEnabled": false,
     "fcmAlarmNotificationEveryone": false,

@@ -22,7 +22,7 @@ const Discord = require('discord.js');
 const Path = require('path');
 
 const Constants = require('../util/constants.js');
-const Client = require('../../index.ts');
+const Client = require('../../index');
 const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
@@ -67,7 +67,7 @@ module.exports = {
         const message = await module.exports.sendMessage(guildId, content, server.messageId,
             instance.channelId.servers, interaction);
 
-        if (!interaction) {
+        if (!interaction && message) {
             instance.serverList[serverId].messageId = message.id;
             Client.client.setInstance(guildId, instance);
         }
@@ -85,7 +85,7 @@ module.exports = {
         const message = await module.exports.sendMessage(guildId, content, tracker.messageId,
             instance.channelId.trackers, interaction);
 
-        if (!interaction) {
+        if (!interaction && message) {
             instance.trackers[trackerId].messageId = message.id;
             Client.client.setInstance(guildId, instance);
         }
@@ -111,7 +111,7 @@ module.exports = {
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
             instance.channelId.switches, interaction);
 
-        if (!interaction) {
+        if (!interaction && message) {
             instance.serverList[serverId].switches[entityId].messageId = message.id;
             Client.client.setInstance(guildId, instance);
         }
@@ -133,7 +133,7 @@ module.exports = {
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
             instance.channelId.alarms, interaction);
 
-        if (!interaction) {
+        if (!interaction && message) {
             instance.serverList[serverId].alarms[entityId].messageId = message.id;
             Client.client.setInstance(guildId, instance);
         }
@@ -160,7 +160,7 @@ module.exports = {
         const message = await module.exports.sendMessage(guildId, content, entity.messageId,
             instance.channelId.storageMonitors, interaction);
 
-        if (!interaction) {
+        if (!interaction && message) {
             instance.serverList[serverId].storageMonitors[entityId].messageId = message.id;
             Client.client.setInstance(guildId, instance);
         }
@@ -180,7 +180,7 @@ module.exports = {
         const message = await module.exports.sendMessage(guildId, content, group.messageId,
             instance.channelId.switchGroups, interaction);
 
-        if (!interaction) {
+        if (!interaction && message) {
             instance.serverList[serverId].switchGroups[groupId].messageId = message.id;
             Client.client.setInstance(guildId, instance);
         }
@@ -406,7 +406,7 @@ module.exports = {
         const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.map, instance.channelId.information);
 
-        if (message.id !== instance.informationMessageId.map) {
+        if (message && message.id !== instance.informationMessageId.map) {
             instance.informationMessageId.map = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
@@ -425,7 +425,7 @@ module.exports = {
         const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.server, instance.channelId.information);
 
-        if (message.id !== instance.informationMessageId.server) {
+        if (message && message.id !== instance.informationMessageId.server) {
             instance.informationMessageId.server = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
@@ -444,7 +444,7 @@ module.exports = {
         const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.event, instance.channelId.information);
 
-        if (message.id !== instance.informationMessageId.event) {
+        if (message && message.id !== instance.informationMessageId.event) {
             instance.informationMessageId.event = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
@@ -463,7 +463,7 @@ module.exports = {
         const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.team, instance.channelId.information);
 
-        if (message.id !== instance.informationMessageId.team) {
+        if (message && message.id !== instance.informationMessageId.team) {
             instance.informationMessageId.team = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
@@ -479,7 +479,7 @@ module.exports = {
         const message = await module.exports.sendMessage(rustplus.guildId, content,
             instance.informationMessageId.battlemetricsPlayers, instance.channelId.information);
 
-        if (message.id !== instance.informationMessageId.battlemetricsPlayers) {
+        if (message && message.id !== instance.informationMessageId.battlemetricsPlayers) {
             instance.informationMessageId.battlemetricsPlayers = message.id;
             Client.client.setInstance(rustplus.guildId, instance);
         }
@@ -496,7 +496,7 @@ module.exports = {
     sendCredentialsShowMessage: async function (interaction) {
         const content = {
             embeds: [await DiscordEmbeds.getCredentialsShowEmbed(interaction.guildId)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionEditReply(interaction, content);
@@ -518,7 +518,7 @@ module.exports = {
         const content = {
             embeds: [DiscordEmbeds.getHelpEmbed(interaction.guildId)],
             components: DiscordButtons.getHelpButtons(),
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionReply(interaction, content);
@@ -527,7 +527,7 @@ module.exports = {
     sendCctvMessage: async function (interaction, monument, cctvCodes, dynamic) {
         const content = {
             embeds: [DiscordEmbeds.getCctvEmbed(interaction.guildId, monument, cctvCodes, dynamic)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionReply(interaction, content);
@@ -536,7 +536,7 @@ module.exports = {
     sendUptimeMessage: async function (interaction, uptime) {
         const content = {
             embeds: [DiscordEmbeds.getUptimeEmbed(interaction.guildId, uptime)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionEditReply(interaction, content);
@@ -545,7 +545,7 @@ module.exports = {
     sendVoiceMessage: async function (interaction, state) {
         const content = {
             embeds: [DiscordEmbeds.getVoiceEmbed(interaction.guildId, state)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionEditReply(interaction, content);
@@ -554,7 +554,7 @@ module.exports = {
     sendCraftMessage: async function (interaction, craftDetails, quantity) {
         const content = {
             embeds: [DiscordEmbeds.getCraftEmbed(interaction.guildId, craftDetails, quantity)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionEditReply(interaction, content);
@@ -563,7 +563,7 @@ module.exports = {
     sendResearchMessage: async function (interaction, researchDetails) {
         const content = {
             embeds: [DiscordEmbeds.getResearchEmbed(interaction.guildId, researchDetails)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionEditReply(interaction, content);
@@ -572,7 +572,7 @@ module.exports = {
     sendRecycleMessage: async function (interaction, recycleDetails, quantity, recyclerType) {
         const content = {
             embeds: [DiscordEmbeds.getRecycleEmbed(interaction.guildId, recycleDetails, quantity, recyclerType)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionEditReply(interaction, content);
@@ -595,7 +595,7 @@ module.exports = {
     sendItemMessage: async function (interaction, itemName, itemId, type) {
         const content = {
             embeds: [DiscordEmbeds.getItemEmbed(interaction.guildId, itemName, itemId, type)],
-            ephemeral: true
+            flags: [Discord.MessageFlags.Ephemeral]
         }
 
         await Client.client.interactionEditReply(interaction, content);

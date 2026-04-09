@@ -20,7 +20,7 @@
 
 const Discord = require('discord.js');
 
-const Client = require('../../index.ts');
+const Client = require('../../index');
 const TextInput = require('./discordTextInputs.js');
 
 module.exports = {

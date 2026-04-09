@@ -20,7 +20,7 @@
 
 const Discord = require('discord.js');
 
-const Client = require('../../index.ts');
+const Client = require('../../index');
 const Constants = require('../util/constants.js');
 const DiscordTools = require('./discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
@@ -637,14 +637,17 @@ module.exports = {
     },
 
     getActionInfoEmbed: function (color, str, footer = null, ephemeral = true) {
-        return {
+        const result = {
             embeds: [module.exports.getEmbed({
                 color: color === 0 ? Constants.COLOR_DEFAULT : Constants.COLOR_INACTIVE,
                 description: `\`\`\`diff\n${(color === 0) ? '+' : '-'} ${str}\n\`\`\``,
                 footer: footer !== null ? { text: footer } : null
-            })],
-            ephemeral: ephemeral
+            })]
         };
+        if (ephemeral) {
+            result.flags = [Discord.MessageFlags.Ephemeral];
+        }
+        return result;
     },
 
     getServerChangedStateEmbed: function (guildId, serverId, state) {
