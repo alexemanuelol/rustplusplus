@@ -67,6 +67,18 @@ module.exports = {
             });
         }
 
+        const botId = client.user?.id;
+        if (botId) {
+            perms.push({
+                id: botId,
+                allow: [
+                    Discord.PermissionFlagsBits.ViewChannel,
+                    Discord.PermissionFlagsBits.SendMessages,
+                    Discord.PermissionFlagsBits.ReadMessageHistory
+                ]
+            });
+        }
+
         return perms;
     },
 
@@ -86,6 +98,18 @@ module.exports = {
             id: guild.roles.everyone.id,
             deny: [Discord.PermissionFlagsBits.ViewChannel, Discord.PermissionFlagsBits.SendMessages]
         });
+
+        const botId = client.user?.id;
+        if (botId) {
+            perms.push({
+                id: botId,
+                allow: [
+                    Discord.PermissionFlagsBits.ViewChannel,
+                    Discord.PermissionFlagsBits.SendMessages,
+                    Discord.PermissionFlagsBits.ReadMessageHistory
+                ]
+            });
+        }
 
         return perms;
     },

@@ -1,0 +1,130 @@
+{
+    "cs":{
+        "male": null,
+        "female": {
+            "EID": 7,
+            "LID": 18,
+            "VID": 1
+        }
+    },
+    "de":{
+        "male": {
+            "EID": 7,
+            "LID": 3,
+            "VID": 2
+        },
+        "female": {
+            "EID": 4,
+            "LID": 3,
+            "VID": 1
+        }
+    },
+    "en":{
+        "male": {
+            "EID": 3,
+            "LID": 1,
+            "VID": 7
+        },
+        "female": {
+            "EID": 3,
+            "LID": 1,
+            "VID": 6
+        }
+    },
+    "es":{
+        "male": {
+            "EID": 2,
+            "LID": 2,
+            "VID": 7
+        },
+        "female": {
+            "EID": 4,
+            "LID": 2,
+            "VID": 3
+        }
+    },
+    "fr":{
+        "male": {
+            "EID": 7,
+            "LID": 4,
+            "VID": 2
+        },
+        "female": {
+            "EID": 4,
+            "LID": 4,
+            "VID": 4
+        }
+    },
+    "it":{
+        "male": {
+            "EID": 7,
+            "LID": 7,
+            "VID": 2
+        },
+        "female": {
+            "EID": 7,
+            "LID": 7,
+            "VID": 1
+        }
+    },
+    "ko":{
+        "male": {
+            "EID": 3,
+            "LID": 13,
+            "VID": 7
+        },
+        "female": {
+            "EID": 3,
+            "LID": 13,
+            "VID": 10
+        }
+    },
+    "pl":{
+        "male": {
+            "EID": 7,
+            "LID": 14,
+            "VID": 2
+        },
+        "female": {
+            "EID": 7,
+            "LID": 14,
+            "VID": 1
+        }
+    },
+    "ru":{
+        "male": {
+            "EID": 2,
+            "LID": 21,
+            "VID": 2
+        },
+        "female": {
+            "EID": 2,
+            "LID": 21,
+            "VID": 1
+        }
+    },
+    "sv":{
+        "male": {
+            "EID": 7,
+            "LID": 9,
+            "VID": 2
+        },
+        "female": {
+            "EID": 4,
+            "LID": 9,
+            "VID": 1
+        }
+    },
+    "tr":{
+        "male": {
+            "EID": 7,
+            "LID": 16,
+            "VID": 2
+        },
+        "female": {
+            "EID": 7,
+            "LID": 16,
+            "VID": 1
+        }
+    }
+}

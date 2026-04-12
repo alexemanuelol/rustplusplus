@@ -35,7 +35,7 @@ class Info {
         this._seed = info.seed;
         this._salt = info.salt;
 
-        this._correctedMapSize = Map.getCorrectedMapSize(info.mapSize);
+        this._correctedMapSize = info.mapSize;
     }
 
     /* Getters and Setters */
@@ -95,7 +95,7 @@ class Info {
         this.seed = info.seed;
         this.salt = info.salt;
 
-        this.correctedMapSize = Map.getCorrectedMapSize(info.mapSize);
+        this.correctedMapSize = info.mapSize;
     }
 
     getSecondsSinceWipe() { return (new Date() - new Date(this.wipeTime * 1000)) / 1000; }

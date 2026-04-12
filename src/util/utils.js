@@ -21,6 +21,11 @@
 const Fs = require('fs');
 const Path = require('path');
 
+const RustlabsStaticStorage = require('./RustlabsStaticStorage');
+const getStaticFilesStorage = require('./getStaticFilesStorage');
+
+let htmlReservedSymbols = null;
+
 module.exports = {
     parseArgs: function (str) {
         return str.trim().split(/[ ]+/);
@@ -48,8 +53,19 @@ module.exports = {
     },
 
     decodeHtml: function (str) {
-        const htmlReservedSymbols = JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'staticFiles', 'htmlReservedSymbols.json'), 'utf8'));
+        if (htmlReservedSymbols === null) {
+            try {
+                htmlReservedSymbols = getStaticFilesStorage().getDatasetObject('htmlReservedSymbols');
+            }
+            catch (e) {
+                const fallbackJsonPath = Path.join(
+                    RustlabsStaticStorage.getDefaultJsonSourcePath(),
+                    'htmlReservedSymbols.json'
+                );
+                if (!Fs.existsSync(fallbackJsonPath)) throw e;
+                htmlReservedSymbols = JSON.parse(Fs.readFileSync(fallbackJsonPath, 'utf8'));
+            }
+        }
 
         for (const [key, value] of Object.entries(htmlReservedSymbols)) {
             str = str.replace(key, value);

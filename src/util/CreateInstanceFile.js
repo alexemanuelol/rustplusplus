@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2022 Alexander Emanuelsson (alexemanuelol)
+    Copyright (C) 2026 FaiThiX
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,6 +23,7 @@ const Fs = require('fs');
 const Path = require('path');
 
 const InstanceUtils = require('../util/instanceUtils.js');
+const Constants = require('./constants.js');
 
 module.exports = (client, guild) => {
     let instance = null;
@@ -65,6 +67,9 @@ module.exports = (client, guild) => {
             teamChatColors: {},
             blacklist: {
                 discordIds: [],
+                steamIds: []
+            },
+            whitelist: {
                 steamIds: []
             },
             aliases: []
@@ -184,6 +189,10 @@ module.exports = (client, guild) => {
         }
         if (!instance.blacklist.hasOwnProperty('discordIds')) instance.blacklist['discordIds'] = [];
         if (!instance.blacklist.hasOwnProperty('steamIds')) instance.blacklist['steamIds'] = [];
+        if (!instance.hasOwnProperty('whitelist')) instance.whitelist = {
+            steamIds: []
+        }
+        if (!instance.whitelist.hasOwnProperty('steamIds')) instance.whitelist['steamIds'] = [];
         if (!instance.hasOwnProperty('aliases')) instance.aliases = [];
 
         for (const serverId of Object.keys(instance.serverList)) {
@@ -203,6 +212,21 @@ module.exports = (client, guild) => {
     /* Check every serverList for missing keys */
     for (const [serverId, content] of Object.entries(instance.serverList)) {
         if (!content.hasOwnProperty('customCameraGroups')) content.customCameraGroups = {};
+        if (!content.hasOwnProperty('cargoShipEgressTimeMs')) {
+            content.cargoShipEgressTimeMs = Constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS;
+        }
+        if (!content.hasOwnProperty('oilRigLockedCrateUnlockTimeMs')) {
+            content.oilRigLockedCrateUnlockTimeMs = Constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS;
+        }
+        if (!content.hasOwnProperty('deepSeaMinWipeCooldownMs')) {
+            content.deepSeaMinWipeCooldownMs = Constants.DEFAULT_DEEP_SEA_MIN_WIPE_COOLDOWN_MS;
+        }
+        if (!content.hasOwnProperty('deepSeaMaxWipeCooldownMs')) {
+            content.deepSeaMaxWipeCooldownMs = Constants.DEFAULT_DEEP_SEA_MAX_WIPE_COOLDOWN_MS;
+        }
+        if (!content.hasOwnProperty('deepSeaWipeDurationMs')) {
+            content.deepSeaWipeDurationMs = Constants.DEFAULT_DEEP_SEA_WIPE_DURATION_MS;
+        }
     }
 
     client.setInstance(guild.id, instance);

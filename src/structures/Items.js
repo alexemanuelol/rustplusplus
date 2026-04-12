@@ -18,15 +18,13 @@
 
 */
 
-const Fs = require('fs');
-const Path = require('path');
-
+const getStaticFilesStorage = require('../util/getStaticFilesStorage');
 const Utils = require('../util/utils.js');
 
 class Items {
     constructor() {
-        this._items = JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'staticFiles', 'items.json'), 'utf8'));
+        this._storage = getStaticFilesStorage();
+        this._items = this._storage.getDatasetObject('items');
 
         this._itemNames = Object.values(this.items).map(item => item.name);
     }

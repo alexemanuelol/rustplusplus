@@ -28,7 +28,7 @@ module.exports = {
 	getData(client, guildId) {
 		return new Builder.SlashCommandBuilder()
 			.setName('despawn')
-			.setDescription(client.intlGet(guildId, 'commandsStackDesc'))
+			.setDescription(client.intlGet(guildId, 'commandsDespawnDesc'))
 			.addStringOption(option => option
 				.setName('name')
 				.setDescription(client.intlGet(guildId, 'theNameOfTheItem'))

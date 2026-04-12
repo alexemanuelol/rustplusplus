@@ -9,6 +9,7 @@
 - **/credentials** - Setup Credentials.
 - **/decay** - Display the decay time of an item.
 - **/help** - Get help message.
+- **/ingameaccess** - Set in-game command access mode.
 - **/item** - Get the details of an item.
 - **/leader** - Transfer leadership.
 - **/map** - Display the In-Game Map.
@@ -22,6 +23,7 @@
 - **/switch** - Change image of paired Storage Monitors.
 - **/upkeep** - Get the upkeep cost of an item.
 - **/uptime** - Get the current uptime for rustplusplus.
+- **/whitelist** - Whitelist a user for in-game bot commands.
 - **/voice** - Let rustplusplus join voicechat.
 
 ## In-Game Commands

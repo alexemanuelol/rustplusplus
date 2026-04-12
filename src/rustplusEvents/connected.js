@@ -106,6 +106,8 @@ module.exports = {
         rustplus.loadMarkers();
 
         await PollingHandler.pollingHandler(rustplus, client);
+        rustplus.restorePersistentRuntimeState();
+        rustplus.persistMapMarkersRuntimeState();
         rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
         rustplus.isOperational = true;
 

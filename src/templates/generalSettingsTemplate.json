@@ -5,6 +5,7 @@
     "muteInGameBotMessages": false,
     "trademark": "rustplusplus",
     "inGameCommandsEnabled": true,
+    "inGameCommandAccessMode": "blacklist",
     "fcmAlarmNotificationEnabled": false,
     "fcmAlarmNotificationEveryone": false,
     "smartAlarmNotifyInGame": true,

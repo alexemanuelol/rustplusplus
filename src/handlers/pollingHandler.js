@@ -48,6 +48,7 @@ module.exports = {
             rustplus.time = new Time(time.time, rustplus, client);
             rustplus.team = new Team(teamInfo.teamInfo, rustplus);
             rustplus.mapMarkers = new MapMarkers(mapMarkers.mapMarkers, rustplus, client);
+            rustplus.restorePersistentRuntimeState();
         }
 
         await module.exports.handlers(rustplus, client, info, mapMarkers, teamInfo, time);

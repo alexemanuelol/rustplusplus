@@ -77,6 +77,18 @@
         "inGame": false,
         "voice": true
     },
+    "deepSeaDetectedSetting": {
+        "image": "deep_sea_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
+    "deepSeaLeftMapSetting": {
+        "image": "deep_sea_logo.png",
+        "discord": true,
+        "inGame": false,
+        "voice": true
+    },
     "vendingMachineDetectedSetting": {
         "image": "vending_machine_logo.png",
         "discord": true,

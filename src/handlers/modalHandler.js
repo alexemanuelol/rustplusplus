@@ -22,9 +22,11 @@ const Discord = require('discord.js');
 
 const Battlemetrics = require('../structures/Battlemetrics');
 const Constants = require('../util/constants.js');
+const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Keywords = require('../util/keywords.js');
 const Scrape = require('../util/scrape.js');
+const TrackerInputParser = require('../util/trackerInputParser.js');
 
 module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
@@ -47,6 +49,9 @@ module.exports = async (client, interaction) => {
         const server = instance.serverList[ids.serverId];
         const cargoShipEgressTime = parseInt(interaction.fields.getTextInputValue('CargoShipEgressTime'));
         const oilRigCrateUnlockTime = parseInt(interaction.fields.getTextInputValue('OilRigCrateUnlockTime'));
+        const deepSeaMinWipeCooldown = parseInt(interaction.fields.getTextInputValue('DeepSeaMinWipeCooldownTime'));
+        const deepSeaMaxWipeCooldown = parseInt(interaction.fields.getTextInputValue('DeepSeaMaxWipeCooldownTime'));
+        const deepSeaWipeDuration = parseInt(interaction.fields.getTextInputValue('DeepSeaWipeDurationTime'));
 
         if (!server) {
             interaction.deferUpdate();
@@ -59,11 +64,20 @@ module.exports = async (client, interaction) => {
         if (oilRigCrateUnlockTime && ((oilRigCrateUnlockTime * 1000) !== server.oilRigLockedCrateUnlockTimeMs)) {
             server.oilRigLockedCrateUnlockTimeMs = oilRigCrateUnlockTime * 1000;
         }
+        if (deepSeaMinWipeCooldown && ((deepSeaMinWipeCooldown * 1000) !== server.deepSeaMinWipeCooldownMs)) {
+            server.deepSeaMinWipeCooldownMs = deepSeaMinWipeCooldown * 1000;
+        }
+        if (deepSeaMaxWipeCooldown && ((deepSeaMaxWipeCooldown * 1000) !== server.deepSeaMaxWipeCooldownMs)) {
+            server.deepSeaMaxWipeCooldownMs = deepSeaMaxWipeCooldown * 1000;
+        }
+        if (deepSeaWipeDuration && ((deepSeaWipeDuration * 1000) !== server.deepSeaWipeDurationMs)) {
+            server.deepSeaWipeDurationMs = deepSeaWipeDuration * 1000;
+        }
         client.setInstance(guildId, instance);
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {
             id: `${verifyId}`,
-            value: `${server.cargoShipEgressTimeMs}, ${server.oilRigLockedCrateUnlockTimeMs}`
+            value: `${server.cargoShipEgressTimeMs}, ${server.oilRigLockedCrateUnlockTimeMs}, ${server.deepSeaMinWipeCooldownMs}, ${server.deepSeaMaxWipeCooldownMs}, ${server.deepSeaWipeDurationMs}`
         }));
     }
     else if (interaction.customId.startsWith('ServerEdit')) {
@@ -310,18 +324,38 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('TrackerAddPlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
         const tracker = instance.trackers[ids.trackerId];
-        const id = interaction.fields.getTextInputValue('TrackerAddPlayerId');
+        const input = interaction.fields.getTextInputValue('TrackerAddPlayerId');
 
         if (!tracker) {
             interaction.deferUpdate();
             return;
         }
 
-        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
+        const parsedInput = TrackerInputParser.parseTrackerPlayerInput(input);
+        if (!parsedInput.valid) {
+            const str = client.intlGet(interaction.guildId, 'trackerPlayerInputInvalid');
+            await client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            return;
+        }
+
+        let id = parsedInput.value;
+        let isSteamId64 = parsedInput.type === 'steamId';
+        if (parsedInput.type === 'steamVanityUrl') {
+            const resolvedSteamId = await Scrape.scrapeSteamIdFromVanity(client, parsedInput.value);
+            if (!resolvedSteamId) {
+                const str = client.intlGet(interaction.guildId, 'trackerPlayerInputInvalid');
+                await client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+                return;
+            }
+
+            id = resolvedSteamId;
+            isSteamId64 = true;
+        }
+
         const bmInstance = client.battlemetricsInstances[tracker.battlemetricsId];
 
         if ((isSteamId64 && tracker.players.some(e => e.steamId === id)) ||
-            (!isSteamId64 && tracker.players.some(e => e.playerId === id && e.steamId === null))) {
+            (!isSteamId64 && tracker.players.some(e => e.playerId === id))) {
             interaction.deferUpdate();
             return;
         }
@@ -341,7 +375,7 @@ module.exports = async (client, interaction) => {
         }
         else {
             playerId = id;
-            if (bmInstance.players.hasOwnProperty(id)) {
+            if (bmInstance && bmInstance.players.hasOwnProperty(id)) {
                 name = bmInstance.players[id]['name'];
             }
             else {
@@ -366,21 +400,48 @@ module.exports = async (client, interaction) => {
     else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
         const tracker = instance.trackers[ids.trackerId];
-        const id = interaction.fields.getTextInputValue('TrackerRemovePlayerId');
-
-        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
+        const input = interaction.fields.getTextInputValue('TrackerRemovePlayerId');
 
         if (!tracker) {
             interaction.deferUpdate();
             return;
         }
 
-        if (isSteamId64) {
+        const parsedInput = TrackerInputParser.parseTrackerPlayerInput(input);
+        let id = parsedInput.valid ? parsedInput.value : parsedInput.normalizedInput;
+        let isSteamId64 = parsedInput.valid ? parsedInput.type === 'steamId' : false;
+        let useRawRemoval = !parsedInput.valid;
+        if (parsedInput.valid && parsedInput.type === 'steamVanityUrl') {
+            const resolvedSteamId = await Scrape.scrapeSteamIdFromVanity(client, parsedInput.value);
+            if (resolvedSteamId) {
+                id = resolvedSteamId;
+                isSteamId64 = true;
+            }
+            else {
+                useRawRemoval = true;
+                id = parsedInput.normalizedInput;
+                isSteamId64 = false;
+            }
+        }
+
+        const previousLength = tracker.players.length;
+
+        if (useRawRemoval) {
+            tracker.players = tracker.players.filter(e => e.steamId !== id && e.playerId !== id);
+        }
+        else if (isSteamId64) {
             tracker.players = tracker.players.filter(e => e.steamId !== id);
         }
         else {
-            tracker.players = tracker.players.filter(e => e.playerId !== id || e.steamId !== null);
+            tracker.players = tracker.players.filter(e => e.playerId !== id);
         }
+
+        if (useRawRemoval && previousLength === tracker.players.length) {
+            const str = client.intlGet(interaction.guildId, 'trackerPlayerInputInvalid');
+            await client.interactionReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            return;
+        }
+
         client.setInstance(interaction.guildId, instance);
 
         client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'modalValueChange', {

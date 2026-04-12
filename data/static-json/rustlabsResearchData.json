@@ -1,0 +1,2702 @@
+{
+  "3222790": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "14241751": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 435
+    }
+  },
+  "15388698": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "21402876": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "51984655": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 690
+    }
+  },
+  "60528587": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 165
+    }
+  },
+  "95950017": {
+    "researchTable": 60,
+    "workbench": null
+  },
+  "99588025": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 270
+    }
+  },
+  "140006625": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 300
+    }
+  },
+  "143803535": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 450
+    }
+  },
+  "170758448": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 240
+    }
+  },
+  "171931394": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "184516676": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 60
+    }
+  },
+  "190184021": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 60
+    }
+  },
+  "196700171": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "198438816": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "200773292": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "210787554": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 90
+    }
+  },
+  "223891266": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 30
+    }
+  },
+  "237239288": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 105
+    }
+  },
+  "254522515": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 120
+    }
+  },
+  "268565518": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 360
+    }
+  },
+  "304481038": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 360
+    }
+  },
+  "352499047": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 465
+    }
+  },
+  "405905095": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 240
+    }
+  },
+  "418081930": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "442289265": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 990
+    }
+  },
+  "442886268": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 120,
+      "totalScrap": 1110
+    }
+  },
+  "443432036": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 150
+    }
+  },
+  "479143914": {
+    "researchTable": 60,
+    "workbench": null
+  },
+  "492357192": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "528668503": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 465
+    }
+  },
+  "553270375": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 375
+    }
+  },
+  "559147458": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "567235583": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 960
+    }
+  },
+  "588596902": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "593465182": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 60
+    }
+  },
+  "596469572": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "602628465": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 150
+    }
+  },
+  "602741290": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "605467368": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 300
+    }
+  },
+  "610102428": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 255
+    }
+  },
+  "613961768": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "625599716": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 210
+    }
+  },
+  "649912614": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 420
+    }
+  },
+  "656371026": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "656371027": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 210
+    }
+  },
+  "656371028": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 195
+    }
+  },
+  "665332906": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "671063303": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "671706427": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 60
+    }
+  },
+  "742745918": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 270
+    }
+  },
+  "762289806": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "785728077": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 390
+    }
+  },
+  "794356786": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "795236088": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "795371088": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 300
+    }
+  },
+  "803222026": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "818877484": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 420
+    }
+  },
+  "829641693": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 255
+    }
+  },
+  "832133926": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "833533164": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "850280505": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 45
+    }
+  },
+  "866889860": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "884424049": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 225
+    }
+  },
+  "888415708": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "895374329": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 240
+    }
+  },
+  "926800282": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 210
+    }
+  },
+  "935692442": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 60
+    }
+  },
+  "936496778": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 165
+    }
+  },
+  "952603248": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 435
+    }
+  },
+  "962186730": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 240
+    }
+  },
+  "963906841": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "969768382": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 195
+    }
+  },
+  "980333378": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "988652725": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "1072924620": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "1079279582": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "1099314009": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1104520648": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 450
+    }
+  },
+  "1110385766": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 540
+    }
+  },
+  "1142993169": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "1145722690": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 630
+    }
+  },
+  "1149964039": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 240
+    }
+  },
+  "1153652756": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 120
+    }
+  },
+  "1158340331": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 210
+    }
+  },
+  "1158340332": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "1158340334": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 195
+    }
+  },
+  "1159991980": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1160881421": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1168856825": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "1168916338": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "1171735914": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 240
+    }
+  },
+  "1174484438": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "1177596584": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 435
+    }
+  },
+  "1181207482": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 195
+    }
+  },
+  "1186655046": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 300
+    }
+  },
+  "1199391518": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "1221063409": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 300
+    }
+  },
+  "1234878710": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 135
+    }
+  },
+  "1234880403": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "1248356124": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 720
+    }
+  },
+  "1259919256": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "1263920163": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 840
+    }
+  },
+  "1266491000": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 60
+    }
+  },
+  "1293102274": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "1296788329": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 1110
+    }
+  },
+  "1318558775": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 420
+    }
+  },
+  "1326180354": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "1330084809": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 195
+    }
+  },
+  "1353298668": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 180
+    }
+  },
+  "1366282552": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1371909803": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 285
+    }
+  },
+  "1373240771": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "1373971859": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 510
+    }
+  },
+  "1376065505": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 180
+    }
+  },
+  "1382263453": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 165
+    }
+  },
+  "1401987718": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "1413014235": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 210
+    }
+  },
+  "1414245162": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1424075905": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 15
+    }
+  },
+  "1428574144": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 300
+    }
+  },
+  "1430085198": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 330
+    }
+  },
+  "1443579727": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1451568081": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "1456143403": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 420
+    }
+  },
+  "1478091698": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 750
+    }
+  },
+  "1491189398": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 45
+    }
+  },
+  "1516985844": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1525520776": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1534542921": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 45
+    }
+  },
+  "1538126328": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 285
+    }
+  },
+  "1540934679": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1545779598": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 780
+    }
+  },
+  "1556365900": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 450
+    }
+  },
+  "1559779253": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 180
+    }
+  },
+  "1569882109": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1581210395": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 30
+    }
+  },
+  "1588298435": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 900
+    }
+  },
+  "1588492232": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 330
+    }
+  },
+  "1602646136": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1604837581": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1608640313": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 15
+    }
+  },
+  "1619039771": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 135
+    }
+  },
+  "1638322904": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 1170
+    }
+  },
+  "1655650836": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 225
+    }
+  },
+  "1658229558": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1659447559": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1675639563": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 30
+    }
+  },
+  "1680793490": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1696050067": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 120
+    }
+  },
+  "1711033574": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1712070256": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 240
+    }
+  },
+  "1714496074": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1714509152": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 570
+    }
+  },
+  "1719587208": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 1050
+    }
+  },
+  "1722154847": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1746956556": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1751045826": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "1796682209": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 810
+    }
+  },
+  "1814288539": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1831249347": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 660
+    }
+  },
+  "1840822026": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 450
+    }
+  },
+  "1849887541": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 195
+    }
+  },
+  "1850456855": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 135
+    }
+  },
+  "1874610722": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 300
+    }
+  },
+  "1877339384": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1882709339": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "1883981798": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 195
+    }
+  },
+  "1883981800": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "1883981801": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 210
+    }
+  },
+  "1946219319": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1948067030": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 300
+    }
+  },
+  "1950721418": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 75
+    }
+  },
+  "1951603367": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 15
+    }
+  },
+  "1954597876": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 690
+    }
+  },
+  "1965232394": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1975934948": {
+    "researchTable": 120,
+    "workbench": null
+  },
+  "1983621560": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 195
+    }
+  },
+  "1989785143": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 195
+    }
+  },
+  "1992974553": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "1993693904": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "2005491391": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 990
+    }
+  },
+  "2023888403": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 165
+    }
+  },
+  "2036395619": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "2040726127": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 375
+    }
+  },
+  "2041899972": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 270
+    }
+  },
+  "2047789913": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 210
+    }
+  },
+  "2083256995": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 480
+    }
+  },
+  "2087678962": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 120
+    }
+  },
+  "2090395347": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 45
+    }
+  },
+  "2100007442": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 105
+    }
+  },
+  "2114754781": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1685290200": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 240
+    }
+  },
+  "-1036635990": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 300
+    }
+  },
+  "-727717969": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 270
+    }
+  },
+  "-1211166256": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 750
+    }
+  },
+  "-2124352573": {
+    "researchTable": 15,
+    "workbench": null
+  },
+  "-1615281216": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 360
+    }
+  },
+  "-903796529": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 150
+    }
+  },
+  "-2139580305": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 120,
+      "totalScrap": 495
+    }
+  },
+  "-2072273936": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-187304968": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 540
+    }
+  },
+  "-1104881824": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "-1273339005": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 105
+    }
+  },
+  "-1262185308": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 405
+    }
+  },
+  "-690968985": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 105
+    }
+  },
+  "-851288382": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "-321247698": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 120,
+      "totalScrap": 210
+    }
+  },
+  "-1903165497": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1549739227": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "-761829530": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1778897469": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 120
+    }
+  },
+  "-1040518150": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 420
+    }
+  },
+  "-34498533": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 315
+    }
+  },
+  "-411735114": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 300
+    }
+  },
+  "-1117626326": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 120
+    }
+  },
+  "-2018158920": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 45
+    }
+  },
+  "-1501451746": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 180
+    }
+  },
+  "-803263829": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 120
+    }
+  },
+  "-1488398114": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1588628467": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 270
+    }
+  },
+  "-1950721390": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 15,
+      "totalScrap": 165
+    }
+  },
+  "-216999575": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 150
+    }
+  },
+  "-1056824343": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 180
+    }
+  },
+  "-502177121": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 120
+    }
+  },
+  "-765183617": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 405
+    }
+  },
+  "-1519126340": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 210
+    }
+  },
+  "-1196547867": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 225
+    }
+  },
+  "-784870360": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 105
+    }
+  },
+  "-1448252298": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "-1673693549": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "-75944661": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1321651331": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 480
+    }
+  },
+  "-592016202": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 600
+    }
+  },
+  "-484006286": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 690
+    }
+  },
+  "-1215753368": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 690
+    }
+  },
+  "-936921910": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 480
+    }
+  },
+  "-939424778": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "-196667575": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1880231361": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 180
+    }
+  },
+  "-265292885": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 120
+    }
+  },
+  "-1166712463": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "-1999722522": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-148794216": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 240
+    }
+  },
+  "-1767794021": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 1050
+    }
+  },
+  "-265876753": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-19318653": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 600
+    }
+  },
+  "-839576748": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 240
+    }
+  },
+  "-1252059217": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 60
+    }
+  },
+  "-1507239837": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 150
+    }
+  },
+  "-1102429027": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 195
+    }
+  },
+  "-1778159885": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 195
+    }
+  },
+  "-1773144852": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-92315244": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 810
+    }
+  },
+  "-691113464": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 120,
+      "totalScrap": 690
+    }
+  },
+  "-967648160": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 120,
+      "totalScrap": 570
+    }
+  },
+  "-335089230": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 330
+    }
+  },
+  "-1802083073": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "-1023065463": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1841918730": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 1170
+    }
+  },
+  "-1214542497": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 660
+    }
+  },
+  "-1663759755": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 360
+    }
+  },
+  "-218009552": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 1050
+    }
+  },
+  "-1989600732": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 60
+    }
+  },
+  "-143132326": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 165
+    }
+  },
+  "-1691396643": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 690
+    }
+  },
+  "-44876289": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "-2012470695": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 45
+    }
+  },
+  "-963819285": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "-1987565603": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 600
+    }
+  },
+  "-1163532624": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "-850982208": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1693832478": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 240
+    }
+  },
+  "-1992717673": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 390
+    }
+  },
+  "-1100168350": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 180
+    }
+  },
+  "-798293154": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 150
+    }
+  },
+  "-110921842": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 330
+    }
+  },
+  "-1469578201": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 30
+    }
+  },
+  "-946369541": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-89874794": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 195
+    }
+  },
+  "-1966748496": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 285
+    }
+  },
+  "-1137865085": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-586784898": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 30
+    }
+  },
+  "-493159321": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 210
+    }
+  },
+  "-1819233322": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-746647361": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 255
+    }
+  },
+  "-194953424": {
+    "researchTable": 120,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 120,
+      "totalScrap": 540
+    }
+  },
+  "-1199897169": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 15,
+      "totalScrap": 165
+    }
+  },
+  "-148229307": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1021495308": {
+    "researchTable": 60,
+    "workbench": null
+  },
+  "-1199897172": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 15,
+      "totalScrap": 180
+    }
+  },
+  "-819720157": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 225
+    }
+  },
+  "-1539025626": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 60
+    }
+  },
+  "-482348853": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 255
+    }
+  },
+  "-759279626": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 600
+    }
+  },
+  "-1405508498": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 750
+    }
+  },
+  "-2097376851": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1518883088": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 255
+    }
+  },
+  "-781866273": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 15,
+      "totalScrap": 525
+    }
+  },
+  "-1286302544": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 120
+    }
+  },
+  "-1302129395": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 120
+    }
+  },
+  "-1127003365": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 600
+    }
+  },
+  "-357442017": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 600
+    }
+  },
+  "-952411326": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 255
+    }
+  },
+  "-365097295": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 210
+    }
+  },
+  "-2049214035": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 105
+    }
+  },
+  "-956706906": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 180
+    }
+  },
+  "-1429456799": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 210
+    }
+  },
+  "-892718768": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 105
+    }
+  },
+  "-1827561369": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 870
+    }
+  },
+  "-594596146": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "-1736356576": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 135
+    }
+  },
+  "-1044468317": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "-566907190": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 210
+    }
+  },
+  "-699558439": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 15,
+      "totalScrap": 105
+    }
+  },
+  "-2002277461": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 150
+    }
+  },
+  "-742865266": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 780
+    }
+  },
+  "-458565393": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 90
+    }
+  },
+  "-1985799200": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "-262590403": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 90
+    }
+  },
+  "-1978999529": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 315
+    }
+  },
+  "-1506397857": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 30
+    }
+  },
+  "-1780802565": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 150
+    }
+  },
+  "-384243979": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 1140
+    }
+  },
+  "-559599960": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 105
+    }
+  },
+  "-1878475007": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 510
+    }
+  },
+  "-948291630": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 165
+    }
+  },
+  "-904863145": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 930
+    }
+  },
+  "-2067472972": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-2025184684": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 60
+    }
+  },
+  "-1695367501": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "-1290278434": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 345
+    }
+  },
+  "-855748505": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-430416124": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-348232115": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 120
+    }
+  },
+  "-1754948969": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-2115299615": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 15,
+      "totalScrap": 195
+    }
+  },
+  "-1293296287": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 450
+    }
+  },
+  "-158718378": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 270
+    }
+  },
+  "-692338819": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 60
+    }
+  },
+  "-1850297170": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-132247350": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "-1138208076": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-695978112": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 240
+    }
+  },
+  "-582782051": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 210
+    }
+  },
+  "-48090175": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "-1659598760": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 405
+    }
+  },
+  "-1517740219": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "-1800345240": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "-1100422738": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 180
+    }
+  },
+  "-563624462": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "-781014061": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 105
+    }
+  },
+  "-1866909924": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 225
+    }
+  },
+  "-1535621066": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 120
+    }
+  },
+  "-1583967946": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1049172752": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 240
+    }
+  },
+  "-1614955425": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 210
+    }
+  },
+  "-626174997": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 300
+    }
+  },
+  "-1758372725": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 60,
+      "totalScrap": 810
+    }
+  },
+  "-97956382": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1671551935": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "-41896755",
+      "scrap": 30,
+      "totalScrap": 1200
+    }
+  },
+  "-280812482": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 45
+    }
+  },
+  "-1478445584": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 75
+    }
+  },
+  "-463122489": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 210
+    }
+  },
+  "-1863559151": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 15,
+      "totalScrap": 90
+    }
+  },
+  "-1284169891": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 30,
+      "totalScrap": 240
+    }
+  },
+  "-1367281941": {
+    "researchTable": 30,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 30,
+      "totalScrap": 345
+    }
+  },
+  "-132516482": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "-1607980696",
+      "scrap": 60,
+      "totalScrap": 180
+    }
+  },
+  "-1819763926": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "210787554",
+      "scrap": 60,
+      "totalScrap": 345
+    }
+  },
+  "-1478212975": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-459159118": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-2094954543": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-274709858": {
+    "researchTable": 30,
+    "workbench": null
+  },
+  "-1336109173": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-1023374709": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 195
+    }
+  },
+  "-180129657": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-593892112": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 150
+    }
+  },
+  "-1234735557": {
+    "researchTable": 10,
+    "workbench": null
+  },
+  "-92759291": {
+    "researchTable": 15,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 15,
+      "totalScrap": 180
+    }
+  },
+  "-316250604": {
+    "researchTable": 60,
+    "workbench": {
+      "type": "1524187186",
+      "scrap": 60,
+      "totalScrap": 120
+    }
+  },
+  "-1183726687": {
+    "researchTable": 10,
+    "workbench": null
+  }
+}

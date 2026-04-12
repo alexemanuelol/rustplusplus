@@ -1,5 +1,6 @@
-# ---- Stage 1: Install dependencies ----
-FROM node:22-slim AS deps
+FROM node:22-bookworm-slim
+
+RUN apt-get update && apt-get install -y graphicsmagick && apt-get clean
 
 WORKDIR /app
 

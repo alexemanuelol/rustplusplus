@@ -17,6 +17,7 @@ Slash Command | Description
 [**/credentials**](commands.md#credentials) | Set/Clear the Credentials for the user account.
 [**/decay**](commands.md#decay) | Display the decay time of an item.
 [**/help**](commands.md#help) | Display help message.
+[**/ingameaccess**](commands.md#ingameaccess) | Set in-game command access mode.
 [**/item**](commands.md#item) | Get the details of an item.
 [**/leader**](commands.md#leader) | Give or take the leadership from/to a team member.
 [**/map**](commands.md#map) | Get the currently connected server map image.
@@ -30,6 +31,7 @@ Slash Command | Description
 [**/switch**](commands.md#switch) | Operations on Smart Switches.
 [**/upkeep**](commands.md#upkeep) | Get the upkeep cost of an item.
 [**/uptime**](commands.md#uptime) | Display uptime of the bot and server.
+[**/whitelist**](commands.md#whitelist) | Whitelist a user for in-game bot commands.
 [**/voice**](commands.md#voice) | Operations on Voice Feature.
 
 
@@ -77,6 +79,17 @@ Subcommand | Options | Description | Required
 `show` | &nbsp; | Show blacklisted users. | &nbsp;
 
 ![Discord Slash Command blacklist Image](images/slash_commands/blacklist.png)
+
+
+## **/ingameaccess**
+
+> **Set in-game command access mode.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+`mode` | &nbsp; | Set access mode for in-game commands. | &nbsp;
+&nbsp; | `mode` | Select blacklist or whitelist mode. | `True`
+`show` | &nbsp; | Show current in-game command access mode. | &nbsp;
 
 
 ## **/cctv**
@@ -328,6 +341,18 @@ Subcommand | Options | Description | Required
 `server` | &nbsp; | Display uptime of server. | &nbsp;
 
 ![Discord Slash Command uptime Image](images/slash_commands/uptime.png)
+
+## **/whitelist**
+
+> **Whitelist a user for in-game bot commands.**
+
+Subcommand | Options | Description | Required
+---------- | ------- | ----------- | --------
+`add` | &nbsp; | Add user to the whitelist. | &nbsp;
+&nbsp; | `steamid` | The steamid of the user. | `True`
+`remove` | &nbsp; | Remove user from the whitelist. | &nbsp;
+&nbsp; | `steamid` | The steamid of the user. | `True`
+`show` | &nbsp; | Show whitelisted users. | &nbsp;
 
 ## **/voice**
 

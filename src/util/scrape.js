@@ -69,4 +69,27 @@ module.exports = {
 
         return null;
     },
+
+    scrapeSteamIdFromVanity: async function (client, vanity) {
+        if (typeof vanity !== 'string' || vanity.trim() === '') return null;
+
+        const url = `https://steamcommunity.com/id/${encodeURIComponent(vanity.trim())}/?xml=1`;
+        const response = await module.exports.scrape(url);
+
+        if (response.status !== 200 || typeof response.data !== 'string') {
+            return null;
+        }
+
+        const steamId64Match = response.data.match(/<steamID64>(\d{17})<\/steamID64>/i);
+        if (steamId64Match) {
+            return steamId64Match[1];
+        }
+
+        const profileLinkMatch = response.data.match(/steamcommunity\.com\/profiles\/(\d{17})/i);
+        if (profileLinkMatch) {
+            return profileLinkMatch[1];
+        }
+
+        return null;
+    },
 }

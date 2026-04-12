@@ -1,19 +1,13 @@
 services:
-    rpp:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: rpp
-        restart: unless-stopped
-        volumes:
-            - ./credentials:/app/credentials
-            - ./instances:/app/instances
-            - ./logs:/app/logs
-            - ./maps:/app/maps
-        env_file:
-            - .env
-        logging:
-            driver: json-file
-            options:
-                max-size: "10m"
-                max-file: "5"
+  rustplusbot:
+    image: ghcr.io/faithix/rustplusplus:master
+    container_name: rustplusbot
+    environment:
+      - RPP_DISCORD_TOKEN=TOKEN
+      - RPP_DISCORD_CLIENT_ID=CLIENT_ID
+    volumes:
+      - ./logs:/app/logs
+      - ./instances:/app/instances
+      - ./credentials:/app/credentials
+      - ./maps:/app/maps
+    restart: unless-stopped

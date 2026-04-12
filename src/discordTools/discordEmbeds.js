@@ -765,6 +765,7 @@ module.exports = {
         const largeOilRigFieldName = Client.client.intlGet(guildId, 'largeOilRig');
         const chinook47FieldName = Client.client.intlGet(guildId, 'chinook47');
         const travelingVendorFieldName = Client.client.intlGet(guildId, 'travelingVendor');
+        const deepSeaFieldName = Client.client.intlGet(guildId, 'deepSea');
 
         const cargoShipMessage = rustplus.getCommandCargo(true);
         const patrolHelicopterMessage = rustplus.getCommandHeli(true);
@@ -772,6 +773,7 @@ module.exports = {
         const largeOilMessage = rustplus.getCommandLarge(true);
         const ch47Message = rustplus.getCommandChinook(true);
         const travelingVendorMessage = rustplus.getCommandTravelingVendor(true);
+        const deepSeaMessage = rustplus.getCommandDeepSea(true);
 
         return module.exports.getEmbed({
             title: Client.client.intlGet(guildId, 'eventInfo'),
@@ -785,7 +787,9 @@ module.exports = {
                 { name: smallOilRigFieldName, value: `\`${smallOilMessage}\``, inline: true },
                 { name: largeOilRigFieldName, value: `\`${largeOilMessage}\``, inline: true },
                 { name: chinook47FieldName, value: `\`${ch47Message}\``, inline: true },
-                { name: travelingVendorFieldName, value: `\`${travelingVendorMessage}\``, inline: true }],
+                { name: travelingVendorFieldName, value: `\`${travelingVendorMessage}\``, inline: true },
+                { name: deepSeaFieldName, value: `\`${deepSeaMessage}\``, inline: true }
+            ],
             timestamp: true
         });
     },
@@ -1044,7 +1048,7 @@ module.exports = {
     },
 
     getHelpEmbed: function (guildId) {
-        const repository = 'https://github.com/alexemanuelol/rustplusplus';
+        const repository = 'https://github.com/faithix/rustplusplus';
         const credentials = `${repository}/blob/master/docs/credentials.md`;
         const pairServer = `${repository}/blob/master/docs/pair_and_connect_to_server.md`;
         const commands = `${repository}/blob/master/docs/commands.md`;

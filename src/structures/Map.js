@@ -361,6 +361,8 @@ class Map {
                 else {
                     /* Compensate for the text placement */
                     if (monument.token === 'DungeonBase') continue;
+                    if (typeof monument.token === 'string' &&
+                        monument.token.replace(/\\/g, '/').toLowerCase().includes('assets/bundled')) continue;
 
                     let name = (this.monumentInfo.hasOwnProperty(monument.token)) ?
                         this.monumentInfo[monument.token].map : monument.token;

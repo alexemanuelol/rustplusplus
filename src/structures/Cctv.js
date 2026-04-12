@@ -19,13 +19,12 @@
 
 */
 
-const Fs = require('fs');
-const Path = require('path');
+const getStaticFilesStorage = require('../util/getStaticFilesStorage');
 
 class Cctv {
     constructor() {
-        this._cctvs = JSON.parse(Fs.readFileSync(
-            Path.join(__dirname, '..', 'staticFiles', 'cctv.json'), 'utf8'));
+        this._storage = getStaticFilesStorage();
+        this._cctvs = this._storage.getDatasetObject('cctv');
     }
 
     /* Getters and Setters */

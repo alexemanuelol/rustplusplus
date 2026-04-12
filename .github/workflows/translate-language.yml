@@ -1,0 +1,59 @@
+name: Translate language files
+
+on:
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: translate-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  translate-language:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run translation script
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+        run: |
+          python src/external/translate_language_json.py \
+            --source src/languages/en.json \
+            --output-dir src/languages \
+            --provider deepl
+
+      - name: Commit translation changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add src/languages/*.json
+
+          if git diff --cached --quiet; then
+            echo "No translation changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore(i18n): update translations"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
