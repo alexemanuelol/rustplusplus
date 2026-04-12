@@ -340,6 +340,24 @@ module.exports = async (client, interaction) => {
                 instance.generalSettings.displayInformationBattlemetricsAllOnlinePlayers)]
         });
     }
+    else if (interaction.customId === 'DisplayInformationBattlemetricsUpcomingWipes') {
+        instance.generalSettings.displayInformationBattlemetricsUpcomingWipes =
+            !instance.generalSettings.displayInformationBattlemetricsUpcomingWipes;
+        client.setInstance(guildId, instance);
+
+        if (rustplus) rustplus.generalSettings.displayInformationBattlemetricsUpcomingWipes =
+            instance.generalSettings.displayInformationBattlemetricsUpcomingWipes;
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `${instance.generalSettings.displayInformationBattlemetricsUpcomingWipes}`
+        }));
+
+        await client.interactionUpdate(interaction, {
+            components: [DiscordButtons.getDisplayInformationBattlemetricsUpcomingWipesButton(guildId,
+                instance.generalSettings.displayInformationBattlemetricsUpcomingWipes)]
+        });
+    }
     else if (interaction.customId === 'BattlemetricsServerNameChanges') {
         instance.generalSettings.battlemetricsServerNameChanges =
             !instance.generalSettings.battlemetricsServerNameChanges;
