@@ -1408,4 +1408,119 @@ module.exports = {
 
         return embed;
     },
+
+    getTrackerActivityReportEmbed: function (guildId, trackerId) {
+        const instance = Client.client.getInstance(guildId);
+        const tracker = instance.trackers[trackerId];
+        const ActivityTracker = require('../util/activityTracker.js');
+
+        let description = `__**Tracker:**__ ${tracker.name}\n`;
+        description += `__**Server:**__ ${tracker.title}\n\n`;
+
+        const fields = [];
+        let totalCharacters = description.length + 100; /* Reserve space for title/footer */
+
+        for (const player of tracker.players) {
+            const report = ActivityTracker.generateReport(player);
+            const statusEmoji = report.isOnline ? Constants.ONLINE_EMOJI : Constants.OFFLINE_EMOJI;
+
+            /* Build per-player stats */
+            let playerStats = `${statusEmoji} **${player.name}**\n`;
+
+            if (report.totalEvents === 0) {
+                playerStats += `> No activity data recorded yet.\n\n`;
+            } else {
+                /* 24h stats */
+                const online24h = ActivityTracker.formatMs(report.stats24h.totalOnlineMs);
+                const pct24h = ActivityTracker.formatPercentage(
+                    report.stats24h.totalOnlineMs,
+                    report.stats24h.totalOnlineMs + report.stats24h.totalOfflineMs
+                );
+
+                /* 7d stats */
+                const online7d = ActivityTracker.formatMs(report.stats7d.totalOnlineMs);
+                const pct7d = ActivityTracker.formatPercentage(
+                    report.stats7d.totalOnlineMs,
+                    report.stats7d.totalOnlineMs + report.stats7d.totalOfflineMs
+                );
+
+                /* 30d stats */
+                const online30d = ActivityTracker.formatMs(report.stats30d.totalOnlineMs);
+
+                const formatTime = (iso) => iso ? `<t:${Math.floor(new Date(iso).getTime() / 1000)}:f> (<t:${Math.floor(new Date(iso).getTime() / 1000)}:R>)` : 'Never';
+
+                playerStats += `> ⏱ **24h:** ${online24h} (${pct24h})\n`;
+                playerStats += `> 📅 **7d:** ${online7d} (${pct7d})\n`;
+                playerStats += `> 📆 **30d:** ${online30d}\n`;
+                playerStats += `> 🔄 **Sessions (7d):** ${report.stats7d.sessions}\n`;
+                playerStats += `> 🔗 **Last connected:** ${formatTime(report.lastConnected)}\n`;
+                playerStats += `> 🛑 **Last disconnected:** ${formatTime(report.lastDisconnected)}\n`;
+                playerStats += `> 👁 **Last seen:** ${formatTime(report.lastSeen)}\n`;
+                playerStats += `> 💤 **Likely sleep:** ${report.sleepWindow}\n`;
+                playerStats += `> 🎮 **Likely playing:** ${report.playWindow}\n`;
+
+                /* Peak hours */
+                if (report.peakHours.length > 0) {
+                    const peakStr = report.peakHours
+                        .map(h => `${h.hour.toString().padStart(2, '0')}:00`)
+                        .join(', ');
+                    playerStats += `> 🔥 **Peak hours:** ${peakStr}\n`;
+                }
+
+                playerStats += '\n';
+            }
+
+            /* Check embed size limits */
+            if (totalCharacters + playerStats.length > Constants.EMBED_MAX_TOTAL_CHARACTERS - 200) {
+                break;
+            }
+
+            totalCharacters += playerStats.length;
+            description += playerStats;
+        }
+
+        /* Build the hourly chart for the first player that has data, as an overview */
+        let chartField = null;
+        for (const player of tracker.players) {
+            const report = ActivityTracker.generateReport(player);
+            if (report.totalEvents >= 2) {
+                const chartStr = ActivityTracker.formatHourlyChart(report.hourlyToday);
+
+                /* Split chart into two columns if needed */
+                const lines = chartStr.split('\n').filter(l => l.length > 0);
+                const firstHalf = lines.slice(0, 12).join('\n');
+                const secondHalf = lines.slice(12).join('\n');
+
+                if (firstHalf.length <= Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS &&
+                    secondHalf.length <= Constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                    fields.push({
+                        name: `📊 Today's Hourly Activity: ${player.name}`,
+                        value: firstHalf || '\u200B',
+                        inline: true
+                    });
+                    fields.push({
+                        name: '\u200B',
+                        value: secondHalf || '\u200B',
+                        inline: true
+                    });
+                }
+                break; /* Only show chart for first player with data */
+            }
+        }
+
+        const embed = module.exports.getEmbed({
+            title: `📋 Activity Report`,
+            color: Constants.COLOR_DEFAULT,
+            description: description,
+            thumbnail: `${tracker.img}`,
+            footer: { text: `${tracker.title} | Today's activity window | ${tracker.players.length} player(s)` },
+            timestamp: true
+        });
+
+        if (fields.length > 0) {
+            embed.addFields(...fields);
+        }
+
+        return embed;
+    },
 }

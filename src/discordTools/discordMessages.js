@@ -27,6 +27,8 @@ const DiscordButtons = require('./discordButtons.js');
 const DiscordEmbeds = require('./discordEmbeds.js');
 const DiscordSelectMenus = require('./discordSelectMenus.js');
 const DiscordTools = require('./discordTools.js');
+const SetupGuildCategory = require('./SetupGuildCategory.js');
+const SetupGuildChannels = require('./SetupGuildChannels.js');
 const Scrape = require('../util/scrape.js');
 
 module.exports = {
@@ -43,7 +45,28 @@ module.exports = {
             return await Client.client.messageEdit(message, content);
         }
         else {
-            const channel = DiscordTools.getTextChannelById(guildId, channelId);
+            let channel = DiscordTools.getTextChannelById(guildId, channelId);
+
+            if (!channel) {
+                const guild = DiscordTools.getGuild(guildId);
+                if (guild) {
+                    const instance = Client.client.getInstance(guildId);
+                    let channelKey = null;
+                    for (const [key, value] of Object.entries(instance.channelId)) {
+                        if (value === channelId) {
+                            channelKey = key;
+                            break;
+                        }
+                    }
+
+                    const category = await SetupGuildCategory(Client.client, guild);
+                    await SetupGuildChannels(Client.client, guild, category);
+
+                    const refreshedInstance = Client.client.getInstance(guildId);
+                    const refreshedChannelId = channelKey ? refreshedInstance.channelId[channelKey] : channelId;
+                    channel = DiscordTools.getTextChannelById(guildId, refreshedChannelId);
+                }
+            }
 
             if (!channel) {
                 Client.client.log(Client.client.intlGet(null, 'errorCap'),
@@ -599,5 +622,43 @@ module.exports = {
         }
 
         await Client.client.interactionEditReply(interaction, content);
+    },
+
+    sendTrackerActivityReportMessage: async function (guildId, trackerId, interaction = null) {
+        if (interaction && !interaction.deferred && !interaction.replied) {
+            try {
+                // Use flags: [64] (EPHEMERAL) to avoid deprecation warning
+                await interaction.deferReply({ flags: [64] });
+            } catch (e) {
+                if (e.code === 40060) return; // Interaction already acknowledged (e.g. duplicate click)
+                console.error('Failed to defer interaction:', e);
+            }
+        }
+
+        const instance = Client.client.getInstance(guildId);
+        const reportEmbed = DiscordEmbeds.getTrackerActivityReportEmbed(guildId, trackerId);
+
+        const content = {
+            embeds: [reportEmbed]
+        }
+
+        if (interaction) {
+            if (interaction.deferred || interaction.replied) {
+                try {
+                    await interaction.editReply(content);
+                } catch (e) {}
+            } else {
+                content.flags = [64];
+                try {
+                    await interaction.reply(content);
+                } catch (e) {
+                    if (e.code === 40060) {
+                        try { await interaction.followUp(content); } catch (err) {}
+                    }
+                }
+            }
+        } else {
+            await module.exports.sendMessage(guildId, content, null, instance.channelId.trackers);
+        }
     },
 }

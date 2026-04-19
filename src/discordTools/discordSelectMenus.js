@@ -319,4 +319,83 @@ module.exports = {
                     }]
             }));
     },
+
+    getTrackerAddPlayerSelectMenu: function (guildId, battlemetricsId, trackerId) {
+        const identifier = JSON.stringify({ "trackerId": trackerId });
+        const bmInstance = Client.client.battlemetricsInstances[battlemetricsId];
+        
+        let options = [];
+        if (bmInstance) {
+            const players = bmInstance.getOnlinePlayerIdsOrderedByTime();
+            for (const playerId of players) {
+                if (options.length >= 25) break;
+                const player = bmInstance.players[playerId];
+                const name = player.name ? player.name.substring(0, 50) : playerId;
+                options.push({
+                    label: name.length > 0 ? name : 'Unknown',
+                    description: `ID: ${player.id}`,
+                    value: player.id.toString()
+                });
+            }
+            if (options.length < 25) {
+                const offlinePlayers = bmInstance.getOfflinePlayerIdsOrderedByLeastTimeSinceOnline();
+                for (const playerId of offlinePlayers) {
+                    if (options.length >= 25) break;
+                    const player = bmInstance.players[playerId];
+                    const name = player.name ? player.name.substring(0, 50) : playerId;
+                    options.push({
+                        label: name.length > 0 ? name : 'Unknown',
+                        description: `ID: ${player.id} (Offline)`,
+                        value: player.id.toString()
+                    });
+                }
+            }
+        }
+        
+        if (options.length === 0) {
+            return null;
+        }
+
+        options.sort((a, b) => a.label.localeCompare(b.label));
+
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getSelectMenu({
+                customId: `TrackerAddPlayerBMPlayer${identifier}`,
+                placeholder: 'Select a player to add...',
+                options: options
+            }));
+    },
+
+    getTrackerRemovePlayerSelectMenu: function (guildId, trackerId) {
+        const identifier = JSON.stringify({ "trackerId": trackerId });
+        const instance = Client.client.getInstance(guildId);
+        const tracker = instance.trackers[trackerId];
+        
+        let options = [];
+        if (tracker && tracker.players.length > 0) {
+            for (const player of tracker.players) {
+                if (options.length >= 25) break; 
+                const name = player.name ? player.name.substring(0, 50) : (player.playerId || player.steamId || 'Unknown');
+                const id = player.steamId ? player.steamId : player.playerId;
+                options.push({
+                    label: name.length > 0 ? name : 'Unknown',
+                    description: `ID: ${id}`,
+                    value: id.toString()
+                });
+            }
+        }
+        
+        if (options.length === 0) {
+            return null;
+        }
+
+        options.sort((a, b) => a.label.localeCompare(b.label));
+
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getSelectMenu({
+                customId: `TrackerRemovePlayerBMPlayer${identifier}`,
+                placeholder: 'Select a player to remove...',
+                options: options
+            }));
+    },
 }

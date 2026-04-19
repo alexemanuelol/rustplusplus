@@ -28,6 +28,12 @@ module.exports = {
         const trademark = generalSettings.trademark;
         const trademarkString = (trademark === 'NOT SHOWING') ? '' : `${trademark} | `;
         const messageMaxLength = Constants.MAX_LENGTH_TEAM_MESSAGE - trademarkString.length;
+        
+        // Track activity for cleanup manager and smart polling when processing messages
+        if (message !== null) {
+            client.instanceCleanupManager.updateActivity(guildId);
+            client.smartPollingManager.updateActivity(guildId);
+        }
 
         /* Time to write a message from the queue. If message === null, that means that its a timer call. */
         if (message === null) {

@@ -205,5 +205,16 @@ module.exports = (client, guild) => {
         if (!content.hasOwnProperty('customCameraGroups')) content.customCameraGroups = {};
     }
 
+    /* Ensure all tracker players have activityLog arrays */
+    for (const [trackerId, tracker] of Object.entries(instance.trackers)) {
+        if (tracker.players) {
+            for (const player of tracker.players) {
+                if (!player.hasOwnProperty('activityLog')) {
+                    player.activityLog = [];
+                }
+            }
+        }
+    }
+
     client.setInstance(guild.id, instance);
 };

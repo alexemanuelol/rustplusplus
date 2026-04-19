@@ -32,6 +32,10 @@ const VendingMachines = require('../handlers/vendingMachineHandler.js');
 
 module.exports = {
     pollingHandler: async function (rustplus, client) {
+        // Track activity for cleanup manager and smart polling during polling
+    client.instanceCleanupManager.updateActivity(rustplus.guildId);
+    client.smartPollingManager.updateActivity(rustplus.guildId);
+        
         /* Poll information such as info, mapMarkers, teamInfo and time */
         let info = await rustplus.getInfoAsync();
         if (!(await rustplus.isResponseValid(info))) return;

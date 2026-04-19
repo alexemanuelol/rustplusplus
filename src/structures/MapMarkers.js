@@ -337,7 +337,6 @@ class MapMarkers {
 
             vendingMachine.id = marker.id;
             vendingMachine.location = pos;
-            vendingMachine.sellOrders = marker.sellOrders;
         }
     }
 

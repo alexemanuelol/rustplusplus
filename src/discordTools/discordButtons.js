@@ -449,6 +449,11 @@ module.exports = {
                     customId: `TrackerUpdate${identifier}`,
                     label: Client.client.intlGet(guildId, 'updateCap'),
                     style: PRIMARY
+                }),
+                module.exports.getButton({
+                    customId: `TrackerActivityReport${identifier}`,
+                    label: '📋 REPORT',
+                    style: PRIMARY
                 }))
         ];
     },
@@ -563,5 +568,36 @@ module.exports = {
                     label: Client.client.intlGet(guildId, 'battlemetricsGlobalLogoutCap'),
                     style: instance.generalSettings.battlemetricsGlobalLogout ? SUCCESS : DANGER
                 }))];
+    },
+
+    getTrackerAddPlayerManualButton: function (guildId, trackerId) {
+        const identifier = JSON.stringify({ "trackerId": trackerId });
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: `TrackerAddPlayerManual${identifier}`,
+                label: 'Enter ID Manually',
+                style: PRIMARY
+            }));
+    },
+
+    getTrackerAddPlayerSearchButton: function (guildId, trackerId) {
+        const identifier = JSON.stringify({ "trackerId": trackerId });
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: `TrackerAddPlayerSearch${identifier}`,
+                label: 'Search by Name',
+                style: Discord.ButtonStyle.Secondary,
+                emoji: '🔍'
+            }));
+    },
+
+    getTrackerRemovePlayerManualButton: function (guildId, trackerId) {
+        const identifier = JSON.stringify({ "trackerId": trackerId });
+        return new Discord.ActionRowBuilder().addComponents(
+            module.exports.getButton({
+                customId: `TrackerRemovePlayerManual${identifier}`,
+                label: 'Enter ID Manually',
+                style: PRIMARY
+            }));
     },
 }

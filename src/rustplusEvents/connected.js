@@ -106,7 +106,9 @@ module.exports = {
         rustplus.loadMarkers();
 
         await PollingHandler.pollingHandler(rustplus, client);
-        rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
+        
+        // Use SmartPollingManager for adaptive polling intervals
+        client.smartPollingManager.initializePolling(rustplus.guildId, rustplus, client);
         rustplus.isOperational = true;
 
         rustplus.updateLeaderRustPlusLiteInstance();

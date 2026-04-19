@@ -19,18 +19,7 @@
 */
 
 const Items = require('./Items');
-const RustlabsBuildingBlocks = require('../staticFiles/rustlabsBuildingBlocks.json');
-const RustlabsOther = require('../staticFiles/rustlabsOther.json');
-
-const CraftData = require('../staticFiles/rustlabsCraftData.json');
-const ResearchData = require('../staticFiles/rustlabsResearchData.json');
-const RecycleData = require('../staticFiles/rustlabsRecycleData.json');
-const DurabilityData = require('../staticFiles/rustlabsDurabilityData.json');
-const SmeltingData = require('../staticFiles/rustlabsSmeltingData.json');
-const DespawnData = require('../staticFiles/rustlabsDespawnData.json');
-const StackData = require('../staticFiles/rustlabsStackData.json');
-const DecayData = require('../staticFiles/rustlabsDecayData.json');
-const UpkeepData = require('../staticFiles/rustlabsUpkeepData.json');
+const DataManager = require('../util/DataManager');
 const Utils = require('../util/utils.js');
 
 const IGNORED_RECYCLE_ITEMS = [
@@ -45,20 +34,11 @@ class RustLabs {
      *  Constructor for the RustLabs Class.
      */
     constructor() {
-        this._craftData = CraftData;
-        this._researchData = ResearchData;
-        this._recycleData = RecycleData;
-        this._durabilityData = DurabilityData;
-        this._smeltingData = SmeltingData;
-        this._despawnData = DespawnData;
-        this._stackData = StackData;
-        this._decayData = DecayData;
-        this._upkeepData = UpkeepData;
-
         this._items = new Items();
-
-        this._rustlabsBuildingBlocks = RustlabsBuildingBlocks;
-        this._rustlabsOther = RustlabsOther;
+        this._dataManager = DataManager;
+        
+        // Preload essential data for better performance
+        this._dataManager.preloadEssentialData();
 
         this._durabilityGroups = [
             'explosive',
@@ -85,9 +65,6 @@ class RustLabs {
             'sulfurHighFirst',
             'sulfurLowFirst'
         ];
-
-        this._buildingBlocks = Object.keys(this.rustlabsBuildingBlocks);
-        this._other = Object.keys(this.rustlabsOther);
     }
 
 
@@ -95,23 +72,23 @@ class RustLabs {
      *  Getters
      **********************************************************************************/
 
-    get craftData() { return this._craftData; }
-    get researchData() { return this._researchData; }
-    get recycleData() { return this._recycleData; }
-    get durabilityData() { return this._durabilityData; }
-    get smeltingData() { return this._smeltingData; }
-    get despawnData() { return this._despawnData; }
-    get stackData() { return this._stackData; }
-    get decayData() { return this._decayData; }
-    get upkeepData() { return this._upkeepData; }
+    get craftData() { return this._dataManager.loadData('craft'); }
+    get researchData() { return this._dataManager.loadData('research'); }
+    get recycleData() { return this._dataManager.loadData('recycle'); }
+    get durabilityData() { return this._dataManager.loadData('durability'); }
+    get smeltingData() { return this._dataManager.loadData('smelting'); }
+    get despawnData() { return this._dataManager.loadData('despawn'); }
+    get stackData() { return this._dataManager.loadData('stack'); }
+    get decayData() { return this._dataManager.loadData('decay'); }
+    get upkeepData() { return this._dataManager.loadData('upkeep'); }
     get items() { return this._items; }
-    get rustlabsBuildingBlocks() { return this._rustlabsBuildingBlocks; }
-    get rustlabsOther() { return this._rustlabsOther; }
+    get rustlabsBuildingBlocks() { return this._dataManager.loadData('buildingBlocks'); }
+    get rustlabsOther() { return this._dataManager.loadData('other'); }
     get durabilityGroups() { return this._durabilityGroups }
     get durabilityWhich() { return this._durabilityWhich; }
     get orderedBy() { return this._orderedBy; }
-    get buildingBlocks() { return this._buildingBlocks; }
-    get other() { return this._other; }
+    get buildingBlocks() { return Object.keys(this.rustlabsBuildingBlocks); }
+    get other() { return Object.keys(this.rustlabsOther); }
 
 
     /***********************************************************************************

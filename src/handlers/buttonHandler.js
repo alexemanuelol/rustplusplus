@@ -31,6 +31,10 @@ module.exports = async (client, interaction) => {
     const instance = client.getInstance(interaction.guildId);
     const guildId = interaction.guildId;
     const rustplus = client.rustplusInstances[guildId];
+    
+    // Track activity for cleanup manager and smart polling on button interactions
+    client.instanceCleanupManager.updateActivity(guildId);
+    client.smartPollingManager.updateActivity(guildId);
 
     const verifyId = Math.floor(100000 + Math.random() * 900000);
     client.logInteraction(interaction, verifyId, 'userButton');
@@ -1109,8 +1113,34 @@ module.exports = async (client, interaction) => {
         delete instance.trackers[ids.trackerId];
         client.setInstance(guildId, instance);
     }
-    else if (interaction.customId.startsWith('TrackerAddPlayer')) {
+    else if (interaction.customId.startsWith('TrackerAddPlayer') && !interaction.customId.startsWith('TrackerAddPlayerManual') && !interaction.customId.startsWith('TrackerAddPlayerSearch')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
+        const DiscordButtons = require('../discordTools/discordButtons.js');
+        const selectMenuRow = DiscordSelectMenus.getTrackerAddPlayerSelectMenu(guildId, tracker.battlemetricsId, ids.trackerId);
+        const searchButtonRow = DiscordButtons.getTrackerAddPlayerSearchButton(guildId, ids.trackerId);
+        const manualButtonRow = DiscordButtons.getTrackerAddPlayerManualButton(guildId, ids.trackerId);
+
+        const components = [];
+        if (selectMenuRow) components.push(selectMenuRow);
+        components.push(searchButtonRow);
+        components.push(manualButtonRow);
+
+        await interaction.reply({
+            content: 'Select a player from the server, or enter an ID manually:',
+            components: components,
+            ephemeral: true
+        });
+    }
+    else if (interaction.customId.startsWith('TrackerAddPlayerManual')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayerManual', ''));
         const tracker = instance.trackers[ids.trackerId];
 
         if (!tracker) {
@@ -1120,9 +1150,47 @@ module.exports = async (client, interaction) => {
 
         const modal = DiscordModals.getTrackerAddPlayerModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
+        interaction.message.delete().catch(() => {});
     }
-    else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
+    else if (interaction.customId.startsWith('TrackerAddPlayerSearch')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayerSearch', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const modal = DiscordModals.getTrackerAddPlayerSearchModal(guildId, ids.trackerId);
+        await interaction.showModal(modal);
+        interaction.message.delete().catch(() => {});
+    }
+    else if (interaction.customId.startsWith('TrackerRemovePlayer') && !interaction.customId.startsWith('TrackerRemovePlayerManual')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
+        const DiscordButtons = require('../discordTools/discordButtons.js');
+        const selectMenuRow = DiscordSelectMenus.getTrackerRemovePlayerSelectMenu(guildId, ids.trackerId);
+        const manualButtonRow = DiscordButtons.getTrackerRemovePlayerManualButton(guildId, ids.trackerId);
+
+        const components = [];
+        if (selectMenuRow) components.push(selectMenuRow);
+        components.push(manualButtonRow);
+
+        await interaction.reply({
+            content: 'Select a player to remove, or enter an ID manually:',
+            components: components,
+            ephemeral: true
+        });
+    }
+    else if (interaction.customId.startsWith('TrackerRemovePlayerManual')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayerManual', ''));
         const tracker = instance.trackers[ids.trackerId];
 
         if (!tracker) {
@@ -1132,6 +1200,7 @@ module.exports = async (client, interaction) => {
 
         const modal = DiscordModals.getTrackerRemovePlayerModal(guildId, ids.trackerId);
         await interaction.showModal(modal);
+        interaction.message.delete().catch(() => {});
     }
     else if (interaction.customId.startsWith('TrackerInGame')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerInGame', ''));
@@ -1152,6 +1221,22 @@ module.exports = async (client, interaction) => {
         }));
 
         await DiscordMessages.sendTrackerMessage(guildId, ids.trackerId, interaction);
+    }
+    else if (interaction.customId.startsWith('TrackerActivityReport')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerActivityReport', ''));
+        const tracker = instance.trackers[ids.trackerId];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        await DiscordMessages.sendTrackerActivityReportMessage(guildId, ids.trackerId, interaction);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'buttonValueChange', {
+            id: `${verifyId}`,
+            value: `ActivityReport_${ids.trackerId}`
+        }));
     }
 
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userButtonInteractionSuccess', {

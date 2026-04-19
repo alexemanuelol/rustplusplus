@@ -28,12 +28,17 @@ const Cctv = require('./Cctv');
 const Config = require('../../config');
 const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordTools = require('../discordTools/discordTools');
+const InstanceCleanupManager = require('../util/InstanceCleanupManager');
+const SmartPollingManager = require('../util/SmartPollingManager');
 const InstanceUtils = require('../util/instanceUtils.js');
 const Items = require('./Items');
+const LanguageManager = require('../util/LanguageManager');
 const Logger = require('./Logger.js');
 const PermissionHandler = require('../handlers/permissionHandler.js');
 const RustLabs = require('../structures/RustLabs');
 const RustPlus = require('../structures/RustPlus');
+const { objectPools } = require('../util/ObjectPool');
+const { memoryMonitor } = require('../util/MemoryMonitor');
 
 class DiscordBot extends Discord.Client {
     constructor(props) {
@@ -45,10 +50,17 @@ class DiscordBot extends Discord.Client {
         this.fcmListeners = new Object();
         this.fcmListenersLite = new Object();
         this.instances = {};
-        this.guildIntl = {};
-        this.botIntl = null;
-        this.enIntl = null;
-        this.enMessages = JSON.parse(Fs.readFileSync(Path.join(__dirname, '..', 'languages', 'en.json')), 'utf8');
+        
+        // Set up object pool monitoring
+        this.setupObjectPoolMonitoring();
+        
+        // Set up memory monitoring
+        this.setupMemoryMonitoring();
+        
+        // Set up Discord.js optimizations
+        this.setupDiscordOptimizations();
+        // Language management now handled by LanguageManager
+        this.languageManager = LanguageManager;
 
         this.rustplusInstances = new Object();
         this.activeRustplusInstances = new Object();
@@ -62,6 +74,8 @@ class DiscordBot extends Discord.Client {
         this.items = new Items();
         this.rustlabs = new RustLabs();
         this.cctv = new Cctv();
+        this.instanceCleanupManager = new InstanceCleanupManager();
+        this.smartPollingManager = new SmartPollingManager();
 
         this.pollingIntervalMs = Config.general.pollingIntervalMs;
 
@@ -74,8 +88,6 @@ class DiscordBot extends Discord.Client {
 
         this.loadDiscordCommands();
         this.loadDiscordEvents();
-        this.loadEnIntl();
-        this.loadBotIntl();
     }
 
     loadDiscordCommands() {
@@ -105,70 +117,58 @@ class DiscordBot extends Discord.Client {
         }
     }
 
-    loadEnIntl() {
-        const language = 'en';
-        const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
-        const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
-        const cache = FormatJS.createIntlCache();
-        this.enIntl = FormatJS.createIntl({
-            locale: language,
-            defaultLocale: 'en',
-            messages: messages
-        }, cache);
+    getGuildLanguage(guildId) {
+        try {
+            const instance = InstanceUtils.readInstanceFile(guildId);
+            return instance.generalSettings.language || 'en';
+        } catch (error) {
+            return 'en';
+        }
     }
 
-    loadBotIntl() {
-        const language = Config.general.language;
-        const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
-        const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
-        const cache = FormatJS.createIntlCache();
-        this.botIntl = FormatJS.createIntl({
-            locale: language,
-            defaultLocale: 'en',
-            messages: messages
-        }, cache);
-    }
-
-    loadGuildIntl(guildId) {
-        const instance = InstanceUtils.readInstanceFile(guildId);
-        const language = instance.generalSettings.language;
-        const path = Path.join(__dirname, '..', 'languages', `${language}.json`);
-        const messages = JSON.parse(Fs.readFileSync(path, 'utf8'));
-        const cache = FormatJS.createIntlCache();
-        this.guildIntl[guildId] = FormatJS.createIntl({
-            locale: language,
-            defaultLocale: 'en',
-            messages: messages
-        }, cache);
+    getBotLanguage() {
+        return Config.general.language || 'en';
     }
 
     loadGuildsIntl() {
+        // Pre-load language data for all guilds to ensure intl is ready
         for (const guild of this.guilds.cache) {
-            this.loadGuildIntl(guild[0]);
+            const guildId = guild[0];
+            const language = this.getGuildLanguage(guildId);
+            // Ensure the language is loaded in the LanguageManager
+            this.languageManager.getIntl(language);
         }
     }
 
     intlGet(guildId, id, variables = {}) {
-        let intl = null;
-        if (guildId && guildId !== 'en') {
-            intl = this.guildIntl[guildId];
+        let language;
+        
+        if (guildId === 'en') {
+            language = 'en';
+        } else if (guildId && guildId !== 'en') {
+            language = this.getGuildLanguage(guildId);
+        } else {
+            language = this.getBotLanguage();
         }
-        else {
-            if (guildId === 'en') {
-                intl = this.enIntl;
-            }
-            else {
-                intl = this.botIntl;
-            }
+
+        const intl = this.languageManager.getIntl(language);
+        const enMessages = this.languageManager.getMessages('en');
+        
+        if (!intl) {
+            console.error(`Failed to get intl for language: ${language}`);
+            return id; // Return the ID as fallback
         }
 
         return intl.formatMessage({
             id: id,
-            defaultMessage: this.enMessages[id]
+            defaultMessage: enMessages ? enMessages[id] : id
         }, variables);
     }
 
     build() {
+        // Start the instance cleanup manager
+        this.instanceCleanupManager.start(this);
+        
         this.login(Config.discord.token).catch(error => {
             switch (error.code) {
                 case 502: {
@@ -305,6 +305,9 @@ class DiscordBot extends Discord.Client {
         /* Add rustplus instance to Object */
         this.rustplusInstances[guildId] = rustplus;
         this.activeRustplusInstances[guildId] = true;
+        
+        // Track activity for cleanup manager
+        this.instanceCleanupManager.updateActivity(guildId);
 
         rustplus.build();
 
@@ -546,6 +549,213 @@ class DiscordBot extends Discord.Client {
 
     isAdministrator(interaction) {
         return interaction.member.permissions.has(Discord.PermissionFlagsBits.Administrator);
+    }
+
+    /**
+     * Set up object pool monitoring and periodic cleanup
+     */
+    setupObjectPoolMonitoring() {
+        // Log pool statistics every 5 minutes
+        setInterval(() => {
+            const stats = objectPools.getStats();
+            this.log('Object Pool Stats', `Position Pool: ${stats.position.active}/${stats.position.total}, ` +
+                `Notification Pool: ${stats.notification.active}/${stats.notification.total}, ` +
+                `Vending Order Pool: ${stats.vendingOrder.active}/${stats.vendingOrder.total}, ` +
+                `Team Change Pool: ${stats.teamChange.active}/${stats.teamChange.total}`);
+        }, 5 * 60 * 1000);
+
+        // Clean up pools every 10 minutes
+        setInterval(() => {
+            objectPools.cleanup();
+            this.log('Object Pool Cleanup', 'Performed periodic cleanup of object pools');
+        }, 10 * 60 * 1000);
+    }
+
+    /**
+     * Clean up all object pools
+     */
+    cleanupObjectPools() {
+        objectPools.cleanup();
+        this.log('Object Pool Cleanup', 'Manual cleanup of object pools completed');
+    }
+
+    /**
+     * Set up memory monitoring
+     */
+    setupMemoryMonitoring() {
+        // Set logger for memory monitor
+        memoryMonitor.setLogger(this);
+        
+        // Start memory monitoring with 2-minute intervals
+        memoryMonitor.startMonitoring(2 * 60 * 1000);
+        
+        // Log memory summary every 15 minutes
+        setInterval(() => {
+            const summary = memoryMonitor.getSummary();
+            if (summary) {
+                const avgMB = (summary.averageHeapUsed / 1024 / 1024).toFixed(2);
+                const maxMB = (summary.maxHeapUsed / 1024 / 1024).toFixed(2);
+                const utilization = summary.averageUtilization.toFixed(1);
+                
+                this.log('Memory Summary', 
+                    `Avg: ${avgMB}MB, Max: ${maxMB}MB, Utilization: ${utilization}%, Samples: ${summary.samples}`);
+                
+                // Log Discord optimization stats
+                this.logDiscordStats();
+            }
+        }, 15 * 60 * 1000);
+    }
+
+    /**
+     * Get current memory statistics
+     * @returns {Object} Memory statistics
+     */
+    getMemoryStats() {
+        return memoryMonitor.getCurrentStats();
+    }
+
+    /**
+     * Force garbage collection
+     * @returns {boolean} True if GC was triggered
+     */
+    forceGarbageCollection() {
+        const result = memoryMonitor.forceGc();
+        if (result) {
+            this.log('Memory Management', 'Manual garbage collection triggered');
+        } else {
+            this.log('Memory Management', 'Garbage collection not available (run with --expose-gc)', 'warn');
+        }
+        return result;
+    }
+
+    setupDiscordOptimizations() {
+        // Set up periodic cache cleanup
+        setInterval(() => {
+            this.performCacheCleanup();
+        }, 600000); // Every 10 minutes
+
+        // Set up connection optimization
+        this.setupConnectionOptimizations();
+
+        // Log optimization setup
+        this.log('Discord Optimization', 'Discord.js optimizations initialized', 'info');
+    }
+
+    performCacheCleanup() {
+        let cleanedItems = 0;
+
+        // Clean up message cache more aggressively
+        this.guilds.cache.forEach(guild => {
+            guild.channels.cache.forEach(channel => {
+                if (channel.messages && channel.messages.cache.size > 25) {
+                    const messagesToDelete = channel.messages.cache.size - 25;
+                    const oldMessages = channel.messages.cache
+                        .sort((a, b) => a.createdTimestamp - b.createdTimestamp)
+                        .first(messagesToDelete);
+                    
+                    oldMessages.forEach(message => {
+                        channel.messages.cache.delete(message.id);
+                        cleanedItems++;
+                    });
+                }
+            });
+
+            // Clean up member cache for inactive members
+            if (guild.members.cache.size > 50) {
+                const membersToRemove = guild.members.cache.size - 50;
+                const inactiveMembers = guild.members.cache
+                    .filter(member => member.id !== this.user.id && !member.user.bot)
+                    .sort((a, b) => (a.joinedTimestamp || 0) - (b.joinedTimestamp || 0))
+                    .first(membersToRemove);
+                
+                inactiveMembers.forEach(member => {
+                    guild.members.cache.delete(member.id);
+                    cleanedItems++;
+                });
+            }
+        });
+
+        // Clean up user cache
+        if (this.users.cache.size > 100) {
+            const usersToRemove = this.users.cache.size - 100;
+            const inactiveUsers = this.users.cache
+                .filter(user => user.id !== this.user.id && !user.bot)
+                .first(usersToRemove);
+            
+            inactiveUsers.forEach(user => {
+                this.users.cache.delete(user.id);
+                cleanedItems++;
+            });
+        }
+
+        if (cleanedItems > 0) {
+            this.log('Discord Optimization', `Cleaned up ${cleanedItems} cached items`, 'info');
+        }
+    }
+
+    setupConnectionOptimizations() {
+        // Optimize WebSocket connection
+        this.on('ready', () => {
+            // Set presence to reduce memory usage
+            this.user.setPresence({
+                activities: [{
+                    name: 'Rust servers',
+                    type: Discord.ActivityType.Watching
+                }],
+                status: 'online'
+            });
+        });
+
+        // Handle rate limits more efficiently
+        this.rest.on('rateLimited', (rateLimitInfo) => {
+            this.log('Discord Optimization', `Rate limited: ${rateLimitInfo.route} for ${rateLimitInfo.timeout}ms`, 'warn');
+        });
+
+        // Optimize guild member chunk handling
+        this.on('guildMemberChunk', (members, guild) => {
+            // Immediately clean up if we have too many cached members
+            if (guild.members.cache.size > 200) {
+                const excess = guild.members.cache.size - 200;
+                const toRemove = guild.members.cache
+                    .filter(member => member.id !== this.user.id)
+                    .random(excess);
+                
+                toRemove.forEach(member => {
+                    guild.members.cache.delete(member.id);
+                });
+            }
+        });
+    }
+
+    getDiscordOptimizationStats() {
+        const stats = {
+            guilds: this.guilds.cache.size,
+            users: this.users.cache.size,
+            channels: 0,
+            messages: 0,
+            members: 0
+        };
+
+        this.guilds.cache.forEach(guild => {
+            stats.channels += guild.channels.cache.size;
+            stats.members += guild.members.cache.size;
+            
+            guild.channels.cache.forEach(channel => {
+                if (channel.messages) {
+                    stats.messages += channel.messages.cache.size;
+                }
+            });
+        });
+
+        return stats;
+    }
+
+    logDiscordStats() {
+        const stats = this.getDiscordOptimizationStats();
+        this.log('Discord Optimization', 
+            `Cache Stats - Guilds: ${stats.guilds}, Users: ${stats.users}, ` +
+            `Channels: ${stats.channels}, Messages: ${stats.messages}, Members: ${stats.members}`, 
+            'info');
     }
 }
 

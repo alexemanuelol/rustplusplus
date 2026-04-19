@@ -18,6 +18,7 @@
 
 */
 
+const ActivityTracker = require('../util/activityTracker.js');
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
@@ -95,6 +96,37 @@ module.exports = {
                     client.setInstance(guildId, instance);
 
                     if (firstTime) {
+                        for (const playerT of content.players) {
+                            if (bmInstance.players[playerT.playerId]) {
+                                if (bmInstance.players[playerT.playerId]['status']) {
+                                    /* Record activity login event using actual connection time */
+                                    let connTime = new Date().toISOString();
+                                    const onlineTime = bmInstance.getOnlineTime(playerT.playerId);
+                                    if (onlineTime) {
+                                        connTime = new Date(Date.now() - (onlineTime[0] * 1000)).toISOString();
+                                    }
+                                    ActivityTracker.recordActivity(playerT, 0, connTime);
+                                } else {
+                                    /* Attempt to record last logout for offline players by fetching profile */
+                                    let logoutTime = null;
+                                    const offlineTime = bmInstance.getOfflineTime(playerT.playerId);
+                                    if (offlineTime) {
+                                        logoutTime = new Date(Date.now() - (offlineTime[0] * 1000)).toISOString();
+                                    } else {
+                                        const profile = await bmInstance.getProfileData(playerT.playerId);
+                                        if (profile && profile.length > 0) {
+                                            const latest = profile.reduce((prev, current) => 
+                                                (new Date(current.lastSeen) > new Date(prev.lastSeen)) ? current : prev
+                                            );
+                                            logoutTime = latest.lastSeen;
+                                        }
+                                    }
+                                    if (logoutTime) {
+                                        ActivityTracker.recordActivity(playerT, 1, logoutTime);
+                                    }
+                                }
+                            }
+                        }
                         await DiscordMessages.sendTrackerMessage(guildId, trackerId);
                         continue;
                     }
@@ -117,6 +149,14 @@ module.exports = {
                     for (const player of content.players) {
                         if (player.playerId !== playerId) continue;
 
+                        /* Record activity login event using actual connection time */
+                        let connTime = new Date().toISOString();
+                        const onlineTime = bmInstance.getOnlineTime(playerId);
+                        if (onlineTime) {
+                            connTime = new Date(Date.now() - (onlineTime[0] * 1000)).toISOString();
+                        }
+                        ActivityTracker.recordActivity(player, 0, connTime);
+
                         const str = client.intlGet(guildId, 'playerJustConnectedTracker', {
                             name: player.name,
                             tracker: content.name
@@ -135,6 +175,14 @@ module.exports = {
                     for (const player of content.players) {
                         if (player.playerId !== playerId) continue;
 
+                        /* Record activity login event using actual connection time */
+                        let connTime = new Date().toISOString();
+                        const onlineTime = bmInstance.getOnlineTime(playerId);
+                        if (onlineTime) {
+                            connTime = new Date(Date.now() - (onlineTime[0] * 1000)).toISOString();
+                        }
+                        ActivityTracker.recordActivity(player, 0, connTime);
+
                         const str = client.intlGet(guildId, 'playerJustConnectedTracker', {
                             name: player.name,
                             tracker: content.name
@@ -152,6 +200,14 @@ module.exports = {
                 for (const playerId of trackerPlayerIds.filter(e => bmInstance.logoutPlayers.includes(e))) {
                     for (const player of content.players) {
                         if (player.playerId !== playerId) continue;
+
+                        /* Record activity logout event using actual logout time */
+                        let logoutTime = new Date().toISOString();
+                        const offlineTime = bmInstance.getOfflineTime(playerId);
+                        if (offlineTime) {
+                            logoutTime = new Date(Date.now() - (offlineTime[0] * 1000)).toISOString();
+                        }
+                        ActivityTracker.recordActivity(player, 1, logoutTime);
 
                         const str = client.intlGet(guildId, 'playerJustDisconnectedTracker', {
                             name: player.name,

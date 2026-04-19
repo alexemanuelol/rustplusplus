@@ -322,6 +322,28 @@ module.exports = {
         return modal;
     },
 
+    getTrackerAddPlayerSearchModal(guildId, trackerId) {
+        const instance = Client.client.getInstance(guildId);
+        const tracker = instance.trackers[trackerId];
+        const identifier = JSON.stringify({ "trackerId": trackerId });
+
+        const modal = module.exports.getModal({
+            customId: `TrackerAddPlayerSearch${identifier}`,
+            title: `Search on ${tracker.name}`
+        });
+
+        modal.addComponents(
+            new Discord.ActionRowBuilder().addComponents(TextInput.getTextInput({
+                customId: 'TrackerAddPlayerSearchQuery',
+                label: 'Player Name',
+                value: '',
+                style: Discord.TextInputStyle.Short
+            }))
+        );
+
+        return modal;
+    },
+
     getTrackerRemovePlayerModal(guildId, trackerId) {
         const instance = Client.client.getInstance(guildId);
         const tracker = instance.trackers[trackerId];

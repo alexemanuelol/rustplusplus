@@ -19,13 +19,18 @@
 */
 
 const Client = require('../../index.ts');
+const { objectPools } = require('./ObjectPool.js');
 
 module.exports = {
     gridDiameter: 146.25,
 
     getPos: function (x, y, mapSize, rustplus) {
         const correctedMapSize = module.exports.getCorrectedMapSize(mapSize);
-        const pos = { location: null, monument: null, string: null, x: x, y: y }
+        const pos = objectPools.acquirePosition();
+        pos.x = x;
+        pos.y = y;
+        pos.location = null;
+        pos.monument = null;
 
         if (module.exports.isOutsideGridSystem(x, y, correctedMapSize)) {
             if (module.exports.isOutsideRowOrColumn(x, y, correctedMapSize)) {
@@ -73,6 +78,15 @@ module.exports = {
         pos.string = `${pos.location}${pos.monument !== null ? ` (${pos.monument})` : ''}`;
 
         return pos;
+    },
+
+    /**
+     * Release a position object back to the object pool
+     * Call this when you're done using a position object from getPos()
+     * @param {Object} pos - Position object to release
+     */
+    releasePos: function (pos) {
+        objectPools.releasePosition(pos);
     },
 
     getGridPos: function (x, y, mapSize) {

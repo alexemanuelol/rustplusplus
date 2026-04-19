@@ -20,6 +20,7 @@
 
 const Constants = require('../util/constants.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
+const { objectPools } = require('../util/ObjectPool.js');
 
 module.exports = {
     handler: async function (rustplus, client, teamInfo) {
@@ -41,22 +42,48 @@ module.exports = {
         for (const steamId of leftPlayers) {
             const player = rustplus.team.getPlayer(steamId);
             const str = client.intlGet(guildId, 'playerLeftTheTeam', { name: player.name });
+            
+            // Use pooled notification object
+            const notification = objectPools.acquireNotification();
+            notification.guildId = guildId;
+            notification.serverId = serverId;
+            notification.color = Constants.COLOR_GREY;
+            notification.message = str;
+            notification.steamId = steamId;
+            notification.name = player.name;
+            
             await DiscordMessages.sendActivityNotificationMessage(
-                guildId, serverId, Constants.COLOR_GREY, str, steamId);
+                notification.guildId, notification.serverId, notification.color, notification.message, notification.steamId);
             if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
             rustplus.log(client.intlGet(null, 'infoCap'), str);
             rustplus.updateConnections(steamId, str);
+            
+            // Release notification object back to pool
+            objectPools.releaseNotification(notification);
         }
 
         for (const steamId of newPlayers) {
             for (const player of teamInfo.members) {
                 if (player.steamId.toString() === steamId) {
                     const str = client.intlGet(guildId, 'playerJoinedTheTeam', { name: player.name });
+                    
+                    // Use pooled notification object
+                    const notification = objectPools.acquireNotification();
+                    notification.guildId = guildId;
+                    notification.serverId = serverId;
+                    notification.color = Constants.COLOR_ACTIVE;
+                    notification.message = str;
+                    notification.steamId = steamId;
+                    notification.name = player.name;
+                    
                     await DiscordMessages.sendActivityNotificationMessage(
-                        guildId, serverId, Constants.COLOR_ACTIVE, str, steamId);
+                        notification.guildId, notification.serverId, notification.color, notification.message, notification.steamId);
                     if (instance.generalSettings.connectionNotify) await rustplus.sendInGameMessage(str);
                     rustplus.log(client.intlGet(null, 'infoCap'), str);
                     rustplus.updateConnections(steamId, str);
+                    
+                    // Release notification object back to pool
+                    objectPools.releaseNotification(notification);
                 }
             }
         }
@@ -71,14 +98,28 @@ module.exports = {
                             name: player.name,
                             location: location
                         });
+                        
+                        // Use pooled notification object for death notification
+                        const notification = objectPools.acquireNotification();
+                        notification.guildId = guildId;
+                        notification.serverId = serverId;
+                        notification.color = Constants.COLOR_INACTIVE;
+                        notification.message = str;
+                        notification.steamId = player.steamId;
+                        notification.name = player.name;
+                        notification.location = player.pos;
+                        
                         await DiscordMessages.sendActivityNotificationMessage(
-                            guildId, serverId, Constants.COLOR_INACTIVE, str, player.steamId);
+                            notification.guildId, notification.serverId, notification.color, notification.message, notification.steamId);
                         if (instance.generalSettings.deathNotify) rustplus.sendInGameMessage(str);
                         rustplus.log(client.intlGet(null, 'infoCap'), str);
                         rustplus.updateDeaths(player.steamId, {
                             name: player.name,
                             location: player.pos
                         });
+                        
+                        // Release notification object back to pool
+                        objectPools.releaseNotification(notification);
                     }
 
                     if (player.isGoneAfk(playerUpdated)) {

@@ -150,6 +150,79 @@ module.exports = async (client, interaction) => {
 
         DiscordMessages.sendSmartSwitchMessage(guildId, ids.serverId, ids.entityId, interaction);
     }
+    else if (interaction.customId.startsWith('TrackerAddPlayerBMPlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayerBMPlayer', ''));
+        const tracker = instance.trackers[ids.trackerId];
+        const playerId = interaction.values[0];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const bmInstance = client.battlemetricsInstances[tracker.battlemetricsId];
+
+        if (tracker.players.some(e => e.playerId === playerId && e.steamId === null)) {
+            // Already tracked
+            await interaction.reply({
+                content: Client.client.intlGet(guildId, 'playerAlreadyTracked') || 'Player is already being tracked.',
+                ephemeral: true
+            });
+            return;
+        }
+
+        let name = '-';
+        if (bmInstance && bmInstance.players.hasOwnProperty(playerId)) {
+            name = bmInstance.players[playerId]['name'];
+        }
+
+        tracker.players.push({
+            name: name,
+            steamId: null,
+            playerId: playerId,
+            activityLog: []
+        });
+        client.setInstance(interaction.guildId, instance);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${playerId}`
+        }));
+
+        await interaction.deferUpdate();
+        interaction.message.delete().catch(() => {});
+        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+    }
+    else if (interaction.customId.startsWith('TrackerRemovePlayerBMPlayer')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayerBMPlayer', ''));
+        const tracker = instance.trackers[ids.trackerId];
+        const id = interaction.values[0];
+
+        if (!tracker) {
+            await interaction.message.delete();
+            return;
+        }
+
+        const Constants = require('../util/constants.js');
+        const isSteamId64 = id.length === Constants.STEAMID64_LENGTH ? true : false;
+
+        if (isSteamId64) {
+            tracker.players = tracker.players.filter(e => e.steamId !== id);
+        }
+        else {
+            tracker.players = tracker.players.filter(e => e.playerId != id);
+        }
+        client.setInstance(interaction.guildId, instance);
+
+        client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'selectMenuValueChange', {
+            id: `${verifyId}`,
+            value: `${id}`
+        }));
+
+        await interaction.deferUpdate();
+        interaction.message.delete().catch(() => {});
+        await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+    }
 
     client.log(client.intlGet(null, 'infoCap'), client.intlGet(null, 'userSelectMenuInteractionSuccess', {
         id: `${verifyId}`

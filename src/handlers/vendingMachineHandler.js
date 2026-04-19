@@ -20,6 +20,7 @@
 
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const Map = require('../util/map.js');
+const { objectPools } = require('../util/ObjectPool.js');
 
 module.exports = {
     handler: async function (rustplus, client, mapMarkers) {
@@ -57,6 +58,11 @@ module.exports = {
                         amountInStock === 0);
 
                     if (allCond || buyCond || sellCond) {
+                        // Release objects back to pool before filtering
+                        const itemsToRemove = rustplus.foundSubscriptionItems[orderType]
+                            .filter(e => e.vId === vId && e.itemId === itemId && e.currencyId === currencyId);
+                        itemsToRemove.forEach(item => objectPools.releaseVendingOrder(item));
+                        
                         rustplus.foundSubscriptionItems[orderType] = rustplus.foundSubscriptionItems[orderType]
                             .filter(e => e.vId !== vId || e.itemId !== itemId || e.currencyId !== currencyId);
                         continue;
@@ -64,11 +70,13 @@ module.exports = {
 
                     if (found) continue;
 
-                    rustplus.foundSubscriptionItems[orderType].push({
-                        vId: vId,
-                        itemId: itemId,
-                        currencyId: currencyId
-                    });
+                    const orderObj = objectPools.acquireVendingOrder();
+                    orderObj.vId = vId;
+                    orderObj.itemId = itemId;
+                    orderObj.currencyId = currencyId;
+                    orderObj.amountInStock = amountInStock;
+                    
+                    rustplus.foundSubscriptionItems[orderType].push(orderObj);
 
                     if (rustplus.isFirstPoll || rustplus.firstPollItems[orderType].includes(itemId) ||
                         rustplus.firstPollItems[orderType].includes(currencyId)) {

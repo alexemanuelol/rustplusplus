@@ -48,6 +48,9 @@ module.exports = {
         clearInterval(rustplus.pollingTaskId);
         clearInterval(rustplus.tokensReplenishTaskId);
         clearTimeout(rustplus.inGameChatTimeout);
+        
+        /* Stop smart polling for this guild */
+        client.smartPollingManager.removeGuild(guildId);
 
         /* Reset map markers, timers & arrays */
         if (rustplus.mapMarkers) rustplus.mapMarkers.reset();

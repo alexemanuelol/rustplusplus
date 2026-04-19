@@ -138,10 +138,23 @@ class Player {
     }
 
     updatePos() {
+        // Release previous position object if it exists
+        if (this.pos !== null) {
+            Map.releasePos(this.pos);
+            this.pos = null;
+        }
+        
         if (this.isAlive || this.isOnline) {
             this.pos = Map.getPos(this.x, this.y, this.rustplus.info.mapSize, this.rustplus);
         }
-        else {
+    }
+
+    /**
+     * Clean up resources when player object is no longer needed
+     */
+    cleanup() {
+        if (this.pos !== null) {
+            Map.releasePos(this.pos);
             this.pos = null;
         }
     }

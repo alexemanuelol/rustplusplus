@@ -307,7 +307,7 @@ module.exports = async (client, interaction) => {
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
     }
-    else if (interaction.customId.startsWith('TrackerAddPlayer')) {
+    else if (interaction.customId.startsWith('TrackerAddPlayer') && !interaction.customId.startsWith('TrackerAddPlayerSearch')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayer', ''));
         const tracker = instance.trackers[ids.trackerId];
         const id = interaction.fields.getTextInputValue('TrackerAddPlayerId');
@@ -352,7 +352,8 @@ module.exports = async (client, interaction) => {
         tracker.players.push({
             name: name,
             steamId: steamId,
-            playerId: playerId
+            playerId: playerId,
+            activityLog: []
         });
         client.setInstance(interaction.guildId, instance);
 
@@ -362,6 +363,57 @@ module.exports = async (client, interaction) => {
         }));
 
         await DiscordMessages.sendTrackerMessage(interaction.guildId, ids.trackerId);
+    }
+    else if (interaction.customId.startsWith('TrackerAddPlayerSearch')) {
+        const ids = JSON.parse(interaction.customId.replace('TrackerAddPlayerSearch', ''));
+        const tracker = instance.trackers[ids.trackerId];
+        const query = interaction.fields.getTextInputValue('TrackerAddPlayerSearchQuery').toLowerCase();
+
+        if (!tracker) {
+            interaction.deferUpdate();
+            return;
+        }
+
+        const bmInstance = client.battlemetricsInstances[tracker.battlemetricsId];
+        let options = [];
+        if (bmInstance) {
+            const allPlayers = Object.keys(bmInstance.players);
+            const matches = allPlayers.filter(id => {
+                const p = bmInstance.players[id];
+                return p.name && p.name.toLowerCase().includes(query);
+            });
+
+            for (const playerId of matches.slice(0, 25)) {
+                const player = bmInstance.players[playerId];
+                options.push({
+                    label: player.name.substring(0, 50),
+                    description: `ID: ${player.id} ${player.status ? '(Online)' : '(Offline)'}`,
+                    value: player.id.toString()
+                });
+            }
+        }
+
+        if (options.length === 0) {
+            await interaction.reply({ content: `No players found matching "${query}".`, ephemeral: true });
+            return;
+        }
+
+        options.sort((a, b) => a.label.localeCompare(b.label));
+
+        const DiscordSelectMenus = require('../discordTools/discordSelectMenus.js');
+        const selectMenuRow = new Discord.ActionRowBuilder().addComponents(
+            DiscordSelectMenus.getSelectMenu({
+                customId: `TrackerAddPlayerBMPlayer${JSON.stringify({ "trackerId": ids.trackerId })}`,
+                placeholder: `Select a player matching "${query}"`,
+                options: options
+            })
+        );
+        
+        await interaction.reply({
+            content: `Search results for "${query}":`,
+            components: [selectMenuRow],
+            ephemeral: true
+        });
     }
     else if (interaction.customId.startsWith('TrackerRemovePlayer')) {
         const ids = JSON.parse(interaction.customId.replace('TrackerRemovePlayer', ''));
@@ -379,7 +431,7 @@ module.exports = async (client, interaction) => {
             tracker.players = tracker.players.filter(e => e.steamId !== id);
         }
         else {
-            tracker.players = tracker.players.filter(e => e.playerId !== id || e.steamId !== null);
+            tracker.players = tracker.players.filter(e => e.playerId != id);
         }
         client.setInstance(interaction.guildId, instance);
 

@@ -96,6 +96,8 @@ class Team {
 
         /* Remove players that have left */
         for (let player of unhandled) {
+            // Clean up resources before removing
+            player.cleanup();
             this.removePlayer(player);
         }
 
@@ -125,6 +127,10 @@ class Team {
     }
 
     removePlayer(player) {
+        // Clean up resources for removed players
+        const playersToRemove = this.players.filter(e => e.steamId === player.steamId);
+        playersToRemove.forEach(p => p.cleanup());
+        
         this.players = this.players.filter(e => e.steamId !== player.steamId);
     }
 
