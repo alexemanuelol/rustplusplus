@@ -29,36 +29,36 @@
     "dependencies": {
         "@discordjs/rest": "^2.6.1",
         "@discordjs/voice": "^0.19.2",
-        "@formatjs/intl": "^4.1.2",
+        "@formatjs/intl": "^4.1.10",
         "@liamcottle/push-receiver": "github:Trophy198/push-receiver#412172c3e9b942e0b9569a169e27bce26bfaac0a",
-        "@napi-rs/canvas": "^0.1.92",
-        "@types/lodash": "^4.17.23",
-        "axios": "^1.13.5",
+        "@napi-rs/canvas": "^1.0.0",
+        "@types/lodash": "^4.17.24",
+        "axios": "^1.16.1",
         "colors": "^1.4.0",
         "discord-api-types": "^0.38.47",
         "discord.js": "^14.26.4",
-        "dotenv": "^17.3.1",
-        "fast-xml-parser": "^5.5.8",
+        "dotenv": "^17.4.2",
+        "fast-xml-parser": "^5.8.0",
         "ffmpeg-static": "^5.3.0",
-        "libsodium-wrappers": "^0.8.2",
-        "lodash": "^4.17.23",
+        "libsodium-wrappers": "^0.8.4",
+        "lodash": "^4.18.1",
         "rustplus-ts": "^0.0.10",
         "translate": "^3.0.1",
         "ts-node": "^10.9.2",
         "typescript": "^6.0.3",
         "winston": "^3.19.0",
-        "zod": "^4.3.6"
+        "zod": "^4.4.3"
     },
     "resolutions": {
         "jpeg-js": "0.4.4",
-        "protobufjs": "8.0.0"
+        "protobufjs": "8.3.0"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@typescript-eslint/eslint-plugin": "^8.59.3",
         "@typescript-eslint/parser": "^8.59.3",
         "eslint": "^10.3.0",
-        "globals": "^16.5.0",
+        "globals": "^17.6.0",
         "typescript-eslint": "^8.59.3"
     }
 }
