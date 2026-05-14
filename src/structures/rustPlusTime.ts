@@ -111,7 +111,7 @@ export class RustPlusTime {
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const server = gInstance.serverInfoMap[this.rpInstance.serverId];
 
-        let seconds = 0;
+        let seconds: number;
         let isDay = this.isDay();
 
         /* Can't calculate time till sunrise or sunset, so use the default time table */

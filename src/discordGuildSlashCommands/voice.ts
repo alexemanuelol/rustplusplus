@@ -58,14 +58,13 @@ export default {
 			return false;
 		}
 
-		let result = false;
 		switch (interaction.options.getSubcommand()) {
 			case 'join': {
-				result = await executeJoin(dm, interaction);
+				return await executeJoin(dm, interaction);
 			} break;
 
 			case 'leave': {
-				result = await executeLeave(dm, interaction);
+				return await executeLeave(dm, interaction);
 			} break;
 
 			default: {
@@ -76,11 +75,9 @@ export default {
 					'errorDescInvalidSubcommand', parameters);
 				log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
-				result = false;
+				return false;
 			} break;
 		}
-
-		return result;
 	}
 };
 

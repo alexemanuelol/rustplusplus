@@ -87,14 +87,13 @@ export default {
             return false;
         }
 
-        let result = false;
         switch (interaction.options.getSubcommand()) {
             case 'missing_channels': {
-                result = await executeMissingChannels(dm, interaction);
+                return await executeMissingChannels(dm, interaction);
             } break;
 
             case 'channel': {
-                result = await executeChannel(dm, interaction);
+                return await executeChannel(dm, interaction);
             } break;
 
             default: {
@@ -105,11 +104,9 @@ export default {
                     'errorDescInvalidSubcommand', parameters);
                 log.warn(`${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
                     { guildId: guildId });
-                result = false;
+                return false;
             } break;
         }
-
-        return result;
     }
 };
 

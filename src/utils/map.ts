@@ -131,7 +131,7 @@ export function getPosString(position: Position, rpInstance: RustPlusInstance, s
     const mapSize = rpInstance.rpInfo?.appInfo.mapSize;
     if (!mapSize) return '';
 
-    let str = '';
+    let str: string;
     if (position.grid) {
         str = position.grid;
     }

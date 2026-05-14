@@ -600,7 +600,7 @@ export class RustPlusMapMarkers {
 
                     const timeLeftMin = Math.floor((timeLeftMs / 1000) / 60).toFixed(1);
 
-                    let phrase = '';
+                    let phrase: string;
                     const param: { [key: string]: string } = {};
                     if (timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS) {
                         phrase = 'inGameEvent-cargoShipLeaving-soon';

@@ -90,22 +90,21 @@ export default {
 			return false;
 		}
 
-		let result = false;
 		switch (interaction.options.getSubcommand()) {
 			case 'add': {
-				result = await executeAdd(dm, interaction);
+				return await executeAdd(dm, interaction);
 			} break;
 
 			case 'remove': {
-				result = await executeRemove(dm, interaction);
+				return await executeRemove(dm, interaction);
 			} break;
 
 			case 'info': {
-				result = await executeInfo(dm, interaction);
+				return await executeInfo(dm, interaction);
 			} break;
 
 			case 'list': {
-				result = await executeList(dm, interaction);
+				return await executeList(dm, interaction);
 			} break;
 
 			default: {
@@ -116,11 +115,9 @@ export default {
 					'errorDescInvalidSubcommand', parameters);
 				log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
-				result = false;
+				return false;
 			} break;
 		}
-
-		return result;
 	}
 };
 

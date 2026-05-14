@@ -69,10 +69,9 @@ export default {
 			return false;
 		}
 
-		let result = false;
 		switch (interaction.options.getSubcommand()) {
 			case 'edit': {
-				result = await executeEdit(dm, interaction);
+				return await executeEdit(dm, interaction);
 			} break;
 
 			default: {
@@ -83,11 +82,9 @@ export default {
 					'errorDescInvalidSubcommand', parameters);
 				log.info(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescInvalidSubcommand')}`,
 					logParam);
-				result = false;
+				return false;
 			} break;
 		}
-
-		return result;
 	}
 };
 
