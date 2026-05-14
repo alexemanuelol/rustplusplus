@@ -45,7 +45,7 @@
         "rustplus-ts": "^0.0.10",
         "translate": "^3.0.1",
         "ts-node": "^10.9.2",
-        "typescript": "^5.9.3",
+        "typescript": "^6.0.3",
         "winston": "^3.19.0",
         "zod": "^4.3.6"
     },
@@ -54,11 +54,11 @@
         "protobufjs": "8.0.0"
     },
     "devDependencies": {
-        "@eslint/js": "^9.39.2",
-        "@typescript-eslint/eslint-plugin": "^8.50.1",
-        "@typescript-eslint/parser": "^8.50.1",
-        "eslint": "^9.39.2",
+        "@eslint/js": "^10.0.1",
+        "@typescript-eslint/eslint-plugin": "^8.59.3",
+        "@typescript-eslint/parser": "^8.59.3",
+        "eslint": "^10.3.0",
         "globals": "^16.5.0",
-        "typescript-eslint": "^8.50.1"
+        "typescript-eslint": "^8.59.3"
     }
 }

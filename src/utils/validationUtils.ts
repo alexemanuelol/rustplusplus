@@ -58,7 +58,7 @@ export async function isValidImageUrl(url: string): Promise<boolean> {
         });
 
         const contentType = response.headers['content-type'];
-        return contentType && contentType.startsWith('image/');
+        return typeof contentType == 'string' && contentType.startsWith('image/');
     }
     catch {
         return false;
