@@ -62,7 +62,13 @@ export async function sendCredentialsExpiredMessage(dm: DiscordManager, steamId:
 export async function sendFcmPlayerDeathMessage(dm: DiscordManager, steamId: types.SteamId, title: string,
     body: PlayerDeathBody) {
     const fn = `[sendFcmPlayerDeathMessage: ${steamId}]`;
-    const credentials = cm.getCredentials(steamId) as Credentials;
+    const logParam = { steamId: steamId };
+
+    const credentials = cm.getCredentials(steamId);
+    if (!credentials) {
+        log.warn(`${fn} Could not find Credentials.`, logParam);
+        return;
+    }
 
     const user = await dm.getUser(credentials.discordUserId);
     if (!user) {
@@ -420,21 +426,8 @@ export async function sendFcmAlarmPluginTriggerMessage(dm: DiscordManager, guild
     await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.activity);
 }
 
-export async function sendFcmTeamLoginMessage(dm: DiscordManager, guildId: types.GuildId,
-    serverId: types.ServerId, body: TeamLoginBody) {
-    const fn = `[sendFcmTeamLoginMessage]`;
-    const logParam = {
-        guildId: guildId,
-        serverId: serverId
-    };
-
+export async function sendFcmTeamLoginMessage(dm: DiscordManager, guildId: types.GuildId, body: TeamLoginBody) {
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-
-    const serverInfo = gInstance.serverInfoMap[serverId];
-    if (!serverInfo) {
-        log.warn(`${fn} Could not find ServerInfo.`, logParam);
-        return;
-    }
 
     const content = {
         embeds: [await discordEmbeds.getFcmTeamLoginEmbed(guildId, body)]
@@ -473,6 +466,18 @@ export async function sendEventNotificationMessage(dm: DiscordManager, guildId: 
             new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'events',
                 settingData.image))
         ]
+    };
+
+    await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.events);
+}
+
+export async function sendActivityNotificationMessage(dm: DiscordManager, guildId: types.GuildId,
+    serverId: types.ServerId, text: string, color: string, steamId: types.SteamId, everyone: boolean = false) {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const content = {
+        embeds: [await discordEmbeds.getActivityNotificationEmbed(guildId, serverId, text, color, steamId)],
+        content: everyone ? '@everyone' : ''
     };
 
     await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.events);

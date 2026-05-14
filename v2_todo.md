@@ -107,7 +107,7 @@
 - [ ] information channel
 - [x] inGame chat handler
 - [x] team chat handler
-- [ ] team handler
+- [x] team handler
 - [x] time handler
 - [ ] vending machine handler
 

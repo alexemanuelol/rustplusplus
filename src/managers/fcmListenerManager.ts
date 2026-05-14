@@ -748,16 +748,6 @@ async function alarmPlugin(flm: FcmListenerManager, steamId: types.SteamId, titl
 }
 
 async function playerDeath(flm: FcmListenerManager, steamId: types.SteamId, title: string, body: PlayerDeathBody) {
-    const fn = `[${flm.constructor.name}: playerDeath]`;
-    const logParam = { steamId: steamId };
-
-    const credentials = cm.getCredentials(steamId);
-
-    if (!credentials) {
-        log.warn(`${fn} Could not find Credentials.`, logParam);
-        return;
-    }
-
     await discordMessages.sendFcmPlayerDeathMessage(flm.dm, steamId, title, body);
 }
 
@@ -785,7 +775,7 @@ async function teamLogin(flm: FcmListenerManager, steamId: types.SteamId, body: 
 
         const rpInstance = rpm.getInstance(guildId, serverId);
         if (!rpInstance && !serverInfo.active && steamId === serverInfo.requesterSteamId) {
-            await discordMessages.sendFcmTeamLoginMessage(flm.dm, guildId, serverId, body);
+            await discordMessages.sendFcmTeamLoginMessage(flm.dm, guildId, body);
             log.info(`${fn} teamLogin: ${body.targetName} just connected to ${body.name}.`, logParam);
         }
     }

@@ -107,6 +107,7 @@ export const COLOR_GREY = '#606060';
 export const COLOR_INACTIVE = '#FF0040';
 export const COLOR_SETTINGS = '#861C0C';
 export const COLOR_TEAMCHAT_DEFAULT = '#CE412B';
+export const COLOR_AFK = '#C97670';
 
 export function GET_STEAM_PROFILE_LINK(steamId: string): string {
     return `[${steamId}](${STEAM_PROFILES_URL}${steamId})`;

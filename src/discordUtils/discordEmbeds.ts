@@ -34,7 +34,7 @@ import * as types from '../utils/types';
 import * as utils from '../utils/utils';
 import { Credentials } from '../managers/credentialsManager';
 import { PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
-import { fetchSteamProfile } from '../utils/steam';
+import { fetchSteamProfile, SteamInfo } from '../utils/steam';
 import { ConnectionStatus } from '../managers/rustPlusManager';
 
 export const EmbedLimits = {
@@ -744,5 +744,27 @@ export function getFcmNewsNewsEmbed(guildId: types.GuildId, title: string, messa
         color: colorHexToNumber(constants.COLOR_DEFAULT),
         thumbnail: { url: constants.DEFAULT_SERVER_IMAGE },
         timestamp: new Date()
+    });
+}
+
+export async function getActivityNotificationEmbed(guildId: types.GuildId, serverId: types.ServerId, text: string,
+    color: string, steamId: types.SteamId): Promise<discordjs.EmbedBuilder> {
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
+
+    let steamInfo: SteamInfo | null = null;
+    if (steamId !== null) {
+        steamInfo = await fetchSteamProfile(steamId);
+    }
+
+    return getEmbed({
+        timestamp: new Date(),
+        color: colorHexToNumber(color),
+        footer: { text: serverInfo.name },
+        author: {
+            name: text,
+            iconURL: (steamInfo !== null) ? steamInfo.imageUrl : constants.DEFAULT_SERVER_IMAGE,
+            url: `${constants.STEAM_PROFILES_URL}${steamId}`
+        }
     });
 }

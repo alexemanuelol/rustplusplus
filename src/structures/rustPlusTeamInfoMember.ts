@@ -57,6 +57,9 @@ export class RustPlusTeamInfoMember {
             if (!this.appTeamInfoMember.isOnline && !this.isGoneOnline(appTeamInfoMember)) {
                 this.wasAfk = false;
             }
+            else if (this.isGoneAfk(appTeamInfoMember)) {
+                this.wasAfk = true;
+            }
         }
 
         this.appTeamInfoMember = appTeamInfoMember;

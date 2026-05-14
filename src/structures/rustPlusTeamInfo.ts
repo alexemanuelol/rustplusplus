@@ -45,9 +45,12 @@ export class RustPlusTeamInfo {
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
 
         if (this.isLeaderSteamIdChanged(appTeamInfo)) {
+            // TODO! Perhaps if leader is changed, only update all members but dont notify about new members 
+            // or left members, since they are the same, just leader changed?
             // TODO! Notify about leader changed
         }
 
+        let hasChanges = false;
         for (const member of this.getNewMembers(appTeamInfo)) {
             this.addMember(member);
 
@@ -59,7 +62,11 @@ export class RustPlusTeamInfo {
                 }
 
                 gInstance.teamMemberChatColorMap[member.steamId] = color;
+                hasChanges = true;
             }
+        }
+        if (hasChanges) {
+            gim.updateGuildInstance(this.rpInstance.guildId);
         }
 
         for (const member of this.getLeftMembers(appTeamInfo)) {
@@ -81,7 +88,6 @@ export class RustPlusTeamInfo {
             this.allOffline = (this.allOffline && !member.appTeamInfoMember.isOnline);
         }
 
-        gim.updateGuildInstance(this.rpInstance.guildId);
         this.appTeamInfo = appTeamInfo;
     }
 
