@@ -5,21 +5,21 @@
 - [x] alias
 - [x] blacklist
 - [x] cctvcodes
-- [ ] craft
+- [ ] craft         Requires rustlabs data
 - [x] credentials
-- [ ] decay
-- [ ] despawn
+- [ ] decay         Requires rustlabs data
+- [ ] despawn       Requires rustlabs data
 - [x] help
 - [ ] item
 - [ ] leader
 - [x] map
 - [ ] market
 - [ ] players
-- [ ] recycle
-- [ ] research
-- [ ] reset
+- [ ] recycle       Requires rustlabs data
+- [ ] research      Requires rustlabs data
+- [x] reset
 - [x] role
-- [ ] stack
+- [ ] stack         Requires rustlabs data
 - [x] storagemonitor
 - [x] smartswitch
 - [ ] upkeep
@@ -27,7 +27,7 @@
 - [x] voice
 
 ## In-Game commands
-- [ ] afk
+- [x] afk
 - [ ] alive
 - [ ] cargo
 - [ ] chinook
