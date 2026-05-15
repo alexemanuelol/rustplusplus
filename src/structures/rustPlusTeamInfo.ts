@@ -39,6 +39,8 @@ export class RustPlusTeamInfo {
         this.members = new Map<types.SteamId, RustPlusTeamInfoMember>();
         this.allOnline = false;
         this.allOffline = false;
+
+        this.updateTeamInfo(appTeamInfo);
     }
 
     public updateTeamInfo(appTeamInfo: rp.AppTeamInfo) {
@@ -153,8 +155,9 @@ export class RustPlusTeamInfo {
     public getReminingMembers(appTeamInfo: rp.AppTeamInfo): rp.AppTeamInfo_Member[] {
         const remainingMembers: rp.AppTeamInfo_Member[] = [];
         for (const member of this.members.values()) {
-            if (appTeamInfo.members.find(m => m.steamId === member.appTeamInfoMember.steamId)) {
-                remainingMembers.push(member.appTeamInfoMember);
+            const updatedMember = appTeamInfo.members.find(m => m.steamId === member.appTeamInfoMember.steamId);
+            if (updatedMember) {
+                remainingMembers.push(updatedMember);
             }
         }
         return remainingMembers;

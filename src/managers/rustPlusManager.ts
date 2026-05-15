@@ -30,6 +30,7 @@ import * as constants from '../utils/constants';
 import * as types from '../utils/types';
 import { getServerId, getIpAndPort, GuildInstance, EventNotificationSettings } from './guildInstanceManager';
 import { sendServerMessage } from '../discordUtils/discordMessages';
+import * as rpTeamInfoHandler from '../handlers/rustPlusTeamInfoHandler';
 import * as rpInfoHandler from '../handlers/rustPlusInfoHandler';
 import * as rpTimeHandler from '../handlers/rustPlusTimeHandler';
 import { RustPlusInfo } from '../structures/rustPlusInfo';
@@ -330,6 +331,8 @@ export class RustPlusInstance {
         }
 
         // TODO! teamHandler
+        await rpTeamInfoHandler.handler(this, teamInfo);
+        (this.rpTeamInfo as RustPlusTeamInfo).updateTeamInfo(teamInfo);
         // TODO! update rpTeamInfo
 
         // TODO! smartSwitchHandler

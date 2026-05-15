@@ -480,7 +480,7 @@ export async function sendActivityNotificationMessage(dm: DiscordManager, guildI
         content: everyone ? '@everyone' : ''
     };
 
-    await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.events);
+    await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.activity);
 }
 
 

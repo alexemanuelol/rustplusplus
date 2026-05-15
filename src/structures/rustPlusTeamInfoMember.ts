@@ -41,7 +41,9 @@ export class RustPlusTeamInfoMember {
 
     public updateTeamInfoMember(appTeamInfoMember: rp.AppTeamInfo_Member) {
         if (this.isGoneOffline(appTeamInfoMember)) {
+            this.lastMovementDate = null;
             this.wentOfflineDate = new Date();
+            this.wasAfk = false;
         }
 
         if (this.isGoneOnline(appTeamInfoMember)) {
@@ -54,10 +56,7 @@ export class RustPlusTeamInfoMember {
             this.wasAfk = false;
         }
         else {
-            if (!this.appTeamInfoMember.isOnline && !this.isGoneOnline(appTeamInfoMember)) {
-                this.wasAfk = false;
-            }
-            else if (this.isGoneAfk(appTeamInfoMember)) {
+            if (this.isGoneAfk(appTeamInfoMember)) {
                 this.wasAfk = true;
             }
         }
@@ -127,12 +126,13 @@ export class RustPlusTeamInfoMember {
             return false;
         }
 
-        return (Date.now() - this.lastMovementDate.getTime()) >= constants.AFK_TIME_SECONDS;
+        return ((Date.now() - this.lastMovementDate.getTime()) / 1000) >= constants.AFK_TIME_SECONDS;
     }
 
     public isGoneAfk(appTeamInfoMember: rp.AppTeamInfo_Member): boolean {
         return (
             !this.wasAfk &&
+            this.isAfk() &&
             !this.isMoved(appTeamInfoMember) &&
             this.appTeamInfoMember.isOnline);
     }
