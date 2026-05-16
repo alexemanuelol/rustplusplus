@@ -467,12 +467,13 @@ export class RustPlusInstance {
         return await commandModule.execute(this, args, message);
     }
 
-    public sendPrefixCommandResponse(response: string, inGame: boolean) {
+    public sendPrefixCommandResponse(response: string | string[], inGame: boolean) {
         if (inGame) {
-            this.inGameTeamChatQueueMessage([response]);
+            this.inGameTeamChatQueueMessage(response);
         }
         else {
-            discordMessages.sendPrefixCommandResponseMessage(dm, this.guildId, response);
+            const formattedResponse = Array.isArray(response) ? response.join('\n') : response;
+            discordMessages.sendPrefixCommandResponseMessage(dm, this.guildId, formattedResponse);
         }
     }
 

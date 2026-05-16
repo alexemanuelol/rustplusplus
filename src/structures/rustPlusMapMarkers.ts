@@ -64,6 +64,7 @@ export interface CargoShipMetaData {
     isLeaving: boolean;
     prevPoint: map.Point | null;
     isDepartureCertain: boolean;
+    spawnTime: Date;
 }
 
 export interface PatrolHelicopterMetaData {
@@ -413,7 +414,8 @@ export class RustPlusMapMarkers {
                 dockingStatus: null,
                 isLeaving: false,
                 prevPoint: null,
-                isDepartureCertain: true
+                isDepartureCertain: true,
+                spawnTime: new Date()
             };
 
             const offset = 4 * gridDiameter;
