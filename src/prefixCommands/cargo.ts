@@ -141,6 +141,9 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
                 const timeLeftSeconds = timer2.getTimeLeftMs() / 1000;
                 timeLeftString0 = secondsToFullScale(timeLeftSeconds, 'd', false);
             }
+            else {
+                /* Do nothing */
+            }
 
             if (timeLeftString0 !== '' && timeLeftString1 !== '') {
                 const timeLeftString = lm.getIntl(language, 'cargoShipLeavingInOr', {
@@ -149,7 +152,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
                 });
                 str += ` ${timeLeftString}`;
             }
-            else {
+            else if (timeLeftString0 !== '') {
                 const timeLeftString = lm.getIntl(language, 'cargoShipLeavingIn', {
                     time: timeLeftString0
                 });
@@ -157,7 +160,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
             }
         }
 
-        response.push(str);
+        response.push(str.trim());
     }
 
     rpInstance.sendPrefixCommandResponse(response, inGame);

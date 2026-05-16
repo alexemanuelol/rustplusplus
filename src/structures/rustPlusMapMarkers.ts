@@ -67,6 +67,12 @@ export interface CargoShipMetaData {
     spawnTime: Date;
 }
 
+export interface Ch47MetaData {
+    spawnTime: Date;
+    lockedCrateDropLocation: string | null;
+    lockedCrateNotified: boolean;
+}
+
 export interface PatrolHelicopterMetaData {
     prevPoint: map.Point | null;
     isLeaving: boolean;
@@ -116,10 +122,9 @@ export class RustPlusMapMarkers {
 
     public knownVendingMachines: map.Point[];
     public oilRigCh47s: number[];
-    public ch47LockedCrateNotified: number[];
     public cargoShipMetaData: { [cargoShip: number]: CargoShipMetaData };
     public patrolHelicopterMetaData: { [cargoShip: number]: PatrolHelicopterMetaData };
-
+    public ch47MetaData: { [ch47: number]: Ch47MetaData };
     public tracers: Tracers;
 
     constructor(rpInstance: rpmc.RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
@@ -159,10 +164,9 @@ export class RustPlusMapMarkers {
 
         this.knownVendingMachines = [];
         this.oilRigCh47s = [];
-        this.ch47LockedCrateNotified = [];
         this.cargoShipMetaData = {};
+        this.ch47MetaData = {};
         this.patrolHelicopterMetaData = {};
-
         this.tracers = {
             players: new Map(),
             ch47s: new Map(),
@@ -313,6 +317,11 @@ export class RustPlusMapMarkers {
                 }
             }
             else {
+                this.ch47MetaData[marker.id] = {
+                    spawnTime: new Date(),
+                    lockedCrateDropLocation: null,
+                    lockedCrateNotified: false
+                }
                 this.addTracer('ch47s', marker.id, { x: marker.x, y: marker.y });
                 const ch47Pos = map.getPos(marker.x, marker.y, this.rpInstance);
                 if (ch47Pos) {
@@ -344,8 +353,8 @@ export class RustPlusMapMarkers {
             }
 
             this.dateCh47LeftMap = new Date();
-            this.ch47LockedCrateNotified = this.ch47LockedCrateNotified.filter(e => e !== marker.id);
             this.ch47s = this.ch47s.filter(e => e.id !== marker.id);
+            delete this.ch47MetaData[marker.id];
         }
 
         /* Markers that still remains. */
@@ -369,7 +378,7 @@ export class RustPlusMapMarkers {
 
             const difference = Math.abs(prevDistance - distance);
             const validMonument = VALID_LOCKED_CRATE_MONUMENTS.includes(closestMonument.token);
-            const notified = this.ch47LockedCrateNotified.includes(marker.id);
+            const notified = this.ch47MetaData[marker.id].lockedCrateNotified;
 
             if (prevClosestMonument.token === closestMonument.token && validMonument && !notified &&
                 distance <= minDistanceInside && difference <= maxDifference) {
@@ -380,10 +389,8 @@ export class RustPlusMapMarkers {
                     grid: gridPos
                 });
                 this.rpInstance.sendEventNotification('ch47MaybeDroppedLockedCrate', eventText);
-                this.ch47LockedCrateNotified.push(marker.id);
-            }
-            else if (prevClosestMonument.token !== closestMonument.token && notified) {
-                this.ch47LockedCrateNotified = this.ch47LockedCrateNotified.filter(e => e !== marker.id);
+                this.ch47MetaData[marker.id].lockedCrateDropLocation = `monumentName-${closestMonument.token}`;
+                this.ch47MetaData[marker.id].lockedCrateNotified = true;
             }
 
             Object.assign(ch47, marker);
