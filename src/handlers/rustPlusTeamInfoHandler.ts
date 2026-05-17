@@ -92,6 +92,7 @@ export async function handler(rpInstance: RustPlusInstance, teamInfo: rp.AppTeam
                 rpInstance.inGameTeamChatQueueMessage(str);
             }
             log.info(`${fn} ${updatedMemberInfo.name} just died at ${posString}.`, logParam);
+            rpInstance.updateDeaths(updatedMemberInfo.steamId, updatedMemberInfo.name, posString);
         }
 
         if (member.isGoneAfk(updatedMemberInfo)) {

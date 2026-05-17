@@ -53,6 +53,12 @@ export enum ConnectionStatus {
     Reconnecting = 3
 }
 
+export interface RustPlusDeathMetaData {
+    time: string;
+    name: string;
+    location: string | null;
+}
+
 export class RustPlusManager {
     private rustPlusInstanceMap: RustPlusInstanceMap;
 
@@ -139,6 +145,8 @@ export class RustPlusInstance {
 
     public allConnections: string[];
     public playerConnections: { [steamId: types.SteamId]: string[] };
+    public allDeaths: RustPlusDeathMetaData[];
+    public playerDeaths: { [steamId: types.SteamId]: RustPlusDeathMetaData[] };
 
 
     constructor(guildId: types.GuildId, ip: string, port: string) {
@@ -177,6 +185,8 @@ export class RustPlusInstance {
 
         this.allConnections = [];
         this.playerConnections = {};
+        this.allDeaths = [];
+        this.playerDeaths = {};
 
         //this.leaderSteamId = '0'; /* 0 When there is no leader. */
     }
@@ -666,5 +676,28 @@ export class RustPlusInstance {
             this.playerConnections[steamId].pop();
         }
         this.playerConnections[steamId].unshift(savedString);
+    }
+
+    public async updateDeaths(steamId: types.SteamId, name: string, location: string | null) {
+        const time = Timer.getCurrentDateTime();
+        const data = {
+            time: time,
+            name: name,
+            location: location
+        }
+
+        if (this.allDeaths.length === 10) {
+            this.allDeaths.pop();
+        }
+        this.allDeaths.unshift(data)
+
+        if (!this.playerDeaths[steamId]) {
+            this.playerDeaths[steamId] = [];
+        }
+
+        if (this.playerDeaths[steamId].length === 10) {
+            this.playerDeaths[steamId].pop();
+        }
+        this.playerDeaths[steamId].unshift(data);
     }
 }

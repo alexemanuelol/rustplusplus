@@ -25,7 +25,7 @@ import { log, guildInstanceManager as gim, localeManager as lm } from '../../ind
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 
-export const name = 'connections';
+export const name = 'death';
 
 export async function execute(rpInstance: RustPlusInstance, args: string[],
     message: rp.AppTeamMessage | discordjs.Message):
@@ -42,22 +42,51 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const language = gInstance.generalSettings.language;
 
+    if (rpInstance.rpTeamInfo === null) return false;
+
+    if (args.length === 0) {
+        const response = lm.getIntl(language, 'nameArgumentMissing');
+        rpInstance.sendPrefixCommandResponse(response, inGame);
+        log.info(`${fn} ${response}`, logParam);
+        return true;
+    }
+
     const response: string[] = [];
-    let number = (args[0] !== undefined) ? parseInt(args[0]) : undefined;
+    const memberName = args[0];
+
+    let number = (args[1] !== undefined) ? parseInt(args[1]) : undefined;
     number = (number !== undefined && isNaN(number)) ? undefined : number;
 
-    if (rpInstance.allConnections.length === 0) {
-        response.push(lm.getIntl(language, 'noConnectionEvents',));
+    const member = [...rpInstance.rpTeamInfo.members.values()].find(m =>
+        m.appTeamInfoMember.name.toLowerCase().includes(memberName.toLowerCase())
+    );
+
+    if (member) {
+        if (rpInstance.playerDeaths[member.appTeamInfoMember.steamId] === undefined) {
+            rpInstance.playerDeaths[member.appTeamInfoMember.steamId] = [];
+        }
+
+        if (rpInstance.playerDeaths[member.appTeamInfoMember.steamId].length === 0) {
+            response.push(lm.getIntl(language, 'noDeathEvents'));
+        }
+        else {
+            let counter = 1;
+            for (const event of rpInstance.playerDeaths[member.appTeamInfoMember.steamId]) {
+                if (counter === 6) break;
+                if (number !== undefined && counter !== number) continue;
+
+                const str = `${event.time} - ` + lm.getIntl(language, 'playerDiedAt', {
+                    name: event.name,
+                    pos: event.location ?? lm.getIntl(language, 'unknown')
+                });
+
+                response.push(str);
+                counter++;
+            }
+        }
     }
     else {
-        let counter = 1;
-        for (const event of rpInstance.allConnections) {
-            if (counter === 6) break;
-            if (number !== undefined && counter !== number) continue;
-
-            response.push(event);
-            counter++;
-        }
+        response.push(lm.getIntl(language, 'noPlayerFoundWithName', { name: memberName }));
     }
 
     rpInstance.sendPrefixCommandResponse(response, inGame);

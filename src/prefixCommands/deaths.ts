@@ -25,7 +25,7 @@ import { log, guildInstanceManager as gim, localeManager as lm } from '../../ind
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 
-export const name = 'connections';
+export const name = 'deaths';
 
 export async function execute(rpInstance: RustPlusInstance, args: string[],
     message: rp.AppTeamMessage | discordjs.Message):
@@ -46,16 +46,21 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     let number = (args[0] !== undefined) ? parseInt(args[0]) : undefined;
     number = (number !== undefined && isNaN(number)) ? undefined : number;
 
-    if (rpInstance.allConnections.length === 0) {
-        response.push(lm.getIntl(language, 'noConnectionEvents',));
+    if (rpInstance.allDeaths.length === 0) {
+        response.push(lm.getIntl(language, 'noDeathEvents',));
     }
     else {
         let counter = 1;
-        for (const event of rpInstance.allConnections) {
+        for (const event of rpInstance.allDeaths) {
             if (counter === 6) break;
             if (number !== undefined && counter !== number) continue;
 
-            response.push(event);
+            const str = `${event.time} - ` + lm.getIntl(language, 'playerDiedAt', {
+                name: event.name,
+                pos: event.location ?? lm.getIntl(language, 'unknown')
+            });
+
+            response.push(str);
             counter++;
         }
     }

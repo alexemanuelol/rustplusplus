@@ -33,7 +33,7 @@
 - [x] chinook
 - [x] connection
 - [ ] craft         Requires rustlabs data
-- [ ] death
+- [x] death
 - [ ] decay         Requires rustlabs data
 - [ ] despawn       Requires rustlabs data
 - [ ] events
