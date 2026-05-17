@@ -53,6 +53,11 @@ export enum ConnectionStatus {
     Reconnecting = 3
 }
 
+export interface RustPlusConnectionMetaData {
+    time: string;
+    str: string;
+}
+
 export interface RustPlusDeathMetaData {
     time: string;
     name: string;
@@ -143,8 +148,8 @@ export class RustPlusInstance {
     public rpTeamInfo: RustPlusTeamInfo | null;
     public rpMapMarkers: RustPlusMapMarkers | null;
 
-    public allConnections: string[];
-    public playerConnections: { [steamId: types.SteamId]: string[] };
+    public allConnections: RustPlusConnectionMetaData[];
+    public playerConnections: { [steamId: types.SteamId]: RustPlusConnectionMetaData[] };
     public allDeaths: RustPlusDeathMetaData[];
     public playerDeaths: { [steamId: types.SteamId]: RustPlusDeathMetaData[] };
 
@@ -661,12 +666,15 @@ export class RustPlusInstance {
 
     public async updateConnections(steamId: types.SteamId, str: string) {
         const time = Timer.getCurrentDateTime();
-        const savedString = `${time} - ${str}`;
+        const data = {
+            time: time,
+            str: str
+        }
 
         if (this.allConnections.length === 10) {
             this.allConnections.pop();
         }
-        this.allConnections.unshift(savedString)
+        this.allConnections.unshift(data)
 
         if (!this.playerConnections[steamId]) {
             this.playerConnections[steamId] = [];
@@ -675,7 +683,7 @@ export class RustPlusInstance {
         if (this.playerConnections[steamId].length === 10) {
             this.playerConnections[steamId].pop();
         }
-        this.playerConnections[steamId].unshift(savedString);
+        this.playerConnections[steamId].unshift(data);
     }
 
     public async updateDeaths(steamId: types.SteamId, name: string, location: string | null) {

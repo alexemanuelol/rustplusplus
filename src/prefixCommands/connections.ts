@@ -55,7 +55,9 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
             if (counter === 6) break;
             if (number !== undefined && counter !== number) continue;
 
-            response.push(event);
+            const str = `${event.time} - ${event.str}`;
+
+            response.push(str);
             counter++;
         }
     }
