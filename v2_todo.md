@@ -28,14 +28,14 @@
 
 ## In-Game commands
 - [x] afk
-- [ ] alive
-- [ ] cargo
-- [ ] chinook
-- [ ] connection
-- [ ] craft
+- [x] alive
+- [x] cargo
+- [x] chinook
+- [x] connection
+- [ ] craft         Requires rustlabs data
 - [ ] death
-- [ ] decay
-- [ ] despawn
+- [ ] decay         Requires rustlabs data
+- [ ] despawn       Requires rustlabs data
 - [ ] events
 - [ ] harbor
 - [ ] heli
@@ -50,11 +50,11 @@
 - [ ] player
 - [x] pop
 - [ ] prox
-- [ ] recycle
-- [ ] research
+- [ ] recycle       Requires rustlabs data
+- [ ] research      Requires rustlabs data
 - [ ] send
 - [ ] small
-- [ ] stack
+- [ ] stack         Requires rustlabs data
 - [ ] steamid
 - [ ] team
 - [x] time
@@ -63,7 +63,7 @@
 - [ ] travellingvendor
 - [ ] tts
 - [ ] unmute
-- [ ] upkeep
+- [ ] upkeep        Requires rustlabs data
 - [ ] uptime
 - [x] wipe
 

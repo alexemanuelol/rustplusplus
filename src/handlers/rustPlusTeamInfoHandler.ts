@@ -58,6 +58,7 @@ export async function handler(rpInstance: RustPlusInstance, teamInfo: rp.AppTeam
             rpInstance.inGameTeamChatQueueMessage(str);
         }
         log.info(`${fn} ${member.appTeamInfoMember.name} left the team.`, logParam);
+        rpInstance.updateConnections(leftMember.steamId, str);
     }
 
     for (const newMember of newMembers) {
@@ -68,6 +69,7 @@ export async function handler(rpInstance: RustPlusInstance, teamInfo: rp.AppTeam
             rpInstance.inGameTeamChatQueueMessage(str);
         }
         log.info(`${fn} ${newMember.name} joined the team.`, logParam);
+        rpInstance.updateConnections(newMember.steamId, str);
     }
 
     for (const member of rpTeamInfo.members.values()) {
@@ -130,6 +132,7 @@ export async function handler(rpInstance: RustPlusInstance, teamInfo: rp.AppTeam
                 rpInstance.inGameTeamChatQueueMessage(str);
             }
             log.info(`${fn} ${updatedMemberInfo.name} just connected.`, logParam);
+            rpInstance.updateConnections(updatedMemberInfo.steamId, str);
         }
 
         if (member.isGoneOffline(updatedMemberInfo)) {
@@ -140,6 +143,7 @@ export async function handler(rpInstance: RustPlusInstance, teamInfo: rp.AppTeam
                 rpInstance.inGameTeamChatQueueMessage(str);
             }
             log.info(`${fn} ${updatedMemberInfo.name} just disconnected.`, logParam);
+            rpInstance.updateConnections(updatedMemberInfo.steamId, str);
         }
     }
 }

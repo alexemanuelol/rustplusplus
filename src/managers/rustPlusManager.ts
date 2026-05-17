@@ -40,6 +40,7 @@ import { RustPlusMapMarkers } from '../structures/rustPlusMapMarkers';
 import { RustPlusTeamInfo } from '../structures/rustPlusTeamInfo';
 import * as discordMessages from '../discordUtils/discordMessages';
 import * as discordVoice from '../discordUtils/discordVoice';
+import * as Timer from '../utils/timer';
 
 
 export type RustPlusInstanceMap = { [guildId: types.GuildId]: RustPlusServerMap };
@@ -136,6 +137,9 @@ export class RustPlusInstance {
     public rpTeamInfo: RustPlusTeamInfo | null;
     public rpMapMarkers: RustPlusMapMarkers | null;
 
+    public allConnections: string[];
+    public playerConnections: { [steamId: types.SteamId]: string[] };
+
 
     constructor(guildId: types.GuildId, ip: string, port: string) {
         this.guildId = guildId;
@@ -170,6 +174,9 @@ export class RustPlusInstance {
         this.rpMap = null;
         this.rpTeamInfo = null;
         this.rpMapMarkers = null;
+
+        this.allConnections = [];
+        this.playerConnections = {};
 
         //this.leaderSteamId = '0'; /* 0 When there is no leader. */
     }
@@ -462,7 +469,7 @@ export class RustPlusInstance {
         const commandPath = path.join(__dirname, '..', 'prefixCommands', `${command}.ts`);
         const commandModule = await import(commandPath);
 
-        const args = messageString.slice(baseCommandStartRaw.length).trim().split(/\s+/);
+        const args = messageString.slice(baseCommandStartRaw.length).trim().split(/\s+/).filter(Boolean);
 
         return await commandModule.execute(this, args, message);
     }
@@ -640,5 +647,24 @@ export class RustPlusInstance {
         }
 
         this.lg.info(`Event Notification: ${text}`);
+    }
+
+    public async updateConnections(steamId: types.SteamId, str: string) {
+        const time = Timer.getCurrentDateTime();
+        const savedString = `${time} - ${str}`;
+
+        if (this.allConnections.length === 10) {
+            this.allConnections.pop();
+        }
+        this.allConnections.unshift(savedString)
+
+        if (!this.playerConnections[steamId]) {
+            this.playerConnections[steamId] = [];
+        }
+
+        if (this.playerConnections[steamId].length === 10) {
+            this.playerConnections[steamId].pop();
+        }
+        this.playerConnections[steamId].unshift(savedString);
     }
 }

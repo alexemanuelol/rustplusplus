@@ -25,7 +25,7 @@ import { log, guildInstanceManager as gim, localeManager as lm } from '../../ind
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 
-export const name = 'alive';
+export const name = 'connection';
 
 export async function execute(rpInstance: RustPlusInstance, args: string[],
     message: rp.AppTeamMessage | discordjs.Message):
@@ -44,33 +44,44 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpTeamInfo === null) return false;
 
-    let response: string;
-    if (args.length !== 0) {
-        const name = args.join(' ');
-        const member = [...rpInstance.rpTeamInfo.members.values()].find(m =>
-            m.appTeamInfoMember.name.toLowerCase().includes(name.toLowerCase())
-        );
+    if (args.length === 0) {
+        const response = lm.getIntl(language, 'nameArgumentMissing');
+        rpInstance.sendPrefixCommandResponse(response, inGame);
+        log.info(`${fn} ${response}`, logParam);
+        return true;
+    }
 
-        if (member) {
-            response = lm.getIntl(language, 'playerHasBeenAliveFor', {
-                name: member.appTeamInfoMember.name,
-                time: member.getAliveTime()
-            });
+    const response: string[] = [];
+    const memberName = args[0];
+
+    let number = (args[1] !== undefined) ? parseInt(args[1]) : undefined;
+    number = (number !== undefined && isNaN(number)) ? undefined : number;
+
+    const member = [...rpInstance.rpTeamInfo.members.values()].find(m =>
+        m.appTeamInfoMember.name.toLowerCase().includes(memberName.toLowerCase())
+    );
+
+    if (member) {
+        if (rpInstance.playerConnections[member.appTeamInfoMember.steamId] === undefined) {
+            rpInstance.playerConnections[member.appTeamInfoMember.steamId] = [];
+        }
+
+        if (rpInstance.playerConnections[member.appTeamInfoMember.steamId].length === 0) {
+            response.push(lm.getIntl(language, 'noConnectionEvents',));
         }
         else {
-            response = lm.getIntl(language, 'noPlayerFoundWithName', { name });
+            let counter = 1;
+            for (const event of rpInstance.playerConnections[member.appTeamInfoMember.steamId]) {
+                if (counter === 6) break;
+                if (number !== undefined && counter !== number) continue;
+
+                response.push(event);
+                counter++;
+            }
         }
     }
     else {
-        const membersAliveTimeArray = [...rpInstance.rpTeamInfo.members.values()].map(m => ({
-            name: m.appTeamInfoMember.name,
-            timeSeconds: m.getAliveSeconds(),
-            timeString: m.getAliveTime('dhs')
-        })).sort((a, b) => b.timeSeconds - a.timeSeconds);
-
-        response = membersAliveTimeArray.map(m => {
-            return `${m.name} (${m.timeString})`;
-        }).join(', ');
+        response.push(lm.getIntl(language, 'noPlayerFoundWithName', { name: memberName }));
     }
 
     rpInstance.sendPrefixCommandResponse(response, inGame);
