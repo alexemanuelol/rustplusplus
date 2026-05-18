@@ -266,6 +266,8 @@
     "noCredentialsConfigured": "No credentials are configured.",
     "noDeathEvents": "No death events found.",
     "noOneIsAfk": "No one is AFK.",
+    "noOneIsOffline": "No one is offline.",
+    "noOneIsOnline": "No one is online.",
     "noPlayerFoundWithName": "No player found with name {name}.",
     "noneSelected": "None selected.",
     "northEast": "North East",
