@@ -45,8 +45,8 @@
 - [ ] market
 - [ ] mute
 - [ ] note
-- [ ] offline
-- [ ] online
+- [x] offline
+- [x] online
 - [ ] player
 - [x] pop
 - [ ] prox
@@ -56,7 +56,7 @@
 - [ ] small
 - [ ] stack         Requires rustlabs data
 - [ ] steamid
-- [ ] team
+- [x] team
 - [x] time
 - [ ] timer
 - [ ] translate
