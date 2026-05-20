@@ -38,7 +38,7 @@
 - [ ] despawn       Requires rustlabs data
 - [ ] events
 - [ ] harbor
-- [ ] heli
+- [x] heli
 - [ ] large
 - [ ] leader
 - [ ] marker

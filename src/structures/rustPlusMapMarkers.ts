@@ -125,6 +125,7 @@ export class RustPlusMapMarkers {
     public cargoShipMetaData: { [cargoShip: number]: CargoShipMetaData };
     public patrolHelicopterMetaData: { [cargoShip: number]: PatrolHelicopterMetaData };
     public ch47MetaData: { [ch47: number]: Ch47MetaData };
+    public patrolHelicopterLastDestroyedLocation: string | null;
     public tracers: Tracers;
 
     constructor(rpInstance: rpmc.RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
@@ -167,6 +168,7 @@ export class RustPlusMapMarkers {
         this.cargoShipMetaData = {};
         this.ch47MetaData = {};
         this.patrolHelicopterMetaData = {};
+        this.patrolHelicopterLastDestroyedLocation = null;
         this.tracers = {
             players: new Map(),
             ch47s: new Map(),
@@ -722,15 +724,21 @@ export class RustPlusMapMarkers {
             const settingsKey = 'patrolHelicopter' + (isOutside ? 'Despawned' : 'Destroyed');
 
             const patrolHelicopterPos = map.getPos(marker.x, marker.y, this.rpInstance);
+            let patrolHelicopterPosString: string | null = null;
             if (patrolHelicopterPos) {
-                const patrolHelicopterPosString = map.getPosString(patrolHelicopterPos, this.rpInstance, false, true);
+                patrolHelicopterPosString = map.getPosString(patrolHelicopterPos, this.rpInstance, false, true);
                 const eventText = lm.getIntl(language, phrase, { location: patrolHelicopterPosString });
                 this.rpInstance.sendEventNotification(settingsKey as keyof gimc.EventNotificationSettings, eventText);
             }
 
-            const now = new Date()
-            this.datePatrolHelicopterLeftMap = now;
-            this.datePatrolHelicopterDestroyed = !isOutside ? now : this.datePatrolHelicopterDestroyed;
+            this.datePatrolHelicopterLeftMap = new Date();
+            if (!isOutside) {
+                this.datePatrolHelicopterDestroyed = new Date();
+                if (patrolHelicopterPosString) {
+                    this.patrolHelicopterLastDestroyedLocation = patrolHelicopterPosString;
+                }
+            }
+
             delete this.patrolHelicopterMetaData[marker.id];
             this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== marker.id);
         }
