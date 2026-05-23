@@ -53,7 +53,7 @@
 - [ ] recycle       Requires rustlabs data
 - [ ] research      Requires rustlabs data
 - [ ] send
-- [ ] small
+- [x] small
 - [ ] stack         Requires rustlabs data
 - [ ] steamid
 - [x] team
