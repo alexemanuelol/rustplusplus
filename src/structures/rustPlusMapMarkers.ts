@@ -57,6 +57,11 @@ const TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000;
 const MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE = 3;
 const MAX_PLAYERS_TRACER_ENTRIES = 500;
 
+export interface OilRigLockedCrateMetaData {
+    timer: timer.Timer;
+    oilRig: 'oil_rig_small' | 'large_oil_rig';
+}
+
 export interface CargoShipMetaData {
     lockedCrateSpawnCounter: number;
     harborsDocked: map.Point[];
@@ -104,7 +109,7 @@ export class RustPlusMapMarkers {
     public patrolHelicopters: rp.AppMarker[];
     public travellingVendors: rp.AppMarker[];
 
-    public oilRigLockedCrateUnlockedTimeoutIds: { [ch47: number]: NodeJS.Timeout };
+    public oilRigLockedCrateUnlockedTimeoutIds: { [ch47: number]: OilRigLockedCrateMetaData };
     public cargoShipEgressTimeoutIds: { [cargoShip: number]: timer.Timer };
     public cargoShipEgressAfterHarbor1TimeoutIds: { [cargoShip: number]: timer.Timer };
     public cargoShipEgressAfterHarbor2TimeoutIds: { [cargoShip: number]: timer.Timer };
@@ -307,11 +312,14 @@ export class RustPlusMapMarkers {
                     });
                     if (!this.firstPoll) this.rpInstance.sendEventNotification('ch47HeavyScientistsCalled', eventText);
 
-                    this.oilRigLockedCrateUnlockedTimeoutIds[marker.id] = setTimeout(
-                        this.notifyOilRigLockedCrateUnlocked.bind(this),
-                        gInstance.serverInfoMap[this.rpInstance.serverId].oilRigLockedCrateUnlockTimeMs,
-                        marker.id, oilRigName, oilRigPosString
-                    );
+                    this.oilRigLockedCrateUnlockedTimeoutIds[marker.id] = {
+                        timer: new timer.Timer(
+                            this.notifyOilRigLockedCrateUnlocked.bind(this, marker.id, oilRigName, oilRigPosString),
+                            gInstance.serverInfoMap[this.rpInstance.serverId].oilRigLockedCrateUnlockTimeMs
+                        ),
+                        oilRig: oilRigTokenName
+                    };
+                    (this.oilRigLockedCrateUnlockedTimeoutIds[marker.id].timer as timer.Timer).start();
 
                     const now = new Date()
                     this.dateSmallOilRigWasTriggered = smallOilRig ? now : this.dateSmallOilRigWasTriggered;
@@ -352,6 +360,11 @@ export class RustPlusMapMarkers {
                     (!map.isOutsideGridSystem(marker.x, marker.y, mapSize) ? '-destroyed' : '');
                 const eventText = lm.getIntl(language, phrase, { location: ch47PosString });
                 this.rpInstance.sendEventNotification('ch47Despawned', eventText);
+            }
+
+            if (Object.hasOwn(this.oilRigLockedCrateUnlockedTimeoutIds, marker.id)) {
+                this.oilRigLockedCrateUnlockedTimeoutIds[marker.id].timer?.stop();
+                delete this.oilRigLockedCrateUnlockedTimeoutIds[marker.id];
             }
 
             this.dateCh47LeftMap = new Date();
@@ -936,7 +949,7 @@ export class RustPlusMapMarkers {
      */
 
     private notifyOilRigLockedCrateUnlocked(ch47: number, oilRigName: string, location: string) {
-        clearTimeout(this.oilRigLockedCrateUnlockedTimeoutIds[ch47]);
+        this.oilRigLockedCrateUnlockedTimeoutIds[ch47].timer?.stop();
         delete this.oilRigLockedCrateUnlockedTimeoutIds[ch47];
 
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
