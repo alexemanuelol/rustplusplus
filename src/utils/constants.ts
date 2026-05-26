@@ -38,7 +38,6 @@ export const STEAM_PROFILES_URL = 'https://steamcommunity.com/profiles/';
 export const BATTLEMETRICS_PROFILE_URL = 'https://www.battlemetrics.com/players/';
 export const BATTLEMETRICS_SERVER_URL = 'https://www.battlemetrics.com/servers/rust/';
 
-
 export const AFK_TIME_SECONDS = 5 * 60; /* 5 min */
 export const MAX_LENGTH_TEAM_MESSAGE = 128;
 export const STEAMID64_LENGTH = 17;
@@ -78,6 +77,7 @@ export const STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY = 48;
 /* Default timer times */
 export const DEFAULT_CARGO_SHIP_EGRESS_TIME_MS = 50 * 60 * 1000; /* 50 min */
 export const DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS = 15 * 60 * 1000; /* 15 min */
+export const DEFAULT_DEEP_SEA_DURATION_TIME_MS = 3 * 60 * 60 * 1000; /* 3 hours */
 
 /* Other constants */
 export const PATROL_HELI_DOWNED_RADIUS = 400;

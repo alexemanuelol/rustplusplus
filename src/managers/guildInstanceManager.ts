@@ -166,6 +166,8 @@ export interface EventNotificationSettings {
     patrolHelicopterLeaving: EventNotificationSetting;
     travellingVendorSpawned: EventNotificationSetting;
     travellingVendorDespawned: EventNotificationSetting;
+    deepSeaSpawned: EventNotificationSetting;
+    deepSeaDespawned: EventNotificationSetting;
 }
 
 export interface EventNotificationSetting {
@@ -214,6 +216,8 @@ export interface SettingsMessages {
     patrolHelicopterLeaving: types.MessageId | null;
     travellingVendorSpawned: types.MessageId | null;
     travellingVendorDespawned: types.MessageId | null;
+    deepSeaSpawned: types.MessageId | null;
+    deepSeaDespawned: types.MessageId | null;
 }
 
 export interface Alias {
@@ -582,7 +586,9 @@ export class GuildInstanceManager {
                 patrolHelicopterDestroyed: null,
                 patrolHelicopterLeaving: null,
                 travellingVendorSpawned: null,
-                travellingVendorDespawned: null
+                travellingVendorDespawned: null,
+                deepSeaSpawned: null,
+                deepSeaDespawned: null
             },
             aliases: [],
             blacklist: {
@@ -1028,7 +1034,9 @@ export function isValidEventNotificationSettings(object: unknown): object is Eve
         'patrolHelicopterDestroyed',
         'patrolHelicopterLeaving',
         'travellingVendorSpawned',
-        'travellingVendorDespawned'
+        'travellingVendorDespawned',
+        'deepSeaSpawned',
+        'deepSeaDespawned'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1065,6 +1073,8 @@ export function isValidEventNotificationSettings(object: unknown): object is Eve
         isValidEventNotificationSetting));
     errors.push(vu.validateInterface('travellingVendorDespawned', obj.travellingVendorDespawned,
         isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('deepSeaSpawned', obj.deepSeaSpawned, isValidEventNotificationSetting));
+    errors.push(vu.validateInterface('deepSeaDespawned', obj.deepSeaDespawned, isValidEventNotificationSetting));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1160,7 +1170,9 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
         'patrolHelicopterDestroyed',
         'patrolHelicopterLeaving',
         'travellingVendorSpawned',
-        'travellingVendorDespawned'
+        'travellingVendorDespawned',
+        'deepSeaSpawned',
+        'deepSeaDespawned'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1204,6 +1216,8 @@ export function isValidSettingsMessages(object: unknown): object is SettingsMess
     errors.push(vu.validateType('patrolHelicopterLeaving', obj.patrolHelicopterLeaving, 'string', null));
     errors.push(vu.validateType('travellingVendorSpawned', obj.travellingVendorSpawned, 'string', null));
     errors.push(vu.validateType('travellingVendorDespawned', obj.travellingVendorDespawned, 'string', null));
+    errors.push(vu.validateType('deepSeaSpawned', obj.deepSeaSpawned, 'string', null));
+    errors.push(vu.validateType('deepSeaDespawned', obj.deepSeaDespawned, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

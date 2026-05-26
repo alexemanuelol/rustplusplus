@@ -145,5 +145,19 @@
         "image": "travelling_vendor_logo.png",
         "inGame": false,
         "voice": true
+    },
+    "deepSeaSpawned": {
+        "color": "#DEC0F7",
+        "discord": true,
+        "image": "deep_sea_logo.png",
+        "inGame": false,
+        "voice": true
+    },
+    "deepSeaDespawned": {
+        "color": "#0BF5AE",
+        "discord": true,
+        "image": "deep_sea_logo.png",
+        "inGame": false,
+        "voice": true
     }
 }
