@@ -255,6 +255,7 @@ export interface TrackerPlayer {
     playerId: string | null;
 }
 
+export type MarkerMap = { [name: string]: Marker };
 export type NoteMap = { [index: string]: string };
 export type SmartSwitchConfigMap = { [entityId: types.EntityId]: SmartSwitchConfig };
 export type SmartAlarmConfigMap = { [entityId: types.EntityId]: SmartAlarmConfig };
@@ -276,6 +277,7 @@ export interface ServerInfo {
     requesterSteamId: types.SteamId | null;
     active: boolean;
     connect: string | null;
+    markerMap: MarkerMap;
     noteMap: NoteMap;
     battlemetricsId: types.BattlemetricsId | null;
     smartSwitchConfigMap: SmartSwitchConfigMap;
@@ -286,6 +288,11 @@ export interface ServerInfo {
     nightDurationSeconds: number | null;
     oilRigLockedCrateUnlockTimeMs: number;
     cargoShipEgressTimeMs: number;
+}
+
+export interface Marker {
+    x: number;
+    y: number;
 }
 
 export interface SmartSwitchConfig {
@@ -1423,6 +1430,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'requesterSteamId',
         'active',
         'connect',
+        'markerMap',
         'noteMap',
         'battlemetricsId',
         'smartSwitchConfigMap',
@@ -1448,6 +1456,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     errors.push(vu.validateType('requesterSteamId', obj.requesterSteamId, 'string', null));
     errors.push(vu.validateType('active', obj.active, 'boolean'));
     errors.push(vu.validateType('connect', obj.connect, 'string', null));
+    errors.push(vu.validateObjectOfInterfaces('markerMap', obj.markerMap, isValidMarker));
     errors.push(vu.validateObjectOfTypes('noteMap', obj.noteMap, 'string'));
     errors.push(vu.validateType('battlemetricsId', obj.battlemetricsId, 'string', null));
     errors.push(vu.validateObjectOfInterfaces('smartSwitchConfigMap', obj.smartSwitchConfigMap,
@@ -1461,6 +1470,36 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     errors.push(vu.validateType('nightDurationSeconds', obj.nightDurationSeconds, 'number', null));
     errors.push(vu.validateType('oilRigLockedCrateUnlockTimeMs', obj.oilRigLockedCrateUnlockTimeMs, 'number'));
     errors.push(vu.validateType('cargoShipEgressTimeMs', obj.cargoShipEgressTimeMs, 'number'));
+
+    const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
+
+    const objectKeys = Object.keys(object);
+    const missingKeys = validKeys.filter(key => !objectKeys.includes(key));
+    const unknownKeys = objectKeys.filter(key => !validKeys.includes(key));
+    const hasAllRequiredKeys = missingKeys.length === 0;
+    const hasOnlyValidKeys = unknownKeys.length === 0;
+
+    vu.logValidations(interfaceName, filteredErrors, missingKeys, unknownKeys);
+
+    return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
+}
+
+export function isValidMarker(object: unknown): object is Marker {
+    if (typeof object !== 'object' || object === null || Array.isArray(object)) {
+        return false;
+    }
+
+    const obj = object as Marker;
+
+    const interfaceName = 'Marker';
+    const validKeys = [
+        'x',
+        'y'
+    ];
+
+    const errors: (vu.ValidationError | null)[] = [];
+    errors.push(vu.validateType('x', obj.x, 'number'));
+    errors.push(vu.validateType('y', obj.x, 'number'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

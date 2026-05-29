@@ -35,13 +35,13 @@
 - [ ] craft         Requires rustlabs data
 - [x] death
 - [ ] decay         Requires rustlabs data
+- [x] deepsea
 - [ ] despawn       Requires rustlabs data
 - [ ] events
-- [ ] harbor
 - [x] heli
 - [x] large
 - [ ] leader
-- [ ] marker
+- [x] marker
 - [ ] market
 - [ ] mute
 - [ ] note
@@ -66,6 +66,9 @@
 - [ ] upkeep        Requires rustlabs data
 - [ ] uptime
 - [x] wipe
+
+## Other not prioritised new commands
+- [ ] monument (which monument is the closest and distance to it).
 
 ## Setup functions
 - [ ] Smart switches

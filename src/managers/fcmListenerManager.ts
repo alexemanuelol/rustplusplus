@@ -482,6 +482,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             requesterSteamId: serverInfo ? serverInfo.requesterSteamId : body.playerId,
             active: serverInfo ? serverInfo.active : false,
             connect: null,
+            markerMap: serverInfo ? serverInfo.markerMap : {},
             noteMap: serverInfo ? serverInfo.noteMap : {},
             battlemetricsId: null,
             smartSwitchConfigMap: serverInfo ? serverInfo.smartSwitchConfigMap : {},
