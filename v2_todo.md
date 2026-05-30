@@ -44,7 +44,7 @@
 - [x] marker
 - [ ] market
 - [x] mute
-- [ ] note
+- [x] note
 - [x] offline
 - [x] online
 - [ ] player
