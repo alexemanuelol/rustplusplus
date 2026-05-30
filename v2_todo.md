@@ -60,7 +60,7 @@
 - [x] time
 - [x] timer
 - [ ] translate
-- [ ] travellingvendor
+- [x] travellingvendor
 - [ ] tts
 - [x] unmute
 - [ ] upkeep        Requires rustlabs data

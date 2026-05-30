@@ -53,7 +53,7 @@ const CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE = 280;
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS = 2 * 60 * 1000; /* 2 min */
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS = 19.5 * 60 * 1000; /* 19.5 min */
 const PATROL_HELICOPTER_LEAVING_SPEED_MIN = 400;
-const TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000;
+export const TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000;
 const MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE = 3;
 const MAX_PLAYERS_TRACER_ENTRIES = 500;
 
@@ -124,6 +124,7 @@ export class RustPlusMapMarkers {
     public dateCargoShipLeftMap: Date | null;
     public datePatrolHelicopterLeftMap: Date | null;
     public datePatrolHelicopterDestroyed: Date | null;
+    public dateTravellingVendorSpawned: { [id: number]: Date };
     public dateTravellingVendorLeftMap: Date | null;
     public dateDeepSeaSpawned: Date | null;
     public dateDeepSeaDespawned: Date | null;
@@ -171,6 +172,7 @@ export class RustPlusMapMarkers {
         this.dateCargoShipLeftMap = null;
         this.datePatrolHelicopterLeftMap = null;
         this.datePatrolHelicopterDestroyed = null;
+        this.dateTravellingVendorSpawned = {};
         this.dateTravellingVendorLeftMap = null;
         this.dateDeepSeaSpawned = null;
         this.dateDeepSeaDespawned = null;
@@ -835,6 +837,7 @@ export class RustPlusMapMarkers {
                 this.notifyTravellingVendorLeavingSoon.bind(this, marker.id),
                 TRAVELLING_VENDOR_ACTIVE_TIME_MS - (5 * 60 * 1000)
             );
+            this.dateTravellingVendorSpawned[marker.id] = new Date();
 
             this.travellingVendors.push(marker);
         }
@@ -853,6 +856,7 @@ export class RustPlusMapMarkers {
                 delete this.travellingVendorLeavingNotificationTimeoutIds[marker.id];
             }
 
+            delete this.dateTravellingVendorSpawned[marker.id];
             this.dateTravellingVendorLeftMap = new Date();
             this.travellingVendors = this.travellingVendors.filter(e => e.id !== marker.id);
         }
