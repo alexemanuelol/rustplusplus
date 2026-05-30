@@ -20,6 +20,7 @@
 
 import * as rp from 'rustplus-ts';
 import * as discordjs from 'discord.js';
+import Fuse from 'fuse.js';
 
 import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
@@ -57,9 +58,11 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     let number = (args[1] !== undefined) ? parseInt(args[1]) : undefined;
     number = (number !== undefined && isNaN(number)) ? undefined : number;
 
-    const member = [...rpInstance.rpTeamInfo.members.values()].find(m =>
-        m.appTeamInfoMember.name.toLowerCase().includes(memberName.toLowerCase())
-    );
+    const fuse = new Fuse([...rpInstance.rpTeamInfo.members.values()], {
+        keys: ['appTeamInfoMember.name'],
+        threshold: 0.3
+    });
+    const member = fuse.search(name)[0]?.item ?? null;
 
     if (member) {
         if (rpInstance.playerDeaths[member.appTeamInfoMember.steamId] === undefined) {
