@@ -62,7 +62,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
             });
         }
         else {
-            response = lm.getIntl(language, 'noPlayerFoundWithName', { name });
+            response = lm.getIntl(language, 'noMemberFoundWithName', { name });
         }
     }
     else {

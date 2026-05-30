@@ -240,6 +240,18 @@ export async function getFcmPlayerDeathEmbed(title: string, body: PlayerDeathBod
     });
 }
 
+export async function getPrivateMessageEmbed(message: string, imageName: string):
+    Promise<discordjs.EmbedBuilder> {
+    return getEmbed({
+        description: message,
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: {
+            url: `attachment://${imageName}`
+        }
+    })
+}
+
 
 /**
  * Slash Command based embeds

@@ -52,7 +52,7 @@
 - [x] prox
 - [ ] recycle       Requires rustlabs data
 - [ ] research      Requires rustlabs data
-- [ ] send
+- [x] send
 - [x] small
 - [ ] stack         Requires rustlabs data
 - [ ] steamid

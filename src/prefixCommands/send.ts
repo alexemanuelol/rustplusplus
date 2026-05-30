@@ -22,11 +22,15 @@ import * as rp from 'rustplus-ts';
 import * as discordjs from 'discord.js';
 import Fuse from 'fuse.js';
 
-import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
+import {
+    log, guildInstanceManager as gim, localeManager as lm, credentialsManager as cm, discordManager as dm
+} from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
+import { getAngleBetweenPoints, getDistance, getPos, getPosString } from '../utils/map';
+import * as discordMessages from '../discordUtils/discordMessages';
 
-export const name = 'death';
+export const name = 'send';
 
 export async function execute(rpInstance: RustPlusInstance, args: string[],
     message: rp.AppTeamMessage | discordjs.Message):
@@ -45,51 +49,46 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpTeamInfo === null) return false;
 
-    if (args.length === 0) {
-        const response = lm.getIntl(language, 'nameArgumentMissing');
-        rpInstance.sendPrefixCommandResponse(response, inGame);
-        log.info(`${fn} ${response}`, logParam);
+    const callerName = inGame ? (message as rp.AppTeamMessage).name : (message as discordjs.Message).author.username;
+
+    if (args.length < 2) {
+        const str = lm.getIntl(language, 'argumentIsMissing');
+        rpInstance.sendPrefixCommandResponse(str, inGame);
+        log.info(`${fn} ${str}`, logParam);
         return true;
     }
 
-    const response: string[] = [];
-    const memberName = args[0];
-
-    let number = (args[1] !== undefined) ? parseInt(args[1]) : undefined;
-    number = (number !== undefined && isNaN(number)) ? undefined : number;
+    const argName = args[0];
+    const argMessage = args.slice(1).join(' ');
 
     const fuse = new Fuse([...rpInstance.rpTeamInfo.members.values()], {
         keys: ['appTeamInfoMember.name'],
         threshold: 0.3
     });
-    const member = fuse.search(name)[0]?.item ?? null;
+    const member = fuse.search(argName)[0]?.item ?? null;
 
-    if (member) {
-        if (rpInstance.playerDeaths[member.appTeamInfoMember.steamId] === undefined) {
-            rpInstance.playerDeaths[member.appTeamInfoMember.steamId] = [];
-        }
+    if (!member) {
+        const str = lm.getIntl(language, 'noMemberFoundWithName', { name: argName });
+        rpInstance.sendPrefixCommandResponse(str, inGame);
+        log.info(`${fn} ${str}`, logParam);
+        return true;
+    }
 
-        if (rpInstance.playerDeaths[member.appTeamInfoMember.steamId].length === 0) {
-            response.push(lm.getIntl(language, 'noDeathEvents'));
-        }
-        else {
-            let counter = 1;
-            for (const event of rpInstance.playerDeaths[member.appTeamInfoMember.steamId]) {
-                if (counter === 6) break;
-                if (number !== undefined && counter !== number) continue;
+    const credentials = cm.getCredentials(member.appTeamInfoMember.steamId);
+    if (!credentials) {
+        const str = lm.getIntl(language, 'couldNotFindMembersDiscordUserId', { name: argName });
+        rpInstance.sendPrefixCommandResponse(str, inGame);
+        log.info(`${fn} ${str}`, logParam);
+        return true;
+    }
 
-                const str = `${event.time} - ` + lm.getIntl(language, 'playerDiedAt', {
-                    name: event.name,
-                    pos: event.location ?? lm.getIntl(language, 'unknown')
-                });
-
-                response.push(str);
-                counter++;
-            }
-        }
+    const messageToSend = `${callerName}: ${argMessage}`;
+    let response: string;
+    if (await discordMessages.sendPrivateMessage(dm, credentials.discordUserId, messageToSend)) {
+        response = lm.getIntl(language, 'messageHasBeenSent');
     }
     else {
-        response.push(lm.getIntl(language, 'noMemberFoundWithName', { name: memberName }));
+        response = lm.getIntl(language, 'messageCouldNotBeSent');
     }
 
     rpInstance.sendPrefixCommandResponse(response, inGame);

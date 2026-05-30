@@ -83,6 +83,26 @@ export async function sendFcmPlayerDeathMessage(dm: DiscordManager, steamId: typ
     await dm.handleMessage(user, content, 'send');
 }
 
+export async function sendPrivateMessage(dm: DiscordManager, discordUserId: types.UserId, message: string):
+    Promise<boolean> {
+    const fn = `[sendPrivateMessage: ${discordUserId}]`;
+
+    const user = await dm.getUser(discordUserId);
+    if (!user) {
+        log.warn(`${fn} Could not find user '${discordUserId}'.`);
+        return false;
+    }
+
+    const imagePath = path.join(__dirname, '..', 'resources/images/rustplusplus_logo.png');
+    const content = {
+        embeds: [await discordEmbeds.getPrivateMessageEmbed(message, 'rustplusplus_logo.png')],
+        files: [new discordjs.AttachmentBuilder(imagePath)]
+    };
+
+    await dm.handleMessage(user, content, 'send');
+    return true;
+}
+
 
 /**
  * Slash Command based messages

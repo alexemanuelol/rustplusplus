@@ -86,7 +86,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
         }
     }
     else {
-        response.push(lm.getIntl(language, 'noPlayerFoundWithName', { name: memberName }));
+        response.push(lm.getIntl(language, 'noMemberFoundWithName', { name: memberName }));
     }
 
     rpInstance.sendPrefixCommandResponse(response, inGame);

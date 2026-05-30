@@ -74,7 +74,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
         const member = fuse.search(name)[0]?.item ?? null;
 
         if (!member || (member && (member.appTeamInfoMember.steamId === callerSteamId))) {
-            response.push(lm.getIntl(language, 'noPlayerFoundWithName', { name }));
+            response.push(lm.getIntl(language, 'noMemberFoundWithName', { name }));
         }
         else {
             const caller = [...rpInstance.rpTeamInfo.members.values()]
