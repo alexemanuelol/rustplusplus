@@ -64,6 +64,12 @@ export interface RustPlusDeathMetaData {
     location: string | null;
 }
 
+export interface TimersMetaData {
+    index: number;
+    timer: Timer.Timer;
+    message: string;
+}
+
 export class RustPlusManager {
     private rustPlusInstanceMap: RustPlusInstanceMap;
 
@@ -153,6 +159,7 @@ export class RustPlusInstance {
     public allDeaths: RustPlusDeathMetaData[];
     public playerDeaths: { [steamId: types.SteamId]: RustPlusDeathMetaData[] };
 
+    public timers: { [index: number]: TimersMetaData };
 
     constructor(guildId: types.GuildId, ip: string, port: string) {
         this.guildId = guildId;
@@ -192,6 +199,8 @@ export class RustPlusInstance {
         this.playerConnections = {};
         this.allDeaths = [];
         this.playerDeaths = {};
+
+        this.timers = {};
 
         //this.leaderSteamId = '0'; /* 0 When there is no leader. */
     }
@@ -264,6 +273,11 @@ export class RustPlusInstance {
 
         // TODO! Remove timers example: pollingTimer, inGameChatTimeout, customTimers like lockedCrate,
         // cargoship leave etc...
+
+        for (const timer of Object.values(this.timers)) {
+            timer.timer.stop();
+        }
+        this.timers = {};
     }
 
     public startReconnectionTimer() {

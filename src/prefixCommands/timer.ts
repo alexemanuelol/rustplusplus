@@ -25,8 +25,9 @@ import { log, guildInstanceManager as gim, localeManager as lm } from '../../ind
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 import { Languages } from '../managers/LocaleManager';
+import { secondsToFullScale, getSecondsFromStringTime, Timer } from '../utils/timer';
 
-export const name = 'note';
+export const name = 'timer';
 
 export async function execute(rpInstance: RustPlusInstance, args: string[],
     message: rp.AppTeamMessage | discordjs.Message):
@@ -41,7 +42,6 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     const inGame = Object.hasOwn(message, 'steamId') ? true : false;
     const guildId = rpInstance.guildId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
-    const serverInfo = gInstance.serverInfoMap[rpInstance.serverId];
     const language = gInstance.generalSettings.language;
 
     if (args.length === 0) {
@@ -56,33 +56,63 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     switch (subcommand) {
         case lm.getIntl(Languages.ENGLISH, 'subcommandList'):
         case lm.getIntl(language, 'subcommandList'): {
-            if (Object.keys(serverInfo.noteMap).length === 0) {
-                response.push(lm.getIntl(language, 'noRegisteredNotes'));
+            if (Object.keys(rpInstance.timers).length === 0) {
+                response.push(lm.getIntl(language, 'noRegisteredTimers'));
             }
             else {
-                for (const [index, note] of Object.entries(serverInfo.noteMap)) {
-                    response.push(`${index}: ${note}`);
+                for (const [index, timer] of Object.entries(rpInstance.timers)) {
+                    const timeLeftSeconds = Math.floor(timer.timer.getTimeLeftMs() / 1000);
+                    const timeLeftString = secondsToFullScale(timeLeftSeconds);
+                    response.push(lm.getIntl(language, 'timeLeftTimer', {
+                        index: index,
+                        time: timeLeftString,
+                        message: timer.message
+                    }));
                 }
             }
         } break;
 
         case lm.getIntl(Languages.ENGLISH, 'subcommandAdd'):
         case lm.getIntl(language, 'subcommandAdd'): {
-            if (args.length < 2) {
-                response.push(language, 'missingNoteArgument');
+            if (args.length < 3) {
+                response.push(language, 'argumentMissing');
                 break;
             }
 
-            const note = args.slice(1).join(' ');
+            const argTime = args[1];
+            const argMessage = args.slice(2).join(' ');
+
+            const time = getSecondsFromStringTime(argTime);
+            if (!time) {
+                response.push(lm.getIntl(language, 'timeArgumentFormatInvalid'));
+                break;
+            }
+
             let index = 0;
-            while (Object.keys(serverInfo.noteMap).map(Number).includes(index)) {
+            while (Object.keys(rpInstance.timers).map(Number).includes(index)) {
                 index += 1;
             }
 
-            serverInfo.noteMap[index] = note;
-            gim.updateGuildInstance(guildId);
+            const timerMessage = lm.getIntl(language, 'timerTriggered', {
+                message: argMessage
+            });
 
-            response.push(lm.getIntl(language, 'noteAdded'));
+            rpInstance.timers[index] = {
+                index: index,
+                message: argMessage,
+                timer: new Timer(
+                    () => {
+                        rpInstance.inGameTeamChatQueueMessage(timerMessage);
+                        delete rpInstance.timers[index];
+                    },
+                    time * 1000
+                )
+            };
+            rpInstance.timers[index].timer.start();
+
+            response.push(lm.getIntl(language, 'timerSet', {
+                time: secondsToFullScale(time)
+            }));
         } break;
 
         case lm.getIntl(Languages.ENGLISH, 'subcommandRemove'):
@@ -98,15 +128,16 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
                 break;
             }
 
-            if (!Object.hasOwn(serverInfo.noteMap, index)) {
-                response.push(lm.getIntl(language, 'noteDoesNotExist', { index: `${index}` }));
+            if (!Object.hasOwn(rpInstance.timers, index)) {
+                response.push(lm.getIntl(language, 'timerDoesNotExist', { index: `${index}` }));
                 break;
             }
 
-            delete serverInfo.noteMap[index];
+            rpInstance.timers[index].timer.stop();
+            delete rpInstance.timers[index];
             gim.updateGuildInstance(guildId);
 
-            response.push(lm.getIntl(language, 'noteRemoved'));
+            response.push(lm.getIntl(language, 'removedTimer'));
         } break;
 
         default: {

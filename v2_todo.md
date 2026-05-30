@@ -58,7 +58,7 @@
 - [ ] steamid
 - [x] team
 - [x] time
-- [ ] timer
+- [x] timer
 - [ ] translate
 - [ ] travellingvendor
 - [ ] tts
