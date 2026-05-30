@@ -62,7 +62,7 @@
 - [ ] translate
 - [ ] travellingvendor
 - [ ] tts
-- [ ] unmute
+- [x] unmute
 - [ ] upkeep        Requires rustlabs data
 - [ ] uptime
 - [x] wipe
