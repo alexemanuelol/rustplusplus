@@ -49,7 +49,7 @@
 - [x] online
 - [ ] player
 - [x] pop
-- [ ] prox
+- [x] prox
 - [ ] recycle       Requires rustlabs data
 - [ ] research      Requires rustlabs data
 - [ ] send
