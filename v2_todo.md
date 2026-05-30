@@ -43,7 +43,7 @@
 - [ ] leader
 - [x] marker
 - [ ] market
-- [ ] mute
+- [x] mute
 - [ ] note
 - [x] offline
 - [x] online
