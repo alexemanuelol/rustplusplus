@@ -32,7 +32,8 @@ interface TimeTable {
 }
 
 export interface TimeTillSunriseOrSunset {
-    timeTill: string;
+    timeTillSeconds: number;
+    timeTillString: string;
     isDay: boolean
 }
 
@@ -131,8 +132,9 @@ export class RustPlusTime {
             const latestSunsetSeconds = (this.latestSunset as Date).getTime() / 1000;
             seconds = (server.nightDurationSeconds as number) - (currentTimeSeconds - latestSunsetSeconds);
         }
+        seconds = Math.floor(seconds);
 
-        return { timeTill: secondsToFullScale(seconds, ignore), isDay: isDay };
+        return { timeTillSeconds: seconds, timeTillString: secondsToFullScale(seconds, ignore), isDay: isDay };
     }
 
     private updateVariables(appTime: rp.AppTime) {

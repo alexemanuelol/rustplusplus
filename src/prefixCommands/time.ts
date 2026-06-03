@@ -50,7 +50,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     const key = timeTillSunriseOrSunset.isDay ? 'timeTillSunset' : 'timeTillSunrise';
 
     const response = `${lm.getIntl(language, 'inGameTime', { time: time })} ` +
-        `${lm.getIntl(language, key, { time: timeTillSunriseOrSunset.timeTill })}`;
+        `${lm.getIntl(language, key, { time: timeTillSunriseOrSunset.timeTillString })}`;
 
     rpInstance.sendPrefixCommandResponse(response, inGame);
     log.info(`${fn} ${response}`, logParam);

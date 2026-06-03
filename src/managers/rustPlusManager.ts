@@ -41,6 +41,7 @@ import { RustPlusTeamInfo } from '../structures/rustPlusTeamInfo';
 import * as discordMessages from '../discordUtils/discordMessages';
 import * as discordVoice from '../discordUtils/discordVoice';
 import * as Timer from '../utils/timer';
+import * as informationChannelHandler from '../handlers/informationChannelHandler';
 
 
 export type RustPlusInstanceMap = { [guildId: types.GuildId]: RustPlusServerMap };
@@ -160,6 +161,7 @@ export class RustPlusInstance {
     public playerDeaths: { [steamId: types.SteamId]: RustPlusDeathMetaData[] };
 
     public timers: { [index: number]: TimersMetaData };
+    public informationChannelCounter: number;
 
     constructor(guildId: types.GuildId, ip: string, port: string) {
         this.guildId = guildId;
@@ -201,6 +203,7 @@ export class RustPlusInstance {
         this.playerDeaths = {};
 
         this.timers = {};
+        this.informationChannelCounter = 0;
 
         //this.leaderSteamId = '0'; /* 0 When there is no leader. */
     }
@@ -386,6 +389,7 @@ export class RustPlusInstance {
         // TODO! storageMonitorHandler
 
         // TODO! informationChannelHandler
+        await informationChannelHandler.handler(this);
     }
 
     public inGameTeamChatQueueMessage(message: string | string[]) {
@@ -721,5 +725,108 @@ export class RustPlusInstance {
             this.playerDeaths[steamId].pop();
         }
         this.playerDeaths[steamId].unshift(data);
+    }
+
+    /**
+     * Information channel server methods
+     */
+
+    public getInformationChannelPlayersString(): string {
+        let str = '\u200B';
+
+        if (this.rpInfo) {
+            str = `${this.rpInfo.appInfo.players}`;
+            str += this.rpInfo.isQueue() ? `(${this.rpInfo.appInfo.queuedPlayers})` : '';
+            str += `/${this.rpInfo.appInfo.maxPlayers}`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelTimeString(): string {
+        let str = '\u200B';
+
+        if (this.rpTime) {
+            str = `${Timer.convertDecimalToHoursMinutes(this.rpTime.appTime.time)}`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelWipeString(): string {
+        let str = '\u200B';
+
+        if (this.rpInfo) {
+            str = `<t:${this.rpInfo.appInfo.wipeTime}:R>`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelTimeTillString(): string {
+        let str = '\u200B';
+
+        if (this.rpTime) {
+            const timeTillData = this.rpTime.getTimeTillSunriseOrSunset();
+            const timeTillTimestamp = Math.floor((new Date().getTime() / 1000)) + timeTillData.timeTillSeconds;
+            console.log(timeTillData)
+            console.log(timeTillTimestamp)
+            str = `<t:${timeTillTimestamp}:R>`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelMapSizeString(): string {
+        let str = '\u200B';
+
+        if (this.rpInfo) {
+            str = `${this.rpInfo.appInfo.mapSize}`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelMapSeedString(): string {
+        let str = '\u200B';
+
+        if (this.rpInfo) {
+            str = `${this.rpInfo.appInfo.seed}`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelMapSaltString(): string {
+        let str = '\u200B';
+
+        if (this.rpInfo) {
+            str = `${this.rpInfo.appInfo.salt}`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelMapString(): string {
+        let str = '\u200B';
+
+        if (this.rpInfo) {
+            str = `${this.rpInfo.appInfo.map}`;
+        }
+
+        return str;
+    }
+
+    public getInformationChannelConnectString(): string {
+        let str = '\u200B';
+
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.serverId];
+
+        if (serverInfo) {
+            str = `${serverInfo.connect}`;
+        }
+
+        return str;
     }
 }

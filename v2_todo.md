@@ -94,8 +94,8 @@
 
 ### Classes
 - [x] Time
-- [ ] Team
-- [ ] TeamMember
+- [x] Team
+- [x] TeamMember
 - [x] Info
 - [x] MapMarkers
 - [x] Map

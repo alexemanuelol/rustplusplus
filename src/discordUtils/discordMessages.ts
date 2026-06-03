@@ -23,7 +23,7 @@ import * as path from 'path';
 import * as rp from 'rustplus-ts';
 
 import { log, guildInstanceManager as gim, credentialsManager as cm, localeManager as lm } from '../../index';
-import { ConnectionStatus } from '../managers/rustPlusManager';
+import { ConnectionStatus, RustPlusInstance } from '../managers/rustPlusManager';
 import * as constants from '../utils/constants';
 import * as discordButtons from './discordButtons';
 import * as discordEmbeds from './discordEmbeds';
@@ -389,6 +389,40 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
     if (interaction === null && message instanceof discordjs.Message &&
         storageMonitorConfig.messageId !== message.id) {
         storageMonitorConfig.messageId = message.id;
+        gim.updateGuildInstance(guildId);
+    }
+}
+
+export async function sendInformationChannelMessage(dm: DiscordManager, rpInstance: RustPlusInstance) {
+    const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
+
+    const fn = `[sendInformationChannelMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const serverInfo = gInstance.serverInfoMap[serverId];
+    if (!serverInfo) {
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
+        return;
+    }
+
+    const content = {
+        embeds: [discordEmbeds.getInformationChannelServerEmbed(rpInstance)],
+        files: [
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'server_info_logo.png'))
+        ]
+    };
+
+    const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.information,
+        gInstance.informationChannelMessageIds.server);
+
+    if (message instanceof discordjs.Message && gInstance.informationChannelMessageIds.server !== message.id) {
+        gInstance.informationChannelMessageIds.server = message.id;
         gim.updateGuildInstance(guildId);
     }
 }

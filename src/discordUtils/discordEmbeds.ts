@@ -35,7 +35,7 @@ import * as utils from '../utils/utils';
 import { Credentials } from '../managers/credentialsManager';
 import { PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
 import { fetchSteamProfile, SteamInfo } from '../utils/steam';
-import { ConnectionStatus } from '../managers/rustPlusManager';
+import { ConnectionStatus, RustPlusInstance } from '../managers/rustPlusManager';
 
 export const EmbedLimits = {
     Maximum: 6000,
@@ -689,6 +689,58 @@ export function getStorageMonitorEmbed(guildId: types.GuildId, serverId: types.S
         { name: lm.getIntl(language, 'item'), data: itemNames },
         { name: lm.getIntl(language, 'quantity'), data: itemQuantities }
     ]);
+}
+
+export function getInformationChannelServerEmbed(rpInstance: RustPlusInstance): discordjs.EmbedBuilder {
+    const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
+
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const language = gInstance.generalSettings.language;
+
+    const playersFieldName = lm.getIntl(language, 'players');
+    const timeFieldName = lm.getIntl(language, 'time');
+    const wipeFieldName = lm.getIntl(language, 'wipe');
+    const timeTillFieldName = lm.getIntl(language, 'timeTill', {
+        emoji: rpInstance.rpTime?.isDay() ? constants.NIGHT_EMOJI : constants.DAY_EMOJI
+    });
+    const mapSizeFieldName = lm.getIntl(language, 'mapSize');
+    const mapSeedFieldName = lm.getIntl(language, 'mapSeed');
+    const mapSaltFieldName = lm.getIntl(language, 'mapSalt');
+    const mapFieldName = lm.getIntl(language, 'map');
+    const connectFieldName = lm.getIntl(language, 'connect');
+
+    const playersFieldValue = rpInstance.getInformationChannelPlayersString();
+    const timeFieldValue = rpInstance.getInformationChannelTimeString();
+    const wipeFieldValue = rpInstance.getInformationChannelWipeString();
+    const timeTillFieldValue = rpInstance.getInformationChannelTimeTillString();
+    const mapSizeFieldValue = rpInstance.getInformationChannelMapSizeString();
+    const mapSeedFieldValue = rpInstance.getInformationChannelMapSeedString();
+    const mapSaltFieldValue = rpInstance.getInformationChannelMapSaltString();
+    const mapFieldValue = rpInstance.getInformationChannelMapString();
+    const connectFieldValue = rpInstance.getInformationChannelConnectString();
+
+    return getEmbed({
+        title: lm.getIntl(language, 'serverInfo'),
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: { url: `attachment://server_info_logo.png` },
+        footer: { text: serverInfo.name },
+        fields: [
+            { name: playersFieldName, value: playersFieldValue, inline: true },
+            { name: timeFieldName, value: timeFieldValue, inline: true },
+            { name: wipeFieldName, value: wipeFieldValue, inline: true },
+            { name: timeTillFieldName, value: timeTillFieldValue, inline: true },
+            { name: '\u200B', value: '\u200B', inline: true },
+            { name: '\u200B', value: '\u200B', inline: true },
+            { name: mapSizeFieldName, value: mapSizeFieldValue, inline: true },
+            { name: mapSeedFieldName, value: mapSeedFieldValue, inline: true },
+            { name: mapSaltFieldName, value: mapSaltFieldValue, inline: true },
+            { name: mapFieldName, value: mapFieldValue, inline: true },
+            { name: connectFieldName, value: connectFieldValue, inline: true }
+        ]
+    });
 }
 
 
