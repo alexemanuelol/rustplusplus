@@ -47,14 +47,17 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpMapMarkers === null) return false;
 
+    const unixTimestampCurrent = Math.floor((new Date().getTime()) / 1000);
+
+    const dateTravellingVendorDespawned = rpInstance.rpMapMarkers.dateTravellingVendorDespawned;
+
     const response: string[] = [];
     if (rpInstance.rpMapMarkers.travellingVendors.length === 0) {
-        const dateTravellingVendorDespawned = rpInstance.rpMapMarkers.dateTravellingVendorDespawned;
-
         if (dateTravellingVendorDespawned !== null) {
-            const timeSinceLeftMapSeconds = (new Date().getTime() - dateTravellingVendorDespawned.getTime()) / 1000;
+            const unixTimestampDespawned = Math.floor(dateTravellingVendorDespawned.getTime() / 1000);
+            const timeSinceDespawnedSeconds = unixTimestampCurrent - unixTimestampDespawned;
             response.push(lm.getIntl(language, 'timeSinceLeftMap', {
-                time: secondsToFullScale(timeSinceLeftMapSeconds)
+                time: secondsToFullScale(timeSinceDespawnedSeconds)
             }));
         }
         else {
@@ -66,17 +69,29 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
             const pos = getPos(travellingVendor.x, travellingVendor.y, rpInstance);
             const posString = (pos !== null) ? getPosString(pos, rpInstance, false, false) :
                 lm.getIntl(language, 'unknown');
-            const dateWhenSpawned = rpInstance.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
 
-            const timeSinceSpawnSeconds = (new Date().getTime() - dateWhenSpawned.getTime()) / 1000;
-            const timeTillDespawn = (constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000) -
-                timeSinceSpawnSeconds;
+            const dateTravellingVendorSpawned =
+                rpInstance.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
 
-            response.push(lm.getIntl(language, 'travellingVendorIsActive', {
-                pos: posString,
-                time1: secondsToFullScale(timeSinceSpawnSeconds),
-                time2: secondsToFullScale(timeTillDespawn)
-            }));
+            if (dateTravellingVendorSpawned !== null) {
+                const unixTimestampSpawned = Math.floor(dateTravellingVendorSpawned.getTime() / 1000);
+                const unixTimestampDespawn = Math.floor(unixTimestampSpawned +
+                    (constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000));
+
+                const timeSinceSpawnedSeconds = unixTimestampCurrent - unixTimestampSpawned;
+                const timeTillDespawnSeconds = unixTimestampDespawn - unixTimestampCurrent;
+
+                response.push(lm.getIntl(language, 'travellingVendorIsActive', {
+                    pos: posString,
+                    time1: secondsToFullScale(timeSinceSpawnedSeconds),
+                    time2: secondsToFullScale(timeTillDespawnSeconds)
+                }));
+            }
+            else {
+                response.push(lm.getIntl(language, 'locatedAtPos', {
+                    pos: posString
+                }));
+            }
         }
     }
 

@@ -830,12 +830,13 @@ export class RustPlusMapMarkers {
             this.rpInstance.sendEventNotification('travellingVendorSpawned', eventText);
 
             /* Notify 5 min before leaving */
-            this.travellingVendorLeavingNotificationTimeoutIds[marker.id] = setTimeout(
-                this.notifyTravellingVendorLeavingSoon.bind(this, marker.id),
-                constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS - (5 * 60 * 1000)
-            );
-            this.dateTravellingVendorSpawned[marker.id] = new Date();
-
+            if (!this.firstPoll) {
+                this.travellingVendorLeavingNotificationTimeoutIds[marker.id] = setTimeout(
+                    this.notifyTravellingVendorLeavingSoon.bind(this, marker.id),
+                    constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS - (5 * 60 * 1000)
+                );
+                this.dateTravellingVendorSpawned[marker.id] = new Date();
+            }
             this.travellingVendors.push(marker);
         }
 

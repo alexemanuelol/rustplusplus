@@ -48,15 +48,16 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     const unixTimestampCurrent = Math.floor((new Date().getTime()) / 1000);
 
-    const response: string[] = [];
-    if (rpInstance.rpMapMarkers.dateDeepSeaSpawned !== null) {
-        const dateDeepSeaSpawned = rpInstance.rpMapMarkers.dateDeepSeaSpawned;
+    const dateDeepSeaSpawned = rpInstance.rpMapMarkers.dateDeepSeaSpawned;
+    const dateDeepSeaDespawned = rpInstance.rpMapMarkers.dateDeepSeaDespawned;
 
-        const unixTimestampSpawn = Math.floor(dateDeepSeaSpawned.getTime() / 1000);
-        const unixTimestampDespawn = Math.floor(unixTimestampSpawn +
+    const response: string[] = [];
+    if (dateDeepSeaSpawned !== null) {
+        const unixTimestampSpawned = Math.floor(dateDeepSeaSpawned.getTime() / 1000);
+        const unixTimestampDespawn = Math.floor(unixTimestampSpawned +
             (constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000));
 
-        const activeTimeSeconds = unixTimestampCurrent - unixTimestampSpawn;
+        const activeTimeSeconds = unixTimestampCurrent - unixTimestampSpawned;
         const timeTillDespawnSeconds = unixTimestampDespawn - unixTimestampCurrent;
 
         response.push(lm.getIntl(language, 'deepSeaIsActiveFor', {
@@ -65,9 +66,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
         }));
     }
     else {
-        if (rpInstance.rpMapMarkers.dateDeepSeaDespawned !== null) {
-            const dateDeepSeaDespawned = rpInstance.rpMapMarkers.dateDeepSeaDespawned;
-
+        if (dateDeepSeaDespawned !== null) {
             const unixTimestampDespawned = Math.floor(dateDeepSeaDespawned.getTime() / 1000);
 
             const timeSinceDespawnedSeconds = unixTimestampCurrent - unixTimestampDespawned;

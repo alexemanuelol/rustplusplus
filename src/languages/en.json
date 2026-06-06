@@ -266,6 +266,7 @@
     "lastTrigger": "Last Trigger",
     "linkCap": "LINK",
     "linkToThePlugin": "Link to the Plugin",
+    "locatedAtPos": "Located at {pos}.",
     "male": "Male",
     "markerAlreadyExist": "Marker {name} already exist.",
     "markerDoesNotExist": "Marker {name} does not exist.",
