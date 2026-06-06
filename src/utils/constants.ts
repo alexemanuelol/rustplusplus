@@ -78,6 +78,7 @@ export const STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY = 48;
 export const DEFAULT_CARGO_SHIP_EGRESS_TIME_MS = 50 * 60 * 1000; /* 50 min */
 export const DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS = 15 * 60 * 1000; /* 15 min */
 export const DEFAULT_DEEP_SEA_DURATION_TIME_MS = 3 * 60 * 60 * 1000; /* 3 hours */
+export const DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000; /* 30 min */
 
 /* Other constants */
 export const PATROL_HELI_DOWNED_RADIUS = 400;

@@ -26,10 +26,10 @@ import {
 } from '../../index';
 
 import * as constants from '../utils/constants';
-import * as gimc from '../managers/guildInstanceManager';
 import * as map from '../utils/map';
 import * as rpmc from '../managers/rustPlusManager';
 import * as timer from '../utils/timer';
+import { GuildInstance, EventNotificationSettings } from '../managers/guildInstanceManager';
 
 const VALID_LOCKED_CRATE_MONUMENTS: string[] = [
     'airfield_display_name',
@@ -53,7 +53,6 @@ const CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE = 280;
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS = 2 * 60 * 1000; /* 2 min */
 const CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS = 19.5 * 60 * 1000; /* 19.5 min */
 const PATROL_HELICOPTER_LEAVING_SPEED_MIN = 400;
-export const TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000;
 const MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE = 3;
 const MAX_PLAYERS_TRACER_ENTRIES = 500;
 
@@ -125,7 +124,7 @@ export class RustPlusMapMarkers {
     public datePatrolHelicopterLeftMap: Date | null;
     public datePatrolHelicopterDestroyed: Date | null;
     public dateTravellingVendorSpawned: { [id: number]: Date };
-    public dateTravellingVendorLeftMap: Date | null;
+    public dateTravellingVendorDespawned: Date | null;
     public dateDeepSeaSpawned: Date | null;
     public dateDeepSeaDespawned: Date | null;
 
@@ -172,7 +171,7 @@ export class RustPlusMapMarkers {
         this.datePatrolHelicopterLeftMap = null;
         this.datePatrolHelicopterDestroyed = null;
         this.dateTravellingVendorSpawned = {};
-        this.dateTravellingVendorLeftMap = null;
+        this.dateTravellingVendorDespawned = null;
         this.dateDeepSeaSpawned = null;
         this.dateDeepSeaDespawned = null;
 
@@ -265,7 +264,7 @@ export class RustPlusMapMarkers {
                 !map.isOutsideGridSystem(marker.x, marker.y, mapSize, constants.GRID_DIAMETER * 4)) {
                 const location = map.getPos(marker.x, marker.y, this.rpInstance);
                 if (location) {
-                    const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+                    const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
                     const language = gInstance.generalSettings.language;
                     const locationString = map.getPosString(location, this.rpInstance, false, true);
                     this.rpInstance.sendEventNotification('vendingMachineSpawned',
@@ -291,7 +290,7 @@ export class RustPlusMapMarkers {
 
     private updateCh47s(mapMarkers: rp.AppMapMarkers) {
         const type = rp.AppMarkerType.CH47;
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
@@ -427,7 +426,7 @@ export class RustPlusMapMarkers {
 
     private updateCargoShips(mapMarkers: rp.AppMapMarkers) {
         const type = rp.AppMarkerType.CargoShip;
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
@@ -708,7 +707,7 @@ export class RustPlusMapMarkers {
 
     private updatePatrolHelicopters(mapMarkers: rp.AppMapMarkers) {
         const type = rp.AppMarkerType.PatrolHelicopter;
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
@@ -754,7 +753,7 @@ export class RustPlusMapMarkers {
             if (patrolHelicopterPos) {
                 patrolHelicopterPosString = map.getPosString(patrolHelicopterPos, this.rpInstance, false, true);
                 const eventText = lm.getIntl(language, phrase, { location: patrolHelicopterPosString });
-                this.rpInstance.sendEventNotification(settingsKey as keyof gimc.EventNotificationSettings, eventText);
+                this.rpInstance.sendEventNotification(settingsKey as keyof EventNotificationSettings, eventText);
             }
 
             this.datePatrolHelicopterLeftMap = new Date();
@@ -813,7 +812,7 @@ export class RustPlusMapMarkers {
 
     private updateTravellingVendors(mapMarkers: rp.AppMapMarkers) {
         const type = rp.AppMarkerType.TravellingVendor;
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
@@ -833,7 +832,7 @@ export class RustPlusMapMarkers {
             /* Notify 5 min before leaving */
             this.travellingVendorLeavingNotificationTimeoutIds[marker.id] = setTimeout(
                 this.notifyTravellingVendorLeavingSoon.bind(this, marker.id),
-                TRAVELLING_VENDOR_ACTIVE_TIME_MS - (5 * 60 * 1000)
+                constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS - (5 * 60 * 1000)
             );
             this.dateTravellingVendorSpawned[marker.id] = new Date();
 
@@ -855,7 +854,7 @@ export class RustPlusMapMarkers {
             }
 
             delete this.dateTravellingVendorSpawned[marker.id];
-            this.dateTravellingVendorLeftMap = new Date();
+            this.dateTravellingVendorDespawned = new Date();
             this.travellingVendors = this.travellingVendors.filter(e => e.id !== marker.id);
         }
 
@@ -868,7 +867,7 @@ export class RustPlusMapMarkers {
     }
 
     private updateDeepSea() {
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const mapSize = this.rpInstance.rpInfo?.appInfo.mapSize ?? null;
@@ -1001,7 +1000,7 @@ export class RustPlusMapMarkers {
         this.oilRigLockedCrateUnlockedTimeoutIds[ch47].timer?.stop();
         delete this.oilRigLockedCrateUnlockedTimeoutIds[ch47];
 
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const eventText = lm.getIntl(language, 'inGameEvent-ch47OilRigLockedCrateUnlocked', {
@@ -1014,7 +1013,7 @@ export class RustPlusMapMarkers {
     private notifyCargoShipEgress(cargoShipId: number) {
         this.cargoShipEgressTimeoutIds[cargoShipId]?.stop();
 
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         if (!this.rpInstance.rpMap || !this.rpInstance.rpInfo) return;
@@ -1046,7 +1045,7 @@ export class RustPlusMapMarkers {
             this.cargoShipEgressAfterHarbor2TimeoutIds[cargoShipId]?.stop();
         }
 
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         if (!this.rpInstance.rpMap || !this.rpInstance.rpInfo) return;
@@ -1064,7 +1063,7 @@ export class RustPlusMapMarkers {
     }
 
     private notifyCargoShipLockedCrateSpawn(cargoShipId: number) {
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         this.cargoShipMetaData[cargoShipId].lockedCrateSpawnCounter++;
@@ -1087,7 +1086,7 @@ export class RustPlusMapMarkers {
     }
 
     private notifyCargoShipUndockingSoon(cargoShipId: number, mapSize: number) {
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const cargoShip = this.cargoShips.find(e => e.id === cargoShipId);
@@ -1112,7 +1111,7 @@ export class RustPlusMapMarkers {
     }
 
     private notifyTravellingVendorLeavingSoon(travellingVendorId: number) {
-        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as gimc.GuildInstance;
+        const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
         const travellingVendor = this.travellingVendors.find(e => e.id === travellingVendorId);

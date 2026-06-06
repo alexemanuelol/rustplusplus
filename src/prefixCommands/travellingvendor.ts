@@ -26,7 +26,7 @@ import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 import { secondsToFullScale } from '../utils/timer';
 import { getPos, getPosString } from '../utils/map';
-import { TRAVELLING_VENDOR_ACTIVE_TIME_MS } from '../structures/rustPlusMapMarkers';
+import * as constants from '../utils/constants';
 
 export const name = 'travellingvendor';
 
@@ -49,10 +49,10 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     const response: string[] = [];
     if (rpInstance.rpMapMarkers.travellingVendors.length === 0) {
-        const dateWhenLeftMap = rpInstance.rpMapMarkers.dateTravellingVendorLeftMap;
+        const dateTravellingVendorDespawned = rpInstance.rpMapMarkers.dateTravellingVendorDespawned;
 
-        if (dateWhenLeftMap !== null) {
-            const timeSinceLeftMapSeconds = (new Date().getTime() - dateWhenLeftMap.getTime()) / 1000;
+        if (dateTravellingVendorDespawned !== null) {
+            const timeSinceLeftMapSeconds = (new Date().getTime() - dateTravellingVendorDespawned.getTime()) / 1000;
             response.push(lm.getIntl(language, 'timeSinceLeftMap', {
                 time: secondsToFullScale(timeSinceLeftMapSeconds)
             }));
@@ -69,7 +69,8 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
             const dateWhenSpawned = rpInstance.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
 
             const timeSinceSpawnSeconds = (new Date().getTime() - dateWhenSpawned.getTime()) / 1000;
-            const timeTillDespawn = (TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000) - timeSinceSpawnSeconds;
+            const timeTillDespawn = (constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000) -
+                timeSinceSpawnSeconds;
 
             response.push(lm.getIntl(language, 'travellingVendorIsActive', {
                 pos: posString,
