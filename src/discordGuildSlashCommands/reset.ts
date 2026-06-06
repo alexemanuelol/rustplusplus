@@ -49,7 +49,7 @@ export default {
     getData(language: Languages) {
         return new discordjs.SlashCommandBuilder()
             .setName('reset')
-            .setDescription(lm.getIntl(language, 'slashCommandDescRole'))
+            .setDescription(lm.getIntl(language, 'slashCommandDescReset'))
             .addSubcommand(subcommand => subcommand
                 .setName('missing_channels')
                 .setDescription(lm.getIntl(language, 'slashCommandDescResetMissingChannels')))

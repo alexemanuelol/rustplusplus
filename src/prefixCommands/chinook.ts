@@ -78,7 +78,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
         if (metaData.lockedCrateNotified) {
             const monumentName = lm.getIntl(language, metaData.lockedCrateDropLocation as string);
-            str += ` ${lm.getIntl(language, 'chinook47MaybeDroppedLockedCrateAt', { monument: monumentName })}`;
+            str += ` ${lm.getIntl(language, 'chinook47MayHaveDroppedLockedCrateAt', { monument: monumentName })}`;
         }
 
         response.push(str.trim());

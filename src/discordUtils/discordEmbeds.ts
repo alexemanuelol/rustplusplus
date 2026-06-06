@@ -699,17 +699,17 @@ export function getInformationChannelServerEmbed(rpInstance: RustPlusInstance): 
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const language = gInstance.generalSettings.language;
 
-    const playersFieldName = lm.getIntl(language, 'players');
-    const timeFieldName = lm.getIntl(language, 'time');
-    const wipeFieldName = lm.getIntl(language, 'wipe');
-    const timeTillFieldName = lm.getIntl(language, 'timeTill', {
+    const playersFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitlePlayers');
+    const timeFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleTime');
+    const wipeFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleWipe');
+    const timeTillFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleTimeTill', {
         emoji: rpInstance.rpTime?.isDay() ? constants.NIGHT_EMOJI : constants.DAY_EMOJI
     });
-    const mapSizeFieldName = lm.getIntl(language, 'mapSize');
-    const mapSeedFieldName = lm.getIntl(language, 'mapSeed');
-    const mapSaltFieldName = lm.getIntl(language, 'mapSalt');
-    const mapFieldName = lm.getIntl(language, 'map');
-    const connectFieldName = lm.getIntl(language, 'connect');
+    const mapSizeFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleMapSize');
+    const mapSeedFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleMapSeed');
+    const mapSaltFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleMapSalt');
+    const mapFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleMap');
+    const connectFieldName = lm.getIntl(language, 'infoChannelEmbedServerFieldTitleConnect');
 
     const playersFieldValue = rpInstance.getInformationChannelServerPlayersString();
     const timeFieldValue = rpInstance.getInformationChannelServerTimeString();
@@ -722,7 +722,7 @@ export function getInformationChannelServerEmbed(rpInstance: RustPlusInstance): 
     const connectFieldValue = rpInstance.getInformationChannelServerConnectString();
 
     return getEmbed({
-        title: lm.getIntl(language, 'serverInfo'),
+        title: lm.getIntl(language, 'infoChannelEmbedServerTitle'),
         timestamp: new Date(),
         color: colorHexToNumber(constants.COLOR_DEFAULT),
         thumbnail: { url: `attachment://server_info_logo.png` },
@@ -749,13 +749,13 @@ export function getInformationChannelEventEmbed(rpInstance: RustPlusInstance): d
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const language = gInstance.generalSettings.language;
 
-    const cargoShipFieldName = lm.getIntl(language, 'cargoShip');
-    const patrolHelicopterFieldName = lm.getIntl(language, 'patrolHelicopter');
-    const smallOilRigFieldName = lm.getIntl(language, 'smallOilRig');
-    const largeOilRigFieldName = lm.getIntl(language, 'largeOilRig');
-    const chinook47FieldName = lm.getIntl(language, 'chinook47');
-    const travellingVendorFieldName = lm.getIntl(language, 'travellingVendor');
-    const deepSeaFieldName = lm.getIntl(language, 'deepSea');
+    const cargoShipFieldName = lm.getIntl(language, 'infoChannelEmbedEventFieldTitleCargoShip');
+    const patrolHelicopterFieldName = lm.getIntl(language, 'infoChannelEmbedEventFieldTitlePatrolHelicopter');
+    const smallOilRigFieldName = lm.getIntl(language, 'infoChannelEmbedEventFieldTitleSmallOilRig');
+    const largeOilRigFieldName = lm.getIntl(language, 'infoChannelEmbedEventFieldTitleLargeOilRig');
+    const chinook47FieldName = lm.getIntl(language, 'infoChannelEmbedEventFieldTitleChinook47');
+    const travellingVendorFieldName = lm.getIntl(language, 'infoChannelEmbedEventFieldTitleTravellingVendor');
+    const deepSeaFieldName = lm.getIntl(language, 'infoChannelEmbedEventFieldTitleDeepSea');
 
     const cargoShipFieldValue = rpInstance.getInformationChannelEventCargoShipString();
     const patrolHelicopterFieldValue = rpInstance.getInformationChannelEventPatrolHelicopterString();
@@ -766,8 +766,8 @@ export function getInformationChannelEventEmbed(rpInstance: RustPlusInstance): d
     const deepSeaFieldValue = rpInstance.getInformationChannelEventDeepSeaString();
 
     return getEmbed({
-        title: lm.getIntl(language, 'serverInfo'),
-        description: lm.getIntl(language, 'inGameEventInfo'),
+        title: lm.getIntl(language, 'infoChannelEmbedEventTitle'),
+        description: lm.getIntl(language, 'infoChannelEmbedEventDesc'),
         timestamp: new Date(),
         color: colorHexToNumber(constants.COLOR_DEFAULT),
         thumbnail: { url: `attachment://event_info_logo.png` },

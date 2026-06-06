@@ -106,7 +106,7 @@ export default {
 				server: `\`${gInstance.serverInfoMap[serverId].name}\``
 			};
 
-			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMapNotConnected',
+			await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleMapServerNotConnected',
 				'errorDescMapServerNotConnected', parameters);
 			log.warn(`${fn} ${id} ${lm.getIntl(config.general.language, 'errorDescMapServerNotConnected', parameters)}`,
 				logParam);

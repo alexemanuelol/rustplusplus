@@ -843,12 +843,14 @@ export class RustPlusInstance {
         if (this.rpMapMarkers) {
             if (this.rpMapMarkers.cargoShips.length === 0) {
                 if (this.rpMapMarkers.dateCargoShipLeftMap === null) {
-                    strings.push(lm.getIntl(language, 'notActive'));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
                 }
                 else {
                     const timestampSinceLeft = Math.floor(this.rpMapMarkers.dateCargoShipLeftMap.getTime() / 1000);
                     const timeSinceLeft = `<t:${timestampSinceLeft}:R>`;
-                    strings.push(lm.getIntl(language, 'leftAtTime', { time: timeSinceLeft }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
+                        time: timeSinceLeft
+                    }));
                 }
             }
 
@@ -860,31 +862,35 @@ export class RustPlusInstance {
 
                 let str: string;
                 if (metaData.isLeaving) {
-                    str = lm.getIntl(language, 'leavingAtShort', { pos: posString });
+                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingAtPos', { pos: posString });
                 }
                 else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKING) {
-                    str = lm.getIntl(language, 'dockingAtShort', { pos: posString });
+                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseDockingAtPos', { pos: posString });
                 }
                 else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKED) {
-                    str = lm.getIntl(language, 'dockedAtShort', { pos: posString });
+                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseDockedAtPos', { pos: posString });
                 }
                 else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.UNDOCKING) {
-                    str = lm.getIntl(language, 'undockingAtShort', { pos: posString });
+                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseUndockingAtPos', { pos: posString });
                 }
                 else {
-                    str = lm.getIntl(language, 'locatedAtShort', { pos: posString });
+                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString });
                 }
                 str += '\n';
 
                 const timeSinceSpawnSeconds = Math.floor(metaData.spawnTime.getTime() / 1000);
                 const timeSinceSpawnString = `<t:${timeSinceSpawnSeconds}:R>`;
-                str += ` ${lm.getIntl(language, 'spawnedAtTime', { time: timeSinceSpawnString })}\n`;
+                str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
+                    time: timeSinceSpawnString
+                })}\n`;
 
                 const numberOfHarborsDocked = `${metaData.harborsDocked.length}`;
-                str += ` ${lm.getIntl(language, 'cargoShipDockedAtXHarbors', { num: numberOfHarborsDocked })}\n`;
+                str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseDockedAtXHarbors', {
+                    num: numberOfHarborsDocked
+                })}\n`;
 
                 const numberOfLockedCratesSpawned = `${metaData.lockedCrateSpawnCounter}`;
-                str += ` ${lm.getIntl(language, 'cargoShipNumberOfLockedCrates', {
+                str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseNumLockedCratesSpawned', {
                     num: numberOfLockedCratesSpawned
                 })}\n`;
 
@@ -926,14 +932,14 @@ export class RustPlusInstance {
                     }
 
                     if (timeLeftString0 !== '' && timeLeftString1 !== '') {
-                        const timeLeftString = lm.getIntl(language, 'cargoShipLeavingInOr', {
+                        const timeLeftString = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingXOrYTime', {
                             time1: timeLeftString0,
                             time2: timeLeftString1
                         });
                         str += `${timeLeftString}\n`;
                     }
                     else if (timeLeftString0 !== '') {
-                        const timeLeftString = lm.getIntl(language, 'cargoShipLeavingIn', {
+                        const timeLeftString = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingTime', {
                             time: timeLeftString0
                         });
                         str += `${timeLeftString}\n`;
@@ -961,7 +967,7 @@ export class RustPlusInstance {
                 if (dateWhenDestroyed !== null) {
                     const timeSinceDestroyedSeconds = Math.floor(dateWhenDestroyed.getTime() / 1000);
                     const timeSinceDestroyedString = `<t:${timeSinceDestroyedSeconds}:R>`;
-                    strings.push(lm.getIntl(language, 'timeSinceDestroyedShort', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDestroyedTimeAtPos', {
                         time: timeSinceDestroyedString,
                         location: destroyedLocation ?? lm.getIntl(language, 'unknown')
                     }));
@@ -970,13 +976,13 @@ export class RustPlusInstance {
                 if (dateWhenLeftMap !== null) {
                     const timeSinceLeftMapSeconds = Math.floor(dateWhenLeftMap.getTime() / 1000);
                     const timeSinceLeftMapString = `<t:${timeSinceLeftMapSeconds}:R>`;
-                    strings.push(lm.getIntl(language, 'timeSinceLeftMapShort', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
                         time: timeSinceLeftMapString
                     }));
                 }
 
                 if (strings.length === 0) {
-                    strings.push(lm.getIntl(language, 'notActive'));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
                 }
             }
 
@@ -987,10 +993,10 @@ export class RustPlusInstance {
                     lm.getIntl(language, 'unknown');
 
                 if (metaData.isLeaving) {
-                    strings.push(lm.getIntl(language, 'leavingAt', { pos: posString }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingAtPos', { pos: posString }));
                 }
                 else {
-                    strings.push(lm.getIntl(language, 'locatedAtShort', { pos: posString }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
                 }
             }
         }
@@ -1010,7 +1016,7 @@ export class RustPlusInstance {
                     const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
                     const timestampString = `<t:${timestamp}:R>`;
 
-                    strings.push(lm.getIntl(language, 'crateUnlocks', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
                         time: timestampString
                     }));
                 }
@@ -1021,12 +1027,12 @@ export class RustPlusInstance {
                     const timestamp = Math.floor(this.rpMapMarkers.dateSmallOilRigWasTriggered.getTime() / 1000);
                     const timestampString = `<t:${timestamp}:R>`;
 
-                    strings.push(lm.getIntl(language, 'lastTriggered', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseTriggeredTime', {
                         time: timestampString
                     }));
                 }
                 else {
-                    strings.push(lm.getIntl(language, 'notActive'));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
                 }
             }
         }
@@ -1046,7 +1052,7 @@ export class RustPlusInstance {
                     const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
                     const timestampString = `<t:${timestamp}:R>`;
 
-                    strings.push(lm.getIntl(language, 'crateUnlocks', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
                         time: timestampString
                     }));
                 }
@@ -1057,12 +1063,12 @@ export class RustPlusInstance {
                     const timestamp = Math.floor(this.rpMapMarkers.dateLargeOilRigWasTriggered.getTime() / 1000);
                     const timestampString = `<t:${timestamp}:R>`;
 
-                    strings.push(lm.getIntl(language, 'lastTriggered', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseTriggeredTime', {
                         time: timestampString
                     }));
                 }
                 else {
-                    strings.push(lm.getIntl(language, 'notActive'));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
                 }
             }
         }
@@ -1078,12 +1084,12 @@ export class RustPlusInstance {
         if (this.rpMapMarkers) {
             if (this.rpMapMarkers.ch47s.length === 0) {
                 if (this.rpMapMarkers.dateCh47LeftMap === null) {
-                    strings.push(lm.getIntl(language, 'notActive'));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
                 }
                 else {
                     const timestamp = Math.floor(this.rpMapMarkers.dateCh47LeftMap.getTime() / 1000);
                     const timestampString = `<t:${timestamp}:R>`;
-                    strings.push(lm.getIntl(language, 'timeSinceLeftShort', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
                         time: timestampString
                     }));
                 }
@@ -1095,15 +1101,17 @@ export class RustPlusInstance {
                 const posString = (pos !== null) ? getPosString(pos, this, true, false) :
                     lm.getIntl(language, 'unknown');
 
-                strings.push(lm.getIntl(language, 'locatedAtShort', { pos: posString }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
 
                 const timestampSpawn = Math.floor(metaData.spawnTime.getTime() / 1000);
                 const timestamp = `<t:${timestampSpawn}:R>`;
-                strings.push(lm.getIntl(language, 'spawnedAtTime', { time: timestamp }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timestamp }));
 
                 if (metaData.lockedCrateNotified) {
                     const monumentName = lm.getIntl(language, metaData.lockedCrateDropLocation as string);
-                    strings.push(lm.getIntl(language, 'lockedCrateDroppedAt', { monument: monumentName }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateDroppedAtPos', {
+                        monument: monumentName
+                    }));
                 }
             }
         }
@@ -1123,12 +1131,12 @@ export class RustPlusInstance {
                 if (dateWhenLeftMap !== null) {
                     const timestampSeconds = Math.floor(dateWhenLeftMap.getTime() / 1000);
                     const timestamp = `<t:${timestampSeconds}:R>`;
-                    strings.push(lm.getIntl(language, 'timeSinceLeftMapShort', {
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
                         time: timestamp
                     }));
                 }
                 else {
-                    strings.push(lm.getIntl(language, 'notActive'));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
                 }
             }
             else {
@@ -1144,9 +1152,13 @@ export class RustPlusInstance {
                     const timestampSpawned = `<t:${timestampSpawnSeconds}:R>`;
                     const timestampDespawn = `<t:${timestampSpawnSeconds + eventDurationSeconds}:R>`;
 
-                    strings.push(lm.getIntl(language, 'locatedAtShort', { pos: posString }));
-                    strings.push(lm.getIntl(language, 'spawnedAtTime', { time: timestampSpawned }));
-                    strings.push(lm.getIntl(language, 'despawnsInTime', { time: timestampDespawn }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
+                        time: timestampSpawned
+                    }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', {
+                        time: timestampDespawn
+                    }));
                 }
             }
         }
@@ -1170,18 +1182,22 @@ export class RustPlusInstance {
                 const timestampSpawnString = `<t:${timestampSpawnSeconds}:R>`;
                 const timestampDespawnString = `<t:${timestampDespawnSeconds}:R>`;
 
-                strings.push(lm.getIntl(language, 'active'));
-                strings.push(lm.getIntl(language, 'spawnedAtTime', { time: timestampSpawnString }));
-                strings.push(lm.getIntl(language, 'despawnsInTime', { time: timestampDespawnString }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseActive'));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
+                    time: timestampSpawnString
+                }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', {
+                    time: timestampDespawnString
+                }));
             }
             else {
                 if (this.rpMapMarkers.dateDeepSeaDespawned !== null) {
                     const timestampSeconds = Math.floor(this.rpMapMarkers.dateDeepSeaDespawned.getTime() / 1000);
                     const timestamp = `<t:${timestampSeconds}:R>`;
-                    strings.push(lm.getIntl(language, 'despawnedAtTime', { time: timestamp }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnedTime', { time: timestamp }));
                 }
                 else {
-                    strings.push(lm.getIntl(language, 'notActive'));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
                 }
             }
         }
