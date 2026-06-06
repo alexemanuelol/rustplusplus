@@ -1146,22 +1146,27 @@ export class RustPlusInstance {
                     const posString = (pos !== null) ? getPosString(pos, this, true, false) :
                         lm.getIntl(language, 'unknown');
 
-                    const dateWhenSpawned = this.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
-
-                    const unixTimestampSpawned = Math.floor(dateWhenSpawned.getTime() / 1000);
-                    const eventDurationSeconds = Math.floor(constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000);
-                    const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
-
-                    const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
-                    const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
+                    const dateTravellingVendorSpawned =
+                        this.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
 
                     strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
-                        time: timeSpawned
-                    }));
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', {
-                        time: timeDespawn
-                    }));
+
+                    if (dateTravellingVendorSpawned !== null) {
+                        const unixTimestampSpawned = Math.floor(dateTravellingVendorSpawned.getTime() / 1000);
+                        const eventDurationSeconds = Math.floor(
+                            constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000);
+                        const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
+
+                        const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
+                        const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
+
+                        strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
+                            time: timeSpawned
+                        }));
+                        strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', {
+                            time: timeDespawn
+                        }));
+                    }
                 }
             }
         }
