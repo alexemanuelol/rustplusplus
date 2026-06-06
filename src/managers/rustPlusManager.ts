@@ -42,6 +42,9 @@ import * as discordMessages from '../discordUtils/discordMessages';
 import * as discordVoice from '../discordUtils/discordVoice';
 import * as Timer from '../utils/timer';
 import * as informationChannelHandler from '../handlers/informationChannelHandler';
+import { getPos, getPosString } from '../utils/map';
+import { DockingStatus } from '../structures/rustPlusMapMarkers';
+import { TRAVELLING_VENDOR_ACTIVE_TIME_MS } from '../structures/rustPlusMapMarkers';
 
 
 export type RustPlusInstanceMap = { [guildId: types.GuildId]: RustPlusServerMap };
@@ -731,7 +734,7 @@ export class RustPlusInstance {
      * Information channel server methods
      */
 
-    public getInformationChannelPlayersString(): string {
+    public getInformationChannelServerPlayersString(): string {
         let str = '\u200B';
 
         if (this.rpInfo) {
@@ -743,7 +746,7 @@ export class RustPlusInstance {
         return str;
     }
 
-    public getInformationChannelTimeString(): string {
+    public getInformationChannelServerTimeString(): string {
         let str = '\u200B';
 
         if (this.rpTime) {
@@ -753,7 +756,7 @@ export class RustPlusInstance {
         return str;
     }
 
-    public getInformationChannelWipeString(): string {
+    public getInformationChannelServerWipeString(): string {
         let str = '\u200B';
 
         if (this.rpInfo) {
@@ -763,21 +766,19 @@ export class RustPlusInstance {
         return str;
     }
 
-    public getInformationChannelTimeTillString(): string {
+    public getInformationChannelServerTimeTillString(): string {
         let str = '\u200B';
 
         if (this.rpTime) {
             const timeTillData = this.rpTime.getTimeTillSunriseOrSunset();
             const timeTillTimestamp = Math.floor((new Date().getTime() / 1000)) + timeTillData.timeTillSeconds;
-            console.log(timeTillData)
-            console.log(timeTillTimestamp)
             str = `<t:${timeTillTimestamp}:R>`;
         }
 
         return str;
     }
 
-    public getInformationChannelMapSizeString(): string {
+    public getInformationChannelServerMapSizeString(): string {
         let str = '\u200B';
 
         if (this.rpInfo) {
@@ -787,7 +788,7 @@ export class RustPlusInstance {
         return str;
     }
 
-    public getInformationChannelMapSeedString(): string {
+    public getInformationChannelServerMapSeedString(): string {
         let str = '\u200B';
 
         if (this.rpInfo) {
@@ -797,7 +798,7 @@ export class RustPlusInstance {
         return str;
     }
 
-    public getInformationChannelMapSaltString(): string {
+    public getInformationChannelServerMapSaltString(): string {
         let str = '\u200B';
 
         if (this.rpInfo) {
@@ -807,7 +808,7 @@ export class RustPlusInstance {
         return str;
     }
 
-    public getInformationChannelMapString(): string {
+    public getInformationChannelServerMapString(): string {
         let str = '\u200B';
 
         if (this.rpInfo) {
@@ -817,16 +818,374 @@ export class RustPlusInstance {
         return str;
     }
 
-    public getInformationChannelConnectString(): string {
+    public getInformationChannelServerConnectString(): string {
         let str = '\u200B';
 
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const serverInfo = gInstance.serverInfoMap[this.serverId];
 
-        if (serverInfo) {
+        if (serverInfo && serverInfo.connect !== null) {
             str = `${serverInfo.connect}`;
         }
 
         return str;
+    }
+
+    /**
+     * Information channel event methods
+     */
+
+    public getInformationChannelEventCargoShipString(): string {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const strings: string[] = [];
+        if (this.rpMapMarkers) {
+            if (this.rpMapMarkers.cargoShips.length === 0) {
+                if (this.rpMapMarkers.dateCargoShipLeftMap === null) {
+                    strings.push(lm.getIntl(language, 'notActive'));
+                }
+                else {
+                    const timestampSinceLeft = Math.floor(this.rpMapMarkers.dateCargoShipLeftMap.getTime() / 1000);
+                    const timeSinceLeft = `<t:${timestampSinceLeft}:R>`;
+                    strings.push(lm.getIntl(language, 'leftAtTime', { time: timeSinceLeft }));
+                }
+            }
+
+            for (const cargoShip of this.rpMapMarkers.cargoShips) {
+                const metaData = this.rpMapMarkers.cargoShipMetaData[cargoShip.id];
+                const pos = getPos(cargoShip.x, cargoShip.y, this);
+                const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                    lm.getIntl(language, 'unknown');
+
+                let str: string;
+                if (metaData.isLeaving) {
+                    str = lm.getIntl(language, 'leavingAtShort', { pos: posString });
+                }
+                else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKING) {
+                    str = lm.getIntl(language, 'dockingAtShort', { pos: posString });
+                }
+                else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKED) {
+                    str = lm.getIntl(language, 'dockedAtShort', { pos: posString });
+                }
+                else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.UNDOCKING) {
+                    str = lm.getIntl(language, 'undockingAtShort', { pos: posString });
+                }
+                else {
+                    str = lm.getIntl(language, 'locatedAtShort', { pos: posString });
+                }
+                str += '\n';
+
+                const timeSinceSpawnSeconds = Math.floor(metaData.spawnTime.getTime() / 1000);
+                const timeSinceSpawnString = `<t:${timeSinceSpawnSeconds}:R>`;
+                str += ` ${lm.getIntl(language, 'spawnedAtTime', { time: timeSinceSpawnString })}\n`;
+
+                const numberOfHarborsDocked = `${metaData.harborsDocked.length}`;
+                str += ` ${lm.getIntl(language, 'cargoShipDockedAtXHarbors', { num: numberOfHarborsDocked })}\n`;
+
+                const numberOfLockedCratesSpawned = `${metaData.lockedCrateSpawnCounter}`;
+                str += ` ${lm.getIntl(language, 'cargoShipNumberOfLockedCrates', {
+                    num: numberOfLockedCratesSpawned
+                })}\n`;
+
+                if (!metaData.isLeaving) {
+                    const timer0 = this.rpMapMarkers.cargoShipEgressTimeoutIds[cargoShip.id];
+                    const timer1 = this.rpMapMarkers.cargoShipEgressAfterHarbor1TimeoutIds[cargoShip.id];
+                    const timer2 = this.rpMapMarkers.cargoShipEgressAfterHarbor2TimeoutIds[cargoShip.id];
+
+                    let timeLeftString0: string = '';
+                    let timeLeftString1: string = '';
+                    if (timer0 && timer0.running && !timer1 && !timer2) {
+                        const timeLeftSeconds = Math.floor(timer0.getTimeLeftMs() / 1000);
+                        const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
+                        timeLeftString0 = `<t:${timestamp}:R>`;
+                    }
+                    else if (timer0 && timer0.running && timer2 && timer2.running) {
+                        const timeLeftSeconds0 = Math.floor(timer0.getTimeLeftMs() / 1000);
+                        const timestamp0 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds0);
+                        timeLeftString0 = `<t:${timestamp0}:R>`;
+                        const timeLeftSeconds1 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                        const timestamp1 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds1);
+                        timeLeftString1 = `<t:${timestamp1}:R>`;
+                    }
+                    else if (timer1 && timer1.running && timer2 && timer2.running) {
+                        const timeLeftSeconds0 = Math.floor(timer1.getTimeLeftMs() / 1000);
+                        const timestamp0 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds0);
+                        timeLeftString0 = `<t:${timestamp0}:R>`;
+                        const timeLeftSeconds1 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                        const timestamp1 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds1);
+                        timeLeftString1 = `<t:${timestamp1}:R>`;
+                    }
+                    else if (timer0 && !timer0.running && timer2 && timer2.running) {
+                        const timeLeftSeconds = Math.floor(timer2.getTimeLeftMs() / 1000);
+                        const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
+                        timeLeftString0 = `<t:${timestamp}:R>`;
+                    }
+                    else {
+                        /* Do nothing */
+                    }
+
+                    if (timeLeftString0 !== '' && timeLeftString1 !== '') {
+                        const timeLeftString = lm.getIntl(language, 'cargoShipLeavingInOr', {
+                            time1: timeLeftString0,
+                            time2: timeLeftString1
+                        });
+                        str += `${timeLeftString}\n`;
+                    }
+                    else if (timeLeftString0 !== '') {
+                        const timeLeftString = lm.getIntl(language, 'cargoShipLeavingIn', {
+                            time: timeLeftString0
+                        });
+                        str += `${timeLeftString}\n`;
+                    }
+                }
+
+                strings.push(str.trim());
+            }
+        }
+
+        return strings.length === 0 ? '\u200B' : strings.join('\n');
+    }
+
+    public getInformationChannelEventPatrolHelicopterString(): string {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const strings: string[] = [];
+        if (this.rpMapMarkers) {
+            if (this.rpMapMarkers.patrolHelicopters.length === 0) {
+                const dateWhenDestroyed = this.rpMapMarkers.datePatrolHelicopterDestroyed;
+                const dateWhenLeftMap = this.rpMapMarkers.datePatrolHelicopterLeftMap;
+                const destroyedLocation = this.rpMapMarkers.patrolHelicopterLastDestroyedLocation;
+
+                if (dateWhenDestroyed !== null) {
+                    const timeSinceDestroyedSeconds = Math.floor(dateWhenDestroyed.getTime() / 1000);
+                    const timeSinceDestroyedString = `<t:${timeSinceDestroyedSeconds}:R>`;
+                    strings.push(lm.getIntl(language, 'timeSinceDestroyedShort', {
+                        time: timeSinceDestroyedString,
+                        location: destroyedLocation ?? lm.getIntl(language, 'unknown')
+                    }));
+                }
+
+                if (dateWhenLeftMap !== null) {
+                    const timeSinceLeftMapSeconds = Math.floor(dateWhenLeftMap.getTime() / 1000);
+                    const timeSinceLeftMapString = `<t:${timeSinceLeftMapSeconds}:R>`;
+                    strings.push(lm.getIntl(language, 'timeSinceLeftMapShort', {
+                        time: timeSinceLeftMapString
+                    }));
+                }
+
+                if (strings.length === 0) {
+                    strings.push(lm.getIntl(language, 'notActive'));
+                }
+            }
+
+            for (const patrolHelicopter of this.rpMapMarkers.patrolHelicopters) {
+                const metaData = this.rpMapMarkers.patrolHelicopterMetaData[patrolHelicopter.id];
+                const pos = getPos(patrolHelicopter.x, patrolHelicopter.y, this);
+                const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                    lm.getIntl(language, 'unknown');
+
+                if (metaData.isLeaving) {
+                    strings.push(lm.getIntl(language, 'leavingAt', { pos: posString }));
+                }
+                else {
+                    strings.push(lm.getIntl(language, 'locatedAtShort', { pos: posString }));
+                }
+            }
+        }
+
+        return strings.length === 0 ? '\u200B' : strings.join('\n');
+    }
+
+    public getInformationChannelEventSmallOilRigString(): string {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const strings: string[] = [];
+        if (this.rpMapMarkers) {
+            for (const content of Object.values(this.rpMapMarkers.oilRigLockedCrateUnlockedTimeoutIds)) {
+                if (content.oilRig === 'oil_rig_small') {
+                    const timeLeftSeconds = Math.floor(content.timer.getTimeLeftMs() / 1000);
+                    const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
+                    const timestampString = `<t:${timestamp}:R>`;
+
+                    strings.push(lm.getIntl(language, 'crateUnlocks', {
+                        time: timestampString
+                    }));
+                }
+            }
+
+            if (strings.length === 0) {
+                if (this.rpMapMarkers.dateSmallOilRigWasTriggered !== null) {
+                    const timestamp = Math.floor(this.rpMapMarkers.dateSmallOilRigWasTriggered.getTime() / 1000);
+                    const timestampString = `<t:${timestamp}:R>`;
+
+                    strings.push(lm.getIntl(language, 'lastTriggered', {
+                        time: timestampString
+                    }));
+                }
+                else {
+                    strings.push(lm.getIntl(language, 'notActive'));
+                }
+            }
+        }
+
+        return strings.length === 0 ? '\u200B' : strings.join('\n');
+    }
+
+    public getInformationChannelEventLargeOilRigString(): string {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const strings: string[] = [];
+        if (this.rpMapMarkers) {
+            for (const content of Object.values(this.rpMapMarkers.oilRigLockedCrateUnlockedTimeoutIds)) {
+                if (content.oilRig === 'large_oil_rig') {
+                    const timeLeftSeconds = Math.floor(content.timer.getTimeLeftMs() / 1000);
+                    const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
+                    const timestampString = `<t:${timestamp}:R>`;
+
+                    strings.push(lm.getIntl(language, 'crateUnlocks', {
+                        time: timestampString
+                    }));
+                }
+            }
+
+            if (strings.length === 0) {
+                if (this.rpMapMarkers.dateLargeOilRigWasTriggered !== null) {
+                    const timestamp = Math.floor(this.rpMapMarkers.dateLargeOilRigWasTriggered.getTime() / 1000);
+                    const timestampString = `<t:${timestamp}:R>`;
+
+                    strings.push(lm.getIntl(language, 'lastTriggered', {
+                        time: timestampString
+                    }));
+                }
+                else {
+                    strings.push(lm.getIntl(language, 'notActive'));
+                }
+            }
+        }
+
+        return strings.length === 0 ? '\u200B' : strings.join('\n');
+    }
+
+    public getInformationChannelEventChinook47String(): string {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const strings: string[] = [];
+        if (this.rpMapMarkers) {
+            if (this.rpMapMarkers.ch47s.length === 0) {
+                if (this.rpMapMarkers.dateCh47LeftMap === null) {
+                    strings.push(lm.getIntl(language, 'notActive'));
+                }
+                else {
+                    const timestamp = Math.floor(this.rpMapMarkers.dateCh47LeftMap.getTime() / 1000);
+                    const timestampString = `<t:${timestamp}:R>`;
+                    strings.push(lm.getIntl(language, 'timeSinceLeftShort', {
+                        time: timestampString
+                    }));
+                }
+            }
+
+            for (const ch47 of this.rpMapMarkers.ch47s) {
+                const metaData = this.rpMapMarkers.ch47MetaData[ch47.id];
+                const pos = getPos(ch47.x, ch47.y, this);
+                const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                    lm.getIntl(language, 'unknown');
+
+                strings.push(lm.getIntl(language, 'locatedAtShort', { pos: posString }));
+
+                const timestampSpawn = Math.floor(metaData.spawnTime.getTime() / 1000);
+                const timestamp = `<t:${timestampSpawn}:R>`;
+                strings.push(lm.getIntl(language, 'spawnedAtTime', { time: timestamp }));
+
+                if (metaData.lockedCrateNotified) {
+                    const monumentName = lm.getIntl(language, metaData.lockedCrateDropLocation as string);
+                    strings.push(lm.getIntl(language, 'lockedCrateDroppedAt', { monument: monumentName }));
+                }
+            }
+        }
+
+        return strings.length === 0 ? '\u200B' : strings.join('\n');
+    }
+
+    public getInformationChannelEventTravellingVendorString(): string {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const strings: string[] = [];
+        if (this.rpMapMarkers) {
+            if (this.rpMapMarkers.travellingVendors.length === 0) {
+                const dateWhenLeftMap = this.rpMapMarkers.dateTravellingVendorLeftMap;
+
+                if (dateWhenLeftMap !== null) {
+                    const timestampSeconds = Math.floor(dateWhenLeftMap.getTime() / 1000);
+                    const timestamp = `<t:${timestampSeconds}:R>`;
+                    strings.push(lm.getIntl(language, 'timeSinceLeftMapShort', {
+                        time: timestamp
+                    }));
+                }
+                else {
+                    strings.push(lm.getIntl(language, 'notActive'));
+                }
+            }
+            else {
+                for (const travellingVendor of this.rpMapMarkers.travellingVendors) {
+                    const pos = getPos(travellingVendor.x, travellingVendor.y, this);
+                    const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                        lm.getIntl(language, 'unknown');
+
+                    const dateWhenSpawned = this.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
+
+                    const timestampSpawnSeconds = Math.floor(dateWhenSpawned.getTime() / 1000);
+                    const eventDurationSeconds = Math.floor(TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000);
+                    const timestampSpawned = `<t:${timestampSpawnSeconds}:R>`;
+                    const timestampDespawn = `<t:${timestampSpawnSeconds + eventDurationSeconds}:R>`;
+
+                    strings.push(lm.getIntl(language, 'locatedAtShort', { pos: posString }));
+                    strings.push(lm.getIntl(language, 'spawnedAtTime', { time: timestampSpawned }));
+                    strings.push(lm.getIntl(language, 'despawnsInTime', { time: timestampDespawn }));
+                }
+            }
+        }
+
+        return strings.length === 0 ? '\u200B' : strings.join('\n');
+    }
+
+    public getInformationChannelEventDeepSeaString(): string {
+        const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const language = gInstance.generalSettings.language;
+
+        const strings: string[] = [];
+        if (this.rpMapMarkers) {
+            if (this.rpMapMarkers.isDeepSeaActive) {
+                const deepSeaSpawnDate = this.rpMapMarkers.dateDeepSeaSpawned as Date;
+
+                const timestampSpawnSeconds = Math.floor(deepSeaSpawnDate.getTime() / 1000);
+                const eventDurationSeconds = Math.floor(constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000);
+                const timestampDespawnSeconds = timestampSpawnSeconds + eventDurationSeconds;
+
+                const timestampSpawnString = `<t:${timestampSpawnSeconds}:R>`;
+                const timestampDespawnString = `<t:${timestampDespawnSeconds}:R>`;
+
+                strings.push(lm.getIntl(language, 'active'));
+                strings.push(lm.getIntl(language, 'spawnedAtTime', { time: timestampSpawnString }));
+                strings.push(lm.getIntl(language, 'despawnsInTime', { time: timestampDespawnString }));
+            }
+            else {
+                if (this.rpMapMarkers.dateDeepSeaDespawned !== null) {
+                    const timestampSeconds = Math.floor(this.rpMapMarkers.dateDeepSeaDespawned.getTime() / 1000);
+                    const timestamp = `<t:${timestampSeconds}:R>`;
+                    strings.push(lm.getIntl(language, 'despawnedAtTime', { time: timestamp }));
+                }
+                else {
+                    strings.push(lm.getIntl(language, 'notActive'));
+                }
+            }
+        }
+
+        return strings.length === 0 ? '\u200B' : strings.join('\n');
     }
 }

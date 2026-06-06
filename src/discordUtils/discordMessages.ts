@@ -412,9 +412,12 @@ export async function sendInformationChannelMessage(dm: DiscordManager, rpInstan
     }
 
     const content = {
-        embeds: [discordEmbeds.getInformationChannelServerEmbed(rpInstance)],
+        embeds: [
+            discordEmbeds.getInformationChannelServerEmbed(rpInstance),
+            discordEmbeds.getInformationChannelEventEmbed(rpInstance)],
         files: [
-            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'server_info_logo.png'))
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'server_info_logo.png')),
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'event_info_logo.png'))
         ]
     };
 

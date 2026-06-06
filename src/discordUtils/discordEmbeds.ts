@@ -711,15 +711,15 @@ export function getInformationChannelServerEmbed(rpInstance: RustPlusInstance): 
     const mapFieldName = lm.getIntl(language, 'map');
     const connectFieldName = lm.getIntl(language, 'connect');
 
-    const playersFieldValue = rpInstance.getInformationChannelPlayersString();
-    const timeFieldValue = rpInstance.getInformationChannelTimeString();
-    const wipeFieldValue = rpInstance.getInformationChannelWipeString();
-    const timeTillFieldValue = rpInstance.getInformationChannelTimeTillString();
-    const mapSizeFieldValue = rpInstance.getInformationChannelMapSizeString();
-    const mapSeedFieldValue = rpInstance.getInformationChannelMapSeedString();
-    const mapSaltFieldValue = rpInstance.getInformationChannelMapSaltString();
-    const mapFieldValue = rpInstance.getInformationChannelMapString();
-    const connectFieldValue = rpInstance.getInformationChannelConnectString();
+    const playersFieldValue = rpInstance.getInformationChannelServerPlayersString();
+    const timeFieldValue = rpInstance.getInformationChannelServerTimeString();
+    const wipeFieldValue = rpInstance.getInformationChannelServerWipeString();
+    const timeTillFieldValue = rpInstance.getInformationChannelServerTimeTillString();
+    const mapSizeFieldValue = rpInstance.getInformationChannelServerMapSizeString();
+    const mapSeedFieldValue = rpInstance.getInformationChannelServerMapSeedString();
+    const mapSaltFieldValue = rpInstance.getInformationChannelServerMapSaltString();
+    const mapFieldValue = rpInstance.getInformationChannelServerMapString();
+    const connectFieldValue = rpInstance.getInformationChannelServerConnectString();
 
     return getEmbed({
         title: lm.getIntl(language, 'serverInfo'),
@@ -732,13 +732,54 @@ export function getInformationChannelServerEmbed(rpInstance: RustPlusInstance): 
             { name: timeFieldName, value: timeFieldValue, inline: true },
             { name: wipeFieldName, value: wipeFieldValue, inline: true },
             { name: timeTillFieldName, value: timeTillFieldValue, inline: true },
-            { name: '\u200B', value: '\u200B', inline: true },
-            { name: '\u200B', value: '\u200B', inline: true },
             { name: mapSizeFieldName, value: mapSizeFieldValue, inline: true },
             { name: mapSeedFieldName, value: mapSeedFieldValue, inline: true },
             { name: mapSaltFieldName, value: mapSaltFieldValue, inline: true },
             { name: mapFieldName, value: mapFieldValue, inline: true },
             { name: connectFieldName, value: connectFieldValue, inline: true }
+        ]
+    });
+}
+
+export function getInformationChannelEventEmbed(rpInstance: RustPlusInstance): discordjs.EmbedBuilder {
+    const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
+
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const language = gInstance.generalSettings.language;
+
+    const cargoShipFieldName = lm.getIntl(language, 'cargoShip');
+    const patrolHelicopterFieldName = lm.getIntl(language, 'patrolHelicopter');
+    const smallOilRigFieldName = lm.getIntl(language, 'smallOilRig');
+    const largeOilRigFieldName = lm.getIntl(language, 'largeOilRig');
+    const chinook47FieldName = lm.getIntl(language, 'chinook47');
+    const travellingVendorFieldName = lm.getIntl(language, 'travellingVendor');
+    const deepSeaFieldName = lm.getIntl(language, 'deepSea');
+
+    const cargoShipFieldValue = rpInstance.getInformationChannelEventCargoShipString();
+    const patrolHelicopterFieldValue = rpInstance.getInformationChannelEventPatrolHelicopterString();
+    const smallOilRigFieldValue = rpInstance.getInformationChannelEventSmallOilRigString();
+    const largeOilRigFieldValue = rpInstance.getInformationChannelEventLargeOilRigString();
+    const chinook47FieldValue = rpInstance.getInformationChannelEventChinook47String();
+    const travellingVendorFieldValue = rpInstance.getInformationChannelEventTravellingVendorString();
+    const deepSeaFieldValue = rpInstance.getInformationChannelEventDeepSeaString();
+
+    return getEmbed({
+        title: lm.getIntl(language, 'serverInfo'),
+        description: lm.getIntl(language, 'inGameEventInfo'),
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: { url: `attachment://event_info_logo.png` },
+        footer: { text: serverInfo.name },
+        fields: [
+            { name: cargoShipFieldName, value: cargoShipFieldValue, inline: true },
+            { name: patrolHelicopterFieldName, value: patrolHelicopterFieldValue, inline: true },
+            { name: smallOilRigFieldName, value: smallOilRigFieldValue, inline: true },
+            { name: largeOilRigFieldName, value: largeOilRigFieldValue, inline: true },
+            { name: chinook47FieldName, value: chinook47FieldValue, inline: true },
+            { name: travellingVendorFieldName, value: travellingVendorFieldValue, inline: true },
+            { name: deepSeaFieldName, value: deepSeaFieldValue, inline: true }
         ]
     });
 }
