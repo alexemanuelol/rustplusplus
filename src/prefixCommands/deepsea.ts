@@ -22,6 +22,7 @@ import * as rp from 'rustplus-ts';
 import * as discordjs from 'discord.js';
 
 import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
+import * as constants from '../utils/constants';
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 import { secondsToFullScale } from '../utils/timer';
@@ -45,15 +46,18 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpMapMarkers === null) return false;
 
-    const response: string[] = [];
-    if (rpInstance.rpMapMarkers.isDeepSeaActive) {
-        const activeTimeSeconds = (new Date().getTime() -
-            (rpInstance.rpMapMarkers.dateDeepSeaSpawned as Date).getTime()) / 1000;
+    const unixTimestampCurrent = Math.floor((new Date().getTime()) / 1000);
 
-        let timeTillDespawnSeconds = 0;
-        if (rpInstance.rpMapMarkers.deepSeaActiveTimer !== null) {
-            timeTillDespawnSeconds = rpInstance.rpMapMarkers.deepSeaActiveTimer.getTimeLeftMs() / 1000;
-        }
+    const response: string[] = [];
+    if (rpInstance.rpMapMarkers.dateDeepSeaSpawned !== null) {
+        const dateDeepSeaSpawned = rpInstance.rpMapMarkers.dateDeepSeaSpawned;
+
+        const unixTimestampSpawn = Math.floor(dateDeepSeaSpawned.getTime() / 1000);
+        const unixTimestampDespawn = Math.floor(unixTimestampSpawn +
+            (constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000));
+
+        const activeTimeSeconds = unixTimestampCurrent - unixTimestampSpawn;
+        const timeTillDespawnSeconds = unixTimestampDespawn - unixTimestampCurrent;
 
         response.push(lm.getIntl(language, 'deepSeaIsActiveFor', {
             time1: secondsToFullScale(activeTimeSeconds),
@@ -62,8 +66,12 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     }
     else {
         if (rpInstance.rpMapMarkers.dateDeepSeaDespawned !== null) {
-            const timeSinceDespawnedSeconds = (new Date().getTime() -
-                (rpInstance.rpMapMarkers.dateDeepSeaDespawned as Date).getTime()) / 1000;
+            const dateDeepSeaDespawned = rpInstance.rpMapMarkers.dateDeepSeaDespawned;
+
+            const unixTimestampDespawned = Math.floor(dateDeepSeaDespawned.getTime() / 1000);
+
+            const timeSinceDespawnedSeconds = unixTimestampCurrent - unixTimestampDespawned;
+
             response.push(lm.getIntl(language, 'deepSeaTimeSinceDespawned', {
                 time: secondsToFullScale(timeSinceDespawnedSeconds)
             }));

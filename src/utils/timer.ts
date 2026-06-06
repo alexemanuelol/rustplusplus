@@ -216,3 +216,7 @@ export function getCurrentDateTime(): string {
 export function getTimeSince(time: Date): number {
     return ((new Date()).getTime() - time.getTime()) / 1000;
 }
+
+export function getDiscordRelativeTime(unixTimestamp: number): string {
+    return `<t:${unixTimestamp}:R>`;
+}

@@ -1172,29 +1172,27 @@ export class RustPlusInstance {
 
         const strings: string[] = [];
         if (this.rpMapMarkers) {
-            if (this.rpMapMarkers.isDeepSeaActive) {
-                const deepSeaSpawnDate = this.rpMapMarkers.dateDeepSeaSpawned as Date;
+            if (this.rpMapMarkers.dateDeepSeaSpawned !== null) {
+                const dateDeepSeaSpawned = this.rpMapMarkers.dateDeepSeaSpawned;
 
-                const timestampSpawnSeconds = Math.floor(deepSeaSpawnDate.getTime() / 1000);
+                const unixTimestampSpawn = Math.floor(dateDeepSeaSpawned.getTime() / 1000);
                 const eventDurationSeconds = Math.floor(constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000);
-                const timestampDespawnSeconds = timestampSpawnSeconds + eventDurationSeconds;
+                const unixTimestampDespawn = unixTimestampSpawn + eventDurationSeconds;
 
-                const timestampSpawnString = `<t:${timestampSpawnSeconds}:R>`;
-                const timestampDespawnString = `<t:${timestampDespawnSeconds}:R>`;
+                const timeSpawn = Timer.getDiscordRelativeTime(unixTimestampSpawn);
+                const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
 
                 strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseActive'));
-                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
-                    time: timestampSpawnString
-                }));
-                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', {
-                    time: timestampDespawnString
-                }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timeSpawn }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', { time: timeDespawn }));
             }
             else {
                 if (this.rpMapMarkers.dateDeepSeaDespawned !== null) {
-                    const timestampSeconds = Math.floor(this.rpMapMarkers.dateDeepSeaDespawned.getTime() / 1000);
-                    const timestamp = `<t:${timestampSeconds}:R>`;
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnedTime', { time: timestamp }));
+                    const dateDeepSeaDespawned = this.rpMapMarkers.dateDeepSeaDespawned;
+
+                    const unixTimestamp = Math.floor(dateDeepSeaDespawned.getTime() / 1000);
+                    const time = `<t:${unixTimestamp}:R>`;
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnedTime', { time: time }));
                 }
                 else {
                     strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));

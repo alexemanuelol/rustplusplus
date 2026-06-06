@@ -97,6 +97,7 @@ export class RustPlusMapMarkers {
     public appMapMarkers: rp.AppMapMarkers;
 
     private firstPoll: boolean;
+    private isDeepSeaActive: boolean;
 
     public undefineds: rp.AppMarker[];
     public players: rp.AppMarker[];
@@ -116,7 +117,6 @@ export class RustPlusMapMarkers {
     public cargoShipLockedCrateSpawnIntervalIds: { [cargoShip: number]: NodeJS.Timeout };
     public cargoShipUndockingNotificationTimeoutIds: { [cargoShip: number]: NodeJS.Timeout };
     public travellingVendorLeavingNotificationTimeoutIds: { [travellingVendor: number]: NodeJS.Timeout };
-    public deepSeaActiveTimer: timer.Timer | null;
 
     public dateSmallOilRigWasTriggered: Date | null;
     public dateLargeOilRigWasTriggered: Date | null;
@@ -136,13 +136,13 @@ export class RustPlusMapMarkers {
     public ch47MetaData: { [ch47: number]: Ch47MetaData };
     public patrolHelicopterLastDestroyedLocation: string | null;
     public tracers: Tracers;
-    public isDeepSeaActive: boolean;
 
     constructor(rpInstance: rpmc.RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
         this.rpInstance = rpInstance;
         this.appMapMarkers = appMapMarkers;
 
         this.firstPoll = true;
+        this.isDeepSeaActive = false;
 
         this.undefineds = [];
         this.players = [];
@@ -163,7 +163,6 @@ export class RustPlusMapMarkers {
         this.cargoShipLockedCrateSpawnIntervalIds = {};
         this.cargoShipUndockingNotificationTimeoutIds = {};
         this.travellingVendorLeavingNotificationTimeoutIds = {};
-        this.deepSeaActiveTimer = null;
 
         /* Event dates */
         this.dateSmallOilRigWasTriggered = null;
@@ -191,7 +190,6 @@ export class RustPlusMapMarkers {
             patrolHelicopters: new Map(),
             travellingVendors: new Map(),
         };
-        this.isDeepSeaActive = false;
     }
 
 
@@ -881,11 +879,10 @@ export class RustPlusMapMarkers {
 
         if (deepSeaVendingMachines.length > 0 && !this.isDeepSeaActive) {
             this.isDeepSeaActive = true;
-            this.dateDeepSeaSpawned = new Date();
+            if (!this.firstPoll) {
+                this.dateDeepSeaSpawned = new Date();
+            }
             this.dateDeepSeaDespawned = null;
-            this.deepSeaActiveTimer = new timer.Timer(
-                this.notifyDeepSeaDespawning.bind(this), constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS);
-            this.deepSeaActiveTimer.start();
 
             const phrase = 'inGameEvent-deepSeaSpawned';
             const eventText = lm.getIntl(language, phrase);
@@ -894,9 +891,9 @@ export class RustPlusMapMarkers {
         else if (deepSeaVendingMachines.length === 0 && this.isDeepSeaActive) {
             this.isDeepSeaActive = false;
             this.dateDeepSeaSpawned = null;
-            this.dateDeepSeaDespawned = new Date();
-            this.deepSeaActiveTimer?.stop();
-            this.deepSeaActiveTimer = null;
+            if (!this.firstPoll) {
+                this.dateDeepSeaDespawned = new Date();
+            }
 
             const phrase = 'inGameEvent-deepSeaDespawned';
             const eventText = lm.getIntl(language, phrase);
@@ -1133,12 +1130,5 @@ export class RustPlusMapMarkers {
             clearTimeout(this.travellingVendorLeavingNotificationTimeoutIds[travellingVendorId]);
             delete this.travellingVendorLeavingNotificationTimeoutIds[travellingVendorId];
         }
-    }
-
-    private notifyDeepSeaDespawning() {
-        this.deepSeaActiveTimer?.stop();
-        this.deepSeaActiveTimer = null;
-
-        /* Just clear the timer, do nothing else. */
     }
 }
