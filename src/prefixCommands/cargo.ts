@@ -63,26 +63,27 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpMapMarkers === null) return false;
 
-    if (rpInstance.rpMapMarkers.cargoShips.length === 0) {
-        let response: string;
-        if (rpInstance.rpMapMarkers.dateCargoShipLeftMap === null) {
-            response = lm.getIntl(language, 'cargoShipNotOnMap');
-        }
-        else {
-            const timeSinceLeft = (new Date().getTime() -
-                rpInstance.rpMapMarkers.dateCargoShipLeftMap.getTime()) / 1000;
-            response = lm.getIntl(language, 'timeSinceCargoShipLeft', {
-                time: secondsToFullScale(timeSinceLeft, '', true)
-            });
-        }
-        rpInstance.sendPrefixCommandResponse(response, inGame);
-        log.info(`${fn} ${response}`, logParam);
-        return true;
-    }
+    const unixTimestampNow = Math.floor(new Date().getTime() / 1000);
+    const dateDespawned = rpInstance.rpMapMarkers.dateCargoShipDespawned;
 
     const response: string[] = [];
+    if (rpInstance.rpMapMarkers.cargoShips.length === 0) {
+        if (dateDespawned === null) {
+            response.push(lm.getIntl(language, 'cargoShipNotOnMap'));
+        }
+        else {
+            const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+            const secondsSinceDespawned = unixTimestampNow - unixTimestampDespawned;
+            response.push(lm.getIntl(language, 'timeSinceCargoShipLeft', {
+                time: secondsToFullScale(secondsSinceDespawned)
+            }));
+        }
+    }
+
     for (const cargoShip of rpInstance.rpMapMarkers.cargoShips) {
         const metaData = rpInstance.rpMapMarkers.cargoShipMetaData[cargoShip.id];
+        const dateSpawned = rpInstance.rpMapMarkers.dateCargoShipSpawned[cargoShip.id];
+
         const pos = getPos(cargoShip.x, cargoShip.y, rpInstance);
         const posString = (pos !== null) ? getPosString(pos, rpInstance, false, false) :
             lm.getIntl(language, 'unknown');
@@ -104,9 +105,13 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
             str = lm.getIntl(language, 'cargoShipLocatedAt', { pos: posString });
         }
 
-        const timeSinceSpawnSeconds = (new Date().getTime() - metaData.spawnTime.getTime()) / 1000;
-        const timeSinceSpawnString = secondsToFullScale(timeSinceSpawnSeconds, '', false);
-        str += ` ${lm.getIntl(language, 'cargoShipBeenOutFor', { time: timeSinceSpawnString })} `;
+        if (dateSpawned) {
+            const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+            const secondsSinceSpawned = unixTimestampNow - unixTimestampSpawned;
+            str += ` ${lm.getIntl(language, 'cargoShipBeenOutFor', {
+                time: secondsToFullScale(secondsSinceSpawned)
+            })} `;
+        }
 
         const numberOfHarborsDocked = `${metaData.harborsDocked.length}`;
         str += ` ${lm.getIntl(language, 'cargoShipDockedAtXHarbors', { num: numberOfHarborsDocked })} `;
@@ -119,42 +124,42 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
             const timer1 = rpInstance.rpMapMarkers.cargoShipEgressAfterHarbor1TimeoutIds[cargoShip.id];
             const timer2 = rpInstance.rpMapMarkers.cargoShipEgressAfterHarbor2TimeoutIds[cargoShip.id];
 
-            let timeLeftString0: string = '';
-            let timeLeftString1: string = '';
+            let timeLeft0: string = '';
+            let timeLeft1: string = '';
             if (timer0 && timer0.running && !timer1 && !timer2) {
-                const timeLeftSeconds = timer0.getTimeLeftMs() / 1000;
-                timeLeftString0 = secondsToFullScale(timeLeftSeconds, 'd', false);
+                const secondsLeft0 = Math.floor(timer0.getTimeLeftMs() / 1000);
+                timeLeft0 = secondsToFullScale(secondsLeft0, 'd', false);
             }
             else if (timer0 && timer0.running && timer2 && timer2.running) {
-                const timeLeftSeconds0 = timer0.getTimeLeftMs() / 1000;
-                timeLeftString0 = secondsToFullScale(timeLeftSeconds0, 'd', false);
-                const timeLeftSeconds1 = timer2.getTimeLeftMs() / 1000;
-                timeLeftString1 = secondsToFullScale(timeLeftSeconds1, 'd', false);
+                const secondsLeft0 = Math.floor(timer0.getTimeLeftMs() / 1000);
+                timeLeft0 = secondsToFullScale(secondsLeft0, 'd', false);
+                const secondsLeft1 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                timeLeft1 = secondsToFullScale(secondsLeft1, 'd', false);
             }
             else if (timer1 && timer1.running && timer2 && timer2.running) {
-                const timeLeftSeconds0 = timer1.getTimeLeftMs() / 1000;
-                timeLeftString0 = secondsToFullScale(timeLeftSeconds0, 'd', false);
-                const timeLeftSeconds1 = timer2.getTimeLeftMs() / 1000;
-                timeLeftString1 = secondsToFullScale(timeLeftSeconds1, 'd', false);
+                const secondsLeft0 = Math.floor(timer1.getTimeLeftMs() / 1000);
+                timeLeft0 = secondsToFullScale(secondsLeft0, 'd', false);
+                const secondsLeft1 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                timeLeft1 = secondsToFullScale(secondsLeft1, 'd', false);
             }
             else if (timer0 && !timer0.running && timer2 && timer2.running) {
-                const timeLeftSeconds = timer2.getTimeLeftMs() / 1000;
-                timeLeftString0 = secondsToFullScale(timeLeftSeconds, 'd', false);
+                const secondsLeft0 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                timeLeft0 = secondsToFullScale(secondsLeft0, 'd', false);
             }
             else {
                 /* Do nothing */
             }
 
-            if (timeLeftString0 !== '' && timeLeftString1 !== '') {
+            if (timeLeft0 !== '' && timeLeft1 !== '') {
                 const timeLeftString = lm.getIntl(language, 'cargoShipLeavingInOr', {
-                    time1: timeLeftString0,
-                    time2: timeLeftString1
+                    time1: timeLeft0,
+                    time2: timeLeft1
                 });
                 str += ` ${timeLeftString}`;
             }
-            else if (timeLeftString0 !== '') {
+            else if (timeLeft0 !== '') {
                 const timeLeftString = lm.getIntl(language, 'cargoShipLeavingIn', {
-                    time: timeLeftString0
+                    time: timeLeft0
                 });
                 str += ` ${timeLeftString}`;
             }

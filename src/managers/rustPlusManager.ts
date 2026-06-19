@@ -840,115 +840,124 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
+        if (!this.rpMapMarkers) {
+            return '\u200B';
+        }
+
+        const unixTimestampNow = Math.floor(new Date().getTime() / 1000);
+        const dateDespawned = this.rpMapMarkers.dateCargoShipDespawned;
+
         const strings: string[] = [];
-        if (this.rpMapMarkers) {
-            if (this.rpMapMarkers.cargoShips.length === 0) {
-                if (this.rpMapMarkers.dateCargoShipLeftMap === null) {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
-                }
-                else {
-                    const timestampSinceLeft = Math.floor(this.rpMapMarkers.dateCargoShipLeftMap.getTime() / 1000);
-                    const timeSinceLeft = `<t:${timestampSinceLeft}:R>`;
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
-                        time: timeSinceLeft
-                    }));
-                }
+        if (this.rpMapMarkers.cargoShips.length === 0) {
+            if (dateDespawned === null) {
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
             }
+            else {
+                const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+                const timeDespawned = Timer.getDiscordRelativeTime(unixTimestampDespawned);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
+                    time: timeDespawned
+                }));
+            }
+        }
 
-            for (const cargoShip of this.rpMapMarkers.cargoShips) {
-                const metaData = this.rpMapMarkers.cargoShipMetaData[cargoShip.id];
-                const pos = getPos(cargoShip.x, cargoShip.y, this);
-                const posString = (pos !== null) ? getPosString(pos, this, true, false) :
-                    lm.getIntl(language, 'unknown');
+        for (const cargoShip of this.rpMapMarkers.cargoShips) {
+            const metaData = this.rpMapMarkers.cargoShipMetaData[cargoShip.id];
+            const dateSpawned = this.rpMapMarkers.dateCargoShipSpawned[cargoShip.id];
 
-                let str: string;
-                if (metaData.isLeaving) {
-                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingAtPos', { pos: posString });
-                }
-                else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKING) {
-                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseDockingAtPos', { pos: posString });
-                }
-                else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKED) {
-                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseDockedAtPos', { pos: posString });
-                }
-                else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.UNDOCKING) {
-                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseUndockingAtPos', { pos: posString });
-                }
-                else {
-                    str = lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString });
-                }
-                str += '\n';
+            const pos = getPos(cargoShip.x, cargoShip.y, this);
+            const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                lm.getIntl(language, 'unknown');
 
-                const timeSinceSpawnSeconds = Math.floor(metaData.spawnTime.getTime() / 1000);
-                const timeSinceSpawnString = `<t:${timeSinceSpawnSeconds}:R>`;
+            let str: string;
+            if (metaData.isLeaving) {
+                str = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingAtPos', { pos: posString });
+            }
+            else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKING) {
+                str = lm.getIntl(language, 'infoChannelEmbedEventPhraseDockingAtPos', { pos: posString });
+            }
+            else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.DOCKED) {
+                str = lm.getIntl(language, 'infoChannelEmbedEventPhraseDockedAtPos', { pos: posString });
+            }
+            else if (metaData.dockingStatus !== null && metaData.dockingStatus === DockingStatus.UNDOCKING) {
+                str = lm.getIntl(language, 'infoChannelEmbedEventPhraseUndockingAtPos', { pos: posString });
+            }
+            else {
+                str = lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString });
+            }
+            str += '\n';
+
+            if (dateSpawned) {
+                const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+                const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
                 str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
-                    time: timeSinceSpawnString
+                    time: timeSpawned
                 })}\n`;
+            }
 
-                const numberOfHarborsDocked = `${metaData.harborsDocked.length}`;
-                str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseDockedAtXHarbors', {
-                    num: numberOfHarborsDocked
-                })}\n`;
+            const numberOfHarborsDocked = `${metaData.harborsDocked.length}`;
+            str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseDockedAtXHarbors', {
+                num: numberOfHarborsDocked
+            })}\n`;
 
-                const numberOfLockedCratesSpawned = `${metaData.lockedCrateSpawnCounter}`;
-                str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseNumLockedCratesSpawned', {
-                    num: numberOfLockedCratesSpawned
-                })}\n`;
+            const numberOfLockedCratesSpawned = `${metaData.lockedCrateSpawnCounter}`;
+            str += ` ${lm.getIntl(language, 'infoChannelEmbedEventPhraseNumLockedCratesSpawned', {
+                num: numberOfLockedCratesSpawned
+            })}\n`;
 
-                if (!metaData.isLeaving) {
-                    const timer0 = this.rpMapMarkers.cargoShipEgressTimeoutIds[cargoShip.id];
-                    const timer1 = this.rpMapMarkers.cargoShipEgressAfterHarbor1TimeoutIds[cargoShip.id];
-                    const timer2 = this.rpMapMarkers.cargoShipEgressAfterHarbor2TimeoutIds[cargoShip.id];
+            if (!metaData.isLeaving) {
+                const timer0 = this.rpMapMarkers.cargoShipEgressTimeoutIds[cargoShip.id];
+                const timer1 = this.rpMapMarkers.cargoShipEgressAfterHarbor1TimeoutIds[cargoShip.id];
+                const timer2 = this.rpMapMarkers.cargoShipEgressAfterHarbor2TimeoutIds[cargoShip.id];
 
-                    let timeLeftString0: string = '';
-                    let timeLeftString1: string = '';
-                    if (timer0 && timer0.running && !timer1 && !timer2) {
-                        const timeLeftSeconds = Math.floor(timer0.getTimeLeftMs() / 1000);
-                        const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
-                        timeLeftString0 = `<t:${timestamp}:R>`;
-                    }
-                    else if (timer0 && timer0.running && timer2 && timer2.running) {
-                        const timeLeftSeconds0 = Math.floor(timer0.getTimeLeftMs() / 1000);
-                        const timestamp0 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds0);
-                        timeLeftString0 = `<t:${timestamp0}:R>`;
-                        const timeLeftSeconds1 = Math.floor(timer2.getTimeLeftMs() / 1000);
-                        const timestamp1 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds1);
-                        timeLeftString1 = `<t:${timestamp1}:R>`;
-                    }
-                    else if (timer1 && timer1.running && timer2 && timer2.running) {
-                        const timeLeftSeconds0 = Math.floor(timer1.getTimeLeftMs() / 1000);
-                        const timestamp0 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds0);
-                        timeLeftString0 = `<t:${timestamp0}:R>`;
-                        const timeLeftSeconds1 = Math.floor(timer2.getTimeLeftMs() / 1000);
-                        const timestamp1 = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds1);
-                        timeLeftString1 = `<t:${timestamp1}:R>`;
-                    }
-                    else if (timer0 && !timer0.running && timer2 && timer2.running) {
-                        const timeLeftSeconds = Math.floor(timer2.getTimeLeftMs() / 1000);
-                        const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
-                        timeLeftString0 = `<t:${timestamp}:R>`;
-                    }
-                    else {
-                        /* Do nothing */
-                    }
-
-                    if (timeLeftString0 !== '' && timeLeftString1 !== '') {
-                        const timeLeftString = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingXOrYTime', {
-                            time1: timeLeftString0,
-                            time2: timeLeftString1
-                        });
-                        str += `${timeLeftString}\n`;
-                    }
-                    else if (timeLeftString0 !== '') {
-                        const timeLeftString = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingTime', {
-                            time: timeLeftString0
-                        });
-                        str += `${timeLeftString}\n`;
-                    }
+                let timeLeft0: string = '';
+                let timeLeft1: string = '';
+                if (timer0 && timer0.running && !timer1 && !timer2) {
+                    const secondsLeft0 = Math.floor(timer0.getTimeLeftMs() / 1000);
+                    const unixTimestampLeave0 = unixTimestampNow + secondsLeft0;
+                    timeLeft0 = Timer.getDiscordRelativeTime(unixTimestampLeave0);
+                }
+                else if (timer0 && timer0.running && timer2 && timer2.running) {
+                    const secondsLeft0 = Math.floor(timer0.getTimeLeftMs() / 1000);
+                    const unixTimestampLeave0 = unixTimestampNow + secondsLeft0;
+                    timeLeft0 = Timer.getDiscordRelativeTime(unixTimestampLeave0);
+                    const secondsLeft1 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                    const unixTimestampLeave1 = unixTimestampNow + secondsLeft1;
+                    timeLeft1 = Timer.getDiscordRelativeTime(unixTimestampLeave1);
+                }
+                else if (timer1 && timer1.running && timer2 && timer2.running) {
+                    const secondsLeft0 = Math.floor(timer1.getTimeLeftMs() / 1000);
+                    const unixTimestampLeave0 = unixTimestampNow + secondsLeft0;
+                    timeLeft0 = Timer.getDiscordRelativeTime(unixTimestampLeave0);
+                    const secondsLeft1 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                    const unixTimestampLeave1 = unixTimestampNow + secondsLeft1;
+                    timeLeft1 = Timer.getDiscordRelativeTime(unixTimestampLeave1);
+                }
+                else if (timer0 && !timer0.running && timer2 && timer2.running) {
+                    const secondsLeft0 = Math.floor(timer2.getTimeLeftMs() / 1000);
+                    const unixTimestampLeave0 = unixTimestampNow + secondsLeft0;
+                    timeLeft0 = Timer.getDiscordRelativeTime(unixTimestampLeave0);
+                }
+                else {
+                    /* Do nothing */
                 }
 
-                strings.push(str.trim());
+                if (timeLeft0 !== '' && timeLeft1 !== '') {
+                    const timeLeftString = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingXOrYTime', {
+                        time1: timeLeft0,
+                        time2: timeLeft1
+                    });
+                    str += `${timeLeftString}\n`;
+                }
+                else if (timeLeft0 !== '') {
+                    const timeLeftString = lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingTime', {
+                        time: timeLeft0
+                    });
+                    str += `${timeLeftString}\n`;
+                }
             }
+
+            strings.push(str.trim());
         }
 
         return strings.length === 0 ? '\u200B' : strings.join('\n');

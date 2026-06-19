@@ -70,7 +70,6 @@ export interface CargoShipMetaData {
     isLeaving: boolean;
     prevPoint: map.Point | null;
     isDepartureCertain: boolean;
-    spawnTime: Date;
 }
 
 export interface Ch47MetaData {
@@ -121,7 +120,8 @@ export class RustPlusMapMarkers {
     public dateLargeOilRigLastTriggered: Date | null;
     public dateCh47Spawned: { [id: number]: Date };
     public dateCh47Despawned: Date | null;
-    public dateCargoShipLeftMap: Date | null;
+    public dateCargoShipSpawned: { [id: number]: Date };
+    public dateCargoShipDespawned: Date | null;
     public datePatrolHelicopterSpawned: { [id: number]: Date };
     public datePatrolHelicopterDespawned: Date | null;
     public datePatrolHelicopterDestroyed: Date | null;
@@ -170,7 +170,8 @@ export class RustPlusMapMarkers {
         this.dateLargeOilRigLastTriggered = null;
         this.dateCh47Spawned = {};
         this.dateCh47Despawned = null;
-        this.dateCargoShipLeftMap = null;
+        this.dateCargoShipSpawned = {};
+        this.dateCargoShipDespawned = null;
         this.datePatrolHelicopterSpawned = {};
         this.datePatrolHelicopterDespawned = null;
         this.datePatrolHelicopterDestroyed = null;
@@ -454,8 +455,7 @@ export class RustPlusMapMarkers {
                 dockingStatus: null,
                 isLeaving: false,
                 prevPoint: null,
-                isDepartureCertain: true,
-                spawnTime: new Date()
+                isDepartureCertain: true
             };
 
             const offset = 4 * gridDiameter;
@@ -473,6 +473,8 @@ export class RustPlusMapMarkers {
             this.cargoShips.push(marker);
 
             if (!this.firstPoll) {
+                this.dateCargoShipSpawned[marker.id] = new Date();
+
                 this.cargoShipEgressTimeoutIds[marker.id] = new timer.Timer(
                     this.notifyCargoShipEgress.bind(this, marker.id),
                     gInstance.serverInfoMap[this.rpInstance.serverId].cargoShipEgressTimeMs
@@ -517,7 +519,8 @@ export class RustPlusMapMarkers {
                 delete this.cargoShipUndockingNotificationTimeoutIds[marker.id];
             }
 
-            this.dateCargoShipLeftMap = new Date();
+            delete this.dateCargoShipSpawned[marker.id];
+            this.dateCargoShipDespawned = new Date();
             delete this.cargoShipMetaData[marker.id];
             this.cargoShips = this.cargoShips.filter(e => e.id !== marker.id);
         }
