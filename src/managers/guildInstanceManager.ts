@@ -286,8 +286,7 @@ export interface ServerInfo {
     smartSwitchGroupConfigMap: SmartSwitchGroupConfigMap;
     dayDurationSeconds: number | null;
     nightDurationSeconds: number | null;
-    oilRigLockedCrateUnlockTimeMs: number;
-    cargoShipEgressTimeMs: number;
+    customVariables: CustomVariables;
 }
 
 export interface Marker {
@@ -366,6 +365,16 @@ export interface SmartSwitchGroupConfig {
 export interface SmartDeviceEntity {
     serverId: types.ServerId;
     entityId: types.EntityId;
+}
+
+export interface CustomVariables {
+    cargoShipEgressTimeMs: number;
+    cargoShipHarborDockingTimeMs: number;
+    cargoShipLootRounds: number;
+    cargoShipLootRoundsSpacingTimeMs: number;
+    deepSeaDurationTimeMs: number;
+    lockedCrateUnlockTimeMs: number;
+    travellingVendorDurationTimeMs: number;
 }
 
 export class GuildInstanceManager {
@@ -1413,7 +1422,6 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
     if (typeof object !== 'object' || object === null || Array.isArray(object)) {
         return false;
     }
-
     const obj = object as ServerInfo;
 
     const interfaceName = 'ServerInfo';
@@ -1439,8 +1447,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         'smartSwitchGroupConfigMap',
         'dayDurationSeconds',
         'nightDurationSeconds',
-        'oilRigLockedCrateUnlockTimeMs',
-        'cargoShipEgressTimeMs'
+        'customVariables'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
@@ -1468,8 +1475,7 @@ export function isValidServerInfo(object: unknown): object is ServerInfo {
         isValidSmartSwitchGroupConfig));
     errors.push(vu.validateType('dayDurationSeconds', obj.dayDurationSeconds, 'number', null));
     errors.push(vu.validateType('nightDurationSeconds', obj.nightDurationSeconds, 'number', null));
-    errors.push(vu.validateType('oilRigLockedCrateUnlockTimeMs', obj.oilRigLockedCrateUnlockTimeMs, 'number'));
-    errors.push(vu.validateType('cargoShipEgressTimeMs', obj.cargoShipEgressTimeMs, 'number'));
+    errors.push(vu.validateInterface('customVariables', obj.customVariables, isValidCustomVariables));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 
@@ -1674,6 +1680,46 @@ export function isValidSmartSwitchGroupConfig(object: unknown): object is SmartS
     errors.push(vu.validateType('command', obj.command, 'string'));
     errors.push(vu.validateType('image', obj.image, 'string'));
     errors.push(vu.validateArrayOfTypes('smartSwitches', obj.smartSwitches, 'string'));
+
+    const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
+
+    const objectKeys = Object.keys(object);
+    const missingKeys = validKeys.filter(key => !objectKeys.includes(key));
+    const unknownKeys = objectKeys.filter(key => !validKeys.includes(key));
+    const hasAllRequiredKeys = missingKeys.length === 0;
+    const hasOnlyValidKeys = unknownKeys.length === 0;
+
+    vu.logValidations(interfaceName, filteredErrors, missingKeys, unknownKeys);
+
+    return filteredErrors.length === 0 && hasAllRequiredKeys && hasOnlyValidKeys;
+}
+
+export function isValidCustomVariables(object: unknown): object is CustomVariables {
+    if (typeof object !== 'object' || object === null || Array.isArray(object)) {
+        return false;
+    }
+
+    const obj = object as CustomVariables;
+
+    const interfaceName = 'CustomVariables';
+    const validKeys = [
+        'cargoShipEgressTimeMs',
+        'cargoShipHarborDockingTimeMs',
+        'cargoShipLootRounds',
+        'cargoShipLootRoundsSpacingTimeMs',
+        'deepSeaDurationTimeMs',
+        'lockedCrateUnlockTimeMs',
+        'travellingVendorDurationTimeMs'
+    ];
+
+    const errors: (vu.ValidationError | null)[] = [];
+    errors.push(vu.validateType('cargoShipEgressTimeMs', obj.cargoShipEgressTimeMs, 'number'));
+    errors.push(vu.validateType('cargoShipHarborDockingTimeMs', obj.cargoShipHarborDockingTimeMs, 'number'));
+    errors.push(vu.validateType('cargoShipLootRounds', obj.cargoShipLootRounds, 'number'));
+    errors.push(vu.validateType('cargoShipLootRoundsSpacingTimeMs', obj.cargoShipLootRoundsSpacingTimeMs, 'number'));
+    errors.push(vu.validateType('deepSeaDurationTimeMs', obj.deepSeaDurationTimeMs, 'number'));
+    errors.push(vu.validateType('lockedCrateUnlockTimeMs', obj.lockedCrateUnlockTimeMs, 'number'));
+    errors.push(vu.validateType('travellingVendorDurationTimeMs', obj.travellingVendorDurationTimeMs, 'number'));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
 

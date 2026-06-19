@@ -1031,7 +1031,7 @@ export class RustPlusInstance {
             if (content.oilRig === 'oil_rig_small') {
                 const dateTriggered = content.dateTriggered;
                 const unixTimestampTriggered = Math.floor(dateTriggered.getTime() / 1000);
-                const eventDurationSeconds = Math.floor(serverInfo.oilRigLockedCrateUnlockTimeMs / 1000);
+                const eventDurationSeconds = Math.floor(serverInfo.customVariables.lockedCrateUnlockTimeMs / 1000);
                 const unixTimestampUnlocks = unixTimestampTriggered + eventDurationSeconds;
                 const timeUnlocks = Timer.getDiscordRelativeTime(unixTimestampUnlocks);
                 strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
@@ -1071,7 +1071,7 @@ export class RustPlusInstance {
             if (content.oilRig === 'large_oil_rig') {
                 const dateTriggered = content.dateTriggered;
                 const unixTimestampTriggered = Math.floor(dateTriggered.getTime() / 1000);
-                const eventDurationSeconds = Math.floor(serverInfo.oilRigLockedCrateUnlockTimeMs / 1000);
+                const eventDurationSeconds = Math.floor(serverInfo.customVariables.lockedCrateUnlockTimeMs / 1000);
                 const unixTimestampUnlocks = unixTimestampTriggered + eventDurationSeconds;
                 const timeUnlocks = Timer.getDiscordRelativeTime(unixTimestampUnlocks);
                 strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
@@ -1150,6 +1150,7 @@ export class RustPlusInstance {
 
     public getInformationChannelEventTravellingVendorString(): string {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.serverId] as ServerInfo;
         const language = gInstance.generalSettings.language;
 
         if (!this.rpMapMarkers) {
@@ -1184,7 +1185,7 @@ export class RustPlusInstance {
                 if (dateSpawned) {
                     const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
                     const eventDurationSeconds = Math.floor(
-                        constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000);
+                        serverInfo.customVariables.travellingVendorDurationTimeMs / 1000);
                     const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
 
                     const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
@@ -1205,6 +1206,7 @@ export class RustPlusInstance {
 
     public getInformationChannelEventDeepSeaString(): string {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.serverId] as ServerInfo;
         const language = gInstance.generalSettings.language;
 
         if (!this.rpMapMarkers) {
@@ -1215,17 +1217,20 @@ export class RustPlusInstance {
         const dateDespawned = this.rpMapMarkers.dateDeepSeaDespawned;
 
         const strings: string[] = [];
-        if (dateSpawned !== null) {
-            const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
-            const eventDurationSeconds = Math.floor(constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000);
-            const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
-
-            const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
-            const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
-
+        if (this.rpMapMarkers.isDeepSeaActive) {
             strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseActive'));
-            strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timeSpawned }));
-            strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', { time: timeDespawn }));
+
+            if (dateSpawned !== null) {
+                const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+                const eventDurationSeconds = Math.floor(serverInfo.customVariables.deepSeaDurationTimeMs / 1000);
+                const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
+
+                const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
+                const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
+
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timeSpawned }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', { time: timeDespawn }));
+            }
         }
         else {
             if (dateDespawned !== null) {

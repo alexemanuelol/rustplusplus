@@ -22,9 +22,8 @@ import * as rp from 'rustplus-ts';
 import * as discordjs from 'discord.js';
 
 import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
-import * as constants from '../utils/constants';
 import { RustPlusInstance } from "../managers/rustPlusManager";
-import { GuildInstance } from '../managers/guildInstanceManager';
+import { GuildInstance, ServerInfo } from '../managers/guildInstanceManager';
 import { secondsToFullScale } from '../utils/timer';
 
 export const name = 'deepsea';
@@ -41,7 +40,9 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     const inGame = Object.hasOwn(message, 'steamId') ? true : false;
     const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const language = gInstance.generalSettings.language;
 
     if (rpInstance.rpMapMarkers === null) return false;
@@ -51,18 +52,23 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
     const dateDespawned = rpInstance.rpMapMarkers.dateDeepSeaDespawned;
 
     const response: string[] = [];
-    if (dateSpawned !== null) {
-        const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
-        const eventDurationSeconds = Math.floor(constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000);
-        const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
+    if (rpInstance.rpMapMarkers.isDeepSeaActive) {
+        if (dateSpawned !== null) {
+            const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+            const eventDurationSeconds = Math.floor(serverInfo.customVariables.deepSeaDurationTimeMs / 1000);
+            const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
 
-        const secondsSinceSpawned = unixTimestampNow - unixTimestampSpawned;
-        const secondsTillDespawn = unixTimestampDespawn - unixTimestampNow;
+            const secondsSinceSpawned = unixTimestampNow - unixTimestampSpawned;
+            const secondsTillDespawn = unixTimestampDespawn - unixTimestampNow;
 
-        response.push(lm.getIntl(language, 'deepSeaIsActiveFor', {
-            time1: secondsToFullScale(secondsSinceSpawned),
-            time2: secondsToFullScale(secondsTillDespawn)
-        }));
+            response.push(lm.getIntl(language, 'deepSeaIsActiveFor', {
+                time1: secondsToFullScale(secondsSinceSpawned),
+                time2: secondsToFullScale(secondsTillDespawn)
+            }));
+        }
+        else {
+            response.push(lm.getIntl(language, 'deepSeaIsActive'));
+        }
     }
     else {
         if (dateDespawned !== null) {

@@ -55,7 +55,7 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
         if (content.oilRig === 'oil_rig_small') {
             const dateTriggered = content.dateTriggered;
             const unixTimestampTriggered = Math.floor(dateTriggered.getTime() / 1000);
-            const eventDurationSeconds = Math.floor(serverInfo.oilRigLockedCrateUnlockTimeMs / 1000);
+            const eventDurationSeconds = Math.floor(serverInfo.customVariables.lockedCrateUnlockTimeMs / 1000);
             const unixTimestampUnlocks = unixTimestampTriggered + eventDurationSeconds;
             const secondsTillUnlocks = unixTimestampUnlocks - unixTimestampNow;
 

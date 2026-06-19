@@ -18,6 +18,9 @@
 
 */
 
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+
 export const RUSTPLUSPLUS_VERSION = 'v1.21.0';
 export const RUSTPLUSPLUS_CREDENTIAL_APP_VERSION = 'v1.4.0';
 
@@ -75,16 +78,26 @@ export const STORAGE_MONITOR_VENDING_MACHINE_CAPACITY = 30;
 export const STORAGE_MONITOR_LARGE_WOOD_BOX_CAPACITY = 48;
 
 /* Default timer times */
-export const DEFAULT_CARGO_SHIP_EGRESS_TIME_MS = 50 * 60 * 1000; /* 50 min */
-export const DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS = 15 * 60 * 1000; /* 15 min */
-export const DEFAULT_DEEP_SEA_DURATION_TIME_MS = 3 * 60 * 60 * 1000; /* 3 hours */
-export const DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * 60 * 1000; /* 30 min */
+export const DEFAULT_CARGO_SHIP_EGRESS_TIME_MS = 50 * MINUTE;                       /* 50 min */
+export const DEFAULT_LOCKED_CRATE_UNLOCK_TIME_MS = 15 * MINUTE;                     /* 15 min */
+export const DEFAULT_DEEP_SEA_DURATION_TIME_MS = 3 * HOUR;                          /* 3 hours */
+export const DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS = 30 * MINUTE;                /* 30 min */
+export const DEFAULT_CARGO_SHIP_LOOT_ROUNDS_SPACING_TIME_MS = 10 * MINUTE;          /* 10 min */
+export const DEFAULT_CARGO_SHIP_HARBOR_DOCKING_TIME_MS = 8 * MINUTE;                /* 8 min */
+export const DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_TIME_MS = 2 * MINUTE;  /* 2 min */
+export const DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_TIME_MS = 19.5 * MINUTE; /* 19.5 min */
 
 /* Other constants */
 export const PATROL_HELI_DOWNED_RADIUS = 400;
 export const OIL_RIG_CHINOOK_47_MAX_SPAWN_DISTANCE = 550;
 export const PROXIMITY_SETTING_DEFAULT_METERS = 500;
 export const HARBOR_DOCK_DISTANCE = 100;
+export const CARGO_SHIP_LOOT_ROUNDS = 3;
+export const CARGO_SHIP_HARBOR_DOCKING_DISTANCE = 480;
+export const CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE = 280;
+export const PATROL_HELICOPTER_LEAVING_SPEED_MIN = 400;
+export const MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE = 3;
+export const MAX_PLAYERS_TRACER_ENTRIES = 500;
 
 /* Emojis */
 export const ONLINE_EMOJI = ':green_circle:';

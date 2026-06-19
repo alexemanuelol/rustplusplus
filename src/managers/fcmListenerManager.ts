@@ -489,12 +489,17 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
             smartAlarmConfigMap: serverInfo ? serverInfo.smartAlarmConfigMap : {},
             storageMonitorConfigMap: serverInfo ? serverInfo.storageMonitorConfigMap : {},
             smartSwitchGroupConfigMap: serverInfo ? serverInfo.smartSwitchGroupConfigMap : {},
+            customVariables: serverInfo ? serverInfo.customVariables : {
+                cargoShipEgressTimeMs: constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS,
+                cargoShipHarborDockingTimeMs: constants.DEFAULT_CARGO_SHIP_HARBOR_DOCKING_TIME_MS,
+                cargoShipLootRounds: constants.CARGO_SHIP_LOOT_ROUNDS,
+                cargoShipLootRoundsSpacingTimeMs: constants.DEFAULT_CARGO_SHIP_LOOT_ROUNDS_SPACING_TIME_MS,
+                deepSeaDurationTimeMs: constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS,
+                lockedCrateUnlockTimeMs: constants.DEFAULT_LOCKED_CRATE_UNLOCK_TIME_MS,
+                travellingVendorDurationTimeMs: constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS
+            },
             dayDurationSeconds: serverInfo ? serverInfo.dayDurationSeconds : null,
-            nightDurationSeconds: serverInfo ? serverInfo.nightDurationSeconds : null,
-            oilRigLockedCrateUnlockTimeMs: serverInfo ? serverInfo.oilRigLockedCrateUnlockTimeMs :
-                constants.DEFAULT_OIL_RIG_LOCKED_CRATE_UNLOCK_TIME_MS,
-            cargoShipEgressTimeMs: serverInfo ? serverInfo.cargoShipEgressTimeMs :
-                constants.DEFAULT_CARGO_SHIP_EGRESS_TIME_MS
+            nightDurationSeconds: serverInfo ? serverInfo.nightDurationSeconds : null
         };
 
         updatePairingDetails(gInstance.pairingDataMap, serverId, steamId, body);

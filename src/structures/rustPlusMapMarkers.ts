@@ -29,7 +29,7 @@ import * as constants from '../utils/constants';
 import * as map from '../utils/map';
 import * as rpmc from '../managers/rustPlusManager';
 import * as timer from '../utils/timer';
-import { GuildInstance, EventNotificationSettings } from '../managers/guildInstanceManager';
+import { GuildInstance, EventNotificationSettings, ServerInfo } from '../managers/guildInstanceManager';
 
 const VALID_LOCKED_CRATE_MONUMENTS: string[] = [
     'airfield_display_name',
@@ -44,17 +44,6 @@ export enum DockingStatus {
     DOCKED = 1,
     UNDOCKING = 2
 }
-
-const CARGO_SHIP_LOOT_ROUNDS = 3;
-const CARGO_SHIP_LOOT_ROUNDS_SPACING_MS = 10 * 60 * 1000; /* 10 min */
-const CARGO_SHIP_HARBOR_DOCKING_TIME_MS = 8 * 60 * 1000; /* 8 min */
-const CARGO_SHIP_HARBOR_DOCKING_DISTANCE = 480;
-const CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE = 280;
-const CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS = 2 * 60 * 1000; /* 2 min */
-const CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS = 19.5 * 60 * 1000; /* 19.5 min */
-const PATROL_HELICOPTER_LEAVING_SPEED_MIN = 400;
-const MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE = 3;
-const MAX_PLAYERS_TRACER_ENTRIES = 500;
 
 export interface OilRigLockedCrateMetaData {
     timeoutId: NodeJS.Timeout;
@@ -96,7 +85,7 @@ export class RustPlusMapMarkers {
     public appMapMarkers: rp.AppMapMarkers;
 
     private firstPoll: boolean;
-    private isDeepSeaActive: boolean;
+    public isDeepSeaActive: boolean;
 
     public undefineds: rp.AppMarker[];
     public players: rp.AppMarker[];
@@ -338,7 +327,7 @@ export class RustPlusMapMarkers {
                 this.oilRigLockedCrateUnlockedMetaData[index] = {
                     timeoutId: setTimeout(
                         this.notifyOilRigLockedCrateUnlocked.bind(this, index),
-                        gInstance.serverInfoMap[this.rpInstance.serverId].oilRigLockedCrateUnlockTimeMs
+                        gInstance.serverInfoMap[this.rpInstance.serverId].customVariables.lockedCrateUnlockTimeMs
                     ),
                     oilRig: oilRigTokenName,
                     pos: oilRigPos,
@@ -434,6 +423,7 @@ export class RustPlusMapMarkers {
     private updateCargoShips(mapMarkers: rp.AppMapMarkers) {
         const type = rp.AppMarkerType.CargoShip;
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.rpInstance.serverId] as ServerInfo;
         const language = gInstance.generalSettings.language;
 
         const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
@@ -477,14 +467,14 @@ export class RustPlusMapMarkers {
 
                 this.cargoShipEgressTimeoutIds[marker.id] = new timer.Timer(
                     this.notifyCargoShipEgress.bind(this, marker.id),
-                    gInstance.serverInfoMap[this.rpInstance.serverId].cargoShipEgressTimeMs
+                    gInstance.serverInfoMap[this.rpInstance.serverId].customVariables.cargoShipEgressTimeMs
                 );
                 (this.cargoShipEgressTimeoutIds[marker.id] as timer.Timer).start();
 
                 this.notifyCargoShipLockedCrateSpawn(marker.id);
                 this.cargoShipLockedCrateSpawnIntervalIds[marker.id] = setInterval(
                     this.notifyCargoShipLockedCrateSpawn.bind(this, marker.id),
-                    CARGO_SHIP_LOOT_ROUNDS_SPACING_MS
+                    serverInfo.customVariables.cargoShipLootRoundsSpacingTimeMs
                 );
             }
         }
@@ -557,8 +547,8 @@ export class RustPlusMapMarkers {
             const isOutside = map.isOutsideGridSystem(marker.x, marker.y, mapSize, 4 * gridDiameter);
 
             const startHarborApproach =
-                prevDist > CARGO_SHIP_HARBOR_DOCKING_DISTANCE &&
-                currDist <= CARGO_SHIP_HARBOR_DOCKING_DISTANCE &&
+                prevDist > constants.CARGO_SHIP_HARBOR_DOCKING_DISTANCE &&
+                currDist <= constants.CARGO_SHIP_HARBOR_DOCKING_DISTANCE &&
                 !hasDockingStatus && !harborAlreadyDocked && !allHarborsDocked;
 
             const justDocked =
@@ -570,8 +560,8 @@ export class RustPlusMapMarkers {
                 !isStandingStill;
 
             const justUndocked =
-                prevDist < CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE &&
-                currDist >= CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE &&
+                prevDist < constants.CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE &&
+                currDist >= constants.CARGO_SHIP_HARBOR_UNDOCKED_DISTANCE &&
                 hasDockingStatus && (this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.DOCKING ||
                     this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.UNDOCKING);
 
@@ -599,7 +589,7 @@ export class RustPlusMapMarkers {
                 /* Notify 1 min (+10 seconds) before undocking */
                 this.cargoShipUndockingNotificationTimeoutIds[marker.id] = setTimeout(
                     this.notifyCargoShipUndockingSoon.bind(this, marker.id, mapSize),
-                    CARGO_SHIP_HARBOR_DOCKING_TIME_MS - (60 * 1000 + 10 * 1000)
+                    serverInfo.customVariables.cargoShipHarborDockingTimeMs - (60 * 1000 + 10 * 1000)
                 );
             }
             else if (startHarborDeparture) {
@@ -621,22 +611,22 @@ export class RustPlusMapMarkers {
                     this.cargoShipMetaData[marker.id].dockingStatus === DockingStatus.UNDOCKING) {
                     const timeLeftMs = this.cargoShipEgressTimeoutIds[marker.id].getTimeLeftMs();
 
-                    if (timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS) {
+                    if (timeLeftMs < constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_TIME_MS) {
                         this.cargoShipEgressTimeoutIds[marker.id]?.stop();
 
                         this.cargoShipEgressAfterHarbor1TimeoutIds[marker.id] = new timer.Timer(
                             this.notifyCargoShipEgressAfterHarbor.bind(this, marker.id, true),
-                            CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS
+                            constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_TIME_MS
                         );
                         (this.cargoShipEgressAfterHarbor1TimeoutIds[marker.id] as timer.Timer).start();
                     }
 
-                    if (timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS ||
-                        (timeLeftMs >= CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS &&
-                            timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS)) {
+                    if (timeLeftMs < constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_TIME_MS ||
+                        (timeLeftMs >= constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_TIME_MS &&
+                            timeLeftMs < constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_TIME_MS)) {
                         this.cargoShipEgressAfterHarbor2TimeoutIds[marker.id] = new timer.Timer(
                             this.notifyCargoShipEgressAfterHarbor.bind(this, marker.id, false),
-                            CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS
+                            constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_TIME_MS
                         );
                         (this.cargoShipEgressAfterHarbor2TimeoutIds[marker.id] as timer.Timer).start();
 
@@ -647,13 +637,13 @@ export class RustPlusMapMarkers {
 
                     let phrase: string;
                     const param: { [key: string]: string } = {};
-                    if (timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS) {
+                    if (timeLeftMs < constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_TIME_MS) {
                         phrase = 'inGameEvent-cargoShipLeaving-soon';
                         param['first'] = '2';
                         param['second'] = '19.5';
                     }
-                    else if (timeLeftMs >= CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_MS &&
-                        timeLeftMs < CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_MS) {
+                    else if (timeLeftMs >= constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_NO_CRATES_TIME_MS &&
+                        timeLeftMs < constants.DEFAULT_CARGO_SHIP_LEAVE_AFTER_HARBOR_WITH_CRATES_TIME_MS) {
                         phrase = 'inGameEvent-cargoShipLeaving-soon';
                         param['first'] = `${timeLeftMin}`;
                         param['second'] = '19.5';
@@ -797,8 +787,8 @@ export class RustPlusMapMarkers {
                 );
 
                 const startLeavingMap =
-                    prevDist >= PATROL_HELICOPTER_LEAVING_SPEED_MIN &&
-                    currDist >= PATROL_HELICOPTER_LEAVING_SPEED_MIN &&
+                    prevDist >= constants.PATROL_HELICOPTER_LEAVING_SPEED_MIN &&
+                    currDist >= constants.PATROL_HELICOPTER_LEAVING_SPEED_MIN &&
                     isSameDir && !isLeaving;
 
                 if (startLeavingMap) {
@@ -826,6 +816,7 @@ export class RustPlusMapMarkers {
     private updateTravellingVendors(mapMarkers: rp.AppMapMarkers) {
         const type = rp.AppMarkerType.TravellingVendor;
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.rpInstance.serverId] as ServerInfo;
         const language = gInstance.generalSettings.language;
 
         const newMarkers = this.getNewMarkersById(type, mapMarkers.markers);
@@ -846,7 +837,7 @@ export class RustPlusMapMarkers {
             if (!this.firstPoll) {
                 this.travellingVendorLeavingNotificationTimeoutIds[marker.id] = setTimeout(
                     this.notifyTravellingVendorLeavingSoon.bind(this, marker.id),
-                    constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS - (5 * 60 * 1000)
+                    serverInfo.customVariables.travellingVendorDurationTimeMs - (5 * 60 * 1000)
                 );
                 this.dateTravellingVendorSpawned[marker.id] = new Date();
             }
@@ -897,7 +888,7 @@ export class RustPlusMapMarkers {
             }
             this.dateDeepSeaDespawned = null;
 
-            const phrase = 'inGameEvent-deepSeaSpawned';
+            const phrase = 'inGameEvent-deepSeaSpawned' + (this.firstPoll ? '-isActive' : '');
             const eventText = lm.getIntl(language, phrase);
             this.rpInstance.sendEventNotification('deepSeaSpawned', eventText);
         }
@@ -993,14 +984,14 @@ export class RustPlusMapMarkers {
         tracerArray.push(point);
 
         /* Enforce only 3 latest tracers if key is not players */
-        if (key !== 'players' && this.tracers[key].size > MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE) {
+        if (key !== 'players' && this.tracers[key].size > constants.MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE) {
             const oldestKey = this.tracers[key].keys().next().value;
             if (oldestKey !== undefined) {
                 this.tracers[key].delete(oldestKey);
             }
         }
         else if (key === 'players') {
-            if (tracerArray.length > MAX_PLAYERS_TRACER_ENTRIES) {
+            if (tracerArray.length > constants.MAX_PLAYERS_TRACER_ENTRIES) {
                 tracerArray.shift(); /* Remove oldest point */
             }
         }
@@ -1086,6 +1077,7 @@ export class RustPlusMapMarkers {
 
     private notifyCargoShipLockedCrateSpawn(cargoShipId: number) {
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.rpInstance.guildId] as ServerInfo;
         const language = gInstance.generalSettings.language;
 
         this.cargoShipMetaData[cargoShipId].lockedCrateSpawnCounter++;
@@ -1101,7 +1093,8 @@ export class RustPlusMapMarkers {
             this.rpInstance.sendEventNotification('cargoShipLockedCrateSpawned', eventText);
         }
 
-        if (this.cargoShipMetaData[cargoShipId].lockedCrateSpawnCounter === CARGO_SHIP_LOOT_ROUNDS) {
+        if (this.cargoShipMetaData[cargoShipId].lockedCrateSpawnCounter ===
+            serverInfo.customVariables.cargoShipLootRounds) {
             clearInterval(this.cargoShipLockedCrateSpawnIntervalIds[cargoShipId]);
             delete this.cargoShipLockedCrateSpawnIntervalIds[cargoShipId];
         }

@@ -23,10 +23,9 @@ import * as discordjs from 'discord.js';
 
 import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
-import { GuildInstance } from '../managers/guildInstanceManager';
+import { GuildInstance, ServerInfo } from '../managers/guildInstanceManager';
 import { secondsToFullScale } from '../utils/timer';
 import { getPos, getPosString } from '../utils/map';
-import * as constants from '../utils/constants';
 
 export const name = 'travellingvendor';
 
@@ -42,7 +41,9 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     const inGame = Object.hasOwn(message, 'steamId') ? true : false;
     const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const language = gInstance.generalSettings.language;
 
     if (rpInstance.rpMapMarkers === null) return false;
@@ -73,7 +74,8 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
             if (dateSpawned !== null) {
                 const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
-                const eventDurationSeconds = Math.floor(constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000);
+                const eventDurationSeconds = Math.floor(
+                    serverInfo.customVariables.travellingVendorDurationTimeMs / 1000);
                 const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
 
                 const secondsSinceSpawned = unixTimestampNow - unixTimestampSpawned;
