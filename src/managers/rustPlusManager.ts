@@ -28,7 +28,9 @@ import { Logger } from 'winston';
 import { log, discordManager as dm, guildInstanceManager as gim, config, localeManager as lm } from '../../index';
 import * as constants from '../utils/constants';
 import * as types from '../utils/types';
-import { getServerId, getIpAndPort, GuildInstance, EventNotificationSettings } from './guildInstanceManager';
+import {
+    getServerId, getIpAndPort, GuildInstance, EventNotificationSettings, ServerInfo
+} from './guildInstanceManager';
 import { sendServerMessage } from '../discordUtils/discordMessages';
 import * as rpTeamInfoHandler from '../handlers/rustPlusTeamInfoHandler';
 import * as rpInfoHandler from '../handlers/rustPlusInfoHandler';
@@ -1005,34 +1007,38 @@ export class RustPlusInstance {
 
     public getInformationChannelEventSmallOilRigString(): string {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.serverId] as ServerInfo;
         const language = gInstance.generalSettings.language;
 
+        if (!this.rpMapMarkers) {
+            return '\u200B';
+        }
+
         const strings: string[] = [];
-        if (this.rpMapMarkers) {
-            for (const content of Object.values(this.rpMapMarkers.oilRigLockedCrateUnlockedTimeoutIds)) {
-                if (content.oilRig === 'oil_rig_small') {
-                    const timeLeftSeconds = Math.floor(content.timer.getTimeLeftMs() / 1000);
-                    const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
-                    const timestampString = `<t:${timestamp}:R>`;
-
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
-                        time: timestampString
-                    }));
-                }
+        for (const content of Object.values(this.rpMapMarkers.oilRigLockedCrateUnlockedMetaData)) {
+            if (content.oilRig === 'oil_rig_small') {
+                const dateTriggered = content.dateTriggered;
+                const unixTimestampTriggered = Math.floor(dateTriggered.getTime() / 1000);
+                const eventDurationSeconds = Math.floor(serverInfo.oilRigLockedCrateUnlockTimeMs / 1000);
+                const unixTimestampUnlocks = unixTimestampTriggered + eventDurationSeconds;
+                const timeUnlocks = Timer.getDiscordRelativeTime(unixTimestampUnlocks);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
+                    time: timeUnlocks
+                }));
             }
+        }
 
-            if (strings.length === 0) {
-                if (this.rpMapMarkers.dateSmallOilRigWasTriggered !== null) {
-                    const timestamp = Math.floor(this.rpMapMarkers.dateSmallOilRigWasTriggered.getTime() / 1000);
-                    const timestampString = `<t:${timestamp}:R>`;
-
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseTriggeredTime', {
-                        time: timestampString
-                    }));
-                }
-                else {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
-                }
+        if (strings.length === 0) {
+            if (this.rpMapMarkers.dateSmallOilRigLastTriggered !== null) {
+                const dateLastTriggered = this.rpMapMarkers.dateSmallOilRigLastTriggered;
+                const unixTimestampLastTriggered = Math.floor(dateLastTriggered.getTime() / 1000);
+                const timeLastTriggered = Timer.getDiscordRelativeTime(unixTimestampLastTriggered);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseTriggeredTime', {
+                    time: timeLastTriggered
+                }));
+            }
+            else {
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
             }
         }
 
@@ -1041,34 +1047,38 @@ export class RustPlusInstance {
 
     public getInformationChannelEventLargeOilRigString(): string {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
+        const serverInfo = gInstance.serverInfoMap[this.serverId] as ServerInfo;
         const language = gInstance.generalSettings.language;
 
+        if (!this.rpMapMarkers) {
+            return '\u200B';
+        }
+
         const strings: string[] = [];
-        if (this.rpMapMarkers) {
-            for (const content of Object.values(this.rpMapMarkers.oilRigLockedCrateUnlockedTimeoutIds)) {
-                if (content.oilRig === 'large_oil_rig') {
-                    const timeLeftSeconds = Math.floor(content.timer.getTimeLeftMs() / 1000);
-                    const timestamp = Math.floor((new Date().getTime() / 1000) + timeLeftSeconds);
-                    const timestampString = `<t:${timestamp}:R>`;
-
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
-                        time: timestampString
-                    }));
-                }
+        for (const content of Object.values(this.rpMapMarkers.oilRigLockedCrateUnlockedMetaData)) {
+            if (content.oilRig === 'large_oil_rig') {
+                const dateTriggered = content.dateTriggered;
+                const unixTimestampTriggered = Math.floor(dateTriggered.getTime() / 1000);
+                const eventDurationSeconds = Math.floor(serverInfo.oilRigLockedCrateUnlockTimeMs / 1000);
+                const unixTimestampUnlocks = unixTimestampTriggered + eventDurationSeconds;
+                const timeUnlocks = Timer.getDiscordRelativeTime(unixTimestampUnlocks);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateUnlocksTime', {
+                    time: timeUnlocks
+                }));
             }
+        }
 
-            if (strings.length === 0) {
-                if (this.rpMapMarkers.dateLargeOilRigWasTriggered !== null) {
-                    const timestamp = Math.floor(this.rpMapMarkers.dateLargeOilRigWasTriggered.getTime() / 1000);
-                    const timestampString = `<t:${timestamp}:R>`;
-
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseTriggeredTime', {
-                        time: timestampString
-                    }));
-                }
-                else {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
-                }
+        if (strings.length === 0) {
+            if (this.rpMapMarkers.dateLargeOilRigLastTriggered !== null) {
+                const dateLastTriggered = this.rpMapMarkers.dateLargeOilRigLastTriggered;
+                const unixTimestampLastTriggered = Math.floor(dateLastTriggered.getTime() / 1000);
+                const timeLastTriggered = Timer.getDiscordRelativeTime(unixTimestampLastTriggered);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseTriggeredTime', {
+                    time: timeLastTriggered
+                }));
+            }
+            else {
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
             }
         }
 
@@ -1079,39 +1089,47 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
+        if (!this.rpMapMarkers) {
+            return '\u200B';
+        }
+
+        const dateDespawned = this.rpMapMarkers.dateCh47Despawned;
+
         const strings: string[] = [];
-        if (this.rpMapMarkers) {
-            if (this.rpMapMarkers.ch47s.length === 0) {
-                if (this.rpMapMarkers.dateCh47LeftMap === null) {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
-                }
-                else {
-                    const timestamp = Math.floor(this.rpMapMarkers.dateCh47LeftMap.getTime() / 1000);
-                    const timestampString = `<t:${timestamp}:R>`;
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
-                        time: timestampString
-                    }));
-                }
+        if (this.rpMapMarkers.ch47s.length === 0) {
+            if (dateDespawned === null) {
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
+            }
+            else {
+                const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+                const timeDespawned = Timer.getDiscordRelativeTime(unixTimestampDespawned);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
+                    time: timeDespawned
+                }));
+            }
+        }
+
+        for (const ch47 of this.rpMapMarkers.ch47s) {
+            const metaData = this.rpMapMarkers.ch47MetaData[ch47.id];
+            const dateSpawned = this.rpMapMarkers.dateCh47Spawned[ch47.id];
+
+            const pos = getPos(ch47.x, ch47.y, this);
+            const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                lm.getIntl(language, 'unknown');
+
+            strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
+
+            if (dateSpawned) {
+                const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+                const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timeSpawned }));
             }
 
-            for (const ch47 of this.rpMapMarkers.ch47s) {
-                const metaData = this.rpMapMarkers.ch47MetaData[ch47.id];
-                const pos = getPos(ch47.x, ch47.y, this);
-                const posString = (pos !== null) ? getPosString(pos, this, true, false) :
-                    lm.getIntl(language, 'unknown');
-
-                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
-
-                const timestampSpawn = Math.floor(metaData.spawnTime.getTime() / 1000);
-                const timestamp = `<t:${timestampSpawn}:R>`;
-                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timestamp }));
-
-                if (metaData.lockedCrateNotified) {
-                    const monumentName = lm.getIntl(language, metaData.lockedCrateDropLocation as string);
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateDroppedAtPos', {
-                        monument: monumentName
-                    }));
-                }
+            if (metaData.lockedCrateNotified) {
+                const monumentName = lm.getIntl(language, metaData.lockedCrateDropLocation as string);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLockedCrateDroppedAtPos', {
+                    monument: monumentName
+                }));
             }
         }
 
@@ -1122,51 +1140,50 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
+        if (!this.rpMapMarkers) {
+            return '\u200B';
+        }
+
+        const dateDespawned = this.rpMapMarkers.dateTravellingVendorDespawned;
+
         const strings: string[] = [];
-        if (this.rpMapMarkers) {
-            if (this.rpMapMarkers.travellingVendors.length === 0) {
-                const dateTravellingVendorDespawned = this.rpMapMarkers.dateTravellingVendorDespawned;
-
-                if (dateTravellingVendorDespawned !== null) {
-                    const unixTimestamp = Math.floor(dateTravellingVendorDespawned.getTime() / 1000);
-
-                    const time = Timer.getDiscordRelativeTime(unixTimestamp);
-
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
-                        time: time
-                    }));
-                }
-                else {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
-                }
+        if (this.rpMapMarkers.travellingVendors.length === 0) {
+            if (dateDespawned !== null) {
+                const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+                const timeDespawned = Timer.getDiscordRelativeTime(unixTimestampDespawned);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
+                    time: timeDespawned
+                }));
             }
             else {
-                for (const travellingVendor of this.rpMapMarkers.travellingVendors) {
-                    const pos = getPos(travellingVendor.x, travellingVendor.y, this);
-                    const posString = (pos !== null) ? getPosString(pos, this, true, false) :
-                        lm.getIntl(language, 'unknown');
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
+            }
+        }
+        else {
+            for (const travellingVendor of this.rpMapMarkers.travellingVendors) {
+                const dateSpawned = this.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
 
-                    const dateTravellingVendorSpawned =
-                        this.rpMapMarkers.dateTravellingVendorSpawned[travellingVendor.id];
+                const pos = getPos(travellingVendor.x, travellingVendor.y, this);
+                const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                    lm.getIntl(language, 'unknown');
 
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
 
-                    if (dateTravellingVendorSpawned !== null) {
-                        const unixTimestampSpawned = Math.floor(dateTravellingVendorSpawned.getTime() / 1000);
-                        const eventDurationSeconds = Math.floor(
-                            constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000);
-                        const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
+                if (dateSpawned) {
+                    const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+                    const eventDurationSeconds = Math.floor(
+                        constants.DEFAULT_TRAVELLING_VENDOR_ACTIVE_TIME_MS / 1000);
+                    const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
 
-                        const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
-                        const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
+                    const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
+                    const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
 
-                        strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
-                            time: timeSpawned
-                        }));
-                        strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', {
-                            time: timeDespawn
-                        }));
-                    }
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', {
+                        time: timeSpawned
+                    }));
+                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', {
+                        time: timeDespawn
+                    }));
                 }
             }
         }
@@ -1178,33 +1195,34 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
+        if (!this.rpMapMarkers) {
+            return '\u200B';
+        }
+
+        const dateSpawned = this.rpMapMarkers.dateDeepSeaSpawned;
+        const dateDespawned = this.rpMapMarkers.dateDeepSeaDespawned;
+
         const strings: string[] = [];
-        if (this.rpMapMarkers) {
-            if (this.rpMapMarkers.dateDeepSeaSpawned !== null) {
-                const dateDeepSeaSpawned = this.rpMapMarkers.dateDeepSeaSpawned;
+        if (dateSpawned !== null) {
+            const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+            const eventDurationSeconds = Math.floor(constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000);
+            const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
 
-                const unixTimestampSpawned = Math.floor(dateDeepSeaSpawned.getTime() / 1000);
-                const eventDurationSeconds = Math.floor(constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000);
-                const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
+            const timeSpawned = Timer.getDiscordRelativeTime(unixTimestampSpawned);
+            const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
 
-                const timeSpawn = Timer.getDiscordRelativeTime(unixTimestampSpawned);
-                const timeDespawn = Timer.getDiscordRelativeTime(unixTimestampDespawn);
-
-                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseActive'));
-                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timeSpawn }));
-                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', { time: timeDespawn }));
+            strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseActive'));
+            strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseSpawnedTime', { time: timeSpawned }));
+            strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnsTime', { time: timeDespawn }));
+        }
+        else {
+            if (dateDespawned !== null) {
+                const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+                const timeDespawned = Timer.getDiscordRelativeTime(unixTimestampDespawned);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnedTime', { time: timeDespawned }));
             }
             else {
-                if (this.rpMapMarkers.dateDeepSeaDespawned !== null) {
-                    const dateDeepSeaDespawned = this.rpMapMarkers.dateDeepSeaDespawned;
-
-                    const unixTimestamp = Math.floor(dateDeepSeaDespawned.getTime() / 1000);
-                    const time = `<t:${unixTimestamp}:R>`;
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDespawnedTime', { time: time }));
-                }
-                else {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
-                }
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
             }
         }
 

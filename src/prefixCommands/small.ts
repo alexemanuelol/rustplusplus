@@ -23,7 +23,7 @@ import * as discordjs from 'discord.js';
 
 import { log, guildInstanceManager as gim, localeManager as lm } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
-import { GuildInstance } from '../managers/guildInstanceManager';
+import { GuildInstance, ServerInfo } from '../managers/guildInstanceManager';
 import { secondsToFullScale } from '../utils/timer';
 
 export const name = 'small';
@@ -40,30 +40,40 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     const inGame = Object.hasOwn(message, 'steamId') ? true : false;
     const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
     const language = gInstance.generalSettings.language;
 
     if (rpInstance.rpMapMarkers === null) return false;
 
+    const unixTimestampNow = Math.floor(new Date().getTime() / 1000);
+    const dateLastTriggered = rpInstance.rpMapMarkers.dateSmallOilRigLastTriggered;
+
     const response: string[] = [];
-    for (const content of Object.values(rpInstance.rpMapMarkers.oilRigLockedCrateUnlockedTimeoutIds)) {
+    for (const content of Object.values(rpInstance.rpMapMarkers.oilRigLockedCrateUnlockedMetaData)) {
         if (content.oilRig === 'oil_rig_small') {
-            const timeLeftSeconds = content.timer.getTimeLeftMs() / 1000;
+            const dateTriggered = content.dateTriggered;
+            const unixTimestampTriggered = Math.floor(dateTriggered.getTime() / 1000);
+            const eventDurationSeconds = Math.floor(serverInfo.oilRigLockedCrateUnlockTimeMs / 1000);
+            const unixTimestampUnlocks = unixTimestampTriggered + eventDurationSeconds;
+            const secondsTillUnlocks = unixTimestampUnlocks - unixTimestampNow;
+
             const location = lm.getIntl(language, `monumentName-${content.oilRig}`);
 
             response.push(lm.getIntl(language, 'timeUntilUnlocksAt', {
-                time: secondsToFullScale(timeLeftSeconds),
+                time: secondsToFullScale(secondsTillUnlocks),
                 location: location
             }));
         }
     }
 
     if (response.length === 0) {
-        if (rpInstance.rpMapMarkers.dateSmallOilRigWasTriggered !== null) {
-            const timeSinceTriggeredSeconds = (new Date().getTime() -
-                rpInstance.rpMapMarkers.dateSmallOilRigWasTriggered.getTime()) / 1000;
+        if (dateLastTriggered !== null) {
+            const unixTimestampLastTriggered = Math.floor(dateLastTriggered.getTime() / 1000);
+            const secondsSinceTriggered = unixTimestampNow - unixTimestampLastTriggered;
             response.push(lm.getIntl(language, 'timeSinceHeavyScientistsOnSmall', {
-                time: secondsToFullScale(timeSinceTriggeredSeconds)
+                time: secondsToFullScale(secondsSinceTriggered)
             }));
         }
         else {

@@ -27,7 +27,6 @@ import {
 } from '../../index';
 import { RustPlusInstance } from "../managers/rustPlusManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
-import { getAngleBetweenPoints, getDistance, getPos, getPosString } from '../utils/map';
 import * as discordMessages from '../discordUtils/discordMessages';
 
 export const name = 'send';

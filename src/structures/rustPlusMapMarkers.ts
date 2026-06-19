@@ -57,8 +57,10 @@ const MAX_NUMBER_OF_TRACERS_PER_MARKER_TYPE = 3;
 const MAX_PLAYERS_TRACER_ENTRIES = 500;
 
 export interface OilRigLockedCrateMetaData {
-    timer: timer.Timer;
+    timeoutId: NodeJS.Timeout;
     oilRig: 'oil_rig_small' | 'large_oil_rig';
+    pos: map.Position;
+    dateTriggered: Date;
 }
 
 export interface CargoShipMetaData {
@@ -72,7 +74,6 @@ export interface CargoShipMetaData {
 }
 
 export interface Ch47MetaData {
-    spawnTime: Date;
     lockedCrateDropLocation: string | null;
     lockedCrateNotified: boolean;
 }
@@ -109,7 +110,6 @@ export class RustPlusMapMarkers {
     public patrolHelicopters: rp.AppMarker[];
     public travellingVendors: rp.AppMarker[];
 
-    public oilRigLockedCrateUnlockedTimeoutIds: { [ch47: number]: OilRigLockedCrateMetaData };
     public cargoShipEgressTimeoutIds: { [cargoShip: number]: timer.Timer };
     public cargoShipEgressAfterHarbor1TimeoutIds: { [cargoShip: number]: timer.Timer };
     public cargoShipEgressAfterHarbor2TimeoutIds: { [cargoShip: number]: timer.Timer };
@@ -117,9 +117,10 @@ export class RustPlusMapMarkers {
     public cargoShipUndockingNotificationTimeoutIds: { [cargoShip: number]: NodeJS.Timeout };
     public travellingVendorLeavingNotificationTimeoutIds: { [travellingVendor: number]: NodeJS.Timeout };
 
-    public dateSmallOilRigWasTriggered: Date | null;
-    public dateLargeOilRigWasTriggered: Date | null;
-    public dateCh47LeftMap: Date | null;
+    public dateSmallOilRigLastTriggered: Date | null;
+    public dateLargeOilRigLastTriggered: Date | null;
+    public dateCh47Spawned: { [id: number]: Date };
+    public dateCh47Despawned: Date | null;
     public dateCargoShipLeftMap: Date | null;
     public datePatrolHelicopterLeftMap: Date | null;
     public datePatrolHelicopterDestroyed: Date | null;
@@ -135,6 +136,7 @@ export class RustPlusMapMarkers {
     public ch47MetaData: { [ch47: number]: Ch47MetaData };
     public patrolHelicopterLastDestroyedLocation: string | null;
     public tracers: Tracers;
+    public oilRigLockedCrateUnlockedMetaData: { [index: number]: OilRigLockedCrateMetaData };
 
     constructor(rpInstance: rpmc.RustPlusInstance, appMapMarkers: rp.AppMapMarkers) {
         this.rpInstance = rpInstance;
@@ -155,7 +157,6 @@ export class RustPlusMapMarkers {
         this.travellingVendors = [];
 
         /* Timeout Ids */
-        this.oilRigLockedCrateUnlockedTimeoutIds = {};
         this.cargoShipEgressTimeoutIds = {};
         this.cargoShipEgressAfterHarbor2TimeoutIds = {}
         this.cargoShipEgressAfterHarbor1TimeoutIds = {}
@@ -164,9 +165,10 @@ export class RustPlusMapMarkers {
         this.travellingVendorLeavingNotificationTimeoutIds = {};
 
         /* Event dates */
-        this.dateSmallOilRigWasTriggered = null;
-        this.dateLargeOilRigWasTriggered = null;
-        this.dateCh47LeftMap = null;
+        this.dateSmallOilRigLastTriggered = null;
+        this.dateLargeOilRigLastTriggered = null;
+        this.dateCh47Spawned = {};
+        this.dateCh47Despawned = null;
         this.dateCargoShipLeftMap = null;
         this.datePatrolHelicopterLeftMap = null;
         this.datePatrolHelicopterDestroyed = null;
@@ -189,6 +191,7 @@ export class RustPlusMapMarkers {
             patrolHelicopters: new Map(),
             travellingVendors: new Map(),
         };
+        this.oilRigLockedCrateUnlockedMetaData = {};
     }
 
 
@@ -308,41 +311,48 @@ export class RustPlusMapMarkers {
 
             const smallOilRig = this.rpInstance.rpMap.getMonumentPointIfInside(point, 'oil_rig_small', radius);
             const largeOilRig = this.rpInstance.rpMap.getMonumentPointIfInside(point, 'large_oil_rig', radius);
-            if (smallOilRig || largeOilRig) {
+            if ((smallOilRig || largeOilRig) && !this.firstPoll) {
                 this.addTracer('oilRigCh47s', marker.id, { x: marker.x, y: marker.y });
                 this.oilRigCh47s.push(marker.id);
                 const oilRigPoint = (smallOilRig ? smallOilRig : largeOilRig) as map.Point;
                 const oilRigTokenName = smallOilRig ? 'oil_rig_small' : 'large_oil_rig';
                 const oilRigName = lm.getIntl(language, `monumentName-${oilRigTokenName}`);
 
-                const oilRigPos = map.getPos(oilRigPoint.x, oilRigPoint.y, this.rpInstance);
-                if (oilRigPos) {
-                    const oilRigPosString = map.getPosString(oilRigPos, this.rpInstance, false, false);
-                    const eventText = lm.getIntl(language, 'inGameEvent-ch47HeavyScientistsCalled', {
-                        rig: oilRigName,
-                        location: oilRigPosString
-                    });
-                    if (!this.firstPoll) this.rpInstance.sendEventNotification('ch47HeavyScientistsCalled', eventText);
+                const oilRigPos = map.getPos(oilRigPoint.x, oilRigPoint.y, this.rpInstance) as map.Position;
+                const oilRigPosString = map.getPosString(oilRigPos, this.rpInstance, false, false);
+                const eventText = lm.getIntl(language, 'inGameEvent-ch47HeavyScientistsCalled', {
+                    rig: oilRigName,
+                    location: oilRigPosString
+                });
 
-                    this.oilRigLockedCrateUnlockedTimeoutIds[marker.id] = {
-                        timer: new timer.Timer(
-                            this.notifyOilRigLockedCrateUnlocked.bind(this, marker.id, oilRigName, oilRigPosString),
-                            gInstance.serverInfoMap[this.rpInstance.serverId].oilRigLockedCrateUnlockTimeMs
-                        ),
-                        oilRig: oilRigTokenName
-                    };
-                    (this.oilRigLockedCrateUnlockedTimeoutIds[marker.id].timer as timer.Timer).start();
+                this.rpInstance.sendEventNotification('ch47HeavyScientistsCalled', eventText);
 
-                    const now = new Date()
-                    this.dateSmallOilRigWasTriggered = smallOilRig ? now : this.dateSmallOilRigWasTriggered;
-                    this.dateLargeOilRigWasTriggered = largeOilRig ? now : this.dateLargeOilRigWasTriggered;
+                let index = 0;
+                while (Object.keys(this.oilRigLockedCrateUnlockedMetaData).map(Number).includes(index)) {
+                    index += 1;
                 }
+
+                this.oilRigLockedCrateUnlockedMetaData[index] = {
+                    timeoutId: setTimeout(
+                        this.notifyOilRigLockedCrateUnlocked.bind(this, index),
+                        gInstance.serverInfoMap[this.rpInstance.serverId].oilRigLockedCrateUnlockTimeMs
+                    ),
+                    oilRig: oilRigTokenName,
+                    pos: oilRigPos,
+                    dateTriggered: new Date()
+                };
+
+                const now = new Date()
+                this.dateSmallOilRigLastTriggered = smallOilRig ? now : this.dateSmallOilRigLastTriggered;
+                this.dateLargeOilRigLastTriggered = largeOilRig ? now : this.dateLargeOilRigLastTriggered;
             }
             else {
                 this.ch47MetaData[marker.id] = {
-                    spawnTime: new Date(),
                     lockedCrateDropLocation: null,
                     lockedCrateNotified: false
+                }
+                if (!this.firstPoll) {
+                    this.dateCh47Spawned[marker.id] = new Date();
                 }
                 this.addTracer('ch47s', marker.id, { x: marker.x, y: marker.y });
                 const ch47Pos = map.getPos(marker.x, marker.y, this.rpInstance);
@@ -365,21 +375,15 @@ export class RustPlusMapMarkers {
                 continue;
             }
 
-            const ch47Pos = map.getPos(marker.x, marker.y, this.rpInstance);
-            if (ch47Pos) {
-                const ch47PosString = map.getPosString(ch47Pos, this.rpInstance, false, true);
-                const phrase = 'inGameEvent-ch47Despawned' +
-                    (!map.isOutsideGridSystem(marker.x, marker.y, mapSize) ? '-destroyed' : '');
-                const eventText = lm.getIntl(language, phrase, { location: ch47PosString });
-                this.rpInstance.sendEventNotification('ch47Despawned', eventText);
-            }
+            const ch47Pos = map.getPos(marker.x, marker.y, this.rpInstance) as map.Position;
+            const ch47PosString = map.getPosString(ch47Pos, this.rpInstance, false, true);
+            const phrase = 'inGameEvent-ch47Despawned' +
+                (!map.isOutsideGridSystem(marker.x, marker.y, mapSize) ? '-destroyed' : '');
+            const eventText = lm.getIntl(language, phrase, { location: ch47PosString });
+            this.rpInstance.sendEventNotification('ch47Despawned', eventText);
 
-            if (Object.hasOwn(this.oilRigLockedCrateUnlockedTimeoutIds, marker.id)) {
-                this.oilRigLockedCrateUnlockedTimeoutIds[marker.id].timer?.stop();
-                delete this.oilRigLockedCrateUnlockedTimeoutIds[marker.id];
-            }
-
-            this.dateCh47LeftMap = new Date();
+            delete this.dateCh47Spawned[marker.id];
+            this.dateCh47Despawned = new Date();
             this.ch47s = this.ch47s.filter(e => e.id !== marker.id);
             delete this.ch47MetaData[marker.id];
         }
@@ -997,18 +1001,26 @@ export class RustPlusMapMarkers {
      * Timeout notification methods
      */
 
-    private notifyOilRigLockedCrateUnlocked(ch47: number, oilRigName: string, location: string) {
-        this.oilRigLockedCrateUnlockedTimeoutIds[ch47].timer?.stop();
-        delete this.oilRigLockedCrateUnlockedTimeoutIds[ch47];
-
+    private notifyOilRigLockedCrateUnlocked(index: number) {
         const gInstance = gim.getGuildInstance(this.rpInstance.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
+        const metaData = this.oilRigLockedCrateUnlockedMetaData[index];
+        if (!metaData) return;
+
+        const oilRigName = lm.getIntl(language, `monumentName-${metaData.oilRig}`);
+        const posString = map.getPosString(metaData.pos, this.rpInstance, false, false);
+
         const eventText = lm.getIntl(language, 'inGameEvent-ch47OilRigLockedCrateUnlocked', {
             rig: oilRigName,
-            location: location
+            location: posString
         });
         this.rpInstance.sendEventNotification('ch47OilRigLockedCrateUnlocked', eventText);
+
+        if (metaData) {
+            clearTimeout(this.oilRigLockedCrateUnlockedMetaData[index].timeoutId);
+            delete this.oilRigLockedCrateUnlockedMetaData[index];
+        }
     }
 
     private notifyCargoShipEgress(cargoShipId: number) {

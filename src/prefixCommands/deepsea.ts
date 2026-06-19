@@ -46,33 +46,30 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpMapMarkers === null) return false;
 
-    const unixTimestampCurrent = Math.floor((new Date().getTime()) / 1000);
-
-    const dateDeepSeaSpawned = rpInstance.rpMapMarkers.dateDeepSeaSpawned;
-    const dateDeepSeaDespawned = rpInstance.rpMapMarkers.dateDeepSeaDespawned;
+    const unixTimestampNow = Math.floor(new Date().getTime() / 1000);
+    const dateSpawned = rpInstance.rpMapMarkers.dateDeepSeaSpawned;
+    const dateDespawned = rpInstance.rpMapMarkers.dateDeepSeaDespawned;
 
     const response: string[] = [];
-    if (dateDeepSeaSpawned !== null) {
-        const unixTimestampSpawned = Math.floor(dateDeepSeaSpawned.getTime() / 1000);
-        const unixTimestampDespawn = Math.floor(unixTimestampSpawned +
-            (constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000));
+    if (dateSpawned !== null) {
+        const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+        const eventDurationSeconds = Math.floor(constants.DEFAULT_DEEP_SEA_DURATION_TIME_MS / 1000);
+        const unixTimestampDespawn = unixTimestampSpawned + eventDurationSeconds;
 
-        const activeTimeSeconds = unixTimestampCurrent - unixTimestampSpawned;
-        const timeTillDespawnSeconds = unixTimestampDespawn - unixTimestampCurrent;
+        const secondsSinceSpawned = unixTimestampNow - unixTimestampSpawned;
+        const secondsTillDespawn = unixTimestampDespawn - unixTimestampNow;
 
         response.push(lm.getIntl(language, 'deepSeaIsActiveFor', {
-            time1: secondsToFullScale(activeTimeSeconds),
-            time2: secondsToFullScale(timeTillDespawnSeconds)
+            time1: secondsToFullScale(secondsSinceSpawned),
+            time2: secondsToFullScale(secondsTillDespawn)
         }));
     }
     else {
-        if (dateDeepSeaDespawned !== null) {
-            const unixTimestampDespawned = Math.floor(dateDeepSeaDespawned.getTime() / 1000);
-
-            const timeSinceDespawnedSeconds = unixTimestampCurrent - unixTimestampDespawned;
-
+        if (dateDespawned !== null) {
+            const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+            const secondsSinceDespawned = unixTimestampNow - unixTimestampDespawned;
             response.push(lm.getIntl(language, 'deepSeaTimeSinceDespawned', {
-                time: secondsToFullScale(timeSinceDespawnedSeconds)
+                time: secondsToFullScale(secondsSinceDespawned)
             }));
         }
         else {

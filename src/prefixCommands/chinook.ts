@@ -46,35 +46,40 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpMapMarkers === null) return false;
 
-    if (rpInstance.rpMapMarkers.ch47s.length === 0) {
-        let response: string;
-        if (rpInstance.rpMapMarkers.dateCh47LeftMap === null) {
-            response = lm.getIntl(language, 'chinook47NotOnMap');
-        }
-        else {
-            const timeSinceLeft = (new Date().getTime() -
-                rpInstance.rpMapMarkers.dateCh47LeftMap.getTime()) / 1000;
-            response = lm.getIntl(language, 'timeSinceChinook47Left', {
-                time: secondsToFullScale(timeSinceLeft, '', true)
-            });
-        }
-        rpInstance.sendPrefixCommandResponse(response, inGame);
-        log.info(`${fn} ${response}`, logParam);
-        return true;
-    }
+    const unixTimestampNow = Math.floor(new Date().getTime() / 1000);
+    const dateDespawned = rpInstance.rpMapMarkers.dateCh47Despawned;
 
     const response: string[] = [];
+    if (rpInstance.rpMapMarkers.ch47s.length === 0) {
+        if (dateDespawned === null) {
+            response.push(lm.getIntl(language, 'chinook47NotOnMap'));
+        }
+        else {
+            const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+            const secondsSinceDespawned = Math.floor(unixTimestampNow - unixTimestampDespawned);
+            response.push(lm.getIntl(language, 'timeSinceChinook47Left', {
+                time: secondsToFullScale(secondsSinceDespawned)
+            }));
+        }
+    }
+
     for (const ch47 of rpInstance.rpMapMarkers.ch47s) {
         const metaData = rpInstance.rpMapMarkers.ch47MetaData[ch47.id];
+        const dateSpawned = rpInstance.rpMapMarkers.dateCh47Spawned[ch47.id];
+
         const pos = getPos(ch47.x, ch47.y, rpInstance);
         const posString = (pos !== null) ? getPosString(pos, rpInstance, false, false) :
             lm.getIntl(language, 'unknown');
 
         let str = lm.getIntl(language, 'chinook47LocatedAt', { pos: posString });
 
-        const timeSinceSpawnSeconds = (new Date().getTime() - metaData.spawnTime.getTime()) / 1000;
-        const timeSinceSpawnString = secondsToFullScale(timeSinceSpawnSeconds, '', false);
-        str += ` ${lm.getIntl(language, 'chinook47BeenOutFor', { time: timeSinceSpawnString })}`;
+        if (dateSpawned) {
+            const unixTimestampSpawned = Math.floor(dateSpawned.getTime() / 1000);
+            const secondsSinceSpawned = Math.floor(unixTimestampNow - unixTimestampSpawned);
+            str += ` ${lm.getIntl(language, 'chinook47BeenOutFor', {
+                time: secondsToFullScale(secondsSinceSpawned)
+            })}`;
+        }
 
         if (metaData.lockedCrateNotified) {
             const monumentName = lm.getIntl(language, metaData.lockedCrateDropLocation as string);
