@@ -54,38 +54,39 @@ export async function execute(rpInstance: RustPlusInstance, args: string[],
 
     if (rpInstance.rpMapMarkers === null) return false;
 
+    const unixTimestampNow = Math.floor(new Date().getTime() / 1000);
+
     const response: string[] = [];
     if (rpInstance.rpMapMarkers.patrolHelicopters.length === 0) {
-        const dateWhenDestroyed = rpInstance.rpMapMarkers.datePatrolHelicopterDestroyed;
-        const dateWhenLeftMap = rpInstance.rpMapMarkers.datePatrolHelicopterLeftMap;
+        const dateDestroyed = rpInstance.rpMapMarkers.datePatrolHelicopterDestroyed;
+        const dateDespawned = rpInstance.rpMapMarkers.datePatrolHelicopterDespawned;
         const destroyedLocation = rpInstance.rpMapMarkers.patrolHelicopterLastDestroyedLocation;
 
-        if (dateWhenDestroyed !== null) {
-            const timeSinceDestroyedSeconds = (new Date().getTime() - dateWhenDestroyed.getTime()) / 1000;
+        if (dateDestroyed) {
+            const unixTimestampDestroyed = Math.floor(dateDestroyed.getTime() / 1000);
+            const secondsSinceDestroyed = unixTimestampNow - unixTimestampDestroyed;
             response.push(lm.getIntl(language, 'timeSinceDestroyed', {
-                time: secondsToFullScale(timeSinceDestroyedSeconds),
+                time: secondsToFullScale(secondsSinceDestroyed),
                 location: destroyedLocation ?? lm.getIntl(language, 'unknown')
             }));
         }
 
-        if (dateWhenLeftMap !== null) {
-            const timeSinceLeftMapSeconds = (new Date().getTime() - dateWhenLeftMap.getTime()) / 1000;
+        if (dateDespawned) {
+            const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+            const secondsSinceDespawned = unixTimestampNow - unixTimestampDespawned;
             response.push(lm.getIntl(language, 'timeSinceLeftMap', {
-                time: secondsToFullScale(timeSinceLeftMapSeconds)
+                time: secondsToFullScale(secondsSinceDespawned)
             }));
         }
 
         if (response.length === 0) {
             response.push(lm.getIntl(language, 'patrolHelicopterNotOnMap'));
         }
-
-        rpInstance.sendPrefixCommandResponse(response.join(' '), inGame);
-        log.info(`${fn} ${response.join(' ')}`, logParam);
-        return true;
     }
 
     for (const patrolHelicopter of rpInstance.rpMapMarkers.patrolHelicopters) {
         const metaData = rpInstance.rpMapMarkers.patrolHelicopterMetaData[patrolHelicopter.id];
+
         const pos = getPos(patrolHelicopter.x, patrolHelicopter.y, rpInstance);
         const posString = (pos !== null) ? getPosString(pos, rpInstance, false, false) :
             lm.getIntl(language, 'unknown');

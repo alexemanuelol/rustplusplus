@@ -122,7 +122,8 @@ export class RustPlusMapMarkers {
     public dateCh47Spawned: { [id: number]: Date };
     public dateCh47Despawned: Date | null;
     public dateCargoShipLeftMap: Date | null;
-    public datePatrolHelicopterLeftMap: Date | null;
+    public datePatrolHelicopterSpawned: { [id: number]: Date };
+    public datePatrolHelicopterDespawned: Date | null;
     public datePatrolHelicopterDestroyed: Date | null;
     public dateTravellingVendorSpawned: { [id: number]: Date };
     public dateTravellingVendorDespawned: Date | null;
@@ -170,7 +171,8 @@ export class RustPlusMapMarkers {
         this.dateCh47Spawned = {};
         this.dateCh47Despawned = null;
         this.dateCargoShipLeftMap = null;
-        this.datePatrolHelicopterLeftMap = null;
+        this.datePatrolHelicopterSpawned = {};
+        this.datePatrolHelicopterDespawned = null;
         this.datePatrolHelicopterDestroyed = null;
         this.dateTravellingVendorSpawned = {};
         this.dateTravellingVendorDespawned = null;
@@ -743,6 +745,9 @@ export class RustPlusMapMarkers {
             const eventText = lm.getIntl(language, phrase, { location: patrolHelicopterPosString });
             this.rpInstance.sendEventNotification('patrolHelicopterSpawned', eventText);
 
+            if (!this.firstPoll) {
+                this.datePatrolHelicopterSpawned[marker.id] = new Date();
+            }
             this.patrolHelicopters.push(marker);
         }
 
@@ -760,7 +765,7 @@ export class RustPlusMapMarkers {
                 this.rpInstance.sendEventNotification(settingsKey as keyof EventNotificationSettings, eventText);
             }
 
-            this.datePatrolHelicopterLeftMap = new Date();
+            this.datePatrolHelicopterDespawned = new Date();
             if (!isOutside) {
                 this.datePatrolHelicopterDestroyed = new Date();
                 if (patrolHelicopterPosString) {
@@ -769,6 +774,7 @@ export class RustPlusMapMarkers {
             }
 
             delete this.patrolHelicopterMetaData[marker.id];
+            delete this.datePatrolHelicopterSpawned[marker.id];
             this.patrolHelicopters = this.patrolHelicopters.filter(e => e.id !== marker.id);
         }
 

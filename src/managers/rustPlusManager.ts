@@ -958,47 +958,50 @@ export class RustPlusInstance {
         const gInstance = gim.getGuildInstance(this.guildId) as GuildInstance;
         const language = gInstance.generalSettings.language;
 
+        if (!this.rpMapMarkers) {
+            return '\u200B';
+        }
+
         const strings: string[] = [];
-        if (this.rpMapMarkers) {
-            if (this.rpMapMarkers.patrolHelicopters.length === 0) {
-                const dateWhenDestroyed = this.rpMapMarkers.datePatrolHelicopterDestroyed;
-                const dateWhenLeftMap = this.rpMapMarkers.datePatrolHelicopterLeftMap;
-                const destroyedLocation = this.rpMapMarkers.patrolHelicopterLastDestroyedLocation;
+        if (this.rpMapMarkers.patrolHelicopters.length === 0) {
+            const dateDestroyed = this.rpMapMarkers.datePatrolHelicopterDestroyed;
+            const dateDespawned = this.rpMapMarkers.datePatrolHelicopterDespawned;
+            const destroyedLocation = this.rpMapMarkers.patrolHelicopterLastDestroyedLocation;
 
-                if (dateWhenDestroyed !== null) {
-                    const timeSinceDestroyedSeconds = Math.floor(dateWhenDestroyed.getTime() / 1000);
-                    const timeSinceDestroyedString = `<t:${timeSinceDestroyedSeconds}:R>`;
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDestroyedTimeAtPos', {
-                        time: timeSinceDestroyedString,
-                        location: destroyedLocation ?? lm.getIntl(language, 'unknown')
-                    }));
-                }
-
-                if (dateWhenLeftMap !== null) {
-                    const timeSinceLeftMapSeconds = Math.floor(dateWhenLeftMap.getTime() / 1000);
-                    const timeSinceLeftMapString = `<t:${timeSinceLeftMapSeconds}:R>`;
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
-                        time: timeSinceLeftMapString
-                    }));
-                }
-
-                if (strings.length === 0) {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
-                }
+            if (dateDestroyed) {
+                const unixTimestampDestroyed = Math.floor(dateDestroyed.getTime() / 1000);
+                const timeDestroyed = Timer.getDiscordRelativeTime(unixTimestampDestroyed);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseDestroyedTimeAtPos', {
+                    time: timeDestroyed,
+                    location: destroyedLocation ?? lm.getIntl(language, 'unknown')
+                }));
             }
 
-            for (const patrolHelicopter of this.rpMapMarkers.patrolHelicopters) {
-                const metaData = this.rpMapMarkers.patrolHelicopterMetaData[patrolHelicopter.id];
-                const pos = getPos(patrolHelicopter.x, patrolHelicopter.y, this);
-                const posString = (pos !== null) ? getPosString(pos, this, true, false) :
-                    lm.getIntl(language, 'unknown');
+            if (dateDespawned) {
+                const unixTimestampDespawned = Math.floor(dateDespawned.getTime() / 1000);
+                const timeDespawned = Timer.getDiscordRelativeTime(unixTimestampDespawned);
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeftTime', {
+                    time: timeDespawned
+                }));
+            }
 
-                if (metaData.isLeaving) {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingAtPos', { pos: posString }));
-                }
-                else {
-                    strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
-                }
+            if (strings.length === 0) {
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseNotActive'));
+            }
+        }
+
+        for (const patrolHelicopter of this.rpMapMarkers.patrolHelicopters) {
+            const metaData = this.rpMapMarkers.patrolHelicopterMetaData[patrolHelicopter.id];
+
+            const pos = getPos(patrolHelicopter.x, patrolHelicopter.y, this);
+            const posString = (pos !== null) ? getPosString(pos, this, true, false) :
+                lm.getIntl(language, 'unknown');
+
+            if (metaData.isLeaving) {
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLeavingAtPos', { pos: posString }));
+            }
+            else {
+                strings.push(lm.getIntl(language, 'infoChannelEmbedEventPhraseLocatedAtPos', { pos: posString }));
             }
         }
 
