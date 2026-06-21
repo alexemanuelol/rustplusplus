@@ -393,11 +393,11 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
     }
 }
 
-export async function sendInformationChannelMessage(dm: DiscordManager, rpInstance: RustPlusInstance) {
+export async function sendInformationChannelServerEventMessage(dm: DiscordManager, rpInstance: RustPlusInstance) {
     const guildId = rpInstance.guildId;
     const serverId = rpInstance.serverId;
 
-    const fn = `[sendInformationChannelMessage]`;
+    const fn = `[sendInformationChannelServerEventMessage]`;
     const logParam = {
         guildId: guildId,
         serverId: serverId
@@ -426,6 +426,41 @@ export async function sendInformationChannelMessage(dm: DiscordManager, rpInstan
 
     if (message instanceof discordjs.Message && gInstance.informationChannelMessageIds.server !== message.id) {
         gInstance.informationChannelMessageIds.server = message.id;
+        gim.updateGuildInstance(guildId);
+    }
+}
+
+export async function sendInformationChannelTeamMessage(dm: DiscordManager, rpInstance: RustPlusInstance) {
+    const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
+
+    const fn = `[sendInformationChannelTeamMessage]`;
+    const logParam = {
+        guildId: guildId,
+        serverId: serverId
+    };
+
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const serverInfo = gInstance.serverInfoMap[serverId];
+    if (!serverInfo) {
+        log.warn(`${fn} Could not find ServerInfo.`, logParam);
+        return;
+    }
+
+    const content = {
+        embeds: [
+            discordEmbeds.getInformationChannelTeamEmbed(rpInstance)],
+        files: [
+            new discordjs.AttachmentBuilder(path.join(__dirname, '..', 'resources', 'images', 'team_info_logo.png'))
+        ]
+    };
+
+    const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.information,
+        gInstance.informationChannelMessageIds.team);
+
+    if (message instanceof discordjs.Message && gInstance.informationChannelMessageIds.team !== message.id) {
+        gInstance.informationChannelMessageIds.team = message.id;
         gim.updateGuildInstance(guildId);
     }
 }

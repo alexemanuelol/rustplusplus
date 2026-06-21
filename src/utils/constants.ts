@@ -123,8 +123,12 @@ export const COLOR_SETTINGS = '#861C0C';
 export const COLOR_TEAMCHAT_DEFAULT = '#CE412B';
 export const COLOR_AFK = '#C97670';
 
-export function GET_STEAM_PROFILE_LINK(steamId: string): string {
+export function GET_STEAM_PROFILE_LINK_STEAMID(steamId: string): string {
     return `[${steamId}](${STEAM_PROFILES_URL}${steamId})`;
+}
+
+export function GET_STEAM_PROFILE_LINK_NAME(name: string, steamId: string): string {
+    return `[${name}](${STEAM_PROFILES_URL}${steamId})`;
 }
 
 export function GET_BATTLEMETRICS_PROFILE_LINK(playerId: string): string {

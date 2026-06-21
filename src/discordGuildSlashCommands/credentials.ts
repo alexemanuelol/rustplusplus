@@ -218,7 +218,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	const credentials = cm.getCredentials(steamId);
 	if (!credentials) {
 		const parameters = {
-			steamId: `${constants.GET_STEAM_PROFILE_LINK(steamId)}`
+			steamId: `${constants.GET_STEAM_PROFILE_LINK_STEAMID(steamId)}`
 		};
 		await discordMessages.sendDefaultMessage(dm, interaction, 'errorTitleCredentialsForSteamIdNotFound',
 			'errorDescCredentialsForSteamIdNotFound', parameters);
@@ -246,7 +246,7 @@ async function executeRemove(dm: DiscordManager, interaction: discordjs.ChatInpu
 	}
 
 	const parameters = {
-		steamId: `${constants.GET_STEAM_PROFILE_LINK(steamId)}`,
+		steamId: `${constants.GET_STEAM_PROFILE_LINK_STEAMID(steamId)}`,
 		guilds: `${guildNames.join(', ')}`
 	};
 	await discordMessages.sendDefaultMessage(dm, interaction, 'slashCommandSuccessTitleCredentialsRemove',

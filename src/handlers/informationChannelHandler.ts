@@ -29,9 +29,8 @@ export async function handler(rpInstance: RustPlusInstance) {
 
     if (rpInstance.informationChannelCounter === 0) {
         // map
-        await discordMessages.sendInformationChannelMessage(dm, rpInstance);
-        // event
-        // team
+        await discordMessages.sendInformationChannelServerEventMessage(dm, rpInstance);
+        await discordMessages.sendInformationChannelTeamMessage(dm, rpInstance);
         // battlemetricsPlayers
     }
 

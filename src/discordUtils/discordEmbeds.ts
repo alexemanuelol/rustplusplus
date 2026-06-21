@@ -36,6 +36,7 @@ import { Credentials } from '../managers/credentialsManager';
 import { PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
 import { fetchSteamProfile, SteamInfo } from '../utils/steam';
 import { ConnectionStatus, RustPlusInstance } from '../managers/rustPlusManager';
+import { getPos, getPosString } from '../utils/map';
 
 export const EmbedLimits = {
     Maximum: 6000,
@@ -199,7 +200,7 @@ export async function getCredentialsExpiredEmbed(dm: DiscordManager, steamId: ty
     }
 
     const parameters = {
-        steamId: `${constants.GET_STEAM_PROFILE_LINK(credentials.steamId)}`,
+        steamId: `${constants.GET_STEAM_PROFILE_LINK_STEAMID(credentials.steamId)}`,
         issueDate: discordjs.time(credentials.issueDate, 'R'),
         expireDate: discordjs.time(credentials.expireDate, 'R'),
         guilds: `${guildNames.join(', ')}`
@@ -373,7 +374,7 @@ export async function getCredentialsInfoEmbed(dm: DiscordManager, interaction: d
 
         const hasExpired = credentials.expireDate < (Date.now() / 1000);
 
-        const fieldData = `${constants.GET_STEAM_PROFILE_LINK(credentials.steamId)}\n` +
+        const fieldData = `${constants.GET_STEAM_PROFILE_LINK_STEAMID(credentials.steamId)}\n` +
             `${lm.getIntl(language, 'issuedAt', { time: discordjs.time(credentials.issueDate, 'R') })}\n` +
             `${lm.getIntl(language, 'expireAt', { time: discordjs.time(credentials.expireDate, 'R') })} ` +
             `${hasExpired ? constants.ERROR_EMOJI : ''}\n` +
@@ -418,7 +419,7 @@ export async function getCredentialsListEmbed(dm: DiscordManager, interaction: d
         const hasExpired = credentials.expireDate < (Date.now() / 1000);
 
         const fieldData = `<@${credentials.discordUserId}>\n` +
-            `${constants.GET_STEAM_PROFILE_LINK(credentials.steamId)}\n` +
+            `${constants.GET_STEAM_PROFILE_LINK_STEAMID(credentials.steamId)}\n` +
             `${lm.getIntl(language, 'issuedAt', { time: discordjs.time(credentials.issueDate, 'R') })}\n` +
             `${lm.getIntl(language, 'expireAt', { time: discordjs.time(credentials.expireDate, 'R') })} ` +
             `${hasExpired ? constants.ERROR_EMOJI : ''}`;
@@ -781,6 +782,118 @@ export function getInformationChannelEventEmbed(rpInstance: RustPlusInstance): d
             { name: travellingVendorFieldName, value: travellingVendorFieldValue, inline: true },
             { name: deepSeaFieldName, value: deepSeaFieldValue, inline: true }
         ]
+    });
+}
+
+export function getInformationChannelTeamEmbed(rpInstance: RustPlusInstance): discordjs.EmbedBuilder {
+    const guildId = rpInstance.guildId;
+    const serverId = rpInstance.serverId;
+
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+    const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
+    const language = gInstance.generalSettings.language;
+
+    const title = lm.getIntl(language, 'infoChannelEmbedTeamTitle');
+    const footer = serverInfo.name;
+    const teamMemberFieldName = lm.getIntl(language, 'infoChannelEmbedTeamFieldTitleTeamMember');
+    const statusFieldName = lm.getIntl(language, 'infoChannelEmbedTeamFieldTitleStatus');
+    const locationFieldName = lm.getIntl(language, 'infoChannelEmbedTeamFieldTitleLocation');
+
+    let totalCharacters = title.length + footer.length + teamMemberFieldName.length + statusFieldName.length +
+        locationFieldName.length;
+    let fieldIndex = 0;
+    const teammateName = [''], teammateStatus = [''], teammateLocation = [''];
+    let teammateNameCharacters = 0, teammateStatusCharacters = 0, teammateLocationCharacters = 0;
+    if (rpInstance.rpTeamInfo !== null) {
+        for (const [steamId, member] of rpInstance.rpTeamInfo.members) {
+            const memberBase = member.appTeamInfoMember;
+            const isLeader = rpInstance.rpTeamInfo.appTeamInfo.leaderSteamId === steamId;
+            const pos = getPos(memberBase.x, memberBase.y, rpInstance);
+            const isPaired = serverId in gInstance.pairingDataMap && steamId in gInstance.pairingDataMap[serverId];
+
+            const name = (memberBase.name === '' ? '-' :
+                `${constants.GET_STEAM_PROFILE_LINK_NAME(memberBase.name, steamId)}`) +
+                ((isLeader) ? `${constants.LEADER_EMOJI}\n` : '\n');
+            let status = '';
+            const location = ((pos !== null) && (memberBase.isOnline || memberBase.isAlive)) ?
+                getPosString(pos, rpInstance, true, true) : '-\n';
+
+            if (memberBase.isOnline) {
+                const isAfk = member.getAfkSeconds() >= constants.AFK_TIME_SECONDS;
+                const afkTime = member.getAfkTime('dhs');
+
+                status += (isAfk) ? constants.AFK_EMOJI : constants.ONLINE_EMOJI;
+                status += (memberBase.isAlive) ? ((isAfk) ? constants.SLEEPING_EMOJI : constants.ALIVE_EMOJI) :
+                    constants.DEAD_EMOJI;
+                status += isPaired ? constants.PAIRED_EMOJI : '';
+                status += (isAfk) ? ` ${afkTime}\n` : '\n';
+            }
+            else {
+                const offlineTime = member.getOfflineTime('s');
+                status += constants.OFFLINE_EMOJI;
+                status += (memberBase.isAlive) ? constants.SLEEPING_EMOJI : constants.DEAD_EMOJI;
+                status += isPaired ? constants.PAIRED_EMOJI : '';
+                status += (offlineTime !== null) ? offlineTime : '';
+                status += '\n';
+            }
+
+            if (totalCharacters + (name.length + status.length + location.length) >=
+                constants.EMBED_MAX_TOTAL_CHARACTERS) {
+                break;
+            }
+
+            if ((teammateNameCharacters + name.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (teammateStatusCharacters + status.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS ||
+                (teammateLocationCharacters + location.length) > constants.EMBED_MAX_FIELD_VALUE_CHARACTERS) {
+                fieldIndex += 1;
+
+                teammateName.push('');
+                teammateStatus.push('');
+                teammateLocation.push('');
+
+                teammateNameCharacters = 0;
+                teammateStatusCharacters = 0;
+                teammateLocationCharacters = 0;
+            }
+
+            teammateNameCharacters += name.length;
+            teammateStatusCharacters += status.length;
+            teammateLocationCharacters += location.length;
+
+            totalCharacters += name.length + status.length + location.length;
+
+            teammateName[fieldIndex] += name;
+            teammateStatus[fieldIndex] += status;
+            teammateLocation[fieldIndex] += location;
+        }
+    }
+
+    const fields = [];
+    for (let i = 0; i < (fieldIndex + 1); i++) {
+        fields.push({
+            name: i === 0 ? teamMemberFieldName : '\u200B',
+            value: teammateName[i] !== '' ? teammateName[i] : lm.getIntl(language, 'empty'),
+            inline: true
+        });
+        fields.push({
+            name: i === 0 ? statusFieldName : '\u200B',
+            value: teammateStatus[i] !== '' ? teammateStatus[i] : lm.getIntl(language, 'empty'),
+            inline: true
+        });
+        fields.push({
+            name: i === 0 ? locationFieldName : '\u200B',
+            value: teammateLocation[i] !== '' ? teammateLocation[i] : lm.getIntl(language, 'empty'),
+            inline: true
+        });
+    }
+
+    return getEmbed({
+        title: title,
+        timestamp: new Date(),
+        color: colorHexToNumber(constants.COLOR_DEFAULT),
+        thumbnail: { url: `attachment://team_info_logo.png` },
+        footer: { text: footer },
+        fields: fields
     });
 }
 
