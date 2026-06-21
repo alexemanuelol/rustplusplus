@@ -422,10 +422,10 @@ export async function sendInformationChannelServerEventMessage(dm: DiscordManage
     };
 
     const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.information,
-        gInstance.informationChannelMessageIds.server);
+        gInstance.informationChannelMessageIds.serverEvent);
 
-    if (message instanceof discordjs.Message && gInstance.informationChannelMessageIds.server !== message.id) {
-        gInstance.informationChannelMessageIds.server = message.id;
+    if (message instanceof discordjs.Message && gInstance.informationChannelMessageIds.serverEvent !== message.id) {
+        gInstance.informationChannelMessageIds.serverEvent = message.id;
         gim.updateGuildInstance(guildId);
     }
 }

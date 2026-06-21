@@ -98,9 +98,9 @@ export interface GuildChannelIds {
 
 export interface InformationChannelMessageIds {
     map: types.MessageId | null;
-    server: types.MessageId | null;
-    event: types.MessageId | null;
+    serverEvent: types.MessageId | null;
     team: types.MessageId | null;
+    team2: types.MessageId | null;
     battlemetricsPlayers: types.MessageId | null;
 }
 
@@ -557,9 +557,9 @@ export class GuildInstanceManager {
             roleIds: [],
             informationChannelMessageIds: {
                 map: null,
-                server: null,
-                event: null,
+                serverEvent: null,
                 team: null,
+                team2: null,
                 battlemetricsPlayers: null
             },
             generalSettings: structuredClone(this.generalSettingsTemplate) as GeneralSettings,
@@ -922,17 +922,17 @@ export function isValidInformationChannelMessageIds(object: unknown): object is 
     const interfaceName = 'InformationChannelMessageIds';
     const validKeys = [
         'map',
-        'server',
-        'event',
+        'serverEvent',
         'team',
+        'team2',
         'battlemetricsPlayers'
     ];
 
     const errors: (vu.ValidationError | null)[] = [];
     errors.push(vu.validateType('map', obj.map, 'string', null));
-    errors.push(vu.validateType('server', obj.server, 'string', null));
-    errors.push(vu.validateType('event', obj.event, 'string', null));
+    errors.push(vu.validateType('serverEvent', obj.serverEvent, 'string', null));
     errors.push(vu.validateType('team', obj.team, 'string', null));
+    errors.push(vu.validateType('team2', obj.team2, 'string', null));
     errors.push(vu.validateType('battlemetricsPlayers', obj.battlemetricsPlayers, 'string', null));
 
     const filteredErrors = errors.filter((error): error is vu.ValidationError => error !== null);
