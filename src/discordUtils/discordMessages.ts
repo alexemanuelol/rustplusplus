@@ -393,6 +393,25 @@ export async function sendStorageMonitorMessage(dm: DiscordManager, guildId: typ
     }
 }
 
+export async function sendInformationChannelMapMessage(dm: DiscordManager, rpInstance: RustPlusInstance,
+    mapPath: string) {
+    const guildId = rpInstance.guildId;
+
+    const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
+
+    const content = {
+        files: [new discordjs.AttachmentBuilder(path.join(__dirname, '..', '..', 'maps', mapPath))]
+    };
+
+    const message = await dm.sendUpdateMessage(guildId, content, gInstance.guildChannelIds.information,
+        gInstance.informationChannelMessageIds.map);
+
+    if (message instanceof discordjs.Message && gInstance.informationChannelMessageIds.map !== message.id) {
+        gInstance.informationChannelMessageIds.map = message.id;
+        gim.updateGuildInstance(guildId);
+    }
+}
+
 export async function sendInformationChannelServerEventMessage(dm: DiscordManager, rpInstance: RustPlusInstance) {
     const guildId = rpInstance.guildId;
     const serverId = rpInstance.serverId;

@@ -648,7 +648,9 @@ export class RustPlusInstance {
         else {
             this.rpMap = new RustPlusMap(this, map);
         }
-        await this.rpMap.writeImage();
+        const mapPath = await this.rpMap.writeImage();
+
+        await discordMessages.sendInformationChannelMapMessage(dm, this, mapPath);
         // TODO! Just update map in information channel
 
         await this.setupSmartDevices();
