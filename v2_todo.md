@@ -107,7 +107,7 @@
 - [ ] Smart switch groups
 - [x] inGame command handler
 - [x] discord command handler
-- [ ] information channel
+- [x] information channel
 - [x] inGame chat handler
 - [x] team chat handler
 - [x] team handler

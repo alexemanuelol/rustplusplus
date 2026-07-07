@@ -651,7 +651,6 @@ export class RustPlusInstance {
         const mapPath = await this.rpMap.writeImage();
 
         await discordMessages.sendInformationChannelMapMessage(dm, this, mapPath);
-        // TODO! Just update map in information channel
 
         await this.setupSmartDevices();
         this.startServerPollingHandler();
