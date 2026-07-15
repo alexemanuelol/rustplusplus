@@ -471,7 +471,7 @@ async function pairingServer(flm: FcmListenerManager, steamId: types.SteamId, bo
 
         gInstance.serverInfoMap[serverId] = {
             name: body.name,
-            desc: JSON.parse(`"${body.desc}"`),
+            desc: body.desc.replaceAll('\\n', '\n').replaceAll('\\t', '\t'),
             img: await vu.isValidImageUrl(img) ? img : constants.DEFAULT_SERVER_IMAGE,
             logo: await vu.isValidImageUrl(logo) ? logo : constants.DEFAULT_SERVER_IMAGE,
             url: vu.isValidUrl(url) ? url : constants.DEFAULT_SERVER_URL,
