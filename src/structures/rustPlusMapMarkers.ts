@@ -279,7 +279,10 @@ export class RustPlusMapMarkers {
         /* Markers that still remains. */
         for (const marker of remainingMarkers) {
             const vendingMachine = this.vendingMachines.find(e => e.x === marker.x && e.y === marker.y) as rp.AppMarker;
-            Object.assign(vendingMachine, marker);
+            /* Just in case a server have custom moving vending machines. */
+            if (vendingMachine) {
+                Object.assign(vendingMachine, marker);
+            }
         }
     }
 
