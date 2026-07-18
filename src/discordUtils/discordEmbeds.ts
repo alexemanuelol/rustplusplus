@@ -34,7 +34,7 @@ import * as types from '../utils/types';
 import * as utils from '../utils/utils';
 import { Credentials } from '../managers/credentialsManager';
 import { PlayerDeathBody, TeamLoginBody } from '../managers/fcmListenerManager';
-import { fetchSteamProfile, SteamInfo } from '../utils/steam';
+import { fetchSteamProfile, SteamProfile } from '../api/steam';
 import { ConnectionStatus, RustPlusInstance } from '../managers/rustPlusManager';
 import { getPos, getPosString } from '../utils/map';
 
@@ -234,7 +234,10 @@ export async function getFcmPlayerDeathEmbed(title: string, body: PlayerDeathBod
     return getEmbed({
         title: title,
         color: colorHexToNumber(constants.COLOR_DEFAULT),
-        thumbnail: { url: steamProfile !== null ? steamProfile.imageUrl : constants.DEFAULT_SERVER_IMAGE },
+        thumbnail: {
+            url: steamProfile !== null && steamProfile.imageUrl !== null ? steamProfile.imageUrl :
+                constants.DEFAULT_SERVER_IMAGE
+        },
         footer: { text: body.name },
         timestamp: new Date(),
         url: body.targetId !== '' ? `${constants.STEAM_PROFILES_URL}${body.targetId}` : ''
@@ -942,7 +945,10 @@ export async function getFcmTeamLoginEmbed(guildId: types.GuildId, body: TeamLog
     return getEmbed({
         title: lm.getIntl(language, 'userJustConnected', { name: body.targetName }),
         color: colorHexToNumber(constants.COLOR_ACTIVE),
-        thumbnail: { url: steamProfile !== null ? steamProfile.imageUrl : constants.DEFAULT_SERVER_IMAGE },
+        thumbnail: {
+            url: steamProfile !== null && steamProfile.imageUrl !== null ? steamProfile.imageUrl :
+                constants.DEFAULT_SERVER_IMAGE
+        },
         timestamp: new Date(),
         footer: { text: body.name },
         url: `${constants.STEAM_PROFILES_URL}${body.targetId}`
@@ -970,9 +976,9 @@ export async function getActivityNotificationEmbed(guildId: types.GuildId, serve
     const gInstance = gim.getGuildInstance(guildId) as GuildInstance;
     const serverInfo = gInstance.serverInfoMap[serverId] as ServerInfo;
 
-    let steamInfo: SteamInfo | null = null;
+    let steamProfile: SteamProfile | null = null;
     if (steamId !== null) {
-        steamInfo = await fetchSteamProfile(steamId);
+        steamProfile = await fetchSteamProfile(steamId);
     }
 
     return getEmbed({
@@ -981,7 +987,8 @@ export async function getActivityNotificationEmbed(guildId: types.GuildId, serve
         footer: { text: serverInfo.name },
         author: {
             name: text,
-            iconURL: (steamInfo !== null) ? steamInfo.imageUrl : constants.DEFAULT_SERVER_IMAGE,
+            iconURL: (steamProfile !== null && steamProfile.imageUrl !== null) ? steamProfile.imageUrl :
+                constants.DEFAULT_SERVER_IMAGE,
             url: `${constants.STEAM_PROFILES_URL}${steamId}`
         }
     });

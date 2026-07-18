@@ -26,7 +26,7 @@ import * as types from '../utils/types';
 import { DiscordManager } from "../managers/discordManager";
 import { GuildInstance } from '../managers/guildInstanceManager';
 import { Credentials } from '../managers/credentialsManager';
-import { fetchSteamProfile } from '../utils/steam';
+import { fetchSteamProfile } from '../api/steam';
 
 export async function autocompleteHandler(dm: DiscordManager, interaction: discordjs.AutocompleteInteraction):
     Promise<boolean> {

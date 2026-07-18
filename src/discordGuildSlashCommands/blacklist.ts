@@ -26,7 +26,7 @@ import { DiscordManager } from '../managers/discordManager';
 import * as types from '../utils/types';
 import { Languages } from '../managers/LocaleManager';
 import { GuildInstance } from '../managers/guildInstanceManager';
-import { fetchSteamProfile } from '../utils/steam';
+import { fetchSteamProfile } from '../api/steam';
 
 export default {
 	name: 'blacklist',
