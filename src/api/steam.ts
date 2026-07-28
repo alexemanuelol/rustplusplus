@@ -25,7 +25,9 @@ import * as types from '../utils/types';
 import { log } from '../../index';
 
 /**
- * Interfaces from the steam profile API call
+ *  Interfaces from the steam profile API call
+ *
+ *  https://steamcommunity.com/profiles/${steamId}/?xml=1
  */
 
 interface SteamAPIProfileXml {
@@ -153,6 +155,6 @@ export async function fetchSteamProfile(steamId: types.SteamId): Promise<SteamPr
         imageUrl: profileXml.avatarFull ?? null,
         summary: profileXml.summary ?? null,
         vacBan: profileXml.vacBanned === 1,
-        memberSince: profileXml.memberSince ?? null
+        memberSince: memberSince
     };
 }
