@@ -4,7 +4,7 @@
 
 Program | Version | Download | Note
 ------- | ------- | -------- | ----
-`NodeJS` | >= 22.12.0 | [**here**](https://nodejs.org/en/download/) | Since discordjs v14 is used, the version needs to be at least 22.12.0.
+`NodeJS` | >= v20.19.x+ LTS | [**here**](https://nodejs.org/en/download/) | &nbsp;
 `Git` | Any | [**here**](https://git-scm.com/downloads) | &nbsp;
 
 ## Optional Software
@@ -18,3 +18,4 @@ Open a terminal (`Git Bash` / `CMD` / `Terminal` / `PowerShell` or similar) and 
     $ git clone https://github.com/alexemanuelol/rustplusplus.git
     $ cd rustplusplus
     $ npm install
+
