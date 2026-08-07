@@ -99,6 +99,10 @@ module.exports = {
             commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxLeader')}`)) {
             rustplus.sendInGameMessage(await rustplus.getCommandLeader(command, callerSteamId));
         }
+        else if (commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxMove')} `) ||
+            commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxMove')} `)) {
+            rustplus.sendInGameMessage(await rustplus.handleMoveCommand(command, callerSteamId, callerName));
+        }
         else if ((commandLowerCase.startsWith(`${prefix}${client.intlGet('en', 'commandSyntaxMarker')} `) ||
             commandLowerCase === `${prefix}${client.intlGet('en', 'commandSyntaxMarkers')}`) ||
             (commandLowerCase.startsWith(`${prefix}${client.intlGet(guildId, 'commandSyntaxMarker')} `) ||

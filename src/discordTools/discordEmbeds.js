@@ -27,11 +27,6 @@ const InstanceUtils = require('../util/instanceUtils.js');
 const Timer = require('../util/timer');
 const Config = require('../../config');
 
-function isValidUrl(url) {
-    if (url.startsWith('https') || url.startsWith('http')) return true;
-    return false;
-}
-
 module.exports = {
     getEmbed: function (options = {}) {
         const embed = new Discord.EmbedBuilder();
@@ -603,7 +598,7 @@ module.exports = {
             footer: { text: body.name },
             title: data.title,
             description: data.message,
-            thumbnail: (body.img !== '' && isValidUrl(body.img)) ? body.img : 'attachment://rocket.png'
+            thumbnail: body.img !== '' ? body.img : 'attachment://rocket.png'
         });
     },
 

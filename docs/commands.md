@@ -360,6 +360,7 @@ In-Game Command | Description
 [**marker**](commands.md#marker) | Set custom markers anywhere on the map.
 [**market**](commands.md#market-ingame) | Search for items in vending machines or subscribe/unsubscribe to items.
 [**mute**](commands.md#mute) | Mute the bot from the In-Game Team Chat.
+[**move**](commands.md#move) | Move user to a different channel.
 [**note/notes**](commands.md#notenotes) | Create notes about meaningful things.
 [**offline**](commands.md#offline) | Get the currently offline players in your team.
 [**online**](commands.md#online) | Get the currently online players in your team.
@@ -535,6 +536,20 @@ Subcommand | Description | Required
 
 ![In-Game Command mute Image](images/ingame_commands/mute_ingame.png)
 
+## **move**
+
+> **Move users between voice channels.** Use this to move yourself or other users to a specified voice channel.
+
+<br>Command format: `!move [user1] [user2] [...]  <target_channel> `
+
+* `target_channel`: Name or ID of the destination voice channel (**required**)
+* `user1`, `user2`, ... : Mention or ID of the users to move (**optional**). If not specified, it moves **you**.
+
+### **Examples**
+
+* `!move General` – Moves **you** to the **General** voice channel
+* `!move Alle Gaming` – Moves **Alle** to the **Gaming** channel
+* `!move 123456789012345678` – Moves **you** to the voice channel with that **ID**
 
 ## **note/notes**
 
