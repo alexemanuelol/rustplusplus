@@ -26,6 +26,7 @@ const DiscordEmbeds = require('../discordTools/discordEmbeds.js');
 const DiscordMessages = require('../discordTools/discordMessages.js');
 const DiscordTools = require('../discordTools/discordTools.js');
 const InstanceUtils = require('../util/instanceUtils.js');
+const RustRelay = require('../util/rustRelay.js');
 
 module.exports = {
     name: 'credentials',
@@ -60,6 +61,10 @@ module.exports = {
                 .addBooleanOption(option => option
                     .setName('host')
                     .setDescription('Host the bot')
+                    .setRequired(false))
+                .addStringOption(option => option
+                    .setName('rustplus_auth_token')
+                    .setDescription('Rust+ auth token (needed to connect through the Rust+ relay).')
                     .setRequired(false)))
             .addSubcommand(subcommand => subcommand
                 .setName('remove')
@@ -125,12 +130,33 @@ async function addCredentials(client, interaction, verifyId) {
         }
     }
 
-    if (steamId in credentials) {
-        const str = client.intlGet(guildId, 'credentialsAlreadyRegistered', { steamId: steamId });
-        await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
-        client.log(client.intlGet(null, 'warningCap'), str);
-        return;
+    const rawAuthToken = interaction.options.getString('rustplus_auth_token');
+    let authToken = null;
+    if (rawAuthToken) {
+        authToken = RustRelay.normaliseAuthToken(rawAuthToken);
+        const payload = authToken ? RustRelay.parseAuthToken(authToken) : null;
+        if (!payload || (payload.steamId && `${payload.steamId}` !== steamId)) {
+            const str = payload ?
+                `Rust+ auth token belongs to ${payload.steamId}, not ${steamId}.` :
+                'Invalid Rust+ auth token.';
+            await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            client.log(client.intlGet(null, 'warningCap'), str);
+            return;
+        }
     }
+
+    /* Re-adding an already registered account refreshes it (new GCM creds and/or auth token). */
+    const existing = credentials[steamId];
+    if (existing && existing.discord_user_id !== interaction.member.user.id) {
+        if (Config.discord.needAdminPrivileges && !client.isAdministrator(interaction)) {
+            const str = client.intlGet(guildId, 'credentialsAlreadyRegistered', { steamId: steamId });
+            await client.interactionEditReply(interaction, DiscordEmbeds.getActionInfoEmbed(1, str));
+            client.log(client.intlGet(null, 'warningCap'), str);
+            return;
+        }
+    }
+    const wasHoster = !!existing && credentials.hoster === steamId;
+    const hoster = isHoster || wasHoster;
 
     credentials[steamId] = new Object();
     credentials[steamId].gcm = new Object();
@@ -139,16 +165,20 @@ async function addCredentials(client, interaction, verifyId) {
     credentials[steamId].issued_date = interaction.options.getString('issued_date');
     credentials[steamId].expire_date = interaction.options.getString('expire_date');
     credentials[steamId].discord_user_id = interaction.member.user.id;
+    const keptAuthToken = existing ? existing.rustplus_auth_token : null;
+    if (authToken || keptAuthToken) {
+        credentials[steamId].rustplus_auth_token = authToken || keptAuthToken;
+    }
 
     const prevHoster = credentials.hoster;
-    if (isHoster) credentials.hoster = steamId;
+    if (hoster) credentials.hoster = steamId;
 
     InstanceUtils.writeCredentialsFile(guildId, credentials);
 
     /* Start Fcm Listener */
-    if (isHoster) {
+    if (hoster) {
         require('../util/FcmListener')(client, DiscordTools.getGuild(interaction.guildId));
-        if (prevHoster !== null) {
+        if (prevHoster && prevHoster !== steamId) {
             require('../util/FcmListenerLite')(client, DiscordTools.getGuild(interaction.guildId), prevHoster);
         }
     }
@@ -165,11 +195,12 @@ async function addCredentials(client, interaction, verifyId) {
         id: `${verifyId}`,
         value: `add, ${steamId}, ` +
             `${credentials[steamId].discord_user_id}, ` +
-            `${isHoster}, ` +
+            `${hoster}, ` +
             `${credentials[steamId].gcm.android_id}, ` +
             `${credentials[steamId].gcm.security_token}, ` +
             `${credentials[steamId].issued_date}, ` +
-            `${credentials[steamId].expire_date}`
+            `${credentials[steamId].expire_date}, ` +
+            `authToken=${authToken ? 'new' : (keptAuthToken ? 'kept' : 'none')}`
     }));
 
     const str = client.intlGet(interaction.guildId, 'credentialsAddedSuccessfully', { steamId: steamId });

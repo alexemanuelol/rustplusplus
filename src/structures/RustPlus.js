@@ -37,6 +37,7 @@ const Languages = require('../util/languages.js');
 const Logger = require('./Logger.js');
 const Map = require('../util/map.js');
 const RustPlusLite = require('../structures/RustPlusLite');
+const RustRelay = require('../util/rustRelay.js');
 const TeamHandler = require('../handlers/teamHandler.js');
 const Timer = require('../util/timer.js');
 
@@ -143,6 +144,30 @@ class RustPlus extends RustPlusLib {
         this.notificationSettings = instance.notificationSettings;
 
         this.connect();
+    }
+
+    /* Connect through the Facepunch Rust+ relay when this server has a relay id and the player has
+       an auth token; otherwise fall back to the legacy direct connection. */
+    connect() {
+        const relay = RustRelay.resolve(this.guildId, this.server, this.port, this.playerId);
+
+        if (!relay) {
+            this.connectionMode = 'direct';
+            this.log(Client.client.intlGet(null, 'infoCap'),
+                'Rust+ relay unavailable (no relay server id or auth token) - using direct connection.');
+            return super.connect();
+        }
+
+        this.connectionMode = 'relay';
+        if (relay.expiresAt && relay.expiresAt * 1000 < Date.now()) {
+            this.log(Client.client.intlGet(null, 'warningCap'),
+                `Rust+ auth token for ${this.playerId} expired at ` +
+                `${new Date(relay.expiresAt * 1000).toISOString()}. Re-add credentials.`, 'warn');
+        }
+        this.log(Client.client.intlGet(null, 'infoCap'),
+            `Connecting via Rust+ relay (server id ${relay.relayServerId}).`);
+
+        RustRelay.connect(this, relay);
     }
 
     updateLeaderRustPlusLiteInstance() {
