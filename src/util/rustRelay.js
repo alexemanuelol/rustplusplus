@@ -20,6 +20,7 @@
     only the address and handshake differ.
 */
 
+const Fs = require('fs');
 const Path = require('path');
 
 const InstanceUtils = require('./instanceUtils.js');
@@ -33,6 +34,36 @@ const PROTO_PATH = Path.join(LIB_DIR, 'rustplus.proto');
 const RELAY_HOST = 'companion-rust.facepunch.com';
 const RELAY_ORIGIN = 'https://app.playrust.com';
 const RELAY_SUBPROTOCOL = 'rustplus.auth.v1';
+
+/*
+    Entity ids are 64-bit network ids on the game server, but the bundled rustplus.proto declares
+    entityId as uint32 in AppRequest and AppEntityChanged. On servers where ids exceed 4294967295 the
+    id is truncated when encoded, so every smart device is reported as not_found (issue #544).
+    The proto text is widened to uint64 in memory when it is loaded, so the library's own file is
+    left untouched and the patch adapts if the library's proto changes (no-op if nothing matches).
+    Only AppRequest/AppEntityChanged are changed; AppCameraRays.Entity.entityId is left as is.
+*/
+async function loadProtoRoot() {
+    let source = await Fs.promises.readFile(PROTO_PATH, 'utf8');
+    source = source.replace(/message\s+(?:AppRequest|AppEntityChanged)\s*\{[^}]*\}/g,
+        block => block.replace(/\buint32(\s+entityId\s*=)/, 'uint64$1'));
+
+    const root = new protobuf.Root();
+    protobuf.parse(source, root);
+    root.resolveAll();
+    return root;
+}
+
+/* uint64 fields decode to Long objects; the rest of the bot expects plain numbers for entity ids. */
+function longToNumber(value) {
+    return (value && typeof value === 'object' && typeof value.toNumber === 'function') ? value.toNumber() : value;
+}
+
+function normaliseMessage(message) {
+    const entityChanged = message.broadcast ? message.broadcast.entityChanged : null;
+    if (entityChanged) entityChanged.entityId = longToNumber(entityChanged.entityId);
+    return message;
+}
 
 function b64url(str) {
     return Buffer.from(str, 'utf8').toString('base64')
@@ -101,7 +132,7 @@ function resolve(guildId, serverIp, appPort, steamId) {
 }
 
 function connect(rustplus, relay) {
-    protobuf.load(PROTO_PATH).then((root) => {
+    loadProtoRoot().then((root) => {
         /* make sure existing connection is disconnected before connecting again */
         if (rustplus.websocket) rustplus.disconnect();
 
@@ -136,7 +167,7 @@ function connect(rustplus, relay) {
                 if (result) return;
             }
 
-            rustplus.emit('message', rustplus.AppMessage.decode(data));
+            rustplus.emit('message', normaliseMessage(rustplus.AppMessage.decode(data)));
         });
 
         rustplus.websocket.on('close', () => {
