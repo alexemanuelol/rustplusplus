@@ -36,6 +36,11 @@ module.exports = {
 
         rustplus.uptimeServer = new Date();
 
+        /* This handler awaits many slow Discord/Rust+ calls. If the connection drops (or is replaced) meanwhile,
+           the disconnected handler has already scheduled the reconnect, and carrying on here would cancel that
+           timer and start polling on a dead socket, so the bot would never reconnect. */
+        const isStale = () => rustplus.isDeleted || client.rustplusInstances[guildId] !== rustplus;
+
         /* Start the token replenish task */
         rustplus.tokensReplenishTaskId = setInterval(rustplus.replenishTokens.bind(rustplus), 1000);
 
@@ -84,6 +89,8 @@ module.exports = {
             await DiscordMessages.sendInformationMapMessage(guildId);
         }
 
+        if (isStale()) return;
+
         if (client.rustplusReconnecting[guildId]) {
             client.rustplusReconnecting[guildId] = false;
 
@@ -102,10 +109,14 @@ module.exports = {
         await require('../discordTools/SetupSwitchGroups')(client, rustplus);
         await require('../discordTools/SetupAlarms')(client, rustplus);
         await require('../discordTools/SetupStorageMonitors')(client, rustplus);
+        if (isStale()) return;
+
         rustplus.isNewConnection = false;
         rustplus.loadMarkers();
 
         await PollingHandler.pollingHandler(rustplus, client);
+        if (isStale()) return;
+
         rustplus.pollingTaskId = setInterval(PollingHandler.pollingHandler, client.pollingIntervalMs, rustplus, client);
         rustplus.isOperational = true;
 

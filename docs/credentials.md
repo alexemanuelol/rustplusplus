@@ -26,6 +26,15 @@
 
 ![Teammates Paired with Server](images/bot_setup/teammates_paired.png)
 
+## Rust+ relay and the Rust+ auth token (Rust update 5 November 2026)
+
+Since the 5 November 2026 Rust update, game servers no longer accept direct Rust+ connections. The bot now connects through the Facepunch Rust+ relay instead. To do that it needs two things:
+
+* A **Rust+ auth token** for your Steam account. Pass it as the `rustplus_auth_token` option of `/credentials add`. The token is valid for about **14 days**; when it expires, run `/credentials add` again with a fresh token (re-adding an already registered account refreshes it instead of failing).
+* The **relay server id**, which the bot receives in the pairing notification. Servers that were paired before this change do not have it, so **pair each server again** in-game (see [Pair and Connect to a Server](pair_and_connect_to_server.md)).
+
+Without a token or relay server id the bot falls back to the old direct connection, which no longer works on up-to-date servers.
+
 ## Why is Credentials necessary?
 
 Credentials are necessary in order to get the following:

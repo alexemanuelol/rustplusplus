@@ -182,7 +182,10 @@ class DiscordBot extends Discord.Client {
                 } break;
 
                 default: {
-                    this.log(this.intlGet(null, 'errorCap'), `${JSON.stringify(error)}`, 'error');
+                    /* Error objects stringify to {} (message/code are not enumerable), so print them explicitly. */
+                    const details = (error && error.message) ?
+                        `${error.code ? `[${error.code}] ` : ''}${error.message}` : JSON.stringify(error);
+                    this.log(this.intlGet(null, 'errorCap'), details, 'error');
                 } break;
             }
         });

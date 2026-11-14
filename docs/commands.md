@@ -116,6 +116,7 @@ Subcommand | Options | Description | Required
 &nbsp; | `issued_date` | Issued date of the credentials. | `True`
 &nbsp; | `expire_date` | Expire date of the credentials. | `True`
 &nbsp; | `hoster` | Should be hoster. | `False`
+&nbsp; | `rustplus_auth_token` | Rust+ auth token, needed to connect through the Rust+ relay (valid for about 14 days). Re-run `add` with a new token to refresh it. | `False`
 `remove` | &nbsp; | Remove Credentials. | &nbsp;
 &nbsp; | `steam_id` | Steam ID. | `False`
 `show` | &nbsp; | Show all registered Credentials. | &nbsp;

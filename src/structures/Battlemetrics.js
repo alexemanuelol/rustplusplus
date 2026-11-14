@@ -340,7 +340,9 @@ class Battlemetrics {
 
         let isDifferent = false;
         if (Array.isArray(value1) || Array.isArray(value2)) {
-            if (value1.length != value2.length || !value1.every(function (u, i) { return u === value2[i] })) {
+            /* One side can be null/non-array (e.g. server_location starts as null), which counts as different. */
+            if (!Array.isArray(value1) || !Array.isArray(value2) ||
+                value1.length != value2.length || !value1.every(function (u, i) { return u === value2[i] })) {
                 isDifferent = true;
             }
         }
