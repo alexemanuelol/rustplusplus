@@ -181,6 +181,9 @@ class RustPlus extends RustPlusLib {
             this.leaderRustPlusInstance = null;
         }
 
+        /* The team is only created by the first successful poll, which can have timed out. */
+        if (!this.team) return;
+
         const instance = Client.client.getInstance(this.guildId);
         const leader = this.team.leaderSteamId;
         if (leader === this.playerId) return;
